@@ -6,6 +6,8 @@ Projetos para Minecraft **1.21.1**, **NeoForge** e **Java 21**.
 
 **Downloads prontos:** [Contracts & Bounties 0.2.0 — JAR](https://github.com/ROCKABITS/Mods/raw/refs/heads/main/mod-pronto/contracts-bounties-0.2.0.jar) · [ZIP](https://github.com/ROCKABITS/Mods/raw/refs/heads/main/mod-pronto/contracts-bounties-0.2.0.zip).
 
+**Realm Council 0.2.1:** [JAR](https://github.com/ROCKABITS/Mods/raw/refs/heads/main/mod-pronto/realmcouncil-0.2.1.jar) · [ZIP](https://github.com/ROCKABITS/Mods/raw/refs/heads/main/mod-pronto/realmcouncil-0.2.1.zip). Os menus passam a exigir os blocos; atualizar cliente e servidor juntos.
+
 - [Contracts & Bounties](contracts-bounties/README.md): mural de contratos de materiais, recompensas reservadas e recolha de entregas.
 - [Realm Council](realm-council/README.md): eleições e governo, com acesso ao menu através dos blocos na versão 0.2.1.
 
