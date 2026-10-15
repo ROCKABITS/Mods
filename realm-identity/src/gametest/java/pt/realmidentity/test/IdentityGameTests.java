@@ -89,6 +89,7 @@ public final class IdentityGameTests {
     private static final class OnlinePlayers implements AutoCloseable {
         private final PlayerList list;
         private final Map<UUID, ServerPlayer> byId;
+        private final List<ServerPlayer> online;
         private final List<FakePlayer> players = new ArrayList<>();
 
         @SuppressWarnings("unchecked")
@@ -98,11 +99,14 @@ public final class IdentityGameTests {
                 Field field = PlayerList.class.getDeclaredField("playersByUUID");
                 field.setAccessible(true);
                 byId = (Map<UUID, ServerPlayer>) field.get(list);
+                Field onlineField = PlayerList.class.getDeclaredField("players");
+                onlineField.setAccessible(true);
+                online = (List<ServerPlayer>) onlineField.get(list);
             } catch (ReflectiveOperationException exception) {
                 throw new IllegalStateException("Cannot register native test players in PlayerList", exception);
             }
             for (FakePlayer player : fixtures) {
-                list.getPlayers().add(player);
+                online.add(player);
                 byId.put(player.getUUID(), player);
                 players.add(player);
             }
@@ -110,7 +114,7 @@ public final class IdentityGameTests {
 
         @Override public void close() {
             for (FakePlayer player : players) {
-                list.getPlayers().remove(player);
+                online.remove(player);
                 byId.remove(player.getUUID(), player);
                 IdentityService.logout(player.getUUID());
             }
