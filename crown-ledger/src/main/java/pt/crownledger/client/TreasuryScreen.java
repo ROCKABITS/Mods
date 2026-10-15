@@ -11,6 +11,7 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.function.BiConsumer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractButton;
@@ -28,6 +29,8 @@ public final class TreasuryScreen extends Screen {
     private static final DateTimeFormatter DATE = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm").withZone(ZoneId.systemDefault());
     private JsonObject state;
     private String tab = "overview", notice = "", pending = "", taxMode = "PERCENTAGE";
+    private String donationCurrency, editingCurrency = "EMERALD";
+    private BiConsumer<String, JsonObject> requestSender = Net::send;
     private boolean waiting, publicForm;
     private long sentAt;
     private int x, y, w, h, top, page, policyPage, ticks;
@@ -37,6 +40,7 @@ public final class TreasuryScreen extends Screen {
     private TreasuryScreen(JsonObject state) {
         super(tr("title"));
         this.state = state;
+        donationCurrency = activeCurrency();
         notice = str(state, "message", "");
     }
 
@@ -62,6 +66,10 @@ public final class TreasuryScreen extends Screen {
         for (var entry : fields.entrySet()) if (entry.getValue().isFocused()) focused = entry.getKey();
         boolean saved = "policy".equals(pending) && bool(data, "success");
         state = data;
+        if (!chroniclesLoaded() && "CHRONICLES".equals(donationCurrency)) {
+            donationCurrency = "EMERALD";
+            value("donation", "0");
+        }
         waiting = false;
         pending = "";
         String message = str(data, "message", "");
@@ -93,7 +101,11 @@ public final class TreasuryScreen extends Screen {
     private JsonArray entries(String key) { return state.has(key) && state.get(key).isJsonArray() ? state.getAsJsonArray(key) : new JsonArray(); }
     private boolean manager() { return bool(state, "manager"); }
     private String currency() { return str(state, "currency", "EMERALD"); }
-    private String contractCurrency() { return str(state, "contractCurrency", currency()); }
+    private boolean chroniclesLoaded() { return bool(state, "chroniclesLoaded"); }
+    private String activeCurrency() { return chroniclesLoaded() && "CHRONICLES".equals(str(state, "activeCurrency", currency())) ? "CHRONICLES" : "EMERALD"; }
+    private String contractCurrency() { return str(state, "contractCurrency", activeCurrency()); }
+    private String currencyKey(String currency) { return "CHRONICLES".equals(currency) ? "currency_chronicles" : "currency_emerald"; }
+    private long donationBalance() { return number(object(state, "wallets"), donationCurrency); }
     private JsonObject policy() { return object(state, "policy"); }
     private String money(long amount, String currency) {
         return "CHRONICLES".equals(currency) ? BigDecimal.valueOf(amount, 2).toPlainString() + " €" : text("emerald_amount", amount);
@@ -102,6 +114,10 @@ public final class TreasuryScreen extends Screen {
     private String percent(long basisPoints) { return BigDecimal.valueOf(basisPoints, 2).stripTrailingZeros().toPlainString(); }
     private String date(long millis) { return millis <= 0 ? text("not_scheduled") : DATE.format(Instant.ofEpochMilli(millis)); }
     private void capture() { fields.forEach((key, field) -> values.put(key, field.getValue())); }
+    private void value(String key, String value) {
+        values.put(key, value);
+        if (fields.containsKey(key)) fields.get(key).setValue(value);
+    }
 
     @Override protected void init() {
         capture();
@@ -147,17 +163,24 @@ public final class TreasuryScreen extends Screen {
 
     private void initContribute() {
         int half = (w - 34) / 2;
-        field("donation", x + 12, top + 23, half, "donation_amount", "10", false);
-        var donate = button(x + 22 + half, top + 23, half, "donate", this::donate);
-        donate.active = !waiting;
+        var selector = button(x + 12, top + 23, half, currencyKey(donationCurrency), () -> {
+            if (!chroniclesLoaded()) return;
+            capture(); donationCurrency = "EMERALD".equals(donationCurrency) ? "CHRONICLES" : "EMERALD";
+            value("donation", "0"); rebuildWidgets();
+        });
+        selector.active = !waiting && chroniclesLoaded();
+        selector.setTooltip(Tooltip.create(tr(chroniclesLoaded() ? "donation_currency_hint" : "currency_unavailable")));
+        field("donation", x + 22 + half, top + 23, half, "donation_amount", "10", false);
+        var donate = button(x + 12, top + 51, w - 24, "donate", this::donate);
+        donate.active = !waiting && donationBalance() >= 0 && (!"CHRONICLES".equals(donationCurrency) || chroniclesLoaded());
         donate.setTooltip(Tooltip.create(tr("donation_hint")));
-        int claimY = Math.min(top + 100, y + h - 59);
+        int claimY = Math.min(top + 132, y + h - 59);
         var emerald = button(x + 12, claimY, half, "claim_emeralds", () -> claim("EMERALD"));
         emerald.active = !waiting && number(object(state, "credits"), "EMERALD") > 0;
         emerald.setTooltip(Tooltip.create(tr("credit_hint", money(number(object(state, "credits"), "EMERALD"), "EMERALD"))));
         var coins = button(x + 22 + half, claimY, half, "claim_coins", () -> claim("CHRONICLES"));
-        coins.active = !waiting && number(object(state, "credits"), "CHRONICLES") > 0;
-        coins.setTooltip(Tooltip.create(tr("credit_hint", money(number(object(state, "credits"), "CHRONICLES"), "CHRONICLES"))));
+        coins.active = !waiting && chroniclesLoaded() && number(object(state, "credits"), "CHRONICLES") > 0;
+        coins.setTooltip(Tooltip.create(tr(chroniclesLoaded() ? "credit_hint" : "credit_unavailable", money(number(object(state, "credits"), "CHRONICLES"), "CHRONICLES"))));
         button(x + 12, y + h - 35, 83, "refresh", () -> send("snapshot", new JsonObject()));
     }
 
@@ -165,19 +188,21 @@ public final class TreasuryScreen extends Screen {
     private void donate() {
         capture();
         try {
-            long amount = amount(values.get("donation"), currency());
+            if ("CHRONICLES".equals(donationCurrency) && !chroniclesLoaded()) throw new IllegalArgumentException();
+            long amount = amount(values.get("donation"), donationCurrency);
             if (amount <= 0) throw new IllegalArgumentException();
-            var data = new JsonObject(); data.addProperty("amount", amount); data.addProperty("currency", currency()); send("donate", data);
+            var data = new JsonObject(); data.addProperty("amount", amount); data.addProperty("currency", donationCurrency); send("donate", data);
         } catch (RuntimeException invalid) { notice = "gui.kingdomtreasury.invalid_amount"; }
     }
 
     private void loadPolicy() {
         JsonObject policy = policy();
+        editingCurrency = str(policy, "currency", currency());
         taxMode = str(policy, "taxMode", "PERCENTAGE");
-        values.put("taxPercent", percent(number(policy, "taxBasisPoints")));
-        for (String key : new String[]{"fixedTax", "salary"}) values.put(key, plainMoney(number(policy, key), currency()));
+        value("taxPercent", percent(number(policy, "taxBasisPoints")));
+        for (String key : new String[]{"fixedTax", "salary"}) value(key, plainMoney(number(policy, key), editingCurrency));
         for (String key : new String[]{"periodHours", "activeMinutes", "minimumReputation", "reputationReward", "dailyReputationLimit"})
-            values.put(key, Long.toString(number(policy, key)));
+            value(key, Long.toString(number(policy, key)));
     }
 
     private void initPolicy() {
@@ -196,22 +221,31 @@ public final class TreasuryScreen extends Screen {
             field("minimumReputation", x + 12, top + 43, half, "minimum_reputation", "0", true);
             field("reputationReward", right, top + 43, half, "reputation_reward", "1", true);
             field("dailyReputationLimit", x + 12, top + 75, half, "daily_limit", "3", true);
+            var selector = button(right, top + 75, half, currencyKey(editingCurrency), () -> {
+                if ("EMERALD".equals(editingCurrency) && !chroniclesLoaded()) return;
+                capture(); editingCurrency = "EMERALD".equals(editingCurrency) ? "CHRONICLES" : "EMERALD";
+                value("fixedTax", "0"); value("salary", "0"); rebuildWidgets();
+            });
+            selector.active = !waiting && (chroniclesLoaded() || "CHRONICLES".equals(editingCurrency));
+            selector.setTooltip(Tooltip.create(tr(selector.active ? "policy_currency_hint" : "currency_unavailable")));
         }
         button(x + 12, y + h - 35, 104, policyPage == 0 ? "participation_page" : "economy_page", () -> {
             capture(); policyPage = 1 - policyPage; rebuildWidgets();
         });
-        var save = button(x + w - 132, y + h - 35, 120, "save_policy", this::savePolicy); save.active = !waiting;
+        var save = button(x + w - 132, y + h - 35, 120, "save_policy", this::savePolicy);
+        save.active = !waiting && (!"CHRONICLES".equals(editingCurrency) || chroniclesLoaded());
         save.setTooltip(Tooltip.create(tr("policy_hint")));
     }
 
     private void savePolicy() {
         capture();
         try {
+            if ("CHRONICLES".equals(editingCurrency) && !chroniclesLoaded()) throw new IllegalArgumentException();
             var data = new JsonObject();
             long bps = new BigDecimal(values.get("taxPercent").replace(',', '.')).movePointRight(2)
                     .setScale(0, RoundingMode.UNNECESSARY).longValueExact();
             if (bps < 0 || bps > 10_000) throw new IllegalArgumentException();
-            data.addProperty("taxMode", taxMode); data.addProperty("taxBasisPoints", bps); data.addProperty("currency", currency());
+            data.addProperty("taxMode", taxMode); data.addProperty("taxBasisPoints", bps); data.addProperty("currency", editingCurrency);
             data.addProperty("fixedTax", nonnegativeAmount("fixedTax")); data.addProperty("salary", nonnegativeAmount("salary"));
             addRange(data, "periodHours", 1, 720); addRange(data, "activeMinutes", 1, 1440);
             addRange(data, "minimumReputation", 0, 100); addRange(data, "reputationReward", 0, 100); addRange(data, "dailyReputationLimit", 0, 100);
@@ -224,7 +258,7 @@ public final class TreasuryScreen extends Screen {
         data.addProperty(key, value);
     }
     private long nonnegativeAmount(String key) {
-        long value = amount(values.get(key), currency()); if (value < 0) throw new IllegalArgumentException(); return value;
+        long value = amount(values.get(key), editingCurrency); if (value < 0) throw new IllegalArgumentException(); return value;
     }
     private static String plainMoney(long amount, String currency) { return "CHRONICLES".equals(currency) ? BigDecimal.valueOf(amount, 2).toPlainString() : Long.toString(amount); }
     private static long amount(String input, String currency) {
@@ -269,7 +303,7 @@ public final class TreasuryScreen extends Screen {
                 throw new IllegalArgumentException();
             var data = new JsonObject();
             data.addProperty("title", values.get("contractTitle")); data.addProperty("item", values.get("contractItem"));
-            data.addProperty("quantity", quantity); data.addProperty("reward", reward); data.addProperty("currency", currency()); send("publish", data);
+            data.addProperty("quantity", quantity); data.addProperty("reward", reward); data.addProperty("currency", contractCurrency()); send("publish", data);
         } catch (RuntimeException invalid) { notice = "gui.kingdomtreasury.invalid_contract"; }
     }
 
@@ -293,7 +327,7 @@ public final class TreasuryScreen extends Screen {
     private void send(String action, JsonObject data) {
         if (waiting) return;
         capture(); waiting = true; sentAt = System.nanoTime(); pending = action; notice = "gui.kingdomtreasury.waiting";
-        Net.send(action, data); rebuildWidgets();
+        requestSender.accept(action, data); rebuildWidgets();
     }
 
     @Override public void render(GuiGraphics g, int mx, int my, float tick) {
@@ -335,7 +369,7 @@ public final class TreasuryScreen extends Screen {
                 text("next_cycle", date(number(state, "salaryNext"))),
                 text("activity_summary", number(policy, "activeMinutes")),
                 text("tax_due", money(number(state, "taxDue"))),
-                text("payroll_pending", money(number(state, "pendingPayrollCost"))),
+                text("payroll_pending", money(number(state, "pendingPayrollCost"), str(state, "pendingPayrollCurrency", currency()))),
                 text("manager_name", str(state, "managerName", text("no_governor")))
         };
         int available = y + h - 44 - lineY;
@@ -345,10 +379,12 @@ public final class TreasuryScreen extends Screen {
     }
 
     private void renderContribute(GuiGraphics g) {
-        line(g, text("your_balance", money(number(state, "playerBalance"))), x + 12, top, w - 24, INK);
-        line(g, text("donation_amount"), x + 12, top + 12, (w - 34) / 2, INK);
-        int claimY = Math.min(top + 100, y + h - 59);
-        if (claimY - top >= 80) {
+        int half = (w - 34) / 2;
+        line(g, donationBalance() < 0 ? text("wallet_unavailable") : text("your_balance", money(donationBalance(), donationCurrency)), x + 12, top, w - 24, INK);
+        line(g, text("donation_currency"), x + 12, top + 12, half, INK);
+        line(g, text("donation_amount"), x + 22 + half, top + 12, half, INK);
+        int claimY = Math.min(top + 132, y + h - 59);
+        if (claimY - top >= 120) {
             line(g, text("available_credit"), x + 12, claimY - 28, w - 24, INK);
             line(g, text("credit_stays"), x + 12, claimY - 15, w - 24, MUTED);
         }
@@ -365,12 +401,16 @@ public final class TreasuryScreen extends Screen {
             if (h > 300) {
                 frame(g, x + 10, top + 82, w - 20, 75, LIGHT, GOLD);
                 wrapped(g, text("policy_hint"), x + 17, top + 90, w - 34, 5, MUTED);
-                line(g, text("policy_currency", money(1)), x + 14, top + 171, w - 28, GREEN);
+                line(g, text("policy_currency", text(currencyKey(editingCurrency))), x + 14, top + 171, w - 28, GREEN);
             }
         } else {
             String[] labels = {"period_hours", "active_minutes", "minimum_reputation", "reputation_reward", "daily_limit"};
             for (int i = 0; i < labels.length; i++) line(g, text(labels[i]), i % 2 == 0 ? x + 12 : right, top + i / 2 * 32, half, INK);
-            if (h > 310) wrapped(g, text("participation_hint"), x + 14, top + 113, w - 28, 5, MUTED);
+            line(g, text("fiscal_currency"), right, top + 64, half, INK);
+            if (h > 310) {
+                wrapped(g, text("policy_currency_hint"), x + 14, top + 108, w - 28, 2, GREEN);
+                wrapped(g, text("participation_hint"), x + 14, top + 138, w - 28, 5, MUTED);
+            }
         }
     }
 
@@ -395,7 +435,8 @@ public final class TreasuryScreen extends Screen {
             line(g, text("contract_item"), x + 12, top + 32, w - 24, INK);
             line(g, text("contract_quantity"), x + 12, top + 64, half, INK);
             line(g, text("contract_reward"), x + 22 + half, top + 64, half, INK);
-            if (h > 310) wrapped(g, text("public_contract_hint"), x + 14, top + 115, w - 28, 5, MUTED);
+            line(g, text("contract_currency", text(currencyKey(contractCurrency()))), x + 14, top + 108, w - 28, GREEN);
+            if (h > 310) wrapped(g, text("public_contract_hint"), x + 14, top + 126, w - 28, 5, MUTED);
             return;
         }
         JsonArray list = entries("contracts"); int count = rows(44, 29);

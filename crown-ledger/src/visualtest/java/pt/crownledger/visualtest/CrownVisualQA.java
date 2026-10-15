@@ -8,10 +8,12 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.BiConsumer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.Screenshot;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractButton;
+import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.TitleScreen;
 import net.minecraft.client.renderer.block.model.BakedQuad;
@@ -39,6 +41,8 @@ public final class CrownVisualQA {
     private static final String[] FILENAMES = {"crown-chest-minecraft.png", "crown-ledger-overview.png", "crown-ledger-policy.png"};
     private static final long STARTED = System.currentTimeMillis();
     private static final List<String> CAPTURED = new ArrayList<>();
+    private static final List<String> CURRENCY_CHECKS = new ArrayList<>();
+    private static final List<Map<String, Object>> UI_REQUESTS = new ArrayList<>();
     private static ItemStack stack;
     private static Screen captureScreen;
     private static int index, ticks, itemQuads, states;
@@ -62,7 +66,7 @@ public final class CrownVisualQA {
                     }
                 }
                 mc.getWindow().setWindowed(1600, 900); mc.options.guiScale().set(2); mc.resizeDisplay();
-                validateModels(mc); show(mc); return;
+                validateModels(mc); validateCurrencyInteractions(mc); show(mc); return;
             }
             if (mc.screen != captureScreen) throw new IllegalStateException("Unexpected screen during Crown visual QA");
             ticks++;
@@ -74,7 +78,7 @@ public final class CrownVisualQA {
                 image.writeToFile(OUT.resolve(FILENAMES[index]));
             }
             CAPTURED.add(FILENAMES[index]); index++;
-            if (index < FILENAMES.length) show(mc); else complete(true, "Registered treasury chest, all placed states and production public/governor menus render with valid models and textures.");
+            if (index < FILENAMES.length) show(mc); else complete(true, "Registered treasury chest, all placed states and production public/governor menus render with valid models and textures; native currency controls and their request payloads passed.");
         } catch (Throwable failure) { failure.printStackTrace(); complete(false, failure.toString()); }
     }
 
@@ -82,11 +86,12 @@ public final class CrownVisualQA {
         if (index == 0) mc.setScreen(new ChestPreview());
         else if (index == 1) {
             validateAccess(mc);
-            ClientHooks.open(demo(true).toString());
-            check(mc.screen instanceof TreasuryScreen, "Production treasury menu did not open");
+            openDemo(mc, demo(true));
         } else {
             check(mc.screen instanceof TreasuryScreen, "Expected treasury before opening kingdom rules");
             check(press(mc.screen, "gui.kingdomtreasury.policy"), "Governor could not open kingdom rules");
+            check(press(mc.screen, "gui.kingdomtreasury.participation_page"), "Governor could not open policy currency controls");
+            selector(mc.screen, "EMERALD", true);
         }
         captureScreen = mc.screen;
         GLFW.glfwSetCursorPos(mc.getWindow().getWindow(), 1, 1);
@@ -95,8 +100,7 @@ public final class CrownVisualQA {
 
     private static void validateAccess(Minecraft mc) {
         Screen previous = mc.screen;
-        ClientHooks.open(demo(false).toString());
-        check(mc.screen instanceof TreasuryScreen, "Public players must be able to inspect the treasury");
+        openDemo(mc, demo(false));
         check(!hasButton(mc.screen, "gui.kingdomtreasury.policy"), "Public players must not receive governor controls");
         check(!hasButton(mc.screen, "gui.kingdomtreasury.contracts"), "Public players must not receive public-contract management controls");
         ClientHooks.open("{\"close\":true}");
@@ -116,10 +120,152 @@ public final class CrownVisualQA {
         return false;
     }
 
+    private static void validateCurrencyInteractions(Minecraft mc) throws ReflectiveOperationException {
+        JsonObject chron = currencyDemo("CHRONICLES", "EMERALD", true);
+        TreasuryScreen screen = openDemo(mc, chron);
+        click(screen, "contribute"); selector(screen, "CHRONICLES", true); expectWallet(screen, 7_650);
+        setField(screen, "donation", "1.25");
+        assertMoney(request(screen, "donate", "donate"), "CHRONICLES", "amount", 125);
+        acknowledge(mc, screen, chron);
+        click(screen, "currency_chronicles"); selector(screen, "EMERALD", true); expectWallet(screen, 128);
+        expectField(screen, "donation", "0");
+        setField(screen, "donation", "7");
+        assertMoney(request(screen, "donate", "donate"), "EMERALD", "amount", 7);
+        acknowledge(mc, screen, chron);
+        setField(screen, "donation", "1.25");
+        int before = UI_REQUESTS.size(); click(screen, "donate");
+        check(UI_REQUESTS.size() == before, "Fractional emerald donation must not send a request");
+        click(screen, "currency_emerald"); selector(screen, "CHRONICLES", true);
+        expectField(screen, "donation", "0");
+        assertCurrency(request(screen, "claim_emeralds", "claim"), "EMERALD"); acknowledge(mc, screen, chron);
+        assertCurrency(request(screen, "claim_coins", "claim"), "CHRONICLES"); acknowledge(mc, screen, chron);
+        CURRENCY_CHECKS.add("Donation defaults to the active available currency, switches both ways, clears amounts, parses Chronicle cents, rejects fractional emeralds, and preserves both credit claims.");
+
+        JsonObject policy = currencyDemo("EMERALD", "CHRONICLES", true);
+        screen = openDemo(mc, policy); click(screen, "policy");
+        expectField(screen, "fixedTax", "1.25"); expectField(screen, "salary", "2.50");
+        click(screen, "participation_page"); selector(screen, "CHRONICLES", true);
+        click(screen, "currency_chronicles"); selector(screen, "EMERALD", true);
+        click(screen, "economy_page"); expectField(screen, "fixedTax", "0"); expectField(screen, "salary", "0");
+        setField(screen, "fixedTax", "9"); setField(screen, "salary", "12");
+        click(screen, "participation_page"); click(screen, "currency_emerald"); selector(screen, "CHRONICLES", true);
+        click(screen, "economy_page"); expectField(screen, "fixedTax", "0"); expectField(screen, "salary", "0");
+        setField(screen, "fixedTax", "1.25"); setField(screen, "salary", "2.50");
+        JsonObject saved = request(screen, "save_policy", "policy");
+        assertMoney(saved, "CHRONICLES", "fixedTax", 125); assertMoney(saved, "CHRONICLES", "salary", 250);
+        acknowledge(mc, screen, policy);
+        click(screen, "contribute");
+        check(button(screen, "claim_emeralds").active && button(screen, "claim_coins").active,
+                "Changing the policy currency must preserve existing credits in both currencies");
+        CURRENCY_CHECKS.add("Policy draft currency comes from the saved policy, clears fixed tax and salary on each currency change, saves Chronicle amounts as cents, and preserves historical credits.");
+
+        JsonObject unavailable = currencyDemo("CHRONICLES", "CHRONICLES", false);
+        screen = openDemo(mc, unavailable); click(screen, "contribute"); selector(screen, "EMERALD", false);
+        check(!button(screen, "claim_coins").active, "Chronicle claim must be disabled when the bridge is absent even with stored credit");
+        before = UI_REQUESTS.size();
+        check(!press(screen, "gui.kingdomtreasury.currency_emerald") && !press(screen, "gui.kingdomtreasury.claim_coins"),
+                "Unavailable Chronicle controls must not accept a click");
+        check(UI_REQUESTS.size() == before, "Unavailable Chronicle controls must not send requests");
+        setField(screen, "donation", "13");
+        assertMoney(request(screen, "donate", "donate"), "EMERALD", "amount", 13); acknowledge(mc, screen, unavailable);
+        assertCurrency(request(screen, "claim_emeralds", "claim"), "EMERALD"); acknowledge(mc, screen, unavailable);
+        click(screen, "policy");
+        check(!button(screen, "save_policy").active, "Unavailable Chronicle policy must not save before recovery to emeralds");
+        click(screen, "participation_page"); selector(screen, "CHRONICLES", true);
+        click(screen, "currency_chronicles"); selector(screen, "EMERALD", false);
+        click(screen, "economy_page"); expectField(screen, "fixedTax", "0"); expectField(screen, "salary", "0");
+        setField(screen, "fixedTax", "4"); setField(screen, "salary", "8");
+        saved = request(screen, "save_policy", "policy");
+        assertMoney(saved, "EMERALD", "fixedTax", 4); assertMoney(saved, "EMERALD", "salary", 8);
+        acknowledge(mc, screen, unavailable);
+        CURRENCY_CHECKS.add("Without Chronicles, donations fall back to emeralds, Chronicle selection and claims are disabled, emerald claims remain available, and a saved Chronicle policy can recover to emeralds.");
+
+        JsonObject contract = currencyDemo("EMERALD", "EMERALD", true); contract.addProperty("contractCurrency", "CHRONICLES");
+        screen = openDemo(mc, contract); click(screen, "contracts"); click(screen, "create_public");
+        setField(screen, "contractTitle", "Demonstration supply order"); setField(screen, "contractItem", "minecraft:oak_log");
+        setField(screen, "contractQuantity", "64"); setField(screen, "contractReward", "3.45");
+        assertMoney(request(screen, "publish", "publish"), "CHRONICLES", "reward", 345);
+        acknowledge(mc, screen, contract);
+        CURRENCY_CHECKS.add("Public contract reward parsing and the published currency use the contract currency independently of the active policy currency.");
+        ClientHooks.open("{\"close\":true}");
+    }
+
+    private static TreasuryScreen openDemo(Minecraft mc, JsonObject data) {
+        ClientHooks.open("{\"close\":true}");
+        ClientHooks.open(data.toString());
+        check(mc.screen instanceof TreasuryScreen, "Production treasury menu did not open");
+        var screen = (TreasuryScreen) mc.screen;
+        try {
+            var sender = TreasuryScreen.class.getDeclaredField("requestSender"); sender.setAccessible(true);
+            BiConsumer<String, JsonObject> recorder = (action, payload) -> {
+                var recorded = new LinkedHashMap<String, Object>(); recorded.put("action", action); recorded.put("payload", payload.deepCopy());
+                UI_REQUESTS.add(recorded);
+            };
+            sender.set(screen, recorder);
+        } catch (ReflectiveOperationException failure) { throw new IllegalStateException("Could not isolate the production menu request transport", failure); }
+        return screen;
+    }
+    private static void acknowledge(Minecraft mc, TreasuryScreen screen, JsonObject fixture) {
+        var reply = fixture.deepCopy(); reply.addProperty("success", true); ClientHooks.open(reply.toString());
+        check(mc.screen == screen, "Demonstration response replaced the active production screen");
+    }
+    private static void click(Screen screen, String suffix) {
+        check(press(screen, "gui.kingdomtreasury." + suffix), "Could not press native treasury button: " + suffix);
+    }
+    private static AbstractButton button(Screen screen, String suffix) {
+        String key = "gui.kingdomtreasury." + suffix;
+        for (var child : screen.children()) if (child instanceof AbstractButton button
+                && button.getMessage().getContents() instanceof TranslatableContents text && text.getKey().equals(key)) return button;
+        throw new IllegalStateException("Missing native treasury button: " + suffix);
+    }
+    private static void selector(Screen screen, String currency, boolean active) {
+        var selector = button(screen, "CHRONICLES".equals(currency) ? "currency_chronicles" : "currency_emerald");
+        check(selector.active == active, "Incorrect currency selector availability for " + currency);
+    }
+    private static EditBox field(TreasuryScreen screen, String key) throws ReflectiveOperationException {
+        var declared = TreasuryScreen.class.getDeclaredField("fields"); declared.setAccessible(true);
+        Object value = ((Map<?, ?>) declared.get(screen)).get(key);
+        check(value instanceof EditBox, "Missing production monetary field: " + key);
+        return (EditBox) value;
+    }
+    private static void setField(TreasuryScreen screen, String key, String value) throws ReflectiveOperationException {
+        field(screen, key).setValue(value); expectField(screen, key, value);
+    }
+    private static void expectField(TreasuryScreen screen, String key, String expected) throws ReflectiveOperationException {
+        check(expected.equals(field(screen, key).getValue()), "Unexpected " + key + " amount; expected " + expected);
+    }
+    private static void expectWallet(TreasuryScreen screen, long expected) throws ReflectiveOperationException {
+        var balance = TreasuryScreen.class.getDeclaredMethod("donationBalance"); balance.setAccessible(true);
+        check(((Long) balance.invoke(screen)) == expected, "Donation balance did not follow the selected currency wallet");
+    }
+    private static JsonObject request(TreasuryScreen screen, String button, String action) {
+        int previous = UI_REQUESTS.size(); click(screen, button);
+        check(UI_REQUESTS.size() == previous + 1, "Native " + button + " button did not send exactly one request");
+        var request = UI_REQUESTS.get(previous); check(action.equals(request.get("action")), "Unexpected action from " + button);
+        return (JsonObject) request.get("payload");
+    }
+    private static void assertCurrency(JsonObject payload, String currency) {
+        check(payload.has("currency") && currency.equals(payload.get("currency").getAsString()), "Wrong currency in native menu request: " + payload);
+    }
+    private static void assertMoney(JsonObject payload, String currency, String field, long amount) {
+        assertCurrency(payload, currency);
+        check(payload.has(field) && payload.get(field).getAsLong() == amount, "Wrong " + field + " in native menu request: " + payload);
+    }
+    private static JsonObject currencyDemo(String active, String policyCurrency, boolean chronLoaded) {
+        var data = demo(true); data.addProperty("currency", policyCurrency); data.addProperty("activeCurrency", active); data.addProperty("chroniclesLoaded", chronLoaded);
+        data.getAsJsonObject("policy").addProperty("currency", policyCurrency);
+        data.getAsJsonObject("policy").addProperty("fixedTax", 125); data.getAsJsonObject("policy").addProperty("salary", 250);
+        data.getAsJsonObject("credits").addProperty("CHRONICLES", 350);
+        if (!chronLoaded) data.getAsJsonObject("wallets").addProperty("CHRONICLES", -1);
+        return data;
+    }
+
     private static JsonObject demo(boolean manager) {
         var data = new JsonObject();
         data.addProperty("valid", true); data.addProperty("manager", manager); data.addProperty("managerName", "Queen Elowen");
         data.addProperty("currency", "EMERALD"); data.addProperty("playerBalance", 128);
+        data.addProperty("activeCurrency", "EMERALD"); data.addProperty("chroniclesLoaded", true); data.addProperty("contractCurrency", "EMERALD");
+        var wallets = new JsonObject(); wallets.addProperty("EMERALD", 128); wallets.addProperty("CHRONICLES", 7_650); data.add("wallets", wallets);
         data.addProperty("salaryNext", 1_792_080_000_000L); data.addProperty("taxDue", 0);
         data.addProperty("pendingPayroll", false); data.addProperty("pendingPayrollCost", 0);
         var balances = new JsonObject(); balances.addProperty("EMERALD", 960); balances.addProperty("CHRONICLES", 12_500); data.add("balances", balances);
@@ -168,6 +314,8 @@ public final class CrownVisualQA {
             var report = new LinkedHashMap<String, Object>(); report.put("success", success); report.put("message", message);
             report.put("screenshot", FILENAMES[0]); report.put("screenshots", List.copyOf(CAPTURED)); report.put("images", List.copyOf(CAPTURED));
             report.put("interfaceData", "Demonstration data in the actual production TreasuryScreen");
+            report.put("currencyInteractionChecks", List.copyOf(CURRENCY_CHECKS)); report.put("recordedUiRequests", List.copyOf(UI_REQUESTS));
+            report.put("requestTransport", "Recorded locally; no game-server network requests"); report.put("policyScreenshotPage", "participation and currency selector");
             report.put("bakedQuadCounts", Map.of("kingdomtreasury:crown_chest", itemQuads)); report.put("validatedBlockStates", states);
             report.put("windowWidth", Minecraft.getInstance().getWindow().getWidth()); report.put("windowHeight", Minecraft.getInstance().getWindow().getHeight());
             Files.writeString(OUT.resolve("result.json"), new GsonBuilder().setPrettyPrinting().create().toJson(report));

@@ -4,7 +4,7 @@ Tesouro público para Minecraft **1.21.1**, **NeoForge 21.1.256+** e **Java 21**
 
 ## Instalação e primeiro uso
 
-1. Coloca `crown-ledger-0.1.0.jar` na pasta `mods` de cada cliente e do servidor.
+1. Coloca `crown-ledger-0.1.1.jar` na pasta `mods` de cada cliente e do servidor.
 2. Para integrar os restantes sistemas, usa **Contracts & Bounties 0.3.1+**, **Realm Council 0.2.1+** e, opcionalmente, **Chronicles RP 0.5.2** com as suas dependências. Substitui os JARs antigos; não deixes duas versões do mesmo mod.
 3. Fabrica o **Cofre da Coroa** e clica nele com o botão direito. Também aparece na aba criativa **Crown Ledger** e na pesquisa.
 
@@ -35,7 +35,7 @@ O governante escolhe entre dois sistemas de imposto:
 
 O salário sai dos fundos existentes. Exemplo: salário de 20 € e imposto fixo de 5 € reservam 15 € para cada jogador elegível; os outros 5 € ficam no tesouro. O jogador recebe o crédito ao abrir o cofre e carregar em **Receber dinheiro**. Jogadores offline mantêm o seu crédito guardado. Um inventário cheio permite receber apenas a parte que couber.
 
-O ciclo inicial dura **168 horas**, com **10 minutos online** de atividade mínima. O governante pode alterar a duração entre 1 e 720 horas e configurar os restantes valores. A atividade conta presença online fora do modo espectador; não tenta detetar AFK. Se Chronicles estiver instalado, exige também uma personagem criada.
+O ciclo inicial dura **168 horas**, com **10 minutos online** de atividade mínima. O governante pode alterar a duração entre 1 e 720 horas e configurar os restantes valores. A atividade conta minutos completos de presença online fora do modo espectador; não tenta detetar AFK. O tempo offline não conta, e frações inferiores a um minuto são descartadas ao terminar sessão. Se Chronicles estiver instalado, exige também uma personagem criada.
 
 No fecho do ciclo, os participantes e os valores são fixados. Se faltar dinheiro para pagar a **todos**, o ciclo inteiro aguarda financiamento; não há prioridade para quem chegar primeiro. Um donativo ou rendimento dos contratos pode desbloqueá-lo. O governante pode cancelar explicitamente esse ciclo pendente, deixando registo. Só depois começa o ciclo seguinte. O tempo com o servidor desligado não cria vários salários retroativos.
 
@@ -53,7 +53,7 @@ O governante define a reputação necessária para publicar contratos particular
 
 ## Moedas e persistência
 
-Sem Chronicles, a moeda normal é a esmeralda inteira. Com Chronicles, os valores digitais usam cêntimos e o perfil original do jogador. Cada moeda tem saldo e créditos separados; não existe conversão automática. Os pagamentos de personagens offline ficam pendentes, sem editar os seus ficheiros de perfil.
+Sem Chronicles, a moeda normal é a esmeralda inteira. Com Chronicles, os valores digitais usam cêntimos e o perfil original do jogador. Cada moeda tem saldo e créditos separados; não existe conversão automática. O separador de donativos permite escolher a moeda. Nas regras, o governante pode escolher a moeda fiscal; mudar essa escolha repõe os campos de salário e imposto fixo em zero, sem converter saldos nem créditos anteriores. Os pagamentos de personagens offline ficam pendentes, sem editar os seus ficheiros de perfil.
 
 O ficheiro `data/crown_ledger.dat` guarda regras, saldo disponível, salários reservados, atividade, ciclo pendente e os últimos 256 movimentos. Os contratos usam também `data/contracts_ledger.dat`. As cópias de segurança devem incluir o mundo completo e os perfis do Chronicles. As transferências entre mods são verificadas no mesmo thread do servidor; estes ficheiros continuam a ser guardados pelo mecanismo normal de mundos do Minecraft, sem uma transação de disco única entre mods.
 

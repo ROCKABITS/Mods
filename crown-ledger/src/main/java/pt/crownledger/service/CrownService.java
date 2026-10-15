@@ -5,6 +5,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.mojang.logging.LogUtils;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -25,6 +26,7 @@ import pt.crownledger.compat.ContractsBridge;
 import pt.crownledger.compat.RealmBridge;
 import pt.crownledger.compat.WalletBridge;
 import pt.crownledger.data.TreasuryData;
+import pt.crownledger.domain.OnlineActivity;
 import pt.crownledger.domain.Policy;
 import pt.crownledger.domain.Treasury;
 import pt.crownledger.domain.Treasury.Currency;
@@ -37,6 +39,7 @@ public final class CrownService {
     private static final Gson JSON = new Gson();
     private static final Map<UUID, Session> SESSIONS = new HashMap<>();
     private static final Map<MinecraftServer, Long> NEXT_MINUTE = new HashMap<>();
+    private static final Map<MinecraftServer, OnlineActivity> ONLINE_ACTIVITY = new HashMap<>();
     private static final long SESSION_NANOS = 300_000_000_000L;
     private static final long MINUTE_NANOS = 60_000_000_000L;
 
@@ -69,40 +72,72 @@ public final class CrownService {
         }
         try { ContractsBridge.start(server); }
         catch (RuntimeException | LinkageError ex) { LOG.error("Contracts integration could not start; treasury funds are retained", ex); }
+        ONLINE_ACTIVITY.put(server, new OnlineActivity());
+        for (ServerPlayer player : server.getPlayerList().getPlayers()) login(player);
         NEXT_MINUTE.put(server, System.nanoTime() + MINUTE_NANOS);
     }
 
     public static void stop(MinecraftServer server) {
         NEXT_MINUTE.remove(server);
+        ONLINE_ACTIVITY.remove(server);
         SESSIONS.clear();
         try { ContractsBridge.stop(); }
         catch (RuntimeException | LinkageError ex) { LOG.warn("Contracts integration could not unregister cleanly", ex); }
     }
 
-    public static void logout(UUID player) { SESSIONS.remove(player); }
+    public static void login(ServerPlayer player) {
+        if (player == null) throw new IllegalStateException("gui.kingdomtreasury.invalid_request");
+        requireThread(player.getServer());
+        OnlineActivity activity = ONLINE_ACTIVITY.computeIfAbsent(player.getServer(), ignored -> new OnlineActivity());
+        activity.logout(player.getUUID());
+        if (!player.isSpectator()) activity.login(player.getUUID(), System.nanoTime());
+    }
+
+    public static void logout(UUID player) {
+        SESSIONS.remove(player);
+        ONLINE_ACTIVITY.values().forEach(activity -> activity.logout(player));
+    }
 
     public static void tick(MinecraftServer server) {
         requireThread(server);
         long nowNanos = System.nanoTime();
         Long next = NEXT_MINUTE.get(server);
-        if (next == null) { NEXT_MINUTE.put(server, nowNanos + MINUTE_NANOS); return; }
-        if (nowNanos - next < 0) return;
+        boolean minuteDue = next != null && nowNanos - next >= 0;
+        if (next == null) NEXT_MINUTE.put(server, nowNanos + MINUTE_NANOS);
+        OnlineActivity activity = ONLINE_ACTIVITY.computeIfAbsent(server, ignored -> new OnlineActivity());
+        List<ServerPlayer> active = new ArrayList<>();
+        for (ServerPlayer player : server.getPlayerList().getPlayers()) {
+            if (player.isSpectator()) { activity.logout(player.getUUID()); continue; }
+            try {
+                if (ChroniclesBridge.loaded() && !ChroniclesBridge.available(player)) {
+                    activity.logout(player.getUUID());
+                    continue;
+                }
+                activity.observe(player.getUUID(), nowNanos);
+                active.add(player);
+            } catch (RuntimeException | LinkageError ex) {
+                activity.logout(player.getUUID());
+                if (minuteDue) LOG.warn("Treasury activity could not read the profile for {}", player.getUUID(), ex);
+            }
+        }
+        if (!minuteDue) return;
         NEXT_MINUTE.put(server, nowNanos + MINUTE_NANOS);
         long now = System.currentTimeMillis();
-        try { cycle(server, now); }
-        catch (RuntimeException | LinkageError ex) { LOG.error("Treasury cycle retained its previous state", ex); }
-        for (ServerPlayer player : server.getPlayerList().getPlayers()) {
-            if (player.isSpectator()) continue;
+        for (ServerPlayer player : active) {
             try {
-                if (ChroniclesBridge.loaded() && !ChroniclesBridge.available(player)) continue;
                 TreasuryData data = TreasuryData.get(server);
                 Treasury treasury = data.treasury.copy();
-                treasury.recordActivity(player.getUUID(), player.getGameProfile().getName(), 1, now);
-                commit(data, treasury);
-                settlePlayer(player);
+                if (activity.recordCompletedMinutes(treasury, player.getUUID(), player.getGameProfile().getName(), now, nowNanos) > 0)
+                    commit(data, treasury);
             } catch (RuntimeException | LinkageError ex) {
-                LOG.warn("Treasury activity/tax could not settle for {}", player.getUUID(), ex);
+                LOG.warn("Treasury activity could not settle for {}", player.getUUID(), ex);
             }
+        }
+        try { cycle(server, now); }
+        catch (RuntimeException | LinkageError ex) { LOG.error("Treasury cycle retained its previous state", ex); }
+        for (ServerPlayer player : active) {
+            try { settlePlayer(player); }
+            catch (RuntimeException | LinkageError ex) { LOG.warn("Treasury tax could not settle for {}", player.getUUID(), ex); }
         }
     }
 
@@ -271,7 +306,7 @@ public final class CrownService {
             TreasuryData data = TreasuryData.get(player.getServer());
             long due = data.treasury.taxDue(player.getUUID(), currency);
             if (due == 0) continue;
-            if (currency == Currency.CHRONICLES && ChroniclesBridge.loaded() && !ChroniclesBridge.available(player)) continue;
+            if (currency == Currency.CHRONICLES && (!ChroniclesBridge.loaded() || !ChroniclesBridge.available(player))) continue;
             long available = currency == Currency.CHRONICLES && !ChroniclesBridge.loaded() ? 0 : WalletBridge.balance(player, currency);
             long paid = Math.min(due, available);
             Treasury next = data.treasury.copy();
@@ -287,7 +322,7 @@ public final class CrownService {
         requireThread(server);
         if (!ContractsBridge.available()) return;
         for (Currency currency : Currency.values()) {
-            long amount = ContractsBridge.balance(server, currency);
+            long amount = Math.min(ContractsBridge.balance(server, currency), ChroniclesBridge.MAX_CENTS);
             if (amount == 0) continue;
             TreasuryData data = TreasuryData.get(server);
             Treasury next = data.treasury.copy();
@@ -363,6 +398,17 @@ public final class CrownService {
         catch (RuntimeException | LinkageError ex) { if (message.isBlank()) message = "gui.kingdomtreasury.profile_required"; }
         view.put("manager", manager); view.put("managerName", managerName); view.put("message", message);
         view.put("currency", policy.currency().name()); view.put("contractCurrency", WalletBridge.activeCurrency().name()); view.put("playerBalance", wallet);
+        view.put("activeCurrency", WalletBridge.activeCurrency().name());
+        view.put("chroniclesLoaded", ChroniclesBridge.loaded());
+        Map<String, Long> wallets = new LinkedHashMap<>();
+        wallets.put("EMERALD", WalletBridge.balance(player, Currency.EMERALD));
+        long digitalWallet = -1;
+        if (ChroniclesBridge.loaded()) {
+            try { digitalWallet = WalletBridge.balance(player, Currency.CHRONICLES); }
+            catch (RuntimeException | LinkageError ignored) { }
+        }
+        wallets.put("CHRONICLES", digitalWallet);
+        view.put("wallets", wallets);
         view.put("success", java.util.Set.of("gui.kingdomtreasury.donated", "gui.kingdomtreasury.claimed", "gui.kingdomtreasury.policy_saved", "gui.kingdomtreasury.published", "gui.kingdomtreasury.cancelled", "gui.kingdomtreasury.collected", "gui.kingdomtreasury.payroll_cancelled").contains(message));
         view.put("balances", treasury.balances());
         view.put("credits", Map.of(Currency.EMERALD.name(), treasury.claims(player.getUUID(), Currency.EMERALD),
@@ -376,6 +422,7 @@ public final class CrownService {
         view.put("policy", rules); view.put("salaryNext", treasury.nextCycleAt());
         Treasury.PendingBatch pending = treasury.pendingBatch();
         view.put("pendingPayroll", pending != null); view.put("pendingPayrollCost", pending == null ? 0 : pending.totalNet());
+        view.put("pendingPayrollCurrency", pending == null ? policy.currency().name() : pending.currency().name());
         view.put("taxDue", treasury.taxDue(player.getUUID(), policy.currency()));
         view.put("contractsAvailable", ContractsBridge.available()); view.put("realmAvailable", RealmBridge.loaded());
         List<Map<String, Object>> contracts = List.of();
@@ -400,7 +447,7 @@ public final class CrownService {
     }
     private static void send(ServerPlayer player, String message) { CrownNetwork.send(player, snapshot(player, message)); }
     private static void close(ServerPlayer player, String message) {
-        logout(player.getUUID());
+        SESSIONS.remove(player.getUUID());
         try { CrownNetwork.send(player, JSON.toJson(Map.of("close", true, "message", message))); }
         catch (RuntimeException ex) { LOG.debug("Could not close Crown Ledger screen for {}", player.getUUID(), ex); }
         player.displayClientMessage(Component.translatable(message), false);

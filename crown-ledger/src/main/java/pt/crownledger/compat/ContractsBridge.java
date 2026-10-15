@@ -102,6 +102,8 @@ public final class ContractsBridge {
         List<?> contracts = (List<?>) call("kingdomContracts", new Class<?>[] {MinecraftServer.class}, server);
         List<Map<String, Object>> result = new ArrayList<>();
         for (Object contract : contracts) {
+            // Keep every cancellable public escrow visible before applying the snapshot limit.
+            if (!"OPEN".equals(accessor(contract, "status").toString())) continue;
             Map<String, Object> values = new LinkedHashMap<>();
             for (String name : List.of("id", "title", "item", "quantity", "reward", "currency", "tax", "netReward", "status"))
                 values.put(name, accessor(contract, name));

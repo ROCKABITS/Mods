@@ -77,7 +77,7 @@
   "gui.kingdomtreasury.contract_payment": "Reserved from the kingdom: %s",
   "gui.kingdomtreasury.page": "Page %s / %s",
   "gui.kingdomtreasury.public_contract_hint": "The full reward is reserved from the public treasury. Delivered materials belong to the kingdom. Cancelling an open contract returns its reward to the treasury.",
-  "gui.kingdomtreasury.donation_amount_hint": "Choose a positive amount in the active currency. Donations cannot be withdrawn as personal deposits.",
+  "gui.kingdomtreasury.donation_amount_hint": "Choose a positive amount in the selected donation currency. Donations cannot be withdrawn as personal deposits.",
   "gui.kingdomtreasury.tax_percent_hint": "0–100%, with up to two decimal places. A 20 € reward at 5% pays 19 € to the worker and 1 € to the kingdom.",
   "gui.kingdomtreasury.fixed_tax_hint": "A nonnegative amount per eligible player each cycle. Used only in fixed tax mode.",
   "gui.kingdomtreasury.salary_hint": "A nonnegative payment per eligible player each cycle, funded by the public treasury.",
@@ -112,5 +112,15 @@
   "gui.kingdomtreasury.cancelled": "Public contract cancelled; its reserved reward returned to the treasury.",
   "gui.kingdomtreasury.collected": "Kingdom materials collected. Any remaining items stay saved.",
   "gui.kingdomtreasury.nothing_materials": "There are no materials to collect, or your inventory is full.",
-  "gui.kingdomtreasury.payroll_cancelled": "The frozen payroll cycle was cancelled. Reserved salary claims remain saved."
+  "gui.kingdomtreasury.payroll_cancelled": "The frozen payroll cycle was cancelled. Reserved salary claims remain saved.",
+  "gui.kingdomtreasury.currency_emerald": "Emeralds",
+  "gui.kingdomtreasury.currency_chronicles": "Chronicles RP (€)",
+  "gui.kingdomtreasury.donation_currency": "Donation currency",
+  "gui.kingdomtreasury.fiscal_currency": "Tax and salary currency",
+  "gui.kingdomtreasury.donation_currency_hint": "Choose emeralds or Chronicles RP money. Changing currency resets the donation amount to 0.",
+  "gui.kingdomtreasury.policy_currency_hint": "Changing currency resets the fixed tax and salary to 0. Enter new amounts before saving; stored funds and credits keep their original currency.",
+  "gui.kingdomtreasury.currency_unavailable": "Chronicles RP is unavailable. Emeralds remain available; stored money is preserved.",
+  "gui.kingdomtreasury.credit_unavailable": "Saved money: %s. Install Chronicles RP again to collect it.",
+  "gui.kingdomtreasury.wallet_unavailable": "Create a Chronicles RP character to use this wallet.",
+  "gui.kingdomtreasury.contract_currency": "Reward currency: %s"
 }

@@ -35,6 +35,7 @@ import net.neoforged.neoforge.gametest.GameTestHolder;
 import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 import pt.crownledger.block.BlockRegistry;
 import pt.crownledger.block.CrownChestBlock;
+import pt.crownledger.compat.ContractsBridge;
 import pt.crownledger.compat.RealmBridge;
 import pt.crownledger.data.TreasuryData;
 import pt.crownledger.domain.Policy;
@@ -471,6 +472,71 @@ public final class CrownGameTests {
             CrownService.sweep(successor.server);
             helper.assertTrue(data.treasury.balance(EMERALD) == 21,
                     "Repeating escrow synchronization duplicated tax or cancellation refunds");
+        }
+        helper.succeed();
+    }
+
+    @GameTest(template = "crown_empty", timeoutTicks = 100)
+    public static void olderOpenPublicContractsRemainManageableAfterNewerContractsFinish(GameTestHelper helper) {
+        var data = reset(helper);
+        if (!contractsLoaded()) { helper.succeed(); return; }
+        var governor = player(helper);
+        var donor = player(helper);
+        donor.getInventory().setItem(0, new ItemStack(Items.EMERALD, 40));
+        try (var authority = new Governor(helper, governor)) {
+            CrownService.donate(donor, 40, EMERALD);
+            UUID olderOpen = CrownService.publishPublic(governor, "Obra publica ainda aberta", "minecraft:oak_log", 1, 1);
+            for (int index = 0; index < 16; index++) {
+                UUID newer = CrownService.publishPublic(governor, "Obra publica terminada " + index,
+                        "minecraft:oak_log", 1, 1);
+                CrownService.cancelPublic(governor, newer);
+            }
+            var visible = ContractsBridge.contracts(governor.server);
+            helper.assertTrue(visible.size() == 1 && olderOpen.equals(visible.getFirst().get("id"))
+                            && "OPEN".equals(visible.getFirst().get("status").toString()),
+                    "Sixteen newer terminal contracts hid an older public contract that still needs management");
+            CrownService.cancelPublic(governor, olderOpen);
+            helper.assertTrue(data.treasury.balance(EMERALD) == 40 && contractsBalance(governor.server) == 0,
+                    "The retained open public contract could not be cancelled and refunded exactly once");
+        }
+        helper.succeed();
+    }
+
+    @GameTest(template = "crown_empty", timeoutTicks = 100)
+    public static void invalidPublicContractsRetainTreasuryFundsWithoutLeavingEscrowCredit(GameTestHelper helper) {
+        var data = reset(helper);
+        if (!contractsLoaded()) { helper.succeed(); return; }
+        var governor = player(helper);
+        var donor = player(helper);
+        donor.getInventory().setItem(0, new ItemStack(Items.EMERALD, 40));
+        try (var authority = new Governor(helper, governor)) {
+            CrownService.donate(donor, 40, EMERALD);
+            var before = data.treasury.snapshot();
+            for (int attempt = 0; attempt < 2; attempt++) {
+                rejected(helper, () -> CrownService.publishPublic(governor,
+                        "Objeto inexistente", "minecraft:crown_qa_missing_item", 1, 10));
+                rejected(helper, () -> CrownService.publishPublic(governor,
+                        "", "minecraft:oak_log", 1, 10));
+                rejected(helper, () -> CrownService.publishPublic(governor,
+                        "Quantidade invalida", "minecraft:oak_log", 0, 10));
+                helper.assertTrue(data.treasury.snapshot().equals(before) && contractsBalance(governor.server) == 0,
+                        "A rejected public contract consumed treasury funds or retained unfunded kingdom credit");
+            }
+            var contracts = (java.util.List<?>) invokeStatic("pt.contracts.api.ContractsApi", "kingdomContracts",
+                    new Class<?>[]{MinecraftServer.class}, governor.server);
+            helper.assertTrue(contracts.isEmpty(), "Invalid public requests created actual Contracts escrow entries");
+            CrownService.sweep(governor.server);
+            helper.assertTrue(data.treasury.snapshot().equals(before) && contractsBalance(governor.server) == 0
+                            && donor.getInventory().countItem(Items.EMERALD) == 0,
+                    "Sweeping after rejected public contracts minted money or changed the funded treasury");
+            UUID valid = CrownService.publishPublic(governor, "Obra valida apos rejeicoes", "minecraft:oak_log", 1, 10);
+            var visible = ContractsBridge.contracts(governor.server);
+            helper.assertTrue(data.treasury.balance(EMERALD) == 30 && contractsBalance(governor.server) == 0
+                            && visible.size() == 1 && valid.equals(visible.getFirst().get("id")),
+                    "Rejected requests left orphan contracts or prevented a later funded public publication");
+            CrownService.cancelPublic(governor, valid);
+            helper.assertTrue(data.treasury.balance(EMERALD) == 40 && contractsBalance(governor.server) == 0,
+                    "Publication after rejected requests did not return exactly its funded reward");
         }
         helper.succeed();
     }

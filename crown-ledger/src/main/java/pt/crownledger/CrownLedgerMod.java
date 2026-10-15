@@ -39,6 +39,7 @@ public final class CrownLedgerMod {
         NeoForge.EVENT_BUS.addListener(CrownLedgerMod::stopped);
         NeoForge.EVENT_BUS.addListener(CrownLedgerMod::tick);
         NeoForge.EVENT_BUS.addListener(CrownLedgerMod::logout);
+        NeoForge.EVENT_BUS.addListener(CrownLedgerMod::login);
     }
     private static void commands(RegisterCommandsEvent event) {
         event.getDispatcher().register(Commands.literal("crown").requires(source -> source.hasPermission(2))
@@ -59,5 +60,8 @@ public final class CrownLedgerMod {
     private static void started(ServerStartedEvent event) { CrownService.start(event.getServer()); }
     private static void stopped(ServerStoppedEvent event) { CrownService.stop(event.getServer()); }
     private static void tick(ServerTickEvent.Post event) { CrownService.tick(event.getServer()); }
+    private static void login(PlayerEvent.PlayerLoggedInEvent event) {
+        if (event.getEntity() instanceof net.minecraft.server.level.ServerPlayer player) CrownService.login(player);
+    }
     private static void logout(PlayerEvent.PlayerLoggedOutEvent event) { CrownService.logout(event.getEntity().getUUID()); }
 }

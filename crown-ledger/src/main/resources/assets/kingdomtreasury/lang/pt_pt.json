@@ -77,7 +77,7 @@
   "gui.kingdomtreasury.contract_payment": "Reservado pelo reino: %s",
   "gui.kingdomtreasury.page": "Página %s / %s",
   "gui.kingdomtreasury.public_contract_hint": "A recompensa total fica reservada na tesouraria pública. Os materiais entregues pertencem ao reino. Cancelar um contrato aberto devolve a recompensa à tesouraria.",
-  "gui.kingdomtreasury.donation_amount_hint": "Escolhe um valor positivo na moeda ativa. Os donativos não podem ser levantados como depósitos pessoais.",
+  "gui.kingdomtreasury.donation_amount_hint": "Escolhe um valor positivo na moeda selecionada para o donativo. Os donativos não podem ser levantados como depósitos pessoais.",
   "gui.kingdomtreasury.fixed_tax_hint": "Valor não negativo por jogador elegível em cada ciclo. Usado apenas no modo de imposto fixo.",
   "gui.kingdomtreasury.salary_hint": "Pagamento não negativo por jogador elegível em cada ciclo, financiado pela tesouraria pública.",
   "gui.kingdomtreasury.period_hours_hint": "Escolhe um ciclo entre 1 e 720 horas.",
@@ -112,5 +112,15 @@
   "gui.kingdomtreasury.cancelled": "Contrato público cancelado; a recompensa reservada regressou ao tesouro.",
   "gui.kingdomtreasury.collected": "Materiais do reino recolhidos. O que não coube mantém-se guardado.",
   "gui.kingdomtreasury.nothing_materials": "Não existem materiais para recolher ou o teu inventário está cheio.",
-  "gui.kingdomtreasury.payroll_cancelled": "O ciclo de salários pendente foi cancelado. Os salários já reservados mantêm-se guardados."
+  "gui.kingdomtreasury.payroll_cancelled": "O ciclo de salários pendente foi cancelado. Os salários já reservados mantêm-se guardados.",
+  "gui.kingdomtreasury.currency_emerald": "Esmeraldas",
+  "gui.kingdomtreasury.currency_chronicles": "Chronicles RP (€)",
+  "gui.kingdomtreasury.donation_currency": "Moeda do donativo",
+  "gui.kingdomtreasury.fiscal_currency": "Moeda dos impostos e salários",
+  "gui.kingdomtreasury.donation_currency_hint": "Escolhe esmeraldas ou dinheiro do Chronicles RP. Mudar de moeda repõe o valor do donativo a 0.",
+  "gui.kingdomtreasury.policy_currency_hint": "Mudar de moeda repõe o imposto fixo e o salário a 0. Introduz novos valores antes de guardar; os fundos e créditos guardados mantêm a moeda original.",
+  "gui.kingdomtreasury.currency_unavailable": "O Chronicles RP está indisponível. Podes usar esmeraldas; o dinheiro guardado mantém-se preservado.",
+  "gui.kingdomtreasury.credit_unavailable": "Dinheiro guardado: %s. Volta a instalar o Chronicles RP para o receber.",
+  "gui.kingdomtreasury.wallet_unavailable": "Cria uma personagem no Chronicles RP para usar esta carteira.",
+  "gui.kingdomtreasury.contract_currency": "Moeda da recompensa: %s"
 }
