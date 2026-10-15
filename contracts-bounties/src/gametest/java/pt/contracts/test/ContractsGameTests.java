@@ -1214,7 +1214,7 @@ public final class ContractsGameTests {
         helper.succeed();
     }
 
-    @GameTest(template = "contracts:contracts_empty", timeoutTicks = 20)
+    @GameTest(template = "contracts_empty", timeoutTicks = 20)
     public static void treasuryTransfersRequireProviderIdentityAndAreExact(GameTestHelper helper) {
         var data = reset(helper);
         var manager = player(helper);
