@@ -1,6 +1,7 @@
 package pt.contracts.visualtest;
 
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonParser;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -123,8 +124,9 @@ public final class BoardVisualQA {
             captureScreen = new PreviewScreen(captureIndex - 1);
             mc.setScreen(captureScreen);
         } else if (captureIndex == 4) {
+            validatePublicationAccess(mc);
             // Feed the exact public snapshot entry point used by server packets.
-            // These valid domain records are presentation fixtures, not live trades.
+            // These snapshots are presentation fixtures, not live trades or treasury policies.
             ContractsScreen.receive(demonstrationSnapshot());
             check(mc.screen instanceof ContractsScreen, "Production contract interface did not open");
             captureScreen = mc.screen;
@@ -164,6 +166,35 @@ public final class BoardVisualQA {
         screenStarted = System.currentTimeMillis();
     }
 
+    private static void validatePublicationAccess(Minecraft mc) {
+        Screen previous = mc.screen;
+        var locked = JsonParser.parseString(demonstrationSnapshot()).getAsJsonObject();
+        locked.addProperty("reputation", 5);
+        locked.addProperty("canPublish", false);
+        locked.addProperty("publicationReason", "gui.contracts.reputation_required");
+        ContractsScreen.receive(locked.toString());
+        check(mc.screen instanceof ContractsScreen, "Locked publishing must still allow browsing contracts");
+        check(hasButton(mc.screen, "gui.contracts.create", false), "Low reputation must disable publication");
+        check(hasButton(mc.screen, "gui.contracts.deliver", true), "Low reputation must still allow contract delivery");
+        check(hasButton(mc.screen, "gui.contracts.claim_emeralds", true), "Low reputation must still allow collecting rewards");
+        ContractsScreen.receive("");
+        check(!(mc.screen instanceof ContractsScreen), "Blank state must close the contract menu");
+        ContractsScreen.receive(demonstrationSnapshot());
+        ContractsScreen.receive("{\"close\":true,\"message\":\"gui.contracts.board_range\"}");
+        check(!(mc.screen instanceof ContractsScreen), "Expired board session must close the contract menu");
+        mc.setScreen(previous);
+        ContractsScreen.receive("{\"close\":true}");
+        check(mc.screen == previous, "Session close must leave unrelated screens open");
+    }
+
+    private static boolean hasButton(Screen screen, String key, boolean active) {
+        for (var child : screen.children()) {
+            if (child instanceof AbstractButton button && button.active == active
+                    && button.getMessage().getContents() instanceof TranslatableContents text && text.getKey().equals(key)) return true;
+        }
+        return false;
+    }
+
     private static String demonstrationSnapshot() {
         String[] titles = {
                 "Oak timber for the village inn", "Stone for the northern watchtower",
@@ -174,11 +205,27 @@ public final class BoardVisualQA {
         String[] authors = {"Rowan", "Aldric", "Mira", "Elowen", "Cedric", "Lyra"};
         int[] quantities = {64, 128, 96, 16, 64, 64};
         long[] rewards = {20, 32, 18, 24, 16, 24};
-        var contracts = new ArrayList<Ledger.Contract>();
+        var contracts = new ArrayList<Map<String, Object>>();
         for (int i = 0; i < titles.length; i++) {
-            contracts.add(new Ledger.Contract(new UUID(0, 101 + i), new UUID(0, 21 + i), authors[i],
-                    titles[i], "minecraft:" + materials[i], quantities[i], rewards[i],
-                    Ledger.Currency.EMERALD, Ledger.Status.OPEN, null));
+            boolean kingdom = i == 1 || i == 3;
+            var contract = new LinkedHashMap<String, Object>();
+            contract.put("id", new UUID(0, 101 + i).toString());
+            contract.put("author", kingdom ? new UUID(0, 0).toString() : new UUID(0, 21 + i).toString());
+            contract.put("issuer", new UUID(0, 21 + i).toString());
+            contract.put("authorName", kingdom ? "The kingdom" : authors[i]);
+            contract.put("title", titles[i]);
+            contract.put("item", "minecraft:" + materials[i]);
+            contract.put("quantity", quantities[i]);
+            contract.put("reward", rewards[i]);
+            contract.put("currency", "EMERALD");
+            contract.put("status", "OPEN");
+            contract.put("funding", kingdom ? "KINGDOM" : "PLAYER");
+            contract.put("taxBasisPoints", 500);
+            contract.put("tax", rewards[i] * 500 / 10_000);
+            contract.put("netReward", rewards[i] - rewards[i] * 500 / 10_000);
+            contract.put("reputationReward", kingdom ? 1 : 0);
+            contract.put("dailyReputationLimit", kingdom ? 5 : 0);
+            contracts.add(contract);
         }
         var data = new LinkedHashMap<String, Object>();
         data.put("me", new UUID(0, 1).toString());
@@ -189,6 +236,14 @@ public final class BoardVisualQA {
         data.put("page", 0);
         data.put("pages", 1);
         data.put("message", "");
+        data.put("reputation", 42);
+        data.put("requiredReputation", 20);
+        data.put("canPublish", true);
+        data.put("treasuryAvailable", true);
+        data.put("publicationReason", "");
+        data.put("reputationPending", 0);
+        data.put("missionsPending", 0);
+        data.put("taxBasisPoints", 500);
         data.put("contracts", contracts);
         data.put("deliveries", List.of(new Ledger.Delivery("minecraft:oak_log", 64)));
         return new GsonBuilder().create().toJson(data);

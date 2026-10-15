@@ -15,13 +15,25 @@ public final class Ledger {
     public static final int MAX_OPEN_PER_AUTHOR = 16;
     public static final int MAX_CONTRACTS = 2_048;
     public static final int MAX_ITEM_ID_LENGTH = 128;
+    public static final int MAX_PENDING_MISSIONS = 1_000_000;
+    public static final UUID KINGDOM_ACCOUNT = new UUID(0, 1);
     private static final Pattern ITEM_ID = Pattern.compile("[a-z0-9_.-]+:[a-z0-9/._-]+");
 
     public enum Currency { EMERALD, CHRONICLES }
     public enum Status { OPEN, COMPLETED, CANCELLED }
+    public enum Funding { PLAYER, KINGDOM }
 
     public record Contract(UUID id, UUID author, String authorName, String title, String item,
-                           int quantity, long reward, Currency currency, Status status, UUID worker) {
+                           int quantity, long reward, Currency currency, Status status, UUID worker,
+                           Funding funding, UUID issuer, int taxBasisPoints, int reputationReward,
+                           int dailyReputationLimit) {
+        /** Legacy contracts keep their original payment and never gain retroactive rewards. */
+        public Contract(UUID id, UUID author, String authorName, String title, String item,
+                        int quantity, long reward, Currency currency, Status status, UUID worker) {
+            this(id, author, authorName, title, item, quantity, reward, currency, status, worker,
+                    Funding.PLAYER, author, 0, 0, 0);
+        }
+
         public Contract {
             require(id, "Contract ID");
             require(author, "Author");
@@ -36,6 +48,22 @@ public final class Ledger {
             }
             require(currency, "Currency");
             require(status, "Status");
+            require(funding, "Funding");
+            require(issuer, "Issuer");
+            if (taxBasisPoints < 0 || taxBasisPoints > 10_000) {
+                throw new IllegalArgumentException("Tax must be between 0 and 10000 basis points");
+            }
+            if (reputationReward < 0 || reputationReward > 100
+                    || dailyReputationLimit < 0 || dailyReputationLimit > 100) {
+                throw new IllegalArgumentException("Reputation reward and daily limit must be between 0 and 100");
+            }
+            if (funding == Funding.KINGDOM) {
+                if (!KINGDOM_ACCOUNT.equals(author) || KINGDOM_ACCOUNT.equals(issuer)) {
+                    throw new IllegalArgumentException("Public contracts require the kingdom account and a player issuer");
+                }
+            } else if (!author.equals(issuer) || reputationReward != 0 || dailyReputationLimit != 0) {
+                throw new IllegalArgumentException("Private contracts require their author as issuer and cannot award progress");
+            }
             if (status == Status.COMPLETED) {
                 require(worker, "Completed contract worker");
                 if (author.equals(worker)) {
@@ -43,6 +71,25 @@ public final class Ledger {
                 }
             } else if (worker != null) {
                 throw new IllegalArgumentException("Only completed contracts can have a worker");
+            }
+        }
+
+        public long tax() { return reward * taxBasisPoints / 10_000; }
+        public long netReward() { return reward - tax(); }
+    }
+
+    public record Progress(int reputation, int missions) {
+        public Progress {
+            if (reputation < 0 || reputation > 100 || missions < 0 || missions > MAX_PENDING_MISSIONS) {
+                throw new IllegalArgumentException("Pending progress is outside the supported limits");
+            }
+        }
+    }
+
+    public record DailyProgress(long day, int reputation) {
+        public DailyProgress {
+            if (reputation < 0 || reputation > 100) {
+                throw new IllegalArgumentException("Daily reputation must be between 0 and 100");
             }
         }
     }
@@ -59,15 +106,25 @@ public final class Ledger {
     private final Map<UUID, Contract> contracts = new LinkedHashMap<>();
     private final Map<UUID, EnumMap<Currency, Long>> credits = new HashMap<>();
     private final Map<UUID, Map<String, Integer>> deliveries = new HashMap<>();
+    private final Map<UUID, Progress> progress = new HashMap<>();
+    private final Map<UUID, DailyProgress> daily = new HashMap<>();
 
     public Ledger() { }
 
     /** Restores a complete saved snapshot. Invalid or ambiguous state is rejected. */
     public Ledger(List<Contract> contracts, Map<UUID, Map<Currency, Long>> credits,
                   Map<UUID, List<Delivery>> deliveries) {
+        this(contracts, credits, deliveries, Map.of(), Map.of());
+    }
+
+    public Ledger(List<Contract> contracts, Map<UUID, Map<Currency, Long>> credits,
+                  Map<UUID, List<Delivery>> deliveries, Map<UUID, Progress> progress,
+                  Map<UUID, DailyProgress> daily) {
         require(contracts, "Contracts");
         require(credits, "Credits");
         require(deliveries, "Deliveries");
+        require(progress, "Progress");
+        require(daily, "Daily progress");
         if (contracts.size() > MAX_CONTRACTS) {
             throw new IllegalArgumentException("Too many saved contracts");
         }
@@ -98,6 +155,18 @@ public final class Ledger {
                 this.credits.put(entry.getKey(), balances);
             }
         }
+        for (var entry : progress.entrySet()) {
+            require(entry.getKey(), "Progress recipient");
+            require(entry.getValue(), "Pending progress");
+            if (entry.getValue().reputation() != 0 || entry.getValue().missions() != 0) {
+                this.progress.put(entry.getKey(), entry.getValue());
+            }
+        }
+        for (var entry : daily.entrySet()) {
+            require(entry.getKey(), "Daily progress recipient");
+            require(entry.getValue(), "Daily progress");
+            this.daily.put(entry.getKey(), entry.getValue());
+        }
         for (var entry : deliveries.entrySet()) {
             require(entry.getKey(), "Delivery recipient");
             require(entry.getValue(), "Saved deliveries");
@@ -117,8 +186,16 @@ public final class Ledger {
     /** The caller must reserve the full payment before publishing. */
     public synchronized Contract publish(UUID id, UUID author, String authorName, String title,
                                          String item, int quantity, long reward, Currency currency) {
+        return publish(id, author, authorName, title, item, quantity, reward, currency,
+                Funding.PLAYER, author, 0, 0, 0);
+    }
+
+    public synchronized Contract publish(UUID id, UUID author, String authorName, String title,
+                                         String item, int quantity, long reward, Currency currency,
+                                         Funding funding, UUID issuer, int taxBasisPoints,
+                                         int reputationReward, int dailyReputationLimit) {
         Contract contract = new Contract(id, author, authorName, title, item, quantity, reward,
-                currency, Status.OPEN, null);
+                currency, Status.OPEN, null, funding, issuer, taxBasisPoints, reputationReward, dailyReputationLimit);
         if (contracts.containsKey(id)) {
             throw new IllegalArgumentException("Contract ID already exists");
         }
@@ -142,12 +219,23 @@ public final class Ledger {
 
     /** The caller must supply all required materials before completing. */
     public synchronized void complete(UUID id, UUID worker) {
+        complete(id, worker, Math.floorDiv(System.currentTimeMillis(), 86_400_000L));
+    }
+
+    public synchronized void complete(UUID id, UUID worker, long epochDay) {
         require(worker, "Worker");
         Contract contract = openContract(id);
         if (contract.author().equals(worker)) {
             throw new IllegalArgumentException("Authors cannot complete their own contracts");
         }
-        long newCredit = checkedCredit(worker, contract.currency(), contract.reward());
+        long newWorkerCredit = checkedCredit(worker, contract.currency(), contract.netReward());
+        long newKingdomCredit = KINGDOM_ACCOUNT.equals(worker) ? newWorkerCredit
+                : credits(KINGDOM_ACCOUNT, contract.currency());
+        try {
+            newKingdomCredit = Math.addExact(newKingdomCredit, contract.tax());
+        } catch (ArithmeticException exception) {
+            throw new IllegalStateException("Kingdom credit would overflow", exception);
+        }
         int newQuantity;
         try {
             newQuantity = Math.addExact(deliveryQuantity(contract.author(), contract.item()), contract.quantity());
@@ -156,11 +244,30 @@ public final class Ledger {
         }
         Contract completed = new Contract(contract.id(), contract.author(), contract.authorName(),
                 contract.title(), contract.item(), contract.quantity(), contract.reward(),
-                contract.currency(), Status.COMPLETED, worker);
-        setCredit(worker, contract.currency(), newCredit);
+                contract.currency(), Status.COMPLETED, worker, contract.funding(), contract.issuer(),
+                contract.taxBasisPoints(), contract.reputationReward(), contract.dailyReputationLimit());
+        Progress newProgress = null;
+        DailyProgress newDaily = null;
+        if (contract.funding() == Funding.KINGDOM && !worker.equals(contract.issuer())) {
+            DailyProgress previous = daily.get(worker);
+            long day = previous == null ? epochDay : Math.max(epochDay, previous.day());
+            int earned = previous == null || epochDay > previous.day() ? 0 : previous.reputation();
+            int award = Math.min(contract.reputationReward(), Math.max(0, contract.dailyReputationLimit() - earned));
+            Progress pending = pendingProgress(worker);
+            newProgress = new Progress(Math.min(100, pending.reputation() + award),
+                    Math.min(MAX_PENDING_MISSIONS, pending.missions() + 1));
+            newDaily = new DailyProgress(day, earned + award);
+        }
+        // Every overflow and state transition is checked before the first mutation.
+        setCredit(worker, contract.currency(), KINGDOM_ACCOUNT.equals(worker) ? newKingdomCredit : newWorkerCredit);
+        if (!KINGDOM_ACCOUNT.equals(worker)) setCredit(KINGDOM_ACCOUNT, contract.currency(), newKingdomCredit);
         deliveries.computeIfAbsent(contract.author(), key -> new LinkedHashMap<>())
                 .put(contract.item(), newQuantity);
         contracts.put(id, completed);
+        if (newProgress != null) {
+            progress.put(worker, newProgress);
+            daily.put(worker, newDaily);
+        }
     }
 
     public synchronized void cancel(UUID id, UUID author) {
@@ -172,7 +279,8 @@ public final class Ledger {
         long newCredit = checkedCredit(author, contract.currency(), contract.reward());
         Contract cancelled = new Contract(contract.id(), contract.author(), contract.authorName(),
                 contract.title(), contract.item(), contract.quantity(), contract.reward(),
-                contract.currency(), Status.CANCELLED, null);
+                contract.currency(), Status.CANCELLED, null, contract.funding(), contract.issuer(),
+                contract.taxBasisPoints(), contract.reputationReward(), contract.dailyReputationLimit());
         setCredit(author, contract.currency(), newCredit);
         contracts.put(id, cancelled);
     }
@@ -186,6 +294,46 @@ public final class Ledger {
         require(currency, "Currency");
         Map<Currency, Long> balances = credits.get(recipient);
         return balances == null ? 0 : balances.getOrDefault(currency, 0L);
+    }
+
+    /** Adds funded account credit; callers must already own the corresponding value. */
+    public synchronized void addCredit(UUID recipient, Currency currency, long amount) {
+        if (amount < 0) throw new IllegalArgumentException("Credit amount cannot be negative");
+        setCredit(recipient, currency, checkedCredit(recipient, currency, amount));
+    }
+
+    public synchronized void transferCredit(UUID from, UUID to, Currency currency, long amount) {
+        require(from, "Credit sender");
+        require(to, "Credit recipient");
+        require(currency, "Currency");
+        if (amount < 0) throw new IllegalArgumentException("Transfer amount cannot be negative");
+        long available = credits(from, currency);
+        if (amount > available) throw new IllegalStateException("Not enough claimable credit");
+        if (from.equals(to) || amount == 0) return;
+        long received = checkedCredit(to, currency, amount);
+        setCredit(from, currency, available - amount);
+        setCredit(to, currency, received);
+    }
+
+    public synchronized Progress pendingProgress(UUID recipient) {
+        require(recipient, "Progress recipient");
+        return progress.getOrDefault(recipient, new Progress(0, 0));
+    }
+
+    /** Compare-and-clear prevents an old synchronization request consuming newer awards. */
+    public synchronized void takeProgress(UUID recipient, Progress exact) {
+        require(exact, "Exact pending progress");
+        if (!pendingProgress(recipient).equals(exact)) {
+            throw new IllegalStateException("Pending progress changed before it was claimed");
+        }
+        progress.remove(recipient);
+    }
+
+    public synchronized Map<UUID, Progress> progressSnapshot() { return Map.copyOf(progress); }
+    public synchronized Map<UUID, DailyProgress> dailySnapshot() { return Map.copyOf(daily); }
+
+    public synchronized Ledger copy() {
+        return new Ledger(list(), creditsSnapshot(), deliveriesSnapshot(), progressSnapshot(), dailySnapshot());
     }
 
     public synchronized void takeCredit(UUID recipient, Currency currency, long amount) {
@@ -273,7 +421,15 @@ public final class Ledger {
     }
 
     private void setCredit(UUID recipient, Currency currency, long amount) {
-        credits.computeIfAbsent(recipient, key -> new EnumMap<>(Currency.class)).put(currency, amount);
+        if (amount == 0) {
+            Map<Currency, Long> balances = credits.get(recipient);
+            if (balances != null) {
+                balances.remove(currency);
+                if (balances.isEmpty()) credits.remove(recipient);
+            }
+        } else {
+            credits.computeIfAbsent(recipient, key -> new EnumMap<>(Currency.class)).put(currency, amount);
+        }
     }
 
     private int deliveryQuantity(UUID recipient, String item) {

@@ -1,6 +1,8 @@
 package pt.contracts;
 
 import com.google.gson.Gson;
+import java.time.LocalDate;
+import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -14,15 +16,20 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
+import pt.contracts.api.ContractsApi;
+import pt.contracts.api.ContractsApi.Policy;
 import pt.contracts.compat.ChroniclesBridge;
 import pt.contracts.domain.Ledger;
 import pt.contracts.domain.Ledger.Contract;
 import pt.contracts.domain.Ledger.Currency;
 import pt.contracts.domain.Ledger.Delivery;
+import pt.contracts.domain.Ledger.Funding;
+import pt.contracts.domain.Ledger.Progress;
 import pt.contracts.domain.Ledger.Status;
 import pt.contracts.network.*;
 
@@ -48,12 +55,10 @@ public final class ContractsService {
 
     public static void open(ServerPlayer player, BlockPos board) {
         requireThread(player);
-        if (player.isSpectator()) return;
         SESSIONS.put(player.getUUID(), new Session(player, board));
-        try { requireSession(player); send(player, ""); }
+        try { requireSession(player); flushProgress(player); send(player, ""); }
         catch (IllegalArgumentException | IllegalStateException ex) {
-            logout(player.getUUID());
-            player.displayClientMessage(Component.translatable(ex.getMessage()), false);
+            close(player, errorMessage(ex));
         }
     }
     public static void logout(UUID id) { SESSIONS.remove(id); }
@@ -62,16 +67,17 @@ public final class ContractsService {
     public static void requireSession(ServerPlayer player) {
         requireThread(player);
         Session session = SESSIONS.get(player.getUUID());
-        if (session == null || System.nanoTime() - session.expires >= 0 || player.isSpectator())
+        if (session == null || session.board == null || System.nanoTime() - session.expires >= 0 || player.isSpectator())
             throw new IllegalStateException("gui.contracts.session_missing");
-        if (session.board != null) {
-            var state = player.level().getBlockState(session.board);
-            if (!session.dimension.equals(player.level().dimension())
-                    || player.distanceToSqr(Vec3.atCenterOf(session.board)) > 64
-                    || !(state.getBlock() instanceof ContractBoardBlock board)
-                    || !board.validStructure(player.level(), session.board, state))
-                throw new IllegalStateException("gui.contracts.board_range");
-        }
+        // Check dimension, distance and loaded chunk before any block/state access.
+        if (!session.dimension.equals(player.level().dimension())
+                || player.distanceToSqr(Vec3.atCenterOf(session.board)) > 64
+                || !player.level().hasChunkAt(session.board))
+            throw new IllegalStateException("gui.contracts.board_range");
+        var state = player.level().getBlockState(session.board);
+        if (!(state.getBlock() instanceof ContractBoardBlock board)
+                || !board.validStructure(player.level(), session.board, state))
+            throw new IllegalStateException("gui.contracts.board_range");
     }
 
     public static void action(ServerPlayer player, ContractsPackets.Action packet) {
@@ -106,33 +112,35 @@ public final class ContractsService {
                     message = count > 0 ? "gui.contracts.items_claimed" : "gui.contracts.nothing_items";
                 }
                 case "page" -> { session.page = Math.max(0, packet.quantity()); message = ""; }
-                case "refresh" -> message = "";
+                case "refresh" -> { flushProgress(player); message = ""; }
                 default -> throw new IllegalArgumentException("gui.contracts.invalid_request");
             }
             send(player, message);
         } catch (IllegalArgumentException | IllegalStateException ex) {
-            if (SESSIONS.containsKey(player.getUUID())) send(player, errorMessage(ex));
-            else player.displayClientMessage(Component.translatable(errorMessage(ex)), false);
+            // Never retry a snapshot after its physical session became invalid.
+            try { requireSession(player); }
+            catch (IllegalArgumentException | IllegalStateException invalid) {
+                close(player, errorMessage(invalid));
+                return;
+            }
+            try { send(player, errorMessage(ex)); }
+            catch (RuntimeException invalid) { close(player, errorMessage(invalid)); }
         }
     }
 
     public static Contract publish(ServerPlayer player, String title, String itemId, int quantity, long reward) {
         requireThread(player);
+        Policy policy = ContractsApi.policy(player.server);
+        requireReputation(player, policy);
         Item item = item(itemId);
         if (item == Items.AIR) throw new IllegalArgumentException("O ar não pode ser entregue.");
         ContractsData data = ContractsData.get(player.server);
         Ledger next = copy(data.ledger);
         Currency currency = currency();
         Contract contract = next.publish(UUID.randomUUID(), player.getUUID(), player.getGameProfile().getName(),
-                title, itemId, quantity, reward, currency);
-        if (currency == Currency.CHRONICLES) {
-            ChroniclesBridge.debit(player, reward);
-        } else {
-            // A plan validates the whole debit before touching any slot.
-            List<ItemStack> inventory = inventory(player);
-            remove(inventory, Items.EMERALD, reward);
-            apply(player, inventory);
-        }
+                title, itemId, quantity, reward, currency, Funding.PLAYER, player.getUUID(),
+                policy.taxBasisPoints(), 0, 0);
+        debit(player, reward, currency);
         commit(data, next, player);
         return contract;
     }
@@ -141,18 +149,21 @@ public final class ContractsService {
         requireThread(player);
         ContractsData data = ContractsData.get(player.server);
         Ledger next = copy(data.ledger);
-        next.complete(id, player.getUUID());
+        next.complete(id, player.getUUID(), LocalDate.now(ZoneOffset.UTC).toEpochDay());
         Contract contract = next.list().stream().filter(c -> c.id().equals(id)).findFirst().orElseThrow();
         List<ItemStack> inventory = inventory(player);
         remove(inventory, item(contract.item()), contract.quantity());
         apply(player, inventory);
         commit(data, next, player);
+        flushProgress(player);
     }
 
     public static void cancel(ServerPlayer player, UUID id) {
         requireThread(player);
         ContractsData data = ContractsData.get(player.server);
         Ledger next = copy(data.ledger);
+        if (contract(next, id).funding() == Funding.KINGDOM)
+            throw new IllegalStateException("gui.contracts.public_only");
         next.cancel(id, player.getUUID());
         commit(data, next, player);
     }
@@ -183,18 +194,22 @@ public final class ContractsService {
 
     public static int collect(ServerPlayer player) {
         requireThread(player);
+        return collect(player, player.getUUID());
+    }
+
+    private static int collect(ServerPlayer player, UUID recipient) {
         ContractsData data = ContractsData.get(player.server);
         Ledger next = copy(data.ledger);
         List<ItemStack> inventory = inventory(player);
         int collected = 0;
-        for (Delivery delivery : data.ledger.deliveries(player.getUUID())) {
+        for (Delivery delivery : data.ledger.deliveries(recipient)) {
             // Removed modded items stay in storage instead of turning into air or deleting other claims.
             ResourceLocation key = ResourceLocation.tryParse(delivery.item());
             if (key == null || !BuiltInRegistries.ITEM.containsKey(key)) continue;
             Item item = BuiltInRegistries.ITEM.get(key);
             int count = insert(inventory, item, delivery.quantity());
             if (count > 0) {
-                next.takeDelivery(player.getUUID(), delivery.item(), count);
+                next.takeDelivery(recipient, delivery.item(), count);
                 collected += count;
             }
         }
@@ -202,8 +217,105 @@ public final class ContractsService {
         return collected;
     }
 
+    /** Public money is reserved from the realm's actual stored balance, never a manager's wallet. */
+    public static Contract publishPublic(ServerPlayer manager, String title, String itemId, int quantity, long reward) {
+        requireThread(manager);
+        ContractsApi.requireManager(manager);
+        Policy policy = ContractsApi.policy(manager.server);
+        item(itemId);
+        ContractsData data = ContractsData.get(manager.server);
+        Ledger next = copy(data.ledger);
+        Contract contract = next.publish(UUID.randomUUID(), Ledger.KINGDOM_ACCOUNT, "Kingdom",
+                title, itemId, quantity, reward, currency(), Funding.KINGDOM, manager.getUUID(),
+                policy.taxBasisPoints(), policy.reputationPerPublicContract(), policy.dailyReputationLimit());
+        next.takeCredit(Ledger.KINGDOM_ACCOUNT, contract.currency(), reward);
+        commit(data, next, manager);
+        return contract;
+    }
+
+    /** Donation entry point for a physical Treasury menu; amount is debited before ledger commit. */
+    public static void depositKingdom(ServerPlayer donor, long amount, String currencyName) {
+        requireThread(donor);
+        if (!ContractsApi.treasuryAvailable()) throw new IllegalStateException("gui.contracts.treasury_unavailable");
+        ContractsApi.policy(donor.server);
+        Currency currency = Currency.valueOf(currencyName);
+        if (currency != currency()) throw new IllegalArgumentException("gui.contracts.currency_changed");
+        if (amount < 1 || amount > ChroniclesBridge.MAX_CENTS)
+            throw new IllegalArgumentException("Invalid treasury deposit amount");
+        ContractsData data = ContractsData.get(donor.server);
+        Ledger next = copy(data.ledger);
+        next.addCredit(Ledger.KINGDOM_ACCOUNT, currency, amount);
+        debit(donor, amount, currency);
+        commit(data, next, donor);
+    }
+
+    public static long kingdomBalance(MinecraftServer server, String currencyName) {
+        ContractsApi.requireServerThread(server);
+        return ContractsData.get(server).ledger.credits(Ledger.KINGDOM_ACCOUNT, Currency.valueOf(currencyName));
+    }
+
+    public static List<Delivery> kingdomDeliveries(MinecraftServer server) {
+        ContractsApi.requireServerThread(server);
+        return ContractsData.get(server).ledger.deliveries(Ledger.KINGDOM_ACCOUNT);
+    }
+
+    public static void cancelPublic(ServerPlayer manager, UUID id) {
+        requireThread(manager);
+        ContractsApi.requireManager(manager);
+        ContractsData data = ContractsData.get(manager.server);
+        Ledger next = copy(data.ledger);
+        if (contract(next, id).funding() != Funding.KINGDOM)
+            throw new IllegalArgumentException("gui.contracts.public_only");
+        next.cancel(id, Ledger.KINGDOM_ACCOUNT);
+        commit(data, next, manager);
+    }
+
+    public static int collectKingdom(ServerPlayer manager) {
+        requireThread(manager);
+        ContractsApi.requireManager(manager);
+        return collect(manager, Ledger.KINGDOM_ACCOUNT);
+    }
+
+    private static Contract contract(Ledger ledger, UUID id) {
+        return ledger.list().stream().filter(c -> c.id().equals(id)).findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("Contract does not exist"));
+    }
+
+    private static void requireReputation(ServerPlayer player, Policy policy) {
+        if (policy.minimumReputation() == 0) return;
+        if (!ChroniclesBridge.loaded() || !ChroniclesBridge.available(player))
+            throw new IllegalStateException("gui.contracts.profile_required");
+        if (ChroniclesBridge.reputation(player) < policy.minimumReputation())
+            throw new IllegalStateException("gui.contracts.reputation_required");
+    }
+
+    private static void debit(ServerPlayer player, long amount, Currency currency) {
+        if (currency == Currency.CHRONICLES) ChroniclesBridge.debit(player, amount);
+        else {
+            List<ItemStack> inventory = inventory(player);
+            remove(inventory, Items.EMERALD, amount);
+            apply(player, inventory);
+        }
+    }
+
+    /** Applying progress may fail independently of an already-settled material/payment transaction. */
+    private static void flushProgress(ServerPlayer player) {
+        ContractsData data = ContractsData.get(player.server);
+        Progress pending = data.ledger.pendingProgress(player.getUUID());
+        if (pending.reputation() == 0 && pending.missions() == 0) return;
+        try {
+            if (!ChroniclesBridge.available(player)) return;
+            Ledger next = copy(data.ledger);
+            next.takeProgress(player.getUUID(), pending);
+            ChroniclesBridge.applyProgress(player, pending.reputation(), pending.missions());
+            commit(data, next, player);
+        } catch (RuntimeException | LinkageError ex) {
+            ContractsMod.LOG.warn("Contract progress remains pending for {}", player.getUUID(), ex);
+        }
+    }
+
     private static Currency currency() { return ChroniclesBridge.loaded() ? Currency.CHRONICLES : Currency.EMERALD; }
-    private static Ledger copy(Ledger ledger) { return new Ledger(ledger.list(), ledger.creditsSnapshot(), ledger.deliveriesSnapshot()); }
+    private static Ledger copy(Ledger ledger) { return ledger.copy(); }
     private static void commit(ContractsData data, Ledger next, ServerPlayer player) {
         data.ledger = next;
         data.setDirty();
@@ -266,6 +378,7 @@ public final class ContractsService {
     }
 
     public static String snapshot(ServerPlayer player, String message) {
+        requireSession(player);
         ContractsData data = ContractsData.get(player.server);
         Session session = SESSIONS.get(player.getUUID());
         List<Contract> open = new ArrayList<>(data.ledger.list().stream().filter(c -> c.status() == Status.OPEN).toList());
@@ -275,9 +388,13 @@ public final class ContractsService {
         if (session != null) session.page = page;
         Currency currency = currency();
         long wallet = currency == Currency.EMERALD ? count(inventory(player), Items.EMERALD) : 0;
+        boolean profileAvailable = currency == Currency.EMERALD;
         if (currency == Currency.CHRONICLES) {
             try {
-                if (ChroniclesBridge.available(player)) wallet = ChroniclesBridge.balance(player);
+                if (ChroniclesBridge.available(player)) {
+                    wallet = ChroniclesBridge.balance(player);
+                    profileAvailable = true;
+                }
                 else if (message.isBlank()) message = "gui.contracts.profile_required";
             } catch (IllegalStateException ex) { if (message.isBlank()) message = ex.getMessage(); }
         }
@@ -286,12 +403,54 @@ public final class ContractsService {
         state.put("emeraldCredit", data.ledger.credits(player.getUUID(), Currency.EMERALD));
         state.put("chroniclesCredit", data.ledger.credits(player.getUUID(), Currency.CHRONICLES));
         state.put("page", page); state.put("pages", pages); state.put("message", message);
-        state.put("contracts", open.subList(page * PAGE_SIZE, Math.min(open.size(), (page + 1) * PAGE_SIZE)));
+        state.put("contracts", open.subList(page * PAGE_SIZE, Math.min(open.size(), (page + 1) * PAGE_SIZE))
+                .stream().map(ContractsService::contractState).toList());
+        int reputation = -1;
+        try { if (ChroniclesBridge.available(player)) reputation = ChroniclesBridge.reputation(player); }
+        catch (RuntimeException | LinkageError ignored) { /* Existing claims remain accessible if the optional adapter is broken. */ }
+        Policy policy = Policy.DEFAULT;
+        String publicationReason = profileAvailable ? "" : "gui.contracts.profile_required";
+        boolean canPublish = profileAvailable;
+        try {
+            policy = ContractsApi.policy(player.server);
+            if (policy.minimumReputation() > 0 && reputation < policy.minimumReputation()) {
+                canPublish = false;
+                publicationReason = reputation < 0 ? "gui.contracts.profile_required" : "gui.contracts.reputation_required";
+            }
+        } catch (RuntimeException | LinkageError ex) {
+            canPublish = false;
+            publicationReason = "gui.contracts.treasury_unavailable";
+        }
+        Progress pending = data.ledger.pendingProgress(player.getUUID());
+        state.put("reputation", reputation); state.put("requiredReputation", policy.minimumReputation());
+        state.put("canPublish", canPublish); state.put("treasuryAvailable", ContractsApi.treasuryAvailable());
+        state.put("publicationReason", publicationReason); state.put("taxBasisPoints", policy.taxBasisPoints());
+        state.put("reputationPending", pending.reputation()); state.put("missionsPending", pending.missions());
         // Only a tooltip preview travels over the network; all stored deliveries remain claimable.
         state.put("deliveries", data.ledger.deliveries(player.getUUID()).stream().limit(9).toList());
         return JSON.toJson(state);
     }
+
+    private static Map<String, Object> contractState(Contract contract) {
+        Map<String, Object> state = new LinkedHashMap<>();
+        state.put("id", contract.id()); state.put("author", contract.author()); state.put("authorName", contract.authorName());
+        state.put("title", contract.title()); state.put("item", contract.item()); state.put("quantity", contract.quantity());
+        state.put("reward", contract.reward()); state.put("currency", contract.currency()); state.put("status", contract.status());
+        if (contract.worker() != null) state.put("worker", contract.worker());
+        state.put("funding", contract.funding()); state.put("issuer", contract.issuer());
+        state.put("taxBasisPoints", contract.taxBasisPoints()); state.put("tax", contract.tax());
+        state.put("netReward", contract.netReward()); state.put("reputationReward", contract.reputationReward());
+        state.put("dailyReputationLimit", contract.dailyReputationLimit());
+        return state;
+    }
+
     private static void send(ServerPlayer player, String message) { ContractsNetwork.send(player, snapshot(player, message)); }
+    private static void close(ServerPlayer player, String message) {
+        logout(player.getUUID());
+        try { ContractsNetwork.send(player, JSON.toJson(Map.of("close", true, "message", message))); }
+        catch (RuntimeException ex) { ContractsMod.LOG.debug("Could not close contract screen for {}", player.getUUID(), ex); }
+        player.displayClientMessage(Component.translatable(message), false);
+    }
     private static String errorMessage(RuntimeException exception) {
         return switch (String.valueOf(exception.getMessage())) {
             case "Authors cannot complete their own contracts" -> "gui.contracts.own_contract";

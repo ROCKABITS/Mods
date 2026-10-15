@@ -3,9 +3,9 @@ loaderVersion="[4,)"
 license="All Rights Reserved"
 [[mods]]
 modId="contracts"
-version="0.2.0"
+version="0.3.0"
 displayName="Contracts & Bounties"
-description='''Contracts for material deliveries with reserved rewards, a physical notice board, and optional Crónicas RP economy integration.'''
+description='''Material delivery contracts with reserved rewards, three physical noticeboards, optional Crónicas RP economy and reputation, and a server API for Kingdom Treasury rules and public contracts.'''
 [[dependencies.contracts]]
 modId="neoforge"
 type="required"
@@ -23,4 +23,10 @@ modId="cronicasrp"
 type="optional"
 versionRange="[0.5.2,0.6)"
 ordering="AFTER"
+side="BOTH"
+[[dependencies.contracts]]
+modId="kingdomtreasury"
+type="optional"
+versionRange="[0.1.0,)"
+ordering="NONE"
 side="BOTH"

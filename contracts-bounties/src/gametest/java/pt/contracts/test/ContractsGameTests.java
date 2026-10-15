@@ -1,6 +1,7 @@
 package pt.contracts.test;
 
 import com.mojang.authlib.GameProfile;
+import com.google.gson.JsonParser;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -12,8 +13,12 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.gametest.framework.GameTest;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.flag.FeatureFlags;
@@ -36,6 +41,7 @@ import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 import pt.contracts.ContractsData;
 import pt.contracts.ContractsService;
 import pt.contracts.ContractBoardBlock;
+import pt.contracts.api.ContractsApi;
 import pt.contracts.compat.ChroniclesBridge;
 import pt.contracts.domain.Ledger;
 import pt.contracts.network.ContractsPackets;
@@ -101,6 +107,34 @@ public final class ContractsGameTests {
                 .mapToInt(entity -> entity.getItem().getCount()).sum();
     }
 
+    private static BlockPos openPhysicalBoard(GameTestHelper helper, FakePlayer customer) {
+        var anchor = boardPosition(helper);
+        prepareBoardSpace(helper, anchor);
+        helper.assertTrue(placeBoard(helper, player(helper), BOARDS.getFirst(), anchor, Direction.NORTH,
+                        new ItemStack(board(BOARDS.getFirst()))), "Unable to place the session's real board");
+        customer.setPos(anchor.getX() + 0.5, anchor.getY(), anchor.getZ() + 1.5);
+        helper.getLevel().getBlockState(anchor).useWithoutItem(helper.getLevel(), customer,
+                new BlockHitResult(Vec3.atCenterOf(anchor), Direction.NORTH, anchor, false));
+        ContractsService.requireSession(customer);
+        return anchor;
+    }
+
+    /** A trusted integration fixture whose current governor and policy can change independently. */
+    private static final class TreasuryFixture implements ContractsApi.TreasuryProvider, AutoCloseable {
+        private UUID manager;
+        private ContractsApi.Policy policy;
+
+        private TreasuryFixture(FakePlayer manager, ContractsApi.Policy policy) {
+            this.manager = manager.getUUID();
+            this.policy = policy;
+            ContractsApi.registerTreasury(this);
+        }
+
+        @Override public ContractsApi.Policy policy(MinecraftServer server) { return policy; }
+        @Override public boolean mayManage(ServerPlayer player) { return manager.equals(player.getUUID()); }
+        @Override public void close() { ContractsApi.unregisterTreasury(this); }
+    }
+
     private static FakePlayer player(GameTestHelper helper) {
         var player = new FakePlayer(helper.getLevel(), new GameProfile(UUID.randomUUID(), "ContractsQA"));
         player.setGameMode(GameType.SURVIVAL);
@@ -148,6 +182,19 @@ public final class ContractsGameTests {
     private static long balance(FakePlayer player) {
         return ChroniclesBridge.loaded() ? ChroniclesBridge.balance(player)
                 : player.getInventory().countItem(Items.EMERALD);
+    }
+
+    @SuppressWarnings({"unchecked", "rawtypes"})
+    private static int chroniclesProgress(FakePlayer player, String counter) {
+        try {
+            var attachment = (AttachmentType) ((Supplier<?>) Class.forName("pt.cronicasrp.ModAttachments")
+                    .getField("PROFILE").get(null)).get();
+            Object profile = player.getData(attachment);
+            Object progress = profile.getClass().getMethod("progress").invoke(profile);
+            return (int) progress.getClass().getMethod(counter).invoke(progress);
+        } catch (ReflectiveOperationException exception) {
+            throw new IllegalStateException("Unable to inspect actual Chronicles RP progress", exception);
+        }
     }
 
     private static void rejected(GameTestHelper helper, Runnable operation) {
@@ -674,12 +721,12 @@ public final class ContractsGameTests {
         ContractsService.action(author, packet);
         helper.assertTrue(data.ledger.list().isEmpty() && balance(author) == 20,
                 "A packet without a server-opened session spent money or created a contract");
-        ContractsService.open(author, null);
+        var anchor = openPhysicalBoard(helper, author);
         ContractsService.action(author, packet);
         helper.assertTrue(data.ledger.list().isEmpty() && balance(author) == 20,
                 "A forged packet currency created a contract or changed its wallet");
         // Reopening also starts a fresh server-side action throttle window.
-        ContractsService.open(author, null);
+        ContractsService.open(author, anchor);
         ContractsService.action(author, new ContractsPackets.Action("publish", "", "Contrato do menu",
                 OAK, 4, 7, currency().name()));
         helper.assertTrue(data.ledger.list().size() == 1
@@ -694,11 +741,7 @@ public final class ContractsGameTests {
     public static void physicalBoardSessionsRejectDistanceAndChangedBlocks(GameTestHelper helper) {
         reset(helper);
         var author = player(helper);
-        var pos = helper.absolutePos(new BlockPos(3, 1, 3));
-        var board = BuiltInRegistries.BLOCK.get(ResourceLocation.fromNamespaceAndPath("contracts", "contract_board"));
-        helper.getLevel().setBlockAndUpdate(pos, board.defaultBlockState());
-        author.setPos(pos.getX() + 0.5, pos.getY() + 1, pos.getZ() + 1.5);
-        ContractsService.open(author, pos);
+        var pos = openPhysicalBoard(helper, author);
         ContractsService.requireSession(author);
         author.setPos(pos.getX() + 100, pos.getY(), pos.getZ());
         rejected(helper, () -> ContractsService.requireSession(author));
@@ -709,6 +752,405 @@ public final class ContractsGameTests {
         helper.getLevel().setBlockAndUpdate(pos, Blocks.STONE.defaultBlockState());
         rejected(helper, () -> ContractsService.requireSession(author));
         ContractsService.logout(author.getUUID());
+        helper.succeed();
+    }
+
+    @GameTest(template = "contracts_empty", timeoutTicks = 100)
+    public static void nullBoardCannotReadTheMarketOrAuthorizePackets(GameTestHelper helper) {
+        var data = reset(helper);
+        var author = player(helper);
+        funds(author, 20);
+        openPhysicalBoard(helper, author);
+        ContractsService.open(author, null);
+        rejected(helper, () -> ContractsService.requireSession(author));
+        rejected(helper, () -> ContractsService.snapshot(author, ""));
+        ContractsService.action(author, new ContractsPackets.Action("publish", "", "Acesso remoto",
+                OAK, 1, 10, currency().name()));
+        helper.assertTrue(data.ledger.list().isEmpty() && balance(author) == 20,
+                "A null-board session authorized remote publication or spent money");
+        helper.succeed();
+    }
+
+    @GameTest(template = "contracts_empty", timeoutTicks = 100)
+    public static void incompleteMultiblockCannotOpenAMenuOrAuthorizePackets(GameTestHelper helper) {
+        var data = reset(helper);
+        var author = player(helper);
+        funds(author, 20);
+        var anchor = boardPosition(helper);
+        prepareBoardSpace(helper, anchor);
+        var wide = board(BOARDS.get(2));
+        // Model a damaged saved structure, before its scheduled orphan cleanup runs.
+        helper.getLevel().setBlockAndUpdate(anchor, wide.defaultBlockState());
+        helper.assertTrue(helper.getLevel().getBlockState(anchor).is(wide)
+                        && !wide.validStructure(helper.getLevel(), anchor, wide.defaultBlockState()),
+                "The damaged-structure fixture must retain an anchor but lack its other sections");
+        author.setPos(anchor.getX() + 0.5, anchor.getY(), anchor.getZ() + 1.5);
+        ContractsService.logout(author.getUUID());
+        helper.getLevel().getBlockState(anchor).useWithoutItem(helper.getLevel(), author,
+                new BlockHitResult(Vec3.atCenterOf(anchor), Direction.NORTH, anchor, false));
+        rejected(helper, () -> ContractsService.requireSession(author));
+        ContractsService.open(author, anchor);
+        rejected(helper, () -> ContractsService.snapshot(author, ""));
+        ContractsService.action(author, new ContractsPackets.Action("publish", "", "Mural incompleto",
+                OAK, 1, 10, currency().name()));
+        helper.assertTrue(data.ledger.list().isEmpty() && balance(author) == 20,
+                "An incomplete board authorized publication or consumed money");
+        helper.succeed();
+    }
+
+    @GameTest(template = "contracts_empty", timeoutTicks = 100)
+    public static void commandsCannotOpenRemoteMenusAndOnlyOperatorsReceiveBoards(GameTestHelper helper) {
+        reset(helper);
+        var author = player(helper);
+        var source = author.createCommandSourceStack();
+        var commands = helper.getLevel().getServer().getCommands();
+        ContractsService.logout(author.getUUID());
+        commands.performPrefixedCommand(source.withPermission(0), "contracts");
+        commands.performPrefixedCommand(source.withPermission(2), "contracts");
+        rejected(helper, () -> ContractsService.requireSession(author));
+        commands.performPrefixedCommand(source.withPermission(0), "contracts boards");
+        helper.assertTrue(BOARDS.stream().allMatch(spec -> author.getInventory().countItem(board(spec).asItem()) == 0),
+                "A non-operator received administrative board items");
+        commands.performPrefixedCommand(source.withPermission(2), "contracts boards");
+        helper.assertTrue(BOARDS.stream().allMatch(spec -> author.getInventory().countItem(board(spec).asItem()) == 1),
+                "The operator's boards command did not give all three variants exactly once");
+        commands.performPrefixedCommand(source.withPermission(2), "contracts board");
+        helper.assertTrue(author.getInventory().countItem(board(BOARDS.getFirst()).asItem()) == 2
+                        && author.getInventory().countItem(board(BOARDS.get(1)).asItem()) == 1
+                        && author.getInventory().countItem(board(BOARDS.get(2)).asItem()) == 1,
+                "The existing board command no longer gives only the small board");
+        rejected(helper, () -> ContractsService.requireSession(author));
+        helper.succeed();
+    }
+
+    @GameTest(template = "contracts_empty", timeoutTicks = 100)
+    public static void privateTaxIsConservedAndLockedAtPublication(GameTestHelper helper) {
+        var data = reset(helper);
+        var author = player(helper);
+        var worker = player(helper);
+        funds(author, 31);
+        funds(worker, 0);
+        try (var treasury = new TreasuryFixture(author, new ContractsApi.Policy(0, 500, 1, 3))) {
+            var contract = ContractsService.publish(author, "Contrato com imposto", OAK, 7, 20);
+            helper.assertTrue(balance(author) == 11 && contract.taxBasisPoints() == 500
+                            && contract.tax() == 1 && contract.netReward() == 19,
+                    "Publication did not reserve the gross amount and lock the 5% rate");
+            treasury.policy = new ContractsApi.Policy(0, 1_000, 1, 3);
+            openPhysicalBoard(helper, author);
+            var snapshot = JsonParser.parseString(ContractsService.snapshot(author, "")).getAsJsonObject();
+            var visible = snapshot.getAsJsonArray("contracts").get(0).getAsJsonObject();
+            helper.assertTrue(snapshot.get("taxBasisPoints").getAsInt() == 1_000
+                            && visible.get("taxBasisPoints").getAsInt() == 500
+                            && visible.get("tax").getAsLong() == 1
+                            && visible.get("netReward").getAsLong() == 19,
+                    "The menu replaced an existing contract's tax with the new policy");
+            worker.getInventory().setItem(0, new ItemStack(Items.OAK_LOG, 7));
+            ContractsService.complete(worker, contract.id());
+            helper.assertTrue(data.ledger.credits(worker.getUUID(), currency()) == 19
+                            && ContractsApi.kingdomBalance(author.server, currency().name()) == 1
+                            && pending(data.ledger, author) == 7,
+                    "Completion did not conserve the reserved 20 units as 19 worker + 1 kingdom");
+            helper.assertTrue(ContractsService.claimMoney(worker, currency()) == 19 && balance(worker) == 19,
+                    "The worker did not receive the exact net reward");
+            rejected(helper, () -> ContractsService.complete(worker, contract.id()));
+            helper.assertTrue(ContractsApi.kingdomBalance(author.server, currency().name()) == 1,
+                    "Duplicate completion charged tax twice");
+        } finally { ContractsService.logout(author.getUUID()); }
+        helper.succeed();
+    }
+
+    @GameTest(template = "contracts_empty", timeoutTicks = 100)
+    public static void cancellingATaxedPrivateContractRefundsTheEntireGrossEscrow(GameTestHelper helper) {
+        var data = reset(helper);
+        var author = player(helper);
+        funds(author, 30);
+        try (var treasury = new TreasuryFixture(author, new ContractsApi.Policy(0, 500, 1, 3))) {
+            var contract = ContractsService.publish(author, "Reembolso sem imposto", OAK, 1, 20);
+            ContractsService.cancel(author, contract.id());
+            helper.assertTrue(balance(author) == 10 && data.ledger.credits(author.getUUID(), currency()) == 20
+                            && ContractsApi.kingdomBalance(author.server, currency().name()) == 0,
+                    "Cancellation charged tax or refunded less than the full reserved amount");
+            helper.assertTrue(ContractsService.claimMoney(author, currency()) == 20 && balance(author) == 30,
+                    "The gross refund did not restore the original wallet");
+            rejected(helper, () -> ContractsService.cancel(author, contract.id()));
+            helper.assertTrue(ContractsService.claimMoney(author, currency()) == 0,
+                    "Repeated cancellation duplicated the refund");
+        }
+        helper.succeed();
+    }
+
+    @GameTest(template = "contracts_empty", timeoutTicks = 100)
+    public static void publicationRequiresKnownReputationAndCannotBypassThePolicyThroughPackets(GameTestHelper helper) {
+        var data = reset(helper);
+        var author = player(helper);
+        funds(author, 30);
+        try (var treasury = new TreasuryFixture(author, new ContractsApi.Policy(20, 500, 1, 3))) {
+            rejected(helper, () -> ContractsService.publish(author, "Reputacao insuficiente", OAK, 1, 20));
+            openPhysicalBoard(helper, author);
+            var snapshot = JsonParser.parseString(ContractsService.snapshot(author, "")).getAsJsonObject();
+            helper.assertTrue(!snapshot.get("canPublish").getAsBoolean()
+                            && snapshot.get("requiredReputation").getAsInt() == 20
+                            && snapshot.get("reputation").getAsInt() == (ChroniclesBridge.loaded() ? 0 : -1),
+                    "The menu allowed publication with insufficient or unknown reputation");
+            ContractsService.action(author, new ContractsPackets.Action("publish", "", "Pacote sem reputacao",
+                    OAK, 1, 20, currency().name()));
+            helper.assertTrue(balance(author) == 30 && data.ledger.list().isEmpty(),
+                    "A forged publication packet bypassed reputation or spent the rejected escrow");
+            if (ChroniclesBridge.loaded()) {
+                ChroniclesBridge.applyProgress(author, 20, 0);
+                var contract = ContractsService.publish(author, "Reputacao verificada", OAK, 1, 20);
+                helper.assertTrue(contract.taxBasisPoints() == 500 && balance(author) == 10,
+                        "A character meeting the reputation threshold could not publish");
+            }
+        } finally { ContractsService.logout(author.getUUID()); }
+        helper.succeed();
+    }
+
+    @GameTest(template = "contracts_empty", timeoutTicks = 100)
+    public static void kingdomDepositsDebitRealFundsAndRejectCurrencyOrBalanceForgery(GameTestHelper helper) {
+        var data = reset(helper);
+        var donor = player(helper);
+        funds(donor, 20);
+        try (var treasury = new TreasuryFixture(donor, ContractsApi.Policy.DEFAULT)) {
+            String wrongCurrency = currency() == Ledger.Currency.EMERALD ? "CHRONICLES" : "EMERALD";
+            rejected(helper, () -> ContractsApi.depositKingdom(donor, 10, wrongCurrency));
+            rejected(helper, () -> ContractsApi.depositKingdom(donor, 21, currency().name()));
+            rejected(helper, () -> ContractsApi.depositKingdom(donor, 0, currency().name()));
+            helper.assertTrue(balance(donor) == 20
+                            && ContractsApi.kingdomBalance(donor.server, currency().name()) == 0,
+                    "A rejected donation changed either the real wallet or the treasury");
+            ContractsApi.depositKingdom(donor, 12, currency().name());
+            helper.assertTrue(balance(donor) == 8
+                            && ContractsApi.kingdomBalance(donor.server, currency().name()) == 12
+                            && data.ledger.credits(donor.getUUID(), currency()) == 0,
+                    "A donation created money or credited a manager's personal claim account");
+            rejected(helper, () -> ContractsApi.depositKingdom(donor, 12, currency().name()));
+            helper.assertTrue(balance(donor) == 8
+                            && ContractsApi.kingdomBalance(donor.server, currency().name()) == 12,
+                    "An unfunded second donation duplicated treasury credit");
+        }
+        helper.succeed();
+    }
+
+    @GameTest(template = "contracts_empty", timeoutTicks = 100)
+    public static void publicEscrowAndMaterialsBelongToTheRealmAcrossGovernorChanges(GameTestHelper helper) {
+        var data = reset(helper);
+        var donor = player(helper);
+        var former = player(helper);
+        var successor = player(helper);
+        var worker = player(helper);
+        funds(donor, 20);
+        funds(former, 10);
+        funds(successor, 4);
+        funds(worker, 0);
+        try (var treasury = new TreasuryFixture(former, ContractsApi.Policy.DEFAULT)) {
+            ContractsApi.depositKingdom(donor, 20, currency().name());
+            var cancelled = ContractsApi.publishPublic(former, "Obra do mandato anterior", OAK, 2, 7);
+            helper.assertTrue(cancelled.funding() == Ledger.Funding.KINGDOM
+                            && cancelled.author().equals(Ledger.KINGDOM_ACCOUNT)
+                            && cancelled.issuer().equals(former.getUUID())
+                            && ContractsApi.kingdomBalance(former.server, currency().name()) == 13,
+                    "Public escrow belongs to the issuing governor instead of the realm");
+            treasury.manager = successor.getUUID();
+            rejected(helper, () -> ContractsApi.cancelPublic(former, cancelled.id()));
+            ContractsApi.cancelPublic(successor, cancelled.id());
+            helper.assertTrue(ContractsApi.kingdomBalance(successor.server, currency().name()) == 20
+                            && balance(former) == 10 && balance(successor) == 4
+                            && data.ledger.credits(former.getUUID(), currency()) == 0,
+                    "A public cancellation refunded a personal wallet or lost kingdom escrow");
+            var completed = ContractsApi.publishPublic(successor, "Obra do novo mandato", OAK, 4, 8);
+            worker.getInventory().setItem(0, new ItemStack(Items.OAK_LOG, 4));
+            ContractsService.complete(worker, completed.id());
+            helper.assertTrue(ContractsApi.kingdomDeliveries(successor.server).stream()
+                            .mapToInt(Ledger.Delivery::quantity).sum() == 4
+                            && ContractsService.collect(former) == 0 && ContractsService.collect(successor) == 0,
+                    "Public materials were stored in a governor's personal collection");
+            rejected(helper, () -> ContractsApi.collectKingdom(former));
+            helper.assertTrue(ContractsApi.collectKingdom(successor) == 4
+                            && successor.getInventory().countItem(Items.OAK_LOG) == 4
+                            && ContractsApi.collectKingdom(successor) == 0
+                            && ContractsApi.kingdomBalance(successor.server, currency().name()) == 12
+                            && data.ledger.credits(worker.getUUID(), currency()) == 8,
+                    "The successor could not collect public materials exactly once with conserved payment");
+        }
+        helper.succeed();
+    }
+
+    @GameTest(template = "contracts_empty", timeoutTicks = 100)
+    public static void publicManagementRejectsStrangersAndOrdinaryBoardCancellationPackets(GameTestHelper helper) {
+        var data = reset(helper);
+        var governor = player(helper);
+        var stranger = player(helper);
+        funds(governor, 20);
+        funds(stranger, 20);
+        try (var treasury = new TreasuryFixture(governor, ContractsApi.Policy.DEFAULT)) {
+            ContractsApi.depositKingdom(governor, 20, currency().name());
+            var contract = ContractsApi.publishPublic(governor, "Contrato publico protegido", OAK, 1, 10);
+            rejected(helper, () -> ContractsApi.publishPublic(stranger, "Publicacao abusiva", OAK, 1, 5));
+            rejected(helper, () -> ContractsApi.cancelPublic(stranger, contract.id()));
+            rejected(helper, () -> ContractsApi.collectKingdom(stranger));
+            rejected(helper, () -> ContractsService.cancel(governor, contract.id()));
+            openPhysicalBoard(helper, governor);
+            ContractsService.action(governor, new ContractsPackets.Action("cancel", contract.id().toString(),
+                    "", "", 0, 0, currency().name()));
+            helper.assertTrue(data.ledger.list().size() == 1
+                            && data.ledger.list().getFirst().status() == Ledger.Status.OPEN
+                            && ContractsApi.kingdomBalance(governor.server, currency().name()) == 10
+                            && balance(stranger) == 20 && balance(governor) == 0,
+                    "Unauthorized public management changed escrow, ownership, or personal money");
+        } finally { ContractsService.logout(governor.getUUID()); }
+        helper.succeed();
+    }
+
+    @GameTest(template = "contracts_empty", timeoutTicks = 100)
+    public static void publicProgressAndDailyLimitsSurviveSaveAndAreAppliedExactlyOnce(GameTestHelper helper) {
+        var data = reset(helper);
+        var governor = player(helper);
+        // An absent/uncreated character keeps awards in persistent pending storage in either runtime.
+        var worker = player(helper);
+        funds(governor, 10);
+        try (var treasury = new TreasuryFixture(governor, ContractsApi.Policy.DEFAULT)) {
+            ContractsApi.depositKingdom(governor, 10, currency().name());
+            worker.getInventory().setItem(0, new ItemStack(Items.OAK_LOG, 4));
+            UUID last = null;
+            for (int i = 0; i < 4; i++) {
+                var contract = ContractsApi.publishPublic(governor, "Trabalho publico " + i, OAK, 1, 1);
+                last = contract.id();
+                ContractsService.complete(worker, contract.id());
+            }
+            helper.assertTrue(data.ledger.pendingProgress(worker.getUUID()).equals(new Ledger.Progress(3, 4)),
+                    "Four public jobs did not retain three daily reputation points and four missions");
+            var saved = data.save(new CompoundTag(), helper.getLevel().registryAccess());
+            var restored = ContractsData.load(saved, helper.getLevel().registryAccess());
+            helper.assertTrue(saved.getInt("version") == 2 && restored.ledger.list().equals(data.ledger.list())
+                            && restored.ledger.pendingProgress(worker.getUUID()).equals(new Ledger.Progress(3, 4))
+                            && restored.ledger.dailySnapshot().equals(data.ledger.dailySnapshot())
+                            && restored.ledger.credits(worker.getUUID(), currency()) == 4
+                            && restored.ledger.deliveries(Ledger.KINGDOM_ACCOUNT).getFirst().quantity() == 4,
+                    "SavedData lost public ownership, claims, pending progress, or the daily reputation cap");
+            data.ledger = restored.ledger;
+            UUID completed = last;
+            rejected(helper, () -> ContractsService.complete(worker, completed));
+            if (ChroniclesBridge.loaded()) funds(worker, 0);
+            openPhysicalBoard(helper, worker);
+            openPhysicalBoard(helper, worker);
+            if (ChroniclesBridge.loaded()) {
+                helper.assertTrue(ChroniclesBridge.reputation(worker) == 3
+                                && chroniclesProgress(worker, "missions") == 4
+                                && data.ledger.pendingProgress(worker.getUUID()).equals(new Ledger.Progress(0, 0)),
+                        "Restored progress was lost or applied twice to the real Chronicles character");
+            } else {
+                var snapshot = JsonParser.parseString(ContractsService.snapshot(worker, "")).getAsJsonObject();
+                helper.assertTrue(data.ledger.pendingProgress(worker.getUUID()).equals(new Ledger.Progress(3, 4))
+                                && snapshot.get("reputationPending").getAsInt() == 3
+                                && snapshot.get("missionsPending").getAsInt() == 4,
+                        "Opening a board without Chronicles consumed or hid pending progress");
+            }
+            helper.assertTrue(ContractsService.claimMoney(worker, currency()) == 4 && balance(worker) == 4,
+                    "Restoring progress lost the worker's independent currency claim");
+            var fifth = ContractsApi.publishPublic(governor, "Limite diario restaurado", OAK, 1, 1);
+            worker.getInventory().setItem(1, new ItemStack(Items.OAK_LOG, 1));
+            ContractsService.complete(worker, fifth.id());
+            if (ChroniclesBridge.loaded()) {
+                helper.assertTrue(ChroniclesBridge.reputation(worker) == 3
+                                && chroniclesProgress(worker, "missions") == 5,
+                        "Reloading or claiming money reset the reputation cap or stopped counting missions");
+            } else {
+                helper.assertTrue(data.ledger.pendingProgress(worker.getUUID()).equals(new Ledger.Progress(3, 5)),
+                        "Reloading or claiming money reset the daily cap or discarded pending progress");
+            }
+        } finally { ContractsService.logout(worker.getUUID()); }
+        helper.succeed();
+    }
+
+    @GameTest(template = "contracts_empty", timeoutTicks = 100)
+    public static void privateJobsAndTheIssuersOwnPublicJobsCannotFarmProgress(GameTestHelper helper) {
+        var data = reset(helper);
+        var governor = player(helper);
+        var author = player(helper);
+        var worker = player(helper);
+        funds(governor, 10);
+        funds(author, 5);
+        funds(worker, 0);
+        try (var treasury = new TreasuryFixture(governor, ContractsApi.Policy.DEFAULT)) {
+            ContractsApi.depositKingdom(governor, 10, currency().name());
+            var own = ContractsApi.publishPublic(governor, "Obra do proprio emissor", OAK, 1, 2);
+            governor.getInventory().setItem(0, new ItemStack(Items.OAK_LOG, 1));
+            ContractsService.complete(governor, own.id());
+            var privateJob = ContractsService.publish(author, "Trabalho particular", OAK, 1, 5);
+            worker.getInventory().setItem(0, new ItemStack(Items.OAK_LOG, 1));
+            ContractsService.complete(worker, privateJob.id());
+            helper.assertTrue(data.ledger.pendingProgress(governor.getUUID()).equals(new Ledger.Progress(0, 0))
+                            && data.ledger.pendingProgress(worker.getUUID()).equals(new Ledger.Progress(0, 0))
+                            && data.ledger.credits(governor.getUUID(), currency()) == 2
+                            && data.ledger.credits(worker.getUUID(), currency()) == 5,
+                    "Ineligible jobs awarded RP progress or changed their legitimate monetary rewards");
+            if (ChroniclesBridge.loaded()) {
+                helper.assertTrue(ChroniclesBridge.reputation(governor) == 0
+                                && chroniclesProgress(governor, "missions") == 0
+                                && ChroniclesBridge.reputation(worker) == 0
+                                && chroniclesProgress(worker, "missions") == 0,
+                        "Private jobs or self-issued public jobs modified actual Chronicles progress");
+            }
+        }
+        helper.succeed();
+    }
+
+    @GameTest(template = "contracts_empty", timeoutTicks = 100)
+    public static void versionOneSavedDataMigratesWithoutRetroactiveTaxOrProgress(GameTestHelper helper) {
+        var author = UUID.randomUUID();
+        var worker = UUID.randomUUID();
+        var id = UUID.randomUUID();
+        var old = new CompoundTag();
+        old.putInt("version", 1);
+        var contracts = new ListTag();
+        var contract = new CompoundTag();
+        contract.putUUID("id", id);
+        contract.putUUID("author", author);
+        contract.putString("authorName", "Autor da versao antiga");
+        contract.putString("title", "Encomenda anterior a tesouraria");
+        contract.putString("item", OAK);
+        contract.putInt("quantity", 4);
+        contract.putLong("reward", 20);
+        contract.putString("currency", "EMERALD");
+        contract.putString("status", "OPEN");
+        contracts.add(contract);
+        old.put("contracts", contracts);
+        var credits = new ListTag();
+        var credit = new CompoundTag();
+        credit.putUUID("player", worker);
+        credit.putString("currency", "EMERALD");
+        credit.putLong("amount", 7);
+        credits.add(credit);
+        old.put("credits", credits);
+        var deliveries = new ListTag();
+        var delivery = new CompoundTag();
+        delivery.putUUID("player", author);
+        delivery.putString("item", OAK);
+        delivery.putInt("quantity", 3);
+        deliveries.add(delivery);
+        old.put("deliveries", deliveries);
+        var migrated = ContractsData.load(old, helper.getLevel().registryAccess());
+        var restoredContract = migrated.ledger.list().getFirst();
+        helper.assertTrue(restoredContract.id().equals(id) && restoredContract.author().equals(author)
+                        && restoredContract.funding() == Ledger.Funding.PLAYER
+                        && restoredContract.issuer().equals(author)
+                        && restoredContract.taxBasisPoints() == 0 && restoredContract.reputationReward() == 0
+                        && restoredContract.dailyReputationLimit() == 0 && restoredContract.netReward() == 20
+                        && migrated.ledger.credits(worker, Ledger.Currency.EMERALD) == 7
+                        && migrated.ledger.deliveries(author).getFirst().quantity() == 3,
+                "Migration changed an old contract, its currency claims, or its stored materials");
+        var versionTwo = migrated.save(new CompoundTag(), helper.getLevel().registryAccess());
+        var reloaded = ContractsData.load(versionTwo, helper.getLevel().registryAccess());
+        helper.assertTrue(versionTwo.getInt("version") == 2
+                        && reloaded.ledger.list().equals(migrated.ledger.list()),
+                "Migrated legacy contracts did not survive a version-two NBT roundtrip");
+        reloaded.ledger.complete(id, worker, 20_000);
+        helper.assertTrue(reloaded.ledger.credits(worker, Ledger.Currency.EMERALD) == 27
+                        && reloaded.ledger.credits(Ledger.KINGDOM_ACCOUNT, Ledger.Currency.EMERALD) == 0
+                        && reloaded.ledger.deliveries(author).getFirst().quantity() == 7
+                        && reloaded.ledger.pendingProgress(worker).equals(new Ledger.Progress(0, 0)),
+                "Settling an old contract introduced retroactive tax, reputation, or missions");
         helper.succeed();
     }
 
@@ -752,6 +1194,12 @@ public final class ContractsGameTests {
         var wrongListType = valid.copy();
         wrongListType.putString("credits", "not a ledger list");
         rejected(helper, () -> ContractsData.load(wrongListType, helper.getLevel().registryAccess()));
+        var missingFunding = valid.copy();
+        missingFunding.getList("contracts", Tag.TAG_COMPOUND).getCompound(0).remove("funding");
+        rejected(helper, () -> ContractsData.load(missingFunding, helper.getLevel().registryAccess()));
+        var falsePublicOwner = valid.copy();
+        falsePublicOwner.getList("contracts", Tag.TAG_COMPOUND).getCompound(0).putString("funding", "KINGDOM");
+        rejected(helper, () -> ContractsData.load(falsePublicOwner, helper.getLevel().registryAccess()));
         var invalidCredit = valid.copy();
         invalidCredit.getList("credits", net.minecraft.nbt.Tag.TAG_COMPOUND).getCompound(0).putLong("amount", 0);
         rejected(helper, () -> ContractsData.load(invalidCredit, helper.getLevel().registryAccess()));

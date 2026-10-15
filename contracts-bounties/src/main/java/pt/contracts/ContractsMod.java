@@ -65,10 +65,8 @@ public final class ContractsMod {
     }
 
     private static void commands(RegisterCommandsEvent event) {
-        var command = Commands.literal("contracts").executes(context -> {
-            ContractsService.open(context.getSource().getPlayerOrException(), null);
-            return 1;
-        }).then(Commands.literal("board").requires(source -> source.hasPermission(2)).executes(context -> {
+        var command = Commands.literal("contracts").requires(source -> source.hasPermission(2))
+                .then(Commands.literal("board").executes(context -> {
             var player = context.getSource().getPlayerOrException();
             ItemStack stack = new ItemStack(BOARD.get());
             if (!player.getInventory().add(stack)) player.drop(stack, false);
