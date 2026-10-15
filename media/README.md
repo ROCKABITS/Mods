@@ -1,5 +1,7 @@
 # Mod galleries
 
+**Crown Ledger logo:** [Download PNG](../mod-pronto/crown-ledger-icon.png). Original illustrated square project icon for CurseForge; separate from the in-game screenshots.
+
 **Crown Ledger:** [Screenshots](crown-ledger/0.1.1/README.md) · [Download PNG gallery](crown-ledger/0.1.1/crown-ledger-0.1.1-media.zip). Actual Minecraft chest and menus; menu balances are demonstration data.
 
 ## Contracts & Bounties
