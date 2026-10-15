@@ -7,10 +7,12 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.Screenshot;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractButton;
+import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.TitleScreen;
 import net.minecraft.client.renderer.block.model.BakedQuad;
@@ -28,8 +30,11 @@ import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.ClientTickEvent;
+import org.lwjgl.glfw.GLFW;
 import pt.contracts.ContractsMod;
 import pt.contracts.ContractBoardBlock;
+import pt.contracts.client.ContractsScreen;
+import pt.contracts.domain.Ledger;
 
 /**
  * Opt-in client smoke test: renders the real, resource-loaded Minecraft item
@@ -41,14 +46,21 @@ public final class BoardVisualQA {
     private static final Path OUT = Path.of(System.getProperty("contract.qaOutput", "qa-results/boards-client"))
             .toAbsolutePath().normalize();
     private static final String[] IDS = {"contract_board", "tall_contract_board", "wide_contract_board"};
-    private static final String[] NAMES = {"Mural de contratos", "Mural com telhado", "Mural grande"};
-    private static final String[] SIZES = {"1 × 1 bloco", "1 × 2 blocos", "2 × 2 blocos"};
+    private static final String[] NAMES = {"Small contract board", "Roofed contract board", "Grand contract board"};
+    private static final String[] SIZES = {"1 × 1 block", "1 × 2 blocks", "2 × 2 blocks"};
+    private static final String[] FILENAMES = {
+            "contracts-boards-minecraft.png", "contracts-board-small.png",
+            "contracts-board-tall.png", "contracts-board-wide.png",
+            "contracts-menu-browse.png", "contracts-menu-create.png"
+    };
     private static final long STARTED = System.currentTimeMillis();
     private static final Map<String, Integer> QUAD_COUNTS = new LinkedHashMap<>();
     private static List<ItemStack> stacks;
-    private static PreviewScreen preview;
-    private static boolean done;
-    private static long previewStarted;
+    private static Screen captureScreen;
+    private static final List<String> CAPTURED = new ArrayList<>();
+    private static boolean done, languageRequested;
+    private static int captureIndex, screenTicks;
+    private static long screenStarted;
 
     private BoardVisualQA() {}
 
@@ -62,34 +74,124 @@ public final class BoardVisualQA {
                         + (mc.screen == null ? "no screen" : mc.screen.getClass().getSimpleName()));
             }
             if (mc.getOverlay() != null) return;
-            if (preview == null) {
+            if (captureScreen == null) {
                 if (!(mc.screen instanceof TitleScreen)) {
                     continueAccessibility(mc.screen);
                     return;
+                }
+                if (!languageRequested) {
+                    languageRequested = true;
+                    if (!"en_us".equals(mc.options.languageCode)) {
+                        mc.getLanguageManager().setSelected("en_us");
+                        mc.options.languageCode = "en_us";
+                        mc.reloadResourcePacks();
+                        return;
+                    }
                 }
                 mc.getWindow().setWindowed(1600, 900);
                 mc.options.guiScale().set(2);
                 mc.resizeDisplay();
                 stacks = loadAndValidateModels(mc);
-                preview = new PreviewScreen();
-                mc.setScreen(preview);
-                previewStarted = System.currentTimeMillis();
+                showCapture(mc);
                 return;
             }
-            if (mc.screen != preview) throw new IllegalStateException("Unexpected screen during board preview");
-            // Wait for actual frames as well as ticks so CI cannot capture before rendering.
-            if (preview.renderedFrames < 30 || System.currentTimeMillis() - previewStarted < 2_000L) return;
+            if (mc.screen != captureScreen) throw new IllegalStateException("Unexpected screen during gallery capture");
+            screenTicks++;
+            // The production interface uses the same client frame loop. Wait for
+            // stable ticks and time; preview screens additionally count real renders.
+            if (screenTicks < 30 || System.currentTimeMillis() - screenStarted < 2_000L
+                    || captureScreen instanceof PreviewScreen preview && preview.renderedFrames < 30) return;
             Files.createDirectories(OUT);
             try (var image = Screenshot.takeScreenshot(mc.getMainRenderTarget())) {
                 check(image.getWidth() >= 1200 && image.getHeight() >= 680,
                         "Screenshot window was smaller than requested: " + image.getWidth() + "x" + image.getHeight());
-                image.writeToFile(OUT.resolve("contracts-boards-minecraft.png"));
+                image.writeToFile(OUT.resolve(FILENAMES[captureIndex]));
             }
-            complete(true, "Three registered board items have nonempty baked geometry, no missing sprites, and an actual Minecraft client screenshot.");
+            CAPTURED.add(FILENAMES[captureIndex]);
+            ContractsMod.LOG.info("CONTRACTS_BOARD_VISUAL_QA captured {}", FILENAMES[captureIndex]);
+            captureIndex++;
+            if (captureIndex < FILENAMES.length) showCapture(mc);
+            else complete(true, "Three registered board items and their placed models have valid geometry and sprites. Captured overview, three close-ups, and the real ContractsScreen browse and creation tabs with demonstration data.");
         } catch (Throwable failure) {
             failure.printStackTrace();
             complete(false, failure.toString());
         }
+    }
+
+    private static void showCapture(Minecraft mc) {
+        if (captureIndex < 4) {
+            captureScreen = new PreviewScreen(captureIndex - 1);
+            mc.setScreen(captureScreen);
+        } else if (captureIndex == 4) {
+            // Feed the exact public snapshot entry point used by server packets.
+            // These valid domain records are presentation fixtures, not live trades.
+            ContractsScreen.receive(demonstrationSnapshot());
+            check(mc.screen instanceof ContractsScreen, "Production contract interface did not open");
+            captureScreen = mc.screen;
+        } else {
+            check(mc.screen instanceof ContractsScreen, "Expected production contract interface before opening form");
+            boolean clicked = false;
+            for (var child : List.copyOf(mc.screen.children())) {
+                if (child instanceof AbstractButton button && button.active && button.visible
+                        && button.getMessage().getContents() instanceof TranslatableContents text
+                        && text.getKey().equals("gui.contracts.create")) {
+                    button.onPress();
+                    clicked = true;
+                    break;
+                }
+            }
+            check(clicked, "Could not open the production Create contract tab");
+            int fields = 0;
+            for (var child : mc.screen.children()) {
+                if (child instanceof EditBox field
+                        && field.getMessage().getContents() instanceof TranslatableContents text) {
+                    switch (text.getKey()) {
+                        case "gui.contracts.label_title" -> field.setValue("Timber for the village inn");
+                        case "gui.contracts.label_item" -> field.setValue("minecraft:oak_log");
+                        case "gui.contracts.label_quantity" -> field.setValue("64");
+                        case "gui.contracts.label_reward" -> field.setValue("20");
+                        default -> throw new IllegalStateException("Unexpected production form field: " + text.getKey());
+                    }
+                    fields++;
+                }
+            }
+            check(fields == 4, "Expected four fields in the production Create contract form");
+            mc.screen.setFocused(null);
+            captureScreen = mc.screen;
+        }
+        GLFW.glfwSetCursorPos(mc.getWindow().getWindow(), 1, 1);
+        screenTicks = 0;
+        screenStarted = System.currentTimeMillis();
+    }
+
+    private static String demonstrationSnapshot() {
+        String[] titles = {
+                "Oak timber for the village inn", "Stone for the northern watchtower",
+                "Food for the harvest festival", "Lanterns for the market square",
+                "Wool for the royal banners", "Glass for the alchemist's workshop"
+        };
+        String[] materials = {"oak_log", "stone", "bread", "lantern", "white_wool", "glass"};
+        String[] authors = {"Rowan", "Aldric", "Mira", "Elowen", "Cedric", "Lyra"};
+        int[] quantities = {64, 128, 96, 16, 64, 64};
+        long[] rewards = {20, 32, 18, 24, 16, 24};
+        var contracts = new ArrayList<Ledger.Contract>();
+        for (int i = 0; i < titles.length; i++) {
+            contracts.add(new Ledger.Contract(new UUID(0, 101 + i), new UUID(0, 21 + i), authors[i],
+                    titles[i], "minecraft:" + materials[i], quantities[i], rewards[i],
+                    Ledger.Currency.EMERALD, Ledger.Status.OPEN, null));
+        }
+        var data = new LinkedHashMap<String, Object>();
+        data.put("me", new UUID(0, 1).toString());
+        data.put("currency", "EMERALD");
+        data.put("wallet", 128);
+        data.put("emeraldCredit", 12);
+        data.put("chroniclesCredit", 0);
+        data.put("page", 0);
+        data.put("pages", 1);
+        data.put("message", "");
+        data.put("contracts", contracts);
+        data.put("deliveries", List.of(new Ledger.Delivery("minecraft:oak_log", 64)));
+        return new GsonBuilder().create().toJson(data);
     }
 
     private static void continueAccessibility(Screen screen) {
@@ -157,6 +259,8 @@ public final class BoardVisualQA {
             report.put("success", success);
             report.put("message", message);
             report.put("screenshot", "contracts-boards-minecraft.png");
+            report.put("screenshots", List.copyOf(CAPTURED));
+            report.put("interfaceData", "Demonstration contracts rendered by the unmodified production ContractsScreen");
             report.put("bakedQuadCounts", QUAD_COUNTS);
             report.put("windowWidth", Minecraft.getInstance().getWindow().getWidth());
             report.put("windowHeight", Minecraft.getInstance().getWindow().getHeight());
@@ -171,9 +275,11 @@ public final class BoardVisualQA {
 
     private static final class PreviewScreen extends Screen {
         private int renderedFrames;
+        private final int featured;
 
-        private PreviewScreen() {
+        private PreviewScreen(int featured) {
             super(Component.literal("Contracts & Bounties"));
+            this.featured = featured;
         }
 
         @Override
@@ -185,23 +291,33 @@ public final class BoardVisualQA {
             graphics.fill(32, 22, width - 32, 23, 0xFF506252);
             graphics.fill(32, height - 23, width - 32, height - 22, 0xFF506252);
             graphics.drawCenteredString(font, getTitle(), width / 2, 38, 0xFFEED9AE);
-            graphics.drawCenteredString(font, "Murais de contratos · madeira, pergaminhos e telhas", width / 2, 56, 0xFFA4B4A3);
+            graphics.drawCenteredString(font, "Crafted wood · pinned parchments · terracotta roofs", width / 2, 56, 0xFFA4B4A3);
             int modelTop = height / 2 - 98;
             int labelTop = height - 94;
-            for (int index = 0; index < stacks.size(); index++) {
-                int center = width * (index * 2 + 1) / 6;
-                // GuiGraphics invokes Minecraft's item renderer and lighting, including
-                // the model's own GUI transformation. This is not an external mock-up.
-                graphics.pose().pushPose();
-                graphics.pose().translate(center - 88, modelTop, 0);
-                graphics.pose().scale(11, 11, 11);
-                graphics.renderItem(stacks.get(index), 0, 0);
-                graphics.pose().popPose();
-                graphics.drawCenteredString(font, NAMES[index], center, labelTop, 0xFFF3E6CD);
-                graphics.drawCenteredString(font, SIZES[index], center, labelTop + 17, 0xFFA4B4A3);
+            if (featured < 0) {
+                for (int index = 0; index < stacks.size(); index++) {
+                    int center = width * (index * 2 + 1) / 6;
+                    renderBoard(graphics, index, center, modelTop, 11);
+                    graphics.drawCenteredString(font, NAMES[index], center, labelTop, 0xFFF3E6CD);
+                    graphics.drawCenteredString(font, SIZES[index], center, labelTop + 17, 0xFFA4B4A3);
+                }
+            } else {
+                // A larger view still uses the exact production item model and
+                // Minecraft lighting; no screenshot postprocessing or mock assets.
+                renderBoard(graphics, featured, width / 2, height / 2 - 128, 16);
+                graphics.drawCenteredString(font, NAMES[featured], width / 2, height - 79, 0xFFF3E6CD);
+                graphics.drawCenteredString(font, SIZES[featured], width / 2, height - 62, 0xFFA4B4A3);
             }
-            graphics.drawCenteredString(font, "Minecraft 1.21.1 · NeoForge · Modelos renderizados no jogo", width / 2, height - 49, 0xFF879B87);
+            graphics.drawCenteredString(font, "Minecraft 1.21.1 · NeoForge · In-game model rendering", width / 2, height - 39, 0xFF879B87);
             renderedFrames++;
+        }
+
+        private void renderBoard(GuiGraphics graphics, int index, int center, int top, int scale) {
+            graphics.pose().pushPose();
+            graphics.pose().translate(center - scale * 8, top, 0);
+            graphics.pose().scale(scale, scale, scale);
+            graphics.renderItem(stacks.get(index), 0, 0);
+            graphics.pose().popPose();
         }
 
         @Override

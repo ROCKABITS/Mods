@@ -7,6 +7,7 @@ on:
       - 'contracts-bounties/**'
       - '.github/workflows/build-mod.yml'
       - '.github/scripts/package_release.py'
+      - '.github/scripts/package_media.py'
   workflow_dispatch:
 
 permissions:
@@ -60,6 +61,9 @@ jobs:
       - name: Package the tested release
         working-directory: .
         run: python3 .github/scripts/package_release.py
+      - name: Package CurseForge media
+        working-directory: .
+        run: python3 .github/scripts/package_media.py
       - name: Downloadable mod JAR
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
@@ -79,6 +83,7 @@ jobs:
             exit 1
           fi
           git add -- "mod-pronto/contracts-bounties-$MOD_VERSION.jar" "mod-pronto/contracts-bounties-$MOD_VERSION.zip" "mod-pronto/contracts-bounties-$MOD_VERSION.sha256" "mod-pronto/contracts-bounties-$MOD_VERSION.build.json" "mod-pronto/contracts-boards-$MOD_VERSION.png" "mod-pronto/contracts-boards-$MOD_VERSION.json"
+          git add -- "media/$MOD_VERSION/"
           if git diff --cached --quiet; then exit 0; fi
           git -c user.name='github-actions[bot]' -c user.email='41898282+github-actions[bot]@users.noreply.github.com' commit -m "Publish tested Contracts & Bounties $MOD_VERSION [skip ci]"
           git push origin HEAD:refs/heads/main
