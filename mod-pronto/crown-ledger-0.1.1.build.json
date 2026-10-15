@@ -1,0 +1,21 @@
+{
+  "version": "0.1.1",
+  "source_commit": "47fc8659feca1cf652869fba5f09c80ada9303f3",
+  "tested_run": "https://github.com/ROCKABITS/Mods/actions/runs/38779566016",
+  "jar_sha256": "e82795f13e9f912f6729cebbad7a31dc242735b7a9e6396d6cbfb7eac02736aa",
+  "zip_sha256": "e517bf532986202457c6be3515efa5c53e19f6f1db04c58944de87d7bd076b63",
+  "unit_tests": 42,
+  "standalone_native_tests": 15,
+  "real_companion_native_tests": 15,
+  "actual_client_validation": true,
+  "chronicles_runtime_tested": false,
+  "companion_jars": {
+    "contracts-bounties-0.3.1.jar": "9746951762a6762b2cb466ca695b7d43f8669c9dc1d55c12cae1b4bd17953f0c",
+    "realmcouncil-0.2.1.jar": "3e407c391f5e2f919e246d1d889323c57ea40b30e0387e9614ae32e0e9251a0a"
+  },
+  "screenshots": {
+    "crown-chest-minecraft.png": "949ea81ee9c562f3427f8da26ad6ea821e51dd01c34edd519c39f4ff22c8b187",
+    "crown-ledger-overview.png": "a43b52f77e6ea5576d1ed7734b708349a818fdeaaefe4d9f71c8db22947faa3f",
+    "crown-ledger-policy.png": "8affbd8e290e727b08e7d77ad1727625f809bb92441de57bb8c76452d4220959"
+  }
+}
