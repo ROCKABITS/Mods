@@ -9,7 +9,7 @@ Plataforma: **Minecraft 1.21.1, NeoForge e Java 21**. Os mods mantêm responsabi
 | Mod | Responsabilidade | Situação neste repositório |
 | --- | --- | --- |
 | Crónicas RP / Chronicles RP 0.5.2 | Personagens, profissões, reputação, dinheiro e progressão | Código-fonte e JAR fornecidos para análise; não redistribuídos aqui. |
-| Realm Council 0.2.0 | Eleições, mandatos, governantes e decisões públicas | Código-fonte e JAR fornecidos para análise; não redistribuídos aqui. |
+| Realm Council 0.2.1 | Eleições, mandatos, governantes e decisões públicas | Projeto incluído para a atualização de acesso através dos blocos. |
 | Contracts & Bounties 0.2.0 | Pedidos de materiais, reserva de recompensas, entregas e recolhas | Implementado neste repositório, com JAR e imagens disponíveis. |
 
 **Correção ao guião original:** o ZIP fornecido do Realm Council contém o projeto Java. Não é necessário reconstruí-lo a partir do JAR.
@@ -53,6 +53,18 @@ Proposta de funcionamento:
 Para contratos públicos, o sistema deve identificar a origem do dinheiro: a recompensa sai da tesouraria e um cancelamento devolve-a à mesma tesouraria. Os materiais entregues ficam disponíveis para recolha autorizada pelo reino. Não devem ser tratados como dinheiro ou materiais pessoais do governante.
 
 A integração exige uma API de contratos com origem de financiamento e destinatário de entregas explícitos; a 0.2.0 só tem contratos de jogadores. Essa API e a tesouraria ainda não existem. As validações de mandato, fundos e inventários devem ocorrer no servidor, com proteção contra repetição de operações.
+
+### Impostos e salários discutidos
+
+O governante poderá escolher um imposto percentual sobre recompensas de missões/contratos ou um valor fixo periódico, dentro de limites configurados pelo administrador. Exemplo de divisão: recompensa de 20 €, taxa de 5%, 19 € para o trabalhador e 1 € para a tesouraria. O jogador vê a divisão antes da entrega e a taxa fica registada na publicação do contrato. O levantamento posterior desse dinheiro não volta a tributar a mesma recompensa.
+
+O governante poderá também definir salários periódicos para jogadores ativos. Os pagamentos saem dos fundos do reino; a interface deve mostrar o custo dos salários e o orçamento disponível. O sistema não deve prometer salários sem financiamento nem criar dívida fiscal ou saldos negativos automaticamente.
+
+A isenção baseada em manter pouco dinheiro na carteira foi afastada, porque permite evitar a contribuição mantendo o saldo baixo. A franquia de rendimento semanal foi discutida como alternativa, mas os exemplos de 100 € isentos e 5% não constituem valores finais nem uma regra confirmada.
+
+### Importância dos blocos
+
+O utilizador pediu que os blocos tenham utilidade real. No Realm Council 0.2.1, o menu público passa a abrir por interação com o quadro, a urna ou a mesa de juramento; o atalho O e os comandos de abertura remota são retirados. A tesouraria deverá seguir o mesmo princípio, usando o cofre para abrir os seus menus. Os comandos de administração do servidor continuam disponíveis a operadores.
 
 ## 3. Documento de personagem
 
