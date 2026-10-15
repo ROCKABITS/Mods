@@ -324,12 +324,14 @@ def displays(width, height):
     # applies model transforms about (8,8,8), so the offset must be compensated.
     cx, cy = width/2-8, height/2-8
     import math
-    yaw, pitch = math.radians(-32), math.radians(18)
+    # The GUI camera sees the positive-Z side. Turn the north-facing notices
+    # toward it instead of showing the plain timber back in the inventory.
+    yaw, pitch = math.radians(148), math.radians(18)
     rx, ry, rz = cx*math.cos(yaw), cy, -cx*math.sin(yaw)
     yy = ry*math.cos(pitch)-rz*math.sin(pitch)
     zz = ry*math.sin(pitch)+rz*math.cos(pitch)
     return {
-        "gui": {"rotation": [18, -32, 0], "translation": [-rx*scale, -yy*scale, -zz*scale], "scale": [scale]*3},
+        "gui": {"rotation": [18, 148, 0], "translation": [-rx*scale, -yy*scale, -zz*scale], "scale": [scale]*3},
         "ground": {"rotation": [0, 0, 0], "translation": [-cx*.3, 3-cy*.3, 0], "scale": [.3]*3},
         "fixed": {"rotation": [0, 180, 0], "translation": [cx*.5, -cy*.5, 0], "scale": [.5]*3},
         "thirdperson_righthand": {"rotation": [65, 0, 0], "translation": [-cx*.35, 2-cy*.35, 1], "scale": [.35]*3},
