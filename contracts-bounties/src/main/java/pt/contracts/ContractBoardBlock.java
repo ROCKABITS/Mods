@@ -23,7 +23,6 @@ import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
-import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
@@ -233,8 +232,6 @@ public final class ContractBoardBlock extends HorizontalDirectionalBlock {
         }
         super.onRemove(state, level, pos, newState, movedByPiston);
     }
-
-    @Override protected PushReaction getPistonPushReaction(BlockState state) { return PushReaction.BLOCK; }
 
     @Override protected VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
         return SHAPES[variant.ordinal()][state.getValue(PART).ordinal()][state.getValue(FACING).get2DDataValue()];

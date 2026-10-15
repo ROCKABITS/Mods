@@ -8,6 +8,7 @@ import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.material.PushReaction;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.common.NeoForge;
@@ -50,7 +51,7 @@ public final class ContractsMod {
                     .build());
 
     private static BlockBehaviour.Properties boardProperties() {
-        return BlockBehaviour.Properties.of().strength(2.5F).sound(SoundType.WOOD).noOcclusion();
+        return BlockBehaviour.Properties.of().strength(2.5F).sound(SoundType.WOOD).noOcclusion().pushReaction(PushReaction.BLOCK);
     }
 
     public ContractsMod(IEventBus bus) {
