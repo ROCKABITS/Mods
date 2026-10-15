@@ -11,6 +11,8 @@ import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.flag.FeatureFlags;
+import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.component.CustomData;
@@ -102,6 +104,24 @@ public final class ContractsGameTests {
         helper.assertTrue(BuiltInRegistries.ITEM.get(key) != Items.AIR, "Contract board item is missing");
         helper.assertTrue(helper.getLevel().getServer().getRecipeManager().byKey(key).isPresent(),
                 "Contract board recipe is missing");
+        helper.succeed();
+    }
+
+    @GameTest(template = "contracts_empty", timeoutTicks = 100)
+    public static void boardIsVisibleInCreativeInventoryAndSearch(GameTestHelper helper) {
+        var tabKey = ResourceLocation.fromNamespaceAndPath("contracts", "contracts");
+        var tab = BuiltInRegistries.CREATIVE_MODE_TAB.get(tabKey);
+        helper.assertTrue(tab != null, "Contracts creative inventory tab is missing");
+        tab.buildContents(new CreativeModeTab.ItemDisplayParameters(
+                FeatureFlags.DEFAULT_FLAGS, true, helper.getLevel().registryAccess()));
+
+        var boardKey = ResourceLocation.fromNamespaceAndPath("contracts", "contract_board");
+        var board = BuiltInRegistries.ITEM.get(boardKey);
+        helper.assertTrue(board != Items.AIR, "Contract board item is missing");
+        helper.assertTrue(tab.getDisplayItems().stream().anyMatch(stack -> stack.is(board)),
+                "Contract board is absent from the Contracts creative inventory tab");
+        helper.assertTrue(tab.getSearchTabDisplayItems().stream().anyMatch(stack -> stack.is(board)),
+                "Contract board is absent from creative inventory search");
         helper.succeed();
     }
 

@@ -2,6 +2,7 @@
 """Expose actual CI results and bounded build diagnostics in the GitHub run summary."""
 from pathlib import Path
 import os
+import re
 import xml.etree.ElementTree as ET
 
 project = Path(__file__).resolve().parent.parent
@@ -12,7 +13,9 @@ if not target:
 parts = ['# Contracts & Bounties validation\n']
 for report in sorted((project / 'build/test-results/test').glob('TEST-*.xml')):
     root = ET.parse(report).getroot()
-    parts.append(f"JUnit {root.get('name')}: tests={root.get('tests')}, failures={root.get('failures')}, errors={root.get('errors')}, skipped={root.get('skipped')}\n")
+    result = f"JUnit {root.get('name')}: tests={root.get('tests')}, failures={root.get('failures')}, errors={root.get('errors')}, skipped={root.get('skipped')}"
+    parts.append(result + '\n')
+    print('::notice title=JUnit results::' + result.replace('%', '%25').replace('\r', '%0D').replace('\n', '%0A'))
 
 for name in ['build.log', 'gametests.log']:
     log = project / name
@@ -20,6 +23,14 @@ for name in ['build.log', 'gametests.log']:
         # Fences in compiler output must not escape the diagnostic block.
         tail = '\n'.join(log.read_text(errors='replace').splitlines()[-180:])[-45000:]
         parts.append(f"\n## {name}\n\n```text\n{tail.replace('```', '~~~')}\n```\n")
+        if name == 'gametests.log':
+            lines = [line for line in log.read_text(errors='replace').splitlines()
+                     if re.search(r'\btests?\b', line, re.IGNORECASE)
+                     and re.search(r'required|optional|pass|fail|done|finish|running|complete|started', line, re.IGNORECASE)]
+            result = '\n'.join(lines[-20:])[-12000:]
+            if result:
+                escaped = result.replace('%', '%25').replace('\r', '%0D').replace('\n', '%0A')
+                print('::notice title=Native server test results::' + escaped)
         if 'BUILD FAILED' in tail or 'FAILURE: Build failed' in tail:
             # Run summaries and raw logs require a GitHub login in some views.
             # Public check annotations expose these bounded diagnostics as well.

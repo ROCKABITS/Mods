@@ -32,6 +32,12 @@ jobs:
           distribution: temurin
           java-version: '21'
           cache: gradle
+      - name: Mod version
+        id: mod
+        run: |
+          version=$(sed -n 's/^mod_version=//p' gradle.properties)
+          [[ "$version" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]
+          echo "version=$version" >> "$GITHUB_OUTPUT"
       - name: Build and unit tests
         run: ./gradlew --no-daemon --console=plain build 2>&1 | tee build.log
       - name: Native server tests
@@ -42,8 +48,8 @@ jobs:
       - name: Downloadable mod JAR
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
-          name: contracts-bounties-0.1.0
-          path: contracts-bounties/build/libs/contracts-bounties-0.1.0.jar
+          name: contracts-bounties-${{ steps.mod.outputs.version }}
+          path: contracts-bounties/build/libs/contracts-bounties-${{ steps.mod.outputs.version }}.jar
           if-no-files-found: error
           retention-days: 30
       - name: Test reports and logs

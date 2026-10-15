@@ -2,6 +2,9 @@ package pt.contracts;
 
 import com.mojang.logging.LogUtils;
 import net.minecraft.commands.Commands;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
@@ -12,6 +15,7 @@ import net.neoforged.neoforge.event.RegisterCommandsEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.server.ServerStoppedEvent;
 import net.neoforged.neoforge.registries.DeferredBlock;
+import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import org.slf4j.Logger;
 import pt.contracts.network.ContractsNetwork;
@@ -22,13 +26,21 @@ public final class ContractsMod {
     public static final Logger LOG = LogUtils.getLogger();
     private static final DeferredRegister.Blocks BLOCKS = DeferredRegister.createBlocks(ID);
     private static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(ID);
+    private static final DeferredRegister<CreativeModeTab> TABS = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, ID);
     public static final DeferredBlock<ContractBoardBlock> BOARD = BLOCKS.register("contract_board",
             () -> new ContractBoardBlock(BlockBehaviour.Properties.of().strength(2.5F).sound(SoundType.WOOD)));
     static { ITEMS.registerSimpleBlockItem(BOARD); }
+    public static final DeferredHolder<CreativeModeTab, CreativeModeTab> TAB = TABS.register("contracts", () ->
+            CreativeModeTab.builder()
+                    .title(Component.translatable("itemGroup.contracts"))
+                    .icon(() -> new ItemStack(BOARD.get()))
+                    .displayItems((parameters, output) -> output.accept(BOARD.get()))
+                    .build());
 
     public ContractsMod(IEventBus bus) {
         BLOCKS.register(bus);
         ITEMS.register(bus);
+        TABS.register(bus);
         bus.addListener(ContractsNetwork::register);
         NeoForge.EVENT_BUS.addListener(ContractsMod::commands);
         NeoForge.EVENT_BUS.addListener(ContractsMod::logout);

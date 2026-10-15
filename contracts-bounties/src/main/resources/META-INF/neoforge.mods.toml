@@ -3,7 +3,7 @@ loaderVersion="[4,)"
 license="All Rights Reserved"
 [[mods]]
 modId="contracts"
-version="0.1.0"
+version="0.1.1"
 displayName="Contracts & Bounties"
 description='''Contracts for material deliveries with reserved rewards, a physical notice board, and optional Crónicas RP economy integration.'''
 [[dependencies.contracts]]
