@@ -1,0 +1,11 @@
+{
+  "version": "0.3.0",
+  "source_commit": "aa281b24ced8e15a50241eae4f19947fa64c0a2f",
+  "tested_run": "https://github.com/ROCKABITS/Mods/actions/runs/38747778023",
+  "jar_sha256": "74ef1869b280d3f5318f5f57d965e25f59fa8007c5ff422763debe9c9d781bef",
+  "zip_sha256": "ea04865ee2bbf3b25763b53132c189cc85f6984164f8eefbdd5d3d079437b328",
+  "screenshot_sha256": "a4bccd109a350dc83cfba6102db1b9f96b19830bb6f12fd8139192658a017de2",
+  "unit_tests": 46,
+  "required_native_tests": 37,
+  "actual_client_validation": true
+}

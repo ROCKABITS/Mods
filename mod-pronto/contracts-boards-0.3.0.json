@@ -1,0 +1,21 @@
+{
+  "success": true,
+  "message": "Three registered board items and their placed models have valid geometry and sprites. Captured overview, three close-ups, and the real ContractsScreen browse and creation tabs with demonstration data.",
+  "screenshot": "contracts-boards-minecraft.png",
+  "screenshots": [
+    "contracts-boards-minecraft.png",
+    "contracts-board-small.png",
+    "contracts-board-tall.png",
+    "contracts-board-wide.png",
+    "contracts-menu-browse.png",
+    "contracts-menu-create.png"
+  ],
+  "interfaceData": "Demonstration contracts rendered by the unmodified production ContractsScreen",
+  "bakedQuadCounts": {
+    "contracts:contract_board": 100,
+    "contracts:tall_contract_board": 254,
+    "contracts:wide_contract_board": 310
+  },
+  "windowWidth": 1600,
+  "windowHeight": 900
+}
