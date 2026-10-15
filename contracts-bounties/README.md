@@ -1,10 +1,12 @@
-# Contracts & Bounties — 0.1.1
+# Contracts & Bounties — 0.2.0
 
 Mod de contratos de materiais para Minecraft **1.21.1**, **NeoForge 21.1.256** e **Java 21**. Deve estar instalado no cliente e no servidor.
 
-**Estado desta entrega:** JAR 0.1.1 compilado no GitHub Actions; 23 testes unitários e todos os 17 testes obrigatórios de servidor aprovados, incluindo presença do mural no criativo e na pesquisa. A integração com o Crónicas RP e a interface ainda precisam de validação dentro do jogo. Ver [VALIDACAO.md](VALIDACAO.md).
+**Estado desta entrega:** três murais 3D com texturas originais de madeira, pergaminhos, telhas e hera. Compilação, 23 testes unitários, 25 testes de servidor e validação dos modelos num cliente Minecraft real aprovados. A integração com o Crónicas RP ainda precisa de validação com esse mod instalado. Ver [VALIDACAO.md](VALIDACAO.md).
 
-[Descarregar o JAR diretamente](https://github.com/ROCKABITS/Mods/raw/refs/heads/main/mod-pronto/contracts-bounties-0.1.1.jar) ou [descarregar o ZIP](https://github.com/ROCKABITS/Mods/raw/refs/heads/main/mod-pronto/contracts-bounties-0.1.1.zip) e extrair `contracts-bounties-0.1.1.jar`. Estes ficheiros estão versionados na pasta `mod-pronto` do repositório, juntamente com os checksums e a identificação da compilação aprovada.
+[Descarregar o JAR 0.2.0](https://github.com/ROCKABITS/Mods/raw/refs/heads/main/mod-pronto/contracts-bounties-0.2.0.jar) ou [descarregar o ZIP](https://github.com/ROCKABITS/Mods/raw/refs/heads/main/mod-pronto/contracts-bounties-0.2.0.zip). Ficheiros, checksums e identificação da compilação estão em `mod-pronto`.
+
+![Os três modelos renderizados no cliente Minecraft](../mod-pronto/contracts-boards-0.2.0.png)
 
 Um jogador publica um pedido, reserva a recompensa e recebe os materiais quando outro jogador faz a entrega. A interface usa um mural de madeira e pergaminho. As decisões sobre inventários e pagamentos são tomadas no servidor.
 
@@ -14,7 +16,15 @@ Um jogador publica um pedido, reserva a recompensa e recebe os materiais quando 
 2. Para usar dinheiro, instalar também **Crónicas RP 0.5.2** nos dois lados. Sem esse mod, as recompensas usam esmeraldas.
 3. Abrir o mural com o botão direito ou usar `/contracts`.
 
-No criativo, o **Mural de contratos** aparece na aba **Contracts & Bounties** e na pesquisa. A versão 0.1.1 corrige a ausência do item nessas listas na 0.1.0. Para atualizar, fechar o jogo/servidor e substituir o JAR antigo pelo novo, mantendo apenas uma versão instalada.
+No criativo, os três murais aparecem na aba **Contracts & Bounties** e na pesquisa. Para atualizar, fechar o jogo/servidor e substituir o JAR antigo pelo novo, mantendo apenas uma versão instalada.
+
+| Mural | Identificador | Espaço ocupado (largura × altura) |
+| --- | --- | --- |
+| Pequeno, num poste | `contracts:contract_board` | 1 × 1 bloco |
+| Alto, com telhado | `contracts:tall_contract_board` | 1 × 2 blocos |
+| Grande, com telhado | `contracts:wide_contract_board` | 2 × 2 blocos |
+
+Os murais cobertos precisam de chão firme e espaço livre para a estrutura completa. Rodam conforme a direção de colocação. Todas as partes abrem o mesmo mural de contratos; partir qualquer secção remove a estrutura inteira e devolve um único item em sobrevivência. O mural pequeno mantém o identificador antigo, pelo que os blocos já colocados passam a ter o novo aspeto sem criar partes adicionais à sua volta.
 
 O mural tem o identificador `contracts:contract_board`. A receita usa **3 papéis na linha superior e 6 tábuas de carvalho nas duas linhas inferiores**:
 
@@ -24,7 +34,9 @@ T T T    T = tábuas de carvalho
 T T T
 ```
 
-Um operador também pode usar `/contracts board` para obter o bloco.
+O mural coberto usa 3 lajes de tijolos na linha superior, papel–mural pequeno–papel na linha central e um tronco de carvalho em cada canto inferior. Dois murais cobertos lado a lado dão um mural grande.
+
+Um operador pode usar `/contracts board` para obter o mural pequeno ou `/contracts boards` para receber os três modelos.
 
 ## Usar os contratos
 
@@ -73,10 +85,12 @@ Para testar a integração real, colocar o JAR fornecido do Crónicas RP e as su
 
 Para desenvolvimento, os ambientes habituais do NeoForge estão disponíveis por `./gradlew runClient` e `./gradlew runServer`. A primeira execução do servidor requer aceitar o EULA do Minecraft em `run/eula.txt`.
 
-A validação visual e os testes com vários jogadores devem ser feitos num mundo de teste: publicar, entregar, recolher, cancelar e reiniciar o servidor com entregas pendentes. Repetir com esmeraldas e, separadamente, com Crónicas RP instalado.
+Os modelos foram carregados e fotografados num cliente Minecraft automático. Para testar a utilização com vários jogadores num mundo de teste: publicar, entregar, recolher, cancelar e reiniciar o servidor com entregas pendentes. Repetir com esmeraldas e, separadamente, com Crónicas RP instalado.
 
 Os dados são guardados em `data/contracts_ledger.dat` do mundo, pelos salvamentos normais do Minecraft. Não há transação atómica de disco entre esse ficheiro e os dados de jogador; uma interrupção abrupta durante a gravação exige verificar os backups do mundo. Um arquivo de contratos ilegível bloqueia o carregamento dos contratos, em vez de ser substituído silenciosamente por um arquivo vazio.
 
 ## Recursos
 
-A textura do mural foi desenhada para este projeto, sem imagens externas. O mod utiliza texturas de carvalho fornecidas pelo próprio Minecraft nas restantes faces do bloco.
+Os modelos e as texturas são originais, inspirados no conceito visual fornecido pelo utilizador. A geometria usa modelos JSON nativos, sem dependências de animação ou renderizadores próprios.
+
+`tools/generate_board_assets.py` reproduz os recursos. `tools/render_board_preview.py` produz uma pré-visualização externa dos modelos; estas ferramentas opcionais usam Pillow e NumPy. Para a captura real do Minecraft, executar `./gradlew -PboardVisualTests runClient` com um ambiente gráfico; o cliente de teste fecha automaticamente e escreve o resultado em `qa-results/boards-client/`.

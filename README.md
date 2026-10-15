@@ -2,7 +2,7 @@
 
 Projetos para Minecraft **1.21.1**, **NeoForge** e **Java 21**.
 
-**Downloads prontos:** [Contracts & Bounties 0.1.1 — JAR](https://github.com/ROCKABITS/Mods/raw/refs/heads/main/mod-pronto/contracts-bounties-0.1.1.jar) · [ZIP](https://github.com/ROCKABITS/Mods/raw/refs/heads/main/mod-pronto/contracts-bounties-0.1.1.zip).
+**Downloads prontos:** [Contracts & Bounties 0.2.0 — JAR](https://github.com/ROCKABITS/Mods/raw/refs/heads/main/mod-pronto/contracts-bounties-0.2.0.jar) · [ZIP](https://github.com/ROCKABITS/Mods/raw/refs/heads/main/mod-pronto/contracts-bounties-0.2.0.zip).
 
 - [Contracts & Bounties](contracts-bounties/README.md): mural de contratos de materiais, recompensas reservadas e recolha de entregas.
 
