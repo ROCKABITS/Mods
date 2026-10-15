@@ -1,0 +1,12 @@
+{
+  "success": true,
+  "message": "Three registered board items have nonempty baked geometry, no missing sprites, and an actual Minecraft client screenshot.",
+  "screenshot": "contracts-boards-minecraft.png",
+  "bakedQuadCounts": {
+    "contracts:contract_board": 100,
+    "contracts:tall_contract_board": 254,
+    "contracts:wide_contract_board": 310
+  },
+  "windowWidth": 1600,
+  "windowHeight": 900
+}
