@@ -1,0 +1,22 @@
+{
+  "version": "0.1.0",
+  "source_commit": "e0a1d3ee8b65d89a39d1b4d0136b8cf89d0890af",
+  "tested_run": "https://github.com/ROCKABITS/Mods/actions/runs/38812039209",
+  "jar_sha256": "9332d133320066d42bedb08fe129dee3da0de41f261f459140dea2a12ebf1606",
+  "zip_sha256": "04b3811783935e1b7d3a3705bf380b99b03a97a9a18fd30505d40850ac58c030",
+  "unit_tests": 28,
+  "standalone_native_tests": 20,
+  "companion_loaded_native_tests": 20,
+  "actual_client_validation": true,
+  "chronicles_runtime_tested": false,
+  "companion_jars": {
+    "contracts-bounties-0.3.1.jar": "9746951762a6762b2cb466ca695b7d43f8669c9dc1d55c12cae1b4bd17953f0c",
+    "crown-ledger-0.1.1.jar": "e82795f13e9f912f6729cebbad7a31dc242735b7a9e6396d6cbfb7eac02736aa",
+    "realmcouncil-0.2.1.jar": "3e407c391f5e2f919e246d1d889323c57ea40b30e0387e9614ae32e0e9251a0a"
+  },
+  "screenshots": {
+    "realm-identity-items.png": "53bc5ff2f6ba4ca07012f8cf265960308f18687d81f057f7669cce2c565a38ed",
+    "realm-identity-document.png": "5d6d6b2d6a45856efcc30d357fa84420545deba97503e69540f86524207707c5",
+    "realm-identity-issuance.png": "15e4eff54a660a5ae6192d7a9a0c590ddabb666a78b82247e14d6af6e9ebfe60"
+  }
+}

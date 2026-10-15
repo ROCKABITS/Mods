@@ -1,0 +1,43 @@
+{
+  "success": true,
+  "message": "Desk and document models, four desk facings, the production passport/issuance screens, and native station controls passed.",
+  "screenshots": [
+    "realm-identity-items.png",
+    "realm-identity-document.png",
+    "realm-identity-issuance.png"
+  ],
+  "images": [
+    "realm-identity-items.png",
+    "realm-identity-document.png",
+    "realm-identity-issuance.png"
+  ],
+  "interfaceData": "Explicit sample identity/profile in the actual production IdentityScreen; not a live Chronicles runtime profile",
+  "signatureData": "Sample ink1 monochrome drawing, decoded by the production domain decoder and rendered by the production UI",
+  "interfaceChecks": [
+    "Native issue, reissue and 100-tick refresh send empty payloads; server eligibility controls button availability; no editable character fields.",
+    "Read-only issued snapshots retain fields across current/outdated/offline/unavailable statuses, hide fields when invalid, and have no station refresh or mutation controls. Standalone and malformed drawings render absent.",
+    "Controls fit a 320x240 viewport. Empty/invalid physical sessions close only the identity menu, preserving unrelated screens."
+  ],
+  "recordedUiRequests": [
+    {
+      "operation": "issue",
+      "payload": {}
+    },
+    {
+      "operation": "reissue",
+      "payload": {}
+    },
+    {
+      "operation": "refresh",
+      "payload": {}
+    }
+  ],
+  "requestTransport": "Recorded locally; no server requests",
+  "bakedQuadCounts": {
+    "realmidentity:writing_desk": 276,
+    "realmidentity:identity_document": 31
+  },
+  "validatedBlockStates": 4,
+  "windowWidth": 1600,
+  "windowHeight": 900
+}
