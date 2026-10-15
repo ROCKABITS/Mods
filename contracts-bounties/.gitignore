@@ -1,4 +1,7 @@
 .gradle/
+build.log
+gametests.log
+__pycache__/
 build/
 run/
 runs/
