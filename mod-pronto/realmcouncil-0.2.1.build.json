@@ -1,0 +1,10 @@
+{
+  "version": "0.2.1",
+  "source_commit": "90e2c6abeb74aedca0be26253b7fd819ff5defe2",
+  "tested_run": "https://github.com/ROCKABITS/Mods/actions/runs/38742667375",
+  "jar_sha256": "3e407c391f5e2f919e246d1d889323c57ea40b30e0387e9614ae32e0e9251a0a",
+  "zip_sha256": "ff4a9cd7a7bfa42200665ee363351430c80ec9ec4d8bdd346c61946eb5c0951c",
+  "unit_tests": 49,
+  "required_native_tests": 24,
+  "public_access": "physical_stations_only"
+}
