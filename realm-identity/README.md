@@ -48,6 +48,8 @@ Chronicles RP 0.5.2 é opcional; o intervalo declarado é `>=0.5.2 e <0.6`. Se i
 
 Todas as escrivaninhas e dimensões usam `data/realm_identity.dat`, que guarda o selo do mundo, o próximo número de série e um documento atual por jogador. Inclui este ficheiro nas cópias de segurança do mundo. Se o registo estiver corrompido, o mod recusa substituí-lo silenciosamente por um registo vazio. A emissão verifica inventário e registo no thread do servidor e usa o mecanismo normal de persistência do Minecraft; não oferece uma transação de disco única durante uma falha abrupta do processo.
 
+[Resultados e limites da validação](VALIDACAO.md) · [Changelog](CHANGELOG.md) · [JAR pronto](../mod-pronto/realm-identity-0.1.0.jar) · [ZIP](../mod-pronto/realm-identity-0.1.0.zip) · [Imagens](../media/realm-identity/0.1.0/README.md).
+
 ## Desenvolvimento
 
 ```bash

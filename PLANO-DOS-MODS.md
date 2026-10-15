@@ -20,7 +20,7 @@ Plataforma: **Minecraft 1.21.1, NeoForge e Java 21**. Os mods mantêm responsabi
 | --- | --- | --- | --- |
 | 1 | Contracts & Bounties | Murais físicos, contratos de materiais e recompensas reservadas. | 0.3.0 disponível; API de impostos, reputação e contratos públicos implementada. Integração com os mods completos por validar. |
 | 2 | Crown Ledger — Tesouro da Coroa | Orçamento, impostos, salários e contratos pagos pelo reino, geridos pelo governante. | Implementado; [guia e downloads](crown-ledger/README.md). |
-| 3 | Documento de personagem | Documento físico de RP que pode ser mostrado a outros jogadores. | Planeado. |
+| 3 | Realm Identity | Documento físico de RP, assinatura e apresentação a outros jogadores com verificação do servidor. | Implementado; [guia e downloads](realm-identity/README.md). |
 | 4 | Bancas de mercado | Lojas com stock e vendas quando o proprietário está offline. | Planeado. |
 | 5 | Guildas | Membros, cargos, sedes, cofres e contratos de grupo. | Planeado. |
 | 6 | Correio de fantasia | Cartas, encomendas e pagamentos entre jogadores. | Planeado. |
