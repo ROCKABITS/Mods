@@ -6,8 +6,11 @@ import java.util.UUID;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.neoforged.fml.ModList;
+import pt.contracts.ContractsData;
 import pt.contracts.ContractsService;
+import pt.contracts.domain.Ledger;
 import pt.contracts.domain.Ledger.Contract;
+import pt.contracts.domain.Ledger.Currency;
 import pt.contracts.domain.Ledger.Delivery;
 
 /**
@@ -15,11 +18,12 @@ import pt.contracts.domain.Ledger.Delivery;
  * No client packet may register a provider or change policy. A provider must verify
  * the current elected ruler on every management request, rather than cache a UUID.
  * Its physical treasury menu must validate its own block session before calling
- * management operations here. All balances use the existing escrow ledger; this
- * API exposes no way to mint currency or withdraw public funds into a personal wallet.
+ * management operations here. All balances use the existing escrow ledger. The
+ * registered provider alone can transfer funded treasury balances into or out of
+ * that escrow; player endpoints cannot mint money or withdraw public funds.
  */
 public final class ContractsApi {
-    public static final int API_VERSION = 1;
+    public static final int API_VERSION = 2;
     public static final String TREASURY_MOD_ID = "kingdomtreasury";
     private static volatile TreasuryProvider treasury;
 
@@ -108,12 +112,60 @@ public final class ContractsApi {
         return ContractsService.kingdomDeliveries(server);
     }
 
+    /** Public treasury accounting view, never a player or client-supplied ledger. */
+    public static List<Contract> kingdomContracts(MinecraftServer server) {
+        requireServerThread(server);
+        return ContractsData.get(server).ledger.list().stream()
+                .filter(contract -> contract.funding() == Ledger.Funding.KINGDOM).toList();
+    }
+
     public static void cancelPublic(ServerPlayer manager, UUID contract) {
         ContractsService.cancelPublic(manager, contract);
     }
 
     public static int collectKingdom(ServerPlayer manager) {
         return ContractsService.collectKingdom(manager);
+    }
+
+    /**
+     * Moves already-funded Crown Ledger money into contract escrow. Only the exact
+     * registered provider may invoke this transfer; it must debit its own persisted
+     * treasury in the same server-thread transaction. This is not a player endpoint.
+     */
+    public static void treasuryCredit(MinecraftServer server, TreasuryProvider provider,
+                                      String currencyName, long amount) {
+        requireFundingProvider(server, provider, amount);
+        Currency currency = Currency.valueOf(currencyName);
+        ContractsData data = ContractsData.get(server);
+        Ledger next = data.ledger.copy();
+        next.addCredit(Ledger.KINGDOM_ACCOUNT, currency, amount);
+        data.ledger = next;
+        data.setDirty();
+    }
+
+    /**
+     * Moves an exact tax/refund balance back to the registered treasury. The caller
+     * must preflight destination overflow before taking this credit. On failure the
+     * contracts ledger is unchanged; there is no partial transfer or currency conversion.
+     */
+    public static long treasuryDebit(MinecraftServer server, TreasuryProvider provider,
+                                     String currencyName, long amount) {
+        requireFundingProvider(server, provider, amount);
+        Currency currency = Currency.valueOf(currencyName);
+        ContractsData data = ContractsData.get(server);
+        Ledger next = data.ledger.copy();
+        next.takeCredit(Ledger.KINGDOM_ACCOUNT, currency, amount);
+        data.ledger = next;
+        data.setDirty();
+        return amount;
+    }
+
+    private static void requireFundingProvider(MinecraftServer server, TreasuryProvider provider, long amount) {
+        requireServerThread(server);
+        if (provider == null || treasury != provider)
+            throw new IllegalStateException("Only the registered treasury provider can transfer public funds");
+        if (amount < 1 || amount > pt.contracts.compat.ChroniclesBridge.MAX_CENTS)
+            throw new IllegalArgumentException("Treasury transfer amount is outside the supported limits");
     }
 
     public static void requireServerThread(MinecraftServer server) {

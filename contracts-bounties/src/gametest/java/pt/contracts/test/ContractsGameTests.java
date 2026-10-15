@@ -1213,4 +1213,42 @@ public final class ContractsGameTests {
                 "Rejected SavedData replaced or modified the live ledger");
         helper.succeed();
     }
+
+    @GameTest(template = "contracts:contracts_empty", timeoutTicks = 20)
+    public static void treasuryTransfersRequireProviderIdentityAndAreExact(GameTestHelper helper) {
+        var data = reset(helper);
+        var manager = player(helper);
+        try (var provider = new TreasuryFixture(manager, ContractsApi.Policy.DEFAULT)) {
+            ContractsApi.TreasuryProvider stranger = new ContractsApi.TreasuryProvider() {
+                public ContractsApi.Policy policy(MinecraftServer server) { return ContractsApi.Policy.DEFAULT; }
+                public boolean mayManage(ServerPlayer player) { return true; }
+            };
+            boolean rejected = false;
+            try { ContractsApi.treasuryCredit(manager.server, stranger, "EMERALD", 10); }
+            catch (IllegalStateException expected) { rejected = true; }
+            helper.assertTrue(rejected && ContractsApi.kingdomBalance(manager.server, "EMERALD") == 0,
+                    "An unregistered provider credited the kingdom");
+            ContractsApi.treasuryCredit(manager.server, provider, "EMERALD", 10);
+            long moved = ContractsApi.treasuryDebit(manager.server, provider, "EMERALD", 4);
+            helper.assertTrue(moved == 4 && ContractsApi.kingdomBalance(manager.server, "EMERALD") == 6,
+                    "An exact treasury transfer changed the wrong amount");
+            rejected = false;
+            try { ContractsApi.treasuryDebit(manager.server, provider, "EMERALD", 7); }
+            catch (IllegalStateException | IllegalArgumentException expected) { rejected = true; }
+            helper.assertTrue(rejected && ContractsApi.kingdomBalance(manager.server, "EMERALD") == 6,
+                    "An unfunded transfer partially debited the treasury");
+            rejected = false;
+            try { ContractsApi.treasuryCredit(manager.server, provider, "EMERALD", 0); }
+            catch (IllegalArgumentException expected) { rejected = true; }
+            helper.assertTrue(rejected && ContractsApi.kingdomBalance(manager.server, "EMERALD") == 6,
+                    "A zero transfer changed treasury accounting");
+            boolean wrongThreadRejected = java.util.concurrent.CompletableFuture.supplyAsync(() -> {
+                try { ContractsApi.treasuryDebit(manager.server, provider, "EMERALD", 1); return false; }
+                catch (IllegalStateException expected) { return true; }
+            }).join();
+            helper.assertTrue(wrongThreadRejected && ContractsApi.kingdomBalance(manager.server, "EMERALD") == 6,
+                    "A transfer from outside the server thread changed treasury accounting");
+        }
+        helper.succeed();
+    }
 }

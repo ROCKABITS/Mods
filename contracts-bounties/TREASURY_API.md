@@ -47,3 +47,7 @@ The contract ledger uses saved format 2 and migrates format 1 with private owner
 Native tests register an explicitly identified test provider to validate funding, policy changes, permission changes, taxation, progress queues and persistence. This is not a claim that the future Treasury mod exists or has been tested.
 
 The supplied Chronicles RP 0.5.2 record API was checked against its original JAR. Full runtime verification with Chronicles, Origins and Jupiter installed remains separate from standalone contract tests.
+
+### Crown Ledger transfers (API 2, Contracts 0.3.1+)
+
+`treasuryCredit(server, provider, currency, amount)` and `treasuryDebit(...)` move exact, positive amounts between the registered treasury and the contracts settlement account. Both require the identical registered provider and the main server thread. Debit rejects insufficient funds without changing the ledger. The treasury must preflight destination capacity and debit its own balance when funding escrow; these methods are trusted integration calls and must never be exposed directly to client packets. Crown Ledger sweeps taxes and refunds into its public account; reserved contracts remain in Contracts escrow. Normal Minecraft world backups must include both SavedData files.
