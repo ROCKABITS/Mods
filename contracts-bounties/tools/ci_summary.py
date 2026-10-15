@@ -34,8 +34,11 @@ for name in ['build.log', 'gametests.log', 'visual-client.log']:
         if 'BUILD FAILED' in tail or 'FAILURE: Build failed' in tail or name == 'visual-client.log' and 'success=false' in tail:
             # Run summaries and raw logs require a GitHub login in some views.
             # Public check annotations expose these bounded diagnostics as well.
-            for index, offset in enumerate(range(0, len(tail), 12000), start=1):
-                diagnostic = tail[offset:offset + 12000].replace('%', '%25').replace('\r', '%0D').replace('\n', '%0A')
+            diagnostics = tail[-16000:]
+            # GitHub's public view truncates long annotation messages. Keep
+            # each chunk short enough to preserve the actual compiler errors.
+            for index, offset in enumerate(range(0, len(diagnostics), 2000), start=1):
+                diagnostic = diagnostics[offset:offset + 2000].replace('%', '%25').replace('\r', '%0D').replace('\n', '%0A')
                 print(f'::error title={name} diagnostics {index}::{diagnostic}')
 
 visual_report = project / 'qa-results/boards-client/result.json'
