@@ -4,7 +4,7 @@ Mod de contratos de materiais para Minecraft **1.21.1**, **NeoForge 21.1.256** e
 
 **Estado desta entrega:** JAR 0.1.1 compilado no GitHub Actions; 23 testes unitários e todos os 17 testes obrigatórios de servidor aprovados, incluindo presença do mural no criativo e na pesquisa. A integração com o Crónicas RP e a interface ainda precisam de validação dentro do jogo. Ver [VALIDACAO.md](VALIDACAO.md).
 
-[Descarregar o mod compilado](https://github.com/ROCKABITS/Mods/actions/runs/38718980393/artifacts/11964257195) com sessão iniciada no GitHub. Extrair o ZIP e usar o ficheiro `contracts-bounties-0.1.1.jar`. O artefacto é conservado durante 30 dias; futuras compilações podem ser iniciadas na página Actions através do workflow `Build Contracts & Bounties`.
+[Descarregar o JAR diretamente](https://github.com/ROCKABITS/Mods/raw/refs/heads/main/mod-pronto/contracts-bounties-0.1.1.jar) ou [descarregar o ZIP](https://github.com/ROCKABITS/Mods/raw/refs/heads/main/mod-pronto/contracts-bounties-0.1.1.zip) e extrair `contracts-bounties-0.1.1.jar`. Estes ficheiros estão versionados na pasta `mod-pronto` do repositório, juntamente com os checksums e a identificação da compilação aprovada.
 
 Um jogador publica um pedido, reserva a recompensa e recebe os materiais quando outro jogador faz a entrega. A interface usa um mural de madeira e pergaminho. As decisões sobre inventários e pagamentos são tomadas no servidor.
 

@@ -2,6 +2,8 @@
 
 Projetos para Minecraft **1.21.1**, **NeoForge** e **Java 21**.
 
+**Downloads prontos:** [Contracts & Bounties 0.1.1 — JAR](https://github.com/ROCKABITS/Mods/raw/refs/heads/main/mod-pronto/contracts-bounties-0.1.1.jar) · [ZIP](https://github.com/ROCKABITS/Mods/raw/refs/heads/main/mod-pronto/contracts-bounties-0.1.1.zip).
+
 - [Contracts & Bounties](contracts-bounties/README.md): mural de contratos de materiais, recompensas reservadas e recolha de entregas.
 
 O Contracts & Bounties funciona de forma independente, com esmeraldas, e tem integração opcional com a economia do **Crónicas RP 0.5.2**. Não altera os outros mods.
