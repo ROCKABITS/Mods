@@ -1,6 +1,6 @@
 {
-  "block.contracts.contract_board": "Contract board",
-  "item.contracts.contract_board": "Contract board",
+  "block.contracts.contract_board": "Small contract board",
+  "item.contracts.contract_board": "Small contract board",
   "itemGroup.contracts": "Contracts & Bounties",
   "gui.contracts.title": "Contracts & Bounties",
   "gui.contracts.browse": "Browse contracts",
@@ -63,5 +63,9 @@
   "gui.contracts.archive_full": "The contract archive is full. Contact the server administrator.",
   "gui.contracts.too_many": "You already have the maximum number of open contracts.",
   "gui.contracts.invalid_request": "Invalid contract request.",
-  "gui.contracts.insufficient_items": "Not enough unmodified items in your main inventory (without a custom name, enchantments or contents)."
+  "gui.contracts.insufficient_items": "Not enough unmodified items in your main inventory (without a custom name, enchantments or contents).",
+  "block.contracts.tall_contract_board": "Roofed contract board",
+  "item.contracts.tall_contract_board": "Roofed contract board",
+  "block.contracts.wide_contract_board": "Grand contract board",
+  "item.contracts.wide_contract_board": "Grand contract board"
 }

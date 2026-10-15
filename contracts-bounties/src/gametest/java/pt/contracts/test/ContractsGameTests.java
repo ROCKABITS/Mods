@@ -1,9 +1,12 @@
 package pt.contracts.test;
 
 import com.mojang.authlib.GameProfile;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 import java.util.function.Supplier;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.gametest.framework.GameTest;
@@ -11,19 +14,28 @@ import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.flag.FeatureFlags;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.component.CustomData;
+import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.phys.shapes.BooleanOp;
+import net.minecraft.world.phys.shapes.Shapes;
 import net.neoforged.neoforge.attachment.AttachmentType;
 import net.neoforged.neoforge.common.util.FakePlayer;
 import net.neoforged.neoforge.gametest.GameTestHolder;
 import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 import pt.contracts.ContractsData;
 import pt.contracts.ContractsService;
+import pt.contracts.ContractBoardBlock;
 import pt.contracts.compat.ChroniclesBridge;
 import pt.contracts.domain.Ledger;
 import pt.contracts.network.ContractsPackets;
@@ -33,6 +45,61 @@ import pt.contracts.network.ContractsPackets;
 @PrefixGameTestTemplate(false)
 public final class ContractsGameTests {
     private static final String OAK = "minecraft:oak_log";
+    // Expected public footprints, independent of the block's placement implementation.
+    private record BoardSpec(String id, int width, int height) {}
+    private static final List<BoardSpec> BOARDS = List.of(
+            new BoardSpec("contract_board", 1, 1),
+            new BoardSpec("tall_contract_board", 1, 2),
+            new BoardSpec("wide_contract_board", 2, 2));
+
+    private static ContractBoardBlock board(BoardSpec spec) {
+        return (ContractBoardBlock) BuiltInRegistries.BLOCK.get(
+                ResourceLocation.fromNamespaceAndPath("contracts", spec.id()));
+    }
+
+    private static List<BlockPos> footprint(BoardSpec spec, BlockPos anchor, Direction facing) {
+        var positions = new ArrayList<BlockPos>();
+        for (int y = 0; y < spec.height(); y++) {
+            for (int x = 0; x < spec.width(); x++) {
+                positions.add(anchor.relative(facing.getClockWise(), x).above(y));
+            }
+        }
+        return positions;
+    }
+
+    private static BlockPos boardPosition(GameTestHelper helper) {
+        return helper.absolutePos(new BlockPos(4, 1, 4));
+    }
+
+    private static void prepareBoardSpace(GameTestHelper helper, BlockPos anchor) {
+        var level = helper.getLevel();
+        for (int x = -2; x <= 2; x++) {
+            for (int z = -2; z <= 2; z++) {
+                for (int y = 0; y < 3; y++) {
+                    level.setBlockAndUpdate(anchor.offset(x, y, z), Blocks.AIR.defaultBlockState());
+                }
+                level.setBlockAndUpdate(anchor.offset(x, -1, z), Blocks.STONE.defaultBlockState());
+            }
+        }
+        level.getEntitiesOfClass(ItemEntity.class, new AABB(anchor).inflate(2)).forEach(ItemEntity::discard);
+    }
+
+    /** Use the real item path, including placement checks, setPlacedBy, and stack consumption. */
+    private static boolean placeBoard(GameTestHelper helper, FakePlayer builder, BoardSpec spec,
+                                      BlockPos anchor, Direction facing, ItemStack stack) {
+        builder.setPos(anchor.getX() + 3.5, anchor.getY(), anchor.getZ() + 3.5);
+        builder.setYRot(facing.getOpposite().toYRot());
+        builder.setXRot(0);
+        builder.setItemInHand(InteractionHand.MAIN_HAND, stack);
+        var hit = new BlockHitResult(Vec3.atBottomCenterOf(anchor), Direction.UP, anchor.below(), false);
+        return stack.useOn(new UseOnContext(builder, InteractionHand.MAIN_HAND, hit)).consumesAction();
+    }
+
+    private static int droppedBoards(GameTestHelper helper, BoardSpec spec, BlockPos anchor) {
+        return helper.getLevel().getEntitiesOfClass(ItemEntity.class, new AABB(anchor).inflate(2)).stream()
+                .filter(entity -> entity.getItem().is(board(spec).asItem()))
+                .mapToInt(entity -> entity.getItem().getCount()).sum();
+    }
 
     private static FakePlayer player(GameTestHelper helper) {
         var player = new FakePlayer(helper.getLevel(), new GameProfile(UUID.randomUUID(), "ContractsQA"));
@@ -99,11 +166,19 @@ public final class ContractsGameTests {
 
     @GameTest(template = "contracts_empty", timeoutTicks = 100)
     public static void boardBlockItemAndRecipeAreRegistered(GameTestHelper helper) {
-        var key = ResourceLocation.fromNamespaceAndPath("contracts", "contract_board");
-        helper.assertTrue(BuiltInRegistries.BLOCK.get(key) != Blocks.AIR, "Contract board block is missing");
-        helper.assertTrue(BuiltInRegistries.ITEM.get(key) != Items.AIR, "Contract board item is missing");
-        helper.assertTrue(helper.getLevel().getServer().getRecipeManager().byKey(key).isPresent(),
-                "Contract board recipe is missing");
+        for (var spec : BOARDS) {
+            var key = ResourceLocation.fromNamespaceAndPath("contracts", spec.id());
+            helper.assertTrue(BuiltInRegistries.BLOCK.get(key) instanceof ContractBoardBlock,
+                    spec.id() + " block is missing");
+            helper.assertTrue(BuiltInRegistries.ITEM.get(key) == board(spec).asItem()
+                            && board(spec).asItem() != Items.AIR,
+                    spec.id() + " block item is missing");
+            helper.assertTrue(helper.getLevel().getServer().getRecipeManager().byKey(key).isPresent(),
+                    spec.id() + " recipe is missing");
+            helper.assertTrue(board(spec).variant().width() == spec.width()
+                            && board(spec).variant().height() == spec.height(),
+                    spec.id() + " has an unexpected public footprint");
+        }
         helper.succeed();
     }
 
@@ -115,13 +190,222 @@ public final class ContractsGameTests {
         tab.buildContents(new CreativeModeTab.ItemDisplayParameters(
                 FeatureFlags.DEFAULT_FLAGS, true, helper.getLevel().registryAccess()));
 
-        var boardKey = ResourceLocation.fromNamespaceAndPath("contracts", "contract_board");
-        var board = BuiltInRegistries.ITEM.get(boardKey);
-        helper.assertTrue(board != Items.AIR, "Contract board item is missing");
-        helper.assertTrue(tab.getDisplayItems().stream().anyMatch(stack -> stack.is(board)),
-                "Contract board is absent from the Contracts creative inventory tab");
-        helper.assertTrue(tab.getSearchTabDisplayItems().stream().anyMatch(stack -> stack.is(board)),
-                "Contract board is absent from creative inventory search");
+        for (var spec : BOARDS) {
+            var item = board(spec).asItem();
+            helper.assertTrue(tab.getDisplayItems().stream().filter(stack -> stack.is(item)).count() == 1,
+                    spec.id() + " must appear exactly once in the Contracts creative inventory tab");
+            helper.assertTrue(tab.getSearchTabDisplayItems().stream().anyMatch(stack -> stack.is(item)),
+                    spec.id() + " is absent from creative inventory search");
+        }
+        helper.succeed();
+    }
+
+    @GameTest(template = "contracts_empty", timeoutTicks = 100)
+    public static void realBlockItemsPlaceEveryFootprintInAllFourDirections(GameTestHelper helper) {
+        var builder = player(helper);
+        var anchor = boardPosition(helper);
+        for (var spec : BOARDS) {
+            for (var facing : Direction.Plane.HORIZONTAL) {
+                prepareBoardSpace(helper, anchor);
+                var stack = new ItemStack(board(spec), 2);
+                helper.assertTrue(placeBoard(helper, builder, spec, anchor, facing, stack),
+                        spec.id() + " item placement failed facing " + facing);
+                helper.assertTrue(stack.getCount() == 1, "Placement must consume exactly one board item");
+                for (int y = 0; y < spec.height(); y++) {
+                    for (int x = 0; x < spec.width(); x++) {
+                        var pos = anchor.relative(facing.getClockWise(), x).above(y);
+                        var state = helper.getLevel().getBlockState(pos);
+                        helper.assertTrue(state.is(board(spec))
+                                        && state.getValue(ContractBoardBlock.FACING) == facing,
+                                spec.id() + " has a missing or wrongly oriented section at " + pos);
+                        var part = state.getValue(ContractBoardBlock.PART);
+                        helper.assertTrue(part.x() == x && part.y() == y,
+                                "Board section has the wrong part identity");
+                        helper.assertTrue(board(spec).anchor(pos, state).equals(anchor),
+                                "A board section resolves to the wrong anchor");
+                    }
+                }
+                helper.assertTrue(board(spec).validStructure(helper.getLevel(), anchor,
+                                helper.getLevel().getBlockState(anchor)),
+                        "Placement left an incomplete board structure");
+                long placed = BlockPos.betweenClosedStream(anchor.offset(-2, 0, -2), anchor.offset(2, 2, 2))
+                        .filter(pos -> helper.getLevel().getBlockState(pos).is(board(spec))).count();
+                helper.assertTrue(placed == spec.width() * spec.height(),
+                        "Placement created extra sections outside the declared footprint");
+            }
+        }
+        helper.succeed();
+    }
+
+    @GameTest(template = "contracts_empty", timeoutTicks = 100)
+    public static void blockedPlacementNeverOverwritesBlocksOrConsumesTheItem(GameTestHelper helper) {
+        var builder = player(helper);
+        var anchor = boardPosition(helper);
+        for (var spec : BOARDS) {
+            for (var facing : Direction.Plane.HORIZONTAL) {
+                for (var obstruction : footprint(spec, anchor, facing)) {
+                    prepareBoardSpace(helper, anchor);
+                    helper.getLevel().setBlockAndUpdate(obstruction, Blocks.STONE.defaultBlockState());
+                    var stack = new ItemStack(board(spec), 2);
+                    helper.assertTrue(!placeBoard(helper, builder, spec, anchor, facing, stack),
+                            "Placement accepted an obstructed section of " + spec.id());
+                    helper.assertTrue(stack.getCount() == 2
+                                    && helper.getLevel().getBlockState(obstruction).is(Blocks.STONE),
+                            "Rejected placement consumed an item or overwrote the obstruction");
+                    for (var pos : footprint(spec, anchor, facing)) {
+                        helper.assertTrue(!helper.getLevel().getBlockState(pos).is(board(spec)),
+                                "Rejected placement left a partial board");
+                    }
+                }
+            }
+        }
+        helper.succeed();
+    }
+
+    @GameTest(template = "contracts_empty", timeoutTicks = 100)
+    public static void wideBoardRequiresSolidGroundUnderBothPosts(GameTestHelper helper) {
+        var builder = player(helper);
+        var anchor = boardPosition(helper);
+        var wide = BOARDS.get(2);
+        for (var facing : Direction.Plane.HORIZONTAL) {
+            prepareBoardSpace(helper, anchor);
+            helper.getLevel().setBlockAndUpdate(anchor.relative(facing.getClockWise()).below(),
+                    Blocks.AIR.defaultBlockState());
+            var stack = new ItemStack(board(wide), 2);
+            helper.assertTrue(!placeBoard(helper, builder, wide, anchor, facing, stack),
+                    "A wide board was placed with an unsupported second post");
+            helper.assertTrue(stack.getCount() == 2, "Unsupported placement consumed a board item");
+            for (var pos : footprint(wide, anchor, facing)) {
+                helper.assertTrue(helper.getLevel().getBlockState(pos).isAir(),
+                        "Unsupported placement left a partial board");
+            }
+        }
+        helper.succeed();
+    }
+
+    @GameTest(template = "contracts_empty", timeoutTicks = 100)
+    public static void tallBoardsCannotPartiallyPlaceThroughTheWorldCeiling(GameTestHelper helper) {
+        var builder = player(helper);
+        var level = helper.getLevel();
+        var local = boardPosition(helper);
+        var anchor = new BlockPos(local.getX(), level.getMaxBuildHeight() - 1, local.getZ());
+        for (var spec : BOARDS) {
+            if (spec.height() == 1) continue;
+            for (var facing : Direction.Plane.HORIZONTAL) {
+                for (int x = 0; x < spec.width(); x++) {
+                    level.setBlockAndUpdate(anchor.relative(facing.getClockWise(), x).below(),
+                            Blocks.STONE.defaultBlockState());
+                }
+                try {
+                    var stack = new ItemStack(board(spec), 2);
+                    helper.assertTrue(!placeBoard(helper, builder, spec, anchor, facing, stack),
+                            "A board was placed beyond the build height");
+                    helper.assertTrue(stack.getCount() == 2,
+                            "World-ceiling rejection consumed a board item");
+                    for (int x = 0; x < spec.width(); x++) {
+                        helper.assertTrue(level.getBlockState(anchor.relative(facing.getClockWise(), x)).isAir(),
+                                "World-ceiling rejection left a lower board section");
+                    }
+                } finally {
+                    for (int x = 0; x < spec.width(); x++) {
+                        level.setBlockAndUpdate(anchor.relative(facing.getClockWise(), x), Blocks.AIR.defaultBlockState());
+                        level.setBlockAndUpdate(anchor.relative(facing.getClockWise(), x).below(),
+                                Blocks.AIR.defaultBlockState());
+                    }
+                }
+            }
+        }
+        helper.succeed();
+    }
+
+    @GameTest(template = "contracts_empty", timeoutTicks = 100)
+    public static void breakingAnySectionInSurvivalDropsOneBoardAndLeavesNoOrphans(GameTestHelper helper) {
+        checkBreakingEverySection(helper, GameType.SURVIVAL, 1);
+        helper.succeed();
+    }
+
+    @GameTest(template = "contracts_empty", timeoutTicks = 100)
+    public static void breakingAnySectionInCreativeDropsNothingAndLeavesNoOrphans(GameTestHelper helper) {
+        checkBreakingEverySection(helper, GameType.CREATIVE, 0);
+        helper.succeed();
+    }
+
+    private static void checkBreakingEverySection(GameTestHelper helper, GameType gameType, int expectedDrops) {
+        var builder = player(helper);
+        var anchor = boardPosition(helper);
+        for (var spec : BOARDS) {
+            for (var target : footprint(spec, anchor, Direction.NORTH)) {
+                prepareBoardSpace(helper, anchor);
+                builder.setGameMode(GameType.SURVIVAL);
+                helper.assertTrue(placeBoard(helper, builder, spec, anchor, Direction.NORTH,
+                                new ItemStack(board(spec))), "Unable to prepare a real board for destruction");
+                builder.setItemInHand(InteractionHand.MAIN_HAND, ItemStack.EMPTY);
+                builder.setGameMode(gameType);
+                helper.assertTrue(builder.gameMode.destroyBlock(target), "Player could not break board section");
+                for (var pos : footprint(spec, anchor, Direction.NORTH)) {
+                    helper.assertTrue(helper.getLevel().getBlockState(pos).isAir(),
+                            "Breaking " + spec.id() + " left an orphaned board section at " + pos);
+                }
+                helper.assertTrue(droppedBoards(helper, spec, anchor) == expectedDrops,
+                        "Breaking " + spec.id() + " in " + gameType + " produced the wrong item count");
+            }
+        }
+    }
+
+    @GameTest(template = "contracts_empty", timeoutTicks = 100)
+    public static void everyBoardSectionOpensAnAnchoredServerSession(GameTestHelper helper) {
+        reset(helper);
+        var builder = player(helper);
+        var author = player(helper);
+        var anchor = boardPosition(helper);
+        for (var spec : BOARDS) {
+            for (var clicked : footprint(spec, anchor, Direction.NORTH)) {
+                prepareBoardSpace(helper, anchor);
+                helper.assertTrue(placeBoard(helper, builder, spec, anchor, Direction.NORTH,
+                                new ItemStack(board(spec))), "Unable to prepare a board for interaction");
+                ContractsService.logout(author.getUUID());
+                var awayFromClickedSection = Vec3.atCenterOf(clicked).subtract(Vec3.atCenterOf(anchor));
+                if (awayFromClickedSection.lengthSqr() == 0) awayFromClickedSection = new Vec3(0, 0, 1);
+                // At 7.5 blocks from the anchor, upper/right sections are more than eight blocks away.
+                // Storing the clicked section instead of the anchor would reject this valid session.
+                var position = Vec3.atCenterOf(anchor).subtract(awayFromClickedSection.normalize().scale(7.5));
+                author.setPos(position.x, position.y, position.z);
+                var state = helper.getLevel().getBlockState(clicked);
+                var hit = new BlockHitResult(Vec3.atCenterOf(clicked), Direction.NORTH, clicked, false);
+                helper.assertTrue(state.useWithoutItem(helper.getLevel(), author, hit).consumesAction(),
+                        "A board section did not handle interaction");
+                ContractsService.requireSession(author);
+                helper.getLevel().setBlockAndUpdate(anchor, Blocks.AIR.defaultBlockState());
+                rejected(helper, () -> ContractsService.requireSession(author));
+                ContractsService.logout(author.getUUID());
+            }
+        }
+        helper.succeed();
+    }
+
+    @GameTest(template = "contracts_empty", timeoutTicks = 100)
+    public static void boardOutlinesAndCollisionRotateWithoutBecomingSolidCubes(GameTestHelper helper) {
+        var pos = boardPosition(helper);
+        for (var spec : BOARDS) {
+            for (var facing : Direction.Plane.HORIZONTAL) {
+                var state = board(spec).defaultBlockState().setValue(ContractBoardBlock.FACING, facing);
+                var outline = state.getShape(helper.getLevel(), pos);
+                var collision = state.getCollisionShape(helper.getLevel(), pos);
+                helper.assertTrue(!outline.isEmpty() && !collision.isEmpty(),
+                        "A board has no clickable outline or physical collision");
+                helper.assertTrue(Shapes.joinIsNotEmpty(outline, Shapes.block(), BooleanOp.NOT_SAME)
+                                && Shapes.joinIsNotEmpty(collision, Shapes.block(), BooleanOp.NOT_SAME),
+                        "A board still uses a solid cube as its outline or collision");
+            }
+            var north = board(spec).defaultBlockState().setValue(ContractBoardBlock.FACING, Direction.NORTH)
+                    .getShape(helper.getLevel(), pos).bounds();
+            var east = board(spec).defaultBlockState().setValue(ContractBoardBlock.FACING, Direction.EAST)
+                    .getShape(helper.getLevel(), pos).bounds();
+            helper.assertTrue(Math.abs(north.getXsize() - east.getZsize()) < 0.00001
+                            && Math.abs(north.getZsize() - east.getXsize()) < 0.00001
+                            && north.getXsize() > north.getZsize(),
+                    "Board outline depth does not rotate with the model facing");
+        }
         helper.succeed();
     }
 

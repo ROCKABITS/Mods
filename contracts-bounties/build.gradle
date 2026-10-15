@@ -48,8 +48,18 @@ if (providers.gradleProperty('contractGameTests').isPresent()) {
     sourceSets.main.java.srcDir('src/gametest/java')
     sourceSets.main.resources.srcDir('src/gametest/resources')
 }
+if (providers.gradleProperty('boardVisualTests').isPresent()) {
+    sourceSets.main.java.srcDir('src/visualtest/java')
+    neoForge.runs.client {
+        systemProperty 'contract.qaOutput', file('qa-results/boards-client').absolutePath
+        programArgument '--width'
+        programArgument '1600'
+        programArgument '--height'
+        programArgument '900'
+    }
+}
 tasks.named('jar', Jar) {
-    exclude('pt/contracts/test/**', 'data/contracts/structure/contracts_empty.nbt')
+    exclude('pt/contracts/test/**', 'pt/contracts/visualtest/**', 'data/contracts/structure/contracts_empty.nbt')
 }
 tasks.withType(JavaCompile).configureEach {
     options.encoding = 'UTF-8'

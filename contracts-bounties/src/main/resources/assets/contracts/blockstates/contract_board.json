@@ -1,18 +1,63 @@
 {
   "variants": {
-    "facing=north": {
-      "model": "contracts:block/contract_board"
+    "facing=north,part=lower_left": {
+      "model": "contracts:block/contract_board_lower_left"
     },
-    "facing=east": {
-      "model": "contracts:block/contract_board",
+    "facing=north,part=lower_right": {
+      "model": "contracts:block/contract_board_lower_left"
+    },
+    "facing=north,part=upper_left": {
+      "model": "contracts:block/contract_board_lower_left"
+    },
+    "facing=north,part=upper_right": {
+      "model": "contracts:block/contract_board_lower_left"
+    },
+    "facing=east,part=lower_left": {
+      "model": "contracts:block/contract_board_lower_left",
       "y": 90
     },
-    "facing=south": {
-      "model": "contracts:block/contract_board",
+    "facing=east,part=lower_right": {
+      "model": "contracts:block/contract_board_lower_left",
+      "y": 90
+    },
+    "facing=east,part=upper_left": {
+      "model": "contracts:block/contract_board_lower_left",
+      "y": 90
+    },
+    "facing=east,part=upper_right": {
+      "model": "contracts:block/contract_board_lower_left",
+      "y": 90
+    },
+    "facing=south,part=lower_left": {
+      "model": "contracts:block/contract_board_lower_left",
       "y": 180
     },
-    "facing=west": {
-      "model": "contracts:block/contract_board",
+    "facing=south,part=lower_right": {
+      "model": "contracts:block/contract_board_lower_left",
+      "y": 180
+    },
+    "facing=south,part=upper_left": {
+      "model": "contracts:block/contract_board_lower_left",
+      "y": 180
+    },
+    "facing=south,part=upper_right": {
+      "model": "contracts:block/contract_board_lower_left",
+      "y": 180
+    },
+    "facing=west,part=lower_left": {
+      "model": "contracts:block/contract_board_lower_left",
+      "y": 270
+    },
+    "facing=west,part=lower_right": {
+      "model": "contracts:block/contract_board_lower_left",
+      "y": 270
+    },
+    "facing=west,part=upper_left": {
+      "model": "contracts:block/contract_board_lower_left",
+      "y": 270
+    },
+    "facing=west,part=upper_right": {
+      "model": "contracts:block/contract_board_lower_left",
       "y": 270
     }
   }

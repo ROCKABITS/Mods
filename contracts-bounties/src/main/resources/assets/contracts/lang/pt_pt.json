@@ -1,6 +1,6 @@
 {
-  "block.contracts.contract_board": "Mural de contratos",
-  "item.contracts.contract_board": "Mural de contratos",
+  "block.contracts.contract_board": "Mural de contratos pequeno",
+  "item.contracts.contract_board": "Mural de contratos pequeno",
   "itemGroup.contracts": "Contracts & Bounties",
   "gui.contracts.title": "Contratos e recompensas",
   "gui.contracts.browse": "Consultar mural",
@@ -63,5 +63,9 @@
   "gui.contracts.archive_full": "O arquivo de contratos está cheio. Contacta a administração do servidor.",
   "gui.contracts.too_many": "Já tens o número máximo de contratos abertos.",
   "gui.contracts.invalid_request": "Pedido de contrato inválido.",
-  "gui.contracts.insufficient_items": "Faltam objetos sem alterações no inventário principal (sem nome, encantamentos ou conteúdo)."
+  "gui.contracts.insufficient_items": "Faltam objetos sem alterações no inventário principal (sem nome, encantamentos ou conteúdo).",
+  "block.contracts.tall_contract_board": "Mural de contratos coberto",
+  "item.contracts.tall_contract_board": "Mural de contratos coberto",
+  "block.contracts.wide_contract_board": "Grande mural de contratos",
+  "item.contracts.wide_contract_board": "Grande mural de contratos"
 }

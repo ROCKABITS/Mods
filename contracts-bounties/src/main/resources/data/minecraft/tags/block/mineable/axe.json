@@ -1,0 +1,8 @@
+{
+  "replace": false,
+  "values": [
+    "contracts:contract_board",
+    "contracts:tall_contract_board",
+    "contracts:wide_contract_board"
+  ]
+}

@@ -1,6 +1,8 @@
 .gradle/
 build.log
 gametests.log
+visual-client.log
+qa-results/
 __pycache__/
 build/
 run/

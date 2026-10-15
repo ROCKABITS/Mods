@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "MM"
+  ],
+  "key": {
+    "M": {
+      "item": "contracts:tall_contract_board"
+    }
+  },
+  "result": {
+    "id": "contracts:wide_contract_board",
+    "count": 1
+  }
+}

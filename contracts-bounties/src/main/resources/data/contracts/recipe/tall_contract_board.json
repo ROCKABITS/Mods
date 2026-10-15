@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "BBB",
+    "PMP",
+    "L L"
+  ],
+  "key": {
+    "B": {
+      "item": "minecraft:brick_slab"
+    },
+    "P": {
+      "item": "minecraft:paper"
+    },
+    "M": {
+      "item": "contracts:contract_board"
+    },
+    "L": {
+      "item": "minecraft:oak_log"
+    }
+  },
+  "result": {
+    "id": "contracts:tall_contract_board",
+    "count": 1
+  }
+}

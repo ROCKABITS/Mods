@@ -64,10 +64,14 @@ public final class ContractsService {
         Session session = SESSIONS.get(player.getUUID());
         if (session == null || System.nanoTime() - session.expires >= 0 || player.isSpectator())
             throw new IllegalStateException("gui.contracts.session_missing");
-        if (session.board != null && (!session.dimension.equals(player.level().dimension())
-                || player.distanceToSqr(Vec3.atCenterOf(session.board)) > 64
-                || !player.level().getBlockState(session.board).is(ContractsMod.BOARD.get())))
-            throw new IllegalStateException("gui.contracts.board_range");
+        if (session.board != null) {
+            var state = player.level().getBlockState(session.board);
+            if (!session.dimension.equals(player.level().dimension())
+                    || player.distanceToSqr(Vec3.atCenterOf(session.board)) > 64
+                    || !(state.getBlock() instanceof ContractBoardBlock board)
+                    || !board.validStructure(player.level(), session.board, state))
+                throw new IllegalStateException("gui.contracts.board_range");
+        }
     }
 
     public static void action(ServerPlayer player, ContractsPackets.Action packet) {

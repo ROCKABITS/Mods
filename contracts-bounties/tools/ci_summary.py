@@ -17,7 +17,7 @@ for report in sorted((project / 'build/test-results/test').glob('TEST-*.xml')):
     parts.append(result + '\n')
     print('::notice title=JUnit results::' + result.replace('%', '%25').replace('\r', '%0D').replace('\n', '%0A'))
 
-for name in ['build.log', 'gametests.log']:
+for name in ['build.log', 'gametests.log', 'visual-client.log']:
     log = project / name
     if log.is_file():
         # Fences in compiler output must not escape the diagnostic block.
@@ -31,11 +31,19 @@ for name in ['build.log', 'gametests.log']:
             if result:
                 escaped = result.replace('%', '%25').replace('\r', '%0D').replace('\n', '%0A')
                 print('::notice title=Native server test results::' + escaped)
-        if 'BUILD FAILED' in tail or 'FAILURE: Build failed' in tail:
+        if 'BUILD FAILED' in tail or 'FAILURE: Build failed' in tail or name == 'visual-client.log' and 'success=false' in tail:
             # Run summaries and raw logs require a GitHub login in some views.
             # Public check annotations expose these bounded diagnostics as well.
             for index, offset in enumerate(range(0, len(tail), 12000), start=1):
                 diagnostic = tail[offset:offset + 12000].replace('%', '%25').replace('\r', '%0D').replace('\n', '%0A')
                 print(f'::error title={name} diagnostics {index}::{diagnostic}')
+
+visual_report = project / 'qa-results/boards-client/result.json'
+if visual_report.exists():
+    import json
+    report = json.loads(visual_report.read_text())
+    message = json.dumps(report, ensure_ascii=False).replace('%', '%25').replace('\r', '%0D').replace('\n', '%0A')
+    kind = 'notice' if report.get('success') else 'error'
+    print(f'::{kind} title=Actual Minecraft client validation::{message}')
 
 Path(target).write_text('\n'.join(parts), encoding='utf-8')
