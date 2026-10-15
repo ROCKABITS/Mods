@@ -1,0 +1,39 @@
+modLoader="javafml"
+loaderVersion="[4,)"
+license="All Rights Reserved"
+[[mods]]
+modId="kingdomtreasury"
+version="0.1.0"
+displayName="Crown Ledger"
+authors="ROCKABITS"
+description='''A physical crown treasury with public accounts, elected ruler controls, configurable taxes, funded salaries and optional public contracts.'''
+[[dependencies.kingdomtreasury]]
+modId="neoforge"
+type="required"
+versionRange="[21.1.256,)"
+ordering="NONE"
+side="BOTH"
+[[dependencies.kingdomtreasury]]
+modId="minecraft"
+type="required"
+versionRange="[1.21.1]"
+ordering="NONE"
+side="BOTH"
+[[dependencies.kingdomtreasury]]
+modId="contracts"
+type="optional"
+versionRange="[0.3.1,)"
+ordering="AFTER"
+side="BOTH"
+[[dependencies.kingdomtreasury]]
+modId="cronicasrp"
+type="optional"
+versionRange="[0.5.2,0.6)"
+ordering="AFTER"
+side="BOTH"
+[[dependencies.kingdomtreasury]]
+modId="realmcouncil"
+type="optional"
+versionRange="[0.2.1,)"
+ordering="AFTER"
+side="BOTH"

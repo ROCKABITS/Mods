@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "kingdomtreasury:block/crown_chest"
+    },
+    "facing=east": {
+      "model": "kingdomtreasury:block/crown_chest",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "kingdomtreasury:block/crown_chest",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "kingdomtreasury:block/crown_chest",
+      "y": 270
+    }
+  }
+}
