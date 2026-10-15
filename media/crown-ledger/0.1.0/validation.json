@@ -1,0 +1,22 @@
+{
+  "success": true,
+  "message": "Registered treasury chest, all placed states and production public/governor menus render with valid models and textures.",
+  "screenshot": "crown-chest-minecraft.png",
+  "screenshots": [
+    "crown-chest-minecraft.png",
+    "crown-ledger-overview.png",
+    "crown-ledger-policy.png"
+  ],
+  "images": [
+    "crown-chest-minecraft.png",
+    "crown-ledger-overview.png",
+    "crown-ledger-policy.png"
+  ],
+  "interfaceData": "Demonstration data in the actual production TreasuryScreen",
+  "bakedQuadCounts": {
+    "kingdomtreasury:crown_chest": 264
+  },
+  "validatedBlockStates": 4,
+  "windowWidth": 1600,
+  "windowHeight": 900
+}
