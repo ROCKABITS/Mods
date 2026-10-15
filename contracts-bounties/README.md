@@ -1,96 +1,87 @@
-# Contracts & Bounties — 0.2.0
+# Contracts & Bounties — 0.3.0
 
-Mod de contratos de materiais para Minecraft **1.21.1**, **NeoForge 21.1.256** e **Java 21**. Deve estar instalado no cliente e no servidor.
+Mod para Minecraft **1.21.1**, **NeoForge 21.1.256** e **Java 21**, instalado no cliente e no servidor.
 
-**Estado desta entrega:** três murais 3D com texturas originais de madeira, pergaminhos, telhas e hera. Compilação, 23 testes unitários, 25 testes de servidor e validação dos modelos num cliente Minecraft real aprovados. A integração com o Crónicas RP ainda precisa de validação com esse mod instalado. Ver [VALIDACAO.md](VALIDACAO.md).
+[Descarregar JAR](https://github.com/ROCKABITS/Mods/raw/refs/heads/main/mod-pronto/contracts-bounties-0.3.0.jar) · [ZIP](https://github.com/ROCKABITS/Mods/raw/refs/heads/main/mod-pronto/contracts-bounties-0.3.0.zip) · [Changelog em inglês](CHANGELOG.md) · [Validação](VALIDACAO.md).
 
-[Descarregar o JAR 0.2.0](https://github.com/ROCKABITS/Mods/raw/refs/heads/main/mod-pronto/contracts-bounties-0.2.0.jar) ou [descarregar o ZIP](https://github.com/ROCKABITS/Mods/raw/refs/heads/main/mod-pronto/contracts-bounties-0.2.0.zip). Ficheiros, checksums e identificação da compilação estão em `mod-pronto`.
+A 0.3.0 mantém os três murais e acrescenta acesso físico obrigatório, menus de reputação e imposto, contratos públicos e uma API para a futura Tesouraria do Reino.
 
-![Os três modelos renderizados no cliente Minecraft](../mod-pronto/contracts-boards-0.2.0.png)
+**A Tesouraria ainda não está implementada.** As suas regras só ficam ativas quando esse mod registar a integração. Sem integração, os contratos particulares continuam disponíveis com **0% de imposto e reputação mínima 0**. O Crónicas RP 0.5.2 fornece dinheiro e reputação quando instalado; sem ele, os pagamentos usam esmeraldas.
 
-Um jogador publica um pedido, reserva a recompensa e recebe os materiais quando outro jogador faz a entrega. A interface usa um mural de madeira e pergaminho. As decisões sobre inventários e pagamentos são tomadas no servidor.
+## Atualizar e abrir
 
-## Instalar e abrir
+1. Guardar uma cópia do mundo antes de atualizar. Fechar o jogo e o servidor e substituir o JAR antigo, mantendo uma única versão do mod.
+2. Atualizar cliente e servidor juntos para a 0.3.0: o protocolo de rede passou para **2**.
+3. Colocar um mural e interagir com ele. A abertura remota por `/contracts` foi retirada. O jogador precisa de permanecer na mesma dimensão e a oito blocos da estrutura intacta; o menu verifica a sessão a cada cinco segundos e as ações são verificadas no servidor. Ao fim de cinco minutos, voltar a interagir com o mural.
 
-1. Colocar o JAR de `build/libs/` na pasta `mods` do cliente e do servidor.
-2. Para usar dinheiro, instalar também **Crónicas RP 0.5.2** nos dois lados. Sem esse mod, as recompensas usam esmeraldas.
-3. Abrir o mural com o botão direito ou usar `/contracts`.
+Os três murais aparecem na aba **Contracts & Bounties** e na pesquisa. Operadores podem obter o pequeno com `/contracts board` ou os três com `/contracts boards`. Estes comandos entregam itens e não abrem o menu.
 
-No criativo, os três murais aparecem na aba **Contracts & Bounties** e na pesquisa. Para atualizar, fechar o jogo/servidor e substituir o JAR antigo pelo novo, mantendo apenas uma versão instalada.
-
-| Mural | Identificador | Espaço ocupado (largura × altura) |
+| Mural | Identificador | Largura × altura |
 | --- | --- | --- |
-| Pequeno, num poste | `contracts:contract_board` | 1 × 1 bloco |
-| Alto, com telhado | `contracts:tall_contract_board` | 1 × 2 blocos |
-| Grande, com telhado | `contracts:wide_contract_board` | 2 × 2 blocos |
+| Pequeno | `contracts:contract_board` | 1 × 1 bloco |
+| Com telhado | `contracts:tall_contract_board` | 1 × 2 blocos |
+| Grande | `contracts:wide_contract_board` | 2 × 2 blocos |
 
-Os murais cobertos precisam de chão firme e espaço livre para a estrutura completa. Rodam conforme a direção de colocação. Todas as partes abrem o mesmo mural de contratos; partir qualquer secção remove a estrutura inteira e devolve um único item em sobrevivência. O mural pequeno mantém o identificador antigo, pelo que os blocos já colocados passam a ter o novo aspeto sem criar partes adicionais à sua volta.
+Os murais cobertos precisam de chão firme e espaço para a estrutura. Todas as partes abrem o mesmo mural; partir uma secção remove a estrutura e devolve um único item em sobrevivência. As receitas e os identificadores da 0.2.0 mantêm-se.
 
-O mural tem o identificador `contracts:contract_board`. A receita usa **3 papéis na linha superior e 6 tábuas de carvalho nas duas linhas inferiores**:
+O pequeno usa três papéis na linha superior e seis tábuas de carvalho nas duas inferiores. O coberto usa três lajes de tijolos no topo, papel–mural pequeno–papel ao centro e dois troncos de carvalho nos cantos inferiores. Dois murais cobertos lado a lado dão um grande.
 
-```text
-P P P    P = papel
-T T T    T = tábuas de carvalho
-T T T
-```
+## Contratos, impostos e reembolsos
 
-O mural coberto usa 3 lajes de tijolos na linha superior, papel–mural pequeno–papel na linha central e um tronco de carvalho em cada canto inferior. Dois murais cobertos lado a lado dão um mural grande.
+O autor publica um pedido por identificador de item, quantidade e recompensa. A recompensa total é retirada e fica reservada. Outro jogador entrega todos os materiais de uma vez e recebe um crédito para levantar no mural; o autor recolhe os materiais. O autor de um contrato particular não pode concluí-lo.
 
-Um operador pode usar `/contracts board` para obter o mural pequeno ou `/contracts boards` para receber os três modelos.
+Quando a Tesouraria fornecer uma taxa, esta fica guardada na publicação. Exemplo: **20 € com imposto de 5% = 19 € de crédito do trabalhador e 1 € de crédito do reino**. O menu mostra recompensa total, imposto e valor líquido antes da entrega. Levantar o crédito não cobra novo imposto.
 
-## Usar os contratos
+A taxa é calculada em unidades inteiras, arredondada por defeito: cêntimos no Crónicas RP e esmeraldas inteiras no modo independente. Cancelar um contrato aberto devolve o valor total reservado, sem imposto.
 
-- Publicar um pedido de um item pelo seu identificador, quantidade e recompensa. A recompensa é retirada no momento da publicação e fica reservada.
-- Outro jogador entrega a quantidade completa a partir do seu inventário. O autor não pode concluir o próprio contrato.
-- Depois da entrega, a recompensa fica disponível para o trabalhador levantar e o autor pode recolher os materiais no mural. Créditos e materiais pendentes permanecem guardados até serem recolhidos.
-- O autor pode cancelar um contrato ainda aberto para recuperar a recompensa reservada.
+A migração conserva os contratos antigos com imposto zero e sem atribuição retroativa de reputação. Uma nova regra de reputação só afeta novas publicações; concluir, cancelar contratos próprios e recolher continuam disponíveis.
 
-Os pedidos aceitam itens comuns, identificados por ID, como `minecraft:oak_log`. Não aceitam objetos personalizados com nome, encantamentos ou outros dados específicos. Não há entregas parciais.
+São aceites itens comuns por ID, como `minecraft:oak_log`, sem nomes, encantamentos ou outros componentes personalizados. Usam-se os 36 espaços principais do inventário, sem consumir equipamento ou a mão secundária. Recolhas parciais preservam o que não couber. Limites atuais: 16 contratos abertos por autor, 1–4096 materiais por contrato e 2048 entradas no arquivo; a rotação do histórico preserva entregas e créditos pendentes.
 
-São usados apenas os 36 espaços do inventário principal, sem consumir a mão secundária ou equipamento. Se uma recolha não couber por inteiro, o restante fica guardado. Cada autor pode ter até 16 contratos abertos; a quantidade por contrato vai de 1 a 4096. O arquivo mantém até 2048 contratos e substitui o histórico mais antigo já concluído/cancelado quando necessário, preservando os créditos e entregas pendentes.
+## Reputação e missões do Crónicas RP
 
-Na integração com Crónicas RP, os montantes têm duas casas decimais e são guardados em cêntimos. Com esmeraldas, a recompensa é um número inteiro de esmeraldas. Os créditos de jogadores offline ficam guardados neste mod para recolha quando voltarem a entrar; o mod não altera os ficheiros offline do Crónicas RP.
+A regra de publicação é fornecida pela futura Tesouraria, de 0 a 100 de reputação. Quando for positiva, exige um perfil Crónicas RP válido; uma integração em falta ou incompatível não autoriza a publicação por engano. O menu apresenta a reputação atual, o mínimo e o motivo de um bloqueio, mantendo disponíveis as entregas e recolhas.
 
-Esta versão não inclui expiração, recompensas por mortes, tesouraria, contratos de grupo ou integração política com Realm Council.
+Contratos públicos podem atribuir reputação e aumentar o contador de missões do Chronicles. Os valores ficam guardados no contrato; a política inicial da API usa **+1 de reputação e limite de 3 pontos por dia UTC**. O contador de missões continua a aumentar quando o limite diário de reputação já foi atingido. Os limites do perfil são 100 de reputação e um milhão de missões.
 
-## Compilar e testar
+Contratos particulares e trabalhos públicos concluídos pelo próprio emissor não atribuem este progresso. Cada conclusão só é processada uma vez. O limite diário persiste após reiniciar e usa o dia real UTC, independente do comando `/time`.
 
-Com o JDK 21 disponível:
+Quando o perfil ou a integração estiverem indisponíveis, o progresso fica pendente no servidor. É tentado novamente na abertura e atualização do mural; uma falha de progresso não retira um pagamento já concluído. A atualização do perfil preserva identidade, dinheiro, profissão e medalhas.
+
+Esta versão prepara ganhos de reputação. Aceitação, reservas de missões, prazos e penalizações por abandono pertencem a uma evolução posterior.
+
+## Contratos públicos e conta do reino
+
+A API separa o reino dos jogadores. O valor reservado sai da conta pública; cancelamentos devolvem-no ao reino e os materiais ficam guardados nessa conta. A autorização é consultada em cada pedido, permitindo que o sucessor recolha ou cancele contratos de outro mandato.
+
+A publicação e a gestão públicas destinam-se ao futuro menu do cofre. O mural comum permite ver e cumprir esses contratos, mas não transfere a propriedade para o governante nem permite cancelar contratos públicos como particulares.
+
+A API usa apenas depósitos debitados de inventários/carteiras reais, créditos de impostos e reembolsos existentes. Não há uma operação pública para criar saldo ou levantar fundos do reino para a carteira pessoal. Ver [API da Tesouraria](TREASURY_API.md).
+
+## Compilar e validar
+
+Com Java 21:
 
 ```bash
 ./gradlew build
-```
-
-O JAR do mod é gerado em `build/libs/`. Para executar os testes de servidor:
-
-```bash
 ./gradlew -PcontractGameTests runGameTestServer
+./gradlew -PboardVisualTests runClient
 ```
 
-Os testes da lógica de contratos também podem correr sem descarregar o Minecraft:
+O último comando precisa de ambiente gráfico; o cliente verifica os modelos e a interface, captura seis imagens e termina. Os fixtures de teste não entram no JAR de produção.
+
+Testes de domínio sem descarregar Minecraft:
 
 ```bash
 python3 tools/test_domain.py
 ```
 
-Neste ambiente cloud, o JDK e a configuração segura do proxy são preparados por:
+Os helpers `tools/bootstrap_cloud.py` e `tools/cloud_gradle.py` preparam o JDK e a ligação segura do proxy deste ambiente. O proxy atual continua a impedir downloads NeoForge/Mojang; a compilação completa é executada no GitHub Actions. As verificações e limitações estão em [VALIDACAO.md](VALIDACAO.md).
 
-```bash
-python3 tools/bootstrap_cloud.py
-python3 tools/cloud_gradle.py build --console=plain
-python3 tools/cloud_gradle.py -PcontractGameTests runGameTestServer --console=plain
-```
+## Dados e recuperação
 
-Para testar a integração real, colocar o JAR fornecido do Crónicas RP e as suas dependências Origins/Jupiter compatíveis em `compat-libs/` e acrescentar `-PcontractsCompat` ao comando de GameTests. Esses ficheiros não são incluídos nem redistribuídos neste projeto.
+O ficheiro continua a ser `data/contracts_ledger.dat` no mundo, agora com formato **2**. O formato 1 é migrado sem alterar os contratos existentes; a 0.2.0 não lê o formato 2, pelo que regressar à versão anterior exige recuperar a cópia do mundo.
 
-Para desenvolvimento, os ambientes habituais do NeoForge estão disponíveis por `./gradlew runClient` e `./gradlew runServer`. A primeira execução do servidor requer aceitar o EULA do Minecraft em `run/eula.txt`.
+Saldos, impostos, entregas, progresso pendente e limites diários são persistentes. Ficheiros inválidos não são substituídos por um arquivo vazio. Os salvamentos normais do Minecraft são usados; não existe transação atómica de disco entre o arquivo de contratos e os dados dos jogadores. Backups continuam a ser a forma de recuperação de interrupções abruptas durante gravações.
 
-Os modelos foram carregados e fotografados num cliente Minecraft automático. Para testar a utilização com vários jogadores num mundo de teste: publicar, entregar, recolher, cancelar e reiniciar o servidor com entregas pendentes. Repetir com esmeraldas e, separadamente, com Crónicas RP instalado.
-
-Os dados são guardados em `data/contracts_ledger.dat` do mundo, pelos salvamentos normais do Minecraft. Não há transação atómica de disco entre esse ficheiro e os dados de jogador; uma interrupção abrupta durante a gravação exige verificar os backups do mundo. Um arquivo de contratos ilegível bloqueia o carregamento dos contratos, em vez de ser substituído silenciosamente por um arquivo vazio.
-
-## Recursos
-
-Os modelos e as texturas são originais, inspirados no conceito visual fornecido pelo utilizador. A geometria usa modelos JSON nativos, sem dependências de animação ou renderizadores próprios.
-
-`tools/generate_board_assets.py` reproduz os recursos. `tools/render_board_preview.py` produz uma pré-visualização externa dos modelos; estas ferramentas opcionais usam Pillow e NumPy. Para a captura real do Minecraft, executar `./gradlew -PboardVisualTests runClient` com um ambiente gráfico; o cliente de teste fecha automaticamente e escreve o resultado em `qa-results/boards-client/`.
+Os modelos e texturas são originais e usam JSON nativo. `tools/generate_board_assets.py` reproduz os recursos; `tools/render_board_preview.py` produz uma prévia externa com Pillow e NumPy. As imagens da galeria são capturas do cliente real, com contratos e regras de demonstração na interface de teste.

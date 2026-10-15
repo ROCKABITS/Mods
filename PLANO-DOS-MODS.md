@@ -10,7 +10,7 @@ Plataforma: **Minecraft 1.21.1, NeoForge e Java 21**. Os mods mantêm responsabi
 | --- | --- | --- |
 | Crónicas RP / Chronicles RP 0.5.2 | Personagens, profissões, reputação, dinheiro e progressão | Código-fonte e JAR fornecidos para análise; não redistribuídos aqui. |
 | Realm Council 0.2.1 | Eleições, mandatos, governantes e decisões públicas | Projeto incluído para a atualização de acesso através dos blocos. |
-| Contracts & Bounties 0.2.0 | Pedidos de materiais, reserva de recompensas, entregas e recolhas | Implementado neste repositório, com JAR e imagens disponíveis. |
+| Contracts & Bounties 0.3.0 | Pedidos de materiais, reserva de recompensas, entregas e recolhas | JAR disponível, com integração preparada para políticas da futura Tesouraria. |
 
 **Correção ao guião original:** o ZIP fornecido do Realm Council contém o projeto Java. Não é necessário reconstruí-lo a partir do JAR.
 
@@ -18,7 +18,7 @@ Plataforma: **Minecraft 1.21.1, NeoForge e Java 21**. Os mods mantêm responsabi
 
 | Etapa | Projeto | Objetivo do guião | Estado |
 | --- | --- | --- | --- |
-| 1 | Contracts & Bounties | Murais físicos, contratos de materiais e recompensas reservadas. | Base disponível na 0.2.0; integração real com Crónicas RP por validar. |
+| 1 | Contracts & Bounties | Murais físicos, contratos de materiais e recompensas reservadas. | 0.3.0 disponível; API de impostos, reputação e contratos públicos implementada. Integração com os mods completos por validar. |
 | 2 | Tesouraria do Reino | Orçamento, despesas públicas e contratos pagos pelo reino, geridos pelo governante. | Próximo projeto previsto; ainda sem implementação. |
 | 3 | Documento de personagem | Documento físico de RP que pode ser mostrado a outros jogadores. | Planeado. |
 | 4 | Bancas de mercado | Lojas com stock e vendas quando o proprietário está offline. | Planeado. |
@@ -29,7 +29,7 @@ As etapas seguintes representam o guião de produto; não são funcionalidades a
 
 ## 1. Contratos: entrega atual e diferenças face ao guião
 
-A versão 0.2.0 inclui três murais 3D, interface em inglês e português, pedidos por identificador de item, quantidade e recompensa, reserva do pagamento, entrega integral, cancelamento e recolha de materiais. Funciona com esmeraldas e tem um adaptador opcional para Crónicas RP 0.5.2.
+A versão 0.3.0 inclui três murais 3D, interface em inglês e português, pedidos por identificador de item, quantidade e recompensa, reserva do pagamento, entrega integral, cancelamento e recolha de materiais. Funciona com esmeraldas e tem um adaptador opcional para Crónicas RP 0.5.2.
 
 Ao concluir um contrato, a recompensa passa a crédito do trabalhador. O jogador levanta esse crédito no mural; o saldo da carteira não é creditado automaticamente no momento da conclusão. Esta diferença face ao objetivo de pagamentos automáticos deve ser considerada numa próxima evolução.
 
@@ -52,7 +52,7 @@ Proposta de funcionamento:
 
 Para contratos públicos, o sistema deve identificar a origem do dinheiro: a recompensa sai da tesouraria e um cancelamento devolve-a à mesma tesouraria. Os materiais entregues ficam disponíveis para recolha autorizada pelo reino. Não devem ser tratados como dinheiro ou materiais pessoais do governante.
 
-A integração exige uma API de contratos com origem de financiamento e destinatário de entregas explícitos; a 0.2.0 só tem contratos de jogadores. Essa API e a tesouraria ainda não existem. As validações de mandato, fundos e inventários devem ocorrer no servidor, com proteção contra repetição de operações.
+A 0.3.0 acrescenta a [API de contratos](contracts-bounties/TREASURY_API.md), com conta do reino, origem de financiamento, emissor e destinatário de entregas distintos. A Tesouraria ainda precisa de ser implementada e registar o fornecedor das regras e permissões. Até lá, os contratos particulares usam imposto 0% e mínimo de reputação 0. As validações de mandato, fundos e inventários ocorrem no servidor, com proteção contra repetição de operações.
 
 ### Impostos e salários discutidos
 
@@ -61,6 +61,12 @@ O governante poderá escolher um imposto percentual sobre recompensas de missõe
 O governante poderá também definir salários periódicos para jogadores ativos. Os pagamentos saem dos fundos do reino; a interface deve mostrar o custo dos salários e o orçamento disponível. O sistema não deve prometer salários sem financiamento nem criar dívida fiscal ou saldos negativos automaticamente.
 
 A isenção baseada em manter pouco dinheiro na carteira foi afastada, porque permite evitar a contribuição mantendo o saldo baixo. A franquia de rendimento semanal foi discutida como alternativa, mas os exemplos de 100 € isentos e 5% não constituem valores finais nem uma regra confirmada.
+
+### Reputação e publicação de missões
+
+Foi aprovada a preparação do Contracts antes de desenvolver a Tesouraria. A 0.3.0 permite que o fornecedor da Tesouraria defina a reputação mínima para publicar contratos particulares; o governante irá configurar essa regra no futuro cofre. Todos podem continuar a cumprir contratos, recolher recompensas e cancelar os próprios pedidos, mesmo abaixo do mínimo.
+
+Os contratos públicos podem atribuir reputação e incrementar o contador de missões do Chronicles. A política inicial da API usa +1 de reputação e limite de 3 pontos por dia UTC; os valores podem ser fornecidos pela integração. Contratos particulares e trabalhos do próprio emissor não dão este progresso. Perdas por abandono ficam para uma fase com aceitação, reservas e prazos explícitos.
 
 ### Importância dos blocos
 

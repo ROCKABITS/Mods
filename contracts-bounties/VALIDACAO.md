@@ -1,6 +1,27 @@
 # Validação desta entrega
 
-## Executado e aprovado
+## Versão 0.3.0: contratos preparados para a Tesouraria
+
+[Execução 38747778023](https://github.com/ROCKABITS/Mods/actions/runs/38747778023), código `aa281b24ced8e15a50241eae4f19947fa64c0a2f`:
+
+- Compilação e empacotamento aprovados com Java 21, Minecraft 1.21.1 e NeoForge 21.1.256.
+- **46 testes unitários aprovados**, sem falhas, erros ou ignorados: 23 testes existentes e 23 novos testes de impostos, conta pública, progresso, limites e snapshots.
+- **Todos os 37 testes obrigatórios de servidor aprovados**, incluindo os 25 anteriores dos blocos, inventários e pagamentos e 12 novos testes da atualização.
+- Os novos testes verificam: sessões físicas, comandos, taxa guardada na publicação, conservação 20 → 19 + 1, reembolso integral, reputação mínima, depósitos com dinheiro real, sucessão do governante, autorização da conta pública, progresso pendente, limite diário, armazenamento v2 e migração de um NBT v1 construído com os campos originais.
+- Os testes da Tesouraria usam um fornecedor de regras e autorização exclusivo de teste. Validam a API num servidor real; não representam um mod Tesouraria já desenvolvido.
+- Cliente Minecraft real aprovado: geometria e sprites das três variantes e estados colocados, publicação bloqueada com pouca reputação, entregas/recolhas ainda disponíveis, fecho de sessão sem fechar ecrãs alheios e seis capturas de 1600 × 900.
+- Os dois novos menus foram inspecionados: reputação atual/mínima, contratos públicos/particulares, total/imposto/líquido, e prévia de publicação com 20 esmeraldas a 5%.
+- JAR de produção verificado sem fixtures de servidor ou cliente; download público confirmado e checksum coincidente.
+
+SHA-256 do JAR 0.3.0: `74ef1869b280d3f5318f5f57d965e25f59fa8007c5ff422763debe9c9d781bef`.
+
+[JAR](../mod-pronto/contracts-bounties-0.3.0.jar) · [ZIP](../mod-pronto/contracts-bounties-0.3.0.zip) · [Proveniência](../mod-pronto/contracts-bounties-0.3.0.build.json) · [Capturas](../media/0.3.0/README.md).
+
+O adaptador de progresso foi ainda verificado isoladamente contra o **JAR original Crónicas RP 0.5.2**, confirmando assinaturas de métodos, limites e preservação dos campos dos records reais. Esta verificação não iniciou o mod completo: os caminhos de attachment e sincronização com Chronicles/Origins/Jupiter instalados continuam por validar em conjunto. Os GameTests desta execução correram em modo independente; os ramos condicionais que exigem o mod real não foram executados.
+
+A Tesouraria continua por implementar. Sem fornecedor registado, os contratos particulares funcionam com imposto 0% e reputação mínima 0. Os contratos existentes migram sem taxas ou reputação retroativas. O formato 2 exige cópia do mundo para regressar à 0.2.0.
+
+## Histórico — preparação inicial e testes da base
 
 - JDK Temurin 21 e Gradle 9.2.1 instalados com os checksums oficiais verificados.
 - Gradle `--version` e `help`; resolução do plugin ModDevGradle 2.0.148.
