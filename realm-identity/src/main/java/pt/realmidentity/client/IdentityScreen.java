@@ -88,6 +88,7 @@ public final class IdentityScreen extends Screen {
     private boolean validProfile() { return !"INVALID".equals(str(state, "status", "")) && object(state, "profile").size() > 0; }
     private String value(JsonObject data, String key) {
         String result = str(data, key, "").strip();
+        if ("age".equals(key) && "0".equals(result)) return "—";
         return result.isEmpty() ? "—" : result;
     }
 
@@ -198,6 +199,7 @@ public final class IdentityScreen extends Screen {
             else g.drawString(font, "—", signatureLeft + 8, signatureTop + Math.max(3, signatureHeight / 2 - 4), MUTED, false);
             g.fill(signatureLeft, signatureTop + signatureHeight, signatureLeft + signatureWidth, signatureTop + signatureHeight + 1, GOLD);
             cy = Math.max(cy, signatureTop + signatureHeight + 10);
+            cy = field(g, "signature_text", value(profile, "signature"), left, cy, inner);
             String owner = str(state, "ownerName", "");
             if (!owner.isBlank()) { g.drawString(font, tr("minecraft_owner", owner), left, cy + 1, MUTED, false); cy += 15; }
             else if (!str(state, "ownerUuid", "").isBlank()) cy = paragraph(g, text("minecraft_owner_uuid", str(state, "ownerUuid", "")), left, cy + 1, inner, MUTED) + 4;

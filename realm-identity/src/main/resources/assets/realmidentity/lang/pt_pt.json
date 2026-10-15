@@ -61,5 +61,6 @@
   "gui.realmidentity.offer_range": "Mantém-te perto de quem apresenta o documento para o consultar.",
   "gui.realmidentity.minecraft_owner_uuid": "UUID do titular no Minecraft: %s",
   "gui.realmidentity.holder": "Na posse de: %s",
-  "gui.realmidentity.holder_not_owner": "Quem tem o documento não é o titular registado."
+  "gui.realmidentity.holder_not_owner": "Quem tem o documento não é o titular registado.",
+  "gui.realmidentity.signature_text": "Assinatura escrita"
 }

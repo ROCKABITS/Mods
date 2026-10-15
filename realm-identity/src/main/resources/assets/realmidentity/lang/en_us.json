@@ -61,5 +61,6 @@
   "gui.realmidentity.offer_range": "Stay near the presenter to inspect the document.",
   "gui.realmidentity.minecraft_owner_uuid": "Minecraft owner UUID: %s",
   "gui.realmidentity.holder": "Carried by: %s",
-  "gui.realmidentity.holder_not_owner": "The holder is not the registered owner."
+  "gui.realmidentity.holder_not_owner": "The holder is not the registered owner.",
+  "gui.realmidentity.signature_text": "Written signature"
 }
