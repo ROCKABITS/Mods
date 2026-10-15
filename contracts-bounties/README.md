@@ -2,7 +2,9 @@
 
 Mod de contratos de materiais para Minecraft **1.21.1**, **NeoForge 21.1.256** e **Java 21**. Deve estar instalado no cliente e no servidor.
 
-**Estado desta entrega:** código-fonte implementado; 23 testes de domínio aprovados. A compilação do mod e os 16 GameTests de servidor ainda não foram executados até ao fim: a rede deste ambiente recusa os downloads do NeoForge/Minecraft. Ainda não existe um JAR validado. Ver [VALIDACAO.md](VALIDACAO.md).
+**Estado desta entrega:** JAR 0.1.0 compilado no GitHub Actions; compilação, testes unitários e tarefa de GameTests de servidor aprovados. A integração com o Crónicas RP e a interface ainda precisam de validação dentro do jogo. Ver [VALIDACAO.md](VALIDACAO.md).
+
+[Descarregar o mod compilado](https://github.com/ROCKABITS/Mods/actions/runs/38717364055/artifacts/11963405690) com sessão iniciada no GitHub. Extrair o ZIP e usar o ficheiro `contracts-bounties-0.1.0.jar`. O artefacto é conservado durante 30 dias; futuras compilações podem ser iniciadas na página Actions através do workflow `Build Contracts & Bounties`.
 
 Um jogador publica um pedido, reserva a recompensa e recebe os materiais quando outro jogador faz a entrega. A interface usa um mural de madeira e pergaminho. As decisões sobre inventários e pagamentos são tomadas no servidor.
 
