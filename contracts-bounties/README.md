@@ -1,17 +1,17 @@
-# Contracts & Bounties — 0.3.0
+# Contracts & Bounties — 0.3.1
 
 Mod para Minecraft **1.21.1**, **NeoForge 21.1.256** e **Java 21**, instalado no cliente e no servidor.
 
-[Descarregar JAR](https://github.com/ROCKABITS/Mods/raw/refs/heads/main/mod-pronto/contracts-bounties-0.3.0.jar) · [ZIP](https://github.com/ROCKABITS/Mods/raw/refs/heads/main/mod-pronto/contracts-bounties-0.3.0.zip) · [Changelog em inglês](CHANGELOG.md) · [Validação](VALIDACAO.md).
+[Descarregar JAR](https://github.com/ROCKABITS/Mods/raw/refs/heads/main/mod-pronto/contracts-bounties-0.3.1.jar) · [ZIP](https://github.com/ROCKABITS/Mods/raw/refs/heads/main/mod-pronto/contracts-bounties-0.3.1.zip) · [Changelog em inglês](CHANGELOG.md) · [Validação](VALIDACAO.md).
 
-A 0.3.0 mantém os três murais e acrescenta acesso físico obrigatório, menus de reputação e imposto, contratos públicos e uma API para a futura Tesouraria do Reino.
+A 0.3.1 mantém os três murais e acrescenta acesso físico obrigatório, menus de reputação e imposto, contratos públicos e uma API para o Crown Ledger — Tesouro da Coroa.
 
-**A Tesouraria ainda não está implementada.** As suas regras só ficam ativas quando esse mod registar a integração. Sem integração, os contratos particulares continuam disponíveis com **0% de imposto e reputação mínima 0**. O Crónicas RP 0.5.2 fornece dinheiro e reputação quando instalado; sem ele, os pagamentos usam esmeraldas.
+**A tesouraria está disponível no mod separado [Crown Ledger](../crown-ledger/README.md).** As suas regras ficam ativas quando esse mod está instalado. Sem integração, os contratos particulares continuam disponíveis com **0% de imposto e reputação mínima 0**. O Crónicas RP 0.5.2 fornece dinheiro e reputação quando instalado; sem ele, os pagamentos usam esmeraldas.
 
 ## Atualizar e abrir
 
 1. Guardar uma cópia do mundo antes de atualizar. Fechar o jogo e o servidor e substituir o JAR antigo, mantendo uma única versão do mod.
-2. Atualizar cliente e servidor juntos para a 0.3.0: o protocolo de rede passou para **2**.
+2. Atualizar cliente e servidor juntos para a 0.3.1: o protocolo de rede passou para **2**.
 3. Colocar um mural e interagir com ele. A abertura remota por `/contracts` foi retirada. O jogador precisa de permanecer na mesma dimensão e a oito blocos da estrutura intacta; o menu verifica a sessão a cada cinco segundos e as ações são verificadas no servidor. Ao fim de cinco minutos, voltar a interagir com o mural.
 
 Os três murais aparecem na aba **Contracts & Bounties** e na pesquisa. Operadores podem obter o pequeno com `/contracts board` ou os três com `/contracts boards`. Estes comandos entregam itens e não abrem o menu.
@@ -40,7 +40,7 @@ São aceites itens comuns por ID, como `minecraft:oak_log`, sem nomes, encantame
 
 ## Reputação e missões do Crónicas RP
 
-A regra de publicação é fornecida pela futura Tesouraria, de 0 a 100 de reputação. Quando for positiva, exige um perfil Crónicas RP válido; uma integração em falta ou incompatível não autoriza a publicação por engano. O menu apresenta a reputação atual, o mínimo e o motivo de um bloqueio, mantendo disponíveis as entregas e recolhas.
+A regra de publicação é fornecida pelo Crown Ledger, de 0 a 100 de reputação. Quando for positiva, exige um perfil Crónicas RP válido; uma integração em falta ou incompatível não autoriza a publicação por engano. O menu apresenta a reputação atual, o mínimo e o motivo de um bloqueio, mantendo disponíveis as entregas e recolhas.
 
 Contratos públicos podem atribuir reputação e aumentar o contador de missões do Chronicles. Os valores ficam guardados no contrato; a política inicial da API usa **+1 de reputação e limite de 3 pontos por dia UTC**. O contador de missões continua a aumentar quando o limite diário de reputação já foi atingido. Os limites do perfil são 100 de reputação e um milhão de missões.
 
@@ -54,7 +54,7 @@ Esta versão prepara ganhos de reputação. Aceitação, reservas de missões, p
 
 A API separa o reino dos jogadores. O valor reservado sai da conta pública; cancelamentos devolvem-no ao reino e os materiais ficam guardados nessa conta. A autorização é consultada em cada pedido, permitindo que o sucessor recolha ou cancele contratos de outro mandato.
 
-A publicação e a gestão públicas destinam-se ao futuro menu do cofre. O mural comum permite ver e cumprir esses contratos, mas não transfere a propriedade para o governante nem permite cancelar contratos públicos como particulares.
+A publicação e a gestão públicas estão disponíveis no menu do Cofre da Coroa. O mural comum permite ver e cumprir esses contratos, mas não transfere a propriedade para o governante nem permite cancelar contratos públicos como particulares.
 
 A API usa apenas depósitos debitados de inventários/carteiras reais, créditos de impostos e reembolsos existentes. Não há uma operação pública para criar saldo ou levantar fundos do reino para a carteira pessoal. Ver [API da Tesouraria](TREASURY_API.md).
 

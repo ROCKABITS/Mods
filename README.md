@@ -1,18 +1,21 @@
 # Mods de Minecraft
 
-Projetos para Minecraft **1.21.1**, **NeoForge** e **Java 21**.
+Projetos de ROCKABITS para **Minecraft 1.21.1**, **NeoForge 21.1.256+** e **Java 21**. Instala a mesma versão de cada mod no servidor e nos clientes; substitui os JARs antigos.
 
-[Plano dos próximos mods](PLANO-DOS-MODS.md): contratos, tesouraria, documento de personagem, bancas de mercado, guildas e correio.
+| Mod | Download | Funcionalidades |
+| --- | --- | --- |
+| **Crown Ledger — Tesouro da Coroa 0.1.1** | [JAR](https://github.com/ROCKABITS/Mods/raw/refs/heads/main/mod-pronto/crown-ledger-0.1.1.jar) · [ZIP](https://github.com/ROCKABITS/Mods/raw/refs/heads/main/mod-pronto/crown-ledger-0.1.1.zip) | Cofre físico, contas públicas, governante eleito, impostos, salários financiados e contratos públicos. |
+| **Contracts & Bounties 0.3.1** | [JAR](https://github.com/ROCKABITS/Mods/raw/refs/heads/main/mod-pronto/contracts-bounties-0.3.1.jar) · [ZIP](https://github.com/ROCKABITS/Mods/raw/refs/heads/main/mod-pronto/contracts-bounties-0.3.1.zip) | Três murais 3D, entregas de materiais, recompensas reservadas, impostos e reputação. |
+| **Realm Council 0.2.1** | [JAR](https://github.com/ROCKABITS/Mods/raw/refs/heads/main/mod-pronto/realmcouncil-0.2.1.jar) · [ZIP](https://github.com/ROCKABITS/Mods/raw/refs/heads/main/mod-pronto/realmcouncil-0.2.1.zip) | Eleições, mandatos, juramentos e decisões públicas, através dos blocos. |
 
-**Downloads prontos:** [Contracts & Bounties 0.3.0 — JAR](https://github.com/ROCKABITS/Mods/raw/refs/heads/main/mod-pronto/contracts-bounties-0.3.0.jar) · [ZIP](https://github.com/ROCKABITS/Mods/raw/refs/heads/main/mod-pronto/contracts-bounties-0.3.0.zip).
+O ZIP é uma alternativa ao download direto do JAR. Extrai-o antes de instalar.
 
-**Realm Council 0.2.1:** [JAR](https://github.com/ROCKABITS/Mods/raw/refs/heads/main/mod-pronto/realmcouncil-0.2.1.jar) · [ZIP](https://github.com/ROCKABITS/Mods/raw/refs/heads/main/mod-pronto/realmcouncil-0.2.1.zip). Os menus passam a exigir os blocos; atualizar cliente e servidor juntos.
+- [Guia do Crown Ledger](crown-ledger/README.md): receita do cofre, permissões, impostos, salários e ciclos.
+- [Guia do Contracts](contracts-bounties/README.md) e [API de integração](contracts-bounties/TREASURY_API.md).
+- [Guia do Realm Council](realm-council/README.md).
+- [Plano dos próximos mods](PLANO-DOS-MODS.md).
+- [Galerias para CurseForge](media/README.md).
 
-- [Contracts & Bounties](contracts-bounties/README.md): mural de contratos de materiais, recompensas reservadas e recolha de entregas.
-- [Realm Council](realm-council/README.md): eleições e governo, com acesso ao menu através dos blocos na versão 0.2.1.
+Cada mod funciona independentemente nas suas funcionalidades base. O Crown Ledger usa esmeraldas sem Chronicles RP. Com **Chronicles RP 0.5.2**, pode usar a carteira digital e a reputação existentes. Com Realm Council, só o governante de um mandato ativo e jurado pode gerir o tesouro; sem ele, um operador designa um responsável. Com Contracts, o governante publica contratos pagos pelo reino.
 
-O Contracts & Bounties funciona de forma independente, com esmeraldas, e tem integração opcional com a economia do **Crónicas RP 0.5.2**. Não altera os outros mods.
-
-A 0.3.0 prepara impostos, reputação e contratos públicos para a futura Tesouraria. Esse mod ainda está por desenvolver; sem a integração, o imposto é 0% e o mínimo de reputação é 0. [Regras e instalação](contracts-bounties/README.md) · [Changelog](contracts-bounties/CHANGELOG.md) · [Imagens](media/README.md).
-
-O projeto do Realm Council foi incluído para desenvolver a atualização pedida. O projeto e o JAR de Crónicas RP enviados para análise não são redistribuídos neste repositório.
+A compilação e os testes nativos/visuais são executados pelo GitHub Actions, com proveniência e checksums em `mod-pronto/*.build.json`. O Crown Ledger foi testado com os JARs reais de Contracts e Realm Council. O runtime completo de Chronicles/Origins/Jupiter continua por validar; o código-fonte e o JAR original fornecidos para análise não são redistribuídos aqui.

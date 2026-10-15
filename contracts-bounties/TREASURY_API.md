@@ -1,6 +1,6 @@
-# Kingdom Treasury integration — Contracts API 1
+# Crown Ledger integration — Contracts API 2
 
-`pt.contracts.api.ContractsApi` is the server-only integration boundary introduced in Contracts & Bounties 0.3.0. Kingdom Treasury itself is a separate, future mod; this release does not add its chest, government controls, salaries or periodic fixed taxes.
+`pt.contracts.api.ContractsApi` is the server-only integration boundary introduced in Contracts & Bounties 0.3.0. Crown Ledger is the separate treasury mod (`kingdomtreasury`). Contracts 0.3.1 adds API 2 funding transfers; Crown Ledger supplies its physical chest, governance controls and payroll.
 
 ## Registering policy and authority
 
@@ -30,7 +30,7 @@ The reserved account is `Ledger.KINGDOM_ACCOUNT` (`00000000-0000-0000-0000-00000
 
 All calls must run on the main server thread. Management calls reject spectators and unauthorized users. The Treasury's own menu must verify its physical chest session before invoking the API; these trusted server calls do not require a Contracts noticeboard session.
 
-The API does not mint balances or withdraw public funds to a manager's personal wallet. Future salary/payment operations need a separately authorized, logged API extension. The Treasury should use this account as the authoritative contract budget and reconcile any separate standalone account explicitly, rather than keeping two independently spendable copies.
+The API does not mint balances or withdraw public funds to a manager's personal wallet. Crown Ledger holds its own salary reserves and claims; only contract funding and settlement use this account. The Treasury should use this account as the authoritative contract budget and reconcile any separate standalone account explicitly, rather than keeping two independently spendable copies.
 
 ## Settlement and progress
 
@@ -44,7 +44,7 @@ The contract ledger uses saved format 2 and migrates format 1 with private owner
 
 ## Verification boundary
 
-Native tests register an explicitly identified test provider to validate funding, policy changes, permission changes, taxation, progress queues and persistence. This is not a claim that the future Treasury mod exists or has been tested.
+Native tests register an explicitly identified test provider to validate funding, policy changes, permission changes, taxation, progress queues and persistence. The separate Crown Ledger CI also runs the actual release JARs of Contracts and Realm Council together, including succession, escrow, refunds and tax conservation.
 
 The supplied Chronicles RP 0.5.2 record API was checked against its original JAR. Full runtime verification with Chronicles, Origins and Jupiter installed remains separate from standalone contract tests.
 

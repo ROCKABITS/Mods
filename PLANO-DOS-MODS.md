@@ -10,7 +10,7 @@ Plataforma: **Minecraft 1.21.1, NeoForge e Java 21**. Os mods mantêm responsabi
 | --- | --- | --- |
 | Crónicas RP / Chronicles RP 0.5.2 | Personagens, profissões, reputação, dinheiro e progressão | Código-fonte e JAR fornecidos para análise; não redistribuídos aqui. |
 | Realm Council 0.2.1 | Eleições, mandatos, governantes e decisões públicas | Projeto incluído para a atualização de acesso através dos blocos. |
-| Contracts & Bounties 0.3.0 | Pedidos de materiais, reserva de recompensas, entregas e recolhas | JAR disponível, com integração preparada para políticas da futura Tesouraria. |
+| Contracts & Bounties 0.3.1 | Pedidos de materiais, reserva de recompensas, entregas e recolhas | JAR disponível, integrado com as políticas do Crown Ledger. |
 
 **Correção ao guião original:** o ZIP fornecido do Realm Council contém o projeto Java. Não é necessário reconstruí-lo a partir do JAR.
 
@@ -19,7 +19,7 @@ Plataforma: **Minecraft 1.21.1, NeoForge e Java 21**. Os mods mantêm responsabi
 | Etapa | Projeto | Objetivo do guião | Estado |
 | --- | --- | --- | --- |
 | 1 | Contracts & Bounties | Murais físicos, contratos de materiais e recompensas reservadas. | 0.3.0 disponível; API de impostos, reputação e contratos públicos implementada. Integração com os mods completos por validar. |
-| 2 | Tesouraria do Reino | Orçamento, despesas públicas e contratos pagos pelo reino, geridos pelo governante. | Próximo projeto previsto; ainda sem implementação. |
+| 2 | Crown Ledger — Tesouro da Coroa | Orçamento, impostos, salários e contratos pagos pelo reino, geridos pelo governante. | Implementado; [guia e downloads](crown-ledger/README.md). |
 | 3 | Documento de personagem | Documento físico de RP que pode ser mostrado a outros jogadores. | Planeado. |
 | 4 | Bancas de mercado | Lojas com stock e vendas quando o proprietário está offline. | Planeado. |
 | 5 | Guildas | Membros, cargos, sedes, cofres e contratos de grupo. | Planeado. |
@@ -37,7 +37,9 @@ Os créditos de jogadores offline ficam guardados no mod até à recolha. Os fic
 
 Antes de alargar a economia a outros mods, validar o ciclo com dois jogadores, créditos e entregas pendentes após reiniciar, e o funcionamento com Crónicas RP instalado. A compilação, os testes de lógica/servidor e as capturas do cliente em modo independente estão documentados em [VALIDACAO.md](contracts-bounties/VALIDACAO.md).
 
-## 2. Tesouraria do Reino: proposta para a primeira versão
+## 2. Crown Ledger: tesouraria implementada
+
+A implementação e as regras finais estão no [guia do Crown Ledger](crown-ledger/README.md). A descrição abaixo conserva o guião de produto original; despesas arbitrárias para destinatários individuais continuam fora desta versão, que financia salários e contratos públicos.
 
 Um mod separado para uma **tesouraria global do reino**. O Realm Council atual tem uma eleição e um mandato globais; várias cidades com governos e cofres independentes exigem um desenvolvimento posterior.
 
@@ -52,7 +54,7 @@ Proposta de funcionamento:
 
 Para contratos públicos, o sistema deve identificar a origem do dinheiro: a recompensa sai da tesouraria e um cancelamento devolve-a à mesma tesouraria. Os materiais entregues ficam disponíveis para recolha autorizada pelo reino. Não devem ser tratados como dinheiro ou materiais pessoais do governante.
 
-A 0.3.0 acrescenta a [API de contratos](contracts-bounties/TREASURY_API.md), com conta do reino, origem de financiamento, emissor e destinatário de entregas distintos. A Tesouraria ainda precisa de ser implementada e registar o fornecedor das regras e permissões. Até lá, os contratos particulares usam imposto 0% e mínimo de reputação 0. As validações de mandato, fundos e inventários ocorrem no servidor, com proteção contra repetição de operações.
+A 0.3.0 acrescenta a [API de contratos](contracts-bounties/TREASURY_API.md), com conta do reino, origem de financiamento, emissor e destinatário de entregas distintos. O Crown Ledger regista o fornecedor das regras e permissões. Sem ele, os contratos particulares usam imposto 0% e mínimo de reputação 0. As validações de mandato, fundos e inventários ocorrem no servidor, com proteção contra repetição de operações.
 
 ### Impostos e salários discutidos
 
@@ -64,7 +66,7 @@ A isenção baseada em manter pouco dinheiro na carteira foi afastada, porque pe
 
 ### Reputação e publicação de missões
 
-Foi aprovada a preparação do Contracts antes de desenvolver a Tesouraria. A 0.3.0 permite que o fornecedor da Tesouraria defina a reputação mínima para publicar contratos particulares; o governante irá configurar essa regra no futuro cofre. Todos podem continuar a cumprir contratos, recolher recompensas e cancelar os próprios pedidos, mesmo abaixo do mínimo.
+Foi aprovada a preparação do Contracts antes de desenvolver a Tesouraria. A 0.3.0 permite que o fornecedor da Tesouraria defina a reputação mínima para publicar contratos particulares; o governante configura essa regra no Cofre da Coroa. Todos podem continuar a cumprir contratos, recolher recompensas e cancelar os próprios pedidos, mesmo abaixo do mínimo.
 
 Os contratos públicos podem atribuir reputação e incrementar o contador de missões do Chronicles. A política inicial da API usa +1 de reputação e limite de 3 pontos por dia UTC; os valores podem ser fornecidos pela integração. Contratos particulares e trabalhos do próprio emissor não dão este progresso. Perdas por abandono ficam para uma fase com aceitação, reservas e prazos explícitos.
 

@@ -1,3 +1,9 @@
+## Atualização 0.3.1 — transferências do Crown Ledger
+
+[Execução aprovada 38751670912](https://github.com/ROCKABITS/Mods/actions/runs/38751670912), código `e6ec71d`: **46 testes unitários**, **38 testes nativos** e cliente Minecraft real aprovados. A API 2 acrescenta transferências exatas entre o tesouro e a conta dos contratos, restritas à identidade do fornecedor registado e ao thread principal. O novo teste rejeita fornecedores estranhos, transferências sem fundos, zero e operações fora do thread principal.
+
+[JAR 0.3.1](../mod-pronto/contracts-bounties-0.3.1.jar) · [Proveniência](../mod-pronto/contracts-bounties-0.3.1.build.json).
+
 # Validação desta entrega
 
 ## Versão 0.3.0: contratos preparados para a Tesouraria
@@ -19,7 +25,7 @@ SHA-256 do JAR 0.3.0: `74ef1869b280d3f5318f5f57d965e25f59fa8007c5ff422763debe9c9
 
 O adaptador de progresso foi ainda verificado isoladamente contra o **JAR original Crónicas RP 0.5.2**, confirmando assinaturas de métodos, limites e preservação dos campos dos records reais. Esta verificação não iniciou o mod completo: os caminhos de attachment e sincronização com Chronicles/Origins/Jupiter instalados continuam por validar em conjunto. Os GameTests desta execução correram em modo independente; os ramos condicionais que exigem o mod real não foram executados.
 
-A Tesouraria continua por implementar. Sem fornecedor registado, os contratos particulares funcionam com imposto 0% e reputação mínima 0. Os contratos existentes migram sem taxas ou reputação retroativas. O formato 2 exige cópia do mundo para regressar à 0.2.0.
+A tesouraria foi implementada no mod separado [Crown Ledger](../crown-ledger/README.md), cujo CI testa também os JARs reais de Contracts e Realm Council. Sem fornecedor registado, os contratos particulares funcionam com imposto 0% e reputação mínima 0. Os contratos existentes migram sem taxas ou reputação retroativas. O formato 2 exige cópia do mundo para regressar à 0.2.0.
 
 ## Histórico — preparação inicial e testes da base
 

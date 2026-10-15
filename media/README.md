@@ -1,33 +1,37 @@
-# Contracts & Bounties — media
+# Mod galleries
 
-[Open the 0.3.0 gallery](0.3.0/README.md) · [Download all six PNG images](0.3.0/contracts-bounties-media-0.3.0.zip)
+**Crown Ledger:** [Screenshots](crown-ledger/0.1.1/README.md) · [Download PNG gallery](crown-ledger/0.1.1/crown-ledger-0.1.1-media.zip). Actual Minecraft chest and menus; menu balances are demonstration data.
+
+## Contracts & Bounties
+
+[Open the 0.3.1 gallery](0.3.1/README.md) · [Download all six PNG images](0.3.1/contracts-bounties-media-0.3.1.zip)
 
 Extract the ZIP and upload the PNG files individually to CurseForge's Media gallery. Suggested English titles and captions are included in the gallery README.
 
-The images are real Minecraft client captures of the mod's models and interface. The contract menu uses demonstration contracts and policy data. Tax and publication reputation rules require the future Treasury integration; standalone defaults are zero tax and no reputation threshold. The board showcase screen is development-only and is excluded from the downloadable mod.
+The images are real Minecraft client captures of the mod's models and interface. The contract menu uses demonstration contracts and policy data. Tax and publication reputation rules use the separate Crown Ledger integration; standalone defaults are zero tax and no reputation threshold. The board showcase screen is development-only and is excluded from the downloadable mod.
 
 [Project icon (PNG)](../mod-pronto/contracts-bounties-icon.png)
 
 ## Three medieval noticeboards
 
-![Three medieval noticeboards](0.3.0/contracts-boards-minecraft.png)
+![Three medieval noticeboards](0.3.1/contracts-boards-minecraft.png)
 
 ## Browse material contracts
 
-![Browse material contracts with demonstration requests and emerald rewards](0.3.0/contracts-menu-browse.png)
+![Browse material contracts with demonstration requests and emerald rewards](0.3.1/contracts-menu-browse.png)
 
 ## Create a material contract
 
-![Create a material contract using the production interface](0.3.0/contracts-menu-create.png)
+![Create a material contract using the production interface](0.3.1/contracts-menu-create.png)
 
 ## Small noticeboard
 
-![Small wooden noticeboard with parchment notices and ivy](0.3.0/contracts-board-small.png)
+![Small wooden noticeboard with parchment notices and ivy](0.3.1/contracts-board-small.png)
 
 ## Roofed noticeboard
 
-![Tall wooden noticeboard with a terracotta tiled roof](0.3.0/contracts-board-tall.png)
+![Tall wooden noticeboard with a terracotta tiled roof](0.3.1/contracts-board-tall.png)
 
 ## Wide noticeboard
 
-![Wide wooden noticeboard with a terracotta tiled roof](0.3.0/contracts-board-wide.png)
+![Wide wooden noticeboard with a terracotta tiled roof](0.3.1/contracts-board-wide.png)

@@ -57,6 +57,8 @@ Sem Chronicles, a moeda normal é a esmeralda inteira. Com Chronicles, os valore
 
 O ficheiro `data/crown_ledger.dat` guarda regras, saldo disponível, salários reservados, atividade, ciclo pendente e os últimos 256 movimentos. Os contratos usam também `data/contracts_ledger.dat`. As cópias de segurança devem incluir o mundo completo e os perfis do Chronicles. As transferências entre mods são verificadas no mesmo thread do servidor; estes ficheiros continuam a ser guardados pelo mecanismo normal de mundos do Minecraft, sem uma transação de disco única entre mods.
 
+[Resultados e limites da validação](VALIDACAO.md) · [JAR pronto](../mod-pronto/crown-ledger-0.1.1.jar) · [ZIP](../mod-pronto/crown-ledger-0.1.1.zip) · [Imagens](../media/crown-ledger/0.1.1/README.md).
+
 ## Desenvolvimento e validação
 
 ```bash
