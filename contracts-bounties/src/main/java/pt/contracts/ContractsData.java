@@ -1,6 +1,11 @@
 package pt.contracts;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.EnumMap;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 import java.nio.file.Files;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.*;
@@ -8,7 +13,10 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.level.saveddata.SavedData;
 import net.minecraft.world.level.storage.LevelResource;
 import pt.contracts.domain.Ledger;
-import pt.contracts.domain.Ledger.*;
+import pt.contracts.domain.Ledger.Contract;
+import pt.contracts.domain.Ledger.Currency;
+import pt.contracts.domain.Ledger.Delivery;
+import pt.contracts.domain.Ledger.Status;
 
 /** All dimensions and all boards share a single overworld escrow ledger. */
 public final class ContractsData extends SavedData {

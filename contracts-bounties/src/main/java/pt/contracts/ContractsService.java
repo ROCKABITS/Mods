@@ -1,7 +1,14 @@
 package pt.contracts;
 
 import com.google.gson.Gson;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.UUID;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
@@ -13,7 +20,10 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import pt.contracts.compat.ChroniclesBridge;
 import pt.contracts.domain.Ledger;
-import pt.contracts.domain.Ledger.*;
+import pt.contracts.domain.Ledger.Contract;
+import pt.contracts.domain.Ledger.Currency;
+import pt.contracts.domain.Ledger.Delivery;
+import pt.contracts.domain.Ledger.Status;
 import pt.contracts.network.*;
 
 /** All entry points execute on the server thread; client packets never supply a wallet or recipient. */
