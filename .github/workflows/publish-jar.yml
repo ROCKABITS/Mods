@@ -1,0 +1,42 @@
+name: Publish tested 0.1.1 JAR to repository
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/publish-jar.yml'
+      - '.github/scripts/unpack_mod_release.py'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  actions: read
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - name: Retrieve the already tested 0.1.1 artifact
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          gh api "repos/$GITHUB_REPOSITORY/actions/runs/38718980393" > "$RUNNER_TEMP/tested-run.json"
+          gh api "repos/$GITHUB_REPOSITORY/actions/artifacts/11964257195/zip" > "$RUNNER_TEMP/contracts-tested.zip"
+          echo "534c7803bffd73ee2023504c75558bbc9db46b983eedda7106f5d94839cc6d9d  $RUNNER_TEMP/contracts-tested.zip" | sha256sum --check --strict
+          python3 .github/scripts/unpack_mod_release.py "$RUNNER_TEMP/contracts-tested.zip" "$RUNNER_TEMP/tested-run.json"
+      - name: Commit the verified JAR and ZIP to main
+        shell: bash
+        run: |
+          git fetch --no-tags origin main
+          if [[ "$(git rev-parse FETCH_HEAD)" != "$GITHUB_SHA" ]]; then
+            echo '::error::Main changed during publication. Rerun this workflow against the latest main.'
+            exit 1
+          fi
+          git add -- mod-pronto/contracts-bounties-0.1.1.jar mod-pronto/contracts-bounties-0.1.1.zip mod-pronto/contracts-bounties-0.1.1.sha256 mod-pronto/contracts-bounties-0.1.1.build.json
+          if git diff --cached --quiet; then exit 0; fi
+          git -c user.name='github-actions[bot]' -c user.email='41898282+github-actions[bot]@users.noreply.github.com' commit -m 'Publish tested Contracts & Bounties 0.1.1 downloads [skip ci]'
+          git push origin HEAD:refs/heads/main
