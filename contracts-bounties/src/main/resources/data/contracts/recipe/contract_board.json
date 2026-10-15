@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "PPP",
+    "WWW",
+    "WWW"
+  ],
+  "key": {
+    "P": {
+      "item": "minecraft:paper"
+    },
+    "W": {
+      "item": "minecraft:oak_planks"
+    }
+  },
+  "result": {
+    "id": "contracts:contract_board",
+    "count": 1
+  }
+}

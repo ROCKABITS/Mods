@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "contracts:block/contract_board"
+    },
+    "facing=east": {
+      "model": "contracts:block/contract_board",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "contracts:block/contract_board",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "contracts:block/contract_board",
+      "y": 270
+    }
+  }
+}
