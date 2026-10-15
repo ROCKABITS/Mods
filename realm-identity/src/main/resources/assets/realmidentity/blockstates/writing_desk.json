@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "realmidentity:block/writing_desk"
+    },
+    "facing=east": {
+      "model": "realmidentity:block/writing_desk",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "realmidentity:block/writing_desk",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "realmidentity:block/writing_desk",
+      "y": 270
+    }
+  }
+}

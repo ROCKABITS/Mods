@@ -1,0 +1,52 @@
+plugins {
+    id 'java-library'
+    id 'net.neoforged.moddev' version '2.0.148'
+    id 'idea'
+}
+version = mod_version
+group = mod_group_id
+base { archivesName = 'realm-identity' }
+java.toolchain.languageVersion = JavaLanguageVersion.of(21)
+repositories { mavenCentral() }
+neoForge {
+    version = project.neo_version
+    runs {
+        client { client() }
+        server { server(); programArgument '--nogui' }
+        gameTestServer {
+            type = 'gameTestServer'
+            systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
+        }
+    }
+    mods { realmidentity { sourceSet(sourceSets.main) } }
+}
+configurations { runtimeClasspath.extendsFrom localRuntime }
+dependencies {
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.11.4'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+    if (providers.gradleProperty('integrationTests').isPresent()) {
+        localRuntime fileTree(dir: 'compat-libs', include: ['*.jar'])
+    }
+}
+sourceSets.test.compileClasspath += sourceSets.main.compileClasspath
+sourceSets.test.runtimeClasspath += sourceSets.main.runtimeClasspath
+tasks.named('test', Test) { useJUnitPlatform() }
+if (providers.gradleProperty('identityGameTests').isPresent()) {
+    sourceSets.main.java.srcDir('src/gametest/java')
+    sourceSets.main.resources.srcDir('src/gametest/resources')
+}
+if (providers.gradleProperty('identityVisualTests').isPresent()) {
+    sourceSets.main.java.srcDir('src/visualtest/java')
+    neoForge.runs.client {
+        systemProperty 'identity.qaOutput', file('qa-results/identity-client').absolutePath
+        programArguments.addAll '--width', '1600', '--height', '900'
+    }
+}
+tasks.named('jar', Jar) {
+    exclude('pt/realmidentity/test/**', 'pt/realmidentity/visualtest/**', 'data/realmidentity/structure/identity_empty.nbt')
+}
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
+    options.release = 21
+}
+tasks.withType(ProcessResources).configureEach { filteringCharset = 'UTF-8' }
