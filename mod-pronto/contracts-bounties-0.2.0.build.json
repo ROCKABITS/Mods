@@ -1,10 +1,10 @@
 {
   "version": "0.2.0",
-  "source_commit": "3b34d419ff5c630bebd764bb3ea201faf03d84f2",
-  "tested_run": "https://github.com/ROCKABITS/Mods/actions/runs/38723677327",
-  "jar_sha256": "232e78615b2d0248761bcfd7243248596f510f7d9a38d8b147bce6320a360269",
-  "zip_sha256": "d6d9ae0635f44f3a967e93218a094ca42c17585700455f2ecda0231abf84ef62",
-  "screenshot_sha256": "daf33ca18d5e140eeee992e6ab9c66ffc031b27535fe7b23d62ab8aacd0a7a1e",
+  "source_commit": "22ef0e403824d423057c4a08e69c1e9787b550c9",
+  "tested_run": "https://github.com/ROCKABITS/Mods/actions/runs/38724104015",
+  "jar_sha256": "ec6f0f790e552962661cbb8c3253f04898c0e37d007318577aa65954b52effbb",
+  "zip_sha256": "62a142f6780a116baff9fecb46616c9500470cc4d26bdea78fc2927d56867fa9",
+  "screenshot_sha256": "a47dbe22c78b4713346d94d6a3855be4a26403cf388aa2ce9b318ded82d74429",
   "unit_tests": 23,
   "required_native_tests": 25,
   "actual_client_validation": true
