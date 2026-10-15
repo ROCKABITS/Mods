@@ -1,10 +1,10 @@
-# Contracts & Bounties — 0.1.0
+# Contracts & Bounties — 0.1.1
 
 Mod de contratos de materiais para Minecraft **1.21.1**, **NeoForge 21.1.256** e **Java 21**. Deve estar instalado no cliente e no servidor.
 
-**Estado desta entrega:** JAR 0.1.0 compilado no GitHub Actions; compilação, testes unitários e tarefa de GameTests de servidor aprovados. A integração com o Crónicas RP e a interface ainda precisam de validação dentro do jogo. Ver [VALIDACAO.md](VALIDACAO.md).
+**Estado desta entrega:** JAR 0.1.1 compilado no GitHub Actions; 23 testes unitários e todos os 17 testes obrigatórios de servidor aprovados, incluindo presença do mural no criativo e na pesquisa. A integração com o Crónicas RP e a interface ainda precisam de validação dentro do jogo. Ver [VALIDACAO.md](VALIDACAO.md).
 
-[Descarregar o mod compilado](https://github.com/ROCKABITS/Mods/actions/runs/38717364055/artifacts/11963405690) com sessão iniciada no GitHub. Extrair o ZIP e usar o ficheiro `contracts-bounties-0.1.0.jar`. O artefacto é conservado durante 30 dias; futuras compilações podem ser iniciadas na página Actions através do workflow `Build Contracts & Bounties`.
+[Descarregar o mod compilado](https://github.com/ROCKABITS/Mods/actions/runs/38718980393/artifacts/11964257195) com sessão iniciada no GitHub. Extrair o ZIP e usar o ficheiro `contracts-bounties-0.1.1.jar`. O artefacto é conservado durante 30 dias; futuras compilações podem ser iniciadas na página Actions através do workflow `Build Contracts & Bounties`.
 
 Um jogador publica um pedido, reserva a recompensa e recebe os materiais quando outro jogador faz a entrega. A interface usa um mural de madeira e pergaminho. As decisões sobre inventários e pagamentos são tomadas no servidor.
 
@@ -13,6 +13,8 @@ Um jogador publica um pedido, reserva a recompensa e recebe os materiais quando 
 1. Colocar o JAR de `build/libs/` na pasta `mods` do cliente e do servidor.
 2. Para usar dinheiro, instalar também **Crónicas RP 0.5.2** nos dois lados. Sem esse mod, as recompensas usam esmeraldas.
 3. Abrir o mural com o botão direito ou usar `/contracts`.
+
+No criativo, o **Mural de contratos** aparece na aba **Contracts & Bounties** e na pesquisa. A versão 0.1.1 corrige a ausência do item nessas listas na 0.1.0. Para atualizar, fechar o jogo/servidor e substituir o JAR antigo pelo novo, mantendo apenas uma versão instalada.
 
 O mural tem o identificador `contracts:contract_board`. A receita usa **3 papéis na linha superior e 6 tábuas de carvalho nas duas linhas inferiores**:
 

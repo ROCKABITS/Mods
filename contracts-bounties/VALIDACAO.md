@@ -8,7 +8,19 @@
 - Testes cobrem reserva lógica, conclusão única, trabalhadores simultâneos, autorizações, reembolsos, recolhas parciais, moedas separadas, limites, overflow, snapshots e rotação de histórico sem perder créditos.
 - Sete ficheiros JSON de recursos válidos e 65 traduções com as mesmas chaves em português e inglês.
 
-## Compilação no GitHub aprovada
+## Correção 0.1.1 aprovada no GitHub
+
+[Execução 38718980393](https://github.com/ROCKABITS/Mods/actions/runs/38718980393), código `f023faa`:
+
+- Compilação e empacotamento aprovados.
+- 23 testes unitários executados, sem falhas, erros ou testes ignorados.
+- 17 testes obrigatórios de servidor iniciados e concluídos, todos aprovados.
+- Novo teste `boardIsVisibleInCreativeInventoryAndSearch` constrói a aba registada e confirma o mural nas listas de itens visíveis e de pesquisa; cobre a falha observada na 0.1.0.
+- Publicação do artefacto `contracts-bounties-0.1.1` aprovada. Contagens e resultados disponíveis nas anotações públicas desta execução.
+
+[Descarregar a versão 0.1.1](https://github.com/ROCKABITS/Mods/actions/runs/38718980393/artifacts/11964257195), com sessão iniciada no GitHub. SHA-256 do ZIP, conforme metadados do GitHub: `534c7803bffd73ee2023504c75558bbc9db46b983eedda7106f5d94839cc6d9d`.
+
+## Histórico: compilação 0.1.0 aprovada no GitHub
 
 [Execução 38717364055](https://github.com/ROCKABITS/Mods/actions/runs/38717364055), código `5fc7e5b`:
 
