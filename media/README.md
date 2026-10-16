@@ -4,6 +4,8 @@
 
 **Realm Markets:** [Screenshots](realm-markets/0.1.1/README.md) · [Download PNG gallery](realm-markets/0.1.1/realm-markets-0.1.1-media.zip). Actual Minecraft stall models and production owner/buyer screens; interface stock and balances are demonstration data.
 
+**Realm Identity logo:** [Download PNG](../mod-pronto/realm-identity-icon.png). Original illustrated square project icon for CurseForge; separate from the in-game screenshots.
+
 **Realm Identity:** [Screenshots](realm-identity/0.1.0/README.md) · [Download PNG gallery](realm-identity/0.1.0/realm-identity-0.1.0-media.zip). Actual Minecraft writing desk, document and interface; sample identities and drawing are demonstration data.
 
 **Crown Ledger logo:** [Download PNG](../mod-pronto/crown-ledger-icon.png). Original illustrated square project icon for CurseForge; separate from the in-game screenshots.
