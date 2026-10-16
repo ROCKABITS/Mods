@@ -246,7 +246,7 @@ for color in ('crimson','sage'):
         if 'rotation' in e:
             e['rotation']['origin'][0]-=8;e['rotation']['origin'][1]-=8
     write(ASSETS/f'models/item/{name}.json',{'parent':'minecraft:block/block','render_type':'minecraft:cutout','ambientocclusion':True,'textures':textures,'elements':item,'display':{
-        'gui':{'rotation':[25,215,0],'translation':[0,.4,0],'scale':[.47,.47,.47]},
+        'gui':{'rotation':[25,35,0],'translation':[0,.4,0],'scale':[.47,.47,.47]},
         'ground':{'rotation':[0,0,0],'translation':[0,3,0],'scale':[.25,.25,.25]},
         'fixed':{'rotation':[0,180,0],'translation':[0,0,0],'scale':[.4,.4,.4]},
         'firstperson_righthand':{'rotation':[0,35,0],'translation':[0,0,0],'scale':[.3,.3,.3]},

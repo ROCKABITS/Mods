@@ -1,3 +1,7 @@
+# Realm Markets 0.1.1 — Beta
+
+- Corrected the inventory display angle of both market stalls so the front counter, sign and striped awning face the viewer.
+
 # Realm Markets 0.1.0 — Beta
 
 - Added two craftable medieval market stalls with crimson and sage fabric awnings, original wooden counters and 3D decorations.

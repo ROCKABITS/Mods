@@ -1,10 +1,12 @@
 # Realm Markets — Bancas de Mercado
 
-Bancas físicas para **Minecraft 1.21.1**, **NeoForge 21.1.256+** e **Java 21**. Instala o mesmo `realm-markets-0.1.0.jar` no servidor e em todos os clientes. Identificador técnico: `realmmarkets`.
+Bancas físicas para **Minecraft 1.21.1**, **NeoForge 21.1.256+** e **Java 21**. Instala o mesmo `realm-markets-0.1.1.jar` no servidor e em todos os clientes. Identificador técnico: `realmmarkets`.
+
+A versão **0.1.1 Beta** corrige o ângulo de apresentação das bancas no inventário para mostrar a frente do balcão e o toldo. Consulta os resultados e os limites das verificações em [VALIDACAO.md](VALIDACAO.md).
 
 ## Abrir uma banca
 
-Fabrica uma **Banca Carmesim** ou uma **Banca Salva** e coloca-a numa superfície livre. Cada banca ocupa **dois blocos de largura, dois de altura e um de profundidade**, com balcão, armação de madeira e toldo de tecido. As variantes têm as mesmas funções e aparecem na aba criativa **Realm Markets** e na pesquisa.
+Fabrica uma **Banca de Mercado Carmesim** ou uma **Banca de Mercado Verde** e coloca-a numa superfície livre. Cada banca ocupa **dois blocos de largura, dois de altura e um de profundidade**, com balcão, armação de madeira e toldo de tecido. As variantes têm as mesmas funções e aparecem na aba criativa **Realm Markets** e na pesquisa.
 
 Receita, de cima para baixo:
 
@@ -14,7 +16,7 @@ Tábuas      Barril      Tábuas
 Pau                     Pau
 ```
 
-Usa lã vermelha para a banca carmesim e lã verde para a banca salva. O jogador que coloca a banca torna-se o proprietário. Clica numa das suas partes com o botão direito para abrir o menu. A utilização exige continuar perto da banca física; não existem atalhos de teclado nem comandos para abrir lojas à distância.
+Usa lã vermelha para a banca carmesim e lã verde para a banca verde. O jogador que coloca a banca torna-se o proprietário. Clica numa das suas partes com o botão direito para abrir o menu. A utilização exige continuar perto da banca física; não existem atalhos de teclado nem comandos para abrir lojas à distância.
 
 ## Abastecer e vender
 
@@ -52,7 +54,7 @@ O ficheiro global `data/realm_markets.dat` guarda proprietário, posição, moed
 
 Chronicles RP é opcional; o intervalo declarado é **`>=0.5.2 e <0.6`**. Se instalado, requer também as dependências do próprio Chronicles. Contracts & Bounties, Realm Council, Crown Ledger e Realm Identity não são necessários para usar Realm Markets. A primeira versão não usa reputação ou decisões do governante para restringir o comércio.
 
-[Changelog](CHANGELOG.md) · [Resultados e limites da validação](VALIDACAO.md) · [JAR](../mod-pronto/realm-markets-0.1.0.jar) · [ZIP](../mod-pronto/realm-markets-0.1.0.zip) · [Imagens](../media/realm-markets/0.1.0/README.md).
+[Changelog](CHANGELOG.md) · [Resultados e limites da validação](VALIDACAO.md) · [JAR](../mod-pronto/realm-markets-0.1.1.jar) · [ZIP](../mod-pronto/realm-markets-0.1.1.zip) · [Imagens](../media/realm-markets/0.1.1/README.md).
 
 ## Desenvolvimento
 

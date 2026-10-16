@@ -1,22 +1,46 @@
-# Validação — Realm Markets 0.1.0
+# Validação — Realm Markets
 
-O projeto está em desenvolvimento. Os totais e os links de uma execução aprovada serão registados aqui **depois** da compilação e dos testes efetivos. A existência do workflow, das capturas de teste ou de uma implementação não constitui aprovação por si só.
+## Atualização 0.1.1 — pendente
 
-## Verificações exigidas para publicar
+A versão 0.1.1 corrige o ângulo de apresentação dos dois modelos de item para mostrar a frente do balcão, a placa e o toldo às riscas. A geometria das bancas colocadas e as operações de comércio mantêm-se. A nova versão só será apresentada como aprovada depois da compilação, dos testes e da validação visual efetivos; os resultados abaixo pertencem à versão 0.1.0.
 
-- Compilação Java 21, JAR de produção e testes JUnit com pelo menos um teste executado, sem falhas, erros ou testes ignorados.
-- Testes nativos em Minecraft 1.21.1/NeoForge 21.1.256, primeiro sem outros mods de RP.
-- A mesma bateria nativa com os JARs publicados de Contracts & Bounties 0.3.1, Realm Council 0.2.1, Crown Ledger 0.1.1 e Realm Identity 0.1.0, verificados contra os seus SHA-256 conhecidos. Esta execução verifica coexistência; não contém Chronicles RP.
-- Cliente Minecraft real, com os modelos e as texturas distribuídos, as duas bancas, as direções de colocação e o menu de produção.
-- Três capturas reais do cliente: bancas, gestão do proprietário e compra. Os artigos e saldos dos menus são dados de demonstração.
-- Inspeção do JAR: versão, identificador, classes de produção, modelos e receitas presentes; classes e estruturas de teste ausentes.
-- Proveniência com commit, execução do CI, totais efetivos, hashes dos JARs usados e checksums dos ficheiros publicados.
+## Resultados aprovados — 0.1.0
 
-O bot publica `mod-pronto/realm-markets-0.1.0.jar`, o ZIP e as imagens apenas depois de todas as etapas aprovadas e se o ramo principal continuar no commit que foi testado.
+A versão **0.1.0 Beta** foi compilada, testada e publicada pela [execução 38887031968](https://github.com/ROCKABITS/Mods/actions/runs/38887031968), sobre o commit `43654c451d32cf5e11cdbe8da943f3a0d406dcbe`. A publicação automatizada terminou depois de todas as verificações exigidas.
+
+| Verificação | Resultado |
+| --- | --- |
+| Compilação e empacotamento | Java 21, Minecraft 1.21.1 e NeoForge 21.1.256; aprovados |
+| Testes JUnit | 32 aprovados, sem falhas, erros ou testes ignorados |
+| Testes nativos independentes | 37 testes obrigatórios aprovados |
+| Testes nativos com os quatro mods companheiros | Os mesmos 37 testes obrigatórios aprovados |
+| Cliente Minecraft real | Aprovado; dois modelos de item e os 32 estados de bloco validados |
+| Interface de produção | Modos de proprietário/comprador, preços, pedidos dos botões e deslocação a 320×240 aprovados |
+| Capturas | Três PNG do cliente Minecraft real |
+| Inspeção do JAR | Versão e recursos obrigatórios presentes; classes e estruturas de teste ausentes |
+
+Os testes nativos verificam colocação nas quatro direções, cancelamento e obstrução da colocação, propriedade, stock real, pagamentos em esmeraldas, ganhos de um proprietário offline, recolha parcial, inventários cheios, compras concorrentes sequenciais, limites de valores e preços alterados após a consulta. Verificam também pedidos malformados, distância e validade da sessão, remoção protegida, explosões, suporte do terreno, rejeição de itens personalizados ou contentores e persistência NBT estrita.
+
+A execução de coexistência carregou os JARs publicados de **Contracts & Bounties 0.3.1**, **Realm Council 0.2.1**, **Crown Ledger 0.1.1** e **Realm Identity 0.1.0**. Cada JAR foi verificado contra o seu SHA-256 conhecido e a sua proveniência. Esta execução verifica coexistência; não contém Chronicles RP.
+
+As [três imagens 0.1.0](../media/realm-markets/0.1.0/README.md) mostram os modelos de item registados pelo Minecraft e os menus de gestão e compra. A validação do cliente também verificou os modelos compilados dos 32 estados de bloco: duas variantes, quatro partes e quatro direções. Os menus usam artigos e saldos de demonstração, identificados como tal. Os pedidos dos botões foram registados localmente, sem os enviar a um servidor nesse teste visual; as operações de servidor são verificadas separadamente pelos testes nativos. A atualização 0.1.1 melhora o ângulo dos modelos de item e terá capturas próprias.
+
+## Ficheiros publicados — 0.1.0
+
+- [JAR](../mod-pronto/realm-markets-0.1.0.jar): **137 953 bytes**.
+- [ZIP com JAR, instruções, changelog e licença](../mod-pronto/realm-markets-0.1.0.zip): **127 822 bytes**.
+- [Checksums](../mod-pronto/realm-markets-0.1.0.sha256).
+- [Proveniência da compilação, resultados e hashes dos companheiros](../mod-pronto/realm-markets-0.1.0.build.json).
+- [Resultado da validação do cliente](../media/realm-markets/0.1.0/validation.json).
+
+```text
+05fa8aa9a81cf886be7e4848a1f2e5e94997a47a9526c5f6c625aa01d1b26ff3  realm-markets-0.1.0.jar
+651a24b2c9e107b554985c65e23a7549193fff82e3ec27c3e2816d0f9e833831  realm-markets-0.1.0.zip
+```
 
 ## Limites
 
-A integração completa de **Chronicles RP 0.5.2, Origins e Jupiter** dentro do Minecraft não está incluída neste CI. Não se redistribuem os JARs originais para simular essa cobertura. Os testes de classes isoladas e a coexistência com os restantes mods não equivalem à execução do conjunto completo.
+A integração completa de **Chronicles RP 0.5.2, Origins e Jupiter** dentro do Minecraft não está incluída neste CI. Não se redistribuem os JARs originais para simular essa cobertura. A coexistência com os restantes mods, a rejeição de uma moeda Chronicles indisponível e os preços em cêntimos da interface não equivalem à execução do conjunto completo.
 
 Uma sessão com dois clientes reais e um reinício manual do mundo constituem validação adicional. Os testes automatizados usam jogadores de teste do servidor e verificações de persistência; as capturas de menus não demonstram transferências entre contas reais do Chronicles.
 
@@ -24,4 +48,4 @@ Os registos do mundo, os inventários e os perfis usam a persistência normal do
 
 ## Ambiente cloud
 
-A preparação do ambiente reutiliza o JDK 21, o Gradle e o truststore verificados dos outros projetos. A última tentativa local de descarregar NeoForm 2.0.31 recebeu HTTP 403 no Maven NeoForge antes da compilação Minecraft. Os testes independentes do domínio não precisam desse download; os testes completos devem ser confirmados no CI ou depois de desbloquear o acesso local. Não se desativa TLS nem se alteram checksums para contornar o bloqueio.
+A preparação do ambiente reutiliza o JDK 21, o Gradle e o truststore verificados dos outros projetos. A última tentativa local de descarregar NeoForm 2.0.31 recebeu HTTP 403 no Maven NeoForge antes da compilação Minecraft. Os 32 testes independentes do domínio passaram localmente; a compilação Minecraft e as verificações completas acima passaram no GitHub Actions. Esse resultado não demonstra que o acesso local ao Maven foi desbloqueado. Não se desativou TLS nem se alteraram checksums para contornar o bloqueio.
