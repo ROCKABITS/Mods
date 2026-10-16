@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "cronicasrp:item/coin_20_cents"
+  }
+}

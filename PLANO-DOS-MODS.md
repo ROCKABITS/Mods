@@ -8,7 +8,7 @@ Plataforma: **Minecraft 1.21.1, NeoForge e Java 21**. Os mods mantêm responsabi
 
 | Mod | Responsabilidade | Situação neste repositório |
 | --- | --- | --- |
-| Crónicas RP / Chronicles RP 0.5.2 | Personagens, profissões, reputação, dinheiro e progressão | Código-fonte e JAR fornecidos para análise; não redistribuídos aqui. |
+| Crónicas RP / Chronicles RP | Personagens, profissões, reputação, dinheiro e progressão | Projeto importado em `chronicles-rp/` para a atualização de nomes RP autorizada pelo utilizador. O JAR original 0.5.2 continua apenas como referência local. |
 | Realm Council 0.2.1 | Eleições, mandatos, governantes e decisões públicas | Projeto incluído para a atualização de acesso através dos blocos. |
 | Contracts & Bounties 0.3.1 | Pedidos de materiais, reserva de recompensas, entregas e recolhas | JAR disponível, integrado com as políticas do Crown Ledger. |
 
@@ -34,10 +34,10 @@ Os projetos futuros abaixo são um guião de produto e não estão incluídos no
 | Realm Rewards | Recompensar conquistas Vanilla e de outros mods com dinheiro do Chronicles RP. | Por desenvolver. |
 | Realm Notifications | Notificações no ecrã e API comum para os mods de RP. | Por desenvolver. |
 | Realm Titles | Títulos de personagem atribuídos pelo governante eleito. | Por desenvolver. |
-| Chronicles RP — Nomes RP | Mostrar o nome da personagem acima da cabeça, no TAB e no chat. | Atualização planeada do mod existente. |
+| Chronicles RP — Nomes RP | Mostrar o nome da personagem acima da cabeça, no TAB e no chat. | Atualização 0.5.3 em desenvolvimento, a pedido do utilizador. |
 | Xaero Map Regions + Xaero's World Map | Desenhar e consultar territórios no mapa. | Solução externa indicada pelo utilizador; não desenvolver um mod próprio. |
 
-O imposto de vendas foi implementado no Crown Ledger e Realm Markets 0.2.0; os resultados de execução ficam nos guias e ficheiros de validação dos dois projetos. O utilizador pediu para guardar os novos projetos para desenvolver mais tarde, sem os iniciar nesta entrega. A sequência futura fica por definir; foi sugerido começar pela API de notificações para ser usada pelas recompensas.
+O imposto de vendas foi implementado no Crown Ledger e Realm Markets 0.2.0; os resultados de execução ficam nos guias e ficheiros de validação dos dois projetos. O utilizador pediu para guardar os novos projetos para desenvolver mais tarde. Depois autorizou a atualização dos nomes RP no Chronicles, que passa a ser a tarefa atual. Realm Rewards, Realm Notifications e Realm Titles continuam por iniciar. A sequência futura fica por definir; foi sugerido começar pela API de notificações para ser usada pelas recompensas.
 
 ### Realm Rewards
 

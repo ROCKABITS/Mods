@@ -1,0 +1,12 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "pt.cronicasrp.mixins",
+  "compatibilityLevel": "JAVA_21",
+  "mixins": [
+    "PlayerDisplayNameMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

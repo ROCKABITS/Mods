@@ -1,0 +1,13 @@
+{
+  "replace": false,
+  "values": [
+    "cronicasrp:coin_1_cent",
+    "cronicasrp:coin_2_cents",
+    "cronicasrp:coin_5_cents",
+    "cronicasrp:coin_10_cents",
+    "cronicasrp:coin_20_cents",
+    "cronicasrp:coin_50_cents",
+    "cronicasrp:coin_1_euro",
+    "cronicasrp:coin_2_euros"
+  ]
+}

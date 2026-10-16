@@ -1,0 +1,20 @@
+{
+  "replace": false,
+  "values": [
+    "cronicasrp:coin_1_cent",
+    "cronicasrp:coin_2_cents",
+    "cronicasrp:coin_5_cents",
+    "cronicasrp:coin_10_cents",
+    "cronicasrp:coin_20_cents",
+    "cronicasrp:coin_50_cents",
+    "cronicasrp:coin_1_euro",
+    "cronicasrp:coin_2_euros",
+    "cronicasrp:note_5_euros",
+    "cronicasrp:note_10_euros",
+    "cronicasrp:note_20_euros",
+    "cronicasrp:note_50_euros",
+    "cronicasrp:note_100_euros",
+    "cronicasrp:note_200_euros",
+    "cronicasrp:note_500_euros"
+  ]
+}

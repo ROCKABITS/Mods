@@ -1,0 +1,20 @@
+Origins compatibility resource
+==============================
+
+The file data/origins/origins/power/claustrophobia.json is adapted from
+Origins (NeoForge) 0.3.2 by IAFEnvoy and contributors, distributed under
+LGPL-3.0. Upstream credits: Apace, EdwinMindcraft and UltrusBot; port authors:
+IAFEnvoy, yuqijun, Mai-xiyu and LukeElrod.
+
+Upstream source: https://github.com/IAFEnvoy/Origins-NeoForge
+Original release: https://www.curseforge.com/minecraft/mc-mods/origins-neoforge/files/8758523
+License text: Origins-LGPL-3.0.txt in this directory.
+
+Chronicles RP modification, 2026-10-14:
+The two effect entries use "effect" instead of "id", as required by the
+EffectEntry codec shipped in Origins (NeoForge) 0.3.2. Other values are retained.
+This modified JSON resource remains available under LGPL-3.0. Its complete
+editable source is the JSON file included in both the mod JAR and source ZIP.
+
+No Origins executable code or external dependency JARs are bundled.
+The Chronicles RP license continues to apply to its own code and assets.
