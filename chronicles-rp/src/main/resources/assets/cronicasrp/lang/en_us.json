@@ -248,5 +248,6 @@
   "gui.cronicasrp.origins.details_help": "Open Origins to read your lineage, class and powers.",
   "gui.cronicasrp.origins.creation_help": "Choose your race here, then your class. Your RP occupation is separate.",
   "error.cronicasrp.origins_required": "Choose your race and class using the lineage button first.",
-  "gui.cronicasrp.origins.choose_help": "Click your lineage to choose an Origins race, then a class if installed. Your RP draft is kept."
+  "gui.cronicasrp.origins.choose_help": "Click your lineage to choose an Origins race, then a class if installed. Your RP draft is kept.",
+  "error.cronicasrp.rp_name_invalid": "The public character name is invalid."
 }

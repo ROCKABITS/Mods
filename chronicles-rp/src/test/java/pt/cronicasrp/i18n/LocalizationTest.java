@@ -86,6 +86,13 @@ class LocalizationTest {
         assertThrows(IllegalArgumentException.class, () -> Money.formatEnglish(-1));
         language("pt_br"); assertEquals("0,01 €", ModMessages.money(1).getString());
     }
+    @Test void publicNameValidationErrorResolvesInAllSupportedLanguages() throws Exception {
+        var error = assertThrows(IllegalArgumentException.class, () -> RpName.checkedUpdate("Ari\nOther"));
+        Component message = ModMessages.error(error.getMessage());
+        language("en_us"); assertEquals("The public character name is invalid.", message.getString());
+        language("pt_pt"); assertEquals("O nome público da personagem é inválido.", message.getString());
+        language("pt_br"); assertEquals("O nome público do personagem é inválido.", message.getString());
+    }
     @Test void everyDomainValidationMessageHasATranslation() throws Exception {
         var pattern = Pattern.compile("new Illegal(?:Argument|State)Exception\\(\"([^\"]+)\"");
         try (var files = Files.walk(Path.of("src/main/java/pt/cronicasrp/domain"))) {

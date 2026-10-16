@@ -41,6 +41,7 @@ import pt.cronicasrp.RpNames;
 import pt.cronicasrp.domain.CharacterDraft;
 import pt.cronicasrp.domain.CharacterProfile;
 import pt.cronicasrp.domain.RpProgress;
+import pt.cronicasrp.domain.SignatureDrawing;
 import pt.cronicasrp.network.ProfileNetwork;
 import pt.cronicasrp.network.ProfilePackets;
 import pt.cronicasrp.network.RpNamePackets;
@@ -267,8 +268,11 @@ public final class RpNamesGameTests {
         helper.assertTrue(player.getDisplayName().getString().equals(ACCOUNT), "Pre-creation display fixture was not cached.");
         helper.assertTrue(player.getTabListDisplayName() == null, "Pre-creation TAB fixture was not cached.");
         selectOrigins(player);
+        byte[] ink = new byte[SignatureDrawing.BYTES];
+        SignatureDrawing.pixel(ink, 40, 20, true);
+        String drawing = SignatureDrawing.encode(ink);
         try (var online = new OnlinePlayers(helper, player, observer)) {
-            invokeCreate(player, new CharacterDraft(NAME, 29, "forged:race", "Lua", "Éowyn", "", "Ferreiro"));
+            invokeCreate(player, new CharacterDraft(NAME, 29, "forged:race", "Lua", "Éowyn", drawing, "Ferreiro"));
             helper.assertTrue(player.getData(ModAttachments.PROFILE).created(), "The real creation packet handler rejected the valid character.");
             displayed(helper, player, NAME);
             helper.assertTrue(observer.names().stream().anyMatch(packet -> packet.playerId().equals(player.getUUID())

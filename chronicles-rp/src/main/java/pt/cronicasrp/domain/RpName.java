@@ -26,7 +26,7 @@ public final class RpName {
 
     public static String checkedUpdate(String name) {
         if (name == null || (!name.isEmpty() && !isValid(name)))
-            throw new IllegalArgumentException("Invalid public character name.");
+            throw new IllegalArgumentException("O nome público da personagem é inválido.");
         return name;
     }
 }

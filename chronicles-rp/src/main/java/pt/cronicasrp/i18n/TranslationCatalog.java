@@ -9,6 +9,7 @@ public final class TranslationCatalog {
         Map.entry("Não tens dinheiro físico suficiente.", "error.cronicasrp.physical_funds"),
         Map.entry("A tua personagem já está criada.", "error.cronicasrp.already_created"),
         Map.entry("O nome precisa de pelo menos 2 caracteres.", "error.cronicasrp.name_short"),
+        Map.entry("O nome público da personagem é inválido.", "error.cronicasrp.rp_name_invalid"),
         Map.entry("O nome precisa de pelo menos 2 letras.", "error.cronicasrp.name_letters"),
         Map.entry("A idade deve estar entre 1 e 999.", "error.cronicasrp.age_range"),
         Map.entry("Escolhe uma idade entre 1 e 999.", "error.cronicasrp.age_choice"),
