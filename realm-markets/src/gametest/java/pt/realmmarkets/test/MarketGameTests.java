@@ -36,6 +36,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.common.util.FakePlayer;
 import net.neoforged.neoforge.event.level.BlockEvent;
 import net.neoforged.neoforge.gametest.GameTestHolder;
@@ -199,6 +200,14 @@ public final class MarketGameTests {
         return event.isCanceled();
     }
 
+    public static final class CancelPlacement {
+        private final UUID player;
+        CancelPlacement(UUID player) { this.player = player; }
+        @SubscribeEvent public void cancel(BlockEvent.EntityPlaceEvent event) {
+            if (event.getEntity() != null && event.getEntity().getUUID().equals(player)) event.setCanceled(true);
+        }
+    }
+
     @GameTest(template = "markets_empty", timeoutTicks = 100)
     public static void twoPhysicalVariantsHaveSurvivalRecipesAndCreativeRegistrations(GameTestHelper helper) {
         var tabKey = ResourceLocation.fromNamespaceAndPath("realmmarkets", "realm_markets");
@@ -284,6 +293,41 @@ public final class MarketGameTests {
                             && helper.getLevel().getBlockState(f.master).isAir()
                             && helper.getLevel().getBlockState(f.master.east()).isAir(),
                     "An obstructed two-wide placement consumed its item or left physical/server ownership fragments");
+        }
+        helper.succeed();
+    }
+
+    @GameTest(template = "markets_empty", timeoutTicks = 100)
+    public static void canceledNativePlacementRestoresAllCellsInventoryAndRegistryWithoutFreeLoot(GameTestHelper helper) {
+        try (var f = new Fixture(helper)) {
+            var owner = f.player();
+            helper.getLevel().setBlockAndUpdate(f.master.below(), Blocks.STONE.defaultBlockState());
+            helper.getLevel().setBlockAndUpdate(f.master.east().below(), Blocks.STONE.defaultBlockState());
+            owner.setYRot(Direction.NORTH.toYRot());
+            var stack = new ItemStack(BlockRegistry.CRIMSON_STALL_ITEM.get());
+            owner.setItemInHand(InteractionHand.MAIN_HAND, stack);
+            var records = f.data.ledger.stalls();
+            var bounds = new AABB(f.master).inflate(3);
+            int before = helper.getLevel().getEntitiesOfClass(ItemEntity.class, bounds).stream()
+                    .filter(entity -> entity.getItem().is(BlockRegistry.CRIMSON_STALL_ITEM.get()))
+                    .mapToInt(entity -> entity.getItem().getCount()).sum();
+            var cancellation = new CancelPlacement(owner.getUUID());
+            NeoForge.EVENT_BUS.register(cancellation);
+            try {
+                stack.useOn(new UseOnContext(owner, InteractionHand.MAIN_HAND,
+                        new BlockHitResult(Vec3.atBottomCenterOf(f.master), Direction.UP, f.master.below(), false)));
+            } finally {
+                NeoForge.EVENT_BUS.unregister(cancellation);
+            }
+            for (int part = 0; part < 4; part++) {
+                helper.assertTrue(helper.getLevel().getBlockState(MarketStallBlock.position(f.master, Direction.SOUTH, part)).isAir(),
+                        "A canceled native placement left a partial physical shop in the world");
+            }
+            int after = helper.getLevel().getEntitiesOfClass(ItemEntity.class, bounds).stream()
+                    .filter(entity -> entity.getItem().is(BlockRegistry.CRIMSON_STALL_ITEM.get()))
+                    .mapToInt(entity -> entity.getItem().getCount()).sum();
+            helper.assertTrue(stack.getCount() == 1 && f.data.ledger.stalls().equals(records) && after == before,
+                    "Canceling a native placement consumed/duplicated its item or retained unplaced ownership");
         }
         helper.succeed();
     }

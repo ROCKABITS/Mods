@@ -10,4 +10,4 @@
 - Added persistent stall records, stock and earnings, with strict validation of saved data.
 - Added English and Portuguese interfaces with unit prices, quantities and purchase totals.
 
-This first version supports ordinary, unmodified items. Named, enchanted or otherwise customized items, bundles, and block-entity containers such as chests and shulker boxes are not supported. Market sales have no tax. The full Chronicles RP, Origins and Jupiter Minecraft runtime remains to be validated.
+This first version supports ordinary, unmodified items. Named, enchanted or otherwise customized items, bundles, block-entity containers such as chests and shulker boxes, and writable or written books are not supported, even when empty. Ordinary books can be sold. Market sales have no tax. The full Chronicles RP, Origins and Jupiter Minecraft runtime remains to be validated.

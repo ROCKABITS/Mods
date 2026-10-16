@@ -282,6 +282,7 @@ public final class MarketService {
     /** Components must exactly match the item's own defaults; no lossy flattening. */
     public static boolean plain(ItemStack stack) {
         if (stack == null || stack.isEmpty() || stack.getItem() instanceof BundleItem
+                || stack.is(Items.WRITABLE_BOOK) || stack.is(Items.WRITTEN_BOOK)
                 || (stack.getItem() instanceof BlockItem block && block.getBlock() instanceof EntityBlock)
                 || stack.has(DataComponents.CONTAINER) || stack.has(DataComponents.BUNDLE_CONTENTS)
                 || stack.has(DataComponents.CONTAINER_LOOT) || stack.has(DataComponents.BLOCK_ENTITY_DATA)
