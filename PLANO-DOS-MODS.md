@@ -18,10 +18,10 @@ Plataforma: **Minecraft 1.21.1, NeoForge e Java 21**. Os mods mantêm responsabi
 
 | Etapa | Projeto | Objetivo do guião | Estado |
 | --- | --- | --- | --- |
-| 1 | Contracts & Bounties | Murais físicos, contratos de materiais e recompensas reservadas. | 0.3.0 disponível; API de impostos, reputação e contratos públicos implementada. Integração com os mods completos por validar. |
+| 1 | Contracts & Bounties | Murais físicos, contratos de materiais e recompensas reservadas. | 0.3.1 disponível; integrado com as políticas e o financiamento do Crown Ledger. Runtime completo do Chronicles por validar. |
 | 2 | Crown Ledger — Tesouro da Coroa | Orçamento, impostos, salários e contratos pagos pelo reino, geridos pelo governante. | Implementado; [guia e downloads](crown-ledger/README.md). |
 | 3 | Realm Identity | Documento físico de RP, assinatura e apresentação a outros jogadores com verificação do servidor. | Implementado; [guia e downloads](realm-identity/README.md). |
-| 4 | Bancas de mercado | Lojas com stock e vendas quando o proprietário está offline. | Planeado. |
+| 4 | Realm Markets | Bancas com stock real, preços por unidade e vendas quando o proprietário está offline. | Implementado; [guia e downloads](realm-markets/README.md). |
 | 5 | Guildas | Membros, cargos, sedes, cofres e contratos de grupo. | Planeado. |
 | 6 | Correio de fantasia | Cartas, encomendas e pagamentos entre jogadores. | Planeado. |
 
@@ -80,7 +80,9 @@ Item físico que apresenta a identidade do Crónicas RP e pode ser mostrado a ou
 
 ## 4. Bancas de mercado
 
-Blocos de loja com proprietário, stock, preços e recolha de receitas. As vendas devem funcionar com o proprietário offline. Compra, pagamento, entrega e atualização do stock precisam de validação conjunta no servidor, incluindo inventário cheio e compras simultâneas.
+O [Realm Markets 0.1.1](realm-markets/README.md) implementa duas bancas medievais de quatro partes, com toldos carmesim e verde-salva, oito ofertas por banca e preços por unidade. O proprietário deposita artigos reais e recolhe os ganhos presencialmente; as compras continuam disponíveis enquanto está offline. O servidor valida pagamento, espaço no inventário, stock e a correspondência do produto e preço apresentados ao comprador.
+
+Funciona com esmeraldas de forma independente e tem integração opcional com a carteira do Chronicles. Esta versão vende itens sem dados personalizados e não cobra impostos sobre vendas.
 
 ## 5. Guildas
 
