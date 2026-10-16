@@ -1,0 +1,4620 @@
+{
+  "parent": "minecraft:block/block",
+  "render_type": "minecraft:cutout",
+  "ambientocclusion": true,
+  "textures": {
+    "oak": "realmmarkets:block/oak",
+    "oak_post": "realmmarkets:block/oak_post",
+    "oak_dark": "realmmarkets:block/oak_dark",
+    "oak_light": "realmmarkets:block/oak_light",
+    "cream": "realmmarkets:block/cream",
+    "brass": "realmmarkets:block/brass",
+    "iron": "realmmarkets:block/iron",
+    "apple": "realmmarkets:block/apple",
+    "apple_top": "realmmarkets:block/apple_top",
+    "pear": "realmmarkets:block/pear",
+    "cabbage": "realmmarkets:block/cabbage",
+    "leaf": "realmmarkets:block/leaf",
+    "stem": "realmmarkets:block/stem",
+    "sack": "realmmarkets:block/sack",
+    "market_sign": "realmmarkets:block/market_sign",
+    "particle": "realmmarkets:block/oak",
+    "crimson": "realmmarkets:block/crimson"
+  },
+  "elements": [
+    {
+      "name": "hewn_upright",
+      "from": [
+        1.1,
+        0,
+        1.15
+      ],
+      "to": [
+        3.2,
+        15.2,
+        3.25
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0.0,
+            0.0,
+            2.1,
+            8.053
+          ],
+          "texture": "#oak_post"
+        },
+        "south": {
+          "uv": [
+            0.0,
+            0.0,
+            2.1,
+            8.053
+          ],
+          "texture": "#oak_post"
+        },
+        "east": {
+          "uv": [
+            0.0,
+            0.0,
+            2.1,
+            8.053
+          ],
+          "texture": "#oak_post"
+        },
+        "west": {
+          "uv": [
+            0.0,
+            0.0,
+            2.1,
+            8.053
+          ],
+          "texture": "#oak_post"
+        },
+        "up": {
+          "uv": [
+            0.0,
+            0.0,
+            2.1,
+            2.1
+          ],
+          "texture": "#oak_post"
+        },
+        "down": {
+          "uv": [
+            0.0,
+            0.0,
+            2.1,
+            2.1
+          ],
+          "texture": "#oak_post"
+        }
+      }
+    },
+    {
+      "name": "iron_collar",
+      "from": [
+        1.01,
+        13.75,
+        1.0599999999999998
+      ],
+      "to": [
+        3.29,
+        14.25,
+        3.34
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0.0,
+            0.0,
+            2.28,
+            0.5
+          ],
+          "texture": "#iron"
+        },
+        "south": {
+          "uv": [
+            0.0,
+            0.0,
+            2.28,
+            0.5
+          ],
+          "texture": "#iron"
+        },
+        "east": {
+          "uv": [
+            0.0,
+            0.0,
+            2.28,
+            0.5
+          ],
+          "texture": "#iron"
+        },
+        "west": {
+          "uv": [
+            0.0,
+            0.0,
+            2.28,
+            0.5
+          ],
+          "texture": "#iron"
+        },
+        "up": {
+          "uv": [
+            0.0,
+            0.0,
+            2.28,
+            2.28
+          ],
+          "texture": "#iron"
+        },
+        "down": {
+          "uv": [
+            0.0,
+            0.0,
+            2.28,
+            2.28
+          ],
+          "texture": "#iron"
+        }
+      }
+    },
+    {
+      "name": "collar_pin",
+      "from": [
+        1.88,
+        13.85,
+        3.33
+      ],
+      "to": [
+        2.4,
+        14.15,
+        3.46
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0.0,
+            0.0,
+            0.52,
+            0.3
+          ],
+          "texture": "#brass"
+        },
+        "south": {
+          "uv": [
+            0.0,
+            0.0,
+            0.52,
+            0.3
+          ],
+          "texture": "#brass"
+        },
+        "east": {
+          "uv": [
+            0.0,
+            0.0,
+            0.13,
+            0.3
+          ],
+          "texture": "#brass"
+        },
+        "west": {
+          "uv": [
+            0.0,
+            0.0,
+            0.13,
+            0.3
+          ],
+          "texture": "#brass"
+        },
+        "up": {
+          "uv": [
+            0.0,
+            0.0,
+            0.52,
+            0.13
+          ],
+          "texture": "#brass"
+        },
+        "down": {
+          "uv": [
+            0.0,
+            0.0,
+            0.52,
+            0.13
+          ],
+          "texture": "#brass"
+        }
+      }
+    },
+    {
+      "name": "post_cap",
+      "from": [
+        0.9,
+        14.6,
+        0.9999999999999999
+      ],
+      "to": [
+        3.4,
+        15.3,
+        3.4
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0.0,
+            0.0,
+            2.5,
+            0.7
+          ],
+          "texture": "#oak_dark"
+        },
+        "south": {
+          "uv": [
+            0.0,
+            0.0,
+            2.5,
+            0.7
+          ],
+          "texture": "#oak_dark"
+        },
+        "east": {
+          "uv": [
+            0.0,
+            0.0,
+            2.4,
+            0.7
+          ],
+          "texture": "#oak_dark"
+        },
+        "west": {
+          "uv": [
+            0.0,
+            0.0,
+            2.4,
+            0.7
+          ],
+          "texture": "#oak_dark"
+        },
+        "up": {
+          "uv": [
+            0.0,
+            0.0,
+            2.5,
+            2.4
+          ],
+          "texture": "#oak_dark"
+        },
+        "down": {
+          "uv": [
+            0.0,
+            0.0,
+            2.5,
+            2.4
+          ],
+          "texture": "#oak_dark"
+        }
+      }
+    },
+    {
+      "name": "hewn_upright",
+      "from": [
+        1.1,
+        0,
+        13.0
+      ],
+      "to": [
+        3.2,
+        9.7,
+        15.1
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0.0,
+            0.0,
+            2.1,
+            6.2834
+          ],
+          "texture": "#oak_post"
+        },
+        "south": {
+          "uv": [
+            0.0,
+            0.0,
+            2.1,
+            6.2834
+          ],
+          "texture": "#oak_post"
+        },
+        "east": {
+          "uv": [
+            0.0,
+            0.0,
+            2.1,
+            6.2834
+          ],
+          "texture": "#oak_post"
+        },
+        "west": {
+          "uv": [
+            0.0,
+            0.0,
+            2.1,
+            6.2834
+          ],
+          "texture": "#oak_post"
+        },
+        "up": {
+          "uv": [
+            0.0,
+            0.0,
+            2.1,
+            2.1
+          ],
+          "texture": "#oak_post"
+        },
+        "down": {
+          "uv": [
+            0.0,
+            0.0,
+            2.1,
+            2.1
+          ],
+          "texture": "#oak_post"
+        }
+      }
+    },
+    {
+      "name": "iron_collar",
+      "from": [
+        1.01,
+        8.25,
+        12.91
+      ],
+      "to": [
+        3.29,
+        8.75,
+        15.19
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0.0,
+            0.0,
+            2.28,
+            0.5
+          ],
+          "texture": "#iron"
+        },
+        "south": {
+          "uv": [
+            0.0,
+            0.0,
+            2.28,
+            0.5
+          ],
+          "texture": "#iron"
+        },
+        "east": {
+          "uv": [
+            0.0,
+            0.0,
+            2.28,
+            0.5
+          ],
+          "texture": "#iron"
+        },
+        "west": {
+          "uv": [
+            0.0,
+            0.0,
+            2.28,
+            0.5
+          ],
+          "texture": "#iron"
+        },
+        "up": {
+          "uv": [
+            0.0,
+            0.0,
+            2.28,
+            2.28
+          ],
+          "texture": "#iron"
+        },
+        "down": {
+          "uv": [
+            0.0,
+            0.0,
+            2.28,
+            2.28
+          ],
+          "texture": "#iron"
+        }
+      }
+    },
+    {
+      "name": "collar_pin",
+      "from": [
+        1.88,
+        8.35,
+        15.18
+      ],
+      "to": [
+        2.4,
+        8.65,
+        15.31
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0.0,
+            0.0,
+            0.52,
+            0.3
+          ],
+          "texture": "#brass"
+        },
+        "south": {
+          "uv": [
+            0.0,
+            0.0,
+            0.52,
+            0.3
+          ],
+          "texture": "#brass"
+        },
+        "east": {
+          "uv": [
+            0.0,
+            0.0,
+            0.13,
+            0.3
+          ],
+          "texture": "#brass"
+        },
+        "west": {
+          "uv": [
+            0.0,
+            0.0,
+            0.13,
+            0.3
+          ],
+          "texture": "#brass"
+        },
+        "up": {
+          "uv": [
+            0.0,
+            0.0,
+            0.52,
+            0.13
+          ],
+          "texture": "#brass"
+        },
+        "down": {
+          "uv": [
+            0.0,
+            0.0,
+            0.52,
+            0.13
+          ],
+          "texture": "#brass"
+        }
+      }
+    },
+    {
+      "name": "post_cap",
+      "from": [
+        0.9,
+        9.1,
+        12.85
+      ],
+      "to": [
+        3.4,
+        9.8,
+        15.25
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0.0,
+            0.0,
+            2.5,
+            0.7
+          ],
+          "texture": "#oak_dark"
+        },
+        "south": {
+          "uv": [
+            0.0,
+            0.0,
+            2.5,
+            0.7
+          ],
+          "texture": "#oak_dark"
+        },
+        "east": {
+          "uv": [
+            0.0,
+            0.0,
+            2.4,
+            0.7
+          ],
+          "texture": "#oak_dark"
+        },
+        "west": {
+          "uv": [
+            0.0,
+            0.0,
+            2.4,
+            0.7
+          ],
+          "texture": "#oak_dark"
+        },
+        "up": {
+          "uv": [
+            0.0,
+            0.0,
+            2.5,
+            2.4
+          ],
+          "texture": "#oak_dark"
+        },
+        "down": {
+          "uv": [
+            0.0,
+            0.0,
+            2.5,
+            2.4
+          ],
+          "texture": "#oak_dark"
+        }
+      }
+    },
+    {
+      "name": "red_apple_shoulders",
+      "from": [
+        5.0,
+        0,
+        6.4
+      ],
+      "to": [
+        6.3,
+        0.15,
+        7.550000000000001
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0.0,
+            0.0,
+            1.3,
+            0.15
+          ],
+          "texture": "#apple"
+        },
+        "south": {
+          "uv": [
+            0.0,
+            0.0,
+            1.3,
+            0.15
+          ],
+          "texture": "#apple"
+        },
+        "east": {
+          "uv": [
+            0.0,
+            0.0,
+            1.15,
+            0.15
+          ],
+          "texture": "#apple"
+        },
+        "west": {
+          "uv": [
+            0.0,
+            0.0,
+            1.15,
+            0.15
+          ],
+          "texture": "#apple"
+        },
+        "up": {
+          "uv": [
+            0.0,
+            0.0,
+            1.3,
+            1.15
+          ],
+          "texture": "#apple"
+        },
+        "down": {
+          "uv": [
+            0.0,
+            0.0,
+            1.3,
+            1.15
+          ],
+          "texture": "#apple"
+        }
+      }
+    },
+    {
+      "name": "apple_stem",
+      "from": [
+        5.55,
+        0.15,
+        6.800000000000001
+      ],
+      "to": [
+        5.8,
+        0.55,
+        7.050000000000001
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0.0,
+            0.0,
+            0.25,
+            0.4
+          ],
+          "texture": "#stem"
+        },
+        "south": {
+          "uv": [
+            0.0,
+            0.0,
+            0.25,
+            0.4
+          ],
+          "texture": "#stem"
+        },
+        "east": {
+          "uv": [
+            0.0,
+            0.0,
+            0.25,
+            0.4
+          ],
+          "texture": "#stem"
+        },
+        "west": {
+          "uv": [
+            0.0,
+            0.0,
+            0.25,
+            0.4
+          ],
+          "texture": "#stem"
+        },
+        "up": {
+          "uv": [
+            0.0,
+            0.0,
+            0.25,
+            0.25
+          ],
+          "texture": "#stem"
+        },
+        "down": {
+          "uv": [
+            0.0,
+            0.0,
+            0.25,
+            0.25
+          ],
+          "texture": "#stem"
+        }
+      }
+    },
+    {
+      "name": "red_apple_shoulders",
+      "from": [
+        7.25,
+        0,
+        6.4
+      ],
+      "to": [
+        8.55,
+        0.15,
+        7.550000000000001
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0.0,
+            0.0,
+            1.3,
+            0.15
+          ],
+          "texture": "#apple"
+        },
+        "south": {
+          "uv": [
+            0.0,
+            0.0,
+            1.3,
+            0.15
+          ],
+          "texture": "#apple"
+        },
+        "east": {
+          "uv": [
+            0.0,
+            0.0,
+            1.15,
+            0.15
+          ],
+          "texture": "#apple"
+        },
+        "west": {
+          "uv": [
+            0.0,
+            0.0,
+            1.15,
+            0.15
+          ],
+          "texture": "#apple"
+        },
+        "up": {
+          "uv": [
+            0.0,
+            0.0,
+            1.3,
+            1.15
+          ],
+          "texture": "#apple"
+        },
+        "down": {
+          "uv": [
+            0.0,
+            0.0,
+            1.3,
+            1.15
+          ],
+          "texture": "#apple"
+        }
+      }
+    },
+    {
+      "name": "apple_stem",
+      "from": [
+        7.8,
+        0.15,
+        6.800000000000001
+      ],
+      "to": [
+        8.05,
+        0.55,
+        7.050000000000001
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0.0,
+            0.0,
+            0.25,
+            0.4
+          ],
+          "texture": "#stem"
+        },
+        "south": {
+          "uv": [
+            0.0,
+            0.0,
+            0.25,
+            0.4
+          ],
+          "texture": "#stem"
+        },
+        "east": {
+          "uv": [
+            0.0,
+            0.0,
+            0.25,
+            0.4
+          ],
+          "texture": "#stem"
+        },
+        "west": {
+          "uv": [
+            0.0,
+            0.0,
+            0.25,
+            0.4
+          ],
+          "texture": "#stem"
+        },
+        "up": {
+          "uv": [
+            0.0,
+            0.0,
+            0.25,
+            0.25
+          ],
+          "texture": "#stem"
+        },
+        "down": {
+          "uv": [
+            0.0,
+            0.0,
+            0.25,
+            0.25
+          ],
+          "texture": "#stem"
+        }
+      }
+    },
+    {
+      "name": "red_apple_shoulders",
+      "from": [
+        9.5,
+        0,
+        6.4
+      ],
+      "to": [
+        10.8,
+        0.15,
+        7.550000000000001
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0.0,
+            0.0,
+            1.3,
+            0.15
+          ],
+          "texture": "#apple"
+        },
+        "south": {
+          "uv": [
+            0.0,
+            0.0,
+            1.3,
+            0.15
+          ],
+          "texture": "#apple"
+        },
+        "east": {
+          "uv": [
+            0.0,
+            0.0,
+            1.15,
+            0.15
+          ],
+          "texture": "#apple"
+        },
+        "west": {
+          "uv": [
+            0.0,
+            0.0,
+            1.15,
+            0.15
+          ],
+          "texture": "#apple"
+        },
+        "up": {
+          "uv": [
+            0.0,
+            0.0,
+            1.3,
+            1.15
+          ],
+          "texture": "#apple"
+        },
+        "down": {
+          "uv": [
+            0.0,
+            0.0,
+            1.3,
+            1.15
+          ],
+          "texture": "#apple"
+        }
+      }
+    },
+    {
+      "name": "apple_stem",
+      "from": [
+        10.05,
+        0.15,
+        6.800000000000001
+      ],
+      "to": [
+        10.3,
+        0.55,
+        7.050000000000001
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0.0,
+            0.0,
+            0.25,
+            0.4
+          ],
+          "texture": "#stem"
+        },
+        "south": {
+          "uv": [
+            0.0,
+            0.0,
+            0.25,
+            0.4
+          ],
+          "texture": "#stem"
+        },
+        "east": {
+          "uv": [
+            0.0,
+            0.0,
+            0.25,
+            0.4
+          ],
+          "texture": "#stem"
+        },
+        "west": {
+          "uv": [
+            0.0,
+            0.0,
+            0.25,
+            0.4
+          ],
+          "texture": "#stem"
+        },
+        "up": {
+          "uv": [
+            0.0,
+            0.0,
+            0.25,
+            0.25
+          ],
+          "texture": "#stem"
+        },
+        "down": {
+          "uv": [
+            0.0,
+            0.0,
+            0.25,
+            0.25
+          ],
+          "texture": "#stem"
+        }
+      }
+    },
+    {
+      "name": "red_apple_shoulders",
+      "from": [
+        5.0,
+        0,
+        8.9
+      ],
+      "to": [
+        6.3,
+        0.15,
+        10.05
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0.0,
+            0.0,
+            1.3,
+            0.15
+          ],
+          "texture": "#apple"
+        },
+        "south": {
+          "uv": [
+            0.0,
+            0.0,
+            1.3,
+            0.15
+          ],
+          "texture": "#apple"
+        },
+        "east": {
+          "uv": [
+            0.0,
+            0.0,
+            1.15,
+            0.15
+          ],
+          "texture": "#apple"
+        },
+        "west": {
+          "uv": [
+            0.0,
+            0.0,
+            1.15,
+            0.15
+          ],
+          "texture": "#apple"
+        },
+        "up": {
+          "uv": [
+            0.0,
+            0.0,
+            1.3,
+            1.15
+          ],
+          "texture": "#apple"
+        },
+        "down": {
+          "uv": [
+            0.0,
+            0.0,
+            1.3,
+            1.15
+          ],
+          "texture": "#apple"
+        }
+      }
+    },
+    {
+      "name": "apple_stem",
+      "from": [
+        5.55,
+        0.15,
+        9.3
+      ],
+      "to": [
+        5.8,
+        0.55,
+        9.55
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0.0,
+            0.0,
+            0.25,
+            0.4
+          ],
+          "texture": "#stem"
+        },
+        "south": {
+          "uv": [
+            0.0,
+            0.0,
+            0.25,
+            0.4
+          ],
+          "texture": "#stem"
+        },
+        "east": {
+          "uv": [
+            0.0,
+            0.0,
+            0.25,
+            0.4
+          ],
+          "texture": "#stem"
+        },
+        "west": {
+          "uv": [
+            0.0,
+            0.0,
+            0.25,
+            0.4
+          ],
+          "texture": "#stem"
+        },
+        "up": {
+          "uv": [
+            0.0,
+            0.0,
+            0.25,
+            0.25
+          ],
+          "texture": "#stem"
+        },
+        "down": {
+          "uv": [
+            0.0,
+            0.0,
+            0.25,
+            0.25
+          ],
+          "texture": "#stem"
+        }
+      }
+    },
+    {
+      "name": "red_apple_body",
+      "from": [
+        6.95,
+        0,
+        8.65
+      ],
+      "to": [
+        8.85,
+        0.35,
+        10.35
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0.0,
+            0.0,
+            1.9,
+            0.35
+          ],
+          "texture": "#apple"
+        },
+        "south": {
+          "uv": [
+            0.0,
+            0.0,
+            1.9,
+            0.35
+          ],
+          "texture": "#apple"
+        },
+        "east": {
+          "uv": [
+            0.0,
+            0.0,
+            1.7,
+            0.35
+          ],
+          "texture": "#apple"
+        },
+        "west": {
+          "uv": [
+            0.0,
+            0.0,
+            1.7,
+            0.35
+          ],
+          "texture": "#apple"
+        },
+        "up": {
+          "uv": [
+            0.0,
+            0.0,
+            1.9,
+            1.7
+          ],
+          "texture": "#apple_top"
+        },
+        "down": {
+          "uv": [
+            0.0,
+            0.0,
+            1.9,
+            1.7
+          ],
+          "texture": "#apple"
+        }
+      }
+    },
+    {
+      "name": "red_apple_shoulders",
+      "from": [
+        7.25,
+        0,
+        8.9
+      ],
+      "to": [
+        8.55,
+        0.7,
+        10.05
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0.0,
+            0.0,
+            1.3,
+            0.7
+          ],
+          "texture": "#apple"
+        },
+        "south": {
+          "uv": [
+            0.0,
+            0.0,
+            1.3,
+            0.7
+          ],
+          "texture": "#apple"
+        },
+        "east": {
+          "uv": [
+            0.0,
+            0.0,
+            1.15,
+            0.7
+          ],
+          "texture": "#apple"
+        },
+        "west": {
+          "uv": [
+            0.0,
+            0.0,
+            1.15,
+            0.7
+          ],
+          "texture": "#apple"
+        },
+        "up": {
+          "uv": [
+            0.0,
+            0.0,
+            1.3,
+            1.15
+          ],
+          "texture": "#apple"
+        },
+        "down": {
+          "uv": [
+            0.0,
+            0.0,
+            1.3,
+            1.15
+          ],
+          "texture": "#apple"
+        }
+      }
+    },
+    {
+      "name": "apple_stem",
+      "from": [
+        7.8,
+        0.7,
+        9.3
+      ],
+      "to": [
+        8.05,
+        1.1,
+        9.55
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0.0,
+            0.0,
+            0.25,
+            0.4
+          ],
+          "texture": "#stem"
+        },
+        "south": {
+          "uv": [
+            0.0,
+            0.0,
+            0.25,
+            0.4
+          ],
+          "texture": "#stem"
+        },
+        "east": {
+          "uv": [
+            0.0,
+            0.0,
+            0.25,
+            0.4
+          ],
+          "texture": "#stem"
+        },
+        "west": {
+          "uv": [
+            0.0,
+            0.0,
+            0.25,
+            0.4
+          ],
+          "texture": "#stem"
+        },
+        "up": {
+          "uv": [
+            0.0,
+            0.0,
+            0.25,
+            0.25
+          ],
+          "texture": "#stem"
+        },
+        "down": {
+          "uv": [
+            0.0,
+            0.0,
+            0.25,
+            0.25
+          ],
+          "texture": "#stem"
+        }
+      }
+    },
+    {
+      "name": "red_apple_shoulders",
+      "from": [
+        9.5,
+        0,
+        8.9
+      ],
+      "to": [
+        10.8,
+        0.15,
+        10.05
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0.0,
+            0.0,
+            1.3,
+            0.15
+          ],
+          "texture": "#apple"
+        },
+        "south": {
+          "uv": [
+            0.0,
+            0.0,
+            1.3,
+            0.15
+          ],
+          "texture": "#apple"
+        },
+        "east": {
+          "uv": [
+            0.0,
+            0.0,
+            1.15,
+            0.15
+          ],
+          "texture": "#apple"
+        },
+        "west": {
+          "uv": [
+            0.0,
+            0.0,
+            1.15,
+            0.15
+          ],
+          "texture": "#apple"
+        },
+        "up": {
+          "uv": [
+            0.0,
+            0.0,
+            1.3,
+            1.15
+          ],
+          "texture": "#apple"
+        },
+        "down": {
+          "uv": [
+            0.0,
+            0.0,
+            1.3,
+            1.15
+          ],
+          "texture": "#apple"
+        }
+      }
+    },
+    {
+      "name": "apple_stem",
+      "from": [
+        10.05,
+        0.15,
+        9.3
+      ],
+      "to": [
+        10.3,
+        0.55,
+        9.55
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0.0,
+            0.0,
+            0.25,
+            0.4
+          ],
+          "texture": "#stem"
+        },
+        "south": {
+          "uv": [
+            0.0,
+            0.0,
+            0.25,
+            0.4
+          ],
+          "texture": "#stem"
+        },
+        "east": {
+          "uv": [
+            0.0,
+            0.0,
+            0.25,
+            0.4
+          ],
+          "texture": "#stem"
+        },
+        "west": {
+          "uv": [
+            0.0,
+            0.0,
+            0.25,
+            0.4
+          ],
+          "texture": "#stem"
+        },
+        "up": {
+          "uv": [
+            0.0,
+            0.0,
+            0.25,
+            0.25
+          ],
+          "texture": "#stem"
+        },
+        "down": {
+          "uv": [
+            0.0,
+            0.0,
+            0.25,
+            0.25
+          ],
+          "texture": "#stem"
+        }
+      }
+    },
+    {
+      "name": "red_apple_shoulders",
+      "from": [
+        5.0,
+        0,
+        11.15
+      ],
+      "to": [
+        6.3,
+        0.15,
+        12.3
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0.0,
+            0.0,
+            1.3,
+            0.15
+          ],
+          "texture": "#apple"
+        },
+        "south": {
+          "uv": [
+            0.0,
+            0.0,
+            1.3,
+            0.15
+          ],
+          "texture": "#apple"
+        },
+        "east": {
+          "uv": [
+            0.0,
+            0.0,
+            1.15,
+            0.15
+          ],
+          "texture": "#apple"
+        },
+        "west": {
+          "uv": [
+            0.0,
+            0.0,
+            1.15,
+            0.15
+          ],
+          "texture": "#apple"
+        },
+        "up": {
+          "uv": [
+            0.0,
+            0.0,
+            1.3,
+            1.15
+          ],
+          "texture": "#apple"
+        },
+        "down": {
+          "uv": [
+            0.0,
+            0.0,
+            1.3,
+            1.15
+          ],
+          "texture": "#apple"
+        }
+      }
+    },
+    {
+      "name": "apple_stem",
+      "from": [
+        5.55,
+        0.15,
+        11.55
+      ],
+      "to": [
+        5.8,
+        0.55,
+        11.8
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0.0,
+            0.0,
+            0.25,
+            0.4
+          ],
+          "texture": "#stem"
+        },
+        "south": {
+          "uv": [
+            0.0,
+            0.0,
+            0.25,
+            0.4
+          ],
+          "texture": "#stem"
+        },
+        "east": {
+          "uv": [
+            0.0,
+            0.0,
+            0.25,
+            0.4
+          ],
+          "texture": "#stem"
+        },
+        "west": {
+          "uv": [
+            0.0,
+            0.0,
+            0.25,
+            0.4
+          ],
+          "texture": "#stem"
+        },
+        "up": {
+          "uv": [
+            0.0,
+            0.0,
+            0.25,
+            0.25
+          ],
+          "texture": "#stem"
+        },
+        "down": {
+          "uv": [
+            0.0,
+            0.0,
+            0.25,
+            0.25
+          ],
+          "texture": "#stem"
+        }
+      }
+    },
+    {
+      "name": "red_apple_shoulders",
+      "from": [
+        7.25,
+        0,
+        11.15
+      ],
+      "to": [
+        8.55,
+        0.15,
+        12.3
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0.0,
+            0.0,
+            1.3,
+            0.15
+          ],
+          "texture": "#apple"
+        },
+        "south": {
+          "uv": [
+            0.0,
+            0.0,
+            1.3,
+            0.15
+          ],
+          "texture": "#apple"
+        },
+        "east": {
+          "uv": [
+            0.0,
+            0.0,
+            1.15,
+            0.15
+          ],
+          "texture": "#apple"
+        },
+        "west": {
+          "uv": [
+            0.0,
+            0.0,
+            1.15,
+            0.15
+          ],
+          "texture": "#apple"
+        },
+        "up": {
+          "uv": [
+            0.0,
+            0.0,
+            1.3,
+            1.15
+          ],
+          "texture": "#apple"
+        },
+        "down": {
+          "uv": [
+            0.0,
+            0.0,
+            1.3,
+            1.15
+          ],
+          "texture": "#apple"
+        }
+      }
+    },
+    {
+      "name": "apple_stem",
+      "from": [
+        7.8,
+        0.15,
+        11.55
+      ],
+      "to": [
+        8.05,
+        0.55,
+        11.8
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0.0,
+            0.0,
+            0.25,
+            0.4
+          ],
+          "texture": "#stem"
+        },
+        "south": {
+          "uv": [
+            0.0,
+            0.0,
+            0.25,
+            0.4
+          ],
+          "texture": "#stem"
+        },
+        "east": {
+          "uv": [
+            0.0,
+            0.0,
+            0.25,
+            0.4
+          ],
+          "texture": "#stem"
+        },
+        "west": {
+          "uv": [
+            0.0,
+            0.0,
+            0.25,
+            0.4
+          ],
+          "texture": "#stem"
+        },
+        "up": {
+          "uv": [
+            0.0,
+            0.0,
+            0.25,
+            0.25
+          ],
+          "texture": "#stem"
+        },
+        "down": {
+          "uv": [
+            0.0,
+            0.0,
+            0.25,
+            0.25
+          ],
+          "texture": "#stem"
+        }
+      }
+    },
+    {
+      "name": "red_apple_shoulders",
+      "from": [
+        9.5,
+        0,
+        11.15
+      ],
+      "to": [
+        10.8,
+        0.15,
+        12.3
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0.0,
+            0.0,
+            1.3,
+            0.15
+          ],
+          "texture": "#apple"
+        },
+        "south": {
+          "uv": [
+            0.0,
+            0.0,
+            1.3,
+            0.15
+          ],
+          "texture": "#apple"
+        },
+        "east": {
+          "uv": [
+            0.0,
+            0.0,
+            1.15,
+            0.15
+          ],
+          "texture": "#apple"
+        },
+        "west": {
+          "uv": [
+            0.0,
+            0.0,
+            1.15,
+            0.15
+          ],
+          "texture": "#apple"
+        },
+        "up": {
+          "uv": [
+            0.0,
+            0.0,
+            1.3,
+            1.15
+          ],
+          "texture": "#apple"
+        },
+        "down": {
+          "uv": [
+            0.0,
+            0.0,
+            1.3,
+            1.15
+          ],
+          "texture": "#apple"
+        }
+      }
+    },
+    {
+      "name": "apple_stem",
+      "from": [
+        10.05,
+        0.15,
+        11.55
+      ],
+      "to": [
+        10.3,
+        0.55,
+        11.8
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0.0,
+            0.0,
+            0.25,
+            0.4
+          ],
+          "texture": "#stem"
+        },
+        "south": {
+          "uv": [
+            0.0,
+            0.0,
+            0.25,
+            0.4
+          ],
+          "texture": "#stem"
+        },
+        "east": {
+          "uv": [
+            0.0,
+            0.0,
+            0.25,
+            0.4
+          ],
+          "texture": "#stem"
+        },
+        "west": {
+          "uv": [
+            0.0,
+            0.0,
+            0.25,
+            0.4
+          ],
+          "texture": "#stem"
+        },
+        "up": {
+          "uv": [
+            0.0,
+            0.0,
+            0.25,
+            0.25
+          ],
+          "texture": "#stem"
+        },
+        "down": {
+          "uv": [
+            0.0,
+            0.0,
+            0.25,
+            0.25
+          ],
+          "texture": "#stem"
+        }
+      }
+    },
+    {
+      "name": "golden_pear_neck",
+      "from": [
+        13.45,
+        0,
+        6.4
+      ],
+      "to": [
+        14.75,
+        0.2,
+        7.6000000000000005
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0.0,
+            0.0,
+            1.3,
+            0.2
+          ],
+          "texture": "#pear"
+        },
+        "south": {
+          "uv": [
+            0.0,
+            0.0,
+            1.3,
+            0.2
+          ],
+          "texture": "#pear"
+        },
+        "east": {
+          "uv": [
+            0.0,
+            0.0,
+            1.2,
+            0.2
+          ],
+          "texture": "#pear"
+        },
+        "west": {
+          "uv": [
+            0.0,
+            0.0,
+            1.2,
+            0.2
+          ],
+          "texture": "#pear"
+        },
+        "up": {
+          "uv": [
+            0.0,
+            0.0,
+            1.3,
+            1.2
+          ],
+          "texture": "#pear"
+        },
+        "down": {
+          "uv": [
+            0.0,
+            0.0,
+            1.3,
+            1.2
+          ],
+          "texture": "#pear"
+        }
+      }
+    },
+    {
+      "name": "pear_stem",
+      "from": [
+        13.85,
+        0.2,
+        6.75
+      ],
+      "to": [
+        14.3,
+        0.55,
+        7.2
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0.0,
+            0.0,
+            0.45,
+            0.35
+          ],
+          "texture": "#stem"
+        },
+        "south": {
+          "uv": [
+            0.0,
+            0.0,
+            0.45,
+            0.35
+          ],
+          "texture": "#stem"
+        },
+        "east": {
+          "uv": [
+            0.0,
+            0.0,
+            0.45,
+            0.35
+          ],
+          "texture": "#stem"
+        },
+        "west": {
+          "uv": [
+            0.0,
+            0.0,
+            0.45,
+            0.35
+          ],
+          "texture": "#stem"
+        },
+        "up": {
+          "uv": [
+            0.0,
+            0.0,
+            0.45,
+            0.45
+          ],
+          "texture": "#stem"
+        },
+        "down": {
+          "uv": [
+            0.0,
+            0.0,
+            0.45,
+            0.45
+          ],
+          "texture": "#stem"
+        }
+      }
+    },
+    {
+      "name": "golden_pear_neck",
+      "from": [
+        15.7,
+        0,
+        6.4
+      ],
+      "to": [
+        16,
+        0.2,
+        7.6000000000000005
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0.0,
+            0.0,
+            0.3,
+            0.2
+          ],
+          "texture": "#pear"
+        },
+        "south": {
+          "uv": [
+            0.0,
+            0.0,
+            0.3,
+            0.2
+          ],
+          "texture": "#pear"
+        },
+        "east": {
+          "uv": [
+            0.0,
+            0.0,
+            1.2,
+            0.2
+          ],
+          "texture": "#pear"
+        },
+        "west": {
+          "uv": [
+            0.0,
+            0.0,
+            1.2,
+            0.2
+          ],
+          "texture": "#pear"
+        },
+        "up": {
+          "uv": [
+            0.0,
+            0.0,
+            0.3,
+            1.2
+          ],
+          "texture": "#pear"
+        },
+        "down": {
+          "uv": [
+            0.0,
+            0.0,
+            0.3,
+            1.2
+          ],
+          "texture": "#pear"
+        }
+      }
+    },
+    {
+      "name": "golden_pear_neck",
+      "from": [
+        13.45,
+        0,
+        8.9
+      ],
+      "to": [
+        14.75,
+        0.2,
+        10.1
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0.0,
+            0.0,
+            1.3,
+            0.2
+          ],
+          "texture": "#pear"
+        },
+        "south": {
+          "uv": [
+            0.0,
+            0.0,
+            1.3,
+            0.2
+          ],
+          "texture": "#pear"
+        },
+        "east": {
+          "uv": [
+            0.0,
+            0.0,
+            1.2,
+            0.2
+          ],
+          "texture": "#pear"
+        },
+        "west": {
+          "uv": [
+            0.0,
+            0.0,
+            1.2,
+            0.2
+          ],
+          "texture": "#pear"
+        },
+        "up": {
+          "uv": [
+            0.0,
+            0.0,
+            1.3,
+            1.2
+          ],
+          "texture": "#pear"
+        },
+        "down": {
+          "uv": [
+            0.0,
+            0.0,
+            1.3,
+            1.2
+          ],
+          "texture": "#pear"
+        }
+      }
+    },
+    {
+      "name": "pear_stem",
+      "from": [
+        13.85,
+        0.2,
+        9.25
+      ],
+      "to": [
+        14.3,
+        0.55,
+        9.700000000000001
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0.0,
+            0.0,
+            0.45,
+            0.35
+          ],
+          "texture": "#stem"
+        },
+        "south": {
+          "uv": [
+            0.0,
+            0.0,
+            0.45,
+            0.35
+          ],
+          "texture": "#stem"
+        },
+        "east": {
+          "uv": [
+            0.0,
+            0.0,
+            0.45,
+            0.35
+          ],
+          "texture": "#stem"
+        },
+        "west": {
+          "uv": [
+            0.0,
+            0.0,
+            0.45,
+            0.35
+          ],
+          "texture": "#stem"
+        },
+        "up": {
+          "uv": [
+            0.0,
+            0.0,
+            0.45,
+            0.45
+          ],
+          "texture": "#stem"
+        },
+        "down": {
+          "uv": [
+            0.0,
+            0.0,
+            0.45,
+            0.45
+          ],
+          "texture": "#stem"
+        }
+      }
+    },
+    {
+      "name": "golden_pear_body",
+      "from": [
+        15.45,
+        0,
+        8.65
+      ],
+      "to": [
+        16,
+        0.05,
+        10.35
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0.0,
+            0.0,
+            0.55,
+            0.05
+          ],
+          "texture": "#pear"
+        },
+        "south": {
+          "uv": [
+            0.0,
+            0.0,
+            0.55,
+            0.05
+          ],
+          "texture": "#pear"
+        },
+        "east": {
+          "uv": [
+            0.0,
+            0.0,
+            1.7,
+            0.05
+          ],
+          "texture": "#pear"
+        },
+        "west": {
+          "uv": [
+            0.0,
+            0.0,
+            1.7,
+            0.05
+          ],
+          "texture": "#pear"
+        },
+        "up": {
+          "uv": [
+            0.0,
+            0.0,
+            0.55,
+            1.7
+          ],
+          "texture": "#pear"
+        },
+        "down": {
+          "uv": [
+            0.0,
+            0.0,
+            0.55,
+            1.7
+          ],
+          "texture": "#pear"
+        }
+      }
+    },
+    {
+      "name": "golden_pear_neck",
+      "from": [
+        15.7,
+        0.05,
+        8.9
+      ],
+      "to": [
+        16,
+        0.75,
+        10.1
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0.0,
+            0.0,
+            0.3,
+            0.7
+          ],
+          "texture": "#pear"
+        },
+        "south": {
+          "uv": [
+            0.0,
+            0.0,
+            0.3,
+            0.7
+          ],
+          "texture": "#pear"
+        },
+        "east": {
+          "uv": [
+            0.0,
+            0.0,
+            1.2,
+            0.7
+          ],
+          "texture": "#pear"
+        },
+        "west": {
+          "uv": [
+            0.0,
+            0.0,
+            1.2,
+            0.7
+          ],
+          "texture": "#pear"
+        },
+        "up": {
+          "uv": [
+            0.0,
+            0.0,
+            0.3,
+            1.2
+          ],
+          "texture": "#pear"
+        },
+        "down": {
+          "uv": [
+            0.0,
+            0.0,
+            0.3,
+            1.2
+          ],
+          "texture": "#pear"
+        }
+      }
+    },
+    {
+      "name": "golden_pear_neck",
+      "from": [
+        13.45,
+        0,
+        11.15
+      ],
+      "to": [
+        14.75,
+        0.2,
+        12.35
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0.0,
+            0.0,
+            1.3,
+            0.2
+          ],
+          "texture": "#pear"
+        },
+        "south": {
+          "uv": [
+            0.0,
+            0.0,
+            1.3,
+            0.2
+          ],
+          "texture": "#pear"
+        },
+        "east": {
+          "uv": [
+            0.0,
+            0.0,
+            1.2,
+            0.2
+          ],
+          "texture": "#pear"
+        },
+        "west": {
+          "uv": [
+            0.0,
+            0.0,
+            1.2,
+            0.2
+          ],
+          "texture": "#pear"
+        },
+        "up": {
+          "uv": [
+            0.0,
+            0.0,
+            1.3,
+            1.2
+          ],
+          "texture": "#pear"
+        },
+        "down": {
+          "uv": [
+            0.0,
+            0.0,
+            1.3,
+            1.2
+          ],
+          "texture": "#pear"
+        }
+      }
+    },
+    {
+      "name": "pear_stem",
+      "from": [
+        13.85,
+        0.2,
+        11.5
+      ],
+      "to": [
+        14.3,
+        0.55,
+        11.950000000000001
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0.0,
+            0.0,
+            0.45,
+            0.35
+          ],
+          "texture": "#stem"
+        },
+        "south": {
+          "uv": [
+            0.0,
+            0.0,
+            0.45,
+            0.35
+          ],
+          "texture": "#stem"
+        },
+        "east": {
+          "uv": [
+            0.0,
+            0.0,
+            0.45,
+            0.35
+          ],
+          "texture": "#stem"
+        },
+        "west": {
+          "uv": [
+            0.0,
+            0.0,
+            0.45,
+            0.35
+          ],
+          "texture": "#stem"
+        },
+        "up": {
+          "uv": [
+            0.0,
+            0.0,
+            0.45,
+            0.45
+          ],
+          "texture": "#stem"
+        },
+        "down": {
+          "uv": [
+            0.0,
+            0.0,
+            0.45,
+            0.45
+          ],
+          "texture": "#stem"
+        }
+      }
+    },
+    {
+      "name": "golden_pear_neck",
+      "from": [
+        15.7,
+        0,
+        11.15
+      ],
+      "to": [
+        16,
+        0.2,
+        12.35
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0.0,
+            0.0,
+            0.3,
+            0.2
+          ],
+          "texture": "#pear"
+        },
+        "south": {
+          "uv": [
+            0.0,
+            0.0,
+            0.3,
+            0.2
+          ],
+          "texture": "#pear"
+        },
+        "east": {
+          "uv": [
+            0.0,
+            0.0,
+            1.2,
+            0.2
+          ],
+          "texture": "#pear"
+        },
+        "west": {
+          "uv": [
+            0.0,
+            0.0,
+            1.2,
+            0.2
+          ],
+          "texture": "#pear"
+        },
+        "up": {
+          "uv": [
+            0.0,
+            0.0,
+            0.3,
+            1.2
+          ],
+          "texture": "#pear"
+        },
+        "down": {
+          "uv": [
+            0.0,
+            0.0,
+            0.3,
+            1.2
+          ],
+          "texture": "#pear"
+        }
+      }
+    },
+    {
+      "name": "rear_roof_beam",
+      "from": [
+        0.65,
+        13.9,
+        1.3
+      ],
+      "to": [
+        16,
+        15.15,
+        3.1
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0.0,
+            0.0,
+            8.0,
+            1.25
+          ],
+          "texture": "#oak_dark"
+        },
+        "south": {
+          "uv": [
+            0.0,
+            0.0,
+            8.0,
+            1.25
+          ],
+          "texture": "#oak_dark"
+        },
+        "east": {
+          "uv": [
+            0.0,
+            0.0,
+            1.8,
+            1.25
+          ],
+          "texture": "#oak_dark"
+        },
+        "west": {
+          "uv": [
+            0.0,
+            0.0,
+            1.8,
+            1.25
+          ],
+          "texture": "#oak_dark"
+        },
+        "up": {
+          "uv": [
+            0.0,
+            0.0,
+            8.0,
+            1.8
+          ],
+          "texture": "#oak_dark"
+        },
+        "down": {
+          "uv": [
+            0.0,
+            0.0,
+            8.0,
+            1.8
+          ],
+          "texture": "#oak_dark"
+        }
+      }
+    },
+    {
+      "name": "front_awning_beam",
+      "from": [
+        0.6,
+        8.8,
+        13.3
+      ],
+      "to": [
+        16,
+        9.9,
+        15.1
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0.0,
+            0.0,
+            8.0,
+            1.1
+          ],
+          "texture": "#oak_dark"
+        },
+        "south": {
+          "uv": [
+            0.0,
+            0.0,
+            8.0,
+            1.1
+          ],
+          "texture": "#oak_dark"
+        },
+        "east": {
+          "uv": [
+            0.0,
+            0.0,
+            1.8,
+            1.1
+          ],
+          "texture": "#oak_dark"
+        },
+        "west": {
+          "uv": [
+            0.0,
+            0.0,
+            1.8,
+            1.1
+          ],
+          "texture": "#oak_dark"
+        },
+        "up": {
+          "uv": [
+            0.0,
+            0.0,
+            8.0,
+            1.8
+          ],
+          "texture": "#oak_dark"
+        },
+        "down": {
+          "uv": [
+            0.0,
+            0.0,
+            8.0,
+            1.8
+          ],
+          "texture": "#oak_dark"
+        }
+      }
+    },
+    {
+      "name": "sloping_canvas_stripe",
+      "from": [
+        0,
+        11.85,
+        1.0
+      ],
+      "to": [
+        4,
+        12.55,
+        15.0
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0.0,
+            4,
+            0.7
+          ],
+          "texture": "#crimson"
+        },
+        "south": {
+          "uv": [
+            0,
+            0.0,
+            4,
+            0.7
+          ],
+          "texture": "#crimson"
+        },
+        "east": {
+          "uv": [
+            0.0,
+            0.0,
+            14.0,
+            0.7
+          ],
+          "texture": "#crimson"
+        },
+        "west": {
+          "uv": [
+            0.0,
+            0.0,
+            14.0,
+            0.7
+          ],
+          "texture": "#crimson"
+        },
+        "up": {
+          "uv": [
+            0,
+            0.0,
+            4,
+            14.0
+          ],
+          "texture": "#crimson"
+        },
+        "down": {
+          "uv": [
+            0,
+            0.0,
+            4,
+            14.0
+          ],
+          "texture": "#crimson"
+        }
+      },
+      "rotation": {
+        "origin": [
+          16,
+          12.2,
+          8
+        ],
+        "axis": "x",
+        "angle": 22.5,
+        "rescale": false
+      }
+    },
+    {
+      "name": "awning_stitched_front_edge",
+      "from": [
+        0,
+        9.15,
+        14.75
+      ],
+      "to": [
+        4,
+        9.8,
+        15.75
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0.0,
+            4,
+            0.65
+          ],
+          "texture": "#crimson"
+        },
+        "south": {
+          "uv": [
+            0,
+            0.0,
+            4,
+            0.65
+          ],
+          "texture": "#crimson"
+        },
+        "east": {
+          "uv": [
+            0.0,
+            0.0,
+            1.0,
+            0.65
+          ],
+          "texture": "#crimson"
+        },
+        "west": {
+          "uv": [
+            0.0,
+            0.0,
+            1.0,
+            0.65
+          ],
+          "texture": "#crimson"
+        },
+        "up": {
+          "uv": [
+            0,
+            0.0,
+            4,
+            1.0
+          ],
+          "texture": "#crimson"
+        },
+        "down": {
+          "uv": [
+            0,
+            0.0,
+            4,
+            1.0
+          ],
+          "texture": "#crimson"
+        }
+      }
+    },
+    {
+      "name": "scalloped_valance_top",
+      "from": [
+        0,
+        7.95,
+        15.15
+      ],
+      "to": [
+        4,
+        9.35,
+        15.6
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0.0,
+            4,
+            1.4
+          ],
+          "texture": "#crimson"
+        },
+        "south": {
+          "uv": [
+            0,
+            0.0,
+            4,
+            1.4
+          ],
+          "texture": "#crimson"
+        },
+        "east": {
+          "uv": [
+            0.0,
+            0.0,
+            0.45,
+            1.4
+          ],
+          "texture": "#crimson"
+        },
+        "west": {
+          "uv": [
+            0.0,
+            0.0,
+            0.45,
+            1.4
+          ],
+          "texture": "#crimson"
+        },
+        "up": {
+          "uv": [
+            0,
+            0.0,
+            4,
+            0.45
+          ],
+          "texture": "#crimson"
+        },
+        "down": {
+          "uv": [
+            0,
+            0.0,
+            4,
+            0.45
+          ],
+          "texture": "#crimson"
+        }
+      }
+    },
+    {
+      "name": "scalloped_valance_step",
+      "from": [
+        0.5,
+        7.6,
+        15.15
+      ],
+      "to": [
+        3.5,
+        8.1,
+        15.6
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0.0,
+            0.0,
+            3.0,
+            0.5
+          ],
+          "texture": "#crimson"
+        },
+        "south": {
+          "uv": [
+            0.0,
+            0.0,
+            3.0,
+            0.5
+          ],
+          "texture": "#crimson"
+        },
+        "east": {
+          "uv": [
+            0.0,
+            0.0,
+            0.45,
+            0.5
+          ],
+          "texture": "#crimson"
+        },
+        "west": {
+          "uv": [
+            0.0,
+            0.0,
+            0.45,
+            0.5
+          ],
+          "texture": "#crimson"
+        },
+        "up": {
+          "uv": [
+            0.0,
+            0.0,
+            3.0,
+            0.45
+          ],
+          "texture": "#crimson"
+        },
+        "down": {
+          "uv": [
+            0.0,
+            0.0,
+            3.0,
+            0.45
+          ],
+          "texture": "#crimson"
+        }
+      }
+    },
+    {
+      "name": "scalloped_valance_tip",
+      "from": [
+        1.2,
+        7.4,
+        15.15
+      ],
+      "to": [
+        2.8,
+        7.7,
+        15.6
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0.0,
+            0.0,
+            1.6,
+            0.3
+          ],
+          "texture": "#crimson"
+        },
+        "south": {
+          "uv": [
+            0.0,
+            0.0,
+            1.6,
+            0.3
+          ],
+          "texture": "#crimson"
+        },
+        "east": {
+          "uv": [
+            0.0,
+            0.0,
+            0.45,
+            0.3
+          ],
+          "texture": "#crimson"
+        },
+        "west": {
+          "uv": [
+            0.0,
+            0.0,
+            0.45,
+            0.3
+          ],
+          "texture": "#crimson"
+        },
+        "up": {
+          "uv": [
+            0.0,
+            0.0,
+            1.6,
+            0.45
+          ],
+          "texture": "#crimson"
+        },
+        "down": {
+          "uv": [
+            0.0,
+            0.0,
+            1.6,
+            0.45
+          ],
+          "texture": "#crimson"
+        }
+      }
+    },
+    {
+      "name": "contrasting_scallop_stitch",
+      "from": [
+        0.55,
+        7.62,
+        15.61
+      ],
+      "to": [
+        3.45,
+        7.8,
+        15.69
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0.0,
+            0.0,
+            2.9,
+            0.18
+          ],
+          "texture": "#cream"
+        },
+        "south": {
+          "uv": [
+            0.0,
+            0.0,
+            2.9,
+            0.18
+          ],
+          "texture": "#cream"
+        },
+        "east": {
+          "uv": [
+            0.0,
+            0.0,
+            0.08,
+            0.18
+          ],
+          "texture": "#cream"
+        },
+        "west": {
+          "uv": [
+            0.0,
+            0.0,
+            0.08,
+            0.18
+          ],
+          "texture": "#cream"
+        },
+        "up": {
+          "uv": [
+            0.0,
+            0.0,
+            2.9,
+            0.08
+          ],
+          "texture": "#cream"
+        },
+        "down": {
+          "uv": [
+            0.0,
+            0.0,
+            2.9,
+            0.08
+          ],
+          "texture": "#cream"
+        }
+      }
+    },
+    {
+      "name": "sloping_canvas_stripe",
+      "from": [
+        4,
+        11.85,
+        1.0
+      ],
+      "to": [
+        8,
+        12.55,
+        15.0
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0.0,
+            4,
+            0.7
+          ],
+          "texture": "#cream"
+        },
+        "south": {
+          "uv": [
+            0,
+            0.0,
+            4,
+            0.7
+          ],
+          "texture": "#cream"
+        },
+        "east": {
+          "uv": [
+            0.0,
+            0.0,
+            14.0,
+            0.7
+          ],
+          "texture": "#cream"
+        },
+        "west": {
+          "uv": [
+            0.0,
+            0.0,
+            14.0,
+            0.7
+          ],
+          "texture": "#cream"
+        },
+        "up": {
+          "uv": [
+            0,
+            0.0,
+            4,
+            14.0
+          ],
+          "texture": "#cream"
+        },
+        "down": {
+          "uv": [
+            0,
+            0.0,
+            4,
+            14.0
+          ],
+          "texture": "#cream"
+        }
+      },
+      "rotation": {
+        "origin": [
+          16,
+          12.2,
+          8
+        ],
+        "axis": "x",
+        "angle": 22.5,
+        "rescale": false
+      }
+    },
+    {
+      "name": "awning_stitched_front_edge",
+      "from": [
+        4,
+        9.15,
+        14.75
+      ],
+      "to": [
+        8,
+        9.8,
+        15.75
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0.0,
+            4,
+            0.65
+          ],
+          "texture": "#cream"
+        },
+        "south": {
+          "uv": [
+            0,
+            0.0,
+            4,
+            0.65
+          ],
+          "texture": "#cream"
+        },
+        "east": {
+          "uv": [
+            0.0,
+            0.0,
+            1.0,
+            0.65
+          ],
+          "texture": "#cream"
+        },
+        "west": {
+          "uv": [
+            0.0,
+            0.0,
+            1.0,
+            0.65
+          ],
+          "texture": "#cream"
+        },
+        "up": {
+          "uv": [
+            0,
+            0.0,
+            4,
+            1.0
+          ],
+          "texture": "#cream"
+        },
+        "down": {
+          "uv": [
+            0,
+            0.0,
+            4,
+            1.0
+          ],
+          "texture": "#cream"
+        }
+      }
+    },
+    {
+      "name": "scalloped_valance_top",
+      "from": [
+        4,
+        7.95,
+        15.15
+      ],
+      "to": [
+        8,
+        9.35,
+        15.6
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0.0,
+            4,
+            1.4
+          ],
+          "texture": "#cream"
+        },
+        "south": {
+          "uv": [
+            0,
+            0.0,
+            4,
+            1.4
+          ],
+          "texture": "#cream"
+        },
+        "east": {
+          "uv": [
+            0.0,
+            0.0,
+            0.45,
+            1.4
+          ],
+          "texture": "#cream"
+        },
+        "west": {
+          "uv": [
+            0.0,
+            0.0,
+            0.45,
+            1.4
+          ],
+          "texture": "#cream"
+        },
+        "up": {
+          "uv": [
+            0,
+            0.0,
+            4,
+            0.45
+          ],
+          "texture": "#cream"
+        },
+        "down": {
+          "uv": [
+            0,
+            0.0,
+            4,
+            0.45
+          ],
+          "texture": "#cream"
+        }
+      }
+    },
+    {
+      "name": "scalloped_valance_step",
+      "from": [
+        4.5,
+        7.6,
+        15.15
+      ],
+      "to": [
+        7.5,
+        8.1,
+        15.6
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0.0,
+            0.0,
+            3.0,
+            0.5
+          ],
+          "texture": "#cream"
+        },
+        "south": {
+          "uv": [
+            0.0,
+            0.0,
+            3.0,
+            0.5
+          ],
+          "texture": "#cream"
+        },
+        "east": {
+          "uv": [
+            0.0,
+            0.0,
+            0.45,
+            0.5
+          ],
+          "texture": "#cream"
+        },
+        "west": {
+          "uv": [
+            0.0,
+            0.0,
+            0.45,
+            0.5
+          ],
+          "texture": "#cream"
+        },
+        "up": {
+          "uv": [
+            0.0,
+            0.0,
+            3.0,
+            0.45
+          ],
+          "texture": "#cream"
+        },
+        "down": {
+          "uv": [
+            0.0,
+            0.0,
+            3.0,
+            0.45
+          ],
+          "texture": "#cream"
+        }
+      }
+    },
+    {
+      "name": "scalloped_valance_tip",
+      "from": [
+        5.2,
+        7.4,
+        15.15
+      ],
+      "to": [
+        6.8,
+        7.7,
+        15.6
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0.0,
+            0.0,
+            1.6,
+            0.3
+          ],
+          "texture": "#cream"
+        },
+        "south": {
+          "uv": [
+            0.0,
+            0.0,
+            1.6,
+            0.3
+          ],
+          "texture": "#cream"
+        },
+        "east": {
+          "uv": [
+            0.0,
+            0.0,
+            0.45,
+            0.3
+          ],
+          "texture": "#cream"
+        },
+        "west": {
+          "uv": [
+            0.0,
+            0.0,
+            0.45,
+            0.3
+          ],
+          "texture": "#cream"
+        },
+        "up": {
+          "uv": [
+            0.0,
+            0.0,
+            1.6,
+            0.45
+          ],
+          "texture": "#cream"
+        },
+        "down": {
+          "uv": [
+            0.0,
+            0.0,
+            1.6,
+            0.45
+          ],
+          "texture": "#cream"
+        }
+      }
+    },
+    {
+      "name": "sloping_canvas_stripe",
+      "from": [
+        8,
+        11.85,
+        1.0
+      ],
+      "to": [
+        12,
+        12.55,
+        15.0
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0.0,
+            4,
+            0.7
+          ],
+          "texture": "#crimson"
+        },
+        "south": {
+          "uv": [
+            0,
+            0.0,
+            4,
+            0.7
+          ],
+          "texture": "#crimson"
+        },
+        "east": {
+          "uv": [
+            0.0,
+            0.0,
+            14.0,
+            0.7
+          ],
+          "texture": "#crimson"
+        },
+        "west": {
+          "uv": [
+            0.0,
+            0.0,
+            14.0,
+            0.7
+          ],
+          "texture": "#crimson"
+        },
+        "up": {
+          "uv": [
+            0,
+            0.0,
+            4,
+            14.0
+          ],
+          "texture": "#crimson"
+        },
+        "down": {
+          "uv": [
+            0,
+            0.0,
+            4,
+            14.0
+          ],
+          "texture": "#crimson"
+        }
+      },
+      "rotation": {
+        "origin": [
+          16,
+          12.2,
+          8
+        ],
+        "axis": "x",
+        "angle": 22.5,
+        "rescale": false
+      }
+    },
+    {
+      "name": "awning_stitched_front_edge",
+      "from": [
+        8,
+        9.15,
+        14.75
+      ],
+      "to": [
+        12,
+        9.8,
+        15.75
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0.0,
+            4,
+            0.65
+          ],
+          "texture": "#crimson"
+        },
+        "south": {
+          "uv": [
+            0,
+            0.0,
+            4,
+            0.65
+          ],
+          "texture": "#crimson"
+        },
+        "east": {
+          "uv": [
+            0.0,
+            0.0,
+            1.0,
+            0.65
+          ],
+          "texture": "#crimson"
+        },
+        "west": {
+          "uv": [
+            0.0,
+            0.0,
+            1.0,
+            0.65
+          ],
+          "texture": "#crimson"
+        },
+        "up": {
+          "uv": [
+            0,
+            0.0,
+            4,
+            1.0
+          ],
+          "texture": "#crimson"
+        },
+        "down": {
+          "uv": [
+            0,
+            0.0,
+            4,
+            1.0
+          ],
+          "texture": "#crimson"
+        }
+      }
+    },
+    {
+      "name": "scalloped_valance_top",
+      "from": [
+        8,
+        7.95,
+        15.15
+      ],
+      "to": [
+        12,
+        9.35,
+        15.6
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0.0,
+            4,
+            1.4
+          ],
+          "texture": "#crimson"
+        },
+        "south": {
+          "uv": [
+            0,
+            0.0,
+            4,
+            1.4
+          ],
+          "texture": "#crimson"
+        },
+        "east": {
+          "uv": [
+            0.0,
+            0.0,
+            0.45,
+            1.4
+          ],
+          "texture": "#crimson"
+        },
+        "west": {
+          "uv": [
+            0.0,
+            0.0,
+            0.45,
+            1.4
+          ],
+          "texture": "#crimson"
+        },
+        "up": {
+          "uv": [
+            0,
+            0.0,
+            4,
+            0.45
+          ],
+          "texture": "#crimson"
+        },
+        "down": {
+          "uv": [
+            0,
+            0.0,
+            4,
+            0.45
+          ],
+          "texture": "#crimson"
+        }
+      }
+    },
+    {
+      "name": "scalloped_valance_step",
+      "from": [
+        8.5,
+        7.6,
+        15.15
+      ],
+      "to": [
+        11.5,
+        8.1,
+        15.6
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0.0,
+            0.0,
+            3.0,
+            0.5
+          ],
+          "texture": "#crimson"
+        },
+        "south": {
+          "uv": [
+            0.0,
+            0.0,
+            3.0,
+            0.5
+          ],
+          "texture": "#crimson"
+        },
+        "east": {
+          "uv": [
+            0.0,
+            0.0,
+            0.45,
+            0.5
+          ],
+          "texture": "#crimson"
+        },
+        "west": {
+          "uv": [
+            0.0,
+            0.0,
+            0.45,
+            0.5
+          ],
+          "texture": "#crimson"
+        },
+        "up": {
+          "uv": [
+            0.0,
+            0.0,
+            3.0,
+            0.45
+          ],
+          "texture": "#crimson"
+        },
+        "down": {
+          "uv": [
+            0.0,
+            0.0,
+            3.0,
+            0.45
+          ],
+          "texture": "#crimson"
+        }
+      }
+    },
+    {
+      "name": "scalloped_valance_tip",
+      "from": [
+        9.2,
+        7.4,
+        15.15
+      ],
+      "to": [
+        10.8,
+        7.7,
+        15.6
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0.0,
+            0.0,
+            1.6,
+            0.3
+          ],
+          "texture": "#crimson"
+        },
+        "south": {
+          "uv": [
+            0.0,
+            0.0,
+            1.6,
+            0.3
+          ],
+          "texture": "#crimson"
+        },
+        "east": {
+          "uv": [
+            0.0,
+            0.0,
+            0.45,
+            0.3
+          ],
+          "texture": "#crimson"
+        },
+        "west": {
+          "uv": [
+            0.0,
+            0.0,
+            0.45,
+            0.3
+          ],
+          "texture": "#crimson"
+        },
+        "up": {
+          "uv": [
+            0.0,
+            0.0,
+            1.6,
+            0.45
+          ],
+          "texture": "#crimson"
+        },
+        "down": {
+          "uv": [
+            0.0,
+            0.0,
+            1.6,
+            0.45
+          ],
+          "texture": "#crimson"
+        }
+      }
+    },
+    {
+      "name": "contrasting_scallop_stitch",
+      "from": [
+        8.55,
+        7.62,
+        15.61
+      ],
+      "to": [
+        11.45,
+        7.8,
+        15.69
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0.0,
+            0.0,
+            2.9,
+            0.18
+          ],
+          "texture": "#cream"
+        },
+        "south": {
+          "uv": [
+            0.0,
+            0.0,
+            2.9,
+            0.18
+          ],
+          "texture": "#cream"
+        },
+        "east": {
+          "uv": [
+            0.0,
+            0.0,
+            0.08,
+            0.18
+          ],
+          "texture": "#cream"
+        },
+        "west": {
+          "uv": [
+            0.0,
+            0.0,
+            0.08,
+            0.18
+          ],
+          "texture": "#cream"
+        },
+        "up": {
+          "uv": [
+            0.0,
+            0.0,
+            2.9,
+            0.08
+          ],
+          "texture": "#cream"
+        },
+        "down": {
+          "uv": [
+            0.0,
+            0.0,
+            2.9,
+            0.08
+          ],
+          "texture": "#cream"
+        }
+      }
+    },
+    {
+      "name": "sloping_canvas_stripe",
+      "from": [
+        12,
+        11.85,
+        1.0
+      ],
+      "to": [
+        16,
+        12.55,
+        15.0
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0.0,
+            4,
+            0.7
+          ],
+          "texture": "#cream"
+        },
+        "south": {
+          "uv": [
+            0,
+            0.0,
+            4,
+            0.7
+          ],
+          "texture": "#cream"
+        },
+        "east": {
+          "uv": [
+            0.0,
+            0.0,
+            14.0,
+            0.7
+          ],
+          "texture": "#cream"
+        },
+        "west": {
+          "uv": [
+            0.0,
+            0.0,
+            14.0,
+            0.7
+          ],
+          "texture": "#cream"
+        },
+        "up": {
+          "uv": [
+            0,
+            0.0,
+            4,
+            14.0
+          ],
+          "texture": "#cream"
+        },
+        "down": {
+          "uv": [
+            0,
+            0.0,
+            4,
+            14.0
+          ],
+          "texture": "#cream"
+        }
+      },
+      "rotation": {
+        "origin": [
+          16,
+          12.2,
+          8
+        ],
+        "axis": "x",
+        "angle": 22.5,
+        "rescale": false
+      }
+    },
+    {
+      "name": "awning_stitched_front_edge",
+      "from": [
+        12,
+        9.15,
+        14.75
+      ],
+      "to": [
+        16,
+        9.8,
+        15.75
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0.0,
+            4,
+            0.65
+          ],
+          "texture": "#cream"
+        },
+        "south": {
+          "uv": [
+            0,
+            0.0,
+            4,
+            0.65
+          ],
+          "texture": "#cream"
+        },
+        "east": {
+          "uv": [
+            0.0,
+            0.0,
+            1.0,
+            0.65
+          ],
+          "texture": "#cream"
+        },
+        "west": {
+          "uv": [
+            0.0,
+            0.0,
+            1.0,
+            0.65
+          ],
+          "texture": "#cream"
+        },
+        "up": {
+          "uv": [
+            0,
+            0.0,
+            4,
+            1.0
+          ],
+          "texture": "#cream"
+        },
+        "down": {
+          "uv": [
+            0,
+            0.0,
+            4,
+            1.0
+          ],
+          "texture": "#cream"
+        }
+      }
+    },
+    {
+      "name": "scalloped_valance_top",
+      "from": [
+        12,
+        7.95,
+        15.15
+      ],
+      "to": [
+        16,
+        9.35,
+        15.6
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0.0,
+            4,
+            1.4
+          ],
+          "texture": "#cream"
+        },
+        "south": {
+          "uv": [
+            0,
+            0.0,
+            4,
+            1.4
+          ],
+          "texture": "#cream"
+        },
+        "east": {
+          "uv": [
+            0.0,
+            0.0,
+            0.45,
+            1.4
+          ],
+          "texture": "#cream"
+        },
+        "west": {
+          "uv": [
+            0.0,
+            0.0,
+            0.45,
+            1.4
+          ],
+          "texture": "#cream"
+        },
+        "up": {
+          "uv": [
+            0,
+            0.0,
+            4,
+            0.45
+          ],
+          "texture": "#cream"
+        },
+        "down": {
+          "uv": [
+            0,
+            0.0,
+            4,
+            0.45
+          ],
+          "texture": "#cream"
+        }
+      }
+    },
+    {
+      "name": "scalloped_valance_step",
+      "from": [
+        12.5,
+        7.6,
+        15.15
+      ],
+      "to": [
+        15.5,
+        8.1,
+        15.6
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0.0,
+            0.0,
+            3.0,
+            0.5
+          ],
+          "texture": "#cream"
+        },
+        "south": {
+          "uv": [
+            0.0,
+            0.0,
+            3.0,
+            0.5
+          ],
+          "texture": "#cream"
+        },
+        "east": {
+          "uv": [
+            0.0,
+            0.0,
+            0.45,
+            0.5
+          ],
+          "texture": "#cream"
+        },
+        "west": {
+          "uv": [
+            0.0,
+            0.0,
+            0.45,
+            0.5
+          ],
+          "texture": "#cream"
+        },
+        "up": {
+          "uv": [
+            0.0,
+            0.0,
+            3.0,
+            0.45
+          ],
+          "texture": "#cream"
+        },
+        "down": {
+          "uv": [
+            0.0,
+            0.0,
+            3.0,
+            0.45
+          ],
+          "texture": "#cream"
+        }
+      }
+    },
+    {
+      "name": "scalloped_valance_tip",
+      "from": [
+        13.2,
+        7.4,
+        15.15
+      ],
+      "to": [
+        14.8,
+        7.7,
+        15.6
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0.0,
+            0.0,
+            1.6,
+            0.3
+          ],
+          "texture": "#cream"
+        },
+        "south": {
+          "uv": [
+            0.0,
+            0.0,
+            1.6,
+            0.3
+          ],
+          "texture": "#cream"
+        },
+        "east": {
+          "uv": [
+            0.0,
+            0.0,
+            0.45,
+            0.3
+          ],
+          "texture": "#cream"
+        },
+        "west": {
+          "uv": [
+            0.0,
+            0.0,
+            0.45,
+            0.3
+          ],
+          "texture": "#cream"
+        },
+        "up": {
+          "uv": [
+            0.0,
+            0.0,
+            1.6,
+            0.45
+          ],
+          "texture": "#cream"
+        },
+        "down": {
+          "uv": [
+            0.0,
+            0.0,
+            1.6,
+            0.45
+          ],
+          "texture": "#cream"
+        }
+      }
+    },
+    {
+      "name": "canopy_tie_plate",
+      "from": [
+        1.35,
+        8.25,
+        15.62
+      ],
+      "to": [
+        2.45,
+        9.25,
+        15.8
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0.0,
+            0.0,
+            1.1,
+            1.0
+          ],
+          "texture": "#brass"
+        },
+        "south": {
+          "uv": [
+            0.0,
+            0.0,
+            1.1,
+            1.0
+          ],
+          "texture": "#brass"
+        },
+        "east": {
+          "uv": [
+            0.0,
+            0.0,
+            0.18,
+            1.0
+          ],
+          "texture": "#brass"
+        },
+        "west": {
+          "uv": [
+            0.0,
+            0.0,
+            0.18,
+            1.0
+          ],
+          "texture": "#brass"
+        },
+        "up": {
+          "uv": [
+            0.0,
+            0.0,
+            1.1,
+            0.18
+          ],
+          "texture": "#brass"
+        },
+        "down": {
+          "uv": [
+            0.0,
+            0.0,
+            1.1,
+            0.18
+          ],
+          "texture": "#brass"
+        }
+      }
+    },
+    {
+      "name": "little_ivy_leaf",
+      "from": [
+        0.8,
+        1.5,
+        2.75
+      ],
+      "to": [
+        2.5,
+        2.7,
+        3.1
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0.0,
+            0.0,
+            1.7,
+            1.2
+          ],
+          "texture": "#leaf"
+        },
+        "south": {
+          "uv": [
+            0.0,
+            0.0,
+            1.7,
+            1.2
+          ],
+          "texture": "#leaf"
+        },
+        "east": {
+          "uv": [
+            0.0,
+            0.0,
+            0.35,
+            1.2
+          ],
+          "texture": "#leaf"
+        },
+        "west": {
+          "uv": [
+            0.0,
+            0.0,
+            0.35,
+            1.2
+          ],
+          "texture": "#leaf"
+        },
+        "up": {
+          "uv": [
+            0.0,
+            0.0,
+            1.7,
+            0.35
+          ],
+          "texture": "#leaf"
+        },
+        "down": {
+          "uv": [
+            0.0,
+            0.0,
+            1.7,
+            0.35
+          ],
+          "texture": "#leaf"
+        }
+      }
+    },
+    {
+      "name": "ivy_stalk",
+      "from": [
+        1.4,
+        1.0,
+        2.8
+      ],
+      "to": [
+        1.7,
+        2.9,
+        2.95
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0.0,
+            0.0,
+            0.3,
+            1.9
+          ],
+          "texture": "#stem"
+        },
+        "south": {
+          "uv": [
+            0.0,
+            0.0,
+            0.3,
+            1.9
+          ],
+          "texture": "#stem"
+        },
+        "east": {
+          "uv": [
+            0.0,
+            0.0,
+            0.15,
+            1.9
+          ],
+          "texture": "#stem"
+        },
+        "west": {
+          "uv": [
+            0.0,
+            0.0,
+            0.15,
+            1.9
+          ],
+          "texture": "#stem"
+        },
+        "up": {
+          "uv": [
+            0.0,
+            0.0,
+            0.3,
+            0.15
+          ],
+          "texture": "#stem"
+        },
+        "down": {
+          "uv": [
+            0.0,
+            0.0,
+            0.3,
+            0.15
+          ],
+          "texture": "#stem"
+        }
+      }
+    },
+    {
+      "name": "little_ivy_leaf",
+      "from": [
+        0.55,
+        4.0,
+        2.8
+      ],
+      "to": [
+        2.25,
+        5.2,
+        3.15
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0.0,
+            0.0,
+            1.7,
+            1.2
+          ],
+          "texture": "#leaf"
+        },
+        "south": {
+          "uv": [
+            0.0,
+            0.0,
+            1.7,
+            1.2
+          ],
+          "texture": "#leaf"
+        },
+        "east": {
+          "uv": [
+            0.0,
+            0.0,
+            0.35,
+            1.2
+          ],
+          "texture": "#leaf"
+        },
+        "west": {
+          "uv": [
+            0.0,
+            0.0,
+            0.35,
+            1.2
+          ],
+          "texture": "#leaf"
+        },
+        "up": {
+          "uv": [
+            0.0,
+            0.0,
+            1.7,
+            0.35
+          ],
+          "texture": "#leaf"
+        },
+        "down": {
+          "uv": [
+            0.0,
+            0.0,
+            1.7,
+            0.35
+          ],
+          "texture": "#leaf"
+        }
+      }
+    },
+    {
+      "name": "ivy_stalk",
+      "from": [
+        1.15,
+        3.5,
+        2.8499999999999996
+      ],
+      "to": [
+        1.45,
+        5.4,
+        3.0
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0.0,
+            0.0,
+            0.3,
+            1.9
+          ],
+          "texture": "#stem"
+        },
+        "south": {
+          "uv": [
+            0.0,
+            0.0,
+            0.3,
+            1.9
+          ],
+          "texture": "#stem"
+        },
+        "east": {
+          "uv": [
+            0.0,
+            0.0,
+            0.15,
+            1.9
+          ],
+          "texture": "#stem"
+        },
+        "west": {
+          "uv": [
+            0.0,
+            0.0,
+            0.15,
+            1.9
+          ],
+          "texture": "#stem"
+        },
+        "up": {
+          "uv": [
+            0.0,
+            0.0,
+            0.3,
+            0.15
+          ],
+          "texture": "#stem"
+        },
+        "down": {
+          "uv": [
+            0.0,
+            0.0,
+            0.3,
+            0.15
+          ],
+          "texture": "#stem"
+        }
+      }
+    }
+  ]
+}

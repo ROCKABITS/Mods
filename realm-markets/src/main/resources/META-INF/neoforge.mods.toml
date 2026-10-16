@@ -1,0 +1,27 @@
+modLoader="javafml"
+loaderVersion="[4,)"
+license="All Rights Reserved"
+[[mods]]
+modId="realmmarkets"
+version="0.1.0"
+displayName="Realm Markets"
+authors="ROCKABITS"
+description='''Craft medieval market stalls, stock real items and sell at fixed prices while the owner is offline. Collect retained sales earnings. Optional Chronicles RP economy integration.'''
+[[dependencies.realmmarkets]]
+modId="neoforge"
+type="required"
+versionRange="[21.1.256,)"
+ordering="NONE"
+side="BOTH"
+[[dependencies.realmmarkets]]
+modId="minecraft"
+type="required"
+versionRange="[1.21.1]"
+ordering="NONE"
+side="BOTH"
+[[dependencies.realmmarkets]]
+modId="cronicasrp"
+type="optional"
+versionRange="[0.5.2,0.6)"
+ordering="AFTER"
+side="BOTH"

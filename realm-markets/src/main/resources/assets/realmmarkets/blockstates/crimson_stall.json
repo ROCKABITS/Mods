@@ -1,0 +1,64 @@
+{
+  "variants": {
+    "facing=south,part=0": {
+      "model": "realmmarkets:block/crimson_stall_part0"
+    },
+    "facing=south,part=1": {
+      "model": "realmmarkets:block/crimson_stall_part1"
+    },
+    "facing=south,part=2": {
+      "model": "realmmarkets:block/crimson_stall_part2"
+    },
+    "facing=south,part=3": {
+      "model": "realmmarkets:block/crimson_stall_part3"
+    },
+    "facing=west,part=0": {
+      "model": "realmmarkets:block/crimson_stall_part0",
+      "y": 90
+    },
+    "facing=west,part=1": {
+      "model": "realmmarkets:block/crimson_stall_part1",
+      "y": 90
+    },
+    "facing=west,part=2": {
+      "model": "realmmarkets:block/crimson_stall_part2",
+      "y": 90
+    },
+    "facing=west,part=3": {
+      "model": "realmmarkets:block/crimson_stall_part3",
+      "y": 90
+    },
+    "facing=north,part=0": {
+      "model": "realmmarkets:block/crimson_stall_part0",
+      "y": 180
+    },
+    "facing=north,part=1": {
+      "model": "realmmarkets:block/crimson_stall_part1",
+      "y": 180
+    },
+    "facing=north,part=2": {
+      "model": "realmmarkets:block/crimson_stall_part2",
+      "y": 180
+    },
+    "facing=north,part=3": {
+      "model": "realmmarkets:block/crimson_stall_part3",
+      "y": 180
+    },
+    "facing=east,part=0": {
+      "model": "realmmarkets:block/crimson_stall_part0",
+      "y": 270
+    },
+    "facing=east,part=1": {
+      "model": "realmmarkets:block/crimson_stall_part1",
+      "y": 270
+    },
+    "facing=east,part=2": {
+      "model": "realmmarkets:block/crimson_stall_part2",
+      "y": 270
+    },
+    "facing=east,part=3": {
+      "model": "realmmarkets:block/crimson_stall_part3",
+      "y": 270
+    }
+  }
+}
