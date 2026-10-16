@@ -37,7 +37,7 @@ Os projetos futuros abaixo são um guião de produto e não estão incluídos no
 | Chronicles RP — Nomes RP | Mostrar o nome da personagem acima da cabeça, no TAB e no chat. | Atualização planeada do mod existente. |
 | Xaero Map Regions + Xaero's World Map | Desenhar e consultar territórios no mapa. | Solução externa indicada pelo utilizador; não desenvolver um mod próprio. |
 
-A atualização do imposto de vendas do Crown Ledger e Realm Markets está em curso. O utilizador pediu para guardar os novos projetos para desenvolver mais tarde, sem os iniciar nesta entrega. A sequência futura fica por definir; foi sugerido começar pela API de notificações para ser usada pelas recompensas.
+O imposto de vendas foi implementado no Crown Ledger e Realm Markets 0.2.0; os resultados de execução ficam nos guias e ficheiros de validação dos dois projetos. O utilizador pediu para guardar os novos projetos para desenvolver mais tarde, sem os iniciar nesta entrega. A sequência futura fica por definir; foi sugerido começar pela API de notificações para ser usada pelas recompensas.
 
 ### Realm Rewards
 
@@ -123,9 +123,9 @@ Item físico que apresenta a identidade do Crónicas RP e pode ser mostrado a ou
 
 ## 4. Bancas de mercado
 
-O [Realm Markets 0.1.1](realm-markets/README.md) implementa duas bancas medievais de quatro partes, com toldos carmesim e verde-salva, oito ofertas por banca e preços por unidade. O proprietário deposita artigos reais e recolhe os ganhos presencialmente; as compras continuam disponíveis enquanto está offline. O servidor valida pagamento, espaço no inventário, stock e a correspondência do produto e preço apresentados ao comprador.
+O [Realm Markets 0.2.0](realm-markets/README.md) implementa duas bancas medievais de quatro partes, com toldos carmesim e verde-salva, oito ofertas por banca e preços por unidade. O proprietário deposita artigos reais e recolhe os ganhos presencialmente; as compras continuam disponíveis enquanto está offline. O servidor valida pagamento, espaço no inventário, stock e a correspondência do produto e preço apresentados ao comprador.
 
-Funciona com esmeraldas de forma independente e tem integração opcional com a carteira do Chronicles. Esta versão vende itens sem dados personalizados e não cobra impostos sobre vendas.
+Funciona com esmeraldas de forma independente e tem integração opcional com a carteira do Chronicles. A 0.2.0 permite ao governante definir no Crown Ledger uma percentagem própria sobre as vendas, independente do imposto dos contratos. O preço bruto pago pelo comprador é dividido entre o líquido do vendedor e a tesouraria. A taxa começa em 0%, e ganhos anteriores e recolhas não são tributados novamente. O cálculo usa unidades inteiras, arredondando para baixo o imposto do total de cada compra. As duas versões devem ser atualizadas juntas quando usadas no mesmo servidor. Esta versão vende itens sem dados personalizados.
 
 ## 5. Guildas
 

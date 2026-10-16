@@ -1,40 +1,53 @@
-# Validação — Crown Ledger
+# Validação — Crown Ledger 0.2.0
 
-## Versão 0.2.0 — execução conjunta pendente
+A [execução conjunta 38924972884](https://github.com/ROCKABITS/Mods/actions/runs/38924972884) compilou, testou e publicou Crown Ledger e Realm Markets **0.2.0**, a partir do mesmo commit `1a6825f00d37ec07c194e96a4b05c003f892d8d1`. A publicação foi concluída no commit do bot `e9991c8` depois de todas as verificações obrigatórias.
 
-A versão 0.2.0 altera os registos persistentes e acrescenta impostos de mercado. A compilação Minecraft, os resultados e a publicação desta versão aguardam a execução do workflow conjunto; os resultados 0.1.1 abaixo são históricos e não aprovam a integração nova.
+| Verificação | Resultado |
+| --- | --- |
+| Compilação de produção | Java 21, Minecraft 1.21.1 e NeoForge 21.1.256; aprovada |
+| Testes unitários Crown Ledger | **46 aprovados**, sem falhas, erros ou testes ignorados |
+| Testes nativos Crown Ledger independente | **19 obrigatórios aprovados** |
+| Testes nativos Crown Ledger com os companheiros reais | **19 obrigatórios aprovados** |
+| Outro JAR novo | Realm Markets 0.2.0 do mesmo commit: **45 unitários, 45 nativos independente e 45 com os companheiros aprovados** |
+| Cliente Minecraft real | Cofre com 264 faces, quatro direções, texturas e três capturas de 1600 × 900 aprovados |
+| Menus de produção | Donativos, moedas, salários e imposto de mercado independente, incluindo controlos a 320 × 240, aprovados |
+| Empacotamento | Versão e recursos obrigatórios presentes; classes e estruturas de teste ausentes |
 
-A publicação exige:
+Os testes novos verificam a taxa de mercado separada do imposto fixo e da percentagem dos contratos, pedidos inteiros e limites válidos, preservação da taxa em pedidos antigos que omitem o campo e autorização exclusiva do governante atual com mandato jurado. Um menu já aberto pelo antigo governante perde essa autorização após a sucessão.
 
-- Compilar primeiro os JARs de produção **Crown Ledger 0.2.0 e Realm Markets 0.2.0**, com todos os testes unitários aprovados.
-- Executar os testes nativos de cada mod sozinho e novamente com o JAR novo do outro mod, compilado no mesmo commit, mais os JARs publicados e verificados de Contracts 0.3.1, Realm Council 0.2.1 e Realm Identity 0.1.0.
-- Concluir as verificações reais da compra tributada, entrada exata do imposto no tesouro, repetição sem nova tributação e retenção da reserva se o tesouro exceder o limite de saldo. Um marcador de conclusão destas verificações é obrigatório no registo de integração; carregar apenas o outro mod não satisfaz esta condição.
-- Aprovar os dois clientes Minecraft, incluindo a regra de imposto no cofre e a decomposição total/imposto/ganho líquido no mercado.
-- Verificar os hashes dos dois JARs e publicar as duas famílias de ficheiros numa única operação do bot, apenas se o commit de origem ainda for o atual de `main`.
+As verificações de persistência aprovam a migração nativa do formato 1 para o 2 com taxa inicial zero, preservando saldo, créditos de salários, histórico, regras e responsável. O formato 2 rejeita taxas ausentes, mal tipadas ou fora dos limites.
 
-O imposto inicial de mercado é zero. O formato anterior migra para o formato 2, conservando regras e fundos; faz uma cópia de segurança **antes de atualizar**. Para regressar a 0.1.x depois da migração, restaura a cópia completa anterior, incluindo os registos de mercado e perfis. Não basta repor o JAR antigo.
+## Integração fiscal efetivamente executada
 
-O imposto em trânsito fica no registo do mercado até o tesouro o recolher, normalmente em até um segundo de servidor ativo ou ao atualizar o cofre. Inventários, registos e perfis mantêm a persistência normal do Minecraft, sem uma transação de disco única durante uma falha abrupta.
+Os dois JARs de produção foram compilados **antes** dos testes nativos. Crown Ledger carregou o JAR novo de **Realm Markets 0.2.0**, mais os JARs publicados e verificados de **Contracts & Bounties 0.3.1**, **Realm Council 0.2.1** e **Realm Identity 0.1.0**. A execução do outro projeto carregou este mesmo Crown Ledger novo; não se aprovou a integração usando a versão antiga de nenhum dos dois.
 
-## Histórico aprovado — 0.1.1
+Os testes fizeram compras reais no servidor, com itens e esmeraldas: **20 pagos = 19 de ganho líquido para o proprietário offline + 1 de imposto reservado**. Verificaram a entrada exata desse imposto no tesouro e no histórico, repetição de recolhas e sincronizações sem nova tributação, retenção da reserva quando o tesouro está cheio e transferência única após recuperar capacidade. Verificaram também imposto de 100%, com ganho líquido zero. Os dois registos de integração emitiram os marcadores obrigatórios de conclusão destas verificações.
 
-[Execução aprovada](https://github.com/ROCKABITS/Mods/actions/runs/38779566016), código `47fc8659feca1cf652869fba5f09c80ada9303f3`.
+A interface de produção guardou 5% e 5,25% em pontos base exatos, manteve a taxa ao mudar a moeda fiscal e alterou-a independentemente do modo fixo/percentagem dos contratos. Os pedidos dos botões foram registados localmente pelo teste visual; as transferências entre mods foram verificadas separadamente nos testes nativos.
 
-- **42 testes unitários** aprovados, zero falhas/erros/ignorados: tesouro, regras, reservas de salários, elegibilidade, overflow, histórico, imposto fixo sem dívida, moedas separadas e persistência lógica. Os 12 testes do relógio verificam minutos completos, reconexões, tempo offline, limite do ciclo e ausência de atividade retroativa durante salários pendentes.
-- **15 testes nativos independentes** aprovados em Minecraft 1.21.1/NeoForge 21.1.256.
-- **15 testes nativos com os JARs reais de Contracts 0.3.1 e Realm Council 0.2.1** aprovados. A mesma bateria verifica os caminhos opcionais presentes ou ausentes. Cobre mandato jurado/ativo, sucessão, autorização de menus já abertos, 20 → 19 + 1, reembolsos, recolha de materiais públicos, repetição de operações, contratos abertos antigos e reversão de publicações inválidas.
-- Cliente Minecraft real aprovado: cofre com **264 faces**, quatro direções, texturas presentes e três capturas de **1600 × 900**.
-- A interface de produção foi exercitada pelos seus botões: donativos nas duas moedas, conversão exata de euros para cêntimos, rejeição de esmeraldas fracionadas, troca explícita da moeda fiscal com campos repostos a zero, créditos antigos preservados, recuperação após ausência do Chronicles e moeda dos contratos independente da moeda fiscal. Estes pedidos foram capturados localmente pelo teste; não simulam uma economia Chronicles real.
-- JAR sem fixtures de GameTests/captura. Downloads públicos do JAR/ZIP verificados contra os checksums do CI.
+## Ficheiros publicados
 
-[JAR](../mod-pronto/crown-ledger-0.1.1.jar) · [ZIP](../mod-pronto/crown-ledger-0.1.1.zip) · [Proveniência](../mod-pronto/crown-ledger-0.1.1.build.json) · [Imagens](../media/crown-ledger/0.1.1/README.md).
+- [JAR](../mod-pronto/crown-ledger-0.2.0.jar): **126 447 bytes**.
+- [ZIP com JAR, instruções e changelog](../mod-pronto/crown-ledger-0.2.0.zip): **123 235 bytes**.
+- [Checksums](../mod-pronto/crown-ledger-0.2.0.sha256) e [proveniência com resultados e hashes dos companheiros](../mod-pronto/crown-ledger-0.2.0.build.json).
+- [Três capturas Minecraft](../media/crown-ledger/0.2.0/README.md) e [resultado do cliente](../media/crown-ledger/0.2.0/validation.json). Os saldos e regras das imagens são dados de demonstração.
 
-SHA-256 do JAR: `e82795f13e9f912f6729cebbad7a31dc242735b7a9e6396d6cbfb7eac02736aa`.
+```text
+278826d3ed182e7ea33bcb57cbd8358cd9d39b5f5fb582b7029923f3fdd3ee77  crown-ledger-0.2.0.jar
+5766c4051b5ec450c281ff5ce206c4e579736e8f29ab1c6889ff722bf9a35009  crown-ledger-0.2.0.zip
+b57021c9efa3c7a6bd017d9b53d552963d10270da70bde5dfacad68a5f2e6866  realm-markets-0.2.0.jar (usado nos testes)
+```
 
-## Limites da validação
+## Atualização e limites
 
-O runtime completo de **Chronicles RP/Origins/Jupiter** não foi iniciado nesta execução. O adaptador usa a API do JAR original fornecido, mas os testes com esmeraldas e os pedidos da interface não comprovam a sincronização de perfis com esses mods instalados. Testes manuais com dois clientes e um mundo de produção reiniciado continuam recomendados antes de abrir o servidor ao público.
+Atualiza **os dois mods para 0.2.0 ou superior no servidor e em todos os clientes** quando os usas juntos. Faz uma cópia de segurança do mundo completo e dos perfis do Chronicles **antes de atualizar**. O formato 1 migra para o 2 conservando valores anteriores e iniciando o imposto de mercado em zero. Para regressar a 0.1.x depois da migração, restaura a cópia completa anterior; não basta repor o JAR antigo.
 
-O ambiente cloud local continua a receber HTTP 403 ao obter NeoForm no Maven NeoForge, antes da compilação Java. A compilação e os testes Minecraft acima foram feitos no GitHub Actions; não provam que a rede desta sessão cloud permita esses artefactos. Os testes independentes do domínio passaram também nesta máquina, com Java 21.
+O imposto em trânsito fica em `data/realm_markets.dat` até o tesouro o recolher, normalmente em até um segundo de servidor ativo ou ao atualizar o cofre. Os registos do tesouro, mercado, inventários e perfis usam a persistência normal do Minecraft, sem uma transação de disco única durante uma falha abrupta.
 
-As instruções de instalação/arranque foram guardadas na configuração do ambiente. Guardar o rascunho não as aplica nem publica o ambiente. Não foram desativadas verificações TLS ou de checksums.
+O runtime completo de **Chronicles RP/Origins/Jupiter não foi executado** neste CI. A matemática em cêntimos, os testes com esmeraldas e os pedidos da interface não comprovam a sincronização de perfis com esses mods instalados. Uma sessão com dois clientes reais e um reinício manual do mundo constituem validação adicional.
+
+A compilação Minecraft foi feita no GitHub Actions. O êxito do CI não comprova que o acesso ao Maven NeoForge desta sessão cloud tenha sido desbloqueado; os 46 testes independentes do domínio passaram também localmente com Java 21. Não se desativaram verificações TLS ou de checksums.
+
+## Histórico preservado — 0.1.1
+
+A [execução 38779566016](https://github.com/ROCKABITS/Mods/actions/runs/38779566016), sobre `47fc8659feca1cf652869fba5f09c80ada9303f3`, aprovou **42 unitários, 15 nativos independente, 15 com Contracts 0.3.1/Realm Council 0.2.1 e o cliente Minecraft**. Cobre o relógio de atividade, salários, imposto fixo sem dívida, contratos públicos e governação. Os [artefactos, hashes e proveniência 0.1.1](../mod-pronto/crown-ledger-0.1.1.build.json) e as [imagens antigas](../media/crown-ledger/0.1.1/README.md) permanecem preservados; essa versão não inclui imposto de mercado.

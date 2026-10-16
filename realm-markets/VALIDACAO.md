@@ -1,65 +1,56 @@
-# Validação — Realm Markets
+# Validação — Realm Markets 0.2.0
 
-## Versão 0.2.0 — execução conjunta pendente
-
-A versão 0.2.0 acrescenta imposto de vendas e migração do registo do mercado. A compilação Minecraft, os resultados e a publicação desta versão aguardam a execução do workflow conjunto; a evidência 0.1.1 abaixo não valida estas alterações.
-
-A publicação exige compilar primeiro os JARs de produção **Realm Markets 0.2.0 e Crown Ledger 0.2.0**, com os testes unitários aprovados. Cada mod corre depois os testes nativos sozinho e com o JAR novo do outro mod, compilado no mesmo commit, mais os JARs publicados e verificados de Contracts 0.3.1, Realm Council 0.2.1 e Realm Identity 0.1.0. Os hashes conhecidos dos três companheiros publicados e o hash do JAR novo são verificados antes dos testes e novamente no empacotamento.
-
-Os registos de integração têm de confirmar que as verificações de imposto com o outro mod real terminaram: compra tributada, separação do ganho líquido e reserva fiscal, entrada exata no tesouro, repetição sem cobrar outro imposto e retenção da reserva quando a transferência não cabe. A simples presença de um JAR companheiro não aprova a integração. O número de testes obrigatórios é obtido das anotações do código e comparado com a conclusão do servidor.
-
-Os dois clientes Minecraft têm de aprovar os menus de produção, incluindo a taxa configurável no cofre e o total/imposto/ganho líquido da compra. As duas versões são empacotadas e publicadas pelo bot numa única operação. A proveniência identifica o mesmo commit de origem e o hash do outro JAR efetivamente usado.
-
-Faz uma cópia de segurança do mundo e dos perfis **antes de atualizar**. O formato 1 migra para o 2, preservando proprietários, lojas, stock e ganhos anteriores, com reserva de imposto inicialmente vazia. Depois da migração, regressar à versão antiga exige restaurar a cópia completa anterior. Não basta trocar o JAR.
-
-Chronicles RP/Origins/Jupiter não fazem parte desta execução. O arredondamento digital em cêntimos é verificado na lógica independente, sem alegar que os perfis destes mods foram executados dentro do Minecraft.
-
-## Resultados aprovados — 0.1.1
-
-A versão **0.1.1 Beta** foi compilada, testada e publicada pela [execução 38887747972](https://github.com/ROCKABITS/Mods/actions/runs/38887747972), sobre o commit `6e8f8ab186f9ba1ba6eace7af3dab1cfb0475633`. A publicação automatizada terminou depois de todas as verificações exigidas. Esta atualização corrige o ângulo de apresentação dos dois modelos de item para mostrar a frente do balcão, a placa e o toldo às riscas; a geometria das bancas colocadas e as operações de comércio mantêm-se.
+A [execução conjunta 38924972884](https://github.com/ROCKABITS/Mods/actions/runs/38924972884) compilou, testou e publicou Realm Markets e Crown Ledger **0.2.0**, a partir do mesmo commit `1a6825f00d37ec07c194e96a4b05c003f892d8d1`. A publicação foi concluída no commit do bot `e9991c8` depois de todas as verificações obrigatórias.
 
 | Verificação | Resultado |
 | --- | --- |
-| Compilação e empacotamento | Java 21, Minecraft 1.21.1 e NeoForge 21.1.256; aprovados |
-| Testes JUnit | 32 aprovados, sem falhas, erros ou testes ignorados |
-| Testes nativos independentes | 37 testes obrigatórios aprovados |
-| Testes nativos com os quatro mods companheiros | Os mesmos 37 testes obrigatórios aprovados |
-| Cliente Minecraft real | Aprovado; dois modelos de item e os 32 estados de bloco validados |
-| Interface de produção | Modos de proprietário/comprador, preços, pedidos dos botões e deslocação a 320×240 aprovados |
-| Capturas | Três PNG do cliente Minecraft real |
-| Inspeção do JAR | Versão e recursos obrigatórios presentes; classes e estruturas de teste ausentes |
+| Compilação de produção | Java 21, Minecraft 1.21.1 e NeoForge 21.1.256; aprovada |
+| Testes unitários Realm Markets | **45 aprovados**, sem falhas, erros ou testes ignorados |
+| Testes nativos Realm Markets independente | **45 obrigatórios aprovados** |
+| Testes nativos Realm Markets com os companheiros reais | **45 obrigatórios aprovados** |
+| Outro JAR novo | Crown Ledger 0.2.0 do mesmo commit: **46 unitários, 19 nativos independente e 19 com os companheiros aprovados** |
+| Cliente Minecraft real | Dois modelos de item, os 32 estados das bancas e três capturas de 1600 × 900 aprovados |
+| Menus de produção | Proprietário/comprador, total, imposto e ganho líquido, pedidos dos botões e deslocação a 320 × 240 aprovados |
+| Empacotamento | Versão, API fiscal e recursos obrigatórios presentes; classes e estruturas de teste ausentes |
 
-Os testes nativos verificam colocação nas quatro direções, cancelamento e obstrução da colocação, propriedade, stock real, pagamentos em esmeraldas, ganhos de um proprietário offline, recolha parcial, inventários cheios, compras concorrentes sequenciais, limites de valores e preços alterados após a consulta. Verificam também pedidos malformados, distância e validade da sessão, remoção protegida, explosões, suporte do terreno, rejeição de itens personalizados ou contentores e persistência NBT estrita.
+A bateria mantém as verificações de colocação nas quatro direções, propriedade, stock real, compras e ganhos com o dono offline, capacidade do inventário, compras sequenciais, preços alterados, validade das sessões, remoção protegida, explosões, rejeição de itens personalizados/contentores e persistência NBT estrita.
 
-A execução de coexistência carregou os JARs publicados de **Contracts & Bounties 0.3.1**, **Realm Council 0.2.1**, **Crown Ledger 0.1.1** e **Realm Identity 0.1.0**. Cada JAR foi verificado contra o seu SHA-256 conhecido e a sua proveniência. Esta execução verifica coexistência; não contém Chronicles RP.
+Os testes novos verificam imposto sobre o total da compra, arredondamento em esmeraldas, 100% com ganho líquido zero, rejeição de cotações antigas ou malformadas sem cobrança, integração indisponível sem bloquear a recuperação de artigos/ganhos, permissões exatas do fornecedor fiscal e rejeição de transferências de outro thread, moeda ou quantia inválida. Uma reserva fiscal cheia recusa a compra antes de mover dinheiro ou stock.
 
-As [três imagens 0.1.1](../media/realm-markets/0.1.1/README.md) mostram os modelos de item registados pelo Minecraft e os menus de gestão e compra. A validação do cliente também verificou os modelos compilados dos 32 estados de bloco: duas variantes, quatro partes e quatro direções. Os menus usam artigos e saldos de demonstração, identificados como tal. Os pedidos dos botões foram registados localmente, sem os enviar a um servidor nesse teste visual; as operações de servidor são verificadas separadamente pelos testes nativos.
+## Integração fiscal efetivamente executada
 
-## Ficheiros publicados — 0.1.1
+Os dois JARs de produção foram compilados **antes** dos testes nativos. Realm Markets carregou o JAR novo de **Crown Ledger 0.2.0**, mais os JARs publicados e verificados de **Contracts & Bounties 0.3.1**, **Realm Council 0.2.1** e **Realm Identity 0.1.0**. A execução do outro projeto carregou este mesmo Realm Markets novo; não se aprovou a integração usando a versão antiga de nenhum dos dois.
 
-- [JAR](../mod-pronto/realm-markets-0.1.1.jar): **137 949 bytes**.
-- [ZIP com JAR, instruções, changelog e licença](../mod-pronto/realm-markets-0.1.1.zip): **127 960 bytes**.
-- [Checksums](../mod-pronto/realm-markets-0.1.1.sha256).
-- [Proveniência da compilação, resultados e hashes dos companheiros](../mod-pronto/realm-markets-0.1.1.build.json).
-- [Resultado da validação do cliente](../media/realm-markets/0.1.1/validation.json).
+Os testes fizeram compras reais no servidor: **20 esmeraldas pagas = 19 de ganho líquido para o dono offline + 1 de imposto reservado**. Crown Ledger recebeu esse imposto exatamente uma vez. Recolher ganhos, retirar stock ou repetir a sincronização não voltou a tributá-lo. Com o tesouro cheio, a reserva manteve-se no mercado; após recuperar capacidade, foi transferida uma única vez. As verificações confirmaram também a taxa de mercado de 5% independente do modo fixo e da percentagem de contratos de 7%. Os dois registos de integração emitiram os marcadores obrigatórios de conclusão.
+
+A interface mostrou **20,00 € = 1,00 € de imposto + 19,00 € líquidos**, atualizou a taxa enviada após mudar as regras e suspendeu compras quando o fornecedor fiscal ficou indisponível. Os botões do proprietário continuaram a permitir retirar stock e recolher ganhos. O teste visual registou os pedidos localmente, sem os enviar a um servidor; as transferências reais foram verificadas pelos testes nativos. As capturas usam dados de demonstração claramente identificados.
+
+## Ficheiros publicados
+
+- [JAR](../mod-pronto/realm-markets-0.2.0.jar): **145 202 bytes**.
+- [ZIP com JAR, instruções, changelog e licença](../mod-pronto/realm-markets-0.2.0.zip): **136 552 bytes**.
+- [Checksums](../mod-pronto/realm-markets-0.2.0.sha256) e [proveniência com resultados e hashes dos companheiros](../mod-pronto/realm-markets-0.2.0.build.json).
+- [Três capturas Minecraft](../media/realm-markets/0.2.0/README.md) e [resultado do cliente](../media/realm-markets/0.2.0/validation.json).
 
 ```text
-0a5a3efeabcfa1d1d53fa00bb2633885cc3970297f90966d0e05d3c4f2024bb4  realm-markets-0.1.1.jar
-55a74d679be588f6173b4b6c97964e25df1858880abc48dfa79df0acbec45a41  realm-markets-0.1.1.zip
+b57021c9efa3c7a6bd017d9b53d552963d10270da70bde5dfacad68a5f2e6866  realm-markets-0.2.0.jar
+85adb9881aa1ae42676437908300d55544a79eee763c9660dcddd527a73462b6  realm-markets-0.2.0.zip
+278826d3ed182e7ea33bcb57cbd8358cd9d39b5f5fb582b7029923f3fdd3ee77  crown-ledger-0.2.0.jar (usado nos testes)
 ```
 
-## Histórico — 0.1.0
+## Atualização e limites
 
-A [execução 38887031968](https://github.com/ROCKABITS/Mods/actions/runs/38887031968), sobre o commit `43654c451d32cf5e11cdbe8da943f3a0d406dcbe`, aprovou também 32 testes JUnit, 37 testes nativos independentes, 37 com os quatro companheiros e a validação do cliente. Os [artefactos e hashes 0.1.0](../mod-pronto/realm-markets-0.1.0.build.json) e as suas imagens mantêm-se preservados; usa a versão 0.1.1 para o ângulo de apresentação corrigido.
+Atualiza **os dois mods para 0.2.0 ou superior no servidor e em todos os clientes** quando os usas juntos. Faz uma cópia de segurança do mundo completo e dos perfis do Chronicles **antes de atualizar**. A migração nativa aprovada do formato 1 para o 2 conserva proprietários, lojas, stock e ganhos anteriores, com reserva fiscal inicialmente vazia. A persistência da reserva fiscal no formato 2 e a rejeição de dados ausentes, duplicados ou negativos também passaram. Depois da migração, regressar à versão antiga exige restaurar a cópia completa anterior; não basta trocar o JAR.
 
-## Limites
+O imposto fica em `data/realm_markets.dat` até Crown Ledger o recolher, normalmente em até um segundo de servidor ativo ou ao atualizar o cofre. Os registos dos dois mods, inventários e perfis usam a persistência normal do Minecraft. As verificações no thread principal não criam uma transação de disco única durante uma falha abrupta.
 
-A integração completa de **Chronicles RP 0.5.2, Origins e Jupiter** dentro do Minecraft não está incluída neste CI. Não se redistribuem os JARs originais para simular essa cobertura. A coexistência com os restantes mods, a rejeição de uma moeda Chronicles indisponível e os preços em cêntimos da interface não equivalem à execução do conjunto completo.
+O runtime completo de **Chronicles RP 0.5.2, Origins e Jupiter não foi executado** neste CI. A matemática em cêntimos, a rejeição de uma moeda Chronicles indisponível e os preços da interface não equivalem a executar esse conjunto completo. Não se redistribuem os JARs originais. Uma sessão com dois clientes reais e um reinício manual do mundo constituem validação adicional.
 
-Uma sessão com dois clientes reais e um reinício manual do mundo constituem validação adicional. Os testes automatizados usam jogadores de teste do servidor e verificações de persistência; as capturas de menus não demonstram transferências entre contas reais do Chronicles.
+A compilação Minecraft foi feita no GitHub Actions. O êxito do CI não comprova que o acesso ao Maven NeoForge desta sessão cloud tenha sido desbloqueado; os 45 testes independentes do domínio passaram também localmente com Java 21. Não se desativaram verificações TLS ou de checksums.
 
-Os registos do mundo, os inventários e os perfis usam a persistência normal do Minecraft. As verificações no thread principal não criam uma transação de disco única entre ficheiros numa falha abrupta.
+## Histórico preservado
 
-## Ambiente cloud
+- **0.1.1:** a [execução 38887747972](https://github.com/ROCKABITS/Mods/actions/runs/38887747972), sobre `6e8f8ab186f9ba1ba6eace7af3dab1cfb0475633`, aprovou **32 unitários, 37 nativos independente, 37 com os quatro companheiros publicados e o cliente Minecraft**. Corrigiu o ângulo dos modelos de item. Os [artefactos, hashes e proveniência](../mod-pronto/realm-markets-0.1.1.build.json) e as [imagens](../media/realm-markets/0.1.1/README.md) permanecem preservados.
+- **0.1.0:** a [execução 38887031968](https://github.com/ROCKABITS/Mods/actions/runs/38887031968), sobre `43654c451d32cf5e11cdbe8da943f3a0d406dcbe`, aprovou também **32 unitários, 37 nativos independente, 37 com os companheiros e o cliente**. A [proveniência e os artefactos antigos](../mod-pronto/realm-markets-0.1.0.build.json) continuam disponíveis.
 
-A preparação do ambiente reutiliza o JDK 21, o Gradle e o truststore verificados dos outros projetos. A última tentativa local de descarregar NeoForm 2.0.31 recebeu HTTP 403 no Maven NeoForge antes da compilação Minecraft. Os 32 testes independentes do domínio passaram localmente; a compilação Minecraft e as verificações completas acima passaram no GitHub Actions. Esse resultado não demonstra que o acesso local ao Maven foi desbloqueado. Não se desativou TLS nem se alteraram checksums para contornar o bloqueio.
+As versões 0.1.x não incluem imposto de mercado.
