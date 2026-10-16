@@ -92,6 +92,10 @@ public final class RpNamesGameTests {
             this.sent = sent;
         }
 
+        // This recording fixture has no network handshake or negotiated optional channels.
+        // Native server ticks must use their ordinary vanilla fallback instead of looking up
+        // channel attributes on its deliberately socket-free Connection.
+        @Override public boolean hasChannel(net.minecraft.resources.ResourceLocation payloadId) { return false; }
         @Override public void send(Packet<?> packet) { sent.add(packet); }
         @Override public void send(Packet<?> packet, PacketSendListener listener) { sent.add(packet); }
     }
