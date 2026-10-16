@@ -1,0 +1,35 @@
+{
+  "version": "0.2.0",
+  "source_commit": "1a6825f00d37ec07c194e96a4b05c003f892d8d1",
+  "tested_run": "https://github.com/ROCKABITS/Mods/actions/runs/38924972884",
+  "jar_sha256": "b57021c9efa3c7a6bd017d9b53d552963d10270da70bde5dfacad68a5f2e6866",
+  "zip_sha256": "85adb9881aa1ae42676437908300d55544a79eee763c9660dcddd527a73462b6",
+  "unit_tests": 45,
+  "standalone_native_tests": 45,
+  "companion_loaded_native_tests": 45,
+  "actual_client_validation": true,
+  "chronicles_runtime_tested": false,
+  "companion_jars": {
+    "contracts-bounties-0.3.1.jar": "9746951762a6762b2cb466ca695b7d43f8669c9dc1d55c12cae1b4bd17953f0c",
+    "realmcouncil-0.2.1.jar": "3e407c391f5e2f919e246d1d889323c57ea40b30e0387e9614ae32e0e9251a0a",
+    "realm-identity-0.1.0.jar": "9332d133320066d42bedb08fe129dee3da0de41f261f459140dea2a12ebf1606",
+    "crown-ledger-0.2.0.jar": "278826d3ed182e7ea33bcb57cbd8358cd9d39b5f5fb582b7029923f3fdd3ee77"
+  },
+  "fresh_counterpart": {
+    "project": "crown-ledger",
+    "source_commit": "1a6825f00d37ec07c194e96a4b05c003f892d8d1",
+    "jar": "crown-ledger-0.2.0.jar",
+    "jar_sha256": "278826d3ed182e7ea33bcb57cbd8358cd9d39b5f5fb582b7029923f3fdd3ee77"
+  },
+  "joint_release": "Crown Ledger and Realm Markets, built and tested from the same source commit",
+  "counterpart_unit_tests": 46,
+  "counterpart_native_tests": {
+    "gametests.log": 19,
+    "integration.log": 19
+  },
+  "screenshots": {
+    "realm-markets-stalls.png": "3e778629531852aeea0907cf217b0fdd7465c464130b60145e56cfee742b4a11",
+    "realm-markets-owner.png": "80be3f51957a3240adf60a228ad49d3a130c1ac1c78ff50f6289582561aab8fe",
+    "realm-markets-buying.png": "64769cba2846c499a8ba5fc69045b69400a32f0fadae476f714576acf157f238"
+  }
+}

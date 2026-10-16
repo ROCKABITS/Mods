@@ -1,0 +1,130 @@
+{
+  "success": true,
+  "message": "Two complete native stall models, all 32 placed states, production owner/buyer screens, currency parsing, quote payloads and small-screen scrolling passed.",
+  "screenshots": [
+    "realm-markets-stalls.png",
+    "realm-markets-owner.png",
+    "realm-markets-buying.png"
+  ],
+  "images": [
+    "realm-markets-stalls.png",
+    "realm-markets-owner.png",
+    "realm-markets-buying.png"
+  ],
+  "interfaceData": "Clearly labelled sample stock and funds in the actual production MarketScreen; not a live Chronicles profile or a record of actual trades",
+  "stallRendering": "Actual registered Minecraft item models, with the same original geometry and textures as the four-part placed stalls",
+  "interfaceChecks": [
+    "Production owner buttons send exact integer-cents pricing, whole stock/withdraw quantities, a title-only rename and an amount-free earnings claim; 100-tick refresh carries no client state.",
+    "Production buyer controls quote the displayed item, price and tax rate. A €20.00 purchase at 5% displays €1.00 tax and €19.00 seller net; refreshed rules update the sent rate. Stock, quantities, funds and unavailable Chronicles checks remain active.",
+    "An unavailable tax provider pauses purchases while owner stock withdrawal and amount-free net earnings claims stay usable.",
+    "Whole emerald pricing: a 20-emerald total at 5% displays 1 tax and 19 seller net; a 2-emerald total rounds tax down to 0. Standalone 0% preserves gross earnings. All owner controls remain reachable by scrolling at 320x240; expiry closes only the market screen."
+  ],
+  "recordedUiRequests": [
+    {
+      "operation": "configure",
+      "payload": {
+        "slot": 0,
+        "price": 125
+      }
+    },
+    {
+      "operation": "stock",
+      "payload": {
+        "slot": 0,
+        "quantity": 32
+      }
+    },
+    {
+      "operation": "withdraw",
+      "payload": {
+        "slot": 0,
+        "quantity": 7
+      }
+    },
+    {
+      "operation": "rename",
+      "payload": {
+        "title": "Aveline\u0027s Orchard"
+      }
+    },
+    {
+      "operation": "claim",
+      "payload": {}
+    },
+    {
+      "operation": "refresh",
+      "payload": {}
+    },
+    {
+      "operation": "buy",
+      "payload": {
+        "slot": 0,
+        "quantity": 3,
+        "price": 125,
+        "item": "minecraft:apple",
+        "marketTaxBasisPoints": 500
+      }
+    },
+    {
+      "operation": "buy",
+      "payload": {
+        "slot": 0,
+        "quantity": 16,
+        "price": 125,
+        "item": "minecraft:apple",
+        "marketTaxBasisPoints": 625
+      }
+    },
+    {
+      "operation": "claim",
+      "payload": {}
+    },
+    {
+      "operation": "configure",
+      "payload": {
+        "slot": 0,
+        "price": 2
+      }
+    }
+  ],
+  "requestTransport": "Recorded locally; no server requests",
+  "bakedQuadCounts": {
+    "realmmarkets:crimson_stall": 1308,
+    "Block{realmmarkets:crimson_stall}[facing\u003dnorth,part\u003d0]": 450,
+    "Block{realmmarkets:crimson_stall}[facing\u003dnorth,part\u003d1]": 408,
+    "Block{realmmarkets:crimson_stall}[facing\u003dnorth,part\u003d2]": 396,
+    "Block{realmmarkets:crimson_stall}[facing\u003dnorth,part\u003d3]": 342,
+    "Block{realmmarkets:crimson_stall}[facing\u003dsouth,part\u003d0]": 450,
+    "Block{realmmarkets:crimson_stall}[facing\u003dsouth,part\u003d1]": 408,
+    "Block{realmmarkets:crimson_stall}[facing\u003dsouth,part\u003d2]": 396,
+    "Block{realmmarkets:crimson_stall}[facing\u003dsouth,part\u003d3]": 342,
+    "Block{realmmarkets:crimson_stall}[facing\u003dwest,part\u003d0]": 450,
+    "Block{realmmarkets:crimson_stall}[facing\u003dwest,part\u003d1]": 408,
+    "Block{realmmarkets:crimson_stall}[facing\u003dwest,part\u003d2]": 396,
+    "Block{realmmarkets:crimson_stall}[facing\u003dwest,part\u003d3]": 342,
+    "Block{realmmarkets:crimson_stall}[facing\u003deast,part\u003d0]": 450,
+    "Block{realmmarkets:crimson_stall}[facing\u003deast,part\u003d1]": 408,
+    "Block{realmmarkets:crimson_stall}[facing\u003deast,part\u003d2]": 396,
+    "Block{realmmarkets:crimson_stall}[facing\u003deast,part\u003d3]": 342,
+    "realmmarkets:sage_stall": 1308,
+    "Block{realmmarkets:sage_stall}[facing\u003dnorth,part\u003d0]": 450,
+    "Block{realmmarkets:sage_stall}[facing\u003dnorth,part\u003d1]": 408,
+    "Block{realmmarkets:sage_stall}[facing\u003dnorth,part\u003d2]": 396,
+    "Block{realmmarkets:sage_stall}[facing\u003dnorth,part\u003d3]": 342,
+    "Block{realmmarkets:sage_stall}[facing\u003dsouth,part\u003d0]": 450,
+    "Block{realmmarkets:sage_stall}[facing\u003dsouth,part\u003d1]": 408,
+    "Block{realmmarkets:sage_stall}[facing\u003dsouth,part\u003d2]": 396,
+    "Block{realmmarkets:sage_stall}[facing\u003dsouth,part\u003d3]": 342,
+    "Block{realmmarkets:sage_stall}[facing\u003dwest,part\u003d0]": 450,
+    "Block{realmmarkets:sage_stall}[facing\u003dwest,part\u003d1]": 408,
+    "Block{realmmarkets:sage_stall}[facing\u003dwest,part\u003d2]": 396,
+    "Block{realmmarkets:sage_stall}[facing\u003dwest,part\u003d3]": 342,
+    "Block{realmmarkets:sage_stall}[facing\u003deast,part\u003d0]": 450,
+    "Block{realmmarkets:sage_stall}[facing\u003deast,part\u003d1]": 408,
+    "Block{realmmarkets:sage_stall}[facing\u003deast,part\u003d2]": 396,
+    "Block{realmmarkets:sage_stall}[facing\u003deast,part\u003d3]": 342
+  },
+  "validatedBlockStates": 32,
+  "windowWidth": 1600,
+  "windowHeight": 900
+}
