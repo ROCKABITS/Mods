@@ -13,6 +13,7 @@ class PolicyTest {
         assertEquals(0, policy.minimumReputation());
         assertEquals(PERCENTAGE, policy.taxMode());
         assertEquals(0, policy.contractTaxBasisPoints());
+        assertEquals(0, policy.marketTaxBasisPoints());
         assertEquals(0, policy.effectiveFixedTax());
         assertEquals(0, policy.salary());
         assertEquals(168, policy.periodHours());
@@ -32,6 +33,32 @@ class PolicyTest {
         assertEquals(0, fixed.contractTaxBasisPoints());
         assertEquals(7, fixed.effectiveFixedTax());
         assertEquals(3_600_000L, fixed.periodMillis());
+        assertEquals(0, percentage.marketTaxBasisPoints());
+        assertEquals(0, fixed.marketTaxBasisPoints());
+    }
+
+    @Test
+    void marketSalesPercentageIsIndependentOfContractAndFixedTaxModes() {
+        for (var mode : Policy.TaxMode.values()) {
+            var policy = new Policy(30, mode, 1250, 7, 20, 24, 10, CHRONICLES, 2, 6, 500);
+
+            assertEquals(500, policy.marketTaxBasisPoints());
+            assertEquals(mode == PERCENTAGE ? 1250 : 0, policy.contractTaxBasisPoints());
+            assertEquals(mode == FIXED ? 7 : 0, policy.effectiveFixedTax());
+            assertEquals(20, policy.salary());
+        }
+    }
+
+    @Test
+    void marketSalesRateAllowsZeroThroughOneHundredPercentAndRejectsInvalidBasisPoints() {
+        for (var rate : new int[]{0, 1, 500, 9999, 10000}) {
+            var policy = new Policy(0, FIXED, 0, 0, 0, 1, 1, EMERALD, 1, 3, rate);
+            assertEquals(rate, policy.marketTaxBasisPoints());
+        }
+        for (var rate : new int[]{Integer.MIN_VALUE, -1, 10001, Integer.MAX_VALUE}) {
+            assertThrows(IllegalArgumentException.class,
+                    () -> new Policy(0, PERCENTAGE, 0, 0, 0, 1, 1, EMERALD, 1, 3, rate));
+        }
     }
 
     @Test

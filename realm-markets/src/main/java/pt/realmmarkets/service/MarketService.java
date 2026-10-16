@@ -28,12 +28,14 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.phys.Vec3;
+import pt.realmmarkets.api.MarketsApi;
 import pt.realmmarkets.block.MarketStallBlock;
 import pt.realmmarkets.compat.ChroniclesBridge;
 import pt.realmmarkets.data.MarketData;
 import pt.realmmarkets.domain.Currency;
 import pt.realmmarkets.domain.Listing;
 import pt.realmmarkets.domain.MarketLedger;
+import pt.realmmarkets.domain.SaleAmounts;
 import pt.realmmarkets.domain.Stall;
 import pt.realmmarkets.network.MarketNetwork;
 
@@ -152,7 +154,7 @@ public final class MarketService {
                     if (current.unitPrice() != number(request, "price") || !current.item().equals(request.get("item"))) {
                         throw failure("offer_changed");
                     }
-                    trustedBuy(player, slot, integer(request, "quantity"));
+                    buy(player, slot, integer(request, "quantity"), integer(request, "marketTaxBasisPoints"));
                     yield PREFIX + "purchased";
                 }
                 case "claim" -> { trustedClaim(player); yield PREFIX + "claimed"; }
@@ -179,6 +181,13 @@ public final class MarketService {
         view.put("open", true); view.put("owner", owner); view.put("title", stall.title());
         view.put("currency", stall.currency().name()); view.put("earnings", owner ? stall.earnings() : 0L);
         view.put("balance", balance); view.put("message", ""); view.put("chroniclesAvailable", chronicles);
+        // A treasury outage must not prevent owners recovering stock or existing earnings.
+        int taxBasisPoints = 0;
+        boolean treasuryAvailable = true;
+        try { taxBasisPoints = MarketsApi.salesTaxBasisPoints(player.getServer()); }
+        catch (RuntimeException | LinkageError unavailable) { treasuryAvailable = false; }
+        view.put("marketTaxBasisPoints", taxBasisPoints);
+        view.put("treasuryAvailable", treasuryAvailable);
         view.put("sample", owner && plain(player.getMainHandItem())
                 ? BuiltInRegistries.ITEM.getKey(player.getMainHandItem().getItem()).toString() : "");
         List<Map<String, Object>> offers = new ArrayList<>();
@@ -224,12 +233,19 @@ public final class MarketService {
     }
 
     public static void trustedBuy(ServerPlayer player, int slot, int quantity) {
+        buy(player, slot, quantity, null);
+    }
+
+    private static void buy(ServerPlayer player, int slot, int quantity, Integer expectedTaxBasisPoints) {
         Stall stall = requireSession(player);
+        int taxBasisPoints = MarketsApi.salesTaxBasisPoints(player.getServer());
+        if (expectedTaxBasisPoints != null && taxBasisPoints != expectedTaxBasisPoints) throw failure("offer_changed");
         Listing listing = listing(stall, slot);
         Item item = item(listing.item());
         MarketData data = MarketData.get(player.getServer());
         MarketLedger next = data.ledger.copy();
-        long cost = next.purchase(stall.id(), player.getUUID(), slot, quantity);
+        SaleAmounts amounts = next.purchase(stall.id(), player.getUUID(), slot, quantity, taxBasisPoints);
+        long cost = amounts.gross();
         List<ItemStack> inventory = copyInventory(player);
         if (stall.currency() == Currency.EMERALD) consume(inventory, Items.EMERALD, cost, "insufficient_funds");
         insert(inventory, item, quantity);
@@ -370,7 +386,7 @@ public final class MarketService {
             case "refresh", "claim", "close" -> Set.of();
             case "configure" -> Set.of("slot", "price");
             case "stock", "withdraw" -> Set.of("slot", "quantity");
-            case "buy" -> Set.of("slot", "quantity", "price", "item");
+            case "buy" -> Set.of("slot", "quantity", "price", "item", "marketTaxBasisPoints");
             case "rename" -> Set.of("title");
             default -> throw new IllegalArgumentException();
         };
@@ -435,5 +451,8 @@ public final class MarketService {
 
     private static IllegalStateException failure(String key) { return new IllegalStateException(PREFIX + key); }
     public static void logout(UUID player) { SESSIONS.remove(player); }
-    public static void stop(MinecraftServer server) { SESSIONS.entrySet().removeIf(entry -> entry.getValue().server() == server); }
+    public static void stop(MinecraftServer server) {
+        SESSIONS.entrySet().removeIf(entry -> entry.getValue().server() == server);
+        MarketsApi.stop(server);
+    }
 }

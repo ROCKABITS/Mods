@@ -49,4 +49,5 @@ if visual_report.exists():
     kind = 'notice' if report.get('success') else 'error'
     print(f'::{kind} title=Actual Minecraft client validation::{message}')
 
-Path(target).write_text('\n'.join(parts), encoding='utf-8')
+with Path(target).open('a', encoding='utf-8') as summary:
+    summary.write('\n'.join(parts) + '\n')

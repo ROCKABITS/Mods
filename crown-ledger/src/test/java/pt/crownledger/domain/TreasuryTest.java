@@ -531,6 +531,54 @@ class TreasuryTest {
         assertEquals(20, treasury.balance(EMERALD));
     }
 
+    @Test
+    void marketPolicyAndTaxHistorySurviveSnapshotCopiesWithoutChangingOldObligations() {
+        var policy = new Policy(30, FIXED, 1250, 7, 20, 24, 10, CHRONICLES, 2, 6, 500);
+        var treasury = restored(policy, Map.of(EMERALD, 50L, CHRONICLES, 2000L),
+                Map.of(ALICE, Map.of(CHRONICLES, 1700L)), Map.of(BOB, Map.of(CHRONICLES, 300L)), null);
+        treasury.recordActivity(CAROL, "Carol", 4, START + 1);
+        var before = treasury.snapshot();
+
+        var copy = treasury.copy();
+        copy.addFunds(CHRONICLES, 100, MARKET_TAX, null, "Market sales tax", START + 2);
+        var restored = new Treasury(copy.snapshot());
+
+        assertEquals(before, treasury.snapshot());
+        assertEquals(copy.snapshot(), restored.snapshot());
+        assertEquals(policy, restored.policy());
+        assertEquals(500, restored.policy().marketTaxBasisPoints());
+        assertEquals(2100, restored.balance(CHRONICLES));
+        assertEquals(50, restored.balance(EMERALD));
+        assertEquals(1700, restored.claims(ALICE, CHRONICLES));
+        assertEquals(300, restored.taxDue(BOB, CHRONICLES));
+        assertEquals(new Treasury.Activity("Carol", 4), restored.activitySnapshot().get(CAROL));
+        assertEquals(MARKET_TAX, restored.history().getFirst().kind());
+        assertEquals(100, restored.history().getFirst().amount());
+        assertNull(restored.history().getFirst().actor());
+    }
+
+    @Test
+    void marketRevenueCanCompleteFrozenPayrollWithoutReassessingTheSellerOrChangingTheRate() {
+        var policy = new Policy(0, FIXED, 2500, 5, 20, 1, 10, EMERALD, 1, 3, 500);
+        var treasury = initialized(policy);
+        eligible(treasury);
+        treasury.addFunds(EMERALD, 29, DEPOSIT, MANAGER, "Payroll budget", START + 1);
+        treasury.cycle(START + HOUR);
+        assertNotNull(treasury.pendingBatch());
+
+        treasury.addFunds(EMERALD, 1, MARKET_TAX, null, "Market sales tax", START + HOUR + 1);
+        assertTrue(treasury.settlePending(START + HOUR + 1));
+
+        assertEquals(15, treasury.claims(ALICE, EMERALD));
+        assertEquals(15, treasury.claims(BOB, EMERALD));
+        assertEquals(0, treasury.balance(EMERALD));
+        assertTrue(treasury.taxDueSnapshot().isEmpty());
+        assertEquals(500, treasury.policy().marketTaxBasisPoints());
+        assertEquals(0, treasury.policy().contractTaxBasisPoints());
+        assertEquals(5, treasury.policy().effectiveFixedTax());
+        assertEquals(MARKET_TAX, treasury.history().get(1).kind());
+    }
+
     private static Treasury initialized(Policy policy) {
         var treasury = new Treasury();
         treasury.setPolicy(policy, MANAGER, START);

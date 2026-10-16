@@ -23,6 +23,7 @@ import org.slf4j.Logger;
 import pt.crownledger.block.BlockRegistry;
 import pt.crownledger.compat.ChroniclesBridge;
 import pt.crownledger.compat.ContractsBridge;
+import pt.crownledger.compat.MarketsBridge;
 import pt.crownledger.compat.RealmBridge;
 import pt.crownledger.compat.WalletBridge;
 import pt.crownledger.data.TreasuryData;
@@ -40,6 +41,8 @@ public final class CrownService {
     private static final Map<UUID, Session> SESSIONS = new HashMap<>();
     private static final Map<MinecraftServer, Long> NEXT_MINUTE = new HashMap<>();
     private static final Map<MinecraftServer, OnlineActivity> ONLINE_ACTIVITY = new HashMap<>();
+    private static final Map<MinecraftServer, Integer> NEXT_MARKET_SWEEP = new HashMap<>();
+    private static final Map<MinecraftServer, Long> NEXT_MARKET_WARNING = new HashMap<>();
     private static final long SESSION_NANOS = 300_000_000_000L;
     private static final long MINUTE_NANOS = 60_000_000_000L;
 
@@ -65,13 +68,17 @@ public final class CrownService {
             Currency currency = WalletBridge.activeCurrency();
             if (previous.currency() != currency) next.setPolicy(new Policy(previous.minimumReputation(), previous.taxMode(),
                     previous.taxBasisPoints(), previous.fixedTax(), previous.salary(), previous.periodHours(),
-                    previous.activeMinutes(), currency, previous.reputationPerPublicContract(), previous.dailyReputationLimit()),
+                    previous.activeMinutes(), currency, previous.reputationPerPublicContract(), previous.dailyReputationLimit(),
+                    previous.marketTaxBasisPoints()),
                     null, System.currentTimeMillis());
             next.cycle(System.currentTimeMillis());
             commit(data, next);
         }
         try { ContractsBridge.start(server); }
         catch (RuntimeException | LinkageError ex) { LOG.error("Contracts integration could not start; treasury funds are retained", ex); }
+        try { MarketsBridge.start(server); }
+        catch (RuntimeException | LinkageError ex) { LOG.error("Markets integration could not start; market purchases remain unavailable", ex); }
+        NEXT_MARKET_SWEEP.put(server, server.getTickCount() + 20);
         ONLINE_ACTIVITY.put(server, new OnlineActivity());
         for (ServerPlayer player : server.getPlayerList().getPlayers()) login(player);
         NEXT_MINUTE.put(server, System.nanoTime() + MINUTE_NANOS);
@@ -80,9 +87,13 @@ public final class CrownService {
     public static void stop(MinecraftServer server) {
         NEXT_MINUTE.remove(server);
         ONLINE_ACTIVITY.remove(server);
+        NEXT_MARKET_SWEEP.remove(server);
+        NEXT_MARKET_WARNING.remove(server);
         SESSIONS.clear();
         try { ContractsBridge.stop(); }
         catch (RuntimeException | LinkageError ex) { LOG.warn("Contracts integration could not unregister cleanly", ex); }
+        try { MarketsBridge.stop(); }
+        catch (RuntimeException | LinkageError ex) { LOG.warn("Markets integration could not unregister cleanly", ex); }
     }
 
     public static void login(ServerPlayer player) {
@@ -101,6 +112,12 @@ public final class CrownService {
     public static void tick(MinecraftServer server) {
         requireThread(server);
         long nowNanos = System.nanoTime();
+        int tick = server.getTickCount();
+        Integer nextSweep = NEXT_MARKET_SWEEP.get(server);
+        if (nextSweep == null || tick - nextSweep >= 0) {
+            NEXT_MARKET_SWEEP.put(server, tick + 20);
+            sweepMarketsSafely(server);
+        }
         Long next = NEXT_MINUTE.get(server);
         boolean minuteDue = next != null && nowNanos - next >= 0;
         if (next == null) NEXT_MINUTE.put(server, nowNanos + MINUTE_NANOS);
@@ -204,7 +221,8 @@ public final class CrownService {
                             number(request, "salary", old.salary()), integer(request, "periodHours", old.periodHours()),
                             integer(request, "activeMinutes", old.activeMinutes()), currency(request, "currency", old.currency()),
                             integer(request, "reputationReward", old.reputationPerPublicContract()),
-                            integer(request, "dailyReputationLimit", old.dailyReputationLimit())));
+                            integer(request, "dailyReputationLimit", old.dailyReputationLimit()),
+                            numericInteger(request, "marketTaxBasisPoints", old.marketTaxBasisPoints())));
                     message = "gui.kingdomtreasury.policy_saved";
                 }
                 case "publish" -> {
@@ -320,6 +338,7 @@ public final class CrownService {
     /** Preflight the destination before transferring any tax/refund from Contracts escrow. */
     public static void sweep(MinecraftServer server) {
         requireThread(server);
+        sweepMarketsSafely(server);
         if (!ContractsBridge.available()) return;
         for (Currency currency : Currency.values()) {
             long amount = Math.min(ContractsBridge.balance(server, currency), ChroniclesBridge.MAX_CENTS);
@@ -332,6 +351,45 @@ public final class CrownService {
             if (ContractsBridge.debit(server, currency, amount) != amount)
                 throw new IllegalStateException("gui.kingdomtreasury.contracts_unavailable");
             commit(data, next);
+        }
+    }
+
+    /** Debit only funded Markets escrow after the complete destination mutation has been validated. */
+    public static void sweepMarkets(MinecraftServer server) {
+        requireThread(server);
+        if (!MarketsBridge.available()) return;
+        Throwable failure = null;
+        for (Currency currency : Currency.values()) {
+            try {
+                long amount = Math.min(MarketsBridge.balance(server, currency), ChroniclesBridge.MAX_CENTS);
+                if (amount == 0) continue;
+                TreasuryData data = TreasuryData.get(server);
+                Treasury next = data.treasury.copy();
+                long now = System.currentTimeMillis();
+                next.addFunds(currency, amount, Kind.MARKET_TAX, null, "gui.kingdomtreasury.market_tax_income", now);
+                next.settlePending(now);
+                if (MarketsBridge.debit(server, currency, amount) != amount)
+                    throw new IllegalStateException("gui.kingdomtreasury.markets_unavailable");
+                commit(data, next);
+            } catch (RuntimeException | LinkageError ex) {
+                // Currency ledgers are independent: a full emerald account must not block digital payroll funding.
+                if (failure == null) failure = ex;
+                else failure.addSuppressed(ex);
+            }
+        }
+        if (failure instanceof RuntimeException runtime) throw runtime;
+        if (failure instanceof LinkageError linkage) throw linkage;
+    }
+
+    private static void sweepMarketsSafely(MinecraftServer server) {
+        try { sweepMarkets(server); }
+        catch (RuntimeException | LinkageError ex) {
+            long now = System.nanoTime();
+            Long nextWarning = NEXT_MARKET_WARNING.get(server);
+            if (nextWarning == null || now - nextWarning >= 0) {
+                NEXT_MARKET_WARNING.put(server, now + MINUTE_NANOS);
+                LOG.warn("Market tax remains in Markets escrow; treasury transfer could not complete", ex);
+            }
         }
     }
 
@@ -379,6 +437,7 @@ public final class CrownService {
 
     public static String snapshot(ServerPlayer player, String message) {
         requireSession(player);
+        sweepMarketsSafely(player.getServer());
         Treasury treasury = TreasuryData.get(player.getServer()).treasury;
         Policy policy = treasury.policy();
         Map<String, Object> view = new LinkedHashMap<>();
@@ -415,6 +474,7 @@ public final class CrownService {
                 Currency.CHRONICLES.name(), treasury.claims(player.getUUID(), Currency.CHRONICLES)));
         Map<String, Object> rules = new LinkedHashMap<>();
         rules.put("taxMode", policy.taxMode()); rules.put("taxBasisPoints", policy.taxBasisPoints());
+        rules.put("marketTaxBasisPoints", policy.marketTaxBasisPoints());
         rules.put("fixedTax", policy.fixedTax()); rules.put("salary", policy.salary());
         rules.put("periodHours", policy.periodHours()); rules.put("activeMinutes", policy.activeMinutes());
         rules.put("minimumReputation", policy.minimumReputation()); rules.put("currency", policy.currency());
@@ -425,6 +485,7 @@ public final class CrownService {
         view.put("pendingPayrollCurrency", pending == null ? policy.currency().name() : pending.currency().name());
         view.put("taxDue", treasury.taxDue(player.getUUID(), policy.currency()));
         view.put("contractsAvailable", ContractsBridge.available()); view.put("realmAvailable", RealmBridge.loaded());
+        view.put("marketsAvailable", MarketsBridge.available());
         List<Map<String, Object>> contracts = List.of();
         if (ContractsBridge.available()) {
             try { contracts = ContractsBridge.contracts(player.getServer()); }
@@ -457,6 +518,13 @@ public final class CrownService {
         return new BigDecimal(request.get(key).getAsString()).longValueExact();
     }
     private static int integer(JsonObject request, String key, int fallback) { return Math.toIntExact(number(request, key, fallback)); }
+    private static int numericInteger(JsonObject request, String key, int fallback) {
+        if (!request.has(key)) return fallback;
+        var value = request.get(key);
+        if (!value.isJsonPrimitive() || !value.getAsJsonPrimitive().isNumber())
+            throw new IllegalArgumentException("gui.kingdomtreasury.invalid_request");
+        return integer(request, key, fallback);
+    }
     private static Currency currency(JsonObject request, String key, Currency fallback) {
         return Currency.valueOf(text(request, key, fallback.name(), 16));
     }

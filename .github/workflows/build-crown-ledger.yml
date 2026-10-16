@@ -1,21 +1,24 @@
-name: Build Crown Ledger
+name: Build Crown Ledger and Realm Markets
 on:
   push:
     branches: [main]
     paths:
       - 'crown-ledger/**'
+      - 'realm-markets/**'
       - '.github/workflows/build-crown-ledger.yml'
       - '.github/scripts/package_crown.py'
+      - '.github/scripts/package_markets.py'
+      - '.github/scripts/joint_economy_release.py'
   workflow_dispatch:
 permissions:
   contents: write
 concurrency:
-  group: crown-build-${{ github.ref }}
+  group: kingdom-economy-build-${{ github.ref }}
   cancel-in-progress: true
 jobs:
   build:
     runs-on: ubuntu-latest
-    timeout-minutes: 35
+    timeout-minutes: 50
     defaults:
       run:
         working-directory: crown-ledger
@@ -29,31 +32,36 @@ jobs:
           distribution: temurin
           java-version: '21'
           cache: gradle
-      - name: Mod version
+      - name: Joint release version
         id: mod
         run: |
           version=$(sed -n 's/^mod_version=//p' gradle.properties)
+          markets_version=$(sed -n 's/^mod_version=//p' ../realm-markets/gradle.properties)
           [[ "$version" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]
+          [[ "$version" == "$markets_version" ]]
           echo "version=$version" >> "$GITHUB_OUTPUT"
-      - name: Build and unit tests
+      - name: Build Crown production JAR and unit tests
         run: ./gradlew --no-daemon --console=plain build 2>&1 | tee build.log
-      - name: Standalone native tests
+      - name: Build Markets production JAR and unit tests
+        working-directory: realm-markets
+        run: ./gradlew --no-daemon --console=plain build 2>&1 | tee build.log
+      - name: Record both production JARs from this commit
+        working-directory: .
+        run: python3 .github/scripts/joint_economy_release.py snapshot
+      - name: Crown standalone native tests
         run: ./gradlew --no-daemon --console=plain -PcrownGameTests runGameTestServer 2>&1 | tee gametests.log
-      - name: Install tested companion mods
-        run: |
-          mkdir -p compat-libs
-          cp ../mod-pronto/contracts-bounties-0.3.1.jar ../mod-pronto/realmcouncil-0.2.1.jar compat-libs/
-          python3 - <<'PY'
-          import hashlib, json
-          from pathlib import Path
-          for project in ['contracts-bounties-0.3.1', 'realmcouncil-0.2.1']:
-              meta = json.loads(Path('../mod-pronto/' + project + '.build.json').read_text())
-              actual = hashlib.sha256(Path('compat-libs/' + project + '.jar').read_bytes()).hexdigest()
-              assert actual == meta['jar_sha256'], project
-          PY
-      - name: Actual Contracts and Realm Council integration tests
+      - name: Markets standalone native tests
+        working-directory: realm-markets
+        run: ./gradlew --no-daemon --console=plain -PmarketGameTests runGameTestServer 2>&1 | tee gametests.log
+      - name: Install fresh counterparts and verified released companions
+        working-directory: .
+        run: python3 .github/scripts/joint_economy_release.py install
+      - name: Crown native integration with fresh Markets and released roleplay mods
         run: ./gradlew --no-daemon --console=plain -PcrownGameTests -PintegrationTests runGameTestServer 2>&1 | tee integration.log
-      - name: Actual Minecraft chest and menu validation
+      - name: Markets native integration with fresh Crown and released roleplay mods
+        working-directory: realm-markets
+        run: ./gradlew --no-daemon --console=plain -PmarketGameTests -PintegrationTests runGameTestServer 2>&1 | tee integration.log
+      - name: Actual Minecraft Crown chest and tax menu validation
         env:
           LIBGL_ALWAYS_SOFTWARE: '1'
           ALSOFT_DRIVERS: 'null'
@@ -64,20 +72,42 @@ jobs:
           fi
           timeout 300s xvfb-run -a -s '-screen 0 1600x900x24' ./gradlew --no-daemon --console=plain -PcrownVisualTests runClient 2>&1 | tee visual-client.log
           python3 -c "import json; report=json.load(open('qa-results/crown-client/result.json')); assert report['success'], report"
-      - name: Validation summary
+      - name: Actual Minecraft market stalls and tax breakdown validation
+        working-directory: realm-markets
+        env:
+          LIBGL_ALWAYS_SOFTWARE: '1'
+          ALSOFT_DRIVERS: 'null'
+        run: |
+          timeout 300s xvfb-run -a -s '-screen 0 1600x900x24' ./gradlew --no-daemon --console=plain -PmarketVisualTests runClient 2>&1 | tee visual-client.log
+          python3 -c "import json; report=json.load(open('qa-results/markets-client/result.json')); assert report['success'], report"
+      - name: Crown validation summary
         if: always()
         run: python3 tools/ci_summary.py
-      - name: Package tested release and media
+      - name: Markets validation summary
+        if: always()
+        working-directory: realm-markets
+        run: python3 tools/ci_summary.py
+      - name: Gate and package both tested releases and media
         working-directory: .
-        run: python3 .github/scripts/package_crown.py
-      - name: Downloadable JAR
+        run: |
+          python3 .github/scripts/joint_economy_release.py check
+          python3 .github/scripts/package_crown.py
+          python3 .github/scripts/package_markets.py
+      - name: Downloadable Crown JAR
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
           name: crown-ledger-${{ steps.mod.outputs.version }}
           path: crown-ledger/build/libs/crown-ledger-${{ steps.mod.outputs.version }}.jar
           if-no-files-found: error
           retention-days: 30
-      - name: Publish tested release
+      - name: Downloadable Markets JAR
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: realm-markets-${{ steps.mod.outputs.version }}
+          path: realm-markets/build/libs/realm-markets-${{ steps.mod.outputs.version }}.jar
+          if-no-files-found: error
+          retention-days: 30
+      - name: Publish both tested releases in one commit
         if: github.ref == 'refs/heads/main'
         working-directory: .
         env:
@@ -89,14 +119,15 @@ jobs:
             exit 1
           fi
           git add -- "mod-pronto/crown-ledger-$MOD_VERSION.jar" "mod-pronto/crown-ledger-$MOD_VERSION.zip" "mod-pronto/crown-ledger-$MOD_VERSION.sha256" "mod-pronto/crown-ledger-$MOD_VERSION.build.json" "media/crown-ledger/$MOD_VERSION/"
+          git add -- "mod-pronto/realm-markets-$MOD_VERSION.jar" "mod-pronto/realm-markets-$MOD_VERSION.zip" "mod-pronto/realm-markets-$MOD_VERSION.sha256" "mod-pronto/realm-markets-$MOD_VERSION.build.json" "media/realm-markets/$MOD_VERSION/"
           if git diff --cached --quiet; then exit 0; fi
-          git -c user.name='github-actions[bot]' -c user.email='41898282+github-actions[bot]@users.noreply.github.com' commit -m "Publish tested Crown Ledger $MOD_VERSION [skip ci]"
+          git -c user.name='github-actions[bot]' -c user.email='41898282+github-actions[bot]@users.noreply.github.com' commit -m "Publish jointly tested Crown Ledger and Realm Markets $MOD_VERSION [skip ci]"
           git push origin HEAD:refs/heads/main
       - name: Test evidence
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
-          name: crown-validation-${{ github.run_id }}
+          name: economy-validation-${{ github.run_id }}
           path: |
             crown-ledger/build.log
             crown-ledger/gametests.log
@@ -105,4 +136,12 @@ jobs:
             crown-ledger/build/test-results/test/
             crown-ledger/qa-results/crown-client/
             crown-ledger/run/logs/latest.log
+            crown-ledger/build/joint-release/manifest.json
+            realm-markets/build.log
+            realm-markets/gametests.log
+            realm-markets/integration.log
+            realm-markets/visual-client.log
+            realm-markets/build/test-results/test/
+            realm-markets/qa-results/markets-client/
+            realm-markets/run/logs/latest.log
           retention-days: 14

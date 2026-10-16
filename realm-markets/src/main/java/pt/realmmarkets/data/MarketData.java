@@ -2,6 +2,7 @@ package pt.realmmarkets.data;
 
 import java.nio.file.Files;
 import java.util.ArrayList;
+import java.util.EnumMap;
 import java.util.List;
 import java.util.Objects;
 import net.minecraft.core.HolderLookup;
@@ -43,7 +44,8 @@ public final class MarketData extends SavedData {
 
     public static MarketData load(CompoundTag tag, HolderLookup.Provider lookup) {
         require(tag, "version", Tag.TAG_INT);
-        if (tag.getInt("version") != 1) throw new IllegalStateException("Unsupported market registry version.");
+        int version = tag.getInt("version");
+        if (version != 1 && version != 2) throw new IllegalStateException("Unsupported market registry version.");
         ListTag entries = compounds(tag, "stalls", 10_000);
         List<Stall> stalls = new ArrayList<>(entries.size());
         for (int i = 0; i < entries.size(); i++) {
@@ -65,14 +67,29 @@ public final class MarketData extends SavedData {
                     entry.getLong("position"), entry.getString("title"), Currency.valueOf(entry.getString("currency")),
                     entry.getLong("earnings"), listings));
         }
+        EnumMap<Currency, Long> taxes = new EnumMap<>(Currency.class);
+        if (version == 2) {
+            ListTag balances = compounds(tag, "taxBalances", Currency.values().length);
+            for (int index = 0; index < balances.size(); index++) {
+                CompoundTag balance = balances.getCompound(index);
+                require(balance, "currency", Tag.TAG_STRING);
+                require(balance, "amount", Tag.TAG_LONG);
+                Currency currency = Currency.valueOf(balance.getString("currency"));
+                long amount = balance.getLong("amount");
+                if (amount < 0 || amount > MarketLedger.MAX_EARNINGS || taxes.putIfAbsent(currency, amount) != null) {
+                    throw new IllegalStateException("Invalid market sales tax balance.");
+                }
+            }
+        }
         MarketData data = new MarketData();
-        data.ledger = new MarketLedger(stalls);
+        data.ledger = new MarketLedger(stalls, taxes);
+        if (version == 1) data.setDirty();
         return data;
     }
 
     @Override
     public CompoundTag save(CompoundTag tag, HolderLookup.Provider lookup) {
-        tag.putInt("version", 1);
+        tag.putInt("version", 2);
         ListTag entries = new ListTag();
         for (Stall stall : ledger.stalls()) {
             CompoundTag entry = new CompoundTag();
@@ -91,6 +108,16 @@ public final class MarketData extends SavedData {
             entries.add(entry);
         }
         tag.put("stalls", entries);
+        ListTag taxBalances = new ListTag();
+        for (Currency currency : Currency.values()) {
+            long amount = ledger.taxBalance(currency);
+            if (amount == 0) continue;
+            CompoundTag balance = new CompoundTag();
+            balance.putString("currency", currency.name());
+            balance.putLong("amount", amount);
+            taxBalances.add(balance);
+        }
+        tag.put("taxBalances", taxBalances);
         return tag;
     }
 

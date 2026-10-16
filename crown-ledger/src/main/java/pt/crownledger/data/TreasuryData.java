@@ -38,12 +38,13 @@ public final class TreasuryData extends SavedData {
 
     public static TreasuryData load(CompoundTag tag, HolderLookup.Provider lookup) {
         type(tag, "version", Tag.TAG_INT);
-        if (tag.getInt("version") != 1) throw new IllegalStateException("Unsupported Crown Ledger storage version");
+        int version = tag.getInt("version");
+        if (version != 1 && version != 2) throw new IllegalStateException("Unsupported Crown Ledger storage version");
         type(tag, "policy", Tag.TAG_COMPOUND);
         type(tag, "periodStartedAt", Tag.TAG_LONG);
         type(tag, "nextCycleAt", Tag.TAG_LONG);
         if (tag.contains("standaloneManager")) uuid(tag, "standaloneManager");
-        Policy policy = readPolicy(tag.getCompound("policy"));
+        Policy policy = readPolicy(tag.getCompound("policy"), version);
         Map<Currency, Long> balances = new EnumMap<>(Currency.class);
         for (Tag raw : list(tag, "balances")) {
             CompoundTag entry = (CompoundTag) raw;
@@ -88,12 +89,13 @@ public final class TreasuryData extends SavedData {
         result.treasury = new Treasury(new Treasury.Snapshot(policy, balances, readAmounts(tag, "claims"),
                 readAmounts(tag, "taxDue"), activity, history, pending, tag.getLong("periodStartedAt"),
                 tag.getLong("nextCycleAt"), tag.hasUUID("standaloneManager") ? tag.getUUID("standaloneManager") : null));
+        if (version == 1) result.setDirty();
         return result;
     }
 
     @Override public CompoundTag save(CompoundTag tag, HolderLookup.Provider lookup) {
         Treasury.Snapshot saved = treasury.snapshot();
-        tag.putInt("version", 1);
+        tag.putInt("version", 2);
         tag.put("policy", writePolicy(saved.policy()));
         tag.putLong("periodStartedAt", saved.periodStartedAt()); tag.putLong("nextCycleAt", saved.nextCycleAt());
         if (saved.standaloneManager() == null) tag.remove("standaloneManager");
@@ -130,14 +132,16 @@ public final class TreasuryData extends SavedData {
         return tag;
     }
 
-    private static Policy readPolicy(CompoundTag tag) {
+    private static Policy readPolicy(CompoundTag tag, int version) {
         for (String key : List.of("minimumReputation", "taxBasisPoints", "periodHours", "activeMinutes", "reputationPerPublicContract", "dailyReputationLimit")) type(tag, key, Tag.TAG_INT);
         for (String key : List.of("fixedTax", "salary")) type(tag, key, Tag.TAG_LONG);
         for (String key : List.of("taxMode", "currency")) type(tag, key, Tag.TAG_STRING);
+        if (version >= 2) type(tag, "marketTaxBasisPoints", Tag.TAG_INT);
         return new Policy(tag.getInt("minimumReputation"), Policy.TaxMode.valueOf(tag.getString("taxMode")),
                 tag.getInt("taxBasisPoints"), tag.getLong("fixedTax"), tag.getLong("salary"), tag.getInt("periodHours"),
                 tag.getInt("activeMinutes"), Currency.valueOf(tag.getString("currency")),
-                tag.getInt("reputationPerPublicContract"), tag.getInt("dailyReputationLimit"));
+                tag.getInt("reputationPerPublicContract"), tag.getInt("dailyReputationLimit"),
+                version >= 2 ? tag.getInt("marketTaxBasisPoints") : 0);
     }
 
     private static CompoundTag writePolicy(Policy policy) {
@@ -146,6 +150,7 @@ public final class TreasuryData extends SavedData {
         tag.putInt("taxBasisPoints", policy.taxBasisPoints()); tag.putLong("fixedTax", policy.fixedTax()); tag.putLong("salary", policy.salary());
         tag.putInt("periodHours", policy.periodHours()); tag.putInt("activeMinutes", policy.activeMinutes()); tag.putString("currency", policy.currency().name());
         tag.putInt("reputationPerPublicContract", policy.reputationPerPublicContract()); tag.putInt("dailyReputationLimit", policy.dailyReputationLimit());
+        tag.putInt("marketTaxBasisPoints", policy.marketTaxBasisPoints());
         return tag;
     }
 

@@ -562,6 +562,179 @@ public final class CrownGameTests {
         helper.succeed();
     }
 
+
+    private static Policy marketPolicy(Policy old, int basisPoints) {
+        return new Policy(old.minimumReputation(), old.taxMode(), old.taxBasisPoints(), old.fixedTax(), old.salary(),
+                old.periodHours(), old.activeMinutes(), old.currency(), old.reputationPerPublicContract(),
+                old.dailyReputationLimit(), basisPoints);
+    }
+
+    @GameTest(template = "crown_empty", timeoutTicks = 100)
+    public static void marketTaxPolicyRequiresCurrentGovernorAndStrictIntegerPacketsAndPreservesOtherRules(GameTestHelper helper) {
+        var data = reset(helper);
+        var governor = player(helper);
+        var successor = player(helper);
+        var stranger = player(helper);
+        try (var authority = new Governor(helper, governor)) {
+            var initial = new Policy(12, Policy.TaxMode.FIXED, 700, 3, 10, 168, 10, EMERALD, 2, 4, 0);
+            CrownService.setPolicy(governor, initial);
+            var chest = openChest(helper, governor);
+            for (String value : new String[]{"-1", "10001", "500.5", "\"500\"", "null", "true"}) {
+                CrownService.openBoard(governor, chest);
+                CrownService.action(governor, "policy", "{\"marketTaxBasisPoints\":" + value + "}");
+                helper.assertTrue(data.treasury.policy().equals(initial),
+                        "A negative, overflowing or noninteger market tax packet changed kingdom rules: " + value);
+            }
+            CrownService.openBoard(governor, chest);
+            CrownService.action(governor, "policy", "{\"marketTaxBasisPoints\":500}");
+            var expected = marketPolicy(initial, 500);
+            helper.assertTrue(data.treasury.policy().equals(expected),
+                    "Updating market tax modified independent fixed tax, contract percentage, salary, or reputation settings");
+            var view = JsonParser.parseString(CrownService.snapshot(governor)).getAsJsonObject();
+            helper.assertTrue(view.getAsJsonObject("policy").get("marketTaxBasisPoints").getAsInt() == 500,
+                    "The production Crown snapshot did not expose the saved independent market tax rule");
+            CrownService.openBoard(governor, chest);
+            CrownService.action(governor, "policy", "{\"taxBasisPoints\":900}");
+            helper.assertTrue(data.treasury.policy().marketTaxBasisPoints() == 500
+                            && data.treasury.policy().taxBasisPoints() == 900,
+                    "A legacy policy payload reset the independent market rate when its field was omitted");
+            stranger.server.getPlayerList().op(stranger.getGameProfile());
+            try {
+                rejected(helper, () -> CrownService.setPolicy(stranger, marketPolicy(data.treasury.policy(), 1_000)));
+            } finally { stranger.server.getPlayerList().deop(stranger.getGameProfile()); }
+            authority.change(successor);
+            CrownService.openBoard(governor, chest);
+            CrownService.action(governor, "policy", "{\"marketTaxBasisPoints\":1000}");
+            helper.assertTrue(data.treasury.policy().marketTaxBasisPoints() == 500,
+                    "An old governor's already-open physical session retained market-tax authority after succession");
+            CrownService.setPolicy(successor, marketPolicy(data.treasury.policy(), 1_000));
+            helper.assertTrue(data.treasury.policy().marketTaxBasisPoints() == 1_000,
+                    "The current non-operator governor could not manage the independent sales tax");
+        } finally { CrownService.logout(governor.getUUID()); }
+        helper.succeed();
+    }
+
+    @GameTest(template = "crown_empty", timeoutTicks = 100)
+    public static void legacyTreasuryMigrationPreservesFundsClaimsAndRulesWithZeroRetroactiveMarketTax(GameTestHelper helper) {
+        var data = reset(helper);
+        var citizen = player(helper);
+        payrollFixture(data, citizen, 10, 0, 15);
+        data.treasury.setStandaloneManager(citizen.getUUID(), citizen.getUUID(), System.currentTimeMillis());
+        var policy = data.treasury.policy();
+        data.treasury.setPolicy(marketPolicy(policy, 500), citizen.getUUID(), System.currentTimeMillis());
+        var saved = data.save(new CompoundTag(), helper.getLevel().registryAccess());
+        var restored = TreasuryData.load(saved, helper.getLevel().registryAccess());
+        helper.assertTrue(saved.getInt("version") == 2 && restored.treasury.policy().marketTaxBasisPoints() == 500
+                        && restored.treasury.snapshot().equals(data.treasury.snapshot()),
+                "Version2 native Crown records lost the independently configured sales-tax rule");
+        var legacy = saved.copy();
+        legacy.putInt("version", 1);
+        legacy.getCompound("policy").remove("marketTaxBasisPoints");
+        var migrated = TreasuryData.load(legacy, helper.getLevel().registryAccess());
+        helper.assertTrue(migrated.isDirty() && migrated.treasury.policy().equals(policy)
+                        && migrated.treasury.balance(EMERALD) == 5
+                        && migrated.treasury.claims(citizen.getUUID(), EMERALD) == 10
+                        && migrated.treasury.standaloneManager().equals(citizen.getUUID())
+                        && migrated.treasury.history().equals(data.treasury.history()),
+                "Version1 migration changed existing funds, salaries, governance, other rules or created retroactive market tax");
+        var missing = saved.copy(); missing.getCompound("policy").remove("marketTaxBasisPoints");
+        rejected(helper, () -> TreasuryData.load(missing, helper.getLevel().registryAccess()));
+        var wrongType = saved.copy(); wrongType.getCompound("policy").putString("marketTaxBasisPoints", "500");
+        rejected(helper, () -> TreasuryData.load(wrongType, helper.getLevel().registryAccess()));
+        var outOfRange = saved.copy(); outOfRange.getCompound("policy").putInt("marketTaxBasisPoints", 10_001);
+        rejected(helper, () -> TreasuryData.load(outOfRange, helper.getLevel().registryAccess()));
+        helper.succeed();
+    }
+
+    @GameTest(template = "crown_empty", timeoutTicks = 100)
+    public static void actualMarketsSaleAndOfflineClaimConserveTaxAcrossRepeatedSweepsAndFullTreasury(GameTestHelper helper) {
+        var data = reset(helper);
+        var governor = player(helper);
+        try (var authority = new Governor(helper, governor)) {
+            CrownService.setPolicy(governor, new Policy(0, Policy.TaxMode.FIXED, 700, 3, 0, 168, 10, EMERALD, 1, 3, 500));
+            if (!MarketsFixture.loaded()) {
+                data.treasury.addFunds(EMERALD, 20, Kind.DEPOSIT, governor.getUUID(), "Standalone Crown fixture", System.currentTimeMillis());
+                var before = data.treasury.snapshot();
+                CrownService.sweepMarkets(governor.server);
+                helper.assertTrue(data.treasury.snapshot().equals(before)
+                                && data.treasury.policy().marketTaxBasisPoints() == 500,
+                        "An absent optional Markets mod changed existing Crown funds or its configured future sales rate");
+                helper.succeed();
+                return;
+            }
+            var seller = player(helper);
+            var buyer = player(helper);
+            buyer.getInventory().setItem(0, new ItemStack(Items.EMERALD, 40));
+            try (var markets = new MarketsFixture(helper, seller, buyer, 2, 20)) {
+                helper.assertTrue(markets.rate() == 500 && seller.server.getPlayerList().getPlayer(seller.getUUID()) == null,
+                        "The real paired provider failed independent5% policy or the seller was not actually offline");
+                markets.purchase(1);
+                helper.assertTrue(buyer.getInventory().countItem(Items.EMERALD) == 20
+                                && buyer.getInventory().countItem(Items.APPLE) == 1
+                                && markets.earnings() == 19 && markets.tax() == 1,
+                        "A real paid gross20 Markets sale failed to conserve offline seller19 plus escrow1");
+                CrownService.sweepMarkets(governor.server);
+                helper.assertTrue(data.treasury.balance(EMERALD) == 1 && markets.tax() == 0
+                                && data.treasury.history().stream().anyMatch(entry -> entry.kind() == Kind.MARKET_TAX && entry.amount() == 1),
+                        "The actual Crown transfer lost funded tax or failed to record a market-specific history entry");
+                markets.claim();
+                rejected(helper, markets::claim);
+                CrownService.sweepMarkets(governor.server);
+                helper.assertTrue(data.treasury.balance(EMERALD) == 1 && markets.tax() == 0
+                                && seller.getInventory().countItem(Items.EMERALD) == 19,
+                        "Repeating a real seller claim or Crown sweep collected/credited a sale tax twice");
+                markets.purchase(1);
+                data.treasury.addFunds(EMERALD, Long.MAX_VALUE - 1, Kind.DEPOSIT, null,
+                        "Native full treasury destination fixture", System.currentTimeMillis());
+                var full = data.treasury.snapshot();
+                rejected(helper, () -> CrownService.sweepMarkets(governor.server));
+                helper.assertTrue(data.treasury.snapshot().equals(full) && markets.tax() == 1,
+                        "Failed Crown destination preflight destroyed tax escrow or changed the full treasury history");
+                data.treasury.removeFunds(EMERALD, Long.MAX_VALUE - 1, Kind.DEPOSIT, null,
+                        "Release native treasury capacity", System.currentTimeMillis());
+                CrownService.sweepMarkets(governor.server);
+                CrownService.sweepMarkets(governor.server);
+                helper.assertTrue(data.treasury.balance(EMERALD) == 2 && markets.tax() == 0
+                                && markets.earnings() == 19 && buyer.getInventory().countItem(Items.EMERALD) == 0
+                                && buyer.getInventory().countItem(Items.APPLE) == 2,
+                        "The retained second tax could not transfer once after capacity returned while conserving two sales");
+                System.out.println("CROWN_MARKETS_TAX_INTEGRATION_PASSED");
+            }
+        }
+        helper.succeed();
+    }
+
+    @GameTest(template = "crown_empty", timeoutTicks = 100)
+    public static void oneHundredPercentActualMarketsTaxCreditsTreasuryWithZeroSellerEarnings(GameTestHelper helper) {
+        var data = reset(helper);
+        var governor = player(helper);
+        try (var authority = new Governor(helper, governor)) {
+            CrownService.setPolicy(governor, marketPolicy(Policy.DEFAULT, 10_000));
+            if (!MarketsFixture.loaded()) {
+                helper.assertTrue(data.treasury.policy().marketTaxBasisPoints() == 10_000
+                                && data.treasury.policy().taxBasisPoints() == Policy.DEFAULT.taxBasisPoints(),
+                        "Standalone Crown did not retain the maximum independent market rule");
+                helper.succeed();
+                return;
+            }
+            var seller = player(helper);
+            var buyer = player(helper);
+            buyer.getInventory().setItem(0, new ItemStack(Items.EMERALD, 20));
+            try (var markets = new MarketsFixture(helper, seller, buyer, 1, 20)) {
+                markets.purchase(1);
+                helper.assertTrue(markets.earnings() == 0 && markets.tax() == 20
+                                && buyer.getInventory().countItem(Items.EMERALD) == 0
+                                && buyer.getInventory().countItem(Items.APPLE) == 1,
+                        "The actual100% policy failed to deliver the paid item or reserved negative/nonzero net seller earnings");
+                CrownService.sweepMarkets(governor.server);
+                CrownService.sweepMarkets(governor.server);
+                helper.assertTrue(data.treasury.balance(EMERALD) == 20 && markets.tax() == 0,
+                        "The actual100% gross proceeds were not transferred to Crown exactly once");
+            }
+        }
+        helper.succeed();
+    }
+
     private static boolean contractsLoaded() { return ModList.get().isLoaded("contracts"); }
 
     private static long contractsBalance(MinecraftServer server) {

@@ -1,6 +1,6 @@
 # Plano dos mods de roleplay
 
-Referência: guião enviado pelo utilizador em `Pasted text.txt`. Esta página organiza a ordem de desenvolvimento e distingue as funcionalidades existentes das propostas para os próximos mods.
+Referências: guião enviado pelo utilizador em `Pasted text.txt` e decisões posteriores na conversa. Esta página distingue as funcionalidades existentes dos projetos futuros.
 
 Plataforma: **Minecraft 1.21.1, NeoForge e Java 21**. Os mods mantêm responsabilidades próprias e integram-se quando instalados em conjunto. A identidade e a economia do Crónicas RP devem ser reutilizadas, evitando contas ou personagens concorrentes.
 
@@ -22,10 +22,53 @@ Plataforma: **Minecraft 1.21.1, NeoForge e Java 21**. Os mods mantêm responsabi
 | 2 | Crown Ledger — Tesouro da Coroa | Orçamento, impostos, salários e contratos pagos pelo reino, geridos pelo governante. | Implementado; [guia e downloads](crown-ledger/README.md). |
 | 3 | Realm Identity | Documento físico de RP, assinatura e apresentação a outros jogadores com verificação do servidor. | Implementado; [guia e downloads](realm-identity/README.md). |
 | 4 | Realm Markets | Bancas com stock real, preços por unidade e vendas quando o proprietário está offline. | Implementado; [guia e downloads](realm-markets/README.md). |
-| 5 | Guildas | Membros, cargos, sedes, cofres e contratos de grupo. | Planeado. |
-| 6 | Correio de fantasia | Cartas, encomendas e pagamentos entre jogadores. | Planeado. |
+| — | Guildas | Membros, cargos, sedes, cofres e contratos de grupo. | O utilizador decidiu não desenvolver nesta fase. |
+| — | Correio de fantasia | Cartas e encomendas entre jogadores. | Ideia sugerida; sem desenvolvimento agendado. |
 
-As etapas seguintes representam o guião de produto; não são funcionalidades anunciadas como disponíveis no JAR atual.
+Os projetos futuros abaixo são um guião de produto e não estão incluídos nos JARs atuais.
+
+## Novos projetos do guião
+
+| Projeto | Objetivo | Estado |
+| --- | --- | --- |
+| Realm Rewards | Recompensar conquistas Vanilla e de outros mods com dinheiro do Chronicles RP. | Por desenvolver. |
+| Realm Notifications | Notificações no ecrã e API comum para os mods de RP. | Por desenvolver. |
+| Realm Titles | Títulos de personagem atribuídos pelo governante eleito. | Por desenvolver. |
+| Chronicles RP — Nomes RP | Mostrar o nome da personagem acima da cabeça, no TAB e no chat. | Atualização planeada do mod existente. |
+| Xaero Map Regions + Xaero's World Map | Desenhar e consultar territórios no mapa. | Solução externa indicada pelo utilizador; não desenvolver um mod próprio. |
+
+A atualização do imposto de vendas do Crown Ledger e Realm Markets está em curso. O utilizador pediu para guardar os novos projetos para desenvolver mais tarde, sem os iniciar nesta entrega. A sequência futura fica por definir; foi sugerido começar pela API de notificações para ser usada pelas recompensas.
+
+### Realm Rewards
+
+- Detetar a conclusão de Advancements normais do Minecraft Vanilla e dos outros mods.
+- Configurar o valor de cada recompensa num menu de administração.
+- Reutilizar a carteira do Chronicles RP e atribuir dinheiro por conquista concluída.
+- Guardar o pagamento de cada conquista por jogador para impedir recompensas repetidas.
+- Reconhecer conquistas de novos mods que utilizem o sistema normal de Advancements.
+
+### Realm Notifications
+
+- Mostrar o montante recebido e o motivo, por exemplo, `+50 € por completar uma conquista`.
+- Suportar avisos de contratos, eleições, vendas e salários.
+- Permitir escolher a posição, incluindo canto superior e centro superior.
+- Configurar animações, sons e duração.
+- Prever histórico e disponibilizar uma API para os restantes mods.
+
+### Realm Titles
+
+- Permitir ao governante eleito pelo Realm Council criar, atribuir e remover títulos personalizados.
+- Associar vários títulos à personagem, como Cavaleiro, Duque, Barão e Conselheiro.
+- Suportar títulos permanentes ou temporários.
+- Prever um bloco físico para gerir nomeações e integração com o Realm Identity para as mostrar.
+
+### Chronicles RP — Nomes RP
+
+- Substituir visualmente o username pelo nome da personagem acima da cabeça, no TAB e no chat.
+- Sem personagem criada, manter o username habitual.
+- Preservar o username real e o UUID usados internamente pelo Minecraft.
+- Manter esta funcionalidade no Chronicles RP, separada dos títulos.
+- Verificar a compatibilidade das interfaces de outros mods; a alteração visual não garante que todas usem automaticamente o nome RP.
 
 ## 1. Contratos: entrega atual e diferenças face ao guião
 

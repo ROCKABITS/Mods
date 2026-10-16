@@ -13,6 +13,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.Screenshot;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractButton;
+import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.TitleScreen;
@@ -90,8 +91,7 @@ public final class CrownVisualQA {
         } else {
             check(mc.screen instanceof TreasuryScreen, "Expected treasury before opening kingdom rules");
             check(press(mc.screen, "gui.kingdomtreasury.policy"), "Governor could not open kingdom rules");
-            check(press(mc.screen, "gui.kingdomtreasury.participation_page"), "Governor could not open policy currency controls");
-            selector(mc.screen, "EMERALD", true);
+            check(((TreasuryScreen) mc.screen).children().stream().anyMatch(child -> child instanceof EditBox), "Governor tax controls must be visible");
         }
         captureScreen = mc.screen;
         GLFW.glfwSetCursorPos(mc.getWindow().getWindow(), 1, 1);
@@ -144,20 +144,40 @@ public final class CrownVisualQA {
         JsonObject policy = currencyDemo("EMERALD", "CHRONICLES", true);
         screen = openDemo(mc, policy); click(screen, "policy");
         expectField(screen, "fixedTax", "1.25"); expectField(screen, "salary", "2.50");
+        expectField(screen, "marketTaxPercent", "5");
         click(screen, "participation_page"); selector(screen, "CHRONICLES", true);
         click(screen, "currency_chronicles"); selector(screen, "EMERALD", true);
         click(screen, "economy_page"); expectField(screen, "fixedTax", "0"); expectField(screen, "salary", "0");
+        expectField(screen, "marketTaxPercent", "5");
         setField(screen, "fixedTax", "9"); setField(screen, "salary", "12");
         click(screen, "participation_page"); click(screen, "currency_emerald"); selector(screen, "CHRONICLES", true);
         click(screen, "economy_page"); expectField(screen, "fixedTax", "0"); expectField(screen, "salary", "0");
+        expectField(screen, "marketTaxPercent", "5");
         setField(screen, "fixedTax", "1.25"); setField(screen, "salary", "2.50");
         JsonObject saved = request(screen, "save_policy", "policy");
         assertMoney(saved, "CHRONICLES", "fixedTax", 125); assertMoney(saved, "CHRONICLES", "salary", 250);
+        check(saved.get("marketTaxBasisPoints").getAsInt() == 500, "Market sales tax must retain 500 basis points across both currency changes");
         acknowledge(mc, screen, policy);
         click(screen, "contribute");
         check(button(screen, "claim_emeralds").active && button(screen, "claim_coins").active,
                 "Changing the policy currency must preserve existing credits in both currencies");
-        CURRENCY_CHECKS.add("Policy draft currency comes from the saved policy, clears fixed tax and salary on each currency change, saves Chronicle amounts as cents, and preserves historical credits.");
+        CURRENCY_CHECKS.add("Policy currency clears fixed tax and salary, preserves independent market tax at 500 basis points and historical credits, and saves Chronicle amounts as cents.");
+
+        screen = openDemo(mc, policy); click(screen, "policy");
+        click(screen, "mode_percentage"); // mode remains independent of the market sales tax
+        setField(screen, "marketTaxPercent", "5.25");
+        saved = request(screen, "save_policy", "policy");
+        check(saved.get("marketTaxBasisPoints").getAsInt() == 525 && "FIXED".equals(saved.get("taxMode").getAsString()), "Market tax must parse exact basis points independently of fixed periodic mode");
+        acknowledge(mc, screen, policy); setField(screen, "marketTaxPercent", "100.01");
+        before = UI_REQUESTS.size(); click(screen, "save_policy");
+        check(UI_REQUESTS.size() == before, "Out-of-range market tax must not send a request");
+        setField(screen, "marketTaxPercent", "5");
+        screen.init(mc, 320, 240);
+        expectField(screen, "marketTaxPercent", "5");
+        for (var child : screen.children()) if (child instanceof AbstractWidget widget && widget.visible)
+            check(widget.getX() >= 0 && widget.getY() >= 0 && widget.getX() + widget.getWidth() <= 320 && widget.getY() + widget.getHeight() <= 240, "Market tax controls exceed the 320x240 viewport");
+        screen.init(mc, mc.getWindow().getGuiScaledWidth(), mc.getWindow().getGuiScaledHeight());
+        CURRENCY_CHECKS.add("The governor edits market tax independently of the periodic/contract mode, saves exact basis points, rejects rates above 100%, and retains visible controls at 320x240.");
 
         JsonObject unavailable = currencyDemo("CHRONICLES", "CHRONICLES", false);
         screen = openDemo(mc, unavailable); click(screen, "contribute"); selector(screen, "EMERALD", false);
@@ -174,6 +194,7 @@ public final class CrownVisualQA {
         click(screen, "participation_page"); selector(screen, "CHRONICLES", true);
         click(screen, "currency_chronicles"); selector(screen, "EMERALD", false);
         click(screen, "economy_page"); expectField(screen, "fixedTax", "0"); expectField(screen, "salary", "0");
+        expectField(screen, "marketTaxPercent", "5");
         setField(screen, "fixedTax", "4"); setField(screen, "salary", "8");
         saved = request(screen, "save_policy", "policy");
         assertMoney(saved, "EMERALD", "fixedTax", 4); assertMoney(saved, "EMERALD", "salary", 8);
@@ -263,7 +284,7 @@ public final class CrownVisualQA {
     private static JsonObject demo(boolean manager) {
         var data = new JsonObject();
         data.addProperty("valid", true); data.addProperty("manager", manager); data.addProperty("managerName", "Queen Elowen");
-        data.addProperty("currency", "EMERALD"); data.addProperty("playerBalance", 128);
+        data.addProperty("currency", "EMERALD"); data.addProperty("playerBalance", 128); data.addProperty("marketsAvailable", true);
         data.addProperty("activeCurrency", "EMERALD"); data.addProperty("chroniclesLoaded", true); data.addProperty("contractCurrency", "EMERALD");
         var wallets = new JsonObject(); wallets.addProperty("EMERALD", 128); wallets.addProperty("CHRONICLES", 7_650); data.add("wallets", wallets);
         data.addProperty("salaryNext", 1_792_080_000_000L); data.addProperty("taxDue", 0);
@@ -271,7 +292,7 @@ public final class CrownVisualQA {
         var balances = new JsonObject(); balances.addProperty("EMERALD", 960); balances.addProperty("CHRONICLES", 12_500); data.add("balances", balances);
         var credits = new JsonObject(); credits.addProperty("EMERALD", 15); credits.addProperty("CHRONICLES", 0); data.add("credits", credits);
         var policy = new JsonObject();
-        policy.addProperty("currency", "EMERALD"); policy.addProperty("taxMode", "PERCENTAGE"); policy.addProperty("taxBasisPoints", 500);
+        policy.addProperty("currency", "EMERALD"); policy.addProperty("taxMode", "PERCENTAGE"); policy.addProperty("taxBasisPoints", 500); policy.addProperty("marketTaxBasisPoints", 500);
         policy.addProperty("fixedTax", 10); policy.addProperty("salary", 15); policy.addProperty("periodHours", 168); policy.addProperty("activeMinutes", 30);
         policy.addProperty("minimumReputation", 20); policy.addProperty("reputationReward", 1); policy.addProperty("dailyReputationLimit", 3); data.add("policy", policy);
         data.add("contracts", new com.google.gson.JsonArray()); data.add("history", new com.google.gson.JsonArray());
@@ -315,7 +336,7 @@ public final class CrownVisualQA {
             report.put("screenshot", FILENAMES[0]); report.put("screenshots", List.copyOf(CAPTURED)); report.put("images", List.copyOf(CAPTURED));
             report.put("interfaceData", "Demonstration data in the actual production TreasuryScreen");
             report.put("currencyInteractionChecks", List.copyOf(CURRENCY_CHECKS)); report.put("recordedUiRequests", List.copyOf(UI_REQUESTS));
-            report.put("requestTransport", "Recorded locally; no game-server network requests"); report.put("policyScreenshotPage", "participation and currency selector");
+            report.put("requestTransport", "Recorded locally; no game-server network requests"); report.put("policyScreenshotPage", "economy: independent market sales tax at 5%, contract mode and salaries");
             report.put("bakedQuadCounts", Map.of("kingdomtreasury:crown_chest", itemQuads)); report.put("validatedBlockStates", states);
             report.put("windowWidth", Minecraft.getInstance().getWindow().getWidth()); report.put("windowHeight", Minecraft.getInstance().getWindow().getHeight());
             Files.writeString(OUT.resolve("result.json"), new GsonBuilder().setPrettyPrinting().create().toJson(report));

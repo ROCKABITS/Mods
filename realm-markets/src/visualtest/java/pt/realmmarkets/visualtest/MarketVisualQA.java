@@ -34,6 +34,7 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.ClientTickEvent;
 import org.lwjgl.glfw.GLFW;
 import pt.realmmarkets.client.MarketScreen;
+import pt.realmmarkets.domain.SaleAmounts;
 
 /** Opt-in actual-client rendering and production menu QA; never included in release JARs. */
 @EventBusSubscriber(modid = "realmmarkets", value = Dist.CLIENT)
@@ -86,7 +87,13 @@ public final class MarketVisualQA {
 
     private static void show(Minecraft mc) {
         if (index == 0) mc.setScreen(new StallPreview());
-        else open(mc, demo(index == 1, "CHRONICLES", true));
+        else {
+            MarketScreen screen = open(mc, demo(index == 1, "CHRONICLES", true));
+            if (index == 2) {
+                try { field(screen, "quantityInput", "16"); }
+                catch (ReflectiveOperationException failure) { throw new IllegalStateException(failure); }
+            }
+        }
         captureScreen = mc.screen;
         GLFW.glfwSetCursorPos(mc.getWindow().getWindow(), 1, 1);
         ticks = 0; screenStarted = System.currentTimeMillis();
@@ -177,9 +184,16 @@ public final class MarketVisualQA {
         for (String key : List.of("configure", "stock", "withdraw", "claim", "save_name"))
             check(!hasButton(screen, key), "Buyers must not receive owner control: " + key);
         field(screen, "quantityInput", "3"); payload = request(screen, "buy", "buy");
-        check(payload.size() == 4 && payload.get("slot").getAsInt() == 0 && payload.get("quantity").getAsInt() == 3
+        check(payload.size() == 5 && payload.get("slot").getAsInt() == 0 && payload.get("quantity").getAsInt() == 3
+                && payload.get("marketTaxBasisPoints").getAsInt() == 500
                 && payload.get("price").getAsLong() == 125 && "minecraft:apple".equals(payload.get("item").getAsString()),
-                "Purchase must quote the displayed item and unit price, with an integer quantity");
+                "Purchase must quote the displayed item, unit price and current 500 basis-point market tax, with an integer quantity");
+        acknowledge(screen, buyer); field(screen, "quantityInput", "16");
+        expectQuote(screen, 2000, 100, 1900);
+        expectMoney(screen, 2000, "€20.00"); expectMoney(screen, 100, "€1.00"); expectMoney(screen, 1900, "€19.00");
+        var changedTax = buyer.deepCopy(); changedTax.addProperty("marketTaxBasisPoints", 625); acknowledge(screen, changedTax);
+        payload = request(screen, "buy", "buy");
+        check(payload.get("marketTaxBasisPoints").getAsInt() == 625, "A refreshed tax rule must replace the quoted rate");
         acknowledge(screen, buyer); field(screen, "quantityInput", "9999");
         check(!button(screen, "buy").active, "Insufficient stock must disable purchases");
         field(screen, "quantityInput", "1.5"); check(!button(screen, "buy").active, "Fractional item quantities must be rejected");
@@ -187,10 +201,23 @@ public final class MarketVisualQA {
         field(screen, "quantityInput", "1"); check(!button(screen, "buy").active, "Insufficient wallet must disable purchases");
         var unavailable = demo(false, "CHRONICLES", false); acknowledge(screen, unavailable);
         check(!button(screen, "buy").active, "Unavailable Chronicles profile must disable digital purchases");
-        CHECKS.add("Production buyer controls expose no owner actions, send the displayed item/price quote, and reject insufficient stock, fractional quantities, insufficient funds and unavailable Chronicles profiles.");
+        CHECKS.add("Production buyer controls quote the displayed item, price and tax rate. A €20.00 purchase at 5% displays €1.00 tax and €19.00 seller net; refreshed rules update the sent rate. Stock, quantities, funds and unavailable Chronicles checks remain active.");
+
+        JsonObject paused = demo(false, "EMERALD", false); paused.addProperty("treasuryAvailable", false);
+        screen = open(mc, paused); check(!button(screen, "buy").active, "Unavailable tax provider must disable purchases");
+        paused.addProperty("owner", true); acknowledge(screen, paused);
+        check(button(screen, "withdraw").active && button(screen, "claim").active, "Tax outage must preserve stock withdrawal and earnings claims");
+        payload = request(screen, "claim", "claim"); check(payload.isEmpty(), "Claims must never quote or recalculate tax");
+        CHECKS.add("An unavailable tax provider pauses purchases while owner stock withdrawal and amount-free net earnings claims stay usable.");
 
         JsonObject emerald = demo(true, "EMERALD", false);
-        screen = open(mc, emerald); field(screen, "priceInput", "2.50");
+        screen = open(mc, emerald); field(screen, "quantityInput", "10");
+        expectQuote(screen, 20, 1, 19);
+        expectMoney(screen, 20, "20 emeralds"); expectMoney(screen, 1, "1 emeralds"); expectMoney(screen, 19, "19 emeralds");
+        field(screen, "quantityInput", "1"); expectQuote(screen, 2, 0, 2);
+        var untaxed = emerald.deepCopy(); untaxed.addProperty("marketTaxBasisPoints", 0); acknowledge(screen, untaxed);
+        expectQuote(screen, 2, 0, 2); acknowledge(screen, emerald);
+        field(screen, "priceInput", "2.50");
         check(!button(screen, "configure").active, "Emerald prices must reject decimals");
         field(screen, "priceInput", "2"); payload = request(screen, "configure", "configure");
         check(payload.get("price").getAsLong() == 2, "Emerald prices must remain whole units");
@@ -207,7 +234,20 @@ public final class MarketVisualQA {
         MarketScreen.receive("{}"); check(!(mc.screen instanceof MarketScreen), "Expired physical session must close the market menu");
         Screen unrelated = new TitleScreen(); mc.setScreen(unrelated); MarketScreen.receive("{}");
         check(mc.screen == unrelated, "Expired market session must preserve unrelated screens");
-        CHECKS.add("Standalone prices use whole emeralds; all owner controls remain reachable through native scrolling at 320x240, and expired sessions close only the market menu.");
+        CHECKS.add("Whole emerald pricing: a 20-emerald total at 5% displays 1 tax and 19 seller net; a 2-emerald total rounds tax down to 0. Standalone 0% preserves gross earnings. All owner controls remain reachable by scrolling at 320x240; expiry closes only the market screen.");
+    }
+
+    private static void expectQuote(MarketScreen screen, long gross, long tax, long net) throws ReflectiveOperationException {
+        var method = MarketScreen.class.getDeclaredMethod("saleQuote"); method.setAccessible(true);
+        Object result = method.invoke(screen);
+        check(result instanceof SaleAmounts, "Production UI has no valid tax quote");
+        SaleAmounts amounts = (SaleAmounts) result;
+        check(amounts.gross() == gross && amounts.tax() == tax && amounts.net() == net, "Production UI gross/tax/net mismatch: " + amounts);
+    }
+
+    private static void expectMoney(MarketScreen screen, long amount, String expected) throws ReflectiveOperationException {
+        var method = MarketScreen.class.getDeclaredMethod("money", long.class); method.setAccessible(true);
+        check(expected.equals(method.invoke(screen, amount)), "Production UI money label differs from " + expected);
     }
 
     private static JsonObject demo(boolean owner, String currency, boolean available) {
@@ -215,6 +255,7 @@ public final class MarketVisualQA {
         data.addProperty("title", "Aveline's Orchard · sample"); data.addProperty("currency", currency);
         data.addProperty("chroniclesAvailable", available); data.addProperty("balance", "CHRONICLES".equals(currency) ? 18750 : 128);
         data.addProperty("earnings", "CHRONICLES".equals(currency) ? 3275 : 48);
+        data.addProperty("treasuryAvailable", true); data.addProperty("marketTaxBasisPoints", 500);
         data.addProperty("sample", "minecraft:apple"); data.addProperty("message", "gui.realmmarkets.qa_sample");
         String[] items = {"apple", "bread", "carrot", "pumpkin", "wheat", "potato", "honey_bottle", "sweet_berries"};
         int[] stocks = {64, 32, 128, 12, 96, 80, 16, 48};

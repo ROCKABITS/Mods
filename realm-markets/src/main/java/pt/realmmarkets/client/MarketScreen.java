@@ -19,6 +19,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import pt.realmmarkets.network.MarketNetwork;
+import pt.realmmarkets.domain.SaleAmounts;
 
 /** Only displays the inventory and prices verified by the physical stall's server session. */
 public final class MarketScreen extends Screen {
@@ -97,6 +98,14 @@ public final class MarketScreen extends Screen {
         catch (RuntimeException malformed) { return false; }
     }
     private boolean owner() { return bool(state, "owner"); }
+    private boolean treasuryAvailable() { return bool(state, "treasuryAvailable"); }
+    private int marketTaxBasisPoints() { return (int) number(state, "marketTaxBasisPoints"); }
+    private String taxPercent() { return java.math.BigDecimal.valueOf(marketTaxBasisPoints(), 2).stripTrailingZeros().toPlainString(); }
+    private SaleAmounts saleQuote() {
+        if (!treasuryAvailable() || total() <= 0) return null;
+        try { return SaleAmounts.quote(total(), marketTaxBasisPoints()); }
+        catch (RuntimeException invalid) { return null; }
+    }
     private boolean chronicles() { return "CHRONICLES".equals(str(state, "currency", "")); }
     private boolean knownCurrency() { return chronicles() || "EMERALD".equals(str(state, "currency", "")); }
     private boolean walletAvailable() { return knownCurrency() && (!chronicles() || bool(state, "chroniclesAvailable")); }
@@ -157,11 +166,11 @@ public final class MarketScreen extends Screen {
             body(card, by);
         }
 
-        quantityY = detailTop + 59;
+        quantityY = detailTop + 87;
         quantityInput = field(detailLeft + detailWidth - 75, quantityY + 12, 75, quantityDraft, "quantity", 4);
         quantityInput.setResponder(value -> { quantityDraft = value; updateActions(); });
         if (owner()) {
-            int actionY = quantityY + 40, half = (detailWidth - 5) / 2;
+            int actionY = quantityY + 84, half = (detailWidth - 5) / 2;
             stockButton = bodyButton(detailLeft, actionY, half, "stock", () -> quantityAction("stock"));
             withdrawButton = bodyButton(detailLeft + half + 5, actionY, detailWidth - half - 5, "withdraw", () -> quantityAction("withdraw"));
             priceY = actionY + 30;
@@ -177,8 +186,8 @@ public final class MarketScreen extends Screen {
             claimButton = bodyButton(detailLeft, claimY + 14, detailWidth, "claim", () -> request("claim", new JsonObject()));
             contentHeight = Math.max(gridTop + gridRows * (cardHeight + 5), claimY + 49);
         } else {
-            buyButton = bodyButton(detailLeft, quantityY + 51, detailWidth, "buy", () -> quantityAction("buy"));
-            contentHeight = Math.max(gridTop + gridRows * (cardHeight + 5), quantityY + 114);
+            buyButton = bodyButton(detailLeft, quantityY + 84, detailWidth, "buy", () -> quantityAction("buy"));
+            contentHeight = Math.max(gridTop + gridRows * (cardHeight + 5), quantityY + 170);
         }
         addRenderableWidget(button(x + w - 94, y + h - 30, 78, "close", this::onClose));
         building = false;
@@ -272,7 +281,7 @@ public final class MarketScreen extends Screen {
             withdrawButton.active = ready && configured() && quantity > 0 && quantity <= stock();
             claimButton.active = ready && walletAvailable() && number(state, "earnings") > 0;
             renameButton.active = ready && validTitle(titleDraft) && !titleDraft.strip().equals(str(state, "title", ""));
-        } else if (buyButton != null) buyButton.active = ready && walletAvailable() && quantity > 0 && quantity <= stock() && total() > 0 && total() <= number(state, "balance");
+        } else if (buyButton != null) buyButton.active = ready && treasuryAvailable() && saleQuote() != null && walletAvailable() && quantity > 0 && quantity <= stock() && total() > 0 && total() <= number(state, "balance");
     }
     private static boolean validTitle(String title) {
         if (title == null || title.strip().isEmpty() || title.length() > 40) return false;
@@ -293,6 +302,7 @@ public final class MarketScreen extends Screen {
         if ("buy".equals(operation)) {
             payload.addProperty("price", unitPrice());
             payload.addProperty("item", str(selected(), "item", ""));
+            payload.addProperty("marketTaxBasisPoints", marketTaxBasisPoints());
         }
         request(operation, payload);
     }
@@ -343,7 +353,7 @@ public final class MarketScreen extends Screen {
         renderScroll(g);
         g.fill(x + 16, bodyBottom + 3, x + w - 16, bodyBottom + 4, GOLD);
         String message = waiting ? text("waiting") : !notice.isBlank() ? Component.translatable(notice).getString()
-                : !knownCurrency() ? text("currency_unavailable") : text(owner() ? "owner_hint" : "buyer_hint");
+                : !treasuryAvailable() ? text("treasury_unavailable") : !knownCurrency() ? text("currency_unavailable") : text(owner() ? "owner_hint" : "buyer_hint");
         g.drawString(font, fit(message, w - 36), x + 18, y + h - 41, waiting ? MUTED : GREEN, false);
         g.drawString(font, tr(!knownCurrency() ? "currency_unavailable" : chronicles() ? "currency_chronicles" : "currency_emerald"), x + 18, y + h - 22, MUTED, false);
         if (mouseY >= bodyTop && mouseY < bodyBottom) {
@@ -380,9 +390,15 @@ public final class MarketScreen extends Screen {
         g.drawString(font, fit(name, detailWidth - 32), detailLeft + 32, dy + 17, INK, false);
         g.drawString(font, tr("stock_count", stock()), detailLeft + 32, dy + 30, MUTED, false);
         g.drawString(font, fit(text("unit_price", configured() ? money(unitPrice()) : "—"), detailWidth), detailLeft, dy + 44, GREEN, false);
+        g.drawString(font, fit(treasuryAvailable() ? text("market_tax_rate", taxPercent()) : text("treasury_unavailable_short"), detailWidth), detailLeft, dy + 59, treasuryAvailable() ? MUTED : RED, false);
+        g.drawString(font, fit(text(chronicles() ? "tax_rounding_chronicles" : "tax_rounding_emerald"), detailWidth), detailLeft, dy + 72, MUTED, false);
         int qy = gy + quantityY;
         g.drawString(font, tr("quantity"), detailLeft, qy + 17, INK, false);
         fieldBackground(g, quantityInput);
+        SaleAmounts quote = saleQuote();
+        g.drawString(font, fit(text("total", total() > 0 ? money(total()) : "—"), detailWidth), detailLeft, qy + 35, GREEN, false);
+        g.drawString(font, fit(text("tax_total", quote == null ? "—" : money(quote.tax())), detailWidth), detailLeft, qy + 49, MUTED, false);
+        g.drawString(font, fit(text("seller_net", quote == null ? "—" : money(quote.net())), detailWidth), detailLeft, qy + 63, GREEN, false);
         if (owner()) {
             int py = gy + priceY;
             g.drawString(font, tr("price_per_item"), detailLeft, py, MUTED, false);
@@ -397,9 +413,7 @@ public final class MarketScreen extends Screen {
             fieldBackground(g, titleInput);
             g.drawString(font, fit(text("earnings", money(number(state, "earnings"))), detailWidth), detailLeft, gy + claimY, GREEN, false);
         } else {
-            String total = total() > 0 ? money(total()) : "—";
-            g.drawString(font, tr("total", total), detailLeft, qy + 34, GREEN, false);
-            paragraph(g, text(!knownCurrency() ? "currency_unavailable" : !walletAvailable() ? "chronicles_unavailable" : "buyer_explanation"), detailLeft, qy + 79, detailWidth, MUTED);
+            paragraph(g, text(!treasuryAvailable() ? "treasury_unavailable" : !knownCurrency() ? "currency_unavailable" : !walletAvailable() ? "chronicles_unavailable" : "buyer_explanation"), detailLeft, qy + 114, detailWidth, MUTED);
         }
     }
     private void renderOffer(GuiGraphics g, AbstractButton card, int slot) {

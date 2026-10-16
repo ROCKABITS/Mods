@@ -2,6 +2,7 @@ package pt.realmmarkets.domain;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.EnumMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,13 +25,23 @@ public final class MarketLedger {
     private final int capacity;
     private final Map<UUID, Stall> byId = new LinkedHashMap<>();
     private final Map<Location, UUID> byLocation = new LinkedHashMap<>();
+    private final EnumMap<Currency, Long> salesTaxes = new EnumMap<>(Currency.class);
 
     public MarketLedger() { this(List.of(), MAX_STALLS); }
     public MarketLedger(Collection<Stall> stalls) { this(stalls, MAX_STALLS); }
     public MarketLedger(int capacity) { this(List.of(), capacity); }
 
     public MarketLedger(Collection<Stall> stalls, int capacity) {
+        this(stalls, Map.of(), capacity);
+    }
+
+    public MarketLedger(Collection<Stall> stalls, Map<Currency, Long> taxBalances) {
+        this(stalls, taxBalances, MAX_STALLS);
+    }
+
+    public MarketLedger(Collection<Stall> stalls, Map<Currency, Long> taxBalances, int capacity) {
         Objects.requireNonNull(stalls, "stalls");
+        Objects.requireNonNull(taxBalances, "tax balances");
         if (capacity < 1 || capacity > MAX_STALLS) throw new IllegalArgumentException("Invalid stall registry capacity.");
         if (stalls.size() > capacity) throw new IllegalArgumentException("Stall registry exceeds capacity.");
         this.capacity = capacity;
@@ -41,10 +52,27 @@ public final class MarketLedger {
                 throw new IllegalArgumentException("Duplicate stall location.");
             }
         }
+        for (Map.Entry<Currency, Long> entry : taxBalances.entrySet()) {
+            Currency currency = Objects.requireNonNull(entry.getKey(), "tax currency");
+            long amount = Objects.requireNonNull(entry.getValue(), "tax amount");
+            if (amount < 0 || amount > MAX_EARNINGS) throw new IllegalArgumentException("Invalid retained sales tax.");
+            if (amount != 0) salesTaxes.put(currency, amount);
+        }
     }
 
-    public MarketLedger copy() { return new MarketLedger(stalls(), capacity); }
+    public MarketLedger copy() { return new MarketLedger(stalls(), salesTaxes, capacity); }
     public List<Stall> stalls() { return List.copyOf(byId.values()); }
+    public long taxBalance(Currency currency) { return salesTaxes.getOrDefault(Objects.requireNonNull(currency, "currency"), 0L); }
+    public Map<Currency, Long> taxBalances() { return Map.copyOf(salesTaxes); }
+
+    /** Only funded purchases can create this balance. Transfers are exact, never partial. */
+    public void debitTax(Currency currency, long amount) {
+        if (amount < 1 || amount > MAX_EARNINGS) throw new IllegalArgumentException("Invalid sales tax transfer.");
+        long balance = taxBalance(currency);
+        if (amount > balance) throw new IllegalStateException("Not enough retained sales tax.");
+        if (amount == balance) salesTaxes.remove(currency);
+        else salesTaxes.put(currency, balance - amount);
+    }
     public Optional<Stall> find(UUID id) { return Optional.ofNullable(byId.get(Objects.requireNonNull(id, "id"))); }
 
     public Optional<Stall> at(String dimension, long position) {
@@ -100,17 +128,26 @@ public final class MarketLedger {
 
     /** Return the exact price. The caller must debit the buyer before committing its copy. */
     public long purchase(UUID id, UUID buyer, int slot, int quantity) {
+        return purchase(id, buyer, slot, quantity, 0).gross();
+    }
+
+    /** Retains the seller's net proceeds and the paid tax in separate, durable accounts. */
+    public SaleAmounts purchase(UUID id, UUID buyer, int slot, int quantity, int taxBasisPoints) {
         Stall stall = require(id);
         Objects.requireNonNull(buyer, "buyer");
         if (stall.owner().equals(buyer)) throw new SecurityException("An owner cannot buy from their own stall.");
         requireAmount(quantity);
         Listing listing = configured(stall, slot);
         if (quantity > listing.stock()) throw new IllegalStateException("There is not enough stock.");
-        long total = Math.multiplyExact(listing.unitPrice(), (long) quantity);
-        long earnings = Math.addExact(stall.earnings(), total);
+        SaleAmounts amounts = SaleAmounts.quote(Math.multiplyExact(listing.unitPrice(), (long) quantity), taxBasisPoints);
+        long earnings = Math.addExact(stall.earnings(), amounts.net());
         if (earnings > MAX_EARNINGS) throw new IllegalStateException("The owner must collect the retained earnings first.");
+        long taxes = Math.addExact(taxBalance(stall.currency()), amounts.tax());
+        if (taxes > MAX_EARNINGS) throw new IllegalStateException("The treasury must collect retained sales tax first.");
+        // All validation and capacity checks finish before either side changes.
         replaceListing(stall, new Listing(slot, listing.item(), listing.stock() - quantity, listing.unitPrice()), earnings);
-        return total;
+        if (taxes != 0) salesTaxes.put(stall.currency(), taxes);
+        return amounts;
     }
 
     public void claim(UUID id, UUID owner, long amount) {

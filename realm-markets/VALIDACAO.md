@@ -1,5 +1,19 @@
 # Validação — Realm Markets
 
+## Versão 0.2.0 — execução conjunta pendente
+
+A versão 0.2.0 acrescenta imposto de vendas e migração do registo do mercado. A compilação Minecraft, os resultados e a publicação desta versão aguardam a execução do workflow conjunto; a evidência 0.1.1 abaixo não valida estas alterações.
+
+A publicação exige compilar primeiro os JARs de produção **Realm Markets 0.2.0 e Crown Ledger 0.2.0**, com os testes unitários aprovados. Cada mod corre depois os testes nativos sozinho e com o JAR novo do outro mod, compilado no mesmo commit, mais os JARs publicados e verificados de Contracts 0.3.1, Realm Council 0.2.1 e Realm Identity 0.1.0. Os hashes conhecidos dos três companheiros publicados e o hash do JAR novo são verificados antes dos testes e novamente no empacotamento.
+
+Os registos de integração têm de confirmar que as verificações de imposto com o outro mod real terminaram: compra tributada, separação do ganho líquido e reserva fiscal, entrada exata no tesouro, repetição sem cobrar outro imposto e retenção da reserva quando a transferência não cabe. A simples presença de um JAR companheiro não aprova a integração. O número de testes obrigatórios é obtido das anotações do código e comparado com a conclusão do servidor.
+
+Os dois clientes Minecraft têm de aprovar os menus de produção, incluindo a taxa configurável no cofre e o total/imposto/ganho líquido da compra. As duas versões são empacotadas e publicadas pelo bot numa única operação. A proveniência identifica o mesmo commit de origem e o hash do outro JAR efetivamente usado.
+
+Faz uma cópia de segurança do mundo e dos perfis **antes de atualizar**. O formato 1 migra para o 2, preservando proprietários, lojas, stock e ganhos anteriores, com reserva de imposto inicialmente vazia. Depois da migração, regressar à versão antiga exige restaurar a cópia completa anterior. Não basta trocar o JAR.
+
+Chronicles RP/Origins/Jupiter não fazem parte desta execução. O arredondamento digital em cêntimos é verificado na lógica independente, sem alegar que os perfis destes mods foram executados dentro do Minecraft.
+
 ## Resultados aprovados — 0.1.1
 
 A versão **0.1.1 Beta** foi compilada, testada e publicada pela [execução 38887747972](https://github.com/ROCKABITS/Mods/actions/runs/38887747972), sobre o commit `6e8f8ab186f9ba1ba6eace7af3dab1cfb0475633`. A publicação automatizada terminou depois de todas as verificações exigidas. Esta atualização corrige o ângulo de apresentação dos dois modelos de item para mostrar a frente do balcão, a placa e o toldo às riscas; a geometria das bancas colocadas e as operações de comércio mantêm-se.

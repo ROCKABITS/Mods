@@ -5,6 +5,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicReference;
+import java.lang.reflect.InvocationTargetException;
+import net.minecraft.server.MinecraftServer;
+import net.neoforged.fml.ModList;
+import pt.realmmarkets.api.MarketsApi;
 import java.util.function.Consumer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -129,7 +134,7 @@ public final class MarketGameTests {
             var records = new ArrayList<>(data.ledger.stalls());
             records.removeIf(stall -> stall.id().equals(replacement.id()));
             records.add(replacement);
-            data.replace(new MarketLedger(records));
+            data.replace(new MarketLedger(records, data.ledger.taxBalances()));
         }
 
         @Override public void close() {
@@ -165,7 +170,32 @@ public final class MarketGameTests {
     }
 
     private static String buy(int slot, int quantity, long price, String item) {
-        return "{\"slot\":" + slot + ",\"quantity\":" + quantity + ",\"price\":" + price + ",\"item\":\"" + item + "\"}";
+        return buy(slot, quantity, price, item, 0);
+    }
+
+    private static String buy(int slot, int quantity, long price, String item, int rate) {
+        return "{\"slot\":" + slot + ",\"quantity\":" + quantity + ",\"price\":" + price
+                + ",\"item\":\"" + item + "\",\"marketTaxBasisPoints\":" + rate + "}";
+    }
+
+    /** Changes only the trusted server capability, restoring the actual Crown provider afterwards. */
+    private static final class TaxProvider implements AutoCloseable {
+        final MarketsApi.TreasuryProvider original;
+        final MarketsApi.TreasuryProvider replacement;
+        TaxProvider(MarketsApi.TreasuryProvider replacement) {
+            try {
+                var field = MarketsApi.class.getDeclaredField("treasury");
+                field.setAccessible(true);
+                original = (MarketsApi.TreasuryProvider) field.get(null);
+            } catch (ReflectiveOperationException failure) { throw new AssertionError(failure); }
+            this.replacement = replacement;
+            if (original != null) MarketsApi.unregisterTreasury(original);
+            if (replacement != null) MarketsApi.registerTreasury(replacement);
+        }
+        @Override public void close() {
+            if (replacement != null) MarketsApi.unregisterTreasury(replacement);
+            if (original != null) MarketsApi.registerTreasury(original);
+        }
     }
 
     /** Arrange only one immutable expiry field; the live physical authorization stays valid. */
@@ -667,7 +697,7 @@ public final class MarketGameTests {
             give(buyer, Items.EMERALD, 20);
             f.open(buyer);
             var before = f.current(stall);
-            String quote = ",\"price\":2,\"item\":\"minecraft:apple\"}";
+            String quote = ",\"price\":2,\"item\":\"minecraft:apple\",\"marketTaxBasisPoints\":0}";
             for (String bad : List.of("{", "[]", "null", "{\"slot\":0,\"quantity\":1.5" + quote,
                     "{\"slot\":0,\"quantity\":1,\"owner\":\"" + owner.getUUID() + "\"" + quote,
                     "{\"slot\":0,\"quantity\":1,\"stall\":\"" + UUID.randomUUID() + "\"" + quote,
@@ -1042,4 +1072,345 @@ public final class MarketGameTests {
         }
         helper.succeed();
     }
+    @GameTest(template = "markets_empty", timeoutTicks = 100)
+    public static void fivePercentPaidSaleReservesOfflineSellerNetAndClaimsNeverRetax(GameTestHelper helper) {
+        try (var tax = new TaxProvider(server -> 500); var f = new Fixture(helper)) {
+            var owner = f.player();
+            var stall = f.place(owner);
+            f.apples(owner, 2, 20);
+            var buyer = f.player();
+            give(buyer, Items.EMERALD, 20);
+            f.open(buyer);
+            helper.assertTrue(owner.server.getPlayerList().getPlayer(owner.getUUID()) == null,
+                    "The taxed seller fixture must really be offline in the server PlayerList");
+            var view = MarketService.snapshot(buyer);
+            helper.assertTrue(((Number) view.get("marketTaxBasisPoints")).intValue() == 500
+                            && Boolean.TRUE.equals(view.get("treasuryAvailable")),
+                    "The actual buyer snapshot did not expose the trusted current treasury rate");
+            MarketService.action(buyer, "buy", buy(0, 1, 20, "minecraft:apple", 500));
+            helper.assertTrue(buyer.getInventory().countItem(Items.EMERALD) == 0
+                            && buyer.getInventory().countItem(Items.APPLE) == 1
+                            && offer(f, stall).stock() == 1 && f.current(stall).earnings() == 19
+                            && f.data.ledger.taxBalance(Currency.EMERALD) == 1
+                            && owner.getInventory().countItem(Items.EMERALD) == 0,
+                    "Paid gross20 must conserve buyer20 = offline seller19 + funded treasury escrow1");
+            MarketService.trustedClaim(owner);
+            rejected(helper, () -> MarketService.trustedClaim(owner));
+            MarketService.trustedWithdraw(owner, 0, 1);
+            helper.assertTrue(owner.getInventory().countItem(Items.EMERALD) == 19
+                            && owner.getInventory().countItem(Items.APPLE) == 1
+                            && f.current(stall).earnings() == 0 && f.data.ledger.taxBalance(Currency.EMERALD) == 1,
+                    "Repeated earnings collection or stock withdrawal taxed existing assets a second time");
+            f.data.ledger.remove(stall.id(), owner.getUUID());
+            helper.assertTrue(f.data.ledger.taxBalance(Currency.EMERALD) == 1,
+                    "Removing an empty stall discarded independently retained paid sales tax");
+        }
+        helper.succeed();
+    }
+
+    @GameTest(template = "markets_empty", timeoutTicks = 100)
+    public static void taxRoundsDownOnTheWholePurchaseAndOneHundredPercentAllowsZeroSellerNet(GameTestHelper helper) {
+        var rate = new java.util.concurrent.atomic.AtomicInteger(500);
+        try (var tax = new TaxProvider(server -> rate.get()); var f = new Fixture(helper)) {
+            var owner = f.player();
+            var stall = f.place(owner);
+            f.apples(owner, 4, 10);
+            var buyer = f.player();
+            give(buyer, Items.EMERALD, 40);
+            f.open(buyer);
+            MarketService.trustedBuy(buyer, 0, 2);
+            helper.assertTrue(f.current(stall).earnings() == 19 && f.data.ledger.taxBalance(Currency.EMERALD) == 1,
+                    "Tax must round down once on gross20, rather than rounding each gross10 unit to zero");
+            rate.set(10_000);
+            MarketService.trustedBuy(buyer, 0, 2);
+            helper.assertTrue(buyer.getInventory().countItem(Items.APPLE) == 4
+                            && buyer.getInventory().countItem(Items.EMERALD) == 0
+                            && f.current(stall).earnings() == 19 && f.data.ledger.taxBalance(Currency.EMERALD) == 21,
+                    "A 100% paid sale must deliver items and retain gross20 tax with zero added seller earnings");
+        }
+        helper.succeed();
+    }
+
+    @GameTest(template = "markets_empty", timeoutTicks = 100)
+    public static void staleMissingFractionalAndForgedRateQuotesCannotChargeTheBuyer(GameTestHelper helper) {
+        try (var tax = new TaxProvider(server -> 500); var f = new Fixture(helper)) {
+            var owner = f.player();
+            var stall = f.place(owner);
+            f.apples(owner, 2, 20);
+            var buyer = f.player();
+            give(buyer, Items.EMERALD, 40);
+            f.open(buyer);
+            var before = f.current(stall);
+            String valid = buy(0, 1, 20, "minecraft:apple", 500);
+            for (String invalid : List.of(buy(0, 1, 20, "minecraft:apple", 0),
+                    buy(0, 1, 20, "minecraft:apple", -1), buy(0, 1, 20, "minecraft:apple", 10_001),
+                    valid.replace(",\"marketTaxBasisPoints\":500", ""),
+                    valid.replace("\"marketTaxBasisPoints\":500", "\"marketTaxBasisPoints\":500.5"),
+                    valid.replace("\"marketTaxBasisPoints\":500", "\"marketTaxBasisPoints\":\"500\""))) {
+                f.open(buyer);
+                MarketService.action(buyer, "buy", invalid);
+                helper.assertTrue(f.current(stall).equals(before) && buyer.getInventory().countItem(Items.EMERALD) == 40
+                                && buyer.getInventory().countItem(Items.APPLE) == 0
+                                && f.data.ledger.taxBalance(Currency.EMERALD) == 0,
+                        "A stale, missing or noninteger tax quote changed a live buyer wallet or stock");
+            }
+            f.open(buyer);
+            MarketService.action(buyer, "buy", valid);
+            helper.assertTrue(f.current(stall).earnings() == 19 && f.data.ledger.taxBalance(Currency.EMERALD) == 1
+                            && buyer.getInventory().countItem(Items.EMERALD) == 20,
+                    "An explicitly accepted current tax quote could not purchase after rejected stale quotes");
+        }
+        helper.succeed();
+    }
+
+    @GameTest(template = "markets_empty", timeoutTicks = 100)
+    public static void brokenOrUnregisteredInstalledTreasuryBlocksSalesButNotStockOrEarningsRecovery(GameTestHelper helper) {
+        var broken = new java.util.concurrent.atomic.AtomicBoolean(false);
+        try (var tax = new TaxProvider(server -> {
+            if (broken.get()) throw new IllegalStateException("Native broken-provider fixture");
+            return 500;
+        }); var f = new Fixture(helper)) {
+            var owner = f.player();
+            var stall = f.place(owner);
+            f.apples(owner, 3, 20);
+            var buyer = f.player();
+            give(buyer, Items.EMERALD, 40);
+            f.open(buyer);
+            MarketService.trustedBuy(buyer, 0, 1);
+            broken.set(true);
+            f.open(buyer);
+            var view = MarketService.snapshot(buyer);
+            helper.assertTrue(Boolean.FALSE.equals(view.get("treasuryAvailable")),
+                    "A broken installed provider was presented to buyers as available or tax-free");
+            var before = f.current(stall);
+            rejected(helper, () -> MarketService.trustedBuy(buyer, 0, 1));
+            helper.assertTrue(f.current(stall).equals(before) && buyer.getInventory().countItem(Items.EMERALD) == 20,
+                    "An unavailable provider silently allowed an untaxed sale or charged a failed purchase");
+            f.open(owner);
+            MarketService.trustedWithdraw(owner, 0, 2);
+            MarketService.trustedClaim(owner);
+            helper.assertTrue(owner.getInventory().countItem(Items.APPLE) == 2
+                            && owner.getInventory().countItem(Items.EMERALD) == 19
+                            && f.data.ledger.taxBalance(Currency.EMERALD) == 1,
+                    "Treasury unavailability trapped stock/earnings or taxed recovery of old assets");
+        }
+        try (var noProvider = new TaxProvider(null)) {
+            if (ModList.get().isLoaded("kingdomtreasury")) {
+                rejected(helper, () -> MarketsApi.salesTaxBasisPoints(helper.getLevel().getServer()));
+            } else {
+                helper.assertTrue(MarketsApi.salesTaxBasisPoints(helper.getLevel().getServer()) == 0,
+                        "Standalone markets without Crown Ledger must retain their original zero-tax behavior");
+            }
+        }
+        helper.succeed();
+    }
+
+    @GameTest(template = "markets_empty", timeoutTicks = 100)
+    public static void privilegedTaxTransfersRequireExactCapabilityThreadCurrencyAmountAndFunding(GameTestHelper helper) {
+        try (var tax = new TaxProvider(server -> 500); var f = new Fixture(helper)) {
+            var owner = f.player();
+            f.place(owner);
+            f.apples(owner, 1, 20);
+            var buyer = f.player();
+            give(buyer, Items.EMERALD, 20);
+            f.open(buyer);
+            MarketService.trustedBuy(buyer, 0, 1);
+            var server = helper.getLevel().getServer();
+            MarketsApi.TreasuryProvider impostor = ignored -> 500;
+            rejected(helper, () -> MarketsApi.registerTreasury(impostor));
+            rejected(helper, () -> MarketsApi.unregisterTreasury(impostor));
+            rejected(helper, () -> MarketsApi.treasuryDebit(server, impostor, "EMERALD", 1));
+            rejected(helper, () -> MarketsApi.treasuryDebit(server, null, "EMERALD", 1));
+            for (long amount : new long[]{-1, 0, 2, MarketLedger.MAX_EARNINGS + 1}) {
+                rejected(helper, () -> MarketsApi.treasuryDebit(server, tax.replacement, "EMERALD", amount));
+            }
+            rejected(helper, () -> MarketsApi.treasuryDebit(server, tax.replacement, "FORGED", 1));
+            rejected(helper, () -> MarketsApi.treasuryDebit(server, tax.replacement, "CHRONICLES", 1));
+            AtomicReference<Throwable> offThread = new AtomicReference<>();
+            Thread worker = new Thread(() -> {
+                try { MarketsApi.treasuryDebit(server, tax.replacement, "EMERALD", 1); }
+                catch (Throwable expected) { offThread.set(expected); }
+            }, "native-markets-wrong-thread");
+            worker.start();
+            try { worker.join(2_000); }
+            catch (InterruptedException failure) { Thread.currentThread().interrupt(); throw new AssertionError(failure); }
+            helper.assertTrue(!worker.isAlive() && offThread.get() instanceof IllegalStateException
+                            && f.data.ledger.taxBalance(Currency.EMERALD) == 1,
+                    "A spoofed, unsupported, unfunded or off-thread transfer changed funded sales escrow");
+            helper.assertTrue(MarketsApi.treasuryDebit(server, tax.replacement, "EMERALD", 1) == 1
+                            && f.data.ledger.taxBalance(Currency.EMERALD) == 0,
+                    "The exact registered server capability could not transfer its one funded emerald");
+            rejected(helper, () -> MarketsApi.treasuryDebit(server, tax.replacement, "EMERALD", 1));
+        }
+        helper.succeed();
+    }
+
+    @GameTest(template = "markets_empty", timeoutTicks = 100)
+    public static void nativeTaxEscrowRoundTripAndLegacyMigrationPreserveStockAndExistingOwnerEarnings(GameTestHelper helper) {
+        try (var tax = new TaxProvider(server -> 500); var f = new Fixture(helper)) {
+            var owner = f.player();
+            var stall = f.place(owner);
+            f.apples(owner, 3, 20);
+            var buyer = f.player();
+            give(buyer, Items.EMERALD, 20);
+            f.open(buyer);
+            MarketService.trustedBuy(buyer, 0, 1);
+            var saved = f.data.save(new CompoundTag(), helper.getLevel().registryAccess());
+            var restored = MarketData.load(saved, helper.getLevel().registryAccess());
+            helper.assertTrue(saved.getInt("version") == 2 && restored.ledger.stalls().equals(f.data.ledger.stalls())
+                            && restored.ledger.taxBalance(Currency.EMERALD) == 1,
+                    "Native version2 serialization lost the distinct paid sales-tax escrow");
+            var legacy = saved.copy();
+            legacy.putInt("version", 1);
+            legacy.remove("taxBalances");
+            var migrated = MarketData.load(legacy, helper.getLevel().registryAccess());
+            helper.assertTrue(migrated.isDirty() && migrated.ledger.stalls().equals(f.data.ledger.stalls())
+                            && migrated.ledger.find(stall.id()).orElseThrow().earnings() == 19
+                            && migrated.ledger.find(stall.id()).orElseThrow().listings().getFirst().stock() == 2
+                            && migrated.ledger.taxBalance(Currency.EMERALD) == 0,
+                    "Migrating a real version1 stall changed its stock/earnings or retroactively created taxes");
+            var missing = saved.copy(); missing.remove("taxBalances");
+            rejected(helper, () -> MarketData.load(missing, helper.getLevel().registryAccess()));
+            var duplicate = saved.copy();
+            var balances = duplicate.getList("taxBalances", Tag.TAG_COMPOUND);
+            balances.add(balances.getCompound(0).copy());
+            rejected(helper, () -> MarketData.load(duplicate, helper.getLevel().registryAccess()));
+            var negative = saved.copy();
+            negative.getList("taxBalances", Tag.TAG_COMPOUND).getCompound(0).putLong("amount", -1);
+            rejected(helper, () -> MarketData.load(negative, helper.getLevel().registryAccess()));
+        }
+        helper.succeed();
+    }
+
+    @GameTest(template = "markets_empty", timeoutTicks = 100)
+    public static void overflowingGlobalTaxEscrowRejectsTheSaleBeforeMoneyOrStockMoves(GameTestHelper helper) {
+        try (var tax = new TaxProvider(server -> 10_000); var f = new Fixture(helper)) {
+            var owner = f.player();
+            var stall = f.place(owner);
+            f.apples(owner, 1, 1);
+            f.data.replace(new MarketLedger(f.data.ledger.stalls(), Map.of(Currency.EMERALD, MarketLedger.MAX_EARNINGS)));
+            var buyer = f.player();
+            give(buyer, Items.EMERALD, 1);
+            f.open(buyer);
+            var before = f.current(stall);
+            rejected(helper, () -> MarketService.trustedBuy(buyer, 0, 1));
+            helper.assertTrue(f.current(stall).equals(before) && f.data.ledger.taxBalance(Currency.EMERALD) == MarketLedger.MAX_EARNINGS
+                            && buyer.getInventory().countItem(Items.EMERALD) == 1
+                            && buyer.getInventory().countItem(Items.APPLE) == 0,
+                    "A full tax destination destroyed funded money or delivered unpaid items before rejecting overflow");
+        }
+        helper.succeed();
+    }
+
+    @GameTest(template = "markets_empty", timeoutTicks = 100)
+    public static void actualCrownProviderSweepsPaidSalesOnceAndRetainsEscrowWhenItsDestinationOverflows(GameTestHelper helper) {
+        if (!ModList.get().isLoaded("kingdomtreasury")) {
+            helper.assertTrue(!MarketsApi.treasuryAvailable()
+                            && MarketsApi.salesTaxBasisPoints(helper.getLevel().getServer()) == 0,
+                    "A standalone market unexpectedly required an absent treasury provider");
+            helper.succeed();
+            return;
+        }
+        var server = helper.getLevel().getServer();
+        Object crownData = optionalStatic("pt.crownledger.data.TreasuryData", "get", new Class<?>[]{MinecraftServer.class}, server);
+        Object previous;
+        try { previous = crownData.getClass().getField("treasury").get(crownData); }
+        catch (ReflectiveOperationException failure) { throw new AssertionError(failure); }
+        try (var f = new Fixture(helper)) {
+            Object treasury;
+            Object policy;
+            Class<?> treasuryType;
+            Class<?> policyType;
+            Class<?> currencyType;
+            Class<?> kindType;
+            try {
+                treasuryType = Class.forName("pt.crownledger.domain.Treasury");
+                policyType = Class.forName("pt.crownledger.domain.Policy");
+                currencyType = Class.forName("pt.crownledger.domain.Treasury$Currency");
+                kindType = Class.forName("pt.crownledger.domain.Treasury$Kind");
+                var taxMode = Class.forName("pt.crownledger.domain.Policy$TaxMode");
+                treasury = treasuryType.getConstructor().newInstance();
+                policy = policyType.getConstructor(int.class, taxMode, int.class, long.class, long.class,
+                                int.class, int.class, currencyType, int.class, int.class, int.class)
+                        .newInstance(0, optionalEnum(taxMode, "FIXED"), 700, 3L, 0L, 168, 10,
+                                optionalEnum(currencyType, "EMERALD"), 1, 3, 500);
+                crownData.getClass().getField("treasury").set(crownData, treasury);
+            } catch (ReflectiveOperationException failure) { throw new AssertionError("Actual Crown0.2.0 domain missing", failure); }
+            optionalCall(treasury, "setPolicy", new Class<?>[]{policyType, UUID.class, long.class},
+                    policy, UUID.randomUUID(), System.currentTimeMillis());
+            helper.assertTrue(MarketsApi.treasuryAvailable() && MarketsApi.salesTaxBasisPoints(server) == 500,
+                    "The actual registered Crown provider did not preserve market5% independently of FIXED tax/contract7%");
+            var owner = f.player();
+            var stall = f.place(owner);
+            f.apples(owner, 2, 20);
+            var buyer = f.player(); give(buyer, Items.EMERALD, 40); f.open(buyer);
+            MarketService.trustedBuy(buyer, 0, 1);
+            helper.assertTrue(f.current(stall).earnings() == 19 && f.data.ledger.taxBalance(Currency.EMERALD) == 1,
+                    "Actual paired Crown/Markets did not split the first paid gross20 sale into19+1");
+            optionalStatic("pt.crownledger.service.CrownService", "sweepMarkets", new Class<?>[]{MinecraftServer.class}, server);
+            Object emerald = optionalEnum(currencyType, "EMERALD");
+            helper.assertTrue((long) optionalCall(treasuryOf(crownData), "balance", new Class<?>[]{currencyType}, emerald) == 1
+                            && f.data.ledger.taxBalance(Currency.EMERALD) == 0,
+                    "The actual Crown service failed to transfer exactly one funded market tax");
+            MarketService.trustedClaim(owner);
+            rejected(helper, () -> MarketService.trustedClaim(owner));
+            optionalStatic("pt.crownledger.service.CrownService", "sweepMarkets", new Class<?>[]{MinecraftServer.class}, server);
+            helper.assertTrue(owner.getInventory().countItem(Items.EMERALD) == 19
+                            && (long) optionalCall(treasuryOf(crownData), "balance", new Class<?>[]{currencyType}, emerald) == 1,
+                    "Repeated market collection or actual Crown synchronization taxed or credited the same sale twice");
+            MarketService.trustedBuy(buyer, 0, 1);
+            Object deposit = optionalEnum(kindType, "DEPOSIT");
+            optionalCall(treasuryOf(crownData), "addFunds",
+                    new Class<?>[]{currencyType, long.class, kindType, UUID.class, String.class, long.class},
+                    emerald, Long.MAX_VALUE - 1, deposit, null, "Native full destination fixture", System.currentTimeMillis());
+            rejected(helper, () -> optionalStatic("pt.crownledger.service.CrownService", "sweepMarkets",
+                    new Class<?>[]{MinecraftServer.class}, server));
+            helper.assertTrue(f.data.ledger.taxBalance(Currency.EMERALD) == 1
+                            && (long) optionalCall(treasuryOf(crownData), "balance", new Class<?>[]{currencyType}, emerald) == Long.MAX_VALUE,
+                    "Crown destination overflow destroyed the still-funded Markets escrow");
+            optionalCall(treasuryOf(crownData), "removeFunds",
+                    new Class<?>[]{currencyType, long.class, kindType, UUID.class, String.class, long.class},
+                    emerald, Long.MAX_VALUE - 1, deposit, null, "Release native destination fixture", System.currentTimeMillis());
+            optionalStatic("pt.crownledger.service.CrownService", "sweepMarkets", new Class<?>[]{MinecraftServer.class}, server);
+            optionalStatic("pt.crownledger.service.CrownService", "sweepMarkets", new Class<?>[]{MinecraftServer.class}, server);
+            helper.assertTrue(f.data.ledger.taxBalance(Currency.EMERALD) == 0
+                            && (long) optionalCall(treasuryOf(crownData), "balance", new Class<?>[]{currencyType}, emerald) == 2
+                            && buyer.getInventory().countItem(Items.EMERALD) == 0
+                            && buyer.getInventory().countItem(Items.APPLE) == 2
+                            && f.current(stall).earnings() == 19,
+                    "Restored capacity failed to transfer the retained tax once while conserving two real sales");
+            System.out.println("MARKETS_CROWN_TAX_INTEGRATION_PASSED");
+        } finally {
+            try { crownData.getClass().getField("treasury").set(crownData, previous); ((net.minecraft.world.level.saveddata.SavedData) crownData).setDirty(); }
+            catch (ReflectiveOperationException failure) { throw new AssertionError(failure); }
+        }
+        helper.succeed();
+    }
+
+    private static Object treasuryOf(Object data) {
+        try { return data.getClass().getField("treasury").get(data); }
+        catch (ReflectiveOperationException failure) { throw new AssertionError(failure); }
+    }
+
+    @SuppressWarnings({"rawtypes", "unchecked"})
+    private static Object optionalEnum(Class<?> type, String name) { return Enum.valueOf((Class) type, name); }
+
+    private static Object optionalStatic(String type, String method, Class<?>[] signature, Object... arguments) {
+        try { return Class.forName(type).getMethod(method, signature).invoke(null, arguments); }
+        catch (InvocationTargetException failure) { throw optionalFailure(failure.getCause()); }
+        catch (ReflectiveOperationException failure) { throw new AssertionError("Actual optional API unavailable", failure); }
+    }
+
+    private static Object optionalCall(Object target, String method, Class<?>[] signature, Object... arguments) {
+        try { return target.getClass().getMethod(method, signature).invoke(target, arguments); }
+        catch (InvocationTargetException failure) { throw optionalFailure(failure.getCause()); }
+        catch (ReflectiveOperationException failure) { throw new AssertionError("Actual optional record unavailable", failure); }
+    }
+
+    private static RuntimeException optionalFailure(Throwable failure) {
+        if (failure instanceof RuntimeException runtime) return runtime;
+        if (failure instanceof Error error) throw error;
+        return new IllegalStateException(failure);
+    }
+
 }

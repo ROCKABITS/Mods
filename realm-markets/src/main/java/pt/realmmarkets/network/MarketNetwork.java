@@ -9,7 +9,7 @@ import pt.realmmarkets.service.MarketService;
 public final class MarketNetwork {
     private MarketNetwork() {}
     public static void register(RegisterPayloadHandlersEvent event) {
-        var registrar = event.registrar("1");
+        var registrar = event.registrar("2");
         registrar.playToServer(MarketPackets.Action.TYPE, MarketPackets.Action.CODEC, (packet, context) -> {
             if (context.player() instanceof ServerPlayer player)
                 MarketService.action(player, packet.operation(), packet.json());

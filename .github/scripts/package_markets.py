@@ -9,6 +9,7 @@ import shutil
 import tomllib
 import xml.etree.ElementTree as ET
 import zipfile
+from joint_economy_release import validate_checks, verify_companions
 
 
 repo = Path(__file__).resolve().parents[2]
@@ -17,20 +18,9 @@ properties = dict(line.split('=', 1) for line in (project / 'gradle.properties')
 version = properties['mod_version']
 assert re.fullmatch(r'\d+\.\d+\.\d+', version), 'Invalid release version'
 
-reports = [ET.parse(p).getroot() for p in (project / 'build/test-results/test').glob('TEST-*.xml')]
-unit = sum(int(r.get('tests', 0)) for r in reports)
-assert unit > 0, 'No unit-test results'
-assert not any(int(r.get(k, 0)) for r in reports for k in ('failures', 'errors', 'skipped')), 'Unsuccessful unit tests'
-expected = sum(len(re.findall(r'@GameTest\s*\(', p.read_text()))
-               for p in (project / 'src/gametest/java').rglob('*.java'))
-assert expected > 0, 'No native tests configured'
-native = {}
-for filename in ['gametests.log', 'integration.log']:
-    log = (project / filename).read_text(errors='replace')
-    counts = re.findall(r'All (\d+) required tests passed', log, re.I)
-    assert counts and int(counts[-1]) == expected, filename + ': native test total does not match configured tests'
-    assert 'BUILD SUCCESSFUL' in log and 'BUILD FAILED' not in log, filename + ': unsuccessful Gradle run'
-    native[filename] = int(counts[-1])
+joint_checks = {name: validate_checks(name) for name in ('crown-ledger', 'realm-markets')}
+unit, native = joint_checks['realm-markets']
+companions, counterpart = verify_companions('realm-markets')
 
 visual_dir = project / 'qa-results/markets-client'
 visual = json.loads((visual_dir / 'result.json').read_text())
@@ -42,16 +32,7 @@ for name in images:
     assert image.is_file() and image.stat().st_size > 1024, name
     assert image.read_bytes()[:8] == b'\x89PNG\r\n\x1a\n', name
 
-companions = {
-    'contracts-bounties-0.3.1.jar': '9746951762a6762b2cb466ca695b7d43f8669c9dc1d55c12cae1b4bd17953f0c',
-    'realmcouncil-0.2.1.jar': '3e407c391f5e2f919e246d1d889323c57ea40b30e0387e9614ae32e0e9251a0a',
-    'crown-ledger-0.1.1.jar': 'e82795f13e9f912f6729cebbad7a31dc242735b7a9e6396d6cbfb7eac02736aa',
-    'realm-identity-0.1.0.jar': '9332d133320066d42bedb08fe129dee3da0de41f261f459140dea2a12ebf1606',
-}
 digest = lambda p: hashlib.sha256(p.read_bytes()).hexdigest()
-assert {p.name for p in (project / 'compat-libs').glob('*.jar')} == set(companions), 'Unexpected companion test setup'
-for name, checksum in companions.items():
-    assert digest(project / 'compat-libs' / name) == checksum, name + ': companion checksum mismatch'
 
 jar_name = f'realm-markets-{version}.jar'
 source = project / 'build/libs' / jar_name
@@ -63,6 +44,8 @@ with zipfile.ZipFile(source) as contents:
     assert not any(p.startswith(('pt/realmmarkets/test/', 'pt/realmmarkets/visualtest/')) for p in names), 'Test classes in production JAR'
     assert not any(p.startswith('data/realmmarkets/structure/') for p in names), 'Test template in production JAR'
     assert 'pt/realmmarkets/RealmMarketsMod.class' in names, 'Production entrypoint missing'
+    assert 'pt/realmmarkets/api/MarketsApi.class' in names, 'Sales-tax API missing'
+    assert 'pt/realmmarkets/domain/SaleAmounts.class' in names, 'Sales-tax arithmetic missing'
     for stall in ['crimson_stall', 'sage_stall']:
         for path in [f'assets/realmmarkets/blockstates/{stall}.json',
                      f'assets/realmmarkets/models/item/{stall}.json',
@@ -95,7 +78,7 @@ These images were captured from the actual Minecraft 1.21.1 NeoForge client, usi
 
 - realm-markets-stalls.png: both original 3D market stalls rendered by Minecraft.
 - realm-markets-owner.png: production owner screen with demonstration stock and earnings.
-- realm-markets-buying.png: production buyer screen with demonstration offers and per-item prices.
+- realm-markets-buying.png: production buyer screen with demonstration offers, purchase total, sales tax and seller net earnings.
 
 All images may be used for the ROCKABITS Realm Markets project gallery.
 ''')
@@ -116,6 +99,10 @@ provenance = {
     'actual_client_validation': True,
     'chronicles_runtime_tested': False,
     'companion_jars': companions,
+    'fresh_counterpart': counterpart,
+    'joint_release': 'Crown Ledger and Realm Markets, built and tested from the same source commit',
+    'counterpart_unit_tests': joint_checks['crown-ledger'][0],
+    'counterpart_native_tests': joint_checks['crown-ledger'][1],
     'screenshots': {name: digest(media / name) for name in images},
 }
 (out / f'realm-markets-{version}.build.json').write_text(json.dumps(provenance, indent=2) + '\n')
