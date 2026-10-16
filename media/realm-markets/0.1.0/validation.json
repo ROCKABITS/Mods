@@ -1,0 +1,114 @@
+{
+  "success": true,
+  "message": "Two complete native stall models, all 32 placed states, production owner/buyer screens, currency parsing, quote payloads and small-screen scrolling passed.",
+  "screenshots": [
+    "realm-markets-stalls.png",
+    "realm-markets-owner.png",
+    "realm-markets-buying.png"
+  ],
+  "images": [
+    "realm-markets-stalls.png",
+    "realm-markets-owner.png",
+    "realm-markets-buying.png"
+  ],
+  "interfaceData": "Clearly labelled sample stock and funds in the actual production MarketScreen; not a live Chronicles profile or a record of actual trades",
+  "stallRendering": "Actual registered Minecraft item models, with the same original geometry and textures as the four-part placed stalls",
+  "interfaceChecks": [
+    "Production owner buttons send exact integer-cents pricing, whole stock/withdraw quantities, a title-only rename and an amount-free earnings claim; 100-tick refresh carries no client state.",
+    "Production buyer controls expose no owner actions, send the displayed item/price quote, and reject insufficient stock, fractional quantities, insufficient funds and unavailable Chronicles profiles.",
+    "Standalone prices use whole emeralds; all owner controls remain reachable through native scrolling at 320x240, and expired sessions close only the market menu."
+  ],
+  "recordedUiRequests": [
+    {
+      "operation": "configure",
+      "payload": {
+        "slot": 0,
+        "price": 125
+      }
+    },
+    {
+      "operation": "stock",
+      "payload": {
+        "slot": 0,
+        "quantity": 32
+      }
+    },
+    {
+      "operation": "withdraw",
+      "payload": {
+        "slot": 0,
+        "quantity": 7
+      }
+    },
+    {
+      "operation": "rename",
+      "payload": {
+        "title": "Aveline\u0027s Orchard"
+      }
+    },
+    {
+      "operation": "claim",
+      "payload": {}
+    },
+    {
+      "operation": "refresh",
+      "payload": {}
+    },
+    {
+      "operation": "buy",
+      "payload": {
+        "slot": 0,
+        "quantity": 3,
+        "price": 125,
+        "item": "minecraft:apple"
+      }
+    },
+    {
+      "operation": "configure",
+      "payload": {
+        "slot": 0,
+        "price": 2
+      }
+    }
+  ],
+  "requestTransport": "Recorded locally; no server requests",
+  "bakedQuadCounts": {
+    "realmmarkets:crimson_stall": 1308,
+    "Block{realmmarkets:crimson_stall}[facing\u003dnorth,part\u003d0]": 450,
+    "Block{realmmarkets:crimson_stall}[facing\u003dnorth,part\u003d1]": 408,
+    "Block{realmmarkets:crimson_stall}[facing\u003dnorth,part\u003d2]": 396,
+    "Block{realmmarkets:crimson_stall}[facing\u003dnorth,part\u003d3]": 342,
+    "Block{realmmarkets:crimson_stall}[facing\u003dsouth,part\u003d0]": 450,
+    "Block{realmmarkets:crimson_stall}[facing\u003dsouth,part\u003d1]": 408,
+    "Block{realmmarkets:crimson_stall}[facing\u003dsouth,part\u003d2]": 396,
+    "Block{realmmarkets:crimson_stall}[facing\u003dsouth,part\u003d3]": 342,
+    "Block{realmmarkets:crimson_stall}[facing\u003dwest,part\u003d0]": 450,
+    "Block{realmmarkets:crimson_stall}[facing\u003dwest,part\u003d1]": 408,
+    "Block{realmmarkets:crimson_stall}[facing\u003dwest,part\u003d2]": 396,
+    "Block{realmmarkets:crimson_stall}[facing\u003dwest,part\u003d3]": 342,
+    "Block{realmmarkets:crimson_stall}[facing\u003deast,part\u003d0]": 450,
+    "Block{realmmarkets:crimson_stall}[facing\u003deast,part\u003d1]": 408,
+    "Block{realmmarkets:crimson_stall}[facing\u003deast,part\u003d2]": 396,
+    "Block{realmmarkets:crimson_stall}[facing\u003deast,part\u003d3]": 342,
+    "realmmarkets:sage_stall": 1308,
+    "Block{realmmarkets:sage_stall}[facing\u003dnorth,part\u003d0]": 450,
+    "Block{realmmarkets:sage_stall}[facing\u003dnorth,part\u003d1]": 408,
+    "Block{realmmarkets:sage_stall}[facing\u003dnorth,part\u003d2]": 396,
+    "Block{realmmarkets:sage_stall}[facing\u003dnorth,part\u003d3]": 342,
+    "Block{realmmarkets:sage_stall}[facing\u003dsouth,part\u003d0]": 450,
+    "Block{realmmarkets:sage_stall}[facing\u003dsouth,part\u003d1]": 408,
+    "Block{realmmarkets:sage_stall}[facing\u003dsouth,part\u003d2]": 396,
+    "Block{realmmarkets:sage_stall}[facing\u003dsouth,part\u003d3]": 342,
+    "Block{realmmarkets:sage_stall}[facing\u003dwest,part\u003d0]": 450,
+    "Block{realmmarkets:sage_stall}[facing\u003dwest,part\u003d1]": 408,
+    "Block{realmmarkets:sage_stall}[facing\u003dwest,part\u003d2]": 396,
+    "Block{realmmarkets:sage_stall}[facing\u003dwest,part\u003d3]": 342,
+    "Block{realmmarkets:sage_stall}[facing\u003deast,part\u003d0]": 450,
+    "Block{realmmarkets:sage_stall}[facing\u003deast,part\u003d1]": 408,
+    "Block{realmmarkets:sage_stall}[facing\u003deast,part\u003d2]": 396,
+    "Block{realmmarkets:sage_stall}[facing\u003deast,part\u003d3]": 342
+  },
+  "validatedBlockStates": 32,
+  "windowWidth": 1600,
+  "windowHeight": 900
+}

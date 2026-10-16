@@ -1,0 +1,23 @@
+{
+  "version": "0.1.0",
+  "source_commit": "43654c451d32cf5e11cdbe8da943f3a0d406dcbe",
+  "tested_run": "https://github.com/ROCKABITS/Mods/actions/runs/38887031968",
+  "jar_sha256": "05fa8aa9a81cf886be7e4848a1f2e5e94997a47a9526c5f6c625aa01d1b26ff3",
+  "zip_sha256": "651a24b2c9e107b554985c65e23a7549193fff82e3ec27c3e2816d0f9e833831",
+  "unit_tests": 32,
+  "standalone_native_tests": 37,
+  "companion_loaded_native_tests": 37,
+  "actual_client_validation": true,
+  "chronicles_runtime_tested": false,
+  "companion_jars": {
+    "contracts-bounties-0.3.1.jar": "9746951762a6762b2cb466ca695b7d43f8669c9dc1d55c12cae1b4bd17953f0c",
+    "realmcouncil-0.2.1.jar": "3e407c391f5e2f919e246d1d889323c57ea40b30e0387e9614ae32e0e9251a0a",
+    "crown-ledger-0.1.1.jar": "e82795f13e9f912f6729cebbad7a31dc242735b7a9e6396d6cbfb7eac02736aa",
+    "realm-identity-0.1.0.jar": "9332d133320066d42bedb08fe129dee3da0de41f261f459140dea2a12ebf1606"
+  },
+  "screenshots": {
+    "realm-markets-stalls.png": "689fc143c04057cb7322a36b39a0d6be2da5a92ae7317514105886460970d4e0",
+    "realm-markets-owner.png": "1ed499791a878843863c5bbfb1585fcef266532207323614e232643a8cb449e8",
+    "realm-markets-buying.png": "cf8b1ace9dce849b7939f6f8e46f2de979c96d88a09266d1d32b6c090e0fa922"
+  }
+}
