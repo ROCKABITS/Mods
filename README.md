@@ -4,6 +4,7 @@ Projetos de ROCKABITS para **Minecraft 1.21.1**, **NeoForge 21.1.256+** e **Java
 
 | Mod | Download | Funcionalidades |
 | --- | --- | --- |
+| **Realm Rewards 0.1.1** | [JAR](https://github.com/ROCKABITS/Mods/raw/refs/heads/main/mod-pronto/realm-rewards-0.1.1.jar) · [ZIP](https://github.com/ROCKABITS/Mods/raw/refs/heads/main/mod-pronto/realm-rewards-0.1.1.zip) | Recompensas por conquistas Vanilla e de outros mods, carteira do Chronicles e configuração por conquista. |
 | **Chronicles RP 0.5.3** | [JAR](https://github.com/ROCKABITS/Mods/raw/refs/heads/main/mod-pronto/cronicasrp-0.5.3.jar) · [ZIP](https://github.com/ROCKABITS/Mods/raw/refs/heads/main/mod-pronto/cronicasrp-0.5.3.zip) | Personagens, economia e nome RP acima da cabeça, no TAB e no chat. Requer Origins e Jupiter. |
 | **Realm Markets 0.2.0** | [JAR](https://github.com/ROCKABITS/Mods/raw/refs/heads/main/mod-pronto/realm-markets-0.2.0.jar) · [ZIP](https://github.com/ROCKABITS/Mods/raw/refs/heads/main/mod-pronto/realm-markets-0.2.0.zip) | Duas bancas medievais, stock real, vendas com o dono offline e imposto para a tesouraria. |
 | **Realm Identity 0.1.0** | [JAR](https://github.com/ROCKABITS/Mods/raw/refs/heads/main/mod-pronto/realm-identity-0.1.0.jar) · [ZIP](https://github.com/ROCKABITS/Mods/raw/refs/heads/main/mod-pronto/realm-identity-0.1.0.zip) | Documento físico, escrivaninha, assinatura do Chronicles e apresentação com consentimento. |
@@ -15,6 +16,7 @@ O ZIP é uma alternativa ao download direto do JAR. Extrai-o antes de instalar.
 
 Se usas Crown Ledger e Realm Markets juntos, atualiza **ambos para 0.2.0** no servidor e em todos os clientes, substituindo os JARs antigos. Faz uma cópia de segurança do mundo e dos perfis do Chronicles antes de atualizar: os dados migram para o formato 2 e regressar à versão anterior exige restaurar essa cópia.
 
+- [Guia do Realm Rewards](realm-rewards/README.md): pagamentos por conquistas, valores padrão, administração e dinheiro pendente.
 - [Guia do Chronicles RP](chronicles-rp/README.md): personagens, nomes RP, dependências e economia.
 - [Guia do Realm Markets](realm-markets/README.md): receitas, abastecimento, preços por unidade e recolha dos ganhos.
 - [Guia do Realm Identity](realm-identity/README.md): emissão, segunda via, autenticidade e apresentação entre jogadores.
@@ -27,6 +29,8 @@ Se usas Crown Ledger e Realm Markets juntos, atualiza **ambos para 0.2.0** no se
 Cada mod funciona independentemente nas suas funcionalidades base. O Crown Ledger usa esmeraldas sem Chronicles RP. Com **Chronicles RP 0.5.3**, pode usar a carteira digital e a reputação existentes. Com Realm Council, só o governante de um mandato ativo e jurado pode gerir o tesouro; sem ele, um operador designa um responsável. Com Contracts, o governante publica contratos pagos pelo reino.
 
 O [Chronicles RP 0.5.3](chronicles-rp/README.md) mantém os perfis e a economia e acrescenta os nomes públicos de personagem. Substitui o JAR anterior no servidor e em todos os clientes; o protocolo passa para 7. As versões 0.5.2 e 0.5.3 não devem ser misturadas. Origins 0.3.2 e Jupiter 2.3.7 são necessários; Origins: Classes 0.3 é opcional.
+
+O Realm Rewards paga conquistas novas uma única vez por jogador. Um operador configura os valores com `/rewards`. A carteira do Chronicles recebe o pagamento; sem carteira disponível, a quantia fica pendente. Receitas e avanços internos começam com valor zero. Conquistas anteriores à instalação não pagam retroativamente.
 
 O Realm Markets usa esmeraldas em modo independente ou a carteira digital do Chronicles nas bancas novas quando esse mod está instalado. Os ganhos ficam guardados na banca até o proprietário os recolher. As vendas podem pagar uma percentagem própria definida pelo governante no Crown Ledger; o comprador paga o preço anunciado e o vendedor recolhe o líquido. A taxa começa em 0%, e os ganhos anteriores mantêm-se. Esta versão vende itens sem dados personalizados.
 

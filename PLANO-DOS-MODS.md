@@ -31,13 +31,13 @@ Os projetos futuros abaixo são um guião de produto e não estão incluídos no
 
 | Projeto | Objetivo | Estado |
 | --- | --- | --- |
-| Realm Rewards | Recompensar conquistas Vanilla e de outros mods com dinheiro do Chronicles RP. | 0.1.0 em desenvolvimento; [guia](realm-rewards/README.md). |
+| Realm Rewards | Recompensar conquistas Vanilla e de outros mods com dinheiro do Chronicles RP. | Implementado na 0.1.1; [guia](realm-rewards/README.md). |
 | Realm Notifications | Notificações no ecrã e API comum para os mods de RP. | Por desenvolver. |
 | Realm Titles | Títulos de personagem atribuídos pelo governante eleito. | Por desenvolver. |
 | Chronicles RP — Nomes RP | Mostrar o nome da personagem acima da cabeça, no TAB e no chat. | Implementado na 0.5.3; [guia e downloads](chronicles-rp/README.md). |
 | Xaero Map Regions + Xaero's World Map | Desenhar e consultar territórios no mapa. | Solução externa indicada pelo utilizador; não desenvolver um mod próprio. |
 
-O imposto de vendas foi implementado no Crown Ledger e Realm Markets 0.2.0; os resultados de execução ficam nos guias e ficheiros de validação dos dois projetos. O utilizador pediu para guardar os novos projetos para desenvolver mais tarde. Depois autorizou a atualização dos nomes RP no Chronicles, concluída e publicada na 0.5.3. Realm Rewards, Realm Notifications e Realm Titles continuam por iniciar. A sequência futura fica por definir; foi sugerido começar pela API de notificações para ser usada pelas recompensas.
+O imposto de vendas foi implementado no Crown Ledger e Realm Markets 0.2.0; os resultados de execução ficam nos guias e ficheiros de validação dos dois projetos. A atualização dos nomes RP foi concluída no Chronicles 0.5.3. O utilizador escolheu desenvolver Realm Rewards primeiro, seguido de Realm Notifications e Realm Titles. O Rewards está implementado na 0.1.1; os outros dois continuam por iniciar.
 
 ### Realm Rewards
 

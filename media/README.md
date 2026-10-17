@@ -1,5 +1,7 @@
 # Mod galleries
 
+**Realm Rewards:** [Administration screenshots](realm-rewards/0.1.1/README.md) · [Download PNG gallery](realm-rewards/0.1.1/realm-rewards-0.1.1-media.zip). Actual production administration screens rendered by Minecraft, using demonstration advancement data.
+
 **Chronicles RP:** [RP names screenshots](chronicles-rp/0.5.3/README.md) · [Download PNG gallery](chronicles-rp/0.5.3/chronicles-rp-0.5.3-media.zip). Actual Minecraft name tags, TAB, player chat and character profile; gallery characters are demonstration fixtures.
 
 **Realm Markets logo:** [Download PNG](../mod-pronto/realm-markets-icon.png). Original illustrated square project icon for CurseForge; separate from the in-game screenshots.

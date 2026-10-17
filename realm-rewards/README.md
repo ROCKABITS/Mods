@@ -41,4 +41,6 @@ Chronicles é opcional para carregar/configurar o mod, mas é necessário para r
 
 No ambiente cloud usa `python3 tools/cloud_gradle.py` para preservar proxy e TLS. Os testes de domínio independentes correm com `python3 tools/test_domain.py`. A compilação local pode continuar bloqueada pela política de rede; o GitHub Actions executa a validação Minecraft.
 
-[Changelog](CHANGELOG.md) · [Validação](VALIDACAO.md).
+[JAR 0.1.1](../mod-pronto/realm-rewards-0.1.1.jar) · [ZIP 0.1.1](../mod-pronto/realm-rewards-0.1.1.zip) · [Imagens](../media/realm-rewards/0.1.1/README.md) · [Changelog](CHANGELOG.md) · [Validação](VALIDACAO.md).
+
+A [execução aprovada da 0.1.1](https://github.com/ROCKABITS/Mods/actions/runs/38989952338) passou 12 testes unitários, 15 GameTests sem Chronicles, os mesmos 15 com a carteira real e os restantes mods, e a verificação do menu no cliente Minecraft. Os limites e os hashes estão no guia de validação.
