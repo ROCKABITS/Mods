@@ -1,3 +1,15 @@
+# Validação atual — Chronicles RP 0.5.4
+
+**Aprovada.** A [execução conjunta 39009308013](https://github.com/ROCKABITS/Mods/actions/runs/39009308013), sobre o código [`0d9e459`](https://github.com/ROCKABITS/Mods/commit/0d9e45962ae298e4fac98f46c6c9b5823e0ffc8d), compilou o JAR de produção e aprovou **66 testes unitários** e **37 GameTests nativos em modo independente**, com Minecraft 1.21.1, NeoForge 21.1.256 e Java 21. Os [metadados desta compilação](../mod-pronto/cronicasrp-0.5.4.build.json) registam as contagens, versões e hashes.
+
+O JAR novo desta versão foi também carregado com as outras cinco versões novas dos companheiros, Origins, Jupiter e Realm Notifications 0.1.0 na integração de **15 GameTests do Realm Notifications**; estes não substituem nem repetem a bateria completa de cada companheiro em modo integrado. A ponte opcional foi exercitada com o payload real e com fallback de chat para clientes sem o canal.
+
+A integração executou os comandos reais de atribuição administrativa e conversão de dinheiro físico, verificando os saldos e o envio das notificações sem duplicação no chat.
+
+O cliente Minecraft real aprovou o HUD, as preferências e o diário do Realm Notifications; as [capturas desta integração](../media/realm-notifications/0.1.0/README.md) mostram essa interface. Não houve nova validação gráfica da interface própria deste companheiro. As verificações e galerias das versões anteriores abaixo permanecem históricas.
+
+## Histórico de validação
+
 # Validação — Chronicles RP 0.5.3
 
 **Estado: aprovado.** A [execução de CI 38936862628](https://github.com/ROCKABITS/Mods/actions/runs/38936862628) compilou e verificou esta versão em 7 min 27 s. O código testado é o commit [`9454231e59e679c26f14b21d21c4d7e612507e51`](https://github.com/ROCKABITS/Mods/commit/9454231e59e679c26f14b21d21c4d7e612507e51); os artefactos resultantes foram publicados no commit [`859a5f016fcb5bc2dcc5d1069d2e0281113e6b3a`](https://github.com/ROCKABITS/Mods/commit/859a5f016fcb5bc2dcc5d1069d2e0281113e6b3a).

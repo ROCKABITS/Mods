@@ -1,6 +1,14 @@
-## Atualização 0.2.1 — Realm Notifications
+# Validação atual — Realm Markets 0.2.1
 
-Integração opcional de apresentação; validação desta atualização pendente da execução conjunta do CI. As verificações de versões anteriores indicadas abaixo são históricas e não certificam automaticamente esta compilação.
+**Aprovada.** A [execução conjunta 39009308013](https://github.com/ROCKABITS/Mods/actions/runs/39009308013), sobre o código [`0d9e459`](https://github.com/ROCKABITS/Mods/commit/0d9e45962ae298e4fac98f46c6c9b5823e0ffc8d), compilou o JAR de produção e aprovou **45 testes unitários** e **45 GameTests nativos em modo independente**, com Minecraft 1.21.1, NeoForge 21.1.256 e Java 21. Os [metadados desta compilação](../mod-pronto/realm-markets-0.2.1.build.json) registam as contagens, versões e hashes.
+
+O JAR novo desta versão foi também carregado com as outras cinco versões novas dos companheiros, Origins, Jupiter e Realm Notifications 0.1.0 na integração de **15 GameTests do Realm Notifications**; estes não substituem nem repetem a bateria completa de cada companheiro em modo integrado. A ponte opcional foi exercitada com o payload real e com fallback de chat para clientes sem o canal.
+
+A ponte opcional do Markets enviou o payload real `Show` e preservou o fallback sem o canal. Esta integração não percorreu uma compra completa no mercado com o cliente Realm Notifications.
+
+O cliente Minecraft real aprovou o HUD, as preferências e o diário do Realm Notifications; as [capturas desta integração](../media/realm-notifications/0.1.0/README.md) mostram essa interface. Não houve nova validação gráfica da interface própria deste companheiro. As verificações e galerias das versões anteriores abaixo permanecem históricas.
+
+## Histórico de validação
 
 # Validação — Realm Markets 0.2.0
 

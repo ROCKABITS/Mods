@@ -45,3 +45,7 @@ O canto superior esquerdo é a posição inicial, para deixar livre o espaço do
 ## Desenvolvimento
 
 A [API pública](API.md) permite enviar avisos a partir de outros mods sem dependência obrigatória. Os resultados efetivos de compilação, testes e capturas ficam em [VALIDACAO.md](VALIDACAO.md).
+
+[Descarregar JAR](https://github.com/ROCKABITS/Mods/raw/refs/heads/main/mod-pronto/realm-notifications-0.1.0.jar) · [ZIP do mod](https://github.com/ROCKABITS/Mods/raw/refs/heads/main/mod-pronto/realm-notifications-0.1.0.zip) · [Pacote de atualizações](https://github.com/ROCKABITS/Mods/raw/refs/heads/main/mod-pronto/realm-notifications-0.1.0-suite.zip) · [Capturas do jogo](../media/realm-notifications/0.1.0/README.md).
+
+A [validação aprovada](https://github.com/ROCKABITS/Mods/actions/runs/39009308013) passou 11 testes unitários do Notifications, os dois modos de servidor e o HUD no cliente Minecraft. As suites completas dos sete projetos somaram 275 testes unitários.

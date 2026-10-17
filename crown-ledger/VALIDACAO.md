@@ -1,3 +1,15 @@
+# Validação atual — Crown Ledger 0.2.1
+
+**Aprovada.** A [execução conjunta 39009308013](https://github.com/ROCKABITS/Mods/actions/runs/39009308013), sobre o código [`0d9e459`](https://github.com/ROCKABITS/Mods/commit/0d9e45962ae298e4fac98f46c6c9b5823e0ffc8d), compilou o JAR de produção e aprovou **46 testes unitários** e **20 GameTests nativos em modo independente**, com Minecraft 1.21.1, NeoForge 21.1.256 e Java 21. Os [metadados desta compilação](../mod-pronto/crown-ledger-0.2.1.build.json) registam as contagens, versões e hashes.
+
+O JAR novo desta versão foi também carregado com as outras cinco versões novas dos companheiros, Origins, Jupiter e Realm Notifications 0.1.0 na integração de **15 GameTests do Realm Notifications**; estes não substituem nem repetem a bateria completa de cada companheiro em modo integrado. A ponte opcional foi exercitada com o payload real e com fallback de chat para clientes sem o canal.
+
+A integração executou um donativo real com a carteira Chronicles, verificando a quantia debitada e uma única notificação de tesouraria, sem duplicação no chat.
+
+O cliente Minecraft real aprovou o HUD, as preferências e o diário do Realm Notifications; as [capturas desta integração](../media/realm-notifications/0.1.0/README.md) mostram essa interface. Não houve nova validação gráfica da interface própria deste companheiro. As verificações e galerias das versões anteriores abaixo permanecem históricas.
+
+## Histórico de validação
+
 # Validação — Crown Ledger 0.2.0
 
 A [execução conjunta 38924972884](https://github.com/ROCKABITS/Mods/actions/runs/38924972884) compilou, testou e publicou Crown Ledger e Realm Markets **0.2.0**, a partir do mesmo commit `1a6825f00d37ec07c194e96a4b05c003f892d8d1`. A publicação foi concluída no commit do bot `e9991c8` depois de todas as verificações obrigatórias.
