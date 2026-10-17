@@ -5,14 +5,14 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class CardLayoutTest {
     @Test void allAnchorsKeepVisibleCardsInsideCompactAndFullScreens() {
-        for(int[] size:new int[][]{{320,240},{800,450},{1920,1080}}) {
-            int w=CardLayout.width(size[0]),slots=CardLayout.visible(size[1]);
+        for(int screenWidth:new int[]{320,576,800,1920}) for(int screenHeight=120;screenHeight<=1080;screenHeight++) {
+            int w=CardLayout.width(screenWidth),slots=CardLayout.visible(screenHeight);
             for(String position:new String[]{"TOP_LEFT","TOP_CENTER","TOP_RIGHT","BOTTOM_LEFT","BOTTOM_RIGHT"}) {
-                int x=CardLayout.x(size[0],w,position);
-                assertTrue(x>=0&&x+w<=size[0],position);
+                int x=CardLayout.x(screenWidth,w,position);
+                assertTrue(x>=0&&x+w<=screenWidth,position);
                 for(int slot=0;slot<slots;slot++) {
-                    int y=CardLayout.y(size[1],slot,position);
-                    assertTrue(y>=0&&y+CardLayout.HEIGHT<=size[1],position+" slot"+slot);
+                    int y=CardLayout.y(screenHeight,slot,position);
+                    assertTrue(y>=0&&y+CardLayout.HEIGHT<=screenHeight,position+" slot"+slot+" height="+screenHeight);
                 }
             }
         }

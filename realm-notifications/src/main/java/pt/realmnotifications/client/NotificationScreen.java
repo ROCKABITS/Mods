@@ -31,8 +31,8 @@ public final class NotificationScreen extends Screen {
         addRenderableWidget(button(px+17,tabY,Math.min(126,(pw-42)/2),19,tr("settings"),b->{journal=false;scroll=0;rebuildWidgets();}));
         addRenderableWidget(button(px+150>px+pw/2?px+pw/2:px+150,tabY,Math.min(126,(pw-42)/2),19,tr("history"),b->{journal=true;scroll=0;rebuildWidgets();}));
         if(!journal) {
-            int left=px+18,right=pw>=560?px+168:px+pw-142;
-            int controlWidth=pw>=560?122:124;
+            int left=px+18,right=pw>=600?px+168:px+pw-142;
+            int controlWidth=pw>=600?122:124;
             int row=compact?19:28;
             option(right,contentY,controlWidth,tr(p().enabled?"on":"off"),b->{p().enabled=!p().enabled;if(!p().enabled)NotificationsClient.clearCards();change();});
             option(right,contentY+row,controlWidth,tr("position."+p().position.name().toLowerCase(Locale.ROOT)),b->{var a=NotificationPreferences.Position.values();p().position=a[(p().position.ordinal()+1)%a.length];change();});
@@ -85,7 +85,7 @@ public final class NotificationScreen extends Screen {
         int row=ph<300?19:28;
         String[] labels={"enabled","position","duration","sound","animations","keep_history"};
         for(int i=0;i<labels.length;i++)g.drawString(font,tr(labels[i]),px+19,contentY+i*row+5,NotificationTheme.PALE,false);
-        if(pw>=560 && ph>=300) {
+        if(pw>=600 && ph>=300) {
             int x=px+pw-302,y=contentY;
             g.drawString(font,tr("preview_label"),x,y,NotificationTheme.GOLD,false);
             NotificationTheme.card(g,x,y+21,278,"reward",Component.translatable("notification.realmnotifications.kind.reward"),tr("demo.reward"),.72,1);
@@ -143,5 +143,11 @@ public final class NotificationScreen extends Screen {
         return super.mouseScrolled(x,y,horizontal,vertical);
     }
     @Override public boolean isPauseScreen() {return false;}
-    @Override public void onClose() {if(p().save())minecraft.setScreen(parent);else saveError=true;}
+    @Override public void onClose() {
+        if(!p().save()) {
+            if(minecraft.player!=null)minecraft.player.displayClientMessage(tr("save_error"),false);
+            else pt.realmnotifications.RealmNotificationsMod.LOGGER.warn("Could not save notification preferences; current preferences remain active for this session.");
+        }
+        minecraft.setScreen(parent);
+    }
 }
