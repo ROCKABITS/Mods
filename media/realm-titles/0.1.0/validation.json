@@ -1,0 +1,97 @@
+{
+  "success": true,
+  "message": "Actual Minecraft four-facing desk, real public/governor S2C, compact native controls and live unchanged-document Identity titles passed.",
+  "step": 18,
+  "checks": [
+    "All eight baked desk states (two halves by four facings) have real geometry and resolved textures; registered item model resolves.",
+    "Four actual-world captures use real two-high desks in all facings, with client camera yaw/pitch applied after server teleport synchronization.",
+    "Real physical openStation and create/grant service calls reached the production menu over actual S2C, with a permanent and a 30-day title. No screen snapshots are injected.",
+    "Native edit and filtered search travelled over actual C2S and authoritative S2C; payloads contain canonical selection/title UUIDs and bounded view fields, without claimed authority or private profiles.",
+    "All three native governing tabs fit 320x240; visible widget bounds remain valid while scrolling.",
+    "The native public registry fit 320x240; visible widget bounds remain valid while scrolling.",
+    "Removing the current authority produces a real server-owned public menu with no governing tabs or mutation controls; public and governor tabs both pass compact bounds.",
+    "Breaking the real physical station closes the production menu through the server\u0027s invalid-session S2C response.",
+    "Real Identity issuance and inspection S2C show active permanent/temporary titles; fresh inspection removes a revoked title without reissuing, rewriting the physical document or changing its serial. Native Identity controls fit 320x240."
+  ],
+  "screenshots": [
+    "realm-titles-desk-north.png",
+    "realm-titles-desk-east.png",
+    "realm-titles-desk-south.png",
+    "realm-titles-desk-west.png",
+    "realm-titles-governor-registry.png",
+    "realm-titles-governor-catalog.png",
+    "realm-titles-governor-honours.png",
+    "realm-titles-public-registry.png",
+    "realm-titles-public-record.png",
+    "realm-titles-identity-current.png",
+    "realm-titles-identity-after-revocation.png"
+  ],
+  "actual_minecraft_client": true,
+  "actual_integrated_server": true,
+  "real_s2c_transport": true,
+  "real_c2s_transport": true,
+  "physical_station_closed_when_broken": true,
+  "world_desk_facings_captured": 4,
+  "capture_resolution": "1600x900",
+  "capture_gui_scale": 2,
+  "demonstration_world_and_titles": true,
+  "synthetic_screen_snapshots": false,
+  "real_council_sworn_mandate_fixture": true,
+  "real_chronicles_created_profile_fixture": true,
+  "real_identity_live_titles": true,
+  "model_quads": {
+    "Block{realmtitles:royal_seal_desk}[facing\u003dnorth,half\u003dupper]": 239,
+    "Block{realmtitles:royal_seal_desk}[facing\u003dnorth,half\u003dlower]": 485,
+    "Block{realmtitles:royal_seal_desk}[facing\u003dsouth,half\u003dupper]": 239,
+    "Block{realmtitles:royal_seal_desk}[facing\u003dsouth,half\u003dlower]": 485,
+    "Block{realmtitles:royal_seal_desk}[facing\u003dwest,half\u003dupper]": 239,
+    "Block{realmtitles:royal_seal_desk}[facing\u003dwest,half\u003dlower]": 485,
+    "Block{realmtitles:royal_seal_desk}[facing\u003deast,half\u003dupper]": 239,
+    "Block{realmtitles:royal_seal_desk}[facing\u003deast,half\u003dlower]": 485
+  },
+  "actual_c2s_requests": [
+    {
+      "operation": "edit",
+      "payload": {
+        "dSearch": "",
+        "pSearch": "",
+        "dPage": 0,
+        "pPage": 0,
+        "selectedPlayer": "380df991-f603-344c-a090-369bad2a924a",
+        "name": "Warden of the Green Roads",
+        "description": "Demonstration honour. Recorded with care in the royal register. Edited through the native menu.",
+        "id": "0b8dc825-8745-4ba9-a856-576e0287f422"
+      }
+    },
+    {
+      "operation": "list",
+      "payload": {
+        "dSearch": "Warden",
+        "pSearch": "",
+        "dPage": 0,
+        "pPage": 0,
+        "selectedPlayer": "380df991-f603-344c-a090-369bad2a924a"
+      }
+    },
+    {
+      "operation": "list",
+      "payload": {
+        "dSearch": "",
+        "pSearch": "",
+        "dPage": 0,
+        "pPage": 0,
+        "selectedPlayer": "380df991-f603-344c-a090-369bad2a924a"
+      }
+    },
+    {
+      "operation": "list",
+      "payload": {
+        "dSearch": "",
+        "pSearch": "",
+        "dPage": 0,
+        "pPage": 0,
+        "selectedPlayer": "380df991-f603-344c-a090-369bad2a924a"
+      }
+    }
+  ]
+}
