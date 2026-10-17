@@ -1,0 +1,1 @@
+{"criteria": {"done": {"trigger": "minecraft:impossible"}}, "display": {"icon": {"id": "minecraft:emerald"}, "title": {"text": "Mod task"}, "description": {"text": "Native rewards fixture"}, "frame": "task", "show_toast": false, "announce_to_chat": false, "hidden": false}}

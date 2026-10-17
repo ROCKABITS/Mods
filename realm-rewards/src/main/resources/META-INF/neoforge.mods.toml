@@ -1,0 +1,27 @@
+modLoader="javafml"
+loaderVersion="[4,)"
+license="All Rights Reserved"
+[[mods]]
+modId="realmrewards"
+version="0.1.0"
+displayName="Realm Rewards"
+authors="ROCKABITS"
+description='''Configurable, once-per-player advancement rewards with the Chronicles RP wallet and an operator administration menu. Vanilla and mod advancements are discovered automatically.'''
+[[dependencies.realmrewards]]
+modId="neoforge"
+type="required"
+versionRange="[21.1.256,)"
+ordering="NONE"
+side="BOTH"
+[[dependencies.realmrewards]]
+modId="minecraft"
+type="required"
+versionRange="[1.21.1]"
+ordering="NONE"
+side="BOTH"
+[[dependencies.realmrewards]]
+modId="cronicasrp"
+type="optional"
+versionRange="[0.5.2,0.6)"
+ordering="AFTER"
+side="BOTH"

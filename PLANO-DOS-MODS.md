@@ -31,7 +31,7 @@ Os projetos futuros abaixo são um guião de produto e não estão incluídos no
 
 | Projeto | Objetivo | Estado |
 | --- | --- | --- |
-| Realm Rewards | Recompensar conquistas Vanilla e de outros mods com dinheiro do Chronicles RP. | Por desenvolver. |
+| Realm Rewards | Recompensar conquistas Vanilla e de outros mods com dinheiro do Chronicles RP. | 0.1.0 em desenvolvimento; [guia](realm-rewards/README.md). |
 | Realm Notifications | Notificações no ecrã e API comum para os mods de RP. | Por desenvolver. |
 | Realm Titles | Títulos de personagem atribuídos pelo governante eleito. | Por desenvolver. |
 | Chronicles RP — Nomes RP | Mostrar o nome da personagem acima da cabeça, no TAB e no chat. | Implementado na 0.5.3; [guia e downloads](chronicles-rp/README.md). |

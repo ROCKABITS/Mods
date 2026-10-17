@@ -1,0 +1,118 @@
+name: Build Realm Rewards
+on:
+  push:
+    branches: [main]
+    paths: ['realm-rewards/**', '.github/workflows/build-realm-rewards.yml', '.github/scripts/package_rewards.py']
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: rewards-build-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    defaults:
+      run:
+        working-directory: realm-rewards
+        shell: bash
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      - name: Java 21
+        uses: actions/setup-java@cf277c60eb25467037889841efdb72551f06f6c3
+        with:
+          distribution: temurin
+          java-version: '21'
+          cache: gradle
+      - name: Verify wrapper and version
+        id: mod
+        run: |
+          echo '423cb469ccc0ecc31f0e4e1c309976198ccb734cdcbb7029d4bda0f18f57e8d9  gradle/wrapper/gradle-wrapper.jar' | sha256sum --check --strict
+          version=$(sed -n 's/^mod_version=//p' gradle.properties)
+          [[ "$version" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+      - name: Production build and unit tests
+        run: |
+          ./gradlew --no-daemon --console=plain build 2>&1 | tee build.log
+          sha256sum "build/libs/realm-rewards-${{ steps.mod.outputs.version }}.jar" | cut -d' ' -f1 > build/production.sha256
+      - name: Native advancements without Chronicles
+        run: ./gradlew --no-daemon --console=plain -PrewardsGameTests runGameTestServer 2>&1 | tee gametests.log
+      - name: Install verified Chronicles and companion mods
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import hashlib,json,shutil
+          target=Path('compat-libs');target.mkdir(exist_ok=True)
+          names=['cronicasrp-0.5.3','contracts-bounties-0.3.1','realmcouncil-0.2.1','crown-ledger-0.2.0','realm-identity-0.1.0','realm-markets-0.2.0']
+          hashes={}
+          for name in names:
+              file=Path('../mod-pronto')/(name+'.jar');meta=json.loads(file.with_suffix('.build.json').read_text())
+              actual=hashlib.sha256(file.read_bytes()).hexdigest();assert actual==meta['jar_sha256'],name
+              hashes[file.name]=actual;shutil.copy2(file,target/file.name)
+          Path('build/companions.json').write_text(json.dumps(hashes,indent=2))
+          PY
+      - name: Native payments with actual Chronicles, Origins and Jupiter
+        run: |
+          ./gradlew --no-daemon --console=plain -PrewardsGameTests -PintegrationTests runGameTestServer 2>&1 | tee integration.log
+          python3 - <<'PY'
+          from pathlib import Path
+          import hashlib,json
+          expected={'origins-neoforge-1375372-8758523.jar':'93383233a047a9838af067b64452964183cc4fe9f2d9c269ffb253141136caf6','jupiter-1072905-7738312.jar':'95af332af250f97fe2d9d288fe6b2057c266673a388348bf33756b0b693ace15'}
+          for name,want in expected.items():
+              files=list((Path.home()/'.gradle/caches/modules-2/files-2.1/curse.maven').rglob(name));assert files,name
+              assert all(hashlib.sha256(file.read_bytes()).hexdigest()==want for file in files),name
+          PY
+      - name: Actual Minecraft administration menu
+        env:
+          LIBGL_ALWAYS_SOFTWARE: '1'
+          ALSOFT_DRIVERS: 'null'
+        run: |
+          if ! command -v xvfb-run >/dev/null; then
+            sudo apt-get update
+            sudo apt-get install -y xvfb xauth
+          fi
+          timeout 300s xvfb-run -a -s '-screen 0 1600x900x24' ./gradlew --no-daemon --console=plain -PrewardsVisualTests -PintegrationTests runClient 2>&1 | tee visual-client.log
+          python3 -c "import json; r=json.load(open('qa-results/rewards-client/result.json')); assert r['success'],r"
+      - name: Validation summary
+        if: always()
+        run: python3 tools/ci_summary.py
+      - name: Package verified release
+        working-directory: .
+        run: python3 .github/scripts/package_rewards.py
+      - name: Downloadable release
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: realm-rewards-${{ steps.mod.outputs.version }}
+          path: mod-pronto/realm-rewards-${{ steps.mod.outputs.version }}.*
+          if-no-files-found: error
+      - name: Publish tested release
+        if: github.ref == 'refs/heads/main'
+        working-directory: .
+        env:
+          MOD_VERSION: ${{ steps.mod.outputs.version }}
+        run: |
+          git fetch --no-tags origin main
+          if [[ "$(git rev-parse FETCH_HEAD)" != "$GITHUB_SHA" ]]; then
+            echo '::error::Main changed during validation. Build the latest source.'
+            exit 1
+          fi
+          git add -- "mod-pronto/realm-rewards-$MOD_VERSION.jar" "mod-pronto/realm-rewards-$MOD_VERSION.zip" "mod-pronto/realm-rewards-$MOD_VERSION.sha256" "mod-pronto/realm-rewards-$MOD_VERSION.build.json" "media/realm-rewards/$MOD_VERSION/"
+          if git diff --cached --quiet; then exit 0; fi
+          git -c user.name='github-actions[bot]' -c user.email='41898282+github-actions[bot]@users.noreply.github.com' commit -m "Publish tested Realm Rewards $MOD_VERSION [skip ci]"
+          git push origin HEAD:refs/heads/main
+      - name: Validation evidence
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: rewards-validation-${{ github.run_id }}
+          path: |
+            realm-rewards/build.log
+            realm-rewards/gametests.log
+            realm-rewards/integration.log
+            realm-rewards/visual-client.log
+            realm-rewards/build/test-results/test/
+            realm-rewards/build/companions.json
+            realm-rewards/qa-results/
+          retention-days: 14
