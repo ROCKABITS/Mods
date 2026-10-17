@@ -381,8 +381,11 @@ public final class TitleGameTests {
             helper.getLevel().setBlockAndUpdate(pos.below(), reason.equals("floor") ? Blocks.AIR.defaultBlockState() : Blocks.STONE.defaultBlockState());
             if (reason.equals("upper")) helper.getLevel().setBlockAndUpdate(pos.above(), Blocks.STONE.defaultBlockState());
             ItemStack stack = new ItemStack(BlockRegistry.SEAL_DESK_ITEM.get()); builder.setItemInHand(InteractionHand.MAIN_HAND, stack);
+            BlockPos clicked = reason.equals("floor") ? pos.west() : pos.below();
+            Direction face = reason.equals("floor") ? Direction.EAST : Direction.UP;
+            if (reason.equals("floor")) helper.getLevel().setBlockAndUpdate(clicked, Blocks.STONE.defaultBlockState());
             var result = stack.useOn(new UseOnContext(builder, InteractionHand.MAIN_HAND,
-                    new BlockHitResult(Vec3.atBottomCenterOf(pos), Direction.UP, pos.below(), false)));
+                    new BlockHitResult(Vec3.atCenterOf(clicked).relative(face, .5), face, clicked, false)));
             helper.assertTrue(!result.consumesAction() && stack.getCount() == 1
                     && !helper.getLevel().getBlockState(pos).is(BlockRegistry.SEAL_DESK.get()), "Invalid " + reason + " placement consumed an item or left a desk half");
             if (reason.equals("upper")) helper.assertTrue(helper.getLevel().getBlockState(pos.above()).is(Blocks.STONE), "Failed placement overwrote the occupied upper block");
@@ -518,7 +521,7 @@ public final class TitleGameTests {
                 long now = System.currentTimeMillis();
                 for (long[] times : List.of(new long[]{now - 1_000, now + 60_000, 0},
                         new long[]{now + 60_000, now + 120_000, now - 500},
-                        new long[]{now - 60_000, now, now - 500}, new long[]{now - 1_000, now + 60_000, now + 500})) {
+                        new long[]{now - 60_000, now, now - 500}, new long[]{now - 1_000, now + 60_000, now + 30_000})) {
                     fixture.council.mandate(first.getUUID(), times[0], times[1], times[2]);
                     unchanged(helper, fixture, first, () -> fixture.create(first, "Invalid mandate honour"), "permission");
                 }
@@ -720,8 +723,9 @@ public final class TitleGameTests {
             fixture.grant(governor, target.getUUID(), TITLE_ONE, 0);
             helper.assertTrue(target.chat.size() == 1 && target.notificationPackets() == 0,
                     "Client without optional notification support did not get exactly one chat fallback");
-            String text = target.chat.getFirst().getString();
-            helper.assertTrue(text.contains("Keeper of the Seal") && !text.contains("PRIVATE"), "Fallback lost public title wording or leaked private profile data");
+            String text = net.minecraft.network.chat.ComponentSerialization.CODEC.encodeStart(
+                    com.mojang.serialization.JsonOps.INSTANCE, target.chat.getFirst()).getOrThrow().toString();
+            helper.assertTrue(text.contains("notification.realmtitles.granted") && text.contains("Keeper of the Seal") && !text.contains("PRIVATE"), "Fallback lost public title wording or leaked private profile data");
         }
         helper.succeed();
     }

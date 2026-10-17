@@ -144,10 +144,11 @@ public final class TitleVisualQA {
             if (manage) {
                 player.getServer().getCommands().performPrefixedCommand(player.getServer().createCommandSourceStack(), "titles steward " + player.getGameProfile().getName());
             } else try {
-                Class<?> type = Class.forName("pt.realmtitles.data.TitleData");
-                Object data = type.getMethod("get", net.minecraft.server.MinecraftServer.class).invoke(null, player.getServer());
-                type.getMethod("steward", UUID.class).invoke(data, UUID.fromString("31871970-a4dd-4b47-b9ed-58a9a3277720"));
-            } catch (ReflectiveOperationException failure) { throw new IllegalStateException("Steward removal fixture failed", failure); }
+                var registry = pt.realmtitles.data.TitleData.get(player.getServer());
+                UUID successor = UUID.fromString("31871970-a4dd-4b47-b9ed-58a9a3277720");
+                registry.replace(registry.ledger().observeCitizen(successor, "The next steward", true));
+                registry.steward(successor);
+            } catch (RuntimeException failure) { throw new IllegalStateException("Steward removal fixture failed", failure); }
         } catch (ReflectiveOperationException failure) { throw new IllegalStateException("Real sworn Council mandate fixture failed", failure); }
     }
     private static void placeDesk(ServerPlayer player, Direction direction) {
