@@ -14,6 +14,7 @@ public final class RealmRewardsMod {
     public RealmRewardsMod(IEventBus bus) {
         bus.addListener(RewardNetwork::register);
         NeoForge.EVENT_BUS.addListener(RewardService::earned);
+        NeoForge.EVENT_BUS.addListener(RewardService::progressed);
         NeoForge.EVENT_BUS.addListener(RewardService::login);
         NeoForge.EVENT_BUS.addListener(RewardService::tick);
         NeoForge.EVENT_BUS.addListener(RewardService::commands);

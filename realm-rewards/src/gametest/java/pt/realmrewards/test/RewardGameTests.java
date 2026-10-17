@@ -9,9 +9,17 @@ import net.minecraft.advancements.AdvancementHolder;
 import net.minecraft.gametest.framework.GameTest;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.nbt.*;
+import net.minecraft.network.Connection;
+import net.minecraft.network.PacketSendListener;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.PacketFlow;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.PlayerAdvancements;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.players.ServerOpListEntry;
+import net.minecraft.server.players.PlayerList;
+import net.minecraft.server.network.CommonListenerCookie;
+import net.minecraft.server.network.ServerGamePacketListenerImpl;
 import net.minecraft.world.level.storage.LevelResource;
 import net.neoforged.fml.ModList;
 import net.neoforged.neoforge.attachment.AttachmentType;
@@ -41,6 +49,11 @@ public final class RewardGameTests {
         @Override public PlayerAdvancements getAdvancements() { return actual==null?super.getAdvancements():actual; }
     }
     private static Actor actor(GameTestHelper helper) { return new Actor(helper); }
+    private static void operator(GameTestHelper helper,Actor player) {
+        // GameTestServer's default op level is zero; set a real level-2 ops-list entry.
+        helper.getLevel().getServer().getPlayerList().getOps().add(new ServerOpListEntry(player.getGameProfile(),2,false));
+        helper.assertTrue(player.hasPermissions(2),"Native level-2 operator fixture was not authorized");
+    }
     private static AdvancementHolder holder(GameTestHelper helper,String path) {
         var value=helper.getLevel().getServer().getAdvancements().get(ResourceLocation.parse(path.contains(":")?path:"rewards_fixture:"+path));
         helper.assertTrue(value!=null,"Real advancement fixture missing: "+path); return value;
@@ -103,6 +116,21 @@ public final class RewardGameTests {
         h.assertTrue(pending(h,p)==0 && ledger(h).account(p.getUUID()).completed().contains(advancement.id().toString()),"Background advancement was paid or not recorded"); h.succeed();
     }
     @GameTest(template="rewards_empty",timeoutTicks=100)
+    public static void backgroundOverridePaysOnlyAfterItsFinalCriterion(GameTestHelper h) {
+        Actor admin=actor(h),p=actor(h);operator(h,admin);
+        JsonObject input=new JsonObject();input.addProperty("id","rewards_fixture:background");input.addProperty("value","3.00");
+        try {
+            RewardService.configure(admin,"save",input);var advancement=holder(h,"background");
+            String first=advancement.value().criteria().keySet().iterator().next();
+            p.getAdvancements().award(advancement,first);
+            h.assertTrue(pending(h,p)==0 && !ledger(h).account(p.getUUID()).completed().contains(advancement.id().toString()),"Partial progress paid a background advancement");
+            grant(p,advancement);h.assertTrue(pending(h,p)==300,"Final background progress did not honor its configured override");
+            revoke(p,advancement);grant(p,advancement);h.assertTrue(pending(h,p)==300,"Background override paid twice");
+        } finally {
+            RewardService.configure(admin,"reset",input);h.getLevel().getServer().getPlayerList().deop(admin.getGameProfile());
+        } h.succeed();
+    }
+    @GameTest(template="rewards_empty",timeoutTicks=100)
     public static void incompleteOrForgedEarnEventCannotCreateMoney(GameTestHelper h) {
         Actor p=actor(h); RewardService.earned(new AdvancementEvent.AdvancementEarnEvent(p,holder(h,"task")));
         h.assertTrue(pending(h,p)==0 && ledger(h).account(p.getUUID()).completed().isEmpty(),"Incomplete advancement event minted money"); h.succeed();
@@ -119,7 +147,7 @@ public final class RewardGameTests {
     public static void adminWritesAndSnapshotsRequireCurrentOperatorPermission(GameTestHelper h) {
         Actor p=actor(h); JsonObject input=new JsonObject(); input.addProperty("id","rewards_fixture:task"); input.addProperty("value","2,75");
         rejected(h,()->RewardService.configure(p,"save",input)); rejected(h,()->RewardService.snapshot(p,new JsonObject(),""));
-        var players=h.getLevel().getServer().getPlayerList(); players.op(p.getGameProfile());
+        var players=h.getLevel().getServer().getPlayerList(); operator(h,p);
         try {
             RewardService.configure(p,"save",input);
             h.assertTrue(ledger(h).amount("rewards_fixture:task",RewardLedger.Kind.TASK)==275,"Admin amount did not use integer cents");
@@ -129,7 +157,7 @@ public final class RewardGameTests {
     }
     @GameTest(template="rewards_empty",timeoutTicks=100)
     public static void adminSearchFindsAdvancementsFromOtherNamespaces(GameTestHelper h) {
-        Actor p=actor(h); var players=h.getLevel().getServer().getPlayerList(); players.op(p.getGameProfile());
+        Actor p=actor(h); var players=h.getLevel().getServer().getPlayerList(); operator(h,p);
         try {
             JsonObject input=new JsonObject(); input.addProperty("search","rewards_fixture:"); input.addProperty("size",12); input.addProperty("page",0);
             var snapshot=RewardService.snapshot(p,input,"");
@@ -182,5 +210,32 @@ public final class RewardGameTests {
         ChroniclesBridge.debit(p,200);
         h.assertTrue(RewardService.payout(p)==150 && pending(h,p)==0,"Only the exact remainder should be paid");
         h.assertTrue(ChroniclesBridge.balance(p)==ChroniclesBridge.MAX_CENTS-50,"Remainder payment duplicated or lost money"); h.succeed();
+    }
+    @GameTest(template="rewards_empty",timeoutTicks=180)
+    @SuppressWarnings("unchecked")
+    public static void actualServerTicksAutomaticallyPayAfterCharacterCreation(GameTestHelper h) {
+        Actor p=actor(h);grant(p,holder(h,"task"));
+        var server=h.getLevel().getServer();
+        p.connection=new ServerGamePacketListenerImpl(server,new Connection(PacketFlow.SERVERBOUND),p,CommonListenerCookie.createInitial(p.getGameProfile(),false)) {
+            @Override public boolean hasChannel(ResourceLocation id) { return false; }
+            @Override public void send(Packet<?> packet) {}
+            @Override public void send(Packet<?> packet,PacketSendListener listener) {}
+        };
+        final List<ServerPlayer> online;
+        try {
+            var field=PlayerList.class.getDeclaredField("players");field.setAccessible(true);
+            online=(List<ServerPlayer>)field.get(server.getPlayerList());
+        } catch(ReflectiveOperationException failure) {throw new IllegalStateException(failure);}
+        if(ChroniclesBridge.loaded()) profile(p,1000);
+        online.add(p);
+        h.runAfterDelay(105,()->{
+            try {
+                if(ChroniclesBridge.loaded()) {
+                    h.assertTrue(pending(h,p)==0 && ChroniclesBridge.balance(p)==1200,"Registered server ticks did not pay automatically after character creation");
+                    RealmRewardsMod.LOGGER.info("REWARDS_AUTOMATIC_RETRY_PASSED");
+                } else h.assertTrue(pending(h,p)==200,"Automatic retry lost money without Chronicles");
+                h.succeed();
+            } finally {online.remove(p);}
+        });
     }
 }

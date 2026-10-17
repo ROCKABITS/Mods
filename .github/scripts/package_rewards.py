@@ -12,7 +12,7 @@ for name in ['gametests.log','integration.log']:
     log=(p/name).read_text(errors='replace');counts=re.findall(r'All (\d+) required tests passed',log,re.I)
     assert counts and int(counts[-1])==expected and 'BUILD SUCCESSFUL' in log and 'BUILD FAILED' not in log,name
     assert 'REWARDS_NATIVE_ADVANCEMENTS_PASSED' in log and 'REWARDS_RUNTIME_MODE_PASSED' in log
-    if name=='integration.log':assert 'REWARDS_CHRONICLES_PAYMENTS_PASSED' in log
+    if name=='integration.log':assert 'REWARDS_CHRONICLES_PAYMENTS_PASSED' in log and 'REWARDS_AUTOMATIC_RETRY_PASSED' in log
     native[name]=int(counts[-1])
 client=json.loads((p/'qa-results/rewards-client/result.json').read_text())
 assert client['success'] is True

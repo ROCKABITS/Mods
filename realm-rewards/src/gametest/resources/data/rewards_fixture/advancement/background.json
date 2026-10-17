@@ -1,1 +1,1 @@
-{"criteria": {"done": {"trigger": "minecraft:impossible"}}}
+{"criteria": {"done": {"trigger": "minecraft:impossible"}, "second": {"trigger": "minecraft:impossible"}}}

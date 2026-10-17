@@ -34,23 +34,32 @@ public final class RewardService {
         return holder.value().display().map(value->value.getTitle()).orElseGet(()->Component.literal(holder.id().toString()));
     }
     public static void earned(AdvancementEvent.AdvancementEarnEvent event) {
-        if (event.getEntity() instanceof ServerPlayer player) {
-            requireThread(player);
-            // Ignore fabricated/incomplete earn events: actual server progress is authoritative.
-            AdvancementHolder actual=player.getServer().getAdvancements().get(event.getAdvancement().id());
-            if (actual==null || !player.getAdvancements().getOrStartProgress(actual).isDone()) return;
-            RewardData data=RewardData.get(player.getServer());
-            RewardLedger next=data.ledger.copy();
-            if (next.earn(player.getUUID(),actual.id().toString(),kind(actual))) {
-                long amount=next.amount(actual.id().toString(),kind(actual));
-                data.replace(next);
-                long paid=payout(player);
-                if (paid>0) player.sendSystemMessage(Component.translatable("message.realmrewards.earned",RewardLedger.euros(paid),title(actual)));
-                long remaining=data.ledger.account(player.getUUID()).pending();
-                if (amount>0 && remaining>0) player.sendSystemMessage(Component.translatable("message.realmrewards.queued",RewardLedger.euros(remaining)));
-            }
+        if (event.getEntity() instanceof ServerPlayer player) complete(player,event.getAdvancement());
+    }
+    public static void progressed(AdvancementEvent.AdvancementProgressEvent event) {
+        // NeoForge 1.21.1 fires EarnEvent only inside display().ifPresent(). Background
+        // and recipe advancements therefore require their real final GRANT event.
+        if (event.getProgressType()==AdvancementEvent.AdvancementProgressEvent.ProgressType.GRANT
+                && event.getAdvancement().value().display().isEmpty() && event.getAdvancementProgress().isDone()
+                && event.getEntity() instanceof ServerPlayer player) complete(player,event.getAdvancement());
+    }
+    private static void complete(ServerPlayer player,AdvancementHolder advancement) {
+        requireThread(player);
+        // Ignore fabricated/incomplete earn events: actual server progress is authoritative.
+        AdvancementHolder actual=player.getServer().getAdvancements().get(advancement.id());
+        if (actual==null || !player.getAdvancements().getOrStartProgress(actual).isDone()) return;
+        RewardData data=RewardData.get(player.getServer());
+        RewardLedger next=data.ledger.copy();
+        if (next.earn(player.getUUID(),actual.id().toString(),kind(actual))) {
+            long amount=next.amount(actual.id().toString(),kind(actual));
+            data.replace(next);
+            long paid=payout(player);
+            if (paid>0) player.sendSystemMessage(Component.translatable("message.realmrewards.earned",RewardLedger.euros(paid),title(actual)));
+            long remaining=data.ledger.account(player.getUUID()).pending();
+            if (amount>0 && remaining>0) player.sendSystemMessage(Component.translatable("message.realmrewards.queued",RewardLedger.euros(remaining)));
         }
     }
+
     public static void login(PlayerEvent.PlayerLoggedInEvent event) {
         if (!(event.getEntity() instanceof ServerPlayer player)) return;
         requireThread(player);
