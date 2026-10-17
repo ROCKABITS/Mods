@@ -1,4 +1,23 @@
-# Validação — Realm Identity 0.1.0
+# Validação — Realm Identity 0.1.1
+
+[Execução conjunta aprovada](https://github.com/ROCKABITS/Mods/actions/runs/39029117475), código `a9de43fdc55325ff9f3aaedaf4ffc61608b8dc16`.
+
+- **35 testes unitários aprovados**, sem falhas/erros/ignorados; a mesma bateria passou no auxiliar local Java 21.
+- **23 GameTests aprovados em modo independente** e **23 com Realm Titles 0.1.0 e os sete companheiros publicados**, incluindo Chronicles RP 0.5.4 com Origins/Jupiter/Classes reais. Os três casos novos verificam ausência do Titles no modo independente e a API real no modo integrado.
+- Novas provas: atribuição e revogação sem reemitir o documento; titulares offline, expiração e descrição atual; API opcional indisponível afeta só os títulos; documento falso não consulta o registo. Item, selo, número de série e perfil emitido mantêm-se.
+- O cliente real do Realm Titles emitiu e consultou um documento autêntico, mostrou dois títulos e confirmou apenas um após revogação. Controlos verificados em 320 × 240. Duas capturas desse percurso fazem parte da [galeria conjunta](../media/realm-titles/README.md); não foi repetida nesta atualização a galeria independente de quatro demonstrações do Identity.
+- Protocolo **2**: instala a 0.1.1 no servidor e em todos os clientes. Os documentos da 0.1.0 continuam válidos.
+- JAR/ZIP publicados e o JAR dentro do pacote conjunto foram novamente verificados por SHA-256. O JAR não inclui os fixtures nativos/visuais nem bibliotecas externas.
+
+SHA-256 do JAR: `4096147ac74847d31ee733291ad85d8d154ff7340e8d6f0874dd7cb7364823b0`.
+
+[JAR](../mod-pronto/realm-identity-0.1.1.jar) · [ZIP](../mod-pronto/realm-identity-0.1.1.zip) · [Proveniência](../mod-pronto/realm-identity-0.1.1.build.json) · [Âmbito completo e limites](../realm-titles/VALIDACAO.md).
+
+O cliente visual foi integrado, com personagens de demonstração, e não comprova uma sessão autenticada de dois clientes. A compilação Minecraft local permaneceu bloqueada por HTTP 403 no download do NeoForm; as provas nativas e visuais foram executadas no GitHub Actions.
+
+---
+
+# Histórico — Realm Identity 0.1.0
 
 [Execução aprovada](https://github.com/ROCKABITS/Mods/actions/runs/38812039209), código `e0a1d3ee8b65d89a39d1b4d0136b8cf89d0890af`.
 
@@ -15,7 +34,7 @@
 
 SHA-256 do JAR: `9332d133320066d42bedb08fe129dee3da0de41f261f459140dea2a12ebf1606`.
 
-## Chronicles e limites
+## Chronicles e limites da 0.1.0
 
 Foi executada separadamente uma verificação do leitor contra os records do **JAR original Chronicles RP 0.5.2** fornecido pelo utilizador. Confirmou os dados de identidade, profissão, assinatura escrita, bits do desenho, rejeição de personagem não criada/assinatura inválida e preservação de biografia, origem, saldo e progresso. O programa de verificação próprio está em `tools/OriginalChroniclesCheck.java`; o JAR original não é redistribuído.
 

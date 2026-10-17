@@ -25,7 +25,7 @@ Plataforma: **Minecraft 1.21.1, NeoForge e Java 21**. Os mods mantêm responsabi
 | — | Guildas | Membros, cargos, sedes, cofres e contratos de grupo. | O utilizador decidiu não desenvolver nesta fase. |
 | — | Correio de fantasia | Cartas e encomendas entre jogadores. | Ideia sugerida; sem desenvolvimento agendado. |
 
-Os projetos futuros abaixo são um guião de produto e não estão incluídos nos JARs atuais.
+O quadro abaixo distingue as funcionalidades já implementadas das ideias ainda futuras.
 
 ## Novos projetos do guião
 
@@ -33,11 +33,11 @@ Os projetos futuros abaixo são um guião de produto e não estão incluídos no
 | --- | --- | --- |
 | Realm Rewards | Recompensar conquistas Vanilla e de outros mods com dinheiro do Chronicles RP. | Implementado e atualizado para 0.1.2; [guia](realm-rewards/README.md). |
 | Realm Notifications | Notificações no ecrã e API comum para os mods de RP. | Implementado na 0.1.0; [guia](realm-notifications/README.md). |
-| Realm Titles | Títulos de personagem atribuídos pelo governante eleito. | Por desenvolver. |
+| Realm Titles | Títulos de personagem atribuídos pelo governante eleito. | Implementado na 0.1.0 Beta; [guia](realm-titles/README.md). |
 | Chronicles RP — Nomes RP | Mostrar o nome da personagem acima da cabeça, no TAB e no chat. | Implementado na 0.5.3; [guia e downloads](chronicles-rp/README.md). |
 | Xaero Map Regions + Xaero's World Map | Desenhar e consultar territórios no mapa. | Solução externa indicada pelo utilizador; não desenvolver um mod próprio. |
 
-O imposto de vendas foi implementado no Crown Ledger e Realm Markets 0.2.0; os resultados de execução ficam nos guias e ficheiros de validação dos dois projetos. A atualização dos nomes RP foi concluída no Chronicles 0.5.3. O utilizador escolheu desenvolver Realm Rewards primeiro, seguido de Realm Notifications e Realm Titles. O Rewards está implementado e atualizado para 0.1.2. O Realm Notifications está implementado na 0.1.0, com integração nos seis mods existentes. Realm Titles continua por iniciar.
+O imposto de vendas foi implementado no Crown Ledger e Realm Markets 0.2.0; os resultados de execução ficam nos guias e ficheiros de validação dos dois projetos. A atualização dos nomes RP foi concluída no Chronicles 0.5.3. O utilizador escolheu desenvolver Realm Rewards primeiro, seguido de Realm Notifications e Realm Titles. O Rewards está implementado e atualizado para 0.1.2. O Realm Notifications está implementado na 0.1.0, com integração nos seis mods existentes. O Realm Titles está implementado na 0.1.0 Beta, acompanhado pelo Realm Identity 0.1.1 para mostrar os títulos atuais nos documentos.
 
 ### Realm Rewards
 
@@ -60,7 +60,7 @@ O imposto de vendas foi implementado no Crown Ledger e Realm Markets 0.2.0; os r
 - Permitir ao governante eleito pelo Realm Council criar, atribuir e remover títulos personalizados.
 - Associar vários títulos à personagem, como Cavaleiro, Duque, Barão e Conselheiro.
 - Suportar títulos permanentes ou temporários.
-- Prever um bloco físico para gerir nomeações e integração com o Realm Identity para as mostrar.
+- Gerir nomeações na Mesa do Selo Real e mostrar os títulos atuais na consulta do Realm Identity 0.1.1, sem reemitir o documento.
 
 ### Chronicles RP — Nomes RP
 
