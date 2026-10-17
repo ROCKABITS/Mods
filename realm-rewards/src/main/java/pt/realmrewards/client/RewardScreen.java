@@ -141,4 +141,7 @@ public final class RewardScreen extends Screen {
         super.render(g,mouseX,mouseY,partial);
     }
     @Override public boolean isPauseScreen() { return false; }
+    // Screen.render() renders its default blurred background before the widgets.
+    // Our parchment and labels were already drawn, so that background must be empty.
+    @Override public void renderBackground(GuiGraphics g,int mouseX,int mouseY,float partial) {}
 }

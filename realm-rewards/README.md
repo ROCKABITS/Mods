@@ -1,4 +1,4 @@
-# Realm Rewards — 0.1.0 Beta
+# Realm Rewards — 0.1.1 Beta
 
 Recompensas automáticas por conquistas para **Minecraft 1.21.1, NeoForge 21.1.256+ e Java 21**. Instala o mesmo JAR no servidor e nos clientes.
 
@@ -6,7 +6,7 @@ O servidor descobre os Advancements Vanilla e de outros mods pelo sistema normal
 
 ## Valores e administração
 
-Um operador de nível 2 abre **`/rewards`**. O menu permite procurar pelo identificador ou título, navegar na lista, definir o valor individual de uma conquista, desativá-la com zero e voltar ao valor padrão. No separador de valores padrão, altera os pagamentos por tipo:
+Um operador de nível 2 abre **`/rewards`**. O menu permite procurar pelo identificador ou título conhecido do servidor, navegar na lista, definir o valor individual de uma conquista, desativá-la com zero e voltar ao valor padrão. Para títulos traduzidos, a pesquisa por ID funciona em qualquer idioma. No separador de valores padrão, altera os pagamentos por tipo:
 
 | Tipo | Valor inicial |
 | --- | --- |

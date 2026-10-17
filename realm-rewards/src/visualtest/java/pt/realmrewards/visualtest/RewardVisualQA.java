@@ -35,8 +35,9 @@ public final class RewardVisualQA {
         root.addProperty("task","2.00");root.addProperty("goal","5.00");root.addProperty("challenge","10.00");
         JsonArray rows=new JsonArray();
         String[] names={"Stone Age","Acquire Hardware","Diamonds!","Cover Me with Debris","A Balanced Diet","Adventure","Modded quest: The Royal Expedition","A Very Very Long Custom Advancement Name"};
+        String[] ids={"minecraft:story/mine_stone","minecraft:story/smelt_iron","minecraft:story/mine_diamond","minecraft:nether/netherite_armor","minecraft:husbandry/balanced_diet","minecraft:adventure/root","fantasy_quests:royal_expedition","fantasy_quests:long_custom_name"};
         for(int i=0;i<8;i++) {
-            JsonObject row=new JsonObject();row.addProperty("id",i==6?"fantasy_quests:royal_expedition":"minecraft:demo/"+i);
+            JsonObject row=new JsonObject();row.addProperty("id",ids[i]);
             JsonObject title=new JsonObject();title.addProperty("text",names[i]);row.add("title",title);
             row.addProperty("kind",i==4?"CHALLENGE":"TASK");row.addProperty("amount",i==4?"10.00":"2.00");row.addProperty("override",false);rows.add(row);
         } root.add("rows",rows);return root;
@@ -55,7 +56,7 @@ public final class RewardVisualQA {
     private static void verify() throws Exception {
         Minecraft mc=Minecraft.getInstance(); screen=new RewardScreen(demo(),SEND);mc.setScreen(screen); choose();
         edit("amountBox").setValue("7,25");click("gui.realmrewards.save");
-        var save=REQUESTS.getLast();check(save.get("id").getAsString().equals("minecraft:demo/0") && save.get("value").getAsString().equals("7,25"),"Reward save used wrong identity/amount");
+        var save=REQUESTS.getLast();check(save.get("id").getAsString().equals("minecraft:story/mine_stone") && save.get("value").getAsString().equals("7,25"),"Reward save used wrong identity/amount");
         click("gui.realmrewards.reset");check(REQUESTS.getLast().get("operation").getAsString().equals("reset"),"Default reset missing");
         edit("searchBox").setValue("fantasy_quests:");click("gui.realmrewards.search");
         check(REQUESTS.getLast().get("search").getAsString().equals("fantasy_quests:") && REQUESTS.getLast().get("page").getAsInt()==0,"Search did not reset pagination");

@@ -3,7 +3,7 @@ loaderVersion="[4,)"
 license="All Rights Reserved"
 [[mods]]
 modId="realmrewards"
-version="0.1.0"
+version="0.1.1"
 displayName="Realm Rewards"
 authors="ROCKABITS"
 description='''Configurable, once-per-player advancement rewards with the Chronicles RP wallet and an operator administration menu. Vanilla and mod advancements are discovered automatically.'''

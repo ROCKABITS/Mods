@@ -1,4 +1,12 @@
-# Realm Rewards 0.1.0
+# Realm Rewards
+
+## 0.1.1
+
+- Fixed Minecraft's default background blur affecting the administration menu's labels.
+- Updated demonstration screenshots with real Vanilla advancement identifiers.
+- Reward rules, completion history and network protocol remain unchanged.
+
+## 0.1.0
 
 - Automatic discovery of Vanilla and normal mod advancements.
 - Configurable task, goal and challenge defaults, plus per-advancement overrides.
