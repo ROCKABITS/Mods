@@ -14,6 +14,8 @@ Back up your world and replace the previous Chronicles RP JAR with `cronicasrp-0
 
 This release declares the Origins 0.3.2 API and, when installed, Classes 0.3. These are the reference dependency versions; see `VALIDACAO.md` for this release's actual validation status. Gradle downloads these dependencies for development runs. External mods are not bundled in the Chronicles RP JAR.
 
+[Version 0.5.3 validation passed](https://github.com/ROCKABITS/Mods/actions/runs/38936862628): 66 unit tests, 36 native GameTests in each of three mod configurations, and checks in the actual Minecraft client. See [VALIDACAO.md](VALIDACAO.md) for release provenance, test scope and limitations.
+
 ## Character names in the world
 
 Once a character has been created, its RP name replaces the account username above the player's head, in TAB, as the author of ordinary chat messages, and in the identity shown by the Chronicles RP character book. An account named **Ricardo123** with a character named **Aetherion** is displayed as **Aetherion**. Players without a created character, or with an invalid name in a legacy profile, keep their normal username.

@@ -14,6 +14,8 @@ Faz uma cópia de segurança do mundo e coloca `cronicasrp-0.5.3.jar` em `mods`,
 
 Esta integração usa a API da versão NeoForge de IAFEnvoy. O JAR declara Origins 0.3.2 como obrigatório e Origins: Classes 0.3 como opcional. Os downloads acima correspondem à combinação de referência; o estado das verificações desta versão está em `VALIDACAO.md`. Não precisas de instalar os JARs externos dentro do projeto IntelliJ: o Gradle carrega-os nas execuções de desenvolvimento.
 
+A [validação da versão 0.5.3 passou](https://github.com/ROCKABITS/Mods/actions/runs/38936862628): 66 testes unitários, 36 GameTests em cada uma de três combinações de mods e verificações no cliente real. Consulta [VALIDACAO.md](VALIDACAO.md) para os artefactos, o âmbito e os limites destes testes.
+
 ## Nomes de personagem no mundo
 
 Depois de criares a personagem, o nome RP substitui o username acima da cabeça, na lista TAB, no nome do autor das mensagens do chat normal e na identificação apresentada pelo livro do Chronicles RP. Por exemplo, uma personagem chamada **Aetherion** é apresentada como **Aetherion**, mesmo que a conta Minecraft se chame **Ricardo123**. Sem personagem criada, ou se um perfil antigo tiver um nome inválido, aparece o username habitual.

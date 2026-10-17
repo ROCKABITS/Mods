@@ -35,6 +35,20 @@ for name in ('build.log', 'gametests.log', 'gametests-without-classes.log', 'int
     if outcomes:
         annotation('notice', name + ' results', '\n'.join(outcomes[-12:])[-12000:])
     if 'BUILD FAILED' in log or 'FAILURE: Build failed' in log:
+        # Crash-report hardware dumps can push the first failed test outside the
+        # last 180 lines. Preserve bounded exception/assertion context as well.
+        lines = log.splitlines()
+        important = re.compile(r'failed!|test[^\n]*failed|GameTestAssertException|AssertionError|'
+                               r'Caused by:|java\.[\w.]*Exception:|CRP_\w*QA_FAILED', re.I)
+        selected = set()
+        for index, line in enumerate(lines):
+            if important.search(line):
+                selected.update(range(max(0, index - 2), min(len(lines), index + 11)))
+        context = '\n'.join(lines[index] for index in sorted(selected))[:12000]
+        if context:
+            parts.append(f"\n## {name} first failure context\n\n```text\n{context.replace('```', '~~~')}\n```\n")
+            for index, offset in enumerate(range(0, len(context), 2000), 1):
+                annotation('error', f'{name} first failure context {index}', context[offset:offset + 2000])
         diagnostic = tail[-16000:]
         for index, offset in enumerate(range(0, len(diagnostic), 2000), 1):
             annotation('error', f'{name} diagnostics {index}', diagnostic[offset:offset + 2000])
