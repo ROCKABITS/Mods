@@ -160,7 +160,16 @@ public final class NotificationsGameTests {
             Show input = new Show("reward", Component.literal("Conquista 🎉"), Component.translatableWithFallback("qa.reward", "+%s € — %s", "50,00", Component.literal("Aetherion")));
             Show.CODEC.encode(buffer, input);
             Show output = Show.CODEC.decode(buffer);
-            helper.assertTrue(input.equals(output) && !buffer.isReadable(), "Notification payload did not round-trip exactly");
+            // Minecraft canonically decodes a literal translation argument as a String.
+            // Compare the wire meaning rather than its pre-encoding Java representation.
+            var codec = net.minecraft.network.chat.ComponentSerialization.CODEC;
+            var ops = com.mojang.serialization.JsonOps.INSTANCE;
+            helper.assertTrue(output.kind().equals("reward") && output.title().getString().equals("Conquista 🎉")
+                    && output.body().getContents() instanceof net.minecraft.network.chat.contents.TranslatableContents
+                    && output.body().getString().equals("+50,00 € — Aetherion")
+                    && codec.encodeStart(ops,input.title()).getOrThrow().equals(codec.encodeStart(ops,output.title()).getOrThrow())
+                    && codec.encodeStart(ops,input.body()).getOrThrow().equals(codec.encodeStart(ops,output.body()).getOrThrow())
+                    && !buffer.isReadable(), "Notification payload lost its translation, arguments, Unicode or framing");
         } finally { buffer.release(); }
         helper.succeed();
     }
