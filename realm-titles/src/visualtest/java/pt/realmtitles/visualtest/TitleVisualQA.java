@@ -155,10 +155,17 @@ public final class TitleVisualQA {
         var block = BuiltInRegistries.BLOCK.get(key("realmtitles", "royal_seal_desk"));
         check(block != Blocks.AIR, "Royal seal desk block is not registered");
         var lower = block.defaultBlockState().setValue(BlockStateProperties.HORIZONTAL_FACING, direction).setValue(BlockStateProperties.DOUBLE_BLOCK_HALF, DoubleBlockHalf.LOWER);
-        // Suppress neighbour callbacks until the complete two-block fixture exists.
-        player.serverLevel().setBlock(DESK, lower, 2);
-        player.serverLevel().setBlock(DESK.above(), lower.setValue(BlockStateProperties.DOUBLE_BLOCK_HALF, DoubleBlockHalf.UPPER), 3);
-        player.serverLevel().sendBlockUpdated(DESK, lower, lower, 3);
+        // A different facing is a replacement structure. Remove the previous
+        // complete pair before placing either new half, just as actual item
+        // placement does; rotating a lower half in-place tears its old pair down.
+        var level = player.serverLevel();
+        level.removeBlock(DESK, false); level.removeBlock(DESK.above(), false);
+        int staged = net.minecraft.world.level.block.Block.UPDATE_CLIENTS | net.minecraft.world.level.block.Block.UPDATE_KNOWN_SHAPE;
+        check(level.setBlock(DESK, lower, staged), "Could not place the lower demonstration desk");
+        check(level.setBlock(DESK.above(), lower.setValue(BlockStateProperties.DOUBLE_BLOCK_HALF, DoubleBlockHalf.UPPER), staged), "Could not place the upper demonstration desk");
+        level.updateNeighborsAt(DESK, block); level.updateNeighborsAt(DESK.above(), block);
+        check(((pt.realmtitles.block.SealDeskBlock) block).validStructure(level, DESK), "The rotated demonstration desk is not a supported matching pair");
+        level.sendBlockUpdated(DESK, lower, lower, 3);
     }
     private static float yaw(Direction facing) { return switch (facing) { case NORTH -> 0; case EAST -> 90; case SOUTH -> 180; case WEST -> 270; default -> throw new IllegalStateException(); }; }
     private static double cameraX(Direction facing) { return .5 + facing.getStepX() * 4.5; }
