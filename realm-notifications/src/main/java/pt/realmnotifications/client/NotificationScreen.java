@@ -55,7 +55,7 @@ public final class NotificationScreen extends Screen {
         var control=addRenderableWidget(button(x,y,width,17,value,action));control.setTooltip(Tooltip.create(value));
     }
     private Button button(int x,int y,int w,int h,Component label,Consumer<Button> press) {
-        return new Button(x,y,w,h,label,press::accept,Button.DEFAULT_NARRATION) {
+        return new Button(x,y,w,h,label,press::accept,narration->narration.get()) {
             @Override protected void renderWidget(GuiGraphics g,int mx,int my,float partial) {
                 int border=isHoveredOrFocused()?0xFFE3C17C:0xFF8C7548;
                 g.fill(getX(),getY(),getX()+getWidth(),getY()+getHeight(),border);

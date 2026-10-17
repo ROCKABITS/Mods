@@ -23,7 +23,10 @@ public final class NotificationClientEvents {
         });
     }
     @SubscribeEvent public static void setup(FMLClientSetupEvent event) {
-        event.enqueueWork(()->ModList.get().getModContainerById("realmnotifications").orElseThrow()
-            .registerExtensionPoint(IConfigScreenFactory.class,()->(container,parent)->new NotificationScreen(parent,false)));
+        event.enqueueWork(()->{
+            IConfigScreenFactory factory=(container,parent)->new NotificationScreen(parent,false);
+            ModList.get().getModContainerById("realmnotifications").orElseThrow()
+                .registerExtensionPoint(IConfigScreenFactory.class,factory);
+        });
     }
 }
