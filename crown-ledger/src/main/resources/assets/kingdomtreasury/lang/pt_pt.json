@@ -129,5 +129,14 @@
   "gui.kingdomtreasury.markets_connected": "Realm Markets ligado",
   "gui.kingdomtreasury.markets_not_connected": "Integração Markets indisponível",
   "gui.kingdomtreasury.markets_unavailable": "A integração Realm Markets está indisponível. O imposto fica guardado no mercado até poder ser recolhido.",
-  "gui.kingdomtreasury.market_tax_income": "Imposto das vendas"
+  "gui.kingdomtreasury.market_tax_income": "Imposto das vendas",
+  "message.kingdomtreasury.euro_amount": "%2$s €",
+  "message.kingdomtreasury.donated": "Contribuíste com %s para a tesouraria do reino.",
+  "message.kingdomtreasury.donation_received": "A tesouraria recebeu uma doação de %s.",
+  "message.kingdomtreasury.salary_available": "O teu salário de %s já está financiado. Levanta-o no Cofre da Coroa.",
+  "message.kingdomtreasury.salary_waiting": "Tens %s de salário à tua espera no Cofre da Coroa.",
+  "message.kingdomtreasury.salary_paid": "Recebeste %s de salário do reino.",
+  "message.kingdomtreasury.fixed_tax_paid": "Pagaste %s de imposto fixo do reino.",
+  "message.kingdomtreasury.contract_income": "A tesouraria recebeu %s de impostos ou devoluções de contratos.",
+  "message.kingdomtreasury.market_income": "A tesouraria recebeu %s de imposto sobre vendas nas bancas."
 }

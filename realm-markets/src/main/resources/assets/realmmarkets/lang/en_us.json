@@ -71,5 +71,9 @@
   "gui.realmmarkets.tax_total": "TO KINGDOM TREASURY: %s",
   "gui.realmmarkets.seller_net": "SELLER RECEIVES: %s",
   "gui.realmmarkets.treasury_unavailable": "Kingdom tax is unavailable. Purchases are paused; stock and earnings remain accessible.",
-  "gui.realmmarkets.treasury_unavailable_short": "Sales paused · tax unavailable"
+  "gui.realmmarkets.treasury_unavailable_short": "Sales paused · tax unavailable",
+  "notification.realmmarkets.purchased": "Bought %s × %s for %s. The items are in your inventory.",
+  "notification.realmmarkets.sale_stored": "Sale at %s: %s net earnings stored at your stall, ready to collect.",
+  "notification.realmmarkets.claimed": "+%s collected from your market sales.",
+  "notification.realmmarkets.emeralds": "%s emeralds"
 }

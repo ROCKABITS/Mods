@@ -1,3 +1,10 @@
+# 0.2.2 — Optional Realm Notifications
+
+- Added optional HUD announcements for election creation, campaign, voting, runoffs, public results, cancellation, oaths and government decisions.
+- Added private candidacy and sealed-vote confirmations. Notifications never contain a voter’s choice or individual ballot details.
+- Used a shared clock path for automatic phase changes, including changes triggered by opening a station, so announcements are sent once.
+- Kept per-player chat fallback when the optional notification channel is absent, plus the existing physical stations, permissions, network protocol and saved data.
+
 # 0.2.1 — Physical council stations
 
 - Removed the O key binding and public `/council` and `/eleicoes` menu opening. Interact with the Notice Board, Ballot Box or Oath Desk instead.

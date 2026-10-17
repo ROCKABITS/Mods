@@ -1,3 +1,7 @@
+## Atualização 0.2.1 — Realm Notifications
+
+Integração opcional de apresentação; validação desta atualização pendente da execução conjunta do CI. As verificações de versões anteriores indicadas abaixo são históricas e não certificam automaticamente esta compilação.
+
 # Validação — Realm Markets 0.2.0
 
 A [execução conjunta 38924972884](https://github.com/ROCKABITS/Mods/actions/runs/38924972884) compilou, testou e publicou Realm Markets e Crown Ledger **0.2.0**, a partir do mesmo commit `1a6825f00d37ec07c194e96a4b05c003f892d8d1`. A publicação foi concluída no commit do bot `e9991c8` depois de todas as verificações obrigatórias.

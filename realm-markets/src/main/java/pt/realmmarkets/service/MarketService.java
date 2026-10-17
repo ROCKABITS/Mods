@@ -31,6 +31,7 @@ import net.minecraft.world.phys.Vec3;
 import pt.realmmarkets.api.MarketsApi;
 import pt.realmmarkets.block.MarketStallBlock;
 import pt.realmmarkets.compat.ChroniclesBridge;
+import pt.realmmarkets.compat.NotificationsBridge;
 import pt.realmmarkets.data.MarketData;
 import pt.realmmarkets.domain.Currency;
 import pt.realmmarkets.domain.Listing;
@@ -253,6 +254,11 @@ public final class MarketService {
         // on copies before the only fallible external write (the online RP wallet).
         if (stall.currency() == Currency.CHRONICLES) ChroniclesBridge.debit(player, cost);
         commit(player, data, next, inventory);
+        NotificationsBridge.notify(player, "market", Component.translatable("notification.realmmarkets.purchased",
+                quantity, item.getDescription(), money(cost, stall.currency())));
+        ServerPlayer seller = player.getServer().getPlayerList().getPlayer(stall.owner());
+        if (seller != null) NotificationsBridge.notify(seller, "market",
+                Component.translatable("notification.realmmarkets.sale_stored", stall.title(), money(amounts.net(), stall.currency())));
     }
 
     /** Collect as much as fits. Any uncollected amount remains owned by this stall. */
@@ -274,6 +280,13 @@ public final class MarketService {
         next.claim(stall.id(), player.getUUID(), amount);
         if (stall.currency() == Currency.CHRONICLES) ChroniclesBridge.credit(player, amount);
         commit(player, data, next, inventory);
+        NotificationsBridge.notify(player, "money", Component.translatable("notification.realmmarkets.claimed", money(amount, stall.currency())));
+    }
+
+    private static Component money(long amount, Currency currency) {
+        return currency == Currency.CHRONICLES
+                ? Component.literal(String.format(java.util.Locale.ROOT, "%d,%02d €", amount / 100, amount % 100))
+                : Component.translatable("notification.realmmarkets.emeralds", Long.toString(amount));
     }
 
     public static void trustedRename(ServerPlayer player, String title) {

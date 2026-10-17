@@ -24,6 +24,7 @@ import pt.crownledger.block.BlockRegistry;
 import pt.crownledger.compat.ChroniclesBridge;
 import pt.crownledger.compat.ContractsBridge;
 import pt.crownledger.compat.MarketsBridge;
+import pt.crownledger.compat.NotificationsBridge;
 import pt.crownledger.compat.RealmBridge;
 import pt.crownledger.compat.WalletBridge;
 import pt.crownledger.data.TreasuryData;
@@ -43,6 +44,9 @@ public final class CrownService {
     private static final Map<MinecraftServer, OnlineActivity> ONLINE_ACTIVITY = new HashMap<>();
     private static final Map<MinecraftServer, Integer> NEXT_MARKET_SWEEP = new HashMap<>();
     private static final Map<MinecraftServer, Long> NEXT_MARKET_WARNING = new HashMap<>();
+    private record IncomeNotice(String key, Currency currency) {}
+    private static final Map<MinecraftServer, Map<IncomeNotice, Long>> INCOME_NOTICES = new HashMap<>();
+    private static final Map<MinecraftServer, Integer> NEXT_INCOME_NOTICE = new HashMap<>();
     private static final long SESSION_NANOS = 300_000_000_000L;
     private static final long MINUTE_NANOS = 60_000_000_000L;
 
@@ -72,7 +76,7 @@ public final class CrownService {
                     previous.marketTaxBasisPoints()),
                     null, System.currentTimeMillis());
             next.cycle(System.currentTimeMillis());
-            commit(data, next);
+            commit(server, data, next);
         }
         try { ContractsBridge.start(server); }
         catch (RuntimeException | LinkageError ex) { LOG.error("Contracts integration could not start; treasury funds are retained", ex); }
@@ -89,6 +93,8 @@ public final class CrownService {
         ONLINE_ACTIVITY.remove(server);
         NEXT_MARKET_SWEEP.remove(server);
         NEXT_MARKET_WARNING.remove(server);
+        INCOME_NOTICES.remove(server);
+        NEXT_INCOME_NOTICE.remove(server);
         SESSIONS.clear();
         try { ContractsBridge.stop(); }
         catch (RuntimeException | LinkageError ex) { LOG.warn("Contracts integration could not unregister cleanly", ex); }
@@ -101,7 +107,15 @@ public final class CrownService {
         requireThread(player.getServer());
         OnlineActivity activity = ONLINE_ACTIVITY.computeIfAbsent(player.getServer(), ignored -> new OnlineActivity());
         activity.logout(player.getUUID());
-        if (!player.isSpectator()) activity.login(player.getUUID(), System.nanoTime());
+        if (!player.isSpectator()) {
+            activity.login(player.getUUID(), System.nanoTime());
+            Treasury treasury = TreasuryData.get(player.getServer()).treasury;
+            for (Currency currency : Currency.values()) {
+                long pending = treasury.claims(player.getUUID(), currency);
+                if (pending > 0) NotificationsBridge.notify(player, "salary",
+                        Component.translatable("message.kingdomtreasury.salary_waiting", money(pending, currency)));
+            }
+        }
     }
 
     public static void logout(UUID player) {
@@ -113,6 +127,7 @@ public final class CrownService {
         requireThread(server);
         long nowNanos = System.nanoTime();
         int tick = server.getTickCount();
+        flushGovernorIncome(server, tick);
         Integer nextSweep = NEXT_MARKET_SWEEP.get(server);
         if (nextSweep == null || tick - nextSweep >= 0) {
             NEXT_MARKET_SWEEP.put(server, tick + 20);
@@ -145,7 +160,7 @@ public final class CrownService {
                 TreasuryData data = TreasuryData.get(server);
                 Treasury treasury = data.treasury.copy();
                 if (activity.recordCompletedMinutes(treasury, player.getUUID(), player.getGameProfile().getName(), now, nowNanos) > 0)
-                    commit(data, treasury);
+                    commit(server, data, treasury);
             } catch (RuntimeException | LinkageError ex) {
                 LOG.warn("Treasury activity could not settle for {}", player.getUUID(), ex);
             }
@@ -164,7 +179,7 @@ public final class CrownService {
         sweep(server);
         TreasuryData data = TreasuryData.get(server);
         Treasury next = data.treasury.copy();
-        if (next.cycle(now)) commit(data, next);
+        if (next.cycle(now)) commit(server, data, next);
     }
 
     public static void openBoard(ServerPlayer player, BlockPos chest) {
@@ -259,7 +274,7 @@ public final class CrownService {
         Treasury next = data.treasury.copy();
         UUID actor = source.getEntity() == null ? null : source.getEntity().getUUID();
         next.setStandaloneManager(target.getUUID(), actor, System.currentTimeMillis());
-        commit(data, next);
+        commit(target.getServer(), data, next);
     }
 
     public static boolean mayManage(ServerPlayer player) {
@@ -285,7 +300,7 @@ public final class CrownService {
         TreasuryData data = TreasuryData.get(manager.getServer());
         Treasury next = data.treasury.copy();
         next.setPolicy(policy, manager.getUUID(), System.currentTimeMillis());
-        commit(data, next);
+        commit(manager.getServer(), data, next);
     }
 
     public static void donate(ServerPlayer player, long amount, Currency currency) {
@@ -298,8 +313,10 @@ public final class CrownService {
         next.addFunds(currency, amount, Kind.DEPOSIT, player.getUUID(), "Donation: " + player.getGameProfile().getName(), now);
         next.settlePending(now);
         WalletBridge.debit(player, currency, amount);
-        commit(data, next);
+        commit(player.getServer(), data, next);
         sync(player);
+        NotificationsBridge.notify(player, "treasury", Component.translatable("message.kingdomtreasury.donated", money(amount, currency)));
+        notifyGovernor(player.getServer(), "message.kingdomtreasury.donation_received", amount, currency, player.getUUID());
     }
 
     public static long claim(ServerPlayer player, Currency currency) {
@@ -312,8 +329,9 @@ public final class CrownService {
         Treasury next = data.treasury.copy();
         next.takeSalary(player.getUUID(), currency, amount, player.getGameProfile().getName(), System.currentTimeMillis());
         WalletBridge.credit(player, currency, amount);
-        commit(data, next);
+        commit(player.getServer(), data, next);
         sync(player);
+        NotificationsBridge.notify(player, "salary", Component.translatable("message.kingdomtreasury.salary_paid", money(amount, currency)));
         return amount;
     }
 
@@ -330,8 +348,10 @@ public final class CrownService {
             Treasury next = data.treasury.copy();
             next.settleTax(player.getUUID(), currency, paid, player.getGameProfile().getName(), System.currentTimeMillis());
             if (paid > 0) WalletBridge.debit(player, currency, paid);
-            commit(data, next);
+            commit(player.getServer(), data, next);
             sync(player);
+            if (paid > 0) NotificationsBridge.notify(player, "treasury",
+                    Component.translatable("message.kingdomtreasury.fixed_tax_paid", money(paid, currency)));
         }
     }
 
@@ -350,7 +370,8 @@ public final class CrownService {
             next.settlePending(now);
             if (ContractsBridge.debit(server, currency, amount) != amount)
                 throw new IllegalStateException("gui.kingdomtreasury.contracts_unavailable");
-            commit(data, next);
+            commit(server, data, next);
+            queueGovernorIncome(server, "message.kingdomtreasury.contract_income", amount, currency);
         }
     }
 
@@ -370,7 +391,8 @@ public final class CrownService {
                 next.settlePending(now);
                 if (MarketsBridge.debit(server, currency, amount) != amount)
                     throw new IllegalStateException("gui.kingdomtreasury.markets_unavailable");
-                commit(data, next);
+                commit(server, data, next);
+                queueGovernorIncome(server, "message.kingdomtreasury.market_income", amount, currency);
             } catch (RuntimeException | LinkageError ex) {
                 // Currency ledgers are independent: a full emerald account must not block digital payroll funding.
                 if (failure == null) failure = ex;
@@ -410,7 +432,7 @@ public final class CrownService {
             catch (RuntimeException | LinkageError restore) { ex.addSuppressed(restore); }
             throw ex;
         }
-        commit(data, next);
+        commit(manager.getServer(), data, next);
         return id;
     }
 
@@ -430,7 +452,7 @@ public final class CrownService {
         TreasuryData data = TreasuryData.get(manager.getServer());
         Treasury next = data.treasury.copy();
         next.cancelPending(manager.getUUID(), System.currentTimeMillis());
-        commit(data, next);
+        commit(manager.getServer(), data, next);
     }
 
     public static String snapshot(ServerPlayer player) { return snapshot(player, ""); }
@@ -501,7 +523,60 @@ public final class CrownService {
         return JSON.toJson(view);
     }
 
-    private static void commit(TreasuryData data, Treasury next) { data.treasury = next; data.setDirty(); }
+    private static void commit(MinecraftServer server, TreasuryData data, Treasury next) {
+        Treasury previous = data.treasury;
+        data.treasury = next;
+        data.setDirty();
+        // A funded claim is collectable at the chest; it is not yet a wallet payment.
+        try {
+            for (ServerPlayer player : server.getPlayerList().getPlayers()) {
+                for (Currency currency : Currency.values()) {
+                    long increase = next.claims(player.getUUID(), currency) - previous.claims(player.getUUID(), currency);
+                    if (increase > 0) NotificationsBridge.notify(player, "salary",
+                            Component.translatable("message.kingdomtreasury.salary_available", money(increase, currency)));
+                }
+            }
+        } catch (RuntimeException | LinkageError disconnected) { /* Presentation cannot roll back committed public money. */ }
+    }
+
+    private static Component money(long amount, Currency currency) {
+        return currency == Currency.EMERALD
+                ? Component.translatable("gui.kingdomtreasury.emerald_amount", Long.toString(amount))
+                : Component.translatable("message.kingdomtreasury.euro_amount", BigDecimal.valueOf(amount, 2).toPlainString(),
+                        BigDecimal.valueOf(amount, 2).toPlainString().replace('.', ','));
+    }
+
+    /** Receipts are batched for ten seconds so busy markets do not flood the governor's HUD. */
+    private static void queueGovernorIncome(MinecraftServer server, String key, long amount, Currency currency) {
+        var pending = INCOME_NOTICES.computeIfAbsent(server, ignored -> new HashMap<>());
+        var notice = new IncomeNotice(key, currency);
+        long previous = pending.getOrDefault(notice, 0L);
+        long total;
+        try { total = Math.addExact(previous, amount); }
+        catch (ArithmeticException overflow) {
+            notifyGovernor(server, key, previous, currency, null);
+            total = amount;
+        }
+        pending.put(notice, total);
+        NEXT_INCOME_NOTICE.putIfAbsent(server, server.getTickCount() + 200);
+    }
+
+    private static void flushGovernorIncome(MinecraftServer server, int tick) {
+        Integer next = NEXT_INCOME_NOTICE.get(server);
+        if (next == null || tick - next < 0) return;
+        NEXT_INCOME_NOTICE.remove(server);
+        var pending = INCOME_NOTICES.remove(server);
+        if (pending != null) pending.forEach((notice, amount) ->
+                notifyGovernor(server, notice.key(), amount, notice.currency(), null));
+    }
+
+    private static void notifyGovernor(MinecraftServer server, String key, long amount, Currency currency, UUID exclude) {
+        try {
+            for (ServerPlayer player : server.getPlayerList().getPlayers())
+                if (!player.getUUID().equals(exclude) && mayManage(player))
+                    NotificationsBridge.notify(player, "treasury", Component.translatable(key, money(amount, currency)));
+        } catch (RuntimeException | LinkageError disconnected) { /* The receipt does not control treasury transfers. */ }
+    }
     private static void sync(ServerPlayer player) {
         try { player.containerMenu.broadcastChanges(); }
         catch (RuntimeException ex) { LOG.warn("Treasury settled but inventory synchronization failed for {}", player.getUUID(), ex); }

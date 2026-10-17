@@ -42,6 +42,28 @@ public final class CouncilGameTests {
     private static CouncilPackets.Action admin(CouncilData d,int action,String target){var e=d.state.current;return new CouncilPackets.Action(action,e.id.toString(),e.round,target,"",e.phase.name());}
 
     @GameTest(template="council_empty",timeoutTicks=100)
+    public static void sealedVoteFallbackNeverRevealsTheChoice(GameTestHelper h){
+        var messages=new ArrayList<net.minecraft.network.chat.Component>();
+        var p=new FakePlayer(h.getLevel(),new GameProfile(UUID.randomUUID(),"VotePrivacyQA")){
+            @Override public void sendSystemMessage(net.minecraft.network.chat.Component message){messages.add(message);}
+        };
+        p.setGameMode(GameType.SURVIVAL);var d=setup(h,p);nominate(d,p);voting(d);
+        var pos=station(h,p,"urn");CouncilService.open(p,"urn",pos);messages.clear();
+        h.assertTrue(!pt.realmcouncil.compat.NotificationsBridge.send(p,"election",net.minecraft.network.chat.Component.literal("unsupported")),
+                "A fixture without the optional channel must use chat fallback.");
+        CouncilService.action(p,new CouncilPackets.Action(3,d.state.current.id.toString(),1,p.getUUID().toString(),"",""));
+        h.assertTrue(messages.size()==1,"A sealed vote must produce exactly one private fallback confirmation.");
+        h.assertTrue(messages.getFirst().getContents() instanceof net.minecraft.network.chat.contents.TranslatableContents,
+                "Vote confirmation must use a localized message.");
+        var content=(net.minecraft.network.chat.contents.TranslatableContents)messages.getFirst().getContents();
+        h.assertTrue(content.getKey().equals("notification.realmcouncil.vote_sealed")&&content.getArgs().length==0,
+                "Private vote confirmation exposed a candidate, voter or ballot argument.");
+        rejected(h,()->CouncilService.action(p,new CouncilPackets.Action(3,d.state.current.id.toString(),1,"","","")));
+        h.assertTrue(messages.size()==1&&d.state.current.ballots.size()==1,"A rejected repeat request sent a second success notice or changed the ballot.");
+        System.out.println("COUNCIL_NOTIFICATION_PRIVACY_PASSED");h.succeed();
+    }
+
+    @GameTest(template="council_empty",timeoutTicks=100)
     public static void blocksAndCraftingRecipesAreRegistered(GameTestHelper h){
         for(String id:List.of("ballot_box","notice_board","oath_desk")){var key=ResourceLocation.fromNamespaceAndPath(RealmCouncil.ID,id);var b=BuiltInRegistries.BLOCK.get(key);h.assertTrue(b!=Blocks.AIR,"Block missing: "+id);h.assertTrue(BuiltInRegistries.ITEM.get(key)!=net.minecraft.world.item.Items.AIR,"Block item missing: "+id);h.assertTrue(h.getLevel().getServer().getRecipeManager().byKey(key).isPresent(),"Recipe missing: "+id);}
         h.assertTrue(CouncilBlocks.BALLOT_BOX.get().defaultBlockState().getValue(CouncilBlock.FACING)==Direction.NORTH,"Default facing is invalid.");h.succeed();

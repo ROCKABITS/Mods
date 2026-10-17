@@ -1,0 +1,104 @@
+name: Build Realm Notifications suite
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'realm-notifications/**'
+      - 'chronicles-rp/**'
+      - 'contracts-bounties/**'
+      - 'realm-council/**'
+      - 'crown-ledger/**'
+      - 'realm-markets/**'
+      - 'realm-rewards/**'
+      - '.github/workflows/build-realm-notifications.yml'
+      - '.github/scripts/notifications_suite.py'
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: notifications-suite-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  build:
+    # Other releases retain their existing workflows; this marker selects one atomic suite publisher.
+    if: ${{ github.event_name == 'workflow_dispatch' || contains(github.event.head_commit.message, '[notifications-suite]') }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      - name: Java 21
+        uses: actions/setup-java@cf277c60eb25467037889841efdb72551f06f6c3
+        with:
+          distribution: temurin
+          java-version: '21'
+          cache: gradle
+      - name: Build seven production JARs and full unit suites
+        run: python3 .github/scripts/notifications_suite.py build
+      - name: Snapshot fixture-free production JARs from this commit
+        run: python3 .github/scripts/notifications_suite.py snapshot
+      - name: Native regression suites for all seven mods
+        run: python3 .github/scripts/notifications_suite.py native
+      - name: Install fresh suite and verified Identity companion
+        run: python3 .github/scripts/notifications_suite.py install
+      - name: Native notifications with actual fresh companion mods and Origins
+        working-directory: realm-notifications
+        run: ./gradlew --no-daemon --console=plain -PnotificationsGameTests -PintegrationTests runGameTestServer 2>&1 | tee integration.log
+      - name: Actual Minecraft HUD, settings and history
+        working-directory: realm-notifications
+        env:
+          LIBGL_ALWAYS_SOFTWARE: '1'
+          ALSOFT_DRIVERS: 'null'
+        run: |
+          if ! command -v xvfb-run >/dev/null; then
+            sudo apt-get update
+            sudo apt-get install -y xvfb xauth
+          fi
+          timeout 420s xvfb-run -a -s '-screen 0 1600x900x24' ./gradlew --no-daemon --console=plain -PnotificationsVisualTests -PintegrationTests runClient 2>&1 | tee visual-client.log
+          python3 -c "import json; r=json.load(open('qa-results/notifications-client/result.json')); assert r.get('success') is True, r"
+      - name: Validation summary and bounded failure diagnostics
+        if: always()
+        run: python3 .github/scripts/notifications_suite.py summary
+      - name: Gate and package all tested releases
+        run: python3 .github/scripts/notifications_suite.py package
+      - name: Downloadable tested suite
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: notifications-suite-${{ github.run_id }}
+          path: |
+            realm-notifications/build/notifications-suite/downloads/
+            media/realm-notifications/
+          if-no-files-found: error
+          retention-days: 30
+      - name: Publish tested suite in one commit
+        if: github.ref == 'refs/heads/main'
+        run: |
+          git fetch --no-tags origin main
+          if [[ "$(git rev-parse FETCH_HEAD)" != "$GITHUB_SHA" ]]; then
+            echo '::error::Main changed during validation. Build the latest source.'
+            exit 1
+          fi
+          python3 .github/scripts/notifications_suite.py stage
+          if git diff --cached --quiet; then exit 0; fi
+          git -c user.name='github-actions[bot]' -c user.email='41898282+github-actions[bot]@users.noreply.github.com' commit -m 'Publish tested Realm Notifications and companion updates [skip ci]'
+          git push origin HEAD:refs/heads/main
+      - name: Full validation evidence
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: notifications-validation-${{ github.run_id }}
+          path: |
+            */build.log
+            */gametests.log
+            realm-notifications/integration.log
+            realm-notifications/visual-client.log
+            */build/test-results/test/
+            realm-notifications/build/notifications-suite/manifest.json
+            realm-notifications/build/notifications-suite/companions.json
+            realm-notifications/qa-results/
+            realm-notifications/run/logs/latest.log
+          if-no-files-found: warn
+          retention-days: 14

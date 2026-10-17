@@ -16,6 +16,7 @@ import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.tick.ServerTickEvent;
 import pt.realmrewards.RealmRewardsMod;
 import pt.realmrewards.compat.ChroniclesBridge;
+import pt.realmrewards.compat.NotificationsBridge;
 import pt.realmrewards.data.RewardData;
 import pt.realmrewards.domain.RewardLedger;
 import pt.realmrewards.network.RewardNetwork;
@@ -49,15 +50,23 @@ public final class RewardService {
         AdvancementHolder actual=player.getServer().getAdvancements().get(advancement.id());
         if (actual==null || !player.getAdvancements().getOrStartProgress(actual).isDone()) return;
         RewardData data=RewardData.get(player.getServer());
+        long previousPending=data.ledger.account(player.getUUID()).pending();
         RewardLedger next=data.ledger.copy();
         if (next.earn(player.getUUID(),actual.id().toString(),kind(actual))) {
             long amount=next.amount(actual.id().toString(),kind(actual));
             data.replace(next);
             long paid=payout(player);
-            if (paid>0) player.sendSystemMessage(Component.translatable("message.realmrewards.earned",RewardLedger.euros(paid),title(actual)));
+            if (paid>0) NotificationsBridge.notify(player,"reward",paidMessage(paid,previousPending,title(actual)));
             long remaining=data.ledger.account(player.getUUID()).pending();
-            if (amount>0 && remaining>0) player.sendSystemMessage(Component.translatable("message.realmrewards.queued",RewardLedger.euros(remaining)));
+            if (amount>0 && remaining>0) NotificationsBridge.notify(player,"info",Component.translatable("message.realmrewards.queued",RewardLedger.euros(remaining)));
         }
+    }
+
+    /** An aggregate payout may include older rewards; never attribute all of it to the newest advancement. */
+    public static Component paidMessage(long paid, long previousPending, Component advancementTitle) {
+        return previousPending > 0
+                ? Component.translatable("message.realmrewards.pending_paid", RewardLedger.euros(paid))
+                : Component.translatable("message.realmrewards.earned", RewardLedger.euros(paid), advancementTitle);
     }
 
     public static void login(PlayerEvent.PlayerLoggedInEvent event) {
@@ -71,7 +80,7 @@ public final class RewardService {
         if (next.baseline(player.getUUID(),completed)) data.replace(next);
         // Profile creation may still be pending. The periodic retry handles that case.
         long value=payout(player);
-        if (value>0) player.sendSystemMessage(Component.translatable("message.realmrewards.pending_paid",RewardLedger.euros(value)));
+        if (value>0) NotificationsBridge.notify(player,"reward",Component.translatable("message.realmrewards.pending_paid",RewardLedger.euros(value)));
     }
     public static void tick(ServerTickEvent.Post event) {
         if (event.getServer().getTickCount()%100!=0) return;
@@ -79,7 +88,7 @@ public final class RewardService {
         for (ServerPlayer player:event.getServer().getPlayerList().getPlayers()) {
             if (data.ledger.account(player.getUUID()).pending()>0) {
                 long value=payout(player);
-                if (value>0) player.sendSystemMessage(Component.translatable("message.realmrewards.pending_paid",RewardLedger.euros(value)));
+                if (value>0) NotificationsBridge.notify(player,"reward",Component.translatable("message.realmrewards.pending_paid",RewardLedger.euros(value)));
             }
         }
     }

@@ -10,6 +10,8 @@ import net.minecraft.gametest.framework.GameTest;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.nbt.*;
 import net.minecraft.network.Connection;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.contents.TranslatableContents;
 import net.minecraft.network.PacketSendListener;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.PacketFlow;
@@ -30,6 +32,7 @@ import net.neoforged.neoforge.gametest.GameTestHolder;
 import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 import pt.realmrewards.RealmRewardsMod;
 import pt.realmrewards.compat.ChroniclesBridge;
+import pt.realmrewards.compat.NotificationsBridge;
 import pt.realmrewards.data.RewardData;
 import pt.realmrewards.domain.RewardLedger;
 import pt.realmrewards.service.RewardService;
@@ -238,4 +241,31 @@ public final class RewardGameTests {
             } finally {online.remove(p);}
         });
     }
+    @GameTest(template="rewards_empty",timeoutTicks=100)
+    public static void unavailableNotificationChannelCannotRepeatOrLoseAReward(GameTestHelper h) {
+        Actor p=actor(h);
+        if (ChroniclesBridge.loaded()) profile(p,1000);
+        grant(p,holder(h,"task"));
+        long reserved=pending(h,p);
+        Object before=ChroniclesBridge.loaded()?profile(p):null;
+        h.assertTrue(!NotificationsBridge.send(p,"reward",Component.literal("Presentation retry")),
+                "A fake player without a supporting client must not accept the optional payload");
+        NotificationsBridge.notify(p,"reward",Component.literal("Presentation retry"));
+        h.assertTrue(pending(h,p)==reserved && (!ChroniclesBridge.loaded() || before.equals(profile(p))),
+                "A notification retry altered paid money or reserved rewards");
+        h.succeed();
+    }
+
+    @GameTest(template="rewards_empty",timeoutTicks=100)
+    public static void aggregateRewardNoticeDoesNotAttributeOldMoneyToTheNewestAdvancement(GameTestHelper h) {
+        Component current=Component.literal("Newest advancement");
+        var aggregate=(TranslatableContents)RewardService.paidMessage(700,500,current).getContents();
+        var direct=(TranslatableContents)RewardService.paidMessage(200,0,current).getContents();
+        h.assertTrue(aggregate.getKey().equals("message.realmrewards.pending_paid") && aggregate.getArgs().length==1,
+                "Old pending rewards were described as belonging to the newest advancement");
+        h.assertTrue(direct.getKey().equals("message.realmrewards.earned") && direct.getArgs().length==2,
+                "A single new reward lost its advancement reason");
+        h.succeed();
+    }
+
 }

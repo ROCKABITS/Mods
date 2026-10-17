@@ -91,5 +91,13 @@
   "gui.contracts.tax_lock_hint": "The tax rate is locked when published. Later policy changes do not alter this contract.",
   "gui.contracts.treasury_unavailable": "The kingdom treasury is unavailable. Try again once its connection is restored.",
   "gui.contracts.treasury_not_connected": "No kingdom treasury is connected. Kingdom rules are inactive.",
-  "gui.contracts.treasury_forbidden": "Only an authorized kingdom manager can perform that action."
+  "gui.contracts.treasury_forbidden": "Only an authorized kingdom manager can perform that action.",
+  "notification.contracts.published": "Contract published: %s. The reward is reserved.",
+  "notification.contracts.completed": "%s completed! %s is ready to collect at the noticeboard.",
+  "notification.contracts.delivery": "Your contract %s was completed. Collect the materials at the noticeboard.",
+  "notification.contracts.cancelled": "%s cancelled. The refund is ready to collect at the noticeboard.",
+  "notification.contracts.claimed": "+%s collected from your contract rewards and refunds.",
+  "notification.contracts.public_published": "Public contract published: %s. The kingdom reserved its reward.",
+  "notification.contracts.public_cancelled": "%s cancelled. The reserved reward returned to the kingdom.",
+  "notification.contracts.emeralds": "%s emeralds"
 }

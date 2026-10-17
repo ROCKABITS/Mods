@@ -71,5 +71,9 @@
   "gui.realmmarkets.tax_total": "PARA O TESOURO: %s",
   "gui.realmmarkets.seller_net": "O VENDEDOR RECEBE: %s",
   "gui.realmmarkets.treasury_unavailable": "O imposto do reino está indisponível. As compras estão suspensas; o stock e os ganhos continuam acessíveis.",
-  "gui.realmmarkets.treasury_unavailable_short": "Vendas suspensas · imposto indisponível"
+  "gui.realmmarkets.treasury_unavailable_short": "Vendas suspensas · imposto indisponível",
+  "notification.realmmarkets.purchased": "Compraste %s × %s por %s. Os itens estão no teu inventário.",
+  "notification.realmmarkets.sale_stored": "Venda em %s: %s líquidos guardados na banca, prontos para levantar.",
+  "notification.realmmarkets.claimed": "+%s levantados das vendas do teu mercado.",
+  "notification.realmmarkets.emeralds": "%s esmeraldas"
 }

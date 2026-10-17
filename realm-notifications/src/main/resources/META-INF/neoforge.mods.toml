@@ -1,0 +1,22 @@
+modLoader="javafml"
+loaderVersion="[4,)"
+license="All Rights Reserved"
+[[mods]]
+modId="realmnotifications"
+version="0.1.0"
+displayName="Realm Notifications"
+logoFile="assets/realmnotifications/icon.png"
+authors="ROCKABITS"
+description='''Elegant parchment notifications for the Realm mod suite, with animated cards, configurable positions and sounds, local notification history and an optional server API. No gameplay or economy changes.'''
+[[dependencies.realmnotifications]]
+modId="neoforge"
+type="required"
+versionRange="[21.1.256,)"
+ordering="NONE"
+side="BOTH"
+[[dependencies.realmnotifications]]
+modId="minecraft"
+type="required"
+versionRange="[1.21.1]"
+ordering="NONE"
+side="BOTH"

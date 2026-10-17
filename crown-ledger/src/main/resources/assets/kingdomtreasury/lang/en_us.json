@@ -129,5 +129,14 @@
   "gui.kingdomtreasury.markets_connected": "Realm Markets connected",
   "gui.kingdomtreasury.markets_not_connected": "Markets integration unavailable",
   "gui.kingdomtreasury.markets_unavailable": "Realm Markets integration is unavailable. Sales tax stays saved in the market ledger until it can be collected.",
-  "gui.kingdomtreasury.market_tax_income": "Market sales tax"
+  "gui.kingdomtreasury.market_tax_income": "Market sales tax",
+  "message.kingdomtreasury.euro_amount": "€%1$s",
+  "message.kingdomtreasury.donated": "Contributed %s to the kingdom treasury.",
+  "message.kingdomtreasury.donation_received": "The treasury received a donation of %s.",
+  "message.kingdomtreasury.salary_available": "%s in salary is now funded. Collect it at the Crown Chest.",
+  "message.kingdomtreasury.salary_waiting": "%s in salary is waiting for you at the Crown Chest.",
+  "message.kingdomtreasury.salary_paid": "Received %s in kingdom salary.",
+  "message.kingdomtreasury.fixed_tax_paid": "Paid %s in fixed kingdom tax.",
+  "message.kingdomtreasury.contract_income": "The treasury received %s in contract tax or refunds.",
+  "message.kingdomtreasury.market_income": "The treasury received %s in market sales tax."
 }

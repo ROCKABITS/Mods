@@ -2,6 +2,7 @@ package pt.cronicasrp;
 
 import java.util.List;
 import pt.cronicasrp.i18n.ModMessages;
+import pt.cronicasrp.compat.NotificationsBridge;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
@@ -32,7 +33,7 @@ public final class CashItem extends Item {
         try {
             int index = hand == InteractionHand.OFF_HAND ? 36 : player.getInventory().selected;
             Component message = CashService.depositHand(serverPlayer, index, player.isShiftKeyDown() ? stack.getCount() : 1);
-            player.displayClientMessage(message, true);
+            if (!NotificationsBridge.send(serverPlayer, "info", message)) player.displayClientMessage(message, true);
             return InteractionResultHolder.consume(player.getItemInHand(hand));
         } catch (IllegalArgumentException ex) {
             player.displayClientMessage(ModMessages.error(ex.getMessage()).copy().withStyle(ChatFormatting.RED), true);

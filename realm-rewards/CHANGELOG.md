@@ -1,5 +1,12 @@
 # Realm Rewards
 
+## 0.1.2
+
+- Optional Realm Notifications integration for advancement payments and rewards awaiting a wallet.
+- Pending payouts use a general advancement-reward reason when they include older rewards, avoiding attributing the whole amount to the newest advancement.
+- Chat remains the fallback when the notification channel is unavailable; no duplicate payment chat accompanies a HUD notification.
+- Completion history, reward amounts and network protocol remain unchanged.
+
 ## 0.1.1
 
 - Fixed Minecraft's default background blur affecting the administration menu's labels.

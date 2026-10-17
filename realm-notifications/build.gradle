@@ -1,0 +1,53 @@
+plugins {
+    id 'java-library'
+    id 'net.neoforged.moddev' version '2.0.148'
+}
+version = mod_version
+group = mod_group_id
+base { archivesName = 'realm-notifications' }
+java.toolchain.languageVersion = JavaLanguageVersion.of(21)
+repositories {
+    mavenCentral()
+    maven { url = 'https://cursemaven.com'; content { includeGroup 'curse.maven' } }
+}
+neoForge {
+    version = project.neo_version
+    runs {
+        client { client() }
+        server { server(); programArgument '--nogui' }
+        gameTestServer {
+            type = 'gameTestServer'
+            systemProperty 'neoforge.enabledGameTestNamespaces', 'realmnotifications'
+            systemProperty 'notifications.integration', providers.gradleProperty('integrationTests').isPresent().toString()
+        }
+    }
+    mods { realmnotifications { sourceSet(sourceSets.main) } }
+}
+configurations { runtimeClasspath.extendsFrom localRuntime }
+dependencies {
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.11.4'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+    if (providers.gradleProperty('integrationTests').isPresent()) {
+        localRuntime fileTree(dir: 'compat-libs', include: ['*.jar'])
+        localRuntime 'curse.maven:origins-neoforge-1375372:8758523'
+        localRuntime 'curse.maven:jupiter-1072905:7738312'
+    }
+}
+sourceSets.test.compileClasspath += sourceSets.main.compileClasspath
+sourceSets.test.runtimeClasspath += sourceSets.main.runtimeClasspath
+tasks.named('test', Test) { useJUnitPlatform() }
+if (providers.gradleProperty('notificationsGameTests').isPresent()) {
+    sourceSets.main.java.srcDir('src/gametest/java')
+    sourceSets.main.resources.srcDir('src/gametest/resources')
+}
+if (providers.gradleProperty('notificationsVisualTests').isPresent()) {
+    sourceSets.main.java.srcDir('src/visualtest/java')
+    neoForge.runs.client {
+        systemProperty 'notifications.qaOutput', file('qa-results/notifications-client').absolutePath
+        programArguments.addAll '--width', '1600', '--height', '900'
+    }
+}
+tasks.named('jar', Jar) {
+    exclude('pt/realmnotifications/test/**', 'pt/realmnotifications/visualtest/**', 'data/realmnotifications/structure/**')
+}
+tasks.withType(JavaCompile).configureEach { options.encoding = 'UTF-8'; options.release = 21 }

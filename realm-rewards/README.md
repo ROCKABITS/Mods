@@ -1,4 +1,6 @@
-# Realm Rewards — 0.1.1 Beta
+# Realm Rewards — 0.1.2 Beta
+
+A versão **0.1.2** integra opcionalmente o **Realm Notifications 0.1.0+**, com o valor e a razão das recompensas. Os pagamentos que incluem recompensas antigas usam uma descrição geral de recompensas pendentes. Sem o canal de notificações, a mensagem aparece no chat.
 
 Recompensas automáticas por conquistas para **Minecraft 1.21.1, NeoForge 21.1.256+ e Java 21**. Instala o mesmo JAR no servidor e nos clientes.
 
@@ -41,6 +43,6 @@ Chronicles é opcional para carregar/configurar o mod, mas é necessário para r
 
 No ambiente cloud usa `python3 tools/cloud_gradle.py` para preservar proxy e TLS. Os testes de domínio independentes correm com `python3 tools/test_domain.py`. A compilação local pode continuar bloqueada pela política de rede; o GitHub Actions executa a validação Minecraft.
 
-[JAR 0.1.1](../mod-pronto/realm-rewards-0.1.1.jar) · [ZIP 0.1.1](../mod-pronto/realm-rewards-0.1.1.zip) · [Imagens](../media/realm-rewards/0.1.1/README.md) · [Changelog](CHANGELOG.md) · [Validação](VALIDACAO.md).
+[JAR 0.1.1](../mod-pronto/realm-rewards-0.1.2.jar) · [ZIP 0.1.1](../mod-pronto/realm-rewards-0.1.1.zip) · [Imagens](../media/realm-rewards/0.1.1/README.md) · [Changelog](CHANGELOG.md) · [Validação](VALIDACAO.md).
 
 A [execução aprovada da 0.1.1](https://github.com/ROCKABITS/Mods/actions/runs/38989952338) passou 12 testes unitários, 15 GameTests sem Chronicles, os mesmos 15 com a carteira real e os restantes mods, e a verificação do menu no cliente Minecraft. Os limites e os hashes estão no guia de validação.

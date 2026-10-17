@@ -178,5 +178,17 @@
   "gui.realmcouncil.hint.admin_remove": "Esta candidatura será retirada da eleição. O jogador continua a poder votar se estiver na lista de eleitores.",
   "error.realmcouncil.permission": "Esta ação exige permissões de operador.",
   "message.realmcouncil.blocks_received": "Blocos entregues; com inventário cheio, estão aos teus pés.",
-  "message.realmcouncil.roster": "Lista atualizada."
+  "message.realmcouncil.roster": "Lista atualizada.",
+  "notification.realmcouncil.winner": "%s venceu a eleição para %s. Falta prestar juramento na mesa.",
+  "notification.realmcouncil.phase.nominations": "Estão abertas as candidaturas para %s. Visita o quadro eleitoral.",
+  "notification.realmcouncil.phase.campaign": "Começou a campanha para %s. Consulta as propostas dos candidatos.",
+  "notification.realmcouncil.phase.voting": "Abriu a votação para %s. Vota em segredo numa urna.",
+  "notification.realmcouncil.phase.runoff": "Empate em %s. A volta %s está aberta nas urnas.",
+  "notification.realmcouncil.phase.finished": "A eleição para %s terminou sem vencedor. Consulta os resultados públicos.",
+  "notification.realmcouncil.phase.cancelled": "A eleição para %s foi cancelada.",
+  "notification.realmcouncil.term_ended": "Terminou o mandato do governante.",
+  "notification.realmcouncil.candidacy_saved": "A tua candidatura e propostas foram guardadas.",
+  "notification.realmcouncil.candidacy_withdrawn": "A tua candidatura foi retirada.",
+  "notification.realmcouncil.vote_sealed": "O teu voto secreto ficou selado. Só podes votar uma vez por volta.",
+  "notification.realmcouncil.decision_published": "%s publicou uma decisão do governo. Consulta-a no quadro eleitoral."
 }

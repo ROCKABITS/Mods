@@ -1,3 +1,10 @@
+# Crown Ledger 0.2.1 — Beta
+
+- Optional Realm Notifications integration for salary availability, actual salary collection, donations and fixed-tax payments.
+- Online governors receive receipts for treasury donations and transferred contract or market income.
+- Funded salary notices explicitly direct players to the Crown Chest; only a completed collection is described as a payment.
+- Existing financial rules and world-data version 2 remain unchanged. Notification failures cannot undo or repeat a treasury transfer.
+
 # Crown Ledger 0.2.0 — Beta
 
 - Added a governor-controlled sales-tax percentage for Realm Markets 0.2.0 and newer.

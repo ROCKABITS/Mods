@@ -1,3 +1,10 @@
+# Realm Markets 0.2.1 — Optional Realm Notifications
+
+- Added optional HUD purchase confirmations with quantity, item and gross price.
+- Notified online stall owners of each completed sale, explicitly showing net earnings retained at the stall; offline earnings remain available to collect normally.
+- Added notifications for earnings actually collected into the wallet or inventory, without re-taxing or crediting a sale twice.
+- Preserved readable chat feedback for clients without the optional notification channel. Existing physical stalls, stock, tax rules, network protocol and saved data remain compatible.
+
 # Realm Markets 0.2.0 — Beta
 
 - Added optional sales tax controlled by the governor in Crown Ledger 0.2.0 and newer.

@@ -91,5 +91,13 @@
   "gui.contracts.tax_lock_hint": "A taxa de imposto fica fixa ao publicar. Alterações posteriores não modificam este contrato.",
   "gui.contracts.treasury_unavailable": "A tesouraria do reino está indisponível. Tenta novamente quando a ligação for restabelecida.",
   "gui.contracts.treasury_not_connected": "Não há ligação à tesouraria do reino. As regras do reino estão inativas.",
-  "gui.contracts.treasury_forbidden": "Apenas um gestor autorizado do reino pode realizar essa ação."
+  "gui.contracts.treasury_forbidden": "Apenas um gestor autorizado do reino pode realizar essa ação.",
+  "notification.contracts.published": "Contrato publicado: %s. A recompensa ficou reservada.",
+  "notification.contracts.completed": "%s concluído! Tens %s para levantar no mural.",
+  "notification.contracts.delivery": "O teu contrato %s foi concluído. Recolhe os materiais no mural.",
+  "notification.contracts.cancelled": "%s cancelado. O reembolso está disponível para levantar no mural.",
+  "notification.contracts.claimed": "+%s levantados das tuas recompensas e reembolsos de contratos.",
+  "notification.contracts.public_published": "Contrato público publicado: %s. O reino reservou a recompensa.",
+  "notification.contracts.public_cancelled": "%s cancelado. A recompensa reservada voltou para o reino.",
+  "notification.contracts.emeralds": "%s esmeraldas"
 }

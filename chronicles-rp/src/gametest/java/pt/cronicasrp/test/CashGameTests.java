@@ -16,6 +16,7 @@ import net.neoforged.neoforge.gametest.GameTestHolder;
 import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 import pt.cronicasrp.*;
 import pt.cronicasrp.domain.*;
+import pt.cronicasrp.compat.NotificationsBridge;
 import pt.cronicasrp.network.CashPackets;
 
 @GameTestHolder(CronicasRP.MOD_ID)
@@ -150,4 +151,20 @@ public final class CashGameTests {
         helper.assertTrue(result.race().equals("Elfo") && result.origin().equals("Comum") && result.progress().occupation().equals("Estudioso"), "Canonical saved labels were translated.");
         helper.succeed();
     }
+    @GameTest(template="cash_empty",timeoutTicks=100)
+    public static void optionalConversionNoticeCannotCreateIncome(GameTestHelper helper) {
+        var player=player(helper);
+        var original=player.getData(ModAttachments.PROFILE);
+        var commands=helper.getLevel().getServer().getCommands();
+        commands.performPrefixedCommand(player.createCommandSourceStack(),"rp withdraw 12.50");
+        helper.assertTrue(!NotificationsBridge.send(player,"info",Component.literal("Conversion receipt retry")),
+                "A fake player without a supporting client accepted the optional payload");
+        NotificationsBridge.notify(player,"info",Component.literal("Conversion receipt retry"));
+        helper.assertTrue(player.getData(ModAttachments.PROFILE).balance()+CashExchange.total(CashService.snapshot(player))==original.balance(),
+                "A conversion notice created or lost money");
+        commands.performPrefixedCommand(player.createCommandSourceStack(),"rp deposit all");
+        helper.assertTrue(original.equals(player.getData(ModAttachments.PROFILE)),"Notification fallback changed RP fields or wallet total");
+        helper.succeed();
+    }
+
 }

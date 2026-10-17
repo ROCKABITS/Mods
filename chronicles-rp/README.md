@@ -1,10 +1,12 @@
-# Chronicles RP — 0.5.3
+# Chronicles RP — 0.5.4
+
+A versão **0.5.4** integra opcionalmente o **Realm Notifications 0.1.0+**. Transferências e pagamentos da administração mostram o valor e o motivo; depósitos e levantamentos são identificados como câmbio. Sem o canal de notificações, mantém-se a mensagem habitual. O protocolo continua a ser **7**, e os dados de RP e de dinheiro mantêm o seu formato.
 
 Personagens de fantasia e economia para Minecraft Java 1.21.1, NeoForge 21.1.256+ na série 21.1 e Java 21.
 
 ## Instalar
 
-Faz uma cópia de segurança do mundo e coloca `cronicasrp-0.5.3.jar` em `mods`, substituindo o JAR anterior do Chronicles RP. Instala a versão 0.5.3 no servidor e em todos os clientes; não deixes dois JARs do Chronicles RP na mesma pasta.
+Faz uma cópia de segurança do mundo e coloca `cronicasrp-0.5.4.jar` em `mods`, substituindo o JAR anterior do Chronicles RP. Instala a versão 0.5.4 no servidor e em todos os clientes; não deixes dois JARs do Chronicles RP na mesma pasta.
 
 | Mod | Versão usada nesta atualização | Necessário? |
 | --- | --- | --- |
@@ -47,7 +49,7 @@ Sem Origins: Classes, o mod continua a funcionar com Origins; a ficha mostra que
 
 Ao atualizar de 0.4.1, preserva a pasta do mundo e troca os JARs. Nome, idade, história, desenho da assinatura, profissão, reputação, missões, medalhas, fortuna inicial e saldo são mantidos. A raça passa a acompanhar a origem que escolheres no Origins. Escolher uma origem ou classe não volta a sortear nem atribui dinheiro.
 
-O protocolo do Chronicles RP passa para a versão **7**: atualiza o servidor e todos os clientes juntos para a versão 0.5.3. As versões 0.5.2 e 0.5.3 não devem ser misturadas. O formato do perfil de RP mantém os campos anteriores; a linhagem guarda o identificador da origem. A escolha da classe fica nos dados do próprio Origins. Esta atualização não reinicia as personagens, não volta a sortear a fortuna e não converte o dinheiro.
+O protocolo do Chronicles RP mantém a versão **7** desde a versão 0.5.3. Recomenda-se atualizar o servidor e todos os clientes para a versão 0.5.4; as versões 0.5.2 e 0.5.3+ usam protocolos diferentes. O formato do perfil de RP mantém os campos anteriores; a linhagem guarda o identificador da origem. A escolha da classe fica nos dados do próprio Origins. Esta atualização não reinicia as personagens, não volta a sortear a fortuna e não converte o dinheiro.
 
 ## Livro e economia
 
@@ -80,7 +82,7 @@ Abre no IntelliJ a pasta `chronicles-rp`, que contém `build.gradle` e `gradlew.
 .\gradlew.bat clean build
 ```
 
-Para testar apenas com Origins, sem Classes, acrescenta `-PrpWithoutClasses` às execuções. O JAR final está em `build/libs/cronicasrp-0.5.3.jar`. Os GameTests e as suas origens de teste são excluídos do JAR, incluindo após uma compilação incremental.
+Para testar apenas com Origins, sem Classes, acrescenta `-PrpWithoutClasses` às execuções. O JAR final está em `build/libs/cronicasrp-0.5.4.jar`. Os GameTests e as suas origens de teste são excluídos do JAR, incluindo após uma compilação incremental.
 
 Se já tens um projeto IntelliJ, substitui `build.gradle`, `gradle.properties` e a pasta `src` pelos desta versão. Mantém a tua pasta `run`, que contém mundos e configurações. No repositório, o projeto está em `chronicles-rp`; os ZIPs de instalação contêm o JAR pronto e não são necessários para importar o projeto.
 

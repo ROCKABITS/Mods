@@ -1,5 +1,12 @@
 # Chronicles RP — changelog
 
+## 0.5.4 — Realm Notifications integration
+
+- Optional styled notifications for successful player transfers and administrator grants, with the payment amount and reason.
+- Cash withdrawals and deposits use conversion notices, without describing them as new income.
+- Existing chat or action-bar feedback remains available without Realm Notifications or a supporting client.
+- RP profiles, wallet calculations, public RP names and network protocol 7 retain their existing formats.
+
 ## 0.5.3 — Public RP names
 
 - Created characters use their RP name above the player, in TAB and as the author of ordinary Minecraft chat messages.

@@ -10,6 +10,7 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.gametest.framework.GameTest;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
@@ -37,6 +38,7 @@ import pt.crownledger.block.BlockRegistry;
 import pt.crownledger.block.CrownChestBlock;
 import pt.crownledger.compat.ContractsBridge;
 import pt.crownledger.compat.RealmBridge;
+import pt.crownledger.compat.NotificationsBridge;
 import pt.crownledger.data.TreasuryData;
 import pt.crownledger.domain.Policy;
 import pt.crownledger.domain.Treasury;
@@ -769,4 +771,18 @@ public final class CrownGameTests {
             throw new IllegalStateException("The actual optional integration API is unavailable", exception);
         }
     }
+    @GameTest(template="crown_empty",timeoutTicks=100)
+    public static void unavailableNotificationChannelDoesNotUndoADonation(GameTestHelper helper) {
+        var data=reset(helper);
+        var donor=player(helper);
+        donor.getInventory().setItem(0,new ItemStack(Items.EMERALD,12));
+        CrownService.donate(donor,7,EMERALD);
+        helper.assertTrue(!NotificationsBridge.send(donor,"treasury",Component.literal("Receipt retry")),
+                "A fake player without a supporting client accepted the optional payload");
+        NotificationsBridge.notify(donor,"treasury",Component.literal("Receipt retry"));
+        helper.assertTrue(data.treasury.balance(EMERALD)==7 && donor.getInventory().countItem(Items.EMERALD)==5,
+                "The notification failure lost, repeated or rolled back the donated money");
+        helper.succeed();
+    }
+
 }

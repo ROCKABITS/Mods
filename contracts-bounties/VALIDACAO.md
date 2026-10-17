@@ -1,3 +1,7 @@
+## Atualização 0.3.2 — Realm Notifications
+
+Integração opcional de apresentação; validação desta atualização pendente da execução conjunta do CI. As verificações de versões anteriores indicadas abaixo são históricas e não certificam automaticamente esta compilação.
+
 ## Atualização 0.3.1 — transferências do Crown Ledger
 
 [Execução aprovada 38751670912](https://github.com/ROCKABITS/Mods/actions/runs/38751670912), código `e6ec71d`: **46 testes unitários**, **38 testes nativos** e cliente Minecraft real aprovados. A API 2 acrescenta transferências exatas entre o tesouro e a conta dos contratos, restritas à identidade do fornecedor registado e ao thread principal. O novo teste rejeita fornecedores estranhos, transferências sem fundos, zero e operações fora do thread principal.

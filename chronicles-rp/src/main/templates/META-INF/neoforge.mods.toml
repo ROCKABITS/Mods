@@ -110,3 +110,10 @@ reason="Adds the selected Origins class to the RP record."
 # stop your mod loading on the server for example.
 #[features.${mod_id}]
 #openGLVersion="[3.2,)"
+
+[[dependencies.cronicasrp]]
+modId="realmnotifications"
+type="optional"
+versionRange="[0.1.0,)"
+ordering="NONE"
+side="BOTH"

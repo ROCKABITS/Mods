@@ -18,6 +18,7 @@ import pt.cronicasrp.client.ClientState;
 import pt.cronicasrp.domain.CharacterRules;
 import pt.cronicasrp.domain.PlayerStatistics;
 import pt.cronicasrp.compat.OriginsBridge;
+import pt.cronicasrp.compat.NotificationsBridge;
 
 public final class ProfileNetwork {
     private ProfileNetwork() {}
@@ -39,6 +40,7 @@ public final class ProfileNetwork {
             if (!(context.player() instanceof ServerPlayer player)) return;
             try {
                 Component message = CashService.perform(player, packet);
+                NotificationsBridge.send(player, "info", message);
                 PacketDistributor.sendToPlayer(player, new CashPackets.Result(true, message));
             } catch (IllegalArgumentException ex) {
                 PacketDistributor.sendToPlayer(player, new CashPackets.Result(false, ModMessages.error(ex.getMessage())));

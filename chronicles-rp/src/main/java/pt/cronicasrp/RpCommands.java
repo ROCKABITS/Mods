@@ -11,6 +11,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
 import pt.cronicasrp.domain.*;
+import pt.cronicasrp.compat.NotificationsBridge;
 import pt.cronicasrp.i18n.ModMessages;
 import pt.cronicasrp.network.*;
 
@@ -98,8 +99,9 @@ public final class RpCommands {
             var result = Wallet.transfer(sender.getData(ModAttachments.PROFILE), receiver.getData(ModAttachments.PROFILE), amount);
             sender.setData(ModAttachments.PROFILE, result.sender()); receiver.setData(ModAttachments.PROFILE, result.receiver());
             ProfileNetwork.send(sender, ProfilePackets.SYNC, ""); ProfileNetwork.send(receiver, ProfilePackets.SYNC, "");
-            source.sendSuccess(() -> ModMessages.tr("message.cronicasrp.payment.sent", ModMessages.money(amount), result.receiver().name()), false);
-            receiver.sendSystemMessage(ModMessages.tr("message.cronicasrp.payment.received", ModMessages.money(amount), result.sender().name())); return 1;
+            Component sent = ModMessages.tr("message.cronicasrp.payment.sent", ModMessages.money(amount), result.receiver().name());
+            if (!NotificationsBridge.send(sender, "money", sent)) source.sendSuccess(() -> sent, false);
+            NotificationsBridge.notify(receiver, "money", ModMessages.tr("message.cronicasrp.payment.received", ModMessages.money(amount), result.sender().name())); return 1;
         } catch (IllegalArgumentException ex) { source.sendFailure(ModMessages.error(ex.getMessage())); return 0; }
     }
     private static int grant(CommandSourceStack source, ServerPlayer player, String value) {
@@ -109,7 +111,22 @@ public final class RpCommands {
             long amount = Money.positive(value);
             player.setData(ModAttachments.PROFILE, profile.withBalance(Math.addExact(profile.balance(), amount)));
             ProfileNetwork.send(player, ProfilePackets.SYNC, "");
-            source.sendSuccess(() -> ModMessages.tr("message.cronicasrp.payment.granted", ModMessages.money(amount), profile.name()), true); return 1;
+            Component receipt = ModMessages.tr("message.cronicasrp.payment.admin_received", ModMessages.money(amount));
+            // Keep the operator audit response, without echoing it to a self-paid player using the HUD.
+            boolean notified = NotificationsBridge.send(player, "money", receipt);
+            var auditSource = source;
+            if (source.getEntity() == player && notified) {
+                // Preserve the existing operator/console audit while the recipient uses the HUD.
+                auditSource = source.withSource(new net.minecraft.commands.CommandSource() {
+                    public void sendSystemMessage(Component message) {}
+                    public boolean acceptsSuccess() { return false; }
+                    public boolean acceptsFailure() { return false; }
+                    public boolean shouldInformAdmins() { return true; }
+                });
+            }
+            auditSource.sendSuccess(() -> ModMessages.tr("message.cronicasrp.payment.granted", ModMessages.money(amount), profile.name()), true);
+            if (source.getEntity() != player && !notified) NotificationsBridge.notify(player, "money", receipt);
+            return 1;
         } catch (ArithmeticException | IllegalArgumentException ex) { source.sendFailure(ModMessages.error(ex.getMessage())); return 0; }
     }
     private static int openCash(CommandSourceStack source) throws com.mojang.brigadier.exceptions.CommandSyntaxException {
@@ -129,8 +146,10 @@ public final class RpCommands {
     }
     private static int exchange(CommandSourceStack source, CashPackets.Request request) throws com.mojang.brigadier.exceptions.CommandSyntaxException {
         try {
-            Component message = CashService.perform(source.getPlayerOrException(), request);
-            source.sendSuccess(() -> message, false); return 1;
+            var player = source.getPlayerOrException();
+            Component message = CashService.perform(player, request);
+            if (!NotificationsBridge.send(player, "info", message)) source.sendSuccess(() -> message, false);
+            return 1;
         } catch (IllegalArgumentException ex) { source.sendFailure(ModMessages.error(ex.getMessage())); return 0; }
     }
 }

@@ -3,7 +3,7 @@ loaderVersion="[4,)"
 license="All Rights Reserved"
 [[mods]]
 modId="realmmarkets"
-version="0.2.0"
+version="0.2.1"
 displayName="Realm Markets"
 authors="ROCKABITS"
 description='''Craft medieval market stalls, stock real items and sell at fixed prices while the owner is offline. Collect retained sales earnings. Optional Chronicles RP economy integration.'''
@@ -31,4 +31,11 @@ modId="kingdomtreasury"
 type="optional"
 versionRange="[0.2.0,)"
 ordering="NONE"
+side="BOTH"
+
+[[dependencies.realmmarkets]]
+modId="realmnotifications"
+type="optional"
+versionRange="[0.1.0,)"
+ordering="AFTER"
 side="BOTH"

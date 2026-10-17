@@ -4,12 +4,14 @@ import java.util.*;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.stats.Stats;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
 import pt.realmcouncil.domain.*;
 import pt.realmcouncil.domain.CouncilState.*;
 import pt.realmcouncil.network.*;
+import pt.realmcouncil.compat.NotificationsBridge;
 import static pt.realmcouncil.domain.Rules.*;
 
 public final class CouncilService {
@@ -44,9 +46,29 @@ public final class CouncilService {
     }
     public static void send(ServerPlayer player,boolean open,String message){
         requireStation(player);
-        var d=CouncilData.get(player.server);long now=System.currentTimeMillis();if(d.state.tick(now))d.setDirty();
+        advanceClock(player.server);long now=System.currentTimeMillis();
         var view=snapshot(player,now);
         CouncilNetwork.send(player,new CouncilPackets.State(CouncilState.JSON.toJson(view),open,message));
+    }
+    /** All automatic transitions share one persistence and announcement path, including menu reads. */
+    public static void advanceClock(MinecraftServer server){
+        var data=CouncilData.get(server);
+        if(data.state.tick(System.currentTimeMillis())){
+            data.setDirty();server.overworld().getDataStorage().save();announcePhase(server);
+        }
+    }
+    public static void notify(ServerPlayer player,Component message){NotificationsBridge.notify(player,"election",message);}
+    public static void broadcast(MinecraftServer server,Component message){
+        for(var player:server.getPlayerList().getPlayers())notify(player,message);
+    }
+    /** Public phase/result only. Individual ballots and voter choices never enter notifications. */
+    public static void announcePhase(MinecraftServer server){
+        var election=CouncilData.get(server).state.current;if(election==null)return;
+        if(election.phase==Phase.FINISHED&&election.winner!=null){
+            var winner=election.candidates.get(election.winner);
+            if(winner!=null){broadcast(server,Component.translatable("notification.realmcouncil.winner",winner.name(),election.title));return;}
+        }
+        broadcast(server,Component.translatable("notification.realmcouncil.phase."+election.phase.name().toLowerCase(java.util.Locale.ROOT),election.title,election.round));
     }
     public static void physical(ServerPlayer player,String expected){
         require(requireStation(player).mode().equals(expected),"station");
@@ -86,7 +108,7 @@ public final class CouncilService {
         long now=System.currentTimeMillis();long last=REQUESTS.getOrDefault(player.getUUID(),0L);
         if(p.action()==0){require(now-REFRESHES.getOrDefault(player.getUUID(),0L)>=1000,"too_fast");REFRESHES.put(player.getUUID(),now);}
         else{require(now-last>=300,"too_fast");REQUESTS.put(player.getUUID(),now);}
-        var d=CouncilData.get(player.server);var s=d.state;if(s.tick(now))d.setDirty();
+        advanceClock(player.server);var d=CouncilData.get(player.server);var s=d.state;
         if(p.action()>=CouncilAdministration.CREATE){
             require(player.hasPermissions(2),"permission");
             if(p.action()==CouncilAdministration.LIST){
@@ -96,6 +118,9 @@ public final class CouncilService {
             }
             administer(player,s,p,now);
             d.setDirty();player.server.overworld().getDataStorage().save();
+            if(p.action()==CouncilAdministration.CREATE)broadcast(player.server,Component.translatable("message.realmcouncil.created",s.current.title));
+            if(p.action()==CouncilAdministration.ADVANCE||p.action()==CouncilAdministration.CANCEL)announcePhase(player.server);
+            if(p.action()==CouncilAdministration.END_TERM)broadcast(player.server,Component.translatable("notification.realmcouncil.term_ended"));
             send(player,false,p.action()==CouncilAdministration.BLOCKS?"blocks_received":"saved");return;
         }
         switch(p.action()){
@@ -103,11 +128,16 @@ public final class CouncilService {
             case 1->{var e=s.requireElection();require(e.id.toString().equals(p.election()),"stale");s.nominate(player.getUUID(),RpBridge.identity(player),p.text(),p.choice(),p.extra(),now);var skin=player.getGameProfile().getProperties().get("textures").stream().findFirst();skin.filter(v->v.value()!=null&&v.value().length()<=4096&&(v.signature()==null||v.signature().length()<=2048)).ifPresent(v->e.candidates.put(player.getUUID(),e.candidates.get(player.getUUID()).withSkin(v.value(),v.signature()==null?"":v.signature())));}
             case 2->{require(s.requireElection().id.toString().equals(p.election()),"stale");s.withdraw(player.getUUID(),now);}
             case 3->{physical(player,"urn");UUID election=parseUuid(p.election());UUID choice=p.choice().isEmpty()?null:parseUuid(p.choice());s.cast(player.getUUID(),election,p.round(),choice,now);}
-            case 4->{physical(player,"oath");require(s.mandate!=null&&s.mandate.electionId.toString().equals(p.election()),"stale");s.claim(player.getUUID(),now);player.server.getPlayerList().broadcastSystemMessage(Component.translatable("message.realmcouncil.sworn",s.mandate.name,s.mandate.title),false);}
+            case 4->{physical(player,"oath");require(s.mandate!=null&&s.mandate.electionId.toString().equals(p.election()),"stale");s.claim(player.getUUID(),now);}
             case 5->{require(s.mandate!=null&&s.mandate.electionId.toString().equals(p.election()),"stale");s.publish(player.getUUID(),p.extra(),now);}
             default->throw new RuleException("action");
         }
         if(p.action()!=0){d.setDirty();player.server.overworld().getDataStorage().save();}
+        if(p.action()==1)notify(player,Component.translatable("notification.realmcouncil.candidacy_saved"));
+        if(p.action()==2)notify(player,Component.translatable("notification.realmcouncil.candidacy_withdrawn"));
+        if(p.action()==3)notify(player,Component.translatable("notification.realmcouncil.vote_sealed"));
+        if(p.action()==4)broadcast(player.server,Component.translatable("message.realmcouncil.sworn",s.mandate.name,s.mandate.title));
+        if(p.action()==5)broadcast(player.server,Component.translatable("notification.realmcouncil.decision_published",s.mandate.name));
         send(player,false,p.action()==0?"":"saved");
     }
     private static void administer(ServerPlayer player,CouncilState s,CouncilPackets.Action p,long now){
@@ -116,7 +146,6 @@ public final class CouncilService {
                 CouncilAdministration.current(s,p.election(),p.round(),p.choice());
                 player.server.getPlayerList().getPlayers().forEach(CouncilService::observe);
                 CouncilAdministration.Settings.decode(p.extra()).create(s,p.text(),now);
-                player.server.getPlayerList().broadcastSystemMessage(Component.translatable("message.realmcouncil.created",s.current.title),false);
             }
             case CouncilAdministration.ADVANCE,CouncilAdministration.CANCEL,CouncilAdministration.ENROL,
                     CouncilAdministration.REMOVE_CANDIDATE,CouncilAdministration.EXCLUDE->{
@@ -128,8 +157,6 @@ public final class CouncilService {
                     case CouncilAdministration.REMOVE_CANDIDATE->s.withdraw(parseUuid(p.choice()),now);
                     case CouncilAdministration.EXCLUDE->s.exclude(parseUuid(p.choice()));
                 }
-                if(p.action()==CouncilAdministration.ADVANCE||p.action()==CouncilAdministration.CANCEL)
-                    player.server.getPlayerList().broadcastSystemMessage(Component.translatable("message.realmcouncil.phase_changed"),false);
             }
             case CouncilAdministration.END_TERM->{
                 require(s.mandate!=null&&s.mandate.electionId.toString().equals(p.election()),"stale");s.endTerm(now);

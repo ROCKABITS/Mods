@@ -1,8 +1,10 @@
 # Realm Markets — Bancas de Mercado
 
-Bancas físicas para **Minecraft 1.21.1**, **NeoForge 21.1.256+** e **Java 21**. Instala o mesmo `realm-markets-0.2.0.jar` no servidor e em todos os clientes. Identificador técnico: `realmmarkets`.
+Bancas físicas para **Minecraft 1.21.1**, **NeoForge 21.1.256+** e **Java 21**. Instala o mesmo `realm-markets-0.2.1.jar` no servidor e em todos os clientes. Identificador técnico: `realmmarkets`.
 
-A versão **0.2.0 Beta** acrescenta imposto sobre vendas configurado pelo governante no Crown Ledger. Antes de atualizar, faz uma cópia de segurança do mundo completo e dos perfis do Chronicles: o registo do mercado migra para o formato 2 e voltar ao JAR antigo exige restaurar a cópia anterior. Se usas Crown Ledger, atualiza também para **0.2.0+** no servidor e em todos os clientes; remove os JARs antigos. Consulta o estado, os resultados e os limites das verificações em [VALIDACAO.md](VALIDACAO.md).
+A versão **0.2.1 Beta** mantém imposto sobre vendas configurado pelo governante no Crown Ledger. Antes de atualizar, faz uma cópia de segurança do mundo completo e dos perfis do Chronicles: o registo do mercado migra para o formato 2 e voltar ao JAR antigo exige restaurar a cópia anterior. Se usas Crown Ledger, atualiza também para **0.2.0+** no servidor e em todos os clientes; remove os JARs antigos. Consulta o estado, os resultados e os limites das verificações em [VALIDACAO.md](VALIDACAO.md).
+
+Com o **[Realm Notifications](../realm-notifications/README.md) 0.1.0+** no servidor e no cliente, os avisos aparecem no HUD medieval. Sem o canal opcional, continuam a ser apresentados no chat. A integração apenas apresenta acontecimentos confirmados; não modifica saldos, regras ou permissões.
 
 ## Abrir uma banca
 

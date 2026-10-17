@@ -3,7 +3,7 @@ loaderVersion="[4,)"
 license="All Rights Reserved"
 [[mods]]
 modId="contracts"
-version="0.3.1"
+version="0.3.2"
 displayName="Contracts & Bounties"
 description='''Material delivery contracts with reserved rewards, three physical noticeboards, optional Crónicas RP economy and reputation, and a server API for Kingdom Treasury rules and public contracts.'''
 [[dependencies.contracts]]
@@ -29,4 +29,11 @@ modId="kingdomtreasury"
 type="optional"
 versionRange="[0.1.0,)"
 ordering="NONE"
+side="BOTH"
+
+[[dependencies.contracts]]
+modId="realmnotifications"
+type="optional"
+versionRange="[0.1.0,)"
+ordering="AFTER"
 side="BOTH"

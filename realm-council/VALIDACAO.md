@@ -1,3 +1,7 @@
+## Atualização 0.2.2 — Realm Notifications
+
+Integração opcional de apresentação; validação desta atualização pendente da execução conjunta do CI. As verificações de versões anteriores indicadas abaixo são históricas e não certificam automaticamente esta compilação.
+
 # Validação — Realm Council 0.2.1
 
 [Execução aprovada no GitHub Actions](https://github.com/ROCKABITS/Mods/actions/runs/38742667375), código `90e2c6abeb74aedca0be26253b7fd819ff5defe2`.

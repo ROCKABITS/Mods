@@ -1,11 +1,13 @@
 # Crown Ledger — Tesouro da Coroa
 
+A versão **0.2.1** integra opcionalmente o **Realm Notifications 0.1.0+** para salários, doações, imposto fixo e receitas da tesouraria. Um aviso de salário financiado indica que tens de o levantar no Cofre da Coroa; só a recolha concluída é apresentada como dinheiro recebido. O governante recebe avisos das receitas enquanto está online; receitas de contratos e bancas são agrupadas durante cerca de dez segundos para evitar uma notificação por venda. O formato dos dados continua na versão 2.
+
 Tesouro público para Minecraft **1.21.1**, **NeoForge 21.1.256+** e **Java 21**. Instala o mesmo JAR no servidor e nos clientes. O identificador técnico é `kingdomtreasury`.
 
 ## Instalação e primeiro uso
 
 1. Antes de atualizar um mundo existente, faz uma cópia de segurança do mundo completo e dos perfis do Chronicles. Esta versão migra o registo do tesouro para o formato 2; voltar ao JAR antigo exige restaurar a cópia anterior à atualização.
-2. Coloca `crown-ledger-0.2.0.jar` na pasta `mods` de cada cliente e do servidor. Se usas Realm Markets, atualiza também para **Realm Markets 0.2.0+** em todos eles; substitui os JARs antigos e não deixes duas versões do mesmo mod.
+2. Coloca `crown-ledger-0.2.1.jar` na pasta `mods` de cada cliente e do servidor. Se usas Realm Markets, atualiza também para **Realm Markets 0.2.0+** em todos eles; substitui os JARs antigos e não deixes duas versões do mesmo mod.
 3. Para integrar os restantes sistemas, usa **Contracts & Bounties 0.3.1+**, **Realm Council 0.2.1+** e, opcionalmente, **Chronicles RP 0.5.2** com as suas dependências.
 4. Fabrica o **Cofre da Coroa** e clica nele com o botão direito. Também aparece na aba criativa **Crown Ledger** e na pesquisa.
 
@@ -70,7 +72,7 @@ Sem Chronicles, a moeda normal é a esmeralda inteira. Com Chronicles, os valore
 
 O ficheiro `data/crown_ledger.dat` guarda regras, saldo disponível, salários reservados, atividade, ciclo pendente e os últimos 256 movimentos, incluindo receitas de imposto de mercado. Os contratos usam também `data/contracts_ledger.dat`; as bancas e os impostos ainda reservados usam `data/realm_markets.dat`. A migração automática do formato 1 para o 2 conserva os valores anteriores e inicia a taxa de mercado em zero. As cópias de segurança devem incluir o mundo completo e os perfis do Chronicles. As transferências entre mods são verificadas no mesmo thread do servidor; estes ficheiros continuam a ser guardados pelo mecanismo normal de mundos do Minecraft, sem uma transação de disco única entre mods.
 
-[Changelog](CHANGELOG.md) · [Resultados e limites da validação](VALIDACAO.md) · [JAR](../mod-pronto/crown-ledger-0.2.0.jar) · [ZIP](../mod-pronto/crown-ledger-0.2.0.zip) · [Imagens](../media/crown-ledger/0.2.0/README.md).
+[Changelog](CHANGELOG.md) · [Resultados e limites da validação](VALIDACAO.md) · [JAR](../mod-pronto/crown-ledger-0.2.1.jar) · [ZIP](../mod-pronto/crown-ledger-0.2.0.zip) · [Imagens](../media/crown-ledger/0.2.0/README.md).
 
 ## Desenvolvimento e validação
 

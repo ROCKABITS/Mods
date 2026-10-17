@@ -1,17 +1,19 @@
-# Contracts & Bounties — 0.3.1
+# Contracts & Bounties — 0.3.2
 
 Mod para Minecraft **1.21.1**, **NeoForge 21.1.256** e **Java 21**, instalado no cliente e no servidor.
 
-[Descarregar JAR](https://github.com/ROCKABITS/Mods/raw/refs/heads/main/mod-pronto/contracts-bounties-0.3.1.jar) · [ZIP](https://github.com/ROCKABITS/Mods/raw/refs/heads/main/mod-pronto/contracts-bounties-0.3.1.zip) · [Changelog em inglês](CHANGELOG.md) · [Validação](VALIDACAO.md).
+[Descarregar JAR](https://github.com/ROCKABITS/Mods/raw/refs/heads/main/mod-pronto/contracts-bounties-0.3.2.jar) · [ZIP](https://github.com/ROCKABITS/Mods/raw/refs/heads/main/mod-pronto/contracts-bounties-0.3.2.zip) · [Changelog em inglês](CHANGELOG.md) · [Validação](VALIDACAO.md).
 
-A 0.3.1 mantém os três murais e acrescenta acesso físico obrigatório, menus de reputação e imposto, contratos públicos e uma API para o Crown Ledger — Tesouro da Coroa.
+A 0.3.2 mantém os três murais e acrescenta acesso físico obrigatório, menus de reputação e imposto, contratos públicos e uma API para o Crown Ledger — Tesouro da Coroa.
 
 **A tesouraria está disponível no mod separado [Crown Ledger](../crown-ledger/README.md).** As suas regras ficam ativas quando esse mod está instalado. Sem integração, os contratos particulares continuam disponíveis com **0% de imposto e reputação mínima 0**. O Crónicas RP 0.5.2 fornece dinheiro e reputação quando instalado; sem ele, os pagamentos usam esmeraldas.
+
+Com o **[Realm Notifications](../realm-notifications/README.md) 0.1.0+** no servidor e no cliente, os avisos aparecem no HUD medieval. Sem o canal opcional, continuam a ser apresentados no chat. A integração apenas apresenta acontecimentos confirmados; não modifica saldos, regras ou permissões.
 
 ## Atualizar e abrir
 
 1. Guardar uma cópia do mundo antes de atualizar. Fechar o jogo e o servidor e substituir o JAR antigo, mantendo uma única versão do mod.
-2. Atualizar cliente e servidor juntos para a 0.3.1: o protocolo de rede passou para **2**.
+2. Atualizar cliente e servidor juntos para a 0.3.2: o protocolo de rede mantém-se em **2**.
 3. Colocar um mural e interagir com ele. A abertura remota por `/contracts` foi retirada. O jogador precisa de permanecer na mesma dimensão e a oito blocos da estrutura intacta; o menu verifica a sessão a cada cinco segundos e as ações são verificadas no servidor. Ao fim de cinco minutos, voltar a interagir com o mural.
 
 Os três murais aparecem na aba **Contracts & Bounties** e na pesquisa. Operadores podem obter o pequeno com `/contracts board` ou os três com `/contracts boards`. Estes comandos entregam itens e não abrem o menu.

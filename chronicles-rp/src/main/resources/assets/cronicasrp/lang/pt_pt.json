@@ -249,5 +249,6 @@
   "gui.cronicasrp.origins.creation_help": "Escolhe aqui a raça e depois a classe. A profissão de RP é separada.",
   "error.cronicasrp.origins_required": "Escolhe primeiro a raça e a classe no botão da linhagem.",
   "gui.cronicasrp.origins.choose_help": "Carrega na linhagem para escolher a raça e, se instalado, a classe do Origins. O formulário fica guardado.",
-  "error.cronicasrp.rp_name_invalid": "O nome público da personagem é inválido."
+  "error.cronicasrp.rp_name_invalid": "O nome público da personagem é inválido.",
+  "message.cronicasrp.payment.admin_received": "Recebeste %s de um administrador."
 }

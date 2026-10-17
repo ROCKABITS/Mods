@@ -15,7 +15,7 @@ public final class CouncilCommands {
             var admin=Commands.literal("admin").requires(s->s.hasPermission(2));
             admin.then(Commands.literal("create").then(Commands.argument("title",StringArgumentType.greedyString()).executes(c->run(c.getSource(),()->{
                 var server=c.getSource().getServer();server.getPlayerList().getPlayers().forEach(CouncilService::observe);
-                var d=CouncilData.get(server);CouncilConfig.settings().create(d.state,StringArgumentType.getString(c,"title"),System.currentTimeMillis());d.setDirty();server.overworld().getDataStorage().save();server.getPlayerList().broadcastSystemMessage(Component.translatable("message.realmcouncil.created",d.state.current.title),false);
+                var d=CouncilData.get(server);CouncilConfig.settings().create(d.state,StringArgumentType.getString(c,"title"),System.currentTimeMillis());d.setDirty();server.overworld().getDataStorage().save();CouncilService.broadcast(server,Component.translatable("message.realmcouncil.created",d.state.current.title));
             }))));
             admin.then(Commands.literal("advance").executes(c->change(c.getSource(),s->s.advance(System.currentTimeMillis()))));
             admin.then(Commands.literal("cancel").executes(c->change(c.getSource(),s->s.cancel(System.currentTimeMillis()))));
@@ -26,6 +26,14 @@ public final class CouncilCommands {
             root.then(admin);event.getDispatcher().register(root);
         }
     }
-    private static int change(CommandSourceStack source,java.util.function.Consumer<CouncilState> f){return run(source,()->{var d=CouncilData.get(source.getServer());f.accept(d.state);d.setDirty();source.getServer().overworld().getDataStorage().save();});}
+    private static int change(CommandSourceStack source,java.util.function.Consumer<CouncilState> f){return run(source,()->{
+        var server=source.getServer();CouncilService.advanceClock(server);var d=CouncilData.get(server);
+        var phase=d.state.current==null?null:d.state.current.phase;int round=d.state.current==null?0:d.state.current.round;
+        long termEnd=d.state.mandate==null?0:d.state.mandate.endsAt;
+        f.accept(d.state);d.setDirty();server.overworld().getDataStorage().save();
+        if(d.state.current!=null&&(d.state.current.phase!=phase||d.state.current.round!=round))CouncilService.announcePhase(server);
+        if(d.state.mandate!=null&&d.state.mandate.endsAt!=termEnd&&d.state.current!=null&&d.state.current.phase==phase)
+            CouncilService.broadcast(server,Component.translatable("notification.realmcouncil.term_ended"));
+    });}
     private static int run(CommandSourceStack source,Runnable f){try{f.run();source.sendSuccess(()->Component.translatable("message.realmcouncil.saved"),true);return 1;}catch(RuleException ex){source.sendFailure(Component.translatable("error.realmcouncil."+ex.code));return 0;}}
 }

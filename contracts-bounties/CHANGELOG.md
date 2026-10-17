@@ -1,3 +1,10 @@
+# Contracts & Bounties 0.3.2 — Optional Realm Notifications
+
+- Added optional medieval HUD notifications for published, completed and cancelled contracts, material deliveries and collected rewards/refunds.
+- Distinguished retained noticeboard credits from money actually collected; public cancellations return reserved funds to the kingdom.
+- Preserved chat feedback for clients without the optional notification channel, without duplicating HUD and chat.
+- Kept the existing physical noticeboards, economy, reputation rules, network protocol and saved-data format.
+
 # Contracts & Bounties 0.3.0
 
 - Contract menus now require a nearby physical noticeboard. Removed remote opening through `/contracts`; operator commands still provide board items.

@@ -178,5 +178,17 @@
   "gui.realmcouncil.hint.admin_remove": "This candidacy will be removed from the election. The player may still vote if they remain on the electoral roll.",
   "error.realmcouncil.permission": "Operator permission is required.",
   "message.realmcouncil.blocks_received": "Blocks delivered. A full inventory drops them at your feet.",
-  "message.realmcouncil.roster": "List updated."
+  "message.realmcouncil.roster": "List updated.",
+  "notification.realmcouncil.winner": "%s won the election for %s. The oath desk awaits.",
+  "notification.realmcouncil.phase.nominations": "Nominations are open for %s. Visit the election noticeboard.",
+  "notification.realmcouncil.phase.campaign": "The campaign for %s has started. Read the candidates’ proposals.",
+  "notification.realmcouncil.phase.voting": "Voting is open for %s. Cast your secret vote at a ballot box.",
+  "notification.realmcouncil.phase.runoff": "%s is tied. Runoff round %s is open at the ballot box.",
+  "notification.realmcouncil.phase.finished": "The election for %s ended without a winner. Consult the public results.",
+  "notification.realmcouncil.phase.cancelled": "The election for %s was cancelled.",
+  "notification.realmcouncil.term_ended": "The governor’s term has ended.",
+  "notification.realmcouncil.candidacy_saved": "Your candidacy and proposals were saved.",
+  "notification.realmcouncil.candidacy_withdrawn": "Your candidacy was withdrawn.",
+  "notification.realmcouncil.vote_sealed": "Your secret vote was sealed. You may vote once per round.",
+  "notification.realmcouncil.decision_published": "%s published a new government decision. Read it at the noticeboard."
 }

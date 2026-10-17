@@ -24,6 +24,7 @@ import net.minecraft.world.phys.Vec3;
 import pt.contracts.api.ContractsApi;
 import pt.contracts.api.ContractsApi.Policy;
 import pt.contracts.compat.ChroniclesBridge;
+import pt.contracts.compat.NotificationsBridge;
 import pt.contracts.domain.Ledger;
 import pt.contracts.domain.Ledger.Contract;
 import pt.contracts.domain.Ledger.Currency;
@@ -142,6 +143,7 @@ public final class ContractsService {
                 policy.taxBasisPoints(), 0, 0);
         debit(player, reward, currency);
         commit(data, next, player);
+        NotificationsBridge.notify(player, "contract", Component.translatable("notification.contracts.published", contract.title()));
         return contract;
     }
 
@@ -156,6 +158,11 @@ public final class ContractsService {
         apply(player, inventory);
         commit(data, next, player);
         flushProgress(player);
+        NotificationsBridge.notify(player, "contract", Component.translatable("notification.contracts.completed",
+                contract.title(), money(contract.netReward(), contract.currency())));
+        ServerPlayer author = player.server.getPlayerList().getPlayer(contract.author());
+        if (author != null) NotificationsBridge.notify(author, "contract",
+                Component.translatable("notification.contracts.delivery", contract.title()));
     }
 
     public static void cancel(ServerPlayer player, UUID id) {
@@ -164,8 +171,10 @@ public final class ContractsService {
         Ledger next = copy(data.ledger);
         if (contract(next, id).funding() == Funding.KINGDOM)
             throw new IllegalStateException("gui.contracts.public_only");
+        Contract cancelled = contract(next, id);
         next.cancel(id, player.getUUID());
         commit(data, next, player);
+        NotificationsBridge.notify(player, "contract", Component.translatable("notification.contracts.cancelled", cancelled.title()));
     }
 
     /** Money stays claimable if its integration is unavailable or the inventory/wallet is full. */
@@ -189,6 +198,7 @@ public final class ContractsService {
             apply(player, inventory);
         }
         commit(data, next, player);
+        NotificationsBridge.notify(player, "money", Component.translatable("notification.contracts.claimed", money(amount, currency)));
         return amount;
     }
 
@@ -230,6 +240,7 @@ public final class ContractsService {
                 policy.taxBasisPoints(), policy.reputationPerPublicContract(), policy.dailyReputationLimit());
         next.takeCredit(Ledger.KINGDOM_ACCOUNT, contract.currency(), reward);
         commit(data, next, manager);
+        NotificationsBridge.notify(manager, "contract", Component.translatable("notification.contracts.public_published", contract.title()));
         return contract;
     }
 
@@ -266,8 +277,10 @@ public final class ContractsService {
         Ledger next = copy(data.ledger);
         if (contract(next, id).funding() != Funding.KINGDOM)
             throw new IllegalArgumentException("gui.contracts.public_only");
+        Contract cancelled = contract(next, id);
         next.cancel(id, Ledger.KINGDOM_ACCOUNT);
         commit(data, next, manager);
+        NotificationsBridge.notify(manager, "contract", Component.translatable("notification.contracts.public_cancelled", cancelled.title()));
     }
 
     public static int collectKingdom(ServerPlayer manager) {
@@ -279,6 +292,12 @@ public final class ContractsService {
     private static Contract contract(Ledger ledger, UUID id) {
         return ledger.list().stream().filter(c -> c.id().equals(id)).findFirst()
                 .orElseThrow(() -> new IllegalArgumentException("Contract does not exist"));
+    }
+
+    private static Component money(long amount, Currency currency) {
+        return currency == Currency.CHRONICLES
+                ? Component.literal(String.format(java.util.Locale.ROOT, "%d,%02d €", amount / 100, amount % 100))
+                : Component.translatable("notification.contracts.emeralds", Long.toString(amount));
     }
 
     private static void requireReputation(ServerPlayer player, Policy policy) {
