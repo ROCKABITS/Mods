@@ -66,7 +66,7 @@ O ficheiro global `data/realm_markets.dat` guarda proprietário, posição, moed
 
 Chronicles RP é opcional; o intervalo declarado é **`>=0.5.2 e <0.6`**. Se instalado, requer também as dependências do próprio Chronicles. Contracts & Bounties, Realm Council, Crown Ledger e Realm Identity não são necessários para usar Realm Markets. Quando Crown Ledger está instalado, requer **0.2.0+** para o imposto de mercado. O comércio não exige um nível de reputação.
 
-[Changelog](CHANGELOG.md) · [Resultados e limites da validação](VALIDACAO.md) · [JAR](../mod-pronto/realm-markets-0.2.0.jar) · [ZIP](../mod-pronto/realm-markets-0.2.0.zip) · [Imagens](../media/realm-markets/0.2.0/README.md).
+[Changelog](CHANGELOG.md) · [Resultados e limites da validação](VALIDACAO.md) · [JAR](../mod-pronto/realm-markets-0.2.1.jar) · [ZIP](../mod-pronto/realm-markets-0.2.1.zip) · [Imagens](../media/realm-markets/0.2.0/README.md).
 
 ## Desenvolvimento
 

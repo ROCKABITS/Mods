@@ -2,7 +2,7 @@
 
 Mod separado de eleições para Minecraft Java 1.21.1, NeoForge 21.1.256 ou superior da série 21.1 e Java 21. Instala `realmcouncil-0.2.2.jar` no servidor e em todos os clientes. A versão 0.2.2 exige a atualização dos dois lados.
 
-[Descarregar JAR 0.2.2](https://github.com/ROCKABITS/Mods/raw/refs/heads/main/mod-pronto/realmcouncil-0.2.2.jar) · [ZIP](https://github.com/ROCKABITS/Mods/raw/refs/heads/main/mod-pronto/realmcouncil-0.2.2.zip) · [Validação: 49 testes unitários e 24 de servidor aprovados](VALIDACAO.md).
+[Descarregar JAR 0.2.2](https://github.com/ROCKABITS/Mods/raw/refs/heads/main/mod-pronto/realmcouncil-0.2.2.jar) · [ZIP](https://github.com/ROCKABITS/Mods/raw/refs/heads/main/mod-pronto/realmcouncil-0.2.2.zip) · [Resultados e limites da validação](VALIDACAO.md).
 
 Funciona sozinho. Se Crónicas RP 0.4.0+ também estiver instalado, lê o nome, raça e idade da personagem para as candidaturas. Usa o nome Minecraft quando não há personagem criada. Não altera o perfil, a assinatura nem o dinheiro do Crónicas RP. Os nomes e propostas são guardados nas candidaturas e continuam disponíveis se a integração deixar de ser usada.
 

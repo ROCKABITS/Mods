@@ -72,7 +72,7 @@ Sem Chronicles, a moeda normal é a esmeralda inteira. Com Chronicles, os valore
 
 O ficheiro `data/crown_ledger.dat` guarda regras, saldo disponível, salários reservados, atividade, ciclo pendente e os últimos 256 movimentos, incluindo receitas de imposto de mercado. Os contratos usam também `data/contracts_ledger.dat`; as bancas e os impostos ainda reservados usam `data/realm_markets.dat`. A migração automática do formato 1 para o 2 conserva os valores anteriores e inicia a taxa de mercado em zero. As cópias de segurança devem incluir o mundo completo e os perfis do Chronicles. As transferências entre mods são verificadas no mesmo thread do servidor; estes ficheiros continuam a ser guardados pelo mecanismo normal de mundos do Minecraft, sem uma transação de disco única entre mods.
 
-[Changelog](CHANGELOG.md) · [Resultados e limites da validação](VALIDACAO.md) · [JAR](../mod-pronto/crown-ledger-0.2.1.jar) · [ZIP](../mod-pronto/crown-ledger-0.2.0.zip) · [Imagens](../media/crown-ledger/0.2.0/README.md).
+[Changelog](CHANGELOG.md) · [Resultados e limites da validação](VALIDACAO.md) · [JAR](../mod-pronto/crown-ledger-0.2.1.jar) · [ZIP](../mod-pronto/crown-ledger-0.2.1.zip) · [Imagens](../media/crown-ledger/0.2.0/README.md).
 
 ## Desenvolvimento e validação
 

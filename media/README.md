@@ -49,3 +49,7 @@ The images are real Minecraft client captures of the mod's models and interface.
 ## Wide noticeboard
 
 ![Wide wooden noticeboard with a terracotta tiled roof](0.3.1/contracts-board-wide.png)
+
+## Realm Notifications
+
+[Galeria 0.1.0](realm-notifications/0.1.0/README.md): HUD real dentro do mundo, posição central, preferências e diário. O conteúdo dos avisos nas imagens é demonstrativo; as capturas usam o cliente Minecraft e o transporte S2C reais.
