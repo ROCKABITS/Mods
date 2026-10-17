@@ -49,8 +49,8 @@ public final class NotificationTheme {
         g.fill(x+3,y+25,x+46,y+h-3,0xFFDDC593);
         g.fill(x+45,y+29,x+46,y+h-8,0xFFBEA474);
         g.fill(x+5,y+6,x+8,y+9,GOLD);g.fill(x+w-8,y+6,x+w-5,y+9,GOLD);
-        Component fitted=Component.literal(font.plainSubstrByWidth(title.getString(),w-(count>1?54:28))).withStyle(s->s.withBold(true));
-        g.drawString(font,fitted,x+13,y+10,GOLD,false);
+        var titleLines=font.split(Component.literal(title.getString()).withStyle(s->s.withBold(true)),w-(count>1?54:28));
+        if(!titleLines.isEmpty())g.drawString(font,titleLines.getFirst(),x+13,y+10,GOLD,false);
         icon(g,kind,x+9,y+31);
         List<FormattedCharSequence> lines=font.split(body,w-62);
         int available=Math.min(3,lines.size());int lineY=y+32+(3-available)*3;

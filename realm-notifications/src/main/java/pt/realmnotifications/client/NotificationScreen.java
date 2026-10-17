@@ -123,8 +123,8 @@ public final class NotificationScreen extends Screen {
             g.fill(px+18,y,px+pw-21,y+h,0xFFE7D5AD);
             g.fill(px+18,y,px+pw-21,y+2,0xFFAA8950);
             NotificationTheme.icon(g,entry.kind(),px+25,y+12);
-            String title=font.plainSubstrByWidth(entry.title().getString(),pw-139);
-            g.drawString(font,Component.literal(title).withStyle(s->s.withBold(true)),px+65,y+9,NotificationTheme.INK,false);
+            var titleLines=font.split(Component.literal(entry.title().getString()).withStyle(s->s.withBold(true)),pw-139);
+            if(!titleLines.isEmpty())g.drawString(font,titleLines.getFirst(),px+65,y+9,NotificationTheme.INK,false);
             g.drawString(font,entry.time(),px+pw-55,y+10,0xFF88724C,false);
             int lineY=y+25;
             for(var line:lines) {g.drawString(font,line,px+65,lineY,NotificationTheme.INK,false);lineY+=11;}
