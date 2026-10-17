@@ -1,0 +1,10 @@
+{
+  "demonstration_data": true,
+  "checks": [
+    "Production selection, exact reward/default/reset/search payloads and 320x240 scroll/accessibility checks passed.",
+    "Snapshots show demonstration advancement data in the actual production administration screen."
+  ],
+  "actual_minecraft_client": true,
+  "success": true,
+  "message": "Production rewards administration, both configuration pages and compact-screen controls passed."
+}

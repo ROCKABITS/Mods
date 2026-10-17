@@ -1,0 +1,24 @@
+{
+  "version": "0.1.0",
+  "source_commit": "d7066822d98ba9fb0cc60acc70a8003645b1bc58",
+  "tested_run": "https://github.com/ROCKABITS/Mods/actions/runs/38989557963",
+  "jar_sha256": "305520da0de8fddb6866e91f15aa4453fab32aeab30b4b93082878e980d7a903",
+  "zip_sha256": "9fa25d55a9944a4c102053d23bdbd9b8c28aef77328bfbf8d864779da100665d",
+  "unit_tests": 12,
+  "standalone_native_tests": 15,
+  "chronicles_native_tests": 15,
+  "actual_client_validation": true,
+  "chronicles_runtime_tested": true,
+  "screenshots": {
+    "realm-rewards-advancements.png": "b4ad96df1c3f4e503c7fdc10b280fb31b49618b9c8b635622297db2965cf17a5",
+    "realm-rewards-defaults.png": "cfea01e66f403426aa317dacf8716339be90d5dee37adbe25c2a5bdcef6499db"
+  },
+  "companions": {
+    "cronicasrp-0.5.3.jar": "2cc100c2572a4338771213e3f38bdded3057fe0ff3c12fa82e79211658340f4e",
+    "contracts-bounties-0.3.1.jar": "9746951762a6762b2cb466ca695b7d43f8669c9dc1d55c12cae1b4bd17953f0c",
+    "realmcouncil-0.2.1.jar": "3e407c391f5e2f919e246d1d889323c57ea40b30e0387e9614ae32e0e9251a0a",
+    "crown-ledger-0.2.0.jar": "278826d3ed182e7ea33bcb57cbd8358cd9d39b5f5fb582b7029923f3fdd3ee77",
+    "realm-identity-0.1.0.jar": "9332d133320066d42bedb08fe129dee3da0de41f261f459140dea2a12ebf1606",
+    "realm-markets-0.2.0.jar": "b57021c9efa3c7a6bd017d9b53d552963d10270da70bde5dfacad68a5f2e6866"
+  }
+}
