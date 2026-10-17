@@ -1,0 +1,21 @@
+{
+  "step": 9,
+  "demonstration_event_text": true,
+  "actual_integrated_server": true,
+  "actual_minecraft_client": true,
+  "screenshots": [
+    "realm-notifications-hud.png",
+    "realm-notifications-center.png",
+    "realm-notifications-preferences.png",
+    "realm-notifications-journal.png"
+  ],
+  "message": "Actual integrated-world HUD, realS2C, original pixel artwork, native preferences/journal and compactqueue/sound/session checks passed.",
+  "checks": [
+    "Preferences round-trip, sound disabled, all5 anchors,320x240 widget bounds, journal scrolling/clear and private session reset passed.",
+    "Three genuine server API calls travelled over optional S2C packets into the real integrated-world HUD. Financial text is demonstration data; no money is minted.",
+    "Compact native journal rendered and scrolled all100 entries, including long wrapped bodies.",
+    "Native production renderer enforced visible/32pending/100history limits, including3-to1 resize with fullqueue; muted mode played no sound."
+  ],
+  "real_s2c_transport": true,
+  "success": true
+}

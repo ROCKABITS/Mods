@@ -1,0 +1,23 @@
+{
+  "unit_tests": 46,
+  "standalone_native_tests": 20,
+  "version": "0.2.1",
+  "source_commit": "0d9e45962ae298e4fac98f46c6c9b5823e0ffc8d",
+  "tested_run": "https://github.com/ROCKABITS/Mods/actions/runs/39009308013",
+  "jar_sha256": "120eb1729d5546b76fa27eff2edfeff0fe8e4cb33dc2bb8f7b75a6ac532dcfe8",
+  "zip_sha256": "36a1237da121bd3a70f4953a8a55eed074a319a1a7facf80986c9bab77d8ccff",
+  "joint_suite_versions": {
+    "chronicles-rp": "0.5.4",
+    "contracts-bounties": "0.3.2",
+    "realm-council": "0.2.2",
+    "crown-ledger": "0.2.1",
+    "realm-markets": "0.2.1",
+    "realm-rewards": "0.1.2",
+    "realm-notifications": "0.1.0"
+  },
+  "runtime_dependency_checksums": {
+    "origins-neoforge-1375372-8758523.jar": "93383233a047a9838af067b64452964183cc4fe9f2d9c269ffb253141136caf6",
+    "jupiter-1072905-7738312.jar": "95af332af250f97fe2d9d288fe6b2057c266673a388348bf33756b0b693ace15",
+    "origins-classes-neoforge-1536425-8758587.jar": "14fcc794ae3fc66f752961f7df480356bb5b7cb01d78a2670e9f1e9d18bafb67"
+  }
+}

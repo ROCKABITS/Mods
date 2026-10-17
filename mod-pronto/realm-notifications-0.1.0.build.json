@@ -1,0 +1,46 @@
+{
+  "unit_tests": 11,
+  "standalone_native_tests": 15,
+  "integrated_native_tests": 15,
+  "actual_client_validation": true,
+  "version": "0.1.0",
+  "source_commit": "0d9e45962ae298e4fac98f46c6c9b5823e0ffc8d",
+  "tested_run": "https://github.com/ROCKABITS/Mods/actions/runs/39009308013",
+  "jar_sha256": "5aa70ac5a7696ce626ffa40e2e530038e90c06819dbeea6f43be70d42310822a",
+  "zip_sha256": "1e022dbebf6070600fdb26ea6fa22055a1fcc174b41503a94062d71f5e5481b5",
+  "joint_suite_versions": {
+    "chronicles-rp": "0.5.4",
+    "contracts-bounties": "0.3.2",
+    "realm-council": "0.2.2",
+    "crown-ledger": "0.2.1",
+    "realm-markets": "0.2.1",
+    "realm-rewards": "0.1.2",
+    "realm-notifications": "0.1.0"
+  },
+  "runtime_dependency_checksums": {
+    "origins-neoforge-1375372-8758523.jar": "93383233a047a9838af067b64452964183cc4fe9f2d9c269ffb253141136caf6",
+    "jupiter-1072905-7738312.jar": "95af332af250f97fe2d9d288fe6b2057c266673a388348bf33756b0b693ace15",
+    "origins-classes-neoforge-1536425-8758587.jar": "14fcc794ae3fc66f752961f7df480356bb5b7cb01d78a2670e9f1e9d18bafb67"
+  },
+  "companions": {
+    "cronicasrp-0.5.4.jar": "197c2fac53f97eb59159c9a0c26b3065362bdc18c8de1a1c0e61ece4360ba1f5",
+    "contracts-bounties-0.3.2.jar": "2ecf125a188f042f8d6c5011af5e1ff2cc5974925835bcd2cc0180f75d07ff15",
+    "realmcouncil-0.2.2.jar": "0a77af87a5c4e36f55ad12578662834886a7986864896a908a3dc4217e2c19cb",
+    "crown-ledger-0.2.1.jar": "120eb1729d5546b76fa27eff2edfeff0fe8e4cb33dc2bb8f7b75a6ac532dcfe8",
+    "realm-markets-0.2.1.jar": "bfb1e73186015ab94a86c841abba1df02bf1b5851a65771e622234624b806bb1",
+    "realm-rewards-0.1.2.jar": "ab8efe3bd9a7b24a4f725bf6dfe1f07dec0b88ecfaac91533b57c45b11cb7bcb",
+    "realm-identity-0.1.0.jar": "9332d133320066d42bedb08fe129dee3da0de41f261f459140dea2a12ebf1606"
+  },
+  "representative_companion_event_hooks_tested": true,
+  "native_hook_markers": [
+    "NOTIFICATIONS_FRESH_COMPANION_BRIDGES_PASSED",
+    "NOTIFICATIONS_MONEY_HOOKS_PASSED",
+    "NOTIFICATIONS_ACTIVITY_HOOKS_PASSED"
+  ],
+  "screenshots": {
+    "realm-notifications-hud.png": "ba7bbc7a73b32b46d9e9691edcc0577c8ce643911c304724c2f6273db6417411",
+    "realm-notifications-center.png": "e0e91d2787dee9e887321183891cee7a74799bb3f0bb7713e91f9dc7bdb75195",
+    "realm-notifications-preferences.png": "420e0da89a48532c6e97af7a59154acb3c7008be6b958f100169b3495f0a611c",
+    "realm-notifications-journal.png": "23b765a8dab655582b7c73c033a75ebe1a1cf5ce52371c94d0ae05f2384c20eb"
+  }
+}
