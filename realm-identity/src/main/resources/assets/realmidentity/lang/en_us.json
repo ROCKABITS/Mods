@@ -62,5 +62,15 @@
   "gui.realmidentity.minecraft_owner_uuid": "Minecraft owner UUID: %s",
   "gui.realmidentity.holder": "Carried by: %s",
   "gui.realmidentity.holder_not_owner": "The holder is not the registered owner.",
-  "gui.realmidentity.signature_text": "Written signature"
+  "gui.realmidentity.signature_text": "Written signature",
+  "gui.realmidentity.titles_heading": "PUBLIC HONOURS · CURRENT REGISTRY",
+  "gui.realmidentity.titles_as_of": "Consulted %s (UTC)",
+  "gui.realmidentity.titles_unavailable": "The honours registry is unavailable. This does not affect this document’s authenticity.",
+  "gui.realmidentity.titles_empty": "No active public titles at this consultation.",
+  "gui.realmidentity.title_permanent": "Permanent honour",
+  "gui.realmidentity.title_until": "Valid until %s (UTC) · %s remaining",
+  "gui.realmidentity.title_days": "%s d",
+  "gui.realmidentity.title_hours": "%s h",
+  "gui.realmidentity.title_minutes": "%s min",
+  "gui.realmidentity.titles_hint": "Honours are consulted live. Reopen the document for new grants or revocations; no reissue is needed."
 }

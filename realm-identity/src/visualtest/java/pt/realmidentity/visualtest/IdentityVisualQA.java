@@ -1,6 +1,7 @@
 package pt.realmidentity.visualtest;
 
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonNull;
 import com.google.gson.JsonObject;
 import java.nio.file.Files;
@@ -40,7 +41,7 @@ import pt.realmidentity.domain.InkDrawing;
 @EventBusSubscriber(modid = "realmidentity", value = Dist.CLIENT)
 public final class IdentityVisualQA {
     private static final Path OUT = Path.of(System.getProperty("identity.qaOutput", "qa-results/identity-client")).toAbsolutePath().normalize();
-    private static final String[] FILENAMES = {"realm-identity-items.png", "realm-identity-document.png", "realm-identity-issuance.png"};
+    private static final String[] FILENAMES = {"realm-identity-items.png", "realm-identity-document.png", "realm-identity-issuance.png", "realm-identity-honours.png"};
     private static final long STARTED = System.currentTimeMillis();
     private static final List<String> CAPTURED = new ArrayList<>();
     private static final List<String> CHECKS = new ArrayList<>();
@@ -88,7 +89,14 @@ public final class IdentityVisualQA {
 
     private static void show(Minecraft mc) {
         if (index == 0) mc.setScreen(new ItemPreview());
-        else open(mc, demo(index == 2));
+        else {
+            var screen = open(mc, demo(index == 2));
+            if (index == 3) {
+                try {
+                    var scroll = IdentityScreen.class.getDeclaredField("scroll"); scroll.setAccessible(true); scroll.setInt(screen, 170);
+                } catch (ReflectiveOperationException failure) { throw new IllegalStateException(failure); }
+            }
+        }
         captureScreen = mc.screen;
         GLFW.glfwSetCursorPos(mc.getWindow().getWindow(), 1, 1);
         ticks = 0; screenStarted = System.currentTimeMillis();
@@ -179,6 +187,32 @@ public final class IdentityVisualQA {
         acknowledge(screen, malformed); check(drawing.get(screen) == null, "Malformed ink must render absent without crashing");
         CHECKS.add("Read-only issued snapshots retain fields across current/outdated/offline/unavailable statuses, hide fields when invalid, and have no station refresh or mutation controls. Standalone and malformed drawings render absent.");
 
+        screen = open(mc, viewed);
+        var activeTitles = IdentityScreen.class.getDeclaredMethod("activeTitles"); activeTitles.setAccessible(true);
+        check(((List<?>) activeTitles.invoke(screen)).size() == 2, "The public honours section lost a permanent or temporary title");
+        var received = IdentityScreen.class.getDeclaredField("receivedAtNanos"); received.setAccessible(true);
+        received.setLong(screen, System.nanoTime() - 8L * 86_400_000_000_000L);
+        check(((List<?>) activeTitles.invoke(screen)).size() == 1,
+                "Temporary titles must expire from consultation time plus monotonic elapsed time, independent of the client wall clock");
+        var full = viewed.deepCopy(); var sixteen = new JsonArray();
+        for (int i = 0; i < 16; i++) {
+            var title = viewed.getAsJsonArray("titles").get(0).getAsJsonObject().deepCopy();
+            title.addProperty("name", "A long public honour whose name wraps safely " + i);
+            title.addProperty("description", "A full public description that must wrap onto the parchment and remain reachable by scrolling. ".repeat(2));
+            sixteen.add(title);
+        }
+        full.add("titles", sixteen); acknowledge(screen, full);
+        check(((List<?>) activeTitles.invoke(screen)).size() == 16, "The document truncated the sixteen-title public registry limit");
+        screen.init(mc, 320, 240);
+        var graphics = new GuiGraphics(mc, mc.renderBuffers().bufferSource());
+        screen.render(graphics, 0, 0, 0); graphics.flush();
+        var contentHeight = IdentityScreen.class.getDeclaredField("contentHeight"); contentHeight.setAccessible(true);
+        check(contentHeight.getInt(screen) > 1600, "All sixteen wrapped public title cards must contribute to the scrollable body");
+        check(screen.mouseScrolled(160, 100, 0, -1000), "Honours body does not accept scroll input at 320x240");
+        var scrollPosition = IdentityScreen.class.getDeclaredField("scroll"); scrollPosition.setAccessible(true);
+        check(scrollPosition.getInt(screen) > 1000, "The last honours are unreachable in a compact viewport");
+        CHECKS.add("Public honours preserve all sixteen wrapped title cards at 320x240, scroll to the last honour, and locally hide expired temporary grants using the server consultation time plus monotonic elapsed time. These are explicit demo payloads, not live server evidence.");
+
         screen = open(mc, viewed); screen.init(mc, 320, 240);
         for (var child : screen.children()) if (child instanceof AbstractButton control)
             check(control.getX() >= 0 && control.getY() >= 0 && control.getX() + control.getWidth() <= 320 && control.getY() + control.getHeight() <= 240, "Control exceeds a 320x240 viewport");
@@ -204,6 +238,17 @@ public final class IdentityVisualQA {
         var profile = new JsonObject(); profile.addProperty("source", "CHRONICLES"); profile.addProperty("name", "Aveline Vale (sample)");
         profile.addProperty("age", 28); profile.addProperty("race", "Human"); profile.addProperty("occupation", "Royal cartographer");
         profile.addProperty("signature", "Aveline Vale"); profile.addProperty("signatureDrawing", sampleDrawing()); data.add("profile", profile);
+        long consultedAt = 1_792_022_400_000L;
+        data.addProperty("titlesStatus", "available"); data.addProperty("titlesAsOf", consultedAt);
+        var titles = new JsonArray();
+        var permanent = new JsonObject(); permanent.addProperty("id", "22222222-2222-2222-2222-222222222222");
+        permanent.addProperty("titleId", "33333333-3333-3333-3333-333333333333"); permanent.addProperty("name", "Royal cartographer");
+        permanent.addProperty("description", "Entrusted with the kingdom’s roads, rivers and frontiers.");
+        permanent.addProperty("grantedAt", consultedAt - 86_400_000L); permanent.addProperty("expiresAt", 0); titles.add(permanent);
+        var temporary = permanent.deepCopy(); temporary.addProperty("id", "44444444-4444-4444-4444-444444444444");
+        temporary.addProperty("titleId", "55555555-5555-5555-5555-555555555555"); temporary.addProperty("name", "Envoy of the harvest");
+        temporary.addProperty("description", "A temporary honour for service during the autumn assembly.");
+        temporary.addProperty("expiresAt", consultedAt + 7L * 86_400_000L); titles.add(temporary); data.add("titles", titles);
         return data;
     }
     private static String sampleDrawing() {

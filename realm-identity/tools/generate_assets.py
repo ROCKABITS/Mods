@@ -241,7 +241,7 @@ write_json(ASSETS / "blockstates/writing_desk.json", {"variants": {
     "facing=" + direction: {"model": "realmidentity:block/writing_desk", **({"y": index * 90} if index else {})}
     for index, direction in enumerate(("north", "east", "south", "west"))}})
 write_json(RES / "data/realmidentity/recipe/writing_desk.json", {
-    "type": "minecraft:crafting_shaped", "category": "decorations", "pattern": ["PFI", "BWB", "WWW"],
+    "type": "minecraft:crafting_shaped", "category": "misc", "pattern": ["PFI", "BWB", "WWW"],
     "key": {"P": {"item": "minecraft:paper"}, "F": {"item": "minecraft:feather"},
             "I": {"item": "minecraft:ink_sac"}, "B": {"item": "minecraft:book"},
             "W": {"tag": "minecraft:planks"}},

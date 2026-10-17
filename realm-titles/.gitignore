@@ -1,0 +1,13 @@
+.gradle/
+build.log
+gametests.log
+visual-client.log
+qa-results/
+__pycache__/
+build/
+run/
+runs/
+.idea/
+*.iml
+compat-libs/
+integration.log

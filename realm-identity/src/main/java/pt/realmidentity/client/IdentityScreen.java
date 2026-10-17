@@ -5,9 +5,12 @@ import com.google.gson.JsonParser;
 import java.time.Instant;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 import java.util.function.BiConsumer;
 import net.minecraft.client.Minecraft;
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractButton;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
@@ -21,7 +24,9 @@ public final class IdentityScreen extends Screen {
     private static final int INK = 0xFF342C22, MUTED = 0xFF77694F, GOLD = 0xFFB99853;
     private static final int PAPER = 0xFFEADCB6, LIGHT = 0xFFF6EBCF, GREEN = 0xFF365B43;
     private static final DateTimeFormatter DATE = DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.ROOT).withZone(ZoneOffset.UTC);
+    private static final DateTimeFormatter CONSULTED_DATE = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm", Locale.ROOT).withZone(ZoneOffset.UTC);
     private JsonObject state;
+    private long receivedAtNanos;
     private InkDrawing signatureDrawing;
     private BiConsumer<String, JsonObject> requestSender = IdentityNetwork::send;
     private boolean waiting;
@@ -31,6 +36,7 @@ public final class IdentityScreen extends Screen {
     private IdentityScreen(JsonObject data) {
         super(tr("title"));
         state = data;
+        receivedAtNanos = System.nanoTime();
         readDrawing();
         notice = str(data, "message", "");
     }
@@ -53,6 +59,7 @@ public final class IdentityScreen extends Screen {
     private void accept(JsonObject data) {
         boolean modeChanged = station() != bool(data, "stationMode");
         state = data;
+        receivedAtNanos = System.nanoTime();
         readDrawing();
         waiting = false; waitingTicks = 0;
         notice = str(data, "message", "");
@@ -206,6 +213,7 @@ public final class IdentityScreen extends Screen {
             g.drawString(font, tr("source_" + ("CHRONICLES".equals(source) ? "chronicles" : "minecraft")), left, cy + 1, MUTED, false);
             cy += 17;
         }
+        if (!invalid) cy = renderTitles(g, left, cy + 4, inner);
         if (!station()) {
             if (!invalid) {
                 String serial = str(state, "serial", "—");
@@ -225,6 +233,71 @@ public final class IdentityScreen extends Screen {
             cy = paragraph(g, text("snapshot_hint"), left, cy + 7, inner, MUTED);
         } else cy = paragraph(g, text("station_hint"), left, cy + 2, inner, MUTED);
         return cy + 8;
+    }
+
+    /** Only public honours from this consultation; never part of the issued profile. */
+    private int renderTitles(GuiGraphics g, int left, int cy, int inner) {
+        String status = str(state, "titlesStatus", "absent");
+        if ("absent".equals(status)) return cy;
+        g.fill(left, cy, left + inner, cy + 1, GOLD);
+        cy += 9;
+        g.drawString(font, tr("titles_heading"), left, cy, GREEN, false);
+        cy += 14;
+        long asOf = number(state, "titlesAsOf");
+        if (asOf > 0) cy = paragraph(g, text("titles_as_of", CONSULTED_DATE.format(Instant.ofEpochMilli(asOf))), left, cy, inner, MUTED) + 5;
+        if (!"available".equals(status)) return paragraph(g, text("titles_unavailable"), left, cy, inner, MUTED) + 11;
+        List<JsonObject> titles = activeTitles();
+        if (titles.isEmpty()) return paragraph(g, text("titles_empty"), left, cy, inner, MUTED) + 11;
+        long now = consultationNow();
+        for (JsonObject title : titles) {
+            Component name = Component.literal(str(title, "name", "")).withStyle(ChatFormatting.BOLD);
+            String description = str(title, "description", "");
+            long expiry = number(title, "expiresAt");
+            String validity = expiry == 0 ? text("title_permanent")
+                    : text("title_until", CONSULTED_DATE.format(Instant.ofEpochMilli(expiry)), remaining(expiry - now));
+            int available = inner - 20;
+            int lines = font.split(name, Math.max(40, available)).size()
+                    + (description.isBlank() ? 0 : font.split(Component.literal(description), Math.max(40, available)).size())
+                    + font.split(Component.literal(validity), Math.max(40, available)).size();
+            int cardHeight = 16 + lines * 11;
+            g.fill(left, cy, left + inner, cy + cardHeight, 0xFFDCCDA6);
+            g.fill(left, cy, left + 3, cy + cardHeight, GOLD);
+            int lineY = cy + 7;
+            for (var line : font.split(name, Math.max(40, available))) {
+                g.drawString(font, line, left + 10, lineY, GREEN, false); lineY += 11;
+            }
+            if (!description.isBlank()) lineY = paragraph(g, description, left + 10, lineY, available, INK);
+            paragraph(g, validity, left + 10, lineY + 2, available, MUTED);
+            cy += cardHeight + 5;
+        }
+        return paragraph(g, text("titles_hint"), left, cy + 2, inner, MUTED) + 12;
+    }
+
+    private long consultationNow() {
+        long elapsed = Math.max(0, (System.nanoTime() - receivedAtNanos) / 1_000_000);
+        return number(state, "titlesAsOf") + elapsed;
+    }
+
+    private List<JsonObject> activeTitles() {
+        List<JsonObject> result = new ArrayList<>();
+        if (!"available".equals(str(state, "titlesStatus", ""))
+                || !state.has("titles") || !state.get("titles").isJsonArray()) return result;
+        long now = consultationNow();
+        for (var entry : state.getAsJsonArray("titles")) {
+            if (result.size() >= 16) break;
+            if (!entry.isJsonObject()) continue;
+            JsonObject title = entry.getAsJsonObject();
+            long expiry = number(title, "expiresAt");
+            if (number(title, "grantedAt") <= now && (expiry == 0 || now < expiry)) result.add(title);
+        }
+        return result;
+    }
+
+    private String remaining(long millis) {
+        long minutes = Math.max(1, (millis + 59_999) / 60_000);
+        if (minutes >= 1440) return text("title_days", (minutes + 1439) / 1440);
+        if (minutes >= 60) return text("title_hours", (minutes + 59) / 60);
+        return text("title_minutes", minutes);
     }
 
     private int field(GuiGraphics g, String key, String value, int left, int cy, int fieldWidth) {

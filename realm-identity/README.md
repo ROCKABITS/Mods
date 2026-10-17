@@ -1,6 +1,6 @@
 # Realm Identity — Documento de Personagem
 
-Documentos físicos de roleplay para **Minecraft 1.21.1**, **NeoForge 21.1.256+** e **Java 21**. Instala `realm-identity-0.1.0.jar` no servidor e em todos os clientes. Identificador: `realmidentity`.
+Documentos físicos de roleplay para **Minecraft 1.21.1**, **NeoForge 21.1.256+** e **Java 21**. Instala `realm-identity-0.1.1.jar` no servidor e em todos os clientes. Identificador: `realmidentity`.
 
 ## Criar o documento
 
@@ -27,6 +27,16 @@ Sem Chronicles, funciona com o nome e UUID reais da conta Minecraft. Os dados de
 
 A consulta distingue a autenticidade da atualidade dos dados. O documento guarda os dados **à data da emissão**. Se a personagem online tiver mudado, mostra-os como desatualizados; com o titular offline, mantém a verificação do registo de emissão e informa que não confirmou o perfil atual.
 
+## Títulos e honras públicas
+
+Com **Realm Titles 0.1.0** instalado, a consulta do documento e a pré-visualização na escrivaninha mostram os títulos públicos atuais do titular: nome, descrição e validade permanente ou data de expiração. A secção tem a sua própria data de consulta, em UTC, e admite até 16 títulos com texto completo e deslocação vertical.
+
+Os títulos são lidos novamente no servidor a cada nova consulta. Atribuir, editar, revogar ou deixar expirar uma honra atualiza a próxima abertura do **mesmo documento**, sem segunda via, sem alterar o número de série nem consumir materiais. Um título temporário também desaparece do menu aberto quando atinge a expiração, calculada a partir da hora de consulta do servidor e do tempo decorrido no cliente. Para receber novas atribuições ou revogações durante uma consulta, fecha e reabre o documento; a escrivaninha atualiza a pré-visualização automaticamente.
+
+As honras funcionam com o titular offline. Se o Realm Titles estiver indisponível ou tiver uma API incompatível, apenas a secção das honras mostra indisponibilidade; o documento autenticado continua legível. Sem Realm Titles, a consulta mantém o funcionamento anterior.
+
+O adaptador opcional usa apenas `pt.realmtitles.api.TitlesApi.VERSION = 1` e `activeTitlesJson(MinecraftServer, UUID)`, depois da autenticação do documento e das verificações de apresentação e consentimento. Não consulta biografias nem escreve perfis. O UUID identifica a conta/personagem neste conjunto de mods; não existe um identificador independente por personagem. Os títulos nunca são gravados no item, no perfil emitido nem no registo `realm_identity.dat`.
+
 ## Segunda via e autenticidade
 
 Cada jogador tem **um documento ativo por mundo**, com identificador aleatório e número de série. Pedir uma segunda via na escrivaninha custa novamente papel e tinta e invalida o documento anterior e todas as suas cópias. Serve também para atualizar os dados depois de alterar a personagem no Chronicles.
@@ -44,11 +54,13 @@ Os jogadores comuns podem fabricar a escrivaninha, emitir os seus documentos, co
 
 ## Compatibilidade e dados
 
+**Atualização 0.1.1:** instala a mesma versão do Realm Identity no servidor e em todos os clientes. O protocolo de rede passou para a versão 2; clientes 0.1.0 têm de ser atualizados. Documentos já emitidos continuam válidos e os dados do mundo não precisam de migração. Realm Titles é opcional e não é necessário para emitir ou ler documentos.
+
 Chronicles RP 0.5.2 é opcional; o intervalo declarado é `>=0.5.2 e <0.6`. Se instalado, requer também as dependências do próprio Chronicles. Contracts, Realm Council e Crown Ledger não são necessários para usar o Realm Identity.
 
 Todas as escrivaninhas e dimensões usam `data/realm_identity.dat`, que guarda o selo do mundo, o próximo número de série e um documento atual por jogador. Inclui este ficheiro nas cópias de segurança do mundo. Se o registo estiver corrompido, o mod recusa substituí-lo silenciosamente por um registo vazio. A emissão verifica inventário e registo no thread do servidor e usa o mecanismo normal de persistência do Minecraft; não oferece uma transação de disco única durante uma falha abrupta do processo.
 
-[Resultados e limites da validação](VALIDACAO.md) · [Changelog](CHANGELOG.md) · [JAR pronto](../mod-pronto/realm-identity-0.1.0.jar) · [ZIP](../mod-pronto/realm-identity-0.1.0.zip) · [Imagens](../media/realm-identity/0.1.0/README.md).
+[Resultados e limites da validação](VALIDACAO.md) · [Changelog](CHANGELOG.md) · [JAR pronto](../mod-pronto/realm-identity-0.1.1.jar) · [ZIP](../mod-pronto/realm-identity-0.1.1.zip) · [Imagens](../media/realm-identity/0.1.0/README.md).
 
 ## Desenvolvimento
 

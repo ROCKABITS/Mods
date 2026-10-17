@@ -33,12 +33,14 @@ import net.neoforged.neoforge.common.util.FakePlayer;
 import net.neoforged.neoforge.attachment.AttachmentType;
 import net.neoforged.neoforge.gametest.GameTestHolder;
 import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
+import net.neoforged.fml.ModList;
 import pt.realmidentity.block.BlockRegistry;
 import pt.realmidentity.compat.ChroniclesBridge;
 import pt.realmidentity.data.IdentityData;
 import pt.realmidentity.domain.Document;
 import pt.realmidentity.domain.IdentityLedger;
 import pt.realmidentity.domain.ProfileSnapshot;
+import pt.realmidentity.domain.PublicTitle;
 import pt.realmidentity.service.IdentityService;
 
 /** Real inventories, item interactions, server sessions, consent, and native SavedData. */
@@ -178,6 +180,148 @@ public final class IdentityGameTests {
 
     private static boolean valid(FakePlayer viewer, ItemStack item) {
         return Boolean.TRUE.equals(IdentityService.inspection(viewer, item).get("authentic"));
+    }
+
+    /** Uses the installed Titles mod's immutable real domain and native SavedData. */
+    private static final class NativeTitles implements AutoCloseable {
+        final Class<?> ledgerType;
+        final Object data;
+        final Object original;
+        Object ledger;
+        NativeTitles(GameTestHelper helper) {
+            try {
+                ledgerType = Class.forName("pt.realmtitles.domain.TitleLedger");
+                var dataType = Class.forName("pt.realmtitles.data.TitleData");
+                data = dataType.getMethod("get", net.minecraft.server.MinecraftServer.class)
+                        .invoke(null, helper.getLevel().getServer());
+                original = dataType.getMethod("ledger").invoke(data);
+                ledger = ledgerType.getConstructor().newInstance();
+                save();
+            } catch (ReflectiveOperationException failure) { throw new IllegalStateException(failure); }
+        }
+        void change(String method, Class<?>[] types, Object... args) {
+            try { ledger = ledgerType.getMethod(method, types).invoke(ledger, args); save(); }
+            catch (ReflectiveOperationException failure) { throw new IllegalStateException(failure); }
+        }
+        void save() {
+            try { data.getClass().getMethod("replace", ledgerType).invoke(data, ledger); }
+            catch (ReflectiveOperationException failure) { throw new IllegalStateException(failure); }
+        }
+        void definition(UUID id, String name) {
+            change("createDefinition", new Class<?>[] {UUID.class, String.class, String.class}, id, name, "Public service to the realm");
+        }
+        void citizen(FakePlayer owner) {
+            change("observeCitizen", new Class<?>[] {UUID.class, String.class, boolean.class}, owner.getUUID(), "Public QA citizen", true);
+        }
+        void grant(UUID owner, UUID definition, UUID id, int days, long now) {
+            change("grant", new Class<?>[] {UUID.class, UUID.class, int.class, long.class, UUID.class}, owner, definition, days, now, id);
+        }
+        void corruptTemporarily() {
+            try { var field = data.getClass().getDeclaredField("ledger"); field.setAccessible(true); field.set(data, null); }
+            catch (ReflectiveOperationException failure) { throw new IllegalStateException(failure); }
+        }
+        @Override public void close() {
+            ledger = original;
+            save();
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    private static List<PublicTitle> titles(Map<String, Object> view) {
+        return (List<PublicTitle>) view.getOrDefault("titles", List.of());
+    }
+
+    @GameTest(template = "identity_empty", timeoutTicks = 100)
+    public static void currentPublicTitlesFollowAssignmentAndRevocationWithoutReissuingTheSameSerial(GameTestHelper helper) {
+        var identity = reset(helper);
+        var owner = player(helper);
+        var physical = issued(helper, owner);
+        var original = identity.ledger.snapshot();
+        var originalItem = physical.get(DataComponents.CUSTOM_DATA).copyTag();
+        String privateBefore = ChroniclesBridge.loaded() ? chroniclesProfile(owner).toString() : "";
+        if (!ModList.get().isLoaded("realmtitles")) {
+            helper.assertTrue("absent".equals(IdentityService.inspection(owner, physical).get("titlesStatus")),
+                    "Standalone Identity must retain its original document behavior without Titles");
+        } else try (var registry = new NativeTitles(helper)) {
+            UUID definition = UUID.randomUUID(), grant = UUID.randomUUID();
+            registry.definition(definition, "Royal cartographer"); registry.citizen(owner);
+            helper.assertTrue(titles(IdentityService.inspection(owner, physical)).isEmpty(), "An unassigned title leaked into a document");
+            registry.grant(owner.getUUID(), definition, grant, 0, System.currentTimeMillis());
+            var assigned = IdentityService.inspection(owner, physical);
+            helper.assertTrue("available".equals(assigned.get("titlesStatus")) && titles(assigned).size() == 1
+                            && titles(assigned).getFirst().name().equals("Royal cartographer")
+                            && titles(assigned).getFirst().expiresAt() == 0,
+                    "An existing physical document did not immediately show the fresh permanent assignment");
+            registry.change("revoke", new Class<?>[] {UUID.class, long.class}, grant, System.currentTimeMillis());
+            helper.assertTrue(titles(IdentityService.inspection(owner, physical)).isEmpty(),
+                    "A revoked title remained visible when reopening the same physical document");
+        }
+        helper.assertTrue(identity.ledger.snapshot().equals(original)
+                        && originalItem.equals(physical.get(DataComponents.CUSTOM_DATA).copyTag()) && valid(owner, physical),
+                "Consulting titles changed the issued profile, document UUID, serial, seal, registry, or physical item NBT");
+        if (ChroniclesBridge.loaded()) helper.assertTrue(privateBefore.equals(chroniclesProfile(owner).toString()),
+                "Reading public titles modified the original private Chronicles profile");
+        System.out.println("IDENTITY_TITLES_LIVE_SERIAL_OK loaded=" + ModList.get().isLoaded("realmtitles"));
+        helper.succeed();
+    }
+
+    @GameTest(template = "identity_empty", timeoutTicks = 100)
+    public static void offlinePublicHonoursUseFreshExpiryAndDefinitionWording(GameTestHelper helper) {
+        var identity = reset(helper);
+        var owner = player(helper);
+        var reader = player(helper);
+        var physical = issued(helper, owner);
+        var original = identity.ledger.snapshot();
+        helper.assertTrue(owner.getServer().getPlayerList().getPlayer(owner.getUUID()) == null,
+                "Offline fixture must not appear in the native online PlayerList");
+        if (ModList.get().isLoaded("realmtitles")) try (var registry = new NativeTitles(helper)) {
+            UUID permanent = UUID.randomUUID(), expired = UUID.randomUUID();
+            registry.definition(permanent, "Keeper of maps"); registry.definition(expired, "Seasonal envoy"); registry.citizen(owner);
+            long now = System.currentTimeMillis();
+            registry.grant(owner.getUUID(), permanent, UUID.randomUUID(), 0, now - 1000);
+            registry.grant(owner.getUUID(), expired, UUID.randomUUID(), 1, now - 86_400_010L);
+            var offline = IdentityService.inspection(reader, physical);
+            helper.assertTrue("OFFLINE".equals(offline.get("status")) && Boolean.TRUE.equals(offline.get("authentic"))
+                            && titles(offline).size() == 1 && titles(offline).getFirst().titleId().equals(permanent),
+                    "Offline inspection hid current public honours or retained an expired assignment");
+            registry.change("editDefinition", new Class<?>[] {UUID.class, String.class, String.class},
+                    permanent, "Royal keeper of maps", "New public wording");
+            var updated = titles(IdentityService.inspection(reader, physical)).getFirst();
+            helper.assertTrue(updated.name().equals("Royal keeper of maps") && updated.description().equals("New public wording"),
+                    "A new consultation displayed immutable printed wording instead of the live title definition");
+        } else helper.assertTrue(titles(IdentityService.inspection(reader, physical)).isEmpty(), "Absent Titles invented public honours");
+        helper.assertTrue(identity.ledger.snapshot().equals(original), "Offline public title reads rewrote the issued identity record");
+        System.out.println("IDENTITY_TITLES_OFFLINE_EXPIRY_OK loaded=" + ModList.get().isLoaded("realmtitles"));
+        helper.succeed();
+    }
+
+    @GameTest(template = "identity_empty", timeoutTicks = 100)
+    public static void brokenOptionalTitlesFailOnlyTheirSectionAndForgedDocumentsNeverReadTitles(GameTestHelper helper) {
+        var identity = reset(helper);
+        var owner = player(helper);
+        var physical = issued(helper, owner);
+        var before = identity.ledger.snapshot();
+        var forged = physical.copy();
+        var custom = forged.get(DataComponents.CUSTOM_DATA).copyTag();
+        custom.getCompound("realmidentity").putUUID("documentId", UUID.randomUUID());
+        custom.putString("titles", "Forged king");
+        forged.set(DataComponents.CUSTOM_DATA, CustomData.of(custom));
+        if (ModList.get().isLoaded("realmtitles")) try (var registry = new NativeTitles(helper)) {
+            registry.corruptTemporarily();
+            var authentic = IdentityService.inspection(owner, physical);
+            helper.assertTrue(Boolean.TRUE.equals(authentic.get("authentic")) && authentic.get("profile") != null
+                            && "unavailable".equals(authentic.get("titlesStatus")) && titles(authentic).isEmpty(),
+                    "An unavailable loaded Titles API invalidated or hid the authenticated identity profile");
+            var invalid = IdentityService.inspection(owner, forged);
+            helper.assertTrue(!Boolean.TRUE.equals(invalid.get("authentic")) && invalid.get("profile") == null
+                            && "absent".equals(invalid.get("titlesStatus")) && !invalid.containsKey("titlesAsOf")
+                            && !invalid.containsKey("titles"),
+                    "An unauthenticated item reached the Titles bridge or disclosed public titles");
+        } else helper.assertTrue("absent".equals(IdentityService.inspection(owner, forged).get("titlesStatus")),
+                "A forged standalone document displayed a Titles section");
+        helper.assertTrue(identity.ledger.snapshot().equals(before), "Optional API failure or forged lookup changed identity data");
+        System.out.println("IDENTITY_TITLES_OPTIONAL_FAILURE_FORGERY_OK loaded=" + ModList.get().isLoaded("realmtitles"));
+        helper.succeed();
     }
 
     @SuppressWarnings("unchecked")

@@ -3,15 +3,21 @@ loaderVersion="[4,)"
 license="All Rights Reserved"
 [[mods]]
 modId="realmidentity"
-version="0.1.0"
+version="0.1.1"
 displayName="Realm Identity"
 authors="ROCKABITS"
-description='''Physical character documents with a writing desk, server-verified issuance and consent-based presentation to other players. Optional Chronicles RP character and handwritten signature integration.'''
+description='''Physical character documents with a writing desk, server-verified issuance and consent-based presentation to other players. Optional Chronicles RP identity/signature and current Realm Titles public honours integration.'''
 [[dependencies.realmidentity]]
 modId="neoforge"
 type="required"
 versionRange="[21.1.256,)"
 ordering="NONE"
+side="BOTH"
+[[dependencies.realmidentity]]
+modId="realmtitles"
+type="optional"
+versionRange="[0.1.0,0.2)"
+ordering="AFTER"
 side="BOTH"
 [[dependencies.realmidentity]]
 modId="minecraft"

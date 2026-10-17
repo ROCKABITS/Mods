@@ -1,3 +1,13 @@
+# Realm Identity 0.1.1 — Beta
+
+- Added optional read-only Realm Titles API v1 integration. Authenticated document inspections and physical desk previews read current public honours from the server, including offline owners.
+- Added complete, scrollable public title cards with name, description, permanent/expiry status and consultation time. Temporary honours expire in an open screen using server-relative time; a new consultation reflects assignments, edits and revocations.
+- Kept existing documents, serial numbers, world seals, profile snapshots and item NBT unchanged. Titles require no reissue or extra materials.
+- Kept the existing consent, recipient, owner, held-item, proximity and line-of-sight checks. Forged documents never receive a Titles section; optional registry failure affects only that section.
+- Bumped the network protocol to 2. Update Realm Identity to 0.1.1 on the server and every client; existing world and item data remain compatible.
+- Corrected the writing desk recipe category for Minecraft 1.21.1 so the survival recipe loads normally.
+- Added strict public API contract tests and native checks for fresh assignments/revocation, offline expiry, unchanged identity data and optional API failure. Integration runs use the real installed Titles mod; standalone checks retain the absent-mod behavior.
+
 # Realm Identity 0.1.0 — Beta
 
 - Added a craftable 3D writing desk and physical identity document.

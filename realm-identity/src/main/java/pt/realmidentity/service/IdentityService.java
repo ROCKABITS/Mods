@@ -28,6 +28,7 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.phys.Vec3;
 import pt.realmidentity.block.BlockRegistry;
 import pt.realmidentity.compat.ChroniclesBridge;
+import pt.realmidentity.compat.TitlesBridge;
 import pt.realmidentity.data.IdentityData;
 import pt.realmidentity.domain.Document;
 import pt.realmidentity.domain.IdentityLedger;
@@ -320,6 +321,7 @@ public final class IdentityService {
             view.put("status", "CURRENT");
             view.put("canIssue", current.isEmpty() && paper > 0 && ink > 0);
             view.put("canReissue", current.isPresent() && paper > 0 && ink > 0);
+            TitlesBridge.addTo(view, player.getServer(), player.getUUID());
         } catch (RuntimeException | LinkageError failure) {
             view.put("status", "PROFILE_UNAVAILABLE");
             if (message.isBlank()) message = error(failure);
@@ -350,6 +352,7 @@ public final class IdentityService {
         view.put("inkCount", 0);
         view.put("canIssue", false);
         view.put("canReissue", false);
+        view.put("titlesStatus", "absent");
         return view;
     }
 
@@ -367,6 +370,7 @@ public final class IdentityService {
         view.put("issuedAt", document.issuedAt());
         view.put("ownerUuid", document.owner().toString());
         view.put("holderIsOwner", document.owner().equals(holder.getUUID()));
+        TitlesBridge.addTo(view, server, document.owner());
         ServerPlayer online = server.getPlayerList().getPlayer(document.owner());
         view.put("ownerName", online == null ? "" : online.getGameProfile().getName());
         if (online == null) {

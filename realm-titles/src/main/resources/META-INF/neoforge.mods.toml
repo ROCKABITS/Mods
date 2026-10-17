@@ -1,0 +1,40 @@
+modLoader="javafml"
+loaderVersion="[4,)"
+license="All Rights Reserved"
+[[mods]]
+modId="realmtitles"
+version="0.1.0"
+displayName="Realm Titles"
+authors="ROCKABITS"
+logoFile="assets/realmtitles/icon.png"
+description='''Public honours, conferred at a royal seal desk by the sworn governor or an explicitly appointed standalone steward. Multiple permanent or temporary titles, with live Realm Identity integration.'''
+[[dependencies.realmtitles]]
+modId="neoforge"
+type="required"
+versionRange="[21.1.256,)"
+ordering="NONE"
+side="BOTH"
+[[dependencies.realmtitles]]
+modId="minecraft"
+type="required"
+versionRange="[1.21.1]"
+ordering="NONE"
+side="BOTH"
+[[dependencies.realmtitles]]
+modId="realmcouncil"
+type="optional"
+versionRange="[0.2.2,)"
+ordering="AFTER"
+side="BOTH"
+[[dependencies.realmtitles]]
+modId="cronicasrp"
+type="optional"
+versionRange="[0.5.2,0.6)"
+ordering="AFTER"
+side="BOTH"
+[[dependencies.realmtitles]]
+modId="realmnotifications"
+type="optional"
+versionRange="[0.1.0,)"
+ordering="AFTER"
+side="BOTH"

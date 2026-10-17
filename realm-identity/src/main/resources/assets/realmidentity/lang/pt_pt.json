@@ -62,5 +62,15 @@
   "gui.realmidentity.minecraft_owner_uuid": "UUID do titular no Minecraft: %s",
   "gui.realmidentity.holder": "Na posse de: %s",
   "gui.realmidentity.holder_not_owner": "Quem tem o documento não é o titular registado.",
-  "gui.realmidentity.signature_text": "Assinatura escrita"
+  "gui.realmidentity.signature_text": "Assinatura escrita",
+  "gui.realmidentity.titles_heading": "HONRAS PÚBLICAS · REGISTO ATUAL",
+  "gui.realmidentity.titles_as_of": "Consultado em %s (UTC)",
+  "gui.realmidentity.titles_unavailable": "O registo de honras está indisponível. A autenticidade deste documento mantém-se.",
+  "gui.realmidentity.titles_empty": "Sem títulos públicos ativos nesta consulta.",
+  "gui.realmidentity.title_permanent": "Honra permanente",
+  "gui.realmidentity.title_until": "Válido até %s (UTC) · faltam %s",
+  "gui.realmidentity.title_days": "%s d",
+  "gui.realmidentity.title_hours": "%s h",
+  "gui.realmidentity.title_minutes": "%s min",
+  "gui.realmidentity.titles_hint": "As honras são consultadas no momento. Reabre o documento para novas atribuições ou revogações; não é necessária segunda via."
 }
