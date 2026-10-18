@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "PGP",
+    "WEW",
+    "WWW"
+  ],
+  "key": {
+    "P": {
+      "item": "minecraft:paper"
+    },
+    "G": {
+      "item": "minecraft:gold_ingot"
+    },
+    "W": {
+      "item": "minecraft:dark_oak_planks"
+    },
+    "E": {
+      "item": "minecraft:green_wool"
+    }
+  },
+  "result": {
+    "id": "realmcasino:blackjack_table",
+    "count": 1
+  }
+}

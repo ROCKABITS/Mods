@@ -1,0 +1,34 @@
+modLoader="javafml"
+loaderVersion="[4,)"
+license="All Rights Reserved"
+[[mods]]
+modId="realmcasino"
+version="0.1.0"
+displayName="Realm Casino"
+authors="ROCKABITS"
+logoFile="assets/realmcasino/icon.png"
+description='''Player-owned fantasy casino furniture: three-reel slots, European roulette and blackjack. Fixed published rules, server-controlled results and fully reserved virtual Chronicles RP wagers. No real-money deposits, withdrawals or conversion.'''
+[[dependencies.realmcasino]]
+modId="neoforge"
+type="required"
+versionRange="[21.1.256,)"
+ordering="NONE"
+side="BOTH"
+[[dependencies.realmcasino]]
+modId="minecraft"
+type="required"
+versionRange="[1.21.1]"
+ordering="NONE"
+side="BOTH"
+[[dependencies.realmcasino]]
+modId="cronicasrp"
+type="optional"
+versionRange="[0.5.4,0.6)"
+ordering="AFTER"
+side="BOTH"
+[[dependencies.realmcasino]]
+modId="realmnotifications"
+type="optional"
+versionRange="[0.1.0,)"
+ordering="AFTER"
+side="BOTH"

@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "GCG",
+    "WEW",
+    "WWW"
+  ],
+  "key": {
+    "G": {
+      "item": "minecraft:gold_ingot"
+    },
+    "C": {
+      "item": "minecraft:compass"
+    },
+    "W": {
+      "item": "minecraft:dark_oak_planks"
+    },
+    "E": {
+      "item": "minecraft:green_wool"
+    }
+  },
+  "result": {
+    "id": "realmcasino:roulette_table",
+    "count": 1
+  }
+}

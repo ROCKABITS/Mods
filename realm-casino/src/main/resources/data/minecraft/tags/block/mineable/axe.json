@@ -1,0 +1,8 @@
+{
+  "replace": false,
+  "values": [
+    "realmcasino:slot_machine",
+    "realmcasino:roulette_table",
+    "realmcasino:blackjack_table"
+  ]
+}
