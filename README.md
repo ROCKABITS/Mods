@@ -4,6 +4,7 @@ Projetos de ROCKABITS para **Minecraft 1.21.1**, **NeoForge 21.1.256+** e **Java
 
 | Mod | Download | Funcionalidades |
 | --- | --- | --- |
+| **Realm Casino 0.1.0 Beta** | [JAR](https://github.com/ROCKABITS/Mods/raw/refs/heads/main/mod-pronto/realm-casino-0.1.0.jar) · [ZIP](https://github.com/ROCKABITS/Mods/raw/refs/heads/main/mod-pronto/realm-casino-0.1.0.zip) | Slots de três rolos, roleta europeia e blackjack, com máquinas próprias, animações e banca de cada proprietário. |
 | **Realm Titles 0.1.0 Beta** | [JAR](https://github.com/ROCKABITS/Mods/raw/refs/heads/main/mod-pronto/realm-titles-0.1.0.jar) · [ZIP](https://github.com/ROCKABITS/Mods/raw/refs/heads/main/mod-pronto/realm-titles-0.1.0.zip) | Mesa do Selo Real, títulos personalizados, nomeações permanentes ou temporárias e registo público. |
 | **Realm Notifications 0.1.0** | [JAR](https://github.com/ROCKABITS/Mods/raw/refs/heads/main/mod-pronto/realm-notifications-0.1.0.jar) · [ZIP](https://github.com/ROCKABITS/Mods/raw/refs/heads/main/mod-pronto/realm-notifications-0.1.0.zip) | Avisos medievais animados, selos próprios, preferências e diário da sessão. |
 | **Realm Rewards 0.1.2** | [JAR](https://github.com/ROCKABITS/Mods/raw/refs/heads/main/mod-pronto/realm-rewards-0.1.2.jar) · [ZIP](https://github.com/ROCKABITS/Mods/raw/refs/heads/main/mod-pronto/realm-rewards-0.1.2.zip) | Recompensas por conquistas Vanilla e de outros mods, carteira do Chronicles e configuração por conquista. |
@@ -18,6 +19,7 @@ O ZIP é uma alternativa ao download direto do JAR. Extrai-o antes de instalar. 
 
 Se usas Crown Ledger e Realm Markets juntos, atualiza **ambos para 0.2.1** no servidor e em todos os clientes, substituindo os JARs antigos. Faz uma cópia de segurança do mundo e dos perfis do Chronicles antes de atualizar: os dados migram para o formato 2 e regressar à versão anterior exige restaurar essa cópia.
 
+- [Guia do Realm Casino](realm-casino/README.md): três jogos, receitas, regras, banca e recolha dos prémios.
 - [Guia do Realm Titles](realm-titles/README.md): mesa, títulos, governante, validade e integração no documento.
 - [Guia do Realm Notifications](realm-notifications/README.md): avisos no ecrã, tecla N, preferências, diário e API opcional.
 - [Guia do Realm Rewards](realm-rewards/README.md): pagamentos por conquistas, valores padrão, administração e dinheiro pendente.
@@ -31,6 +33,8 @@ Se usas Crown Ledger e Realm Markets juntos, atualiza **ambos para 0.2.1** no se
 - [Galerias para CurseForge](media/README.md).
 
 Cada mod funciona independentemente nas suas funcionalidades base. O Crown Ledger usa esmeraldas sem Chronicles RP. Com **Chronicles RP 0.5.4**, pode usar a carteira digital e a reputação existentes. Com Realm Council, só o governante de um mandato ativo e jurado pode gerir o tesouro; sem ele, um operador designa um responsável. Com Contracts, o governante publica contratos pagos pelo reino.
+
+O **Realm Casino 0.1.0 Beta** já tem [galeria de capturas reais](media/realm-casino/README.md) e [validação aprovada](realm-casino/VALIDACAO.md). Esta primeira fase inclui slots de três rolos, roleta europeia e blackjack contra a banca, acessíveis pelos respetivos blocos. Cada máquina tem proprietário e fundos próprios: as apostas e os prémios utilizam a carteira virtual do Chronicles RP, e os prémios ficam por receber até à recolha presencial. Sem Chronicles, podes colocar os blocos e consultar as regras, mas as operações económicas ficam desativadas. O Realm Notifications é opcional; não há imposto do Crown Ledger nesta versão. Os restantes jogos do guião ficam para atualizações futuras.
 
 O [Chronicles RP 0.5.4](chronicles-rp/README.md) mantém os perfis e a economia e acrescenta os nomes públicos de personagem. Substitui o JAR anterior no servidor e em todos os clientes; o protocolo mantém a versão 7 introduzida na 0.5.3. Não mistures a 0.5.2 com estas versões. Origins 0.3.2 e Jupiter 2.3.7 são necessários; Origins: Classes 0.3 é opcional.
 

@@ -34,6 +34,7 @@ O quadro abaixo distingue as funcionalidades já implementadas das ideias ainda 
 | Realm Rewards | Recompensar conquistas Vanilla e de outros mods com dinheiro do Chronicles RP. | Implementado e atualizado para 0.1.2; [guia](realm-rewards/README.md). |
 | Realm Notifications | Notificações no ecrã e API comum para os mods de RP. | Implementado na 0.1.0; [guia](realm-notifications/README.md). |
 | Realm Titles | Títulos de personagem atribuídos pelo governante eleito. | Implementado na 0.1.0 Beta; [guia](realm-titles/README.md). |
+| Realm Casino | Casino medieval com máquinas e mesas, banca própria de cada proprietário e dinheiro virtual do Chronicles RP. | Primeira fase implementada, testada e publicada na 0.1.0 Beta. [Guia](realm-casino/README.md). |
 | Chronicles RP — Nomes RP | Mostrar o nome da personagem acima da cabeça, no TAB e no chat. | Implementado na 0.5.3; [guia e downloads](chronicles-rp/README.md). |
 | Xaero Map Regions + Xaero's World Map | Desenhar e consultar territórios no mapa. | Solução externa indicada pelo utilizador; não desenvolver um mod próprio. |
 
@@ -61,6 +62,16 @@ O imposto de vendas foi implementado no Crown Ledger e Realm Markets 0.2.0; os r
 - Associar vários títulos à personagem, como Cavaleiro, Duque, Barão e Conselheiro.
 - Suportar títulos permanentes ou temporários.
 - Gerir nomeações na Mesa do Selo Real e mostrar os títulos atuais na consulta do Realm Identity 0.1.1, sem reemitir o documento.
+
+### Realm Casino — primeira fase
+
+- Slots de três rolos, roleta europeia e blackjack contra a banca, cada um com bloco, modelos, animações, sons e interface próprios.
+- Proprietário, nome, banca e limites de aposta independentes por máquina ou mesa. Os menus abrem pela interação com os blocos.
+- Usar apenas a carteira virtual do Chronicles RP; sem ela, permitir consultar modelos e regras, mantendo as operações económicas desativadas.
+- Confirmar os resultados no servidor, reservar o maior prémio possível antes da aposta e guardar os prémios como quantias por receber, recolhidas presencialmente.
+- Realm Notifications opcional. Impostos do Crown Ledger e os restantes jogos do guião ficam para fases futuras; esta versão não inclui poker nem jogos entre jogadores.
+
+A **0.1.0 Beta está publicada**, com [ZIP](https://github.com/ROCKABITS/Mods/raw/refs/heads/main/mod-pronto/realm-casino-0.1.0.zip) e [galeria](media/realm-casino/README.md). Os resultados estão em [VALIDACAO.md](realm-casino/VALIDACAO.md) e na proveniência do JAR.
 
 ### Chronicles RP — Nomes RP
 

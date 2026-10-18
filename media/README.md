@@ -1,5 +1,7 @@
 # Mod galleries
 
+**Realm Casino 0.1.0 Beta:** [Seleção visual](realm-casino/README.md) · [Download dos 15 PNGs](realm-casino/0.1.0/realm-casino-0.1.0-media.zip). Capturas reais dos três blocos medievais, slots, roleta europeia, blackjack e menus de regras e proprietário, com personagens e fundos virtuais de demonstração.
+
 **Realm Titles 0.1.0:** [Seleção visual](realm-titles/README.md) · [Download PNG](realm-titles/0.1.0/realm-titles-0.1.0-media.zip). Capturas reais da Mesa do Selo Real nas quatro direções, registo público, menus do governante e títulos atuais num documento autêntico do Identity; personagens e nomeações de demonstração.
 
 **Realm Rewards:** [Administration screenshots](realm-rewards/0.1.1/README.md) · [Download PNG gallery](realm-rewards/0.1.1/realm-rewards-0.1.1-media.zip). Actual production administration screens rendered by Minecraft, using demonstration advancement data.
