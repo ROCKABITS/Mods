@@ -1,0 +1,56 @@
+{
+  "unit_tests": 51,
+  "standalone_native_tests": 48,
+  "integrated_native_tests": 48,
+  "actual_client_validation": true,
+  "version": "0.1.0",
+  "source_commit": "bb382705b2bc6ba1ce001fc1e6ef5a62e91339a1",
+  "tested_run": "https://github.com/ROCKABITS/Mods/actions/runs/39168508219",
+  "jar_sha256": "21cd60517db824614cda6e81793c8e57a199895eb88d8338fbcec001e252e840",
+  "zip_sha256": "92e3573bb67da1492096971447bbcddee090b6e60e8fe9875cb759963eaf9e76",
+  "project_versions": {
+    "laws-justice": "0.1.0"
+  },
+  "runtime_dependency_checksums": {
+    "origins-neoforge-1375372-8758523.jar": "93383233a047a9838af067b64452964183cc4fe9f2d9c269ffb253141136caf6",
+    "jupiter-1072905-7738312.jar": "95af332af250f97fe2d9d288fe6b2057c266673a388348bf33756b0b693ace15",
+    "origins-classes-neoforge-1536425-8758587.jar": "14fcc794ae3fc66f752961f7df480356bb5b7cb01d78a2670e9f1e9d18bafb67"
+  },
+  "companions": {
+    "cronicasrp-0.5.4.jar": "197c2fac53f97eb59159c9a0c26b3065362bdc18c8de1a1c0e61ece4360ba1f5",
+    "contracts-bounties-0.3.2.jar": "2ecf125a188f042f8d6c5011af5e1ff2cc5974925835bcd2cc0180f75d07ff15",
+    "realmcouncil-0.2.2.jar": "0a77af87a5c4e36f55ad12578662834886a7986864896a908a3dc4217e2c19cb",
+    "crown-ledger-0.2.1.jar": "120eb1729d5546b76fa27eff2edfeff0fe8e4cb33dc2bb8f7b75a6ac532dcfe8",
+    "realm-markets-0.2.1.jar": "bfb1e73186015ab94a86c841abba1df02bf1b5851a65771e622234624b806bb1",
+    "realm-rewards-0.1.2.jar": "ab8efe3bd9a7b24a4f725bf6dfe1f07dec0b88ecfaac91533b57c45b11cb7bcb",
+    "realm-notifications-0.1.0.jar": "5aa70ac5a7696ce626ffa40e2e530038e90c06819dbeea6f43be70d42310822a",
+    "realm-titles-0.1.0.jar": "65d854ffd92805f6e8cb0891454f80ba5a6f33394cc0375cf23f64098af2bd16",
+    "realm-identity-0.1.1.jar": "4096147ac74847d31ee733291ad85d8d154ff7340e8d6f0874dd7cb7364823b0",
+    "realm-casino-0.1.0.jar": "8f4410f7469da0c60ec35b97976aae62f31873c76459c52c46f7717f6526587b"
+  },
+  "native_markers": [
+    "JUSTICE_NATIVE_PASSED integration=false",
+    "JUSTICE_NATIVE_PASSED integration=true",
+    "JUSTICE_RUNTIME_MODE_PASSED integration=false",
+    "JUSTICE_RUNTIME_MODE_PASSED integration=true",
+    "JUSTICE_CUSTODY_PASSED",
+    "JUSTICE_PERSISTENCE_PASSED"
+  ],
+  "screenshots": {
+    "laws-justice-prison-courtyard.png": "d851766ca4d0c78fb82271da272f9dff93029a7f6f080094519d7217e00b6665",
+    "laws-justice-control-ledger.png": "6504d03aa79aba0eed61a1d5a3f14fac3999d5fdb2ff3cdb0212819b1e1699ce",
+    "laws-justice-door-bars-lock.png": "24b1495bd13de00a764a5bc206deb0390e9eb995846550301d829f9f11db8816",
+    "laws-justice-admin-overview.png": "d09167140339f2ad4f6e23a3c35454d2ed8f1c88339a66c8e6ebc41193834e01",
+    "laws-justice-admin-prisons.png": "e67cfb51118bf7da9c57038fb43158d37f4d047857f679c268b414be5cfdee92",
+    "laws-justice-admin-cells.png": "b6fa0f63c7d19fe162a57875552df5c34662024fb88c5b3dd278ddcb8170a255",
+    "laws-justice-admin-sentence-form.png": "8aa1fe77fd76987ed6112ad25fac28228a53f9b65838d8507a088bbf50df27fb",
+    "laws-justice-custody-history.png": "1a327b7402cf939539d60fb55246e1c7df3aa6801fdf95fc84750117fb4c93a9",
+    "laws-justice-prisoner-status.png": "86baf92cceaf3afc82a2bbc1c5cab59150f26d74ca7ccf7bee1bc34c8b79f388",
+    "laws-justice-prisoner-after-respawn.png": "a356ea9269516217fc4e950df7e5a4e70fdd32dd5187b56b855ea2e5ecfc7c29",
+    "laws-justice-prisoner-after-world-restart.png": "654b05835c5ae000c6e4038186906b93ddb086c9b2ea1ddaf177b021f26ec316",
+    "laws-justice-release-courtyard.png": "ea840a7be009d239f51e44a0659a84538ae735c674f6ca14a6b757acc0a73a71",
+    "laws-justice-history-after-release.png": "381d307129ec35893f54f2d200c86b8bc837d908ae5a312d5b679959a74183e4"
+  },
+  "release_phase": "1: player-built prisons, cells, physical administration, online-only sentences, containment and automatic release",
+  "judicial_authority": "Administrator-only emergency administration in phase one; elected-president powers are planned for phase two"
+}
