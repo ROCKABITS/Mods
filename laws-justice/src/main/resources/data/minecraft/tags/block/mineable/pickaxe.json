@@ -1,0 +1,9 @@
+{
+  "replace": false,
+  "values": [
+    "lawsjustice:prison_door",
+    "lawsjustice:prison_bars",
+    "lawsjustice:reinforced_lock",
+    "lawsjustice:prison_control"
+  ]
+}

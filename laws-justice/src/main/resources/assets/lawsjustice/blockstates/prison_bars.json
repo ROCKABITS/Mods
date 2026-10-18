@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "lawsjustice:block/prison_bars"
+    },
+    "facing=east": {
+      "model": "lawsjustice:block/prison_bars",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "lawsjustice:block/prison_bars",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "lawsjustice:block/prison_bars",
+      "y": 270
+    }
+  }
+}

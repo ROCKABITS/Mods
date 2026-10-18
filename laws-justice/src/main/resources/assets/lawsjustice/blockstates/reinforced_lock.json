@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "lawsjustice:block/reinforced_lock"
+    },
+    "facing=east": {
+      "model": "lawsjustice:block/reinforced_lock",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "lawsjustice:block/reinforced_lock",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "lawsjustice:block/reinforced_lock",
+      "y": 270
+    }
+  }
+}

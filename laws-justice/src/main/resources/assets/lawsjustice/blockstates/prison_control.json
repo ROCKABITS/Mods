@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "lawsjustice:block/prison_control"
+    },
+    "facing=east": {
+      "model": "lawsjustice:block/prison_control",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "lawsjustice:block/prison_control",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "lawsjustice:block/prison_control",
+      "y": 270
+    }
+  }
+}
