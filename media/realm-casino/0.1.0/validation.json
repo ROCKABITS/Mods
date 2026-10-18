@@ -1,0 +1,285 @@
+{
+  "success": true,
+  "message": "Actual integrated Minecraft world, all three custom furniture models and game menus, owner controls, real Chronicles finances, native C2S/S2C/BE updates and compact controls passed.",
+  "step": 35,
+  "checks": [
+    "All registered baked states and all three furniture item models have native geometry and resolved textures.",
+    "All three real furniture blocks photographed together from a three-quarter camera angle, more than 12 seconds after scene creation, with a furnished wall and resolved chunks.",
+    "Actual native owner deposit, withdrawal, pending-credit claim and configuration travelled through C2S and authoritative S2C; real Chronicles balance, casino bank and pending credit conserve the initial fixture money.",
+    "Native slots Play, Rules and Owner tabs fit 320x240; visible controls remain within bounds before and after scrolling.",
+    "Native roulette Play, Rules and Owner tabs fit 320x240; visible controls remain within bounds before and after scrolling.",
+    "The actual roulette block was photographed while its committed 3.2-second animation was running and after settlement, at an unchanged camera and unchanged BE round id; the rendered tabletop region changed pixels.",
+    "Native blackjack Play, Rules and Owner tabs fit 320x240; visible controls remain within bounds before and after scrolling.",
+    "All three actual native games debit the genuine Chronicles wallet, return authoritative server results, update rendered world block entities through native BE packets and preserve wallet + bank + pending credit. Blackjack was stood through actual C2S when the deal remained active; no shoe was sent to the client.",
+    "All three original furniture models were also photographed individually from synchronized three-quarter detail cameras.",
+    "After real deposit, claim and each game stake, both playerdata UUID.dat and level.dat Data.Player contain the exact Chronicles balance and identical casino receipt; loading each actual host restart tag into a fresh server player restores that balance. This is integrated-host persistence proof, not a remote authenticated multiplayer reconnect."
+  ],
+  "screenshots": [
+    "realm-casino-furniture.png",
+    "realm-casino-owner.png",
+    "realm-casino-rules.png",
+    "realm-casino-slots.png",
+    "realm-casino-slots-spinning.png",
+    "realm-casino-slots-result.png",
+    "realm-casino-roulette-world-spinning.png",
+    "realm-casino-roulette-world-settled.png",
+    "realm-casino-roulette.png",
+    "realm-casino-blackjack.png",
+    "realm-casino-blackjack-result.png",
+    "realm-casino-furniture-after-play.png",
+    "realm-casino-slots-detail.png",
+    "realm-casino-roulette-detail.png",
+    "realm-casino-blackjack-detail.png"
+  ],
+  "actual_minecraft_client": true,
+  "actual_integrated_server": true,
+  "real_s2c_transport": true,
+  "real_c2s_transport": true,
+  "real_chronicles_wallet": true,
+  "lan_host_wallet_dual_save": true,
+  "actual_host_wallet_saves": [
+    {
+      "operation": "slots_deposit",
+      "balance": 1500000,
+      "receipt": "e7aa1181-6649-4d0f-93ec-afc9687d8dc1",
+      "player_file": true,
+      "level_dat_host": true,
+      "loaded_host_restart_tag": true
+    },
+    {
+      "operation": "pending_claim",
+      "balance": 1510000,
+      "receipt": "866cc30d-aba7-4c92-997f-bc58f3708e47",
+      "player_file": true,
+      "level_dat_host": true,
+      "loaded_host_restart_tag": true
+    },
+    {
+      "operation": "slots_bet",
+      "balance": 1509900,
+      "receipt": "3522a0ad-8c7e-482f-b399-480ac0eaf5c4",
+      "player_file": true,
+      "level_dat_host": true,
+      "loaded_host_restart_tag": true
+    },
+    {
+      "operation": "roulette_bet",
+      "balance": 1009800,
+      "receipt": "f439af63-54aa-4963-b7a2-a0a05047dce1",
+      "player_file": true,
+      "level_dat_host": true,
+      "loaded_host_restart_tag": true
+    },
+    {
+      "operation": "blackjack_bet",
+      "balance": 509700,
+      "receipt": "ed9e5601-c088-4217-b588-133226aed3fc",
+      "player_file": true,
+      "level_dat_host": true,
+      "loaded_host_restart_tag": true
+    }
+  ],
+  "real_world_models": true,
+  "real_world_animation": true,
+  "server_result_block_entity_updates": 4,
+  "capture_resolution": "1600x900",
+  "capture_gui_scale": 2,
+  "world_animation_changing_pixels": 2723,
+  "demonstration_world_and_money": true,
+  "synthetic_financial_snapshots": false,
+  "server_rng_overridden": false,
+  "actual_c2s_requests": [
+    {
+      "operation": "deposit",
+      "payload": {
+        "amount": 500000,
+        "nonce": "eba95655-711e-4018-adae-8ac54e3b5e92",
+        "version": 0
+      }
+    },
+    {
+      "operation": "withdraw",
+      "payload": {
+        "amount": 10000,
+        "nonce": "8fb8feca-d33d-496f-8435-06645c3777eb",
+        "version": 1
+      }
+    },
+    {
+      "operation": "claim",
+      "payload": {
+        "amount": 0,
+        "nonce": "5118dc73-c2d0-4986-9300-661654f08d14",
+        "version": 2
+      }
+    },
+    {
+      "operation": "configure",
+      "payload": {
+        "name": "The Velvet Crown",
+        "minBet": 100,
+        "maxBet": 1000,
+        "nonce": "5c176f38-b95f-457f-9d8e-10cce63a7a9c",
+        "version": 2
+      }
+    },
+    {
+      "operation": "bet",
+      "payload": {
+        "amount": 100,
+        "nonce": "4a6dfefa-7ace-4423-ba88-78ca7ca28c83",
+        "version": 3
+      }
+    },
+    {
+      "operation": "deposit",
+      "payload": {
+        "amount": 500000,
+        "nonce": "d0d2b0f2-1677-445c-a5d8-a28652147bd8",
+        "version": 0
+      }
+    },
+    {
+      "operation": "bet",
+      "payload": {
+        "amount": 100,
+        "selection": "red",
+        "nonce": "de3caa23-be9d-4e76-8c5a-8d5e8d1578d1",
+        "version": 1
+      }
+    },
+    {
+      "operation": "deposit",
+      "payload": {
+        "amount": 500000,
+        "nonce": "d7eda125-d110-4b8f-af20-052371a22494",
+        "version": 0
+      }
+    },
+    {
+      "operation": "bet",
+      "payload": {
+        "amount": 100,
+        "nonce": "169cc75d-968e-40b5-83af-b238bd284120",
+        "version": 1
+      }
+    },
+    {
+      "operation": "stand",
+      "payload": {
+        "round": "72c2318c-29a6-4824-b997-0ffbad5b0120",
+        "revision": 1,
+        "nonce": "248322f2-b2d2-46d0-9a3e-c4abc6873017",
+        "version": 2
+      }
+    }
+  ],
+  "model_quads": {
+    "Block{realmcasino:slot_machine}[facing\u003dnorth,half\u003dupper]": 454,
+    "Block{realmcasino:slot_machine}[facing\u003dnorth,half\u003dlower]": 316,
+    "Block{realmcasino:slot_machine}[facing\u003dsouth,half\u003dupper]": 454,
+    "Block{realmcasino:slot_machine}[facing\u003dsouth,half\u003dlower]": 316,
+    "Block{realmcasino:slot_machine}[facing\u003dwest,half\u003dupper]": 454,
+    "Block{realmcasino:slot_machine}[facing\u003dwest,half\u003dlower]": 316,
+    "Block{realmcasino:slot_machine}[facing\u003deast,half\u003dupper]": 454,
+    "Block{realmcasino:slot_machine}[facing\u003deast,half\u003dlower]": 316,
+    "Block{realmcasino:roulette_table}[facing\u003dnorth]": 732,
+    "Block{realmcasino:roulette_table}[facing\u003dsouth]": 732,
+    "Block{realmcasino:roulette_table}[facing\u003dwest]": 732,
+    "Block{realmcasino:roulette_table}[facing\u003deast]": 732,
+    "Block{realmcasino:blackjack_table}[facing\u003dnorth]": 816,
+    "Block{realmcasino:blackjack_table}[facing\u003dsouth]": 816,
+    "Block{realmcasino:blackjack_table}[facing\u003dwest]": 816,
+    "Block{realmcasino:blackjack_table}[facing\u003deast]": 816
+  },
+  "real_server_rounds": {
+    "slots": {
+      "id": "212b8ea5-1aec-4881-a988-685e09a54396",
+      "game": "slots",
+      "phase": "settled",
+      "stake": 100,
+      "payout": 100,
+      "maxPayout": 10000,
+      "startedAt": 1792341071620,
+      "deadline": 1792341071620,
+      "revision": 1,
+      "outcome": "push",
+      "results": [
+        3,
+        5,
+        3
+      ],
+      "playerCards": [],
+      "dealerCards": [],
+      "canHit": false,
+      "canStand": false
+    },
+    "roulette": {
+      "id": "41bccc43-0f00-4af7-9003-eb064309a229",
+      "game": "roulette",
+      "phase": "settled",
+      "stake": 100,
+      "payout": 0,
+      "maxPayout": 3600,
+      "startedAt": 1792341076765,
+      "deadline": 1792341076765,
+      "revision": 1,
+      "outcome": "lose",
+      "results": [
+        33
+      ],
+      "playerCards": [],
+      "dealerCards": [],
+      "canHit": false,
+      "canStand": false
+    },
+    "blackjack_dealt": {
+      "id": "72c2318c-29a6-4824-b997-0ffbad5b0120",
+      "game": "blackjack",
+      "phase": "active",
+      "stake": 100,
+      "payout": 0,
+      "maxPayout": 250,
+      "startedAt": 1792341086155,
+      "deadline": 1792341146155,
+      "revision": 1,
+      "outcome": "",
+      "results": [],
+      "playerCards": [
+        31,
+        21
+      ],
+      "dealerCards": [
+        23,
+        -1
+      ],
+      "canHit": true,
+      "canStand": true
+    },
+    "blackjack_settled": {
+      "id": "72c2318c-29a6-4824-b997-0ffbad5b0120",
+      "game": "blackjack",
+      "phase": "settled",
+      "stake": 100,
+      "payout": 200,
+      "maxPayout": 250,
+      "startedAt": 1792341086155,
+      "deadline": 1792341146155,
+      "revision": 2,
+      "outcome": "win",
+      "results": [],
+      "playerCards": [
+        31,
+        21
+      ],
+      "dealerCards": [
+        23,
+        17,
+        0,
+        6
+      ],
+      "canHit": false,
+      "canStand": false
+    }
+  }
+}
