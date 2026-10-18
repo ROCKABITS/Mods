@@ -35,6 +35,7 @@ O quadro abaixo distingue as funcionalidades já implementadas das ideias ainda 
 | Realm Notifications | Notificações no ecrã e API comum para os mods de RP. | Implementado na 0.1.0; [guia](realm-notifications/README.md). |
 | Realm Titles | Títulos de personagem atribuídos pelo governante eleito. | Implementado na 0.1.0 Beta; [guia](realm-titles/README.md). |
 | Realm Casino | Casino medieval com máquinas e mesas, banca própria de cada proprietário e dinheiro virtual do Chronicles RP. | Primeira fase implementada, testada e publicada na 0.1.0 Beta. [Guia](realm-casino/README.md). |
+| Laws & Justice | Prisões construídas pelos jogadores, justiça pelo Presidente, mandados, trabalho comunitário e economia judicial, por fases. | 0.1.0 Beta em validação final: prisões/celas, penas online, libertação e administração física. Publicação pendente. [Guia](laws-justice/README.md) · [plano completo](laws-justice/PLANO-COMPLETO.md). |
 | Chronicles RP — Nomes RP | Mostrar o nome da personagem acima da cabeça, no TAB e no chat. | Implementado na 0.5.3; [guia e downloads](chronicles-rp/README.md). |
 | Xaero Map Regions + Xaero's World Map | Desenhar e consultar territórios no mapa. | Solução externa indicada pelo utilizador; não desenvolver um mod próprio. |
 
@@ -72,6 +73,17 @@ O imposto de vendas foi implementado no Crown Ledger e Realm Markets 0.2.0; os r
 - Realm Notifications opcional. Impostos do Crown Ledger e os restantes jogos do guião ficam para fases futuras; esta versão não inclui poker nem jogos entre jogadores.
 
 A **0.1.0 Beta está publicada**, com [ZIP](https://github.com/ROCKABITS/Mods/raw/refs/heads/main/mod-pronto/realm-casino-0.1.0.zip) e [galeria](media/realm-casino/README.md). Os resultados estão em [VALIDACAO.md](realm-casino/VALIDACAO.md) e na proveniência do JAR.
+
+### Laws & Justice — desenvolvimento por versões
+
+A primeira fase **0.1.0 Beta está publicada**. Os [links do ZIP](https://github.com/ROCKABITS/Mods/raw/refs/heads/main/mod-pronto/laws-justice-0.1.0.zip) e [JAR](https://github.com/ROCKABITS/Mods/raw/refs/heads/main/mod-pronto/laws-justice-0.1.0.jar) permitem descarregar a versão testada. O [guia](laws-justice/README.md) explica a utilização e a [galeria](media/laws-justice/README.md) reúne os modelos e menus reais do cliente.
+
+- **0.1.0:** prisões e celas delimitadas pelo administrador em construções dos jogadores, penas que contam apenas online, regresso à prisão após morte/teleporte e libertação automática. Quatro blocos — Porta de Cela, Grades de Prisão, Fechadura Reforçada e Controlo da Prisão — e um Agrimensor Prisional. Menus físicos; só administradores autorizam decisões nesta fase. Chronicles e Notifications são opcionais para nomes RP e avisos.
+- **0.2.0:** Presidente eleito e empossado pelo Realm Council como juiz, Mesa de Justiça, algemas e mandados físicos validados no servidor. Não criar cargos adicionais de juiz, guarda ou chefe da prisão. O mandato determina a autoridade, mantendo acesso administrativo de emergência.
+- **0.3.0:** Trabalho Comunitário opcional, zonas de mina, horta, oficina, armazém e pátio, postos e entregas validadas. Redução máxima padrão de 50% da pena original, com progresso persistente e prevenção de repetição de blocos/entregas ou materiais de criativo.
+- **0.4.0:** multas, fianças, registos criminais, documentos e integrações adicionais. Carteira do Chronicles ou esmeraldas quando ausente; pagamentos para Crown Ledger quando instalado. A falta de dinheiro não gera automaticamente uma nova pena.
+
+**A prisão é sempre construída pelos jogadores.** O mod fornece blocos, seleção de áreas e gestão, sem gerar edifícios. Penas e dados persistem em mundos dedicados e LAN; não há contagem offline. O [plano completo das 13 secções](laws-justice/PLANO-COMPLETO.md) conserva os requisitos do utilizador, incluindo as seis tarefas de exemplo, as zonas, os mandados, as permissões e as integrações futuras.
 
 ### Chronicles RP — Nomes RP
 
