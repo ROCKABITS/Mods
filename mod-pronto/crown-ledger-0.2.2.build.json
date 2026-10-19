@@ -1,0 +1,53 @@
+{
+  "unit_tests": 52,
+  "standalone_native_tests": 25,
+  "integrated_native_tests": 25,
+  "actual_client_validation": true,
+  "live_financial_integration_via_laws_justice": true,
+  "version": "0.2.2",
+  "source_commit": "86b93988a7ef5bfe9736f56085c6a861adddb66e",
+  "tested_run": "https://github.com/ROCKABITS/Mods/actions/runs/39253815267",
+  "jar_sha256": "a91afc03da4aae23cb584911bdcd88cf3b5a4fcf91bcc13b683ef6405fe6dab5",
+  "zip_sha256": "ffacf2862f3b00e9415669f449aa6125e27218a6b05dd681fe005c1dc1cc2e71",
+  "project_versions": {
+    "laws-justice": "0.4.0",
+    "crown-ledger": "0.2.2"
+  },
+  "runtime_dependency_checksums": {
+    "origins-neoforge-1375372-8758523.jar": "93383233a047a9838af067b64452964183cc4fe9f2d9c269ffb253141136caf6",
+    "jupiter-1072905-7738312.jar": "95af332af250f97fe2d9d288fe6b2057c266673a388348bf33756b0b693ace15",
+    "origins-classes-neoforge-1536425-8758587.jar": "14fcc794ae3fc66f752961f7df480356bb5b7cb01d78a2670e9f1e9d18bafb67"
+  },
+  "companions": {
+    "contracts-bounties-0.3.2.jar": "2ecf125a188f042f8d6c5011af5e1ff2cc5974925835bcd2cc0180f75d07ff15",
+    "realmcouncil-0.2.2.jar": "0a77af87a5c4e36f55ad12578662834886a7986864896a908a3dc4217e2c19cb",
+    "realm-markets-0.2.1.jar": "bfb1e73186015ab94a86c841abba1df02bf1b5851a65771e622234624b806bb1",
+    "realm-rewards-0.1.2.jar": "ab8efe3bd9a7b24a4f725bf6dfe1f07dec0b88ecfaac91533b57c45b11cb7bcb",
+    "realm-notifications-0.1.0.jar": "5aa70ac5a7696ce626ffa40e2e530038e90c06819dbeea6f43be70d42310822a",
+    "realm-titles-0.1.0.jar": "65d854ffd92805f6e8cb0891454f80ba5a6f33394cc0375cf23f64098af2bd16",
+    "realm-identity-0.1.1.jar": "4096147ac74847d31ee733291ad85d8d154ff7340e8d6f0874dd7cb7364823b0",
+    "realm-casino-0.1.0.jar": "8f4410f7469da0c60ec35b97976aae62f31873c76459c52c46f7717f6526587b",
+    "laws-justice-0.4.0.jar": "78c32b0c3acc8930ffd508c9bb44cc98b794a4b87900438b19ab812c21d36f7b"
+  },
+  "native_markers": [
+    "CROWN_INCOME_API_PASSED"
+  ],
+  "screenshots": {
+    "crown-chest-minecraft.png": "949ea81ee9c562f3427f8da26ad6ea821e51dd01c34edd519c39f4ff22c8b187",
+    "crown-ledger-overview.png": "b5f087cc007118855a2d1c894d4c53db68bea7ea56ff95c26e1d79d8c7606770",
+    "crown-ledger-policy.png": "3d5eb7ee2bb8eb9af883e6374bde6dbd8a1a72a055865b7d1b40344863bff5f8"
+  },
+  "client_interface_data": "Demonstration data for Crown menu screenshots; actual host wallet debits and Crown receipts tested in the Laws & Justice integrated client",
+  "financial_integration": {
+    "real_bail_payment": true,
+    "real_fine_payment": true,
+    "real_crown_income_receipts": true,
+    "real_lan_host_payment_persistence": true,
+    "finance_initial_wallet_cents": 10000,
+    "finance_after_payments_wallet_cents": 5500,
+    "finance_initial_crown_cents": 0,
+    "finance_after_payments_crown_cents": 4500
+  },
+  "release_phase": "4: complete prison, court, warrant, work, fine, bail and public record systems with backed, durable, receipt-based money settlement",
+  "judicial_authority": "Live elected and sworn Realm Council President; explicitly audited administrator emergency authority; no additional roles"
+}
