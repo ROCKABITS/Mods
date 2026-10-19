@@ -71,7 +71,7 @@ public final class JusticeService {
     public static void open(ServerPlayer player,BlockPos anchor) {
         thread(player);
         if(!physical(player,anchor,dimension(player)))return;
-        CourtService.closeSession(player);
+        CourtService.closeSession(player);WorkService.closeSession(player);
         RuntimeState r=runtime(player.getServer());r.sessions.put(player.getUUID(),new Session(player,anchor));
         send(player);
     }
@@ -156,6 +156,7 @@ public final class JusticeService {
             data.replace(next);s.nonce=UUID.randomUUID();s.message="lawsjustice.message.saved";send(p);
         }catch(RuntimeException ex){s.error=errorKey(ex);send(p);}
     }
+    public static Area selectedArea(ServerPlayer p){thread(p);if(!administrator(p))throw failure("permission");Selection s=runtime(p.getServer()).selections.get(p.getUUID());if(s==null||s.a()==null||s.b()==null||!s.dimension().equals(dimension(p)))throw failure("selection");return Area.between(s.dimension(),s.a(),s.b());}
     private static Selection selection(ServerPlayer p){Selection s=runtime(p.getServer()).selections.get(p.getUUID());if(s==null||s.a()==null||s.b()==null||s.anchor()==null||!s.dimension().equals(dimension(p)))throw failure("selection");return s;}
     private static Prison prison(JusticeLedger ledger,UUID id){Prison p=ledger.prisons().get(id);if(p==null)throw failure("prison_missing");return p;}
     private static Cell cell(Prison p,UUID id){return p.cells().stream().filter(c->c.id().equals(id)).findFirst().orElseThrow(()->failure("cell_missing"));}
@@ -271,7 +272,7 @@ public final class JusticeService {
     public static boolean canBreak(ServerPlayer p,BlockPos at){return !imprisoned(p)&&!CourtService.restricted(p);}
     public static boolean canPlace(ServerPlayer p,BlockPos at){return canBreak(p,at);}
     public static boolean canUseDoor(ServerPlayer p,BlockPos at){return !imprisoned(p)&&!CourtService.restricted(p);}
-    public static boolean canInteract(ServerPlayer p,BlockPos at){if(!imprisoned(p))return true;var b=p.level().getBlockState(at).getBlock();return b instanceof PrisonControlBlock||b instanceof ReinforcedLockBlock||b instanceof pt.lawsjustice.block.JusticeDeskBlock;}
+    public static boolean canInteract(ServerPlayer p,BlockPos at){if(!imprisoned(p))return true;var b=p.level().getBlockState(at).getBlock();return b instanceof PrisonControlBlock||b instanceof ReinforcedLockBlock||b instanceof pt.lawsjustice.block.JusticeDeskBlock||b instanceof pt.lawsjustice.block.WorkStationBlock;}
 
     private static void keys(JsonObject o,String... allowed){Set<String> keys=Set.of(allowed);if(!keys.containsAll(o.keySet()))throw failure("request");}
     private static String text(JsonObject o,String k,int max){JsonElement v=o.get(k);if(v==null||!v.isJsonPrimitive()||!v.getAsJsonPrimitive().isString())throw failure("request");String t=v.getAsString().strip();if(t.isEmpty()||t.length()>max||t.codePoints().anyMatch(Character::isISOControl))throw failure("request");return t;}

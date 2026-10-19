@@ -29,6 +29,7 @@ public final class JusticeLedger {
     public static final String SENTENCED = "SENTENCED";
     public static final String COMPLETED = "COMPLETED";
     public static final String EMERGENCY_RELEASE = "EMERGENCY_RELEASE";
+    public static final String WORK_REDUCTION = "WORK_REDUCTION";
 
     public record Point(int x, int y, int z) {
         public Point {
@@ -128,10 +129,11 @@ public final class JusticeLedger {
             text(playerName, 64, "name"); text(authorityName, 64, "name"); text(reason, 300, "reason");
             require(at >= 0, "date");
             ticks(originalTicks, servedTicks, reductionTicks);
-            require(SENTENCED.equals(action) || COMPLETED.equals(action) || EMERGENCY_RELEASE.equals(action), "action");
-            require(!SENTENCED.equals(action) || servedTicks == 0, "history");
-            require(!COMPLETED.equals(action) || servedTicks == originalTicks, "history");
-            require(!EMERGENCY_RELEASE.equals(action) || servedTicks < originalTicks, "history");
+            require(SENTENCED.equals(action) || COMPLETED.equals(action) || EMERGENCY_RELEASE.equals(action) || WORK_REDUCTION.equals(action), "action");
+            require(!SENTENCED.equals(action) || servedTicks == 0 && reductionTicks == 0, "history");
+            require(!COMPLETED.equals(action) || servedTicks + reductionTicks == originalTicks, "history");
+            require(!EMERGENCY_RELEASE.equals(action) || servedTicks + reductionTicks < originalTicks, "history");
+            require(!WORK_REDUCTION.equals(action) || reductionTicks > 0, "history");
         }
     }
 
@@ -270,6 +272,20 @@ public final class JusticeLedger {
                 append(decision(updated, updated.authority(), updated.authorityName(), COMPLETED, updated.reason(), now)));
     }
 
+    /** Only validated, completed community work calls this operation. Clock and reduction remain independent. */
+    public JusticeLedger reduce(UUID player,long requestedTicks,int maximumPercent,long now) {
+        notNull(player);require(requestedTicks>0,"work_reward");require(maximumPercent>=0&&maximumPercent<=100,"work_cap");require(now>=0,"date");
+        Sentence previous=active.get(player);state(previous!=null,"sentence_missing");
+        long budget=Math.max(0,previous.originalTicks()*maximumPercent/100-previous.reductionTicks());
+        long amount=Math.min(Math.min(requestedTicks,budget),previous.remainingTicks());state(amount>0,"work_cap");
+        Sentence updated=new Sentence(previous.id(),previous.player(),previous.playerName(),previous.prison(),previous.cell(),previous.authority(),previous.authorityName(),previous.reason(),previous.issuedAt(),previous.originalTicks(),previous.servedTicks(),previous.reductionTicks()+amount,previous.revision()==Long.MAX_VALUE?Long.MAX_VALUE:previous.revision()+1);
+        LinkedHashMap<UUID,Sentence> changed=new LinkedHashMap<>(active);
+        List<Decision> decisions=append(decision(updated,updated.authority(),updated.authorityName(),WORK_REDUCTION,"Community service",now));
+        if(updated.remainingTicks()>0)changed.put(player,updated);
+        else {changed.remove(player);decisions=append(decisions,decision(updated,updated.authority(),updated.authorityName(),COMPLETED,updated.reason(),now));}
+        return new JusticeLedger(this,changed,decisions);
+    }
+
     public JusticeLedger release(UUID player, UUID actor, String actorName, String reason, long now) {
         notNull(player); notNull(actor); text(actorName, 64, "name"); text(reason, 300, "reason"); require(now >= 0, "date");
         Sentence sentence = active.get(player);
@@ -287,11 +303,11 @@ public final class JusticeLedger {
         state(active.values().stream().noneMatch(value -> value.prison().equals(prison)), "prison_active");
     }
 
-    private List<Decision> append(Decision decision) {
-        ArrayList<Decision> result = new ArrayList<>(Math.min(MAX_HISTORY, history.size() + 1));
-        result.addAll(history.subList(history.size() == MAX_HISTORY ? 1 : 0, history.size()));
-        result.add(decision);
-        return result;
+    private List<Decision> append(Decision decision) { return append(history,decision); }
+    private static List<Decision> append(List<Decision> previous,Decision decision) {
+        ArrayList<Decision> result = new ArrayList<>(Math.min(MAX_HISTORY, previous.size() + 1));
+        result.addAll(previous.subList(previous.size() == MAX_HISTORY ? 1 : 0, previous.size()));
+        result.add(decision);return result;
     }
 
     private Decision decision(Sentence sentence, UUID authority, String authorityName, String action, String reason, long now) {
@@ -318,7 +334,11 @@ public final class JusticeLedger {
         for (Decision entry : history) {
             notNull(entry);
             require(decisions.add(entry.id()), "duplicate");
-            if (SENTENCED.equals(entry.action())) {
+            if (WORK_REDUCTION.equals(entry.action())) {
+                require(!finished.containsKey(entry.sentence()),"history");
+                Decision start=started.get(entry.sentence());
+                if(start!=null)require(start.player().equals(entry.player())&&start.playerName().equals(entry.playerName())&&start.originalTicks()==entry.originalTicks()&&start.authority().equals(entry.authority()),"history");
+            } else if (SENTENCED.equals(entry.action())) {
                 require(!finished.containsKey(entry.sentence()) && started.putIfAbsent(entry.sentence(), entry) == null, "history");
                 require(openByPlayer.putIfAbsent(entry.player(), entry) == null, "history");
                 Sentence sentence = activeIds.get(entry.sentence());
@@ -349,7 +369,7 @@ public final class JusticeLedger {
 
     private static void ticks(long original, long served, long reduction) {
         require(original >= 1 && original <= MAX_SENTENCE_TICKS && served >= 0 && served <= original, "ticks");
-        require(reduction == 0, "reduction");
+        require(reduction >= 0 && reduction <= original - served, "reduction");
     }
 
     private static long next(long revision) {

@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    " H ",
+    "WBW",
+    " L "
+  ],
+  "key": {
+    "H": {
+      "item": "minecraft:wooden_hoe"
+    },
+    "W": {
+      "item": "minecraft:wheat"
+    },
+    "B": {
+      "item": "minecraft:barrel"
+    },
+    "L": {
+      "item": "minecraft:oak_log"
+    }
+  },
+  "result": {
+    "id": "lawsjustice:agricultural_post",
+    "count": 1
+  }
+}

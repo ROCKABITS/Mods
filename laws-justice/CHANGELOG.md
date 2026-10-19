@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.3.0 — Beta, phase three
+
+- Added seven original work blocks: Work Board, Delivery Box, Mining Post, Agricultural Post, Workshop Table, Maintenance Post and Warehouse Post, plus a server-issued Sealed Work Pouch.
+- Added optional mining, farming, carpentry, maintenance, smithing and transport tasks, with administrator-configured objectives, rewards and a default 50% total sentence-reduction cap.
+- Added surveyed prison work zones, finite commissioned world resources, mature-crop and tool checks, safe manual resource renewal and single-use work provenance.
+- Added timed workshop and brush actions that require the prisoner to remain nearby. Normal online sentence time continues while working.
+- Added sealed deliveries bound to the correct task, prisoner, sentence and zone. External inventory, creative items and copied bags cannot create work progress.
+- Committed work completion, actual reduction credits and custody changes atomically, including automatic release when work completes the remaining sentence.
+- Added work menus, progress displays, recent records, recipes and Portuguese/English translations. Existing prison and elected-court features are preserved.
+- Added strict world-format migration from phases one and two, resource/credit persistence, rollback and replay checks, plus actual-client task and furniture validation.
+
 ## 0.2.0 — Beta, phase two
 
 - Added an original 3D Justice Desk with scales, gavel and case ledger, royal handcuffs and sealed warrant items, recipes and Portuguese/English translations.

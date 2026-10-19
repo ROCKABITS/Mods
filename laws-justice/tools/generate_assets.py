@@ -751,3 +751,203 @@ for name,pattern,keys in (
 for tag in ('mineable/pickaxe','needs_stone_tool'):
     write(RES/f'data/minecraft/tags/block/{tag}.json',{'replace':False,'values':blocks+['lawsjustice:justice_desk']})
 print(json.dumps({'original_cuboids':COUNTS,'original_textures':len(TEXTURES)-1,'door_variants':len(variants),'block_model_files':len(list((ASSETS/'models/block').glob('*.json'))),'item_model_files':8,'crafting_recipes':7,'warrant_craftable':False},indent=2))
+
+# Version 0.3: original prison workshops, safe delivery furniture and sealed work pouch.
+# This seed and appended texture dictionary preserve every v0.1/v0.2 resource.
+RNG=random.Random(2203102026)
+for name,base in (('work_green',(58,83,58)),('work_canvas',(183,159,111)),('work_roof',(83,103,76)),('work_ore',(101,103,103)),('work_grain',(192,156,68))):
+    im=noise((32,32),base,4);d=ImageDraw.Draw(im)
+    if name=='work_roof':
+        for y in (0,8,16,24):
+            d.line((0,y,31,y),fill=shade(base,-26))
+            for x in range(-8,40,8):d.line((x+(y%16)//2,y,x+(y%16)//2,y+7),fill=shade(base,-17))
+            d.line((1,y+1,31,y+1),fill=shade(base,16))
+    elif name=='work_ore':
+        for x,y in ((4,3),(18,5),(10,15),(25,21),(3,26),(20,30)):
+            d.rectangle((x,y,min(31,x+3),min(31,y+2)),fill=(181,140,91));d.point((x,y),fill=(217,183,120))
+    else:
+        for y in range(0,32,4):d.line((0,y,31,y),fill=shade(base,-8))
+        for x in range(0,32,4):d.line((x,0,x,31),fill=shade(base,7))
+        d.rectangle((0,0,31,31),outline=shade(base,-30))
+    save(name,im)
+im=noise((32,32),PAPER,2);d=ImageDraw.Draw(im);d.rectangle((1,1,30,30),outline=(169,138,83))
+for y,length in ((7,19),(11,17),(15,20),(19,12),(24,16)):d.line((6,y,length+5,y),fill=(119,100,68),width=1)
+d.rectangle((22,20,27,25),fill=(81,109,65));d.line((23,23,24,24,27,21),fill=(223,218,162));save('work_notice',im)
+WORK_TEXTURES=('work_green','work_canvas','work_roof','work_ore','work_grain','work_notice')
+TEXTURES={**TEXTURES,**{name:'lawsjustice:block/'+name for name in WORK_TEXTURES}}
+
+
+def rivets(x0,y0,z,x1,y1):
+    for x in (x0,x1):
+        for y in (y0,y1):box([x,y,z],[x+.28,y+.28,z+.2],'steel','work_square_iron_rivet')
+
+
+def crate(x,y,z,size=5,h=4):
+    box([x,y,z],[x+size,y+h,z+size],'oak','work_finite_supply_crate')
+    for yy in (y+.3,y+h-.6):
+        box([x-.08,yy,z-.08],[x+size+.08,yy+.3,z+.12],'iron_dark','work_crate_front_iron_band')
+        box([x-.08,yy,z+size-.12],[x+size+.08,yy+.3,z+size+.08],'iron_dark','work_crate_back_iron_band')
+        for xx in (x-.08,x+size-.12):box([xx,yy,z+.12],[xx+.2,yy+.3,z+size-.12],'iron_dark','work_crate_side_iron_band')
+    box([x+size*.4,y+h+.02,z],[x+size*.6,y+h+.17,z+size],'work_canvas','work_crate_linen_binding')
+
+
+def post_base():
+    for x in (2,11.5):
+        box([x,0,3],[x+2.5,.7,13],'stone_dark','work_station_foundation')
+        box([x+.3,.7,3.3],[x+2.2,5,12.7],'oak','work_station_leg')
+        for y in (1,4.4):box([x+.1,y,3.1],[x+2.4,y+.32,12.9],'iron','work_station_leg_iron_collar')
+    box([1.2,5,2],[14.8,5.5,14],'oak_dark','work_supply_tray_underlay')
+    box([1.4,5.5,2.2],[14.6,6,13.8],'oak','work_supply_tray')
+    for x in (2.1,12.3):box([x,6,8.4],[x+1.6,15.2,10],'oak_dark','work_post_raised_sign_upright')
+    box([2,11,8],[14,15,8.5],'oak','work_public_direction_sign')
+    for y in (11,14.6):box([1.9,y,7.8],[14.1,y+.4,8.6],'bronze','work_sign_moulded_edge')
+    for x in (2.3,13):box([x,11.45,7.65],[x+.35,14.5,7.85],'iron','work_sign_corner_ironwork')
+    box([4,11.45,7.7],[12,14.5,7.95],'work_green','work_green_sign_inset')
+
+
+ELEMENTS=[]
+for x in (1.3,12.5):
+    box([x,0,5],[x+2.2,.6,11],'stone_dark','board_stone_shoe')
+    box([x+.15,.6,5.25],[x+2.05,14.7,7.45],'oak','board_carved_upright')
+    for y in (1,5.3,12.8):box([x+.03,y,5.13],[x+2.17,y+.4,7.57],'iron','board_forged_iron_collar')
+box([2.8,1.9,6.2],[13.2,2.6,7.1],'oak_dark','board_lower_crossbar')
+box([2.8,4.9,6.25],[13.2,13.8,7.2],'oak_dark','board_shadow_recess')
+for y in (5,7.2,9.4,11.6):box([3,y,5.97],[13,y+2.03,6.3],'oak','board_horizontal_backing_plank')
+for x in (3.1,12.5):box([x,5.15,5.75],[x+.35,13.6,6.12],'bronze','board_bronze_vertical_trim')
+for y in (5.15,13.2):box([3.1,y,5.75],[12.85,y+.35,6.12],'bronze','board_bronze_horizontal_trim')
+for x,y,w,h in ((4,8.2,3.2,4),(8.2,7,3.8,4.2),(5,5.65,2.4,2.5)):
+    box([x-.07,y-.06,5.69],[x+w+.08,y+h+.1,5.87],'work_canvas','board_curling_parchment_edge')
+    box([x,y,5.53],[x+w,y+h,5.73],'work_notice','board_pinned_task_parchment',north='work_notice')
+    box([x+w/2-.2,y+h-.35,5.3],[x+w/2+.2,y+h+.03,5.64],'steel','board_task_iron_pin')
+for i in range(8):
+    z=3.1+i*1.0;up=15.5-abs(i-3.5)*.37
+    box([.45,up-.45,z],[15.55,up,z+1.05],'work_roof','board_moss_green_tiled_roof')
+    box([.42,up-.48,z],[15.58,up-.32,z+.13],'oak_dark','board_roof_tile_shadow')
+box([.2,14.1,3.05],[15.8,14.48,3.48],'bronze','board_weathered_roof_front_lip')
+box([6.4,13.85,3.01],[9.6,14.3,3.2],'justice_crest','board_justice_crest',north='justice_crest')
+publish('work_board',ELEMENTS)
+
+ELEMENTS=[]
+box([1,0,1],[15,.65,15],'stone_dark','delivery_coffer_stone_plinth')
+box([1.4,.65,1.4],[14.6,9.3,14.6],'oak_dark','delivery_deep_wooden_coffer')
+for x in (1.7,5.4,9.1,12.8):box([x,1,1.23],[x+1.5,8.8,1.48],'oak','delivery_carved_front_stave')
+for z in (1.7,5.4,9.1,12.8):
+    for x in (1.22,14.52):box([x,1,z],[x+.26,8.8,z+1.5],'oak','delivery_carved_side_stave')
+for y in (1,8.2):
+    box([1.1,y,1.1],[14.9,y+.55,1.5],'iron','delivery_front_reinforcing_strap')
+    box([1.1,y,14.5],[14.9,y+.55,14.9],'iron','delivery_back_reinforcing_strap')
+    for x in (1.1,14.5):box([x,y,1.5],[x+.4,y+.55,14.5],'iron','delivery_side_reinforcing_strap')
+rivets(1.8,1.2,.99,13.8,8.4)
+box([1,9.3,1],[15,9.65,15],'bronze','delivery_lid_bronze_lip')
+box([1.2,9.65,1.2],[14.8,10.3,14.8],'oak','delivery_bevelled_lid')
+for x in (3,11.8):
+    box([x,10.3,1.2],[x+1.2,10.55,14.8],'iron','delivery_lid_forged_band')
+    box([x+.2,9.3,14.8],[x+1,10.6,15.15],'steel','delivery_heavy_hinge')
+box([6.2,5.5,.85],[9.8,9.25,1.35],'bronze','delivery_clasp_plate')
+box([6.7,6,.6],[9.3,8.6,.97],'iron_dark','delivery_clasp_shadow')
+box([7.55,6.7,.43],[8.45,8.2,.7],'steel','delivery_clasp_keyhole')
+box([5.1,10.32,5],[10.9,10.55,11],'work_canvas','delivery_sealed_parcel')
+box([7.6,10.55,5],[8.4,10.75,11],'work_green','delivery_parcel_tie')
+seal(7.1,10.75,7.3,1.7)
+publish('delivery_box',ELEMENTS)
+
+ELEMENTS=[];post_base()
+crate(3,6,3,4.3,3)
+for x,y,z in ((4,9,4),(6,9.3,5.2),(5.4,9,3.5)):
+    box([x,y,z],[x+1.5,y+1,z+1.5],'work_ore','mine_crate_finite_ore')
+    box([x+.2,y+1,z+.2],[x+1.3,y+1.25,z+1.3],'stone','mine_ore_bevel')
+box([7.4,11.7,7.32],[8.2,14.1,7.63],'oak','mine_sign_pickaxe_handle')
+for x,y in ((5.4,13.5),(6.3,13.85),(7.3,14),(8.3,13.85),(9.3,13.5)):
+    box([x,y,7.17],[x+1.2,y+.55,7.55],'steel','mine_sign_sculpted_pickaxe')
+box([10.3,6.2,3],[12.8,6.9,6.2],'iron_dark','mine_tool_sharpening_stone')
+box([10.55,6.9,3.25],[12.55,7.2,5.95],'stone','mine_honed_whetstone')
+publish('mining_post',ELEMENTS)
+
+ELEMENTS=[];post_base()
+box([2.5,6,3],[9.8,7.6,7.4],'oak','farm_raised_seedling_tray')
+box([2.9,7.6,3.4],[9.4,7.9,7],'oak_dark','farm_tray_dark_soil')
+for x,z in ((3.8,4.4),(5.5,5.8),(7.8,4.8)):
+    box([x,7.9,z],[x+.2,11.8,z+.22],'work_green','farm_wheat_stem')
+    for side in (-1,1):
+        for k in range(3):box([x+(side<0)*-.4,9.8+k*.55,z-.12],[x+.2+(side>0)*.4,10.25+k*.55,z+.35],'work_grain','farm_ripe_grain_ear')
+box([10.5,6.1,3],[13,8,6],'work_canvas','farm_linen_seed_sack')
+box([10.65,8,3.2],[12.85,8.6,5.8],'work_canvas','farm_folded_seed_sack')
+box([11.35,8.55,3.5],[12.15,8.8,5.5],'work_green','farm_seed_sack_tie')
+for i in range(3):box([6.1+i*.9,12+i*.35,7.25],[6.5+i*.9,14.5,7.65],'work_grain','farm_sign_wheat_emblem')
+publish('agricultural_post',ELEMENTS)
+
+ELEMENTS=[]
+for x,z in ((1,1),(12.5,1),(1,12.5),(12.5,12.5)):
+    box([x,0,z],[x+2.5,.6,z+2.5],'iron_dark','workshop_forged_foot')
+    box([x+.3,.6,z+.3],[x+2.2,8.5,z+2.2],'oak','workshop_square_leg')
+    box([x+.15,6.7,z+.15],[x+2.35,7.1,z+2.35],'iron','workshop_leg_collar')
+box([1.5,2,2],[14.5,2.7,14],'oak_dark','workshop_supply_shelf')
+crate(3,2.7,6,4.4,3.5)
+box([.7,8.5,.7],[15.3,9.1,15.3],'iron_dark','workshop_strong_underlay')
+for z in (1,4.6,8.2,11.8):box([.9,9.1,z],[15.1,9.8,z+3.3],'oak','workshop_thick_workbench_plank')
+for x in (1.4,14.1):
+    for z in (1.4,14.1):box([x,9.8,z],[x+.45,9.96,z+.45],'steel','workshop_recessed_fastener')
+box([2,9.8,8],[7,10.45,12],'iron_dark','workshop_small_anvil_base')
+box([3,10.45,9],[5.8,12.2,11],'iron','workshop_small_anvil_waist')
+box([1.5,12.2,8.1],[7,13.1,11.9],'steel','workshop_anvil_working_face')
+box([7,12.25,8.9],[8.4,12.8,11.1],'iron','workshop_tapered_anvil_horn')
+box([8.4,12.35,9.4],[9.2,12.65,10.6],'steel','workshop_anvil_horn_tip')
+box([9.6,9.8,3.1],[13,11.7,6.8],'oak_dark','workshop_timber_in_vice')
+for x in (9.2,12.9):box([x,9.8,2.8],[x+.6,12,7.1],'iron','workshop_vice_jaw')
+box([12.8,10.4,4.5],[15.1,10.85,5.1],'steel','workshop_vice_screw')
+box([14.7,9.7,4.65],[15.1,12,5],'iron','workshop_vice_cross_handle')
+box([3,9.9,3],[7.9,10.45,4.1],'oak','workshop_mallet_handle')
+box([6.7,10,2.1],[8.3,11.3,5.1],'iron','workshop_forged_mallet_head')
+box([2.5,4,1],[6.9,6.9,1.25],'work_green','workshop_carpenters_emblem')
+rivets(2.7,4.2,.85,6.2,6.2)
+publish('workshop_table',ELEMENTS)
+
+ELEMENTS=[];post_base()
+box([3,6,3],[7.2,8.8,7.2],'iron_dark','maintenance_bucket_shadow')
+for x in (2.8,6.7):box([x,6.2,2.8],[x+.55,9,7.4],'oak','maintenance_bucket_side_stave')
+for z in (2.8,6.8):box([3.35,6.2,z],[6.7,9,z+.55],'oak','maintenance_bucket_front_stave')
+for y in (6.5,8.4):
+    for x in (2.65,7.1):box([x,y,2.7],[x+.2,y+.35,7.45],'iron','maintenance_bucket_iron_side_hoop')
+    for z in (2.65,7.25):box([2.85,y,z],[7.1,y+.35,z+.2],'iron','maintenance_bucket_iron_front_hoop')
+box([3.4,8.3,3.4],[6.6,8.4,6.8],'work_green','maintenance_bucket_water')
+box([10,6,4],[10.55,15.5,4.55],'oak','maintenance_broom_handle')
+box([8.8,6,3.6],[11.8,8,5.3],'work_grain','maintenance_bound_broom_head')
+for xx in (9,9.5,10,10.5,11):box([xx,5.7,3.5],[xx+.18,7.3,5.4],'work_canvas','maintenance_separate_broom_bristle')
+box([8.9,7.7,3.4],[11.7,8.15,5.5],'work_green','maintenance_broom_linen_binding')
+for i in range(2):box([6.1+i*1.5,12,7.2],[7+i*1.5,14,7.6],'work_canvas','maintenance_sign_clean_linen')
+publish('maintenance_post',ELEMENTS)
+
+ELEMENTS=[];post_base()
+crate(2.4,6,2.7,4.4,3.4);crate(8.3,6,3.6,4.5,3.7)
+for x,y,z in ((3.5,9.6,3.9),(9.5,10,4.8)):seal(x,y,z,1.5)
+box([5.8,12.1,7.1],[9.9,13.3,7.6],'work_canvas','warehouse_sign_sealed_parcel')
+box([7.4,12,6.95],[8.2,13.4,7.2],'work_green','warehouse_sign_parcel_tie')
+box([6.5,14,7],[9.1,14.3,7.4],'bronze','warehouse_sign_route_arrow')
+box([9,13.7,7],[9.5,14.6,7.4],'bronze','warehouse_sign_route_arrowhead')
+publish('warehouse_post',ELEMENTS)
+
+ELEMENTS=[]
+box([3,2.5,3],[13,9.5,12.5],'work_canvas','sealed_work_pouch_body')
+box([3.5,2,3.5],[12.5,2.6,12],'oak_dark','sealed_work_pouch_leather_bottom')
+box([3.4,9.5,3.4],[12.6,10.3,12.1],'work_canvas','sealed_work_pouch_folded_top')
+for z in (4.7,9.8):box([2.8,3,z],[13.2,10.5,z+.4],'oak_dark','sealed_work_pouch_cross_tie')
+box([7.6,2.4,2.8],[8.4,10.6,12.7],'work_green','sealed_work_pouch_green_binding')
+seal(7,10.6,6.7,2)
+for x in (5.7,9.9):box([x,10.25,7],[x+.45,12,7.5],'oak_dark','sealed_work_pouch_handle_side')
+box([5.7,11.6,7],[10.35,12.1,7.5],'oak_dark','sealed_work_pouch_handle')
+check_bounds(ELEMENTS);item('work_bundle',ELEMENTS);COUNTS['work_bundle']=len(ELEMENTS)
+
+WORK_RECIPES=(
+('work_board',['SPS','LHL','S S'],{'S':'stick','P':'paper','L':'oak_log','H':'honeycomb'}),
+('delivery_box',['IPI','IBI','IPI'],{'I':'iron_ingot','P':'oak_planks','B':'barrel'}),
+('mining_post',[' P ','SBS',' L '],{'P':'wooden_pickaxe','S':'cobblestone','B':'barrel','L':'oak_log'}),
+('agricultural_post',[' H ','WBW',' L '],{'H':'wooden_hoe','W':'wheat','B':'barrel','L':'oak_log'}),
+('workshop_table',['ICI','PAP','P P'],{'I':'iron_ingot','C':'crafting_table','A':'anvil','P':'oak_planks'}),
+('maintenance_post',[' B ','PUP',' P '],{'B':'brush','U':'bucket','P':'oak_planks'}),
+('warehouse_post',['PCP','PBP','PPP'],{'P':'oak_planks','C':'chest','B':'barrel'}))
+for name,pattern,keys in WORK_RECIPES:
+    write(RES/f'data/lawsjustice/recipe/{name}.json',{'type':'minecraft:crafting_shaped','category':'misc','pattern':pattern,'key':{k:{'item':'minecraft:'+v} for k,v in keys.items()},'result':{'id':'lawsjustice:'+name,'count':1}})
+    write(RES/f'data/lawsjustice/advancement/recipes/decorations/{name}.json',{'parent':'minecraft:recipes/root','criteria':{'has_planks':{'trigger':'minecraft:inventory_changed','conditions':{'items':[{'items':['minecraft:oak_planks']}]}},'has_recipe':{'trigger':'minecraft:recipe_unlocked','conditions':{'recipe':'lawsjustice:'+name}}},'requirements':[['has_planks','has_recipe']],'rewards':{'recipes':['lawsjustice:'+name]}})
+for tag in ('mineable/pickaxe','needs_stone_tool'):
+    write(RES/f'data/minecraft/tags/block/{tag}.json',{'replace':False,'values':blocks+['lawsjustice:justice_desk']+['lawsjustice:'+r[0] for r in WORK_RECIPES]})
+print(json.dumps({'work_models':{k:v for k,v in COUNTS.items() if k.startswith(('work_','delivery','mining','agricultural','maintenance','warehouse'))},'work_recipes':len(WORK_RECIPES),'work_bundle_craftable':False},indent=2))

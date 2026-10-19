@@ -1,46 +1,44 @@
-# Validação — Laws & Justice 0.2.0 Beta
+# Validação — Laws & Justice 0.3.0 Beta
 
-[Execução aprovada](https://github.com/ROCKABITS/Mods/actions/runs/39215840002), código `9bf540a3be4847c9905153398cf2207d9f0e0122`. JAR e imagens publicados no commit `f6e1575`. Os testes locais e a repetição independente no GitHub Actions passaram.
+A fase três foi compilada e validada localmente com Java 21, Minecraft 1.21.1 e NeoForge 21.1.256. A publicação do JAR fica condicionada à repetição dos testes no GitHub Actions; a execução e os checksums serão registados depois dessa publicação.
 
-| Verificação | Resultado |
+| Verificação local | Resultado |
 | --- | ---: |
-| Testes unitários | 85, sem falhas ou ignorados |
-| GameTests independentes | 73 |
-| GameTests com dez mods companheiros | 73 |
-| Cliente Minecraft real integrado | Aprovado, 20 capturas |
+| Testes unitários | 106, sem falhas ou ignorados |
+| GameTests independentes | 95 |
+| GameTests com dez mods companheiros | 95 |
+| Cliente Minecraft real integrado | Aprovado, 35 capturas funcionais |
 
-A [validação arquivada da 0.1](VALIDACAO-0.1.0.md) conserva a proveniência da base publicada.
+A galeria de publicação acrescenta dois enquadramentos aproximados dos postos. As validações publicadas das fases [0.1](VALIDACAO-0.1.0.md) e [0.2](VALIDACAO-0.2.0.md) conservam a proveniência das versões anteriores.
 
-## Tribunal, autoridade e segurança
+## Trabalho e redução de pena
 
-O servidor verificou mandatos reais do Realm Council: Presidente eleito e empossado, ausência de Presidente, mandato futuro, expirado ou sem juramento, dados indisponíveis e troca imediata de titular com um menu aberto. As intervenções administrativas ficam identificadas como ADMIN_EMERGENCY. Não foram criados cargos adicionais.
+O servidor validou as seis tarefas com blocos e eventos reais: mineração, colheita de trigo maduro, carpintaria, ferraria com minério e combustível finitos, limpeza com escova e transporte entre dois postos separados. A produção da mesa e a limpeza terminaram através dos ticks normais do servidor; o relógio da pena continuou a avançar. Afastar-se interrompeu a produção sem consumir as matérias-primas.
 
-As provas ficam limitadas às partes e à autoridade judicial atual. Uma audiência é obrigatória; absolvições e condenações não podem ser reaplicadas. Uma condenação e a respetiva pena são guardadas na mesma substituição atómica do ficheiro. Falhas reais de escrita e tentativas de guardar apenas metade da decisão são rejeitadas. Um ficheiro da fase um migra sem reiniciar a pena.
+Os testes rejeitaram trabalho sem condenação, modo criativo, alterações de regras por prisioneiros, progresso inventado pelo cliente, materiais externos, contadores falsificados no saco, repetição de recursos, entrega numa zona errada e repetição da mesma entrega. A inspeção não reiniciou pontos consumidos. Só uma reposição física por um administrador em Sobrevivência permitiu a renovação deliberada.
 
-Os testes usam os itens físicos de mandado e algemas: UUIDs inventados, nomes falsificados, outro acusado, validade futura/expirada, revogação, cópias executadas, distância, ausência de algemas, modo criativo e autoalgemagem são rejeitados. Uma detenção válida reduz a velocidade sem alterar o modo de jogo ou as capacidades. A saída do acompanhante, a expiração e a libertação autorizada removem os efeitos; o mandado continua consumido.
+A conclusão, o crédito real de trabalho e a redução da pena ficam no mesmo ficheiro atómico. A falha real de uma escrita não consumiu o saco nem atribuiu metade da recompensa. Reduções sem crédito e créditos sem redução foram rejeitados. A recompensa foi limitada a 50% da pena original e ao tempo restante. Uma entrega que terminou a condenação utilizou a fila e a saída normais de libertação, sem duplicar o registo COMPLETED.
 
-A abertura de outro menu de justiça encerra a sessão anterior, evitando que atualizações periódicas substituam o ecrã atual. Sessões físicas, tokens, versões, limites, persistência, libertação e contenção da fase um continuam cobertos.
+## Persistência e migração
 
-## Cliente real e imagens
+O formato três acrescenta zonas, pontos finitos, regras, tarefas, sacos lógicos e créditos. Os formatos um e dois são migrados sem reiniciar as penas ou apagar processos. Os testes incluem ficheiros comprimidos reais e rejeição de créditos divergentes, objetivos inválidos e recursos com referências inexistentes. O fim da condenação cancela a autorização de trabalho antiga, também depois de reabrir os dados.
 
-O cliente carregou os modelos e texturas dos blocos da prisão, da Mesa de Justiça, das algemas e do mandado. A Mesa de Justiça tem 141 elementos originais; as algemas têm 64 e o mandado 25. Os recursos da fase um foram conservados. Os menus e o documento passaram nas verificações de limites e scroll a 320 × 240.
+A base das prisões e o tribunal continuam testados: relógio online, morte/respawn, contenção, capacidade, decisões atómicas, libertação, dados estritos, mandato empossado, perda imediata de autoridade do Presidente, provas privadas, audiência obrigatória, mandados e algemas. Não foram criados cargos adicionais.
 
-Os botões reais e o transporte C2S/S2C registaram prisão, cela, pena, acusação, depoimento, audiência, mandado e absolvição. O anfitrião sem poderes de operador recebeu autoridade através de um mandato empossado real; substituí-lo retirou o acesso judicial. O pergaminho foi entregue no inventário, colocado na mão e usado através da interação normal do cliente, sendo validado pelo servidor. As capturas do tribunal verificam também o separador realmente mostrado. Não foram injetados snapshots artificiais.
+## Cliente e blocos originais
 
-A pena conservou o mesmo identificador após teleporte, morte/respawn e fecho/reabertura real do mundo LAN. O tempo offline não contou. A libertação ocorreu pelo relógio normal do servidor, sem avanço manual, com uma única decisão COMPLETED e teleporte para a saída definida.
+O cliente real carregou as sete novas peças e as 28 orientações correspondentes, além do Saco de Trabalho Selado. Todos os modelos anteriores foram conservados. Os limites e UVs dos 35 modelos JSON foram verificados; os recursos antigos permanecem iguais byte a byte. Os novos blocos têm receitas, criativo/pesquisa e traduções em português e inglês. O saco não tem receita nem guarda contadores editáveis.
 
-A prisão, personagem, mandato e processo usados nas imagens são demonstrações de teste. O mod não gera prisões. Esta validação usa um cliente integrado e não estabelece uma sessão autenticada entre dois clientes remotos.
+Os botões reais registaram uma zona selecionada pelo agrimensor, validaram os recursos e guardaram as regras. Os cinco separadores administrativos e os três do prisioneiro passaram nas verificações de scroll e limites a 320 × 240.
 
-## Limites desta fase
+Um anfitrião real, em Sobrevivência, sem operador nem voo, completou os seis trabalhos através de pacotes normais de mineração, colheita, machado, minério/carvão e escova, dos botões temporizados da mesa e de dois postos físicos do armazém. Cada tarefa de demonstração foi configurada para uma unidade e um minuto de recompensa. As seis entregas deram exatamente 7200 ticks de redução à pena real de vinte minutos; o ficheiro reaberto conservou os seis registos e o mesmo crédito. Não foram injetados contadores de progresso ou snapshots S2C.
 
-Trabalhos e zonas prisionais pertencem à fase 0.3; multas, fianças e integrações financeiras à fase 0.4. O desenvolvimento continua segundo o [plano completo](PLANO-COMPLETO.md). A fechadura permanece um bloco de controlo auxiliar; não associa chaves a portas.
+O mesmo percurso de validação inclui a morte/respawn, o teleporte e o fecho/reabertura real do mundo LAN da base prisional, uma libertação pelo relógio natural, o Presidente sem operador, processos, provas, audiência, absolvição, pergaminho usado através do cliente e perda de autoridade após troca do mandato.
 
-Foram testadas as versões publicadas de Chronicles RP 0.5.4, Contracts & Bounties 0.3.2, Realm Council 0.2.2, Crown Ledger 0.2.1, Realm Markets 0.2.1, Realm Rewards 0.1.2, Realm Notifications 0.1.0, Realm Titles 0.1.0, Realm Identity 0.1.1 e Realm Casino 0.1.0, com dependências Origins/Jupiter reais verificadas por SHA-256. Não foi testado Windows nem todas as combinações de mods. Conserva cópias de segurança do mundo; um encerramento abrupto pode perder os últimos ticks desde o checkpoint.
+## Limites
 
-## Publicação verificada
+Construções, personagens, mandato, processos e regras reduzidas das imagens são demonstrações de teste. O mod não gera prisões nem recursos; as quantidades e recompensas normais são as documentadas no guia. A prova usa um cliente integrado e não estabelece uma sessão autenticada entre dois clientes remotos.
 
-JAR, ZIP e os 20 PNGs foram verificados por SHA-256 depois de obter o commit publicado. O download HTTP do JAR também corresponde ao checksum.
+Foram utilizados os dez companheiros publicados, incluindo Chronicles RP, Realm Council, Crown Ledger, Markets, Rewards, Notifications, Titles, Identity, Casino e Contracts, com Origins/Jupiter reais e checksums fixados. Windows e todas as combinações possíveis de mods não foram testados. Conserva cópias de segurança do mundo; um encerramento abrupto pode perder os últimos ticks desde o checkpoint.
 
-- [JAR](../mod-pronto/laws-justice-0.2.0.jar): 321 080 bytes; SHA-256 `b3cf6b5788cd13035a271228b6e4076f6a1b29e31191e1ca735290fd7fb0c858`.
-- [ZIP](../mod-pronto/laws-justice-0.2.0.zip): 304 701 bytes; SHA-256 `91b278c097a74b5a49127174a6b1231bbe6117bd2367f11aaa500744b5f2b3f3`.
-- [Proveniência e checksums](../mod-pronto/laws-justice-0.2.0.build.json) · [20 imagens](../media/laws-justice/0.2.0/README.md).
+Multas, fianças e integrações financeiras continuam na fase 0.4 do [plano completo](PLANO-COMPLETO.md). A fechadura continua a ser um bloco auxiliar de controlo, sem associação de chaves a portas.

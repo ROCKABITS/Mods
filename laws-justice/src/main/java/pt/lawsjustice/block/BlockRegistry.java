@@ -47,6 +47,24 @@ public final class BlockRegistry {
     public static final DeferredItem<WarrantItem> WARRANT = ITEMS.register("warrant",
             () -> new WarrantItem(new Item.Properties().stacksTo(1)));
 
+    public static final DeferredBlock<WorkStationBlock> WORK_BOARD=station("work_board","BOARD");
+    public static final DeferredBlock<WorkStationBlock> DELIVERY_BOX=station("delivery_box","DELIVERY");
+    public static final DeferredBlock<WorkStationBlock> MINING_POST=station("mining_post","MINE");
+    public static final DeferredBlock<WorkStationBlock> AGRICULTURAL_POST=station("agricultural_post","FARM");
+    public static final DeferredBlock<WorkStationBlock> WORKSHOP_TABLE=station("workshop_table","WORKSHOP");
+    public static final DeferredBlock<WorkStationBlock> MAINTENANCE_POST=station("maintenance_post","YARD");
+    public static final DeferredBlock<WorkStationBlock> WAREHOUSE_POST=station("warehouse_post","WAREHOUSE");
+    public static final DeferredItem<BlockItem> WORK_BOARD_ITEM=stationItem("work_board",WORK_BOARD);
+    public static final DeferredItem<BlockItem> DELIVERY_BOX_ITEM=stationItem("delivery_box",DELIVERY_BOX);
+    public static final DeferredItem<BlockItem> MINING_POST_ITEM=stationItem("mining_post",MINING_POST);
+    public static final DeferredItem<BlockItem> AGRICULTURAL_POST_ITEM=stationItem("agricultural_post",AGRICULTURAL_POST);
+    public static final DeferredItem<BlockItem> WORKSHOP_TABLE_ITEM=stationItem("workshop_table",WORKSHOP_TABLE);
+    public static final DeferredItem<BlockItem> MAINTENANCE_POST_ITEM=stationItem("maintenance_post",MAINTENANCE_POST);
+    public static final DeferredItem<BlockItem> WAREHOUSE_POST_ITEM=stationItem("warehouse_post",WAREHOUSE_POST);
+    public static final DeferredItem<pt.lawsjustice.item.WorkBundleItem> WORK_BUNDLE=ITEMS.register("work_bundle",()->new pt.lawsjustice.item.WorkBundleItem(new Item.Properties().stacksTo(1)));
+    private static DeferredBlock<WorkStationBlock> station(String name,String kind){return BLOCKS.register(name,()->new WorkStationBlock(metalProperties().sound(SoundType.WOOD),kind));}
+    private static DeferredItem<BlockItem> stationItem(String name,DeferredBlock<WorkStationBlock> block){return ITEMS.register(name,()->new BlockItem(block.get(),new Item.Properties()));}
+
     private BlockRegistry() {}
 
     private static BlockBehaviour.Properties metalProperties() {

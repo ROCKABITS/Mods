@@ -60,7 +60,7 @@ public final class CourtService {
         boolean elected=president!=null&&president.id().equals(p.getUUID());
         return new Role(admin,admin||elected,elected,president==null?"":president.name(),elected?CourtLedger.PRESIDENT:admin?CourtLedger.ADMIN_EMERGENCY:"",warning);
     }
-    public static void open(ServerPlayer p,BlockPos desk){thread(p);if(!physical(p,desk,dimension(p)))return;JusticeService.closeSession(p);runtime(p.getServer()).sessions.put(p.getUUID(),new Session(p,desk,null));send(p);}
+    public static void open(ServerPlayer p,BlockPos desk){thread(p);if(!physical(p,desk,dimension(p)))return;JusticeService.closeSession(p);WorkService.closeSession(p);runtime(p.getServer()).sessions.put(p.getUUID(),new Session(p,desk,null));send(p);}
     public static void closeSession(ServerPlayer p){thread(p);runtime(p.getServer()).sessions.remove(p.getUUID());}
     private static boolean physical(ServerPlayer p,BlockPos pos,String dim){return p.isAlive()&&dimension(p).equals(dim)&&p.distanceToSqr(pos.getX()+.5,pos.getY()+.5,pos.getZ()+.5)<=64&&p.level().getBlockState(pos).getBlock()instanceof JusticeDeskBlock;}
     private static boolean valid(ServerPlayer p,Session s){return s!=null&&p.isAlive()&&dimension(p).equals(s.dimension)&&System.nanoTime()-s.openedAt<=300_000_000_000L&&(long)p.getServer().getTickCount()-s.openedTick<=6000
@@ -75,7 +75,7 @@ public final class CourtService {
     public static void inspectWarrant(ServerPlayer p,ItemStack stack){
         thread(p);UUID id=paperId(stack);
         if(id==null||!holding(p,id)||!JusticeData.get(p.getServer()).court().warrants().containsKey(id)){p.displayClientMessage(Component.translatable("lawsjustice.error.warrant_invalid"),false);return;}
-        JusticeService.closeSession(p);runtime(p.getServer()).sessions.put(p.getUUID(),new Session(p,null,id));send(p);
+        JusticeService.closeSession(p);WorkService.closeSession(p);runtime(p.getServer()).sessions.put(p.getUUID(),new Session(p,null,id));send(p);
     }
     public static void handle(ServerPlayer p,String operation,String raw){
         thread(p);RuntimeState r=runtime(p.getServer());Session s=r.sessions.get(p.getUUID());

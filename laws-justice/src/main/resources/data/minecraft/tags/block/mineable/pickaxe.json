@@ -5,6 +5,13 @@
     "lawsjustice:prison_bars",
     "lawsjustice:reinforced_lock",
     "lawsjustice:prison_control",
-    "lawsjustice:justice_desk"
+    "lawsjustice:justice_desk",
+    "lawsjustice:work_board",
+    "lawsjustice:delivery_box",
+    "lawsjustice:mining_post",
+    "lawsjustice:agricultural_post",
+    "lawsjustice:workshop_table",
+    "lawsjustice:maintenance_post",
+    "lawsjustice:warehouse_post"
   ]
 }

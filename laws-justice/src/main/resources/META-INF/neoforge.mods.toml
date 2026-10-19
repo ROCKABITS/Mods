@@ -3,7 +3,7 @@ loaderVersion="[4,)"
 license="All Rights Reserved"
 [[mods]]
 modId="lawsjustice"
-version="0.2.0"
+version="0.3.0"
 displayName="Laws & Justice"
 authors="ROCKABITS"
 logoFile="assets/lawsjustice/icon.png"

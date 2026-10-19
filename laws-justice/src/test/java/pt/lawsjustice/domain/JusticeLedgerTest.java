@@ -203,7 +203,7 @@ class JusticeLedgerTest {
             Sentence invalid = new Sentence(SENTENCE, PLAYER, "Player", PRISON, CELL, AUTHORITY, "Admin", "Reason", 0, 100, values[0], 0, values[1]);
             assertThrows(IllegalArgumentException.class, () -> registered().sentence(invalid));
         }
-        assertThrows(IllegalArgumentException.class, () -> new Sentence(SENTENCE, PLAYER, "Player", PRISON, CELL, AUTHORITY, "Admin", "Reason", 0, 100, 0, 1, 0));
+        assertThrows(IllegalArgumentException.class, () -> registered().sentence(new Sentence(SENTENCE, PLAYER, "Player", PRISON, CELL, AUTHORITY, "Admin", "Reason", 0, 100, 0, 1, 0)));
     }
 
     @Test void durationsDatesAndProgressHaveStrictBounds() {
@@ -499,4 +499,25 @@ class JusticeLedgerTest {
         assertEquals(audit, before.history()); assertEquals(100, before.active().get(PLAYER).remainingTicks());
         assertEquals(1, before.prisons().get(PRISON).revision());
     }
+    @Test void communityWorkClampsToTheConfiguredFractionOfTheOriginalSentence() {
+        var first=sentenced(100).reduce(PLAYER,20,50,2000);assertEquals(20,first.active().get(PLAYER).reductionTicks());
+        var capped=first.reduce(PLAYER,Long.MAX_VALUE,50,2001);assertEquals(50,capped.active().get(PLAYER).reductionTicks());assertEquals(50,capped.active().get(PLAYER).remainingTicks());
+        assertThrows(IllegalStateException.class,()->capped.reduce(PLAYER,1,50,2002));assertEquals(3,capped.history().size());
+    }
+    @Test void onlineTimeContinuesIndependentlyAndCanCompleteAWorkReducedSentence() {
+        var reduced=sentenced(100).advance(PLAYER,20,2000).reduce(PLAYER,30,50,2001);assertEquals(20,reduced.active().get(PLAYER).servedTicks());assertEquals(50,reduced.active().get(PLAYER).remainingTicks());
+        var complete=reduced.advance(PLAYER,50,2002);assertTrue(complete.active().isEmpty());assertEquals(70,complete.history().getLast().servedTicks());assertEquals(30,complete.history().getLast().reductionTicks());
+        assertEquals(complete.history(),JusticeLedger.restore(complete.prisons(),complete.active(),complete.history()).history());
+    }
+    @Test void workCanFinishTheRemainingTimeButCannotAwardMoreThanIsLeft() {
+        var complete=sentenced(100).advance(PLAYER,95,2000).reduce(PLAYER,30,50,2001);assertTrue(complete.active().isEmpty());
+        assertEquals(5,complete.history().getLast().reductionTicks());assertEquals(1,complete.history().stream().filter(x->x.action().equals(COMPLETED)).count());
+        assertEquals(complete.history(),JusticeLedger.restore(complete.prisons(),complete.active(),complete.history()).history());
+        assertThrows(IllegalStateException.class,()->complete.reduce(PLAYER,1,50,2002));
+    }
+    @Test void invalidWorkRewardsCannotChangeTheSentence() {
+        var ledger=sentenced(100);assertThrows(IllegalArgumentException.class,()->ledger.reduce(PLAYER,0,50,2000));assertThrows(IllegalArgumentException.class,()->ledger.reduce(PLAYER,1,101,2000));
+        assertThrows(IllegalStateException.class,()->ledger.reduce(PLAYER,1,0,2000));assertEquals(0,ledger.active().get(PLAYER).reductionTicks());
+    }
+
 }

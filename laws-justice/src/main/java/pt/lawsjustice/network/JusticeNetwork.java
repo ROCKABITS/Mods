@@ -9,11 +9,12 @@ import pt.lawsjustice.service.JusticeService;
 public final class JusticeNetwork {
     private JusticeNetwork() {}
     public static void register(RegisterPayloadHandlersEvent event) {
-        var registrar = event.registrar("2");
+        var registrar = event.registrar("3");
         registrar.playToServer(JusticePackets.Action.TYPE, JusticePackets.Action.CODEC, (packet, context) -> {
             if (context.player() instanceof ServerPlayer player)
                 context.enqueueWork(() -> {
                     if(packet.operation().startsWith("court_"))pt.lawsjustice.service.CourtService.handle(player,packet.operation(),packet.json());
+                    else if(packet.operation().startsWith("work_"))pt.lawsjustice.service.WorkService.handle(player,packet.operation(),packet.json());
                     else JusticeService.handle(player, packet.operation(), packet.json());
                 });
         });
@@ -23,6 +24,7 @@ public final class JusticeNetwork {
                         var snapshot=com.google.gson.JsonParser.parseString(packet.json()).getAsJsonObject();
                         String kind=snapshot.has("kind")?snapshot.get("kind").getAsString():"";
                         if(kind.equals("court")||kind.equals("warrant"))pt.lawsjustice.client.CourtScreen.receive(packet.json());
+                        else if(kind.equals("work"))pt.lawsjustice.client.WorkScreen.receive(packet.json());
                         else pt.lawsjustice.client.JusticeScreen.receive(packet.json());
                     }catch(RuntimeException malformed){ /* Never open a screen from a malformed document. */ }
                 }));

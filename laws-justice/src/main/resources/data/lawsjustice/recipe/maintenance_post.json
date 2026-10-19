@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    " B ",
+    "PUP",
+    " P "
+  ],
+  "key": {
+    "B": {
+      "item": "minecraft:brush"
+    },
+    "U": {
+      "item": "minecraft:bucket"
+    },
+    "P": {
+      "item": "minecraft:oak_planks"
+    }
+  },
+  "result": {
+    "id": "lawsjustice:maintenance_post",
+    "count": 1
+  }
+}

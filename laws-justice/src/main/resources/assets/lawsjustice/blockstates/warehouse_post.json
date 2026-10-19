@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "lawsjustice:block/warehouse_post"
+    },
+    "facing=east": {
+      "model": "lawsjustice:block/warehouse_post",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "lawsjustice:block/warehouse_post",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "lawsjustice:block/warehouse_post",
+      "y": 270
+    }
+  }
+}

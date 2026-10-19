@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "lawsjustice:block/work_board"
+    },
+    "facing=east": {
+      "model": "lawsjustice:block/work_board",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "lawsjustice:block/work_board",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "lawsjustice:block/work_board",
+      "y": 270
+    }
+  }
+}

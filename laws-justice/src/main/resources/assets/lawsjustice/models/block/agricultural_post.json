@@ -1,0 +1,3284 @@
+{
+  "parent": "minecraft:block/block",
+  "render_type": "minecraft:cutout",
+  "ambientocclusion": true,
+  "textures": {
+    "black": "lawsjustice:block/black",
+    "bronze": "lawsjustice:block/bronze",
+    "flame": "lawsjustice:block/flame",
+    "iron": "lawsjustice:block/iron",
+    "iron_dark": "lawsjustice:block/iron_dark",
+    "justice_crest": "lawsjustice:block/justice_crest",
+    "leather": "lawsjustice:block/leather",
+    "ledger_cover": "lawsjustice:block/ledger_cover",
+    "ledger_pages": "lawsjustice:block/ledger_pages",
+    "lock_plate": "lawsjustice:block/lock_plate",
+    "oak": "lawsjustice:block/oak",
+    "oak_dark": "lawsjustice:block/oak_dark",
+    "steel": "lawsjustice:block/steel",
+    "stone": "lawsjustice:block/stone",
+    "stone_dark": "lawsjustice:block/stone_dark",
+    "surveyor_dial": "lawsjustice:block/surveyor_dial",
+    "velvet": "lawsjustice:block/velvet",
+    "wax": "lawsjustice:block/wax",
+    "particle": "lawsjustice:block/iron",
+    "court_parchment": "lawsjustice:block/court_parchment",
+    "garnet": "lawsjustice:block/garnet",
+    "gold_polished": "lawsjustice:block/gold_polished",
+    "mahogany": "lawsjustice:block/mahogany",
+    "mahogany_dark": "lawsjustice:block/mahogany_dark",
+    "royal_wax_seal": "lawsjustice:block/royal_wax_seal",
+    "warrant_parchment": "lawsjustice:block/warrant_parchment",
+    "work_green": "lawsjustice:block/work_green",
+    "work_canvas": "lawsjustice:block/work_canvas",
+    "work_roof": "lawsjustice:block/work_roof",
+    "work_ore": "lawsjustice:block/work_ore",
+    "work_grain": "lawsjustice:block/work_grain",
+    "work_notice": "lawsjustice:block/work_notice"
+  },
+  "elements": [
+    {
+      "name": "work_station_foundation",
+      "from": [
+        2,
+        0,
+        3
+      ],
+      "to": [
+        4.5,
+        0.7,
+        13
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            2.5,
+            0.7
+          ],
+          "texture": "#stone_dark"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            2.5,
+            0.7
+          ],
+          "texture": "#stone_dark"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            10,
+            0.7
+          ],
+          "texture": "#stone_dark"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            10,
+            0.7
+          ],
+          "texture": "#stone_dark"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            2.5,
+            10
+          ],
+          "texture": "#stone_dark"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            2.5,
+            10
+          ],
+          "texture": "#stone_dark"
+        }
+      }
+    },
+    {
+      "name": "work_station_leg",
+      "from": [
+        2.3,
+        0.7,
+        3.3
+      ],
+      "to": [
+        4.2,
+        5,
+        12.7
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            1.9000000000000004,
+            4.3
+          ],
+          "texture": "#oak"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            1.9000000000000004,
+            4.3
+          ],
+          "texture": "#oak"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            9.399999999999999,
+            4.3
+          ],
+          "texture": "#oak"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            9.399999999999999,
+            4.3
+          ],
+          "texture": "#oak"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            1.9000000000000004,
+            9.399999999999999
+          ],
+          "texture": "#oak"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            1.9000000000000004,
+            9.399999999999999
+          ],
+          "texture": "#oak"
+        }
+      }
+    },
+    {
+      "name": "work_station_leg_iron_collar",
+      "from": [
+        2.1,
+        1,
+        3.1
+      ],
+      "to": [
+        4.4,
+        1.32,
+        12.9
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            2.3000000000000003,
+            0.32000000000000006
+          ],
+          "texture": "#iron"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            2.3000000000000003,
+            0.32000000000000006
+          ],
+          "texture": "#iron"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            9.8,
+            0.32000000000000006
+          ],
+          "texture": "#iron"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            9.8,
+            0.32000000000000006
+          ],
+          "texture": "#iron"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            2.3000000000000003,
+            9.8
+          ],
+          "texture": "#iron"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            2.3000000000000003,
+            9.8
+          ],
+          "texture": "#iron"
+        }
+      }
+    },
+    {
+      "name": "work_station_leg_iron_collar",
+      "from": [
+        2.1,
+        4.4,
+        3.1
+      ],
+      "to": [
+        4.4,
+        4.72,
+        12.9
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            2.3000000000000003,
+            0.3200000000000003
+          ],
+          "texture": "#iron"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            2.3000000000000003,
+            0.3200000000000003
+          ],
+          "texture": "#iron"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            9.8,
+            0.3200000000000003
+          ],
+          "texture": "#iron"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            9.8,
+            0.3200000000000003
+          ],
+          "texture": "#iron"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            2.3000000000000003,
+            9.8
+          ],
+          "texture": "#iron"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            2.3000000000000003,
+            9.8
+          ],
+          "texture": "#iron"
+        }
+      }
+    },
+    {
+      "name": "work_station_foundation",
+      "from": [
+        11.5,
+        0,
+        3
+      ],
+      "to": [
+        14.0,
+        0.7,
+        13
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            2.5,
+            0.7
+          ],
+          "texture": "#stone_dark"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            2.5,
+            0.7
+          ],
+          "texture": "#stone_dark"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            10,
+            0.7
+          ],
+          "texture": "#stone_dark"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            10,
+            0.7
+          ],
+          "texture": "#stone_dark"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            2.5,
+            10
+          ],
+          "texture": "#stone_dark"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            2.5,
+            10
+          ],
+          "texture": "#stone_dark"
+        }
+      }
+    },
+    {
+      "name": "work_station_leg",
+      "from": [
+        11.8,
+        0.7,
+        3.3
+      ],
+      "to": [
+        13.7,
+        5,
+        12.7
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            1.8999999999999986,
+            4.3
+          ],
+          "texture": "#oak"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            1.8999999999999986,
+            4.3
+          ],
+          "texture": "#oak"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            9.399999999999999,
+            4.3
+          ],
+          "texture": "#oak"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            9.399999999999999,
+            4.3
+          ],
+          "texture": "#oak"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            1.8999999999999986,
+            9.399999999999999
+          ],
+          "texture": "#oak"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            1.8999999999999986,
+            9.399999999999999
+          ],
+          "texture": "#oak"
+        }
+      }
+    },
+    {
+      "name": "work_station_leg_iron_collar",
+      "from": [
+        11.6,
+        1,
+        3.1
+      ],
+      "to": [
+        13.9,
+        1.32,
+        12.9
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            2.3000000000000007,
+            0.32000000000000006
+          ],
+          "texture": "#iron"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            2.3000000000000007,
+            0.32000000000000006
+          ],
+          "texture": "#iron"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            9.8,
+            0.32000000000000006
+          ],
+          "texture": "#iron"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            9.8,
+            0.32000000000000006
+          ],
+          "texture": "#iron"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            2.3000000000000007,
+            9.8
+          ],
+          "texture": "#iron"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            2.3000000000000007,
+            9.8
+          ],
+          "texture": "#iron"
+        }
+      }
+    },
+    {
+      "name": "work_station_leg_iron_collar",
+      "from": [
+        11.6,
+        4.4,
+        3.1
+      ],
+      "to": [
+        13.9,
+        4.72,
+        12.9
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            2.3000000000000007,
+            0.3200000000000003
+          ],
+          "texture": "#iron"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            2.3000000000000007,
+            0.3200000000000003
+          ],
+          "texture": "#iron"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            9.8,
+            0.3200000000000003
+          ],
+          "texture": "#iron"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            9.8,
+            0.3200000000000003
+          ],
+          "texture": "#iron"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            2.3000000000000007,
+            9.8
+          ],
+          "texture": "#iron"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            2.3000000000000007,
+            9.8
+          ],
+          "texture": "#iron"
+        }
+      }
+    },
+    {
+      "name": "work_supply_tray_underlay",
+      "from": [
+        1.2,
+        5,
+        2
+      ],
+      "to": [
+        14.8,
+        5.5,
+        14
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            13.600000000000001,
+            0.5
+          ],
+          "texture": "#oak_dark"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            13.600000000000001,
+            0.5
+          ],
+          "texture": "#oak_dark"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            12,
+            0.5
+          ],
+          "texture": "#oak_dark"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            12,
+            0.5
+          ],
+          "texture": "#oak_dark"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            13.600000000000001,
+            12
+          ],
+          "texture": "#oak_dark"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            13.600000000000001,
+            12
+          ],
+          "texture": "#oak_dark"
+        }
+      }
+    },
+    {
+      "name": "work_supply_tray",
+      "from": [
+        1.4,
+        5.5,
+        2.2
+      ],
+      "to": [
+        14.6,
+        6,
+        13.8
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            13.2,
+            0.5
+          ],
+          "texture": "#oak"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            13.2,
+            0.5
+          ],
+          "texture": "#oak"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            11.600000000000001,
+            0.5
+          ],
+          "texture": "#oak"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            11.600000000000001,
+            0.5
+          ],
+          "texture": "#oak"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            13.2,
+            11.600000000000001
+          ],
+          "texture": "#oak"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            13.2,
+            11.600000000000001
+          ],
+          "texture": "#oak"
+        }
+      }
+    },
+    {
+      "name": "work_post_raised_sign_upright",
+      "from": [
+        2.1,
+        6,
+        8.4
+      ],
+      "to": [
+        3.7,
+        15.2,
+        10
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            1.6,
+            9.2
+          ],
+          "texture": "#oak_dark"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            1.6,
+            9.2
+          ],
+          "texture": "#oak_dark"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            1.5999999999999996,
+            9.2
+          ],
+          "texture": "#oak_dark"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            1.5999999999999996,
+            9.2
+          ],
+          "texture": "#oak_dark"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            1.6,
+            1.5999999999999996
+          ],
+          "texture": "#oak_dark"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            1.6,
+            1.5999999999999996
+          ],
+          "texture": "#oak_dark"
+        }
+      }
+    },
+    {
+      "name": "work_post_raised_sign_upright",
+      "from": [
+        12.3,
+        6,
+        8.4
+      ],
+      "to": [
+        13.9,
+        15.2,
+        10
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            1.5999999999999996,
+            9.2
+          ],
+          "texture": "#oak_dark"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            1.5999999999999996,
+            9.2
+          ],
+          "texture": "#oak_dark"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            1.5999999999999996,
+            9.2
+          ],
+          "texture": "#oak_dark"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            1.5999999999999996,
+            9.2
+          ],
+          "texture": "#oak_dark"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            1.5999999999999996,
+            1.5999999999999996
+          ],
+          "texture": "#oak_dark"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            1.5999999999999996,
+            1.5999999999999996
+          ],
+          "texture": "#oak_dark"
+        }
+      }
+    },
+    {
+      "name": "work_public_direction_sign",
+      "from": [
+        2,
+        11,
+        8
+      ],
+      "to": [
+        14,
+        15,
+        8.5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            12,
+            4
+          ],
+          "texture": "#oak"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            12,
+            4
+          ],
+          "texture": "#oak"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            0.5,
+            4
+          ],
+          "texture": "#oak"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            0.5,
+            4
+          ],
+          "texture": "#oak"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            12,
+            0.5
+          ],
+          "texture": "#oak"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            12,
+            0.5
+          ],
+          "texture": "#oak"
+        }
+      }
+    },
+    {
+      "name": "work_sign_moulded_edge",
+      "from": [
+        1.9,
+        11,
+        7.8
+      ],
+      "to": [
+        14.1,
+        11.4,
+        8.6
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            12.2,
+            0.40000000000000036
+          ],
+          "texture": "#bronze"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            12.2,
+            0.40000000000000036
+          ],
+          "texture": "#bronze"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            0.7999999999999998,
+            0.40000000000000036
+          ],
+          "texture": "#bronze"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            0.7999999999999998,
+            0.40000000000000036
+          ],
+          "texture": "#bronze"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            12.2,
+            0.7999999999999998
+          ],
+          "texture": "#bronze"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            12.2,
+            0.7999999999999998
+          ],
+          "texture": "#bronze"
+        }
+      }
+    },
+    {
+      "name": "work_sign_moulded_edge",
+      "from": [
+        1.9,
+        14.6,
+        7.8
+      ],
+      "to": [
+        14.1,
+        15.0,
+        8.6
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            12.2,
+            0.40000000000000036
+          ],
+          "texture": "#bronze"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            12.2,
+            0.40000000000000036
+          ],
+          "texture": "#bronze"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            0.7999999999999998,
+            0.40000000000000036
+          ],
+          "texture": "#bronze"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            0.7999999999999998,
+            0.40000000000000036
+          ],
+          "texture": "#bronze"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            12.2,
+            0.7999999999999998
+          ],
+          "texture": "#bronze"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            12.2,
+            0.7999999999999998
+          ],
+          "texture": "#bronze"
+        }
+      }
+    },
+    {
+      "name": "work_sign_corner_ironwork",
+      "from": [
+        2.3,
+        11.45,
+        7.65
+      ],
+      "to": [
+        2.65,
+        14.5,
+        7.85
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            0.3500000000000001,
+            3.0500000000000007
+          ],
+          "texture": "#iron"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            0.3500000000000001,
+            3.0500000000000007
+          ],
+          "texture": "#iron"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            0.1999999999999993,
+            3.0500000000000007
+          ],
+          "texture": "#iron"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            0.1999999999999993,
+            3.0500000000000007
+          ],
+          "texture": "#iron"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.3500000000000001,
+            0.1999999999999993
+          ],
+          "texture": "#iron"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.3500000000000001,
+            0.1999999999999993
+          ],
+          "texture": "#iron"
+        }
+      }
+    },
+    {
+      "name": "work_sign_corner_ironwork",
+      "from": [
+        13,
+        11.45,
+        7.65
+      ],
+      "to": [
+        13.35,
+        14.5,
+        7.85
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            0.34999999999999964,
+            3.0500000000000007
+          ],
+          "texture": "#iron"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            0.34999999999999964,
+            3.0500000000000007
+          ],
+          "texture": "#iron"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            0.1999999999999993,
+            3.0500000000000007
+          ],
+          "texture": "#iron"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            0.1999999999999993,
+            3.0500000000000007
+          ],
+          "texture": "#iron"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.34999999999999964,
+            0.1999999999999993
+          ],
+          "texture": "#iron"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.34999999999999964,
+            0.1999999999999993
+          ],
+          "texture": "#iron"
+        }
+      }
+    },
+    {
+      "name": "work_green_sign_inset",
+      "from": [
+        4,
+        11.45,
+        7.7
+      ],
+      "to": [
+        12,
+        14.5,
+        7.95
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            8,
+            3.0500000000000007
+          ],
+          "texture": "#work_green"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            8,
+            3.0500000000000007
+          ],
+          "texture": "#work_green"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            0.25,
+            3.0500000000000007
+          ],
+          "texture": "#work_green"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            0.25,
+            3.0500000000000007
+          ],
+          "texture": "#work_green"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            8,
+            0.25
+          ],
+          "texture": "#work_green"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            8,
+            0.25
+          ],
+          "texture": "#work_green"
+        }
+      }
+    },
+    {
+      "name": "farm_raised_seedling_tray",
+      "from": [
+        2.5,
+        6,
+        3
+      ],
+      "to": [
+        9.8,
+        7.6,
+        7.4
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            7.300000000000001,
+            1.5999999999999996
+          ],
+          "texture": "#oak"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            7.300000000000001,
+            1.5999999999999996
+          ],
+          "texture": "#oak"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            4.4,
+            1.5999999999999996
+          ],
+          "texture": "#oak"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            4.4,
+            1.5999999999999996
+          ],
+          "texture": "#oak"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            7.300000000000001,
+            4.4
+          ],
+          "texture": "#oak"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            7.300000000000001,
+            4.4
+          ],
+          "texture": "#oak"
+        }
+      }
+    },
+    {
+      "name": "farm_tray_dark_soil",
+      "from": [
+        2.9,
+        7.6,
+        3.4
+      ],
+      "to": [
+        9.4,
+        7.9,
+        7
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            6.5,
+            0.3000000000000007
+          ],
+          "texture": "#oak_dark"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            6.5,
+            0.3000000000000007
+          ],
+          "texture": "#oak_dark"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            3.6,
+            0.3000000000000007
+          ],
+          "texture": "#oak_dark"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            3.6,
+            0.3000000000000007
+          ],
+          "texture": "#oak_dark"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            6.5,
+            3.6
+          ],
+          "texture": "#oak_dark"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            6.5,
+            3.6
+          ],
+          "texture": "#oak_dark"
+        }
+      }
+    },
+    {
+      "name": "farm_wheat_stem",
+      "from": [
+        3.8,
+        7.9,
+        4.4
+      ],
+      "to": [
+        4.0,
+        11.8,
+        4.62
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            0.20000000000000018,
+            3.9000000000000004
+          ],
+          "texture": "#work_green"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            0.20000000000000018,
+            3.9000000000000004
+          ],
+          "texture": "#work_green"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            0.21999999999999975,
+            3.9000000000000004
+          ],
+          "texture": "#work_green"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            0.21999999999999975,
+            3.9000000000000004
+          ],
+          "texture": "#work_green"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.20000000000000018,
+            0.21999999999999975
+          ],
+          "texture": "#work_green"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.20000000000000018,
+            0.21999999999999975
+          ],
+          "texture": "#work_green"
+        }
+      }
+    },
+    {
+      "name": "farm_ripe_grain_ear",
+      "from": [
+        3.4,
+        9.8,
+        4.28
+      ],
+      "to": [
+        4.0,
+        10.25,
+        4.75
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            0.6000000000000001,
+            0.4499999999999993
+          ],
+          "texture": "#work_grain"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            0.6000000000000001,
+            0.4499999999999993
+          ],
+          "texture": "#work_grain"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            0.46999999999999975,
+            0.4499999999999993
+          ],
+          "texture": "#work_grain"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            0.46999999999999975,
+            0.4499999999999993
+          ],
+          "texture": "#work_grain"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.6000000000000001,
+            0.46999999999999975
+          ],
+          "texture": "#work_grain"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.6000000000000001,
+            0.46999999999999975
+          ],
+          "texture": "#work_grain"
+        }
+      }
+    },
+    {
+      "name": "farm_ripe_grain_ear",
+      "from": [
+        3.4,
+        10.35,
+        4.28
+      ],
+      "to": [
+        4.0,
+        10.8,
+        4.75
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            0.6000000000000001,
+            0.4499999999999993
+          ],
+          "texture": "#work_grain"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            0.6000000000000001,
+            0.4499999999999993
+          ],
+          "texture": "#work_grain"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            0.46999999999999975,
+            0.4499999999999993
+          ],
+          "texture": "#work_grain"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            0.46999999999999975,
+            0.4499999999999993
+          ],
+          "texture": "#work_grain"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.6000000000000001,
+            0.46999999999999975
+          ],
+          "texture": "#work_grain"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.6000000000000001,
+            0.46999999999999975
+          ],
+          "texture": "#work_grain"
+        }
+      }
+    },
+    {
+      "name": "farm_ripe_grain_ear",
+      "from": [
+        3.4,
+        10.9,
+        4.28
+      ],
+      "to": [
+        4.0,
+        11.35,
+        4.75
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            0.6000000000000001,
+            0.4499999999999993
+          ],
+          "texture": "#work_grain"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            0.6000000000000001,
+            0.4499999999999993
+          ],
+          "texture": "#work_grain"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            0.46999999999999975,
+            0.4499999999999993
+          ],
+          "texture": "#work_grain"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            0.46999999999999975,
+            0.4499999999999993
+          ],
+          "texture": "#work_grain"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.6000000000000001,
+            0.46999999999999975
+          ],
+          "texture": "#work_grain"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.6000000000000001,
+            0.46999999999999975
+          ],
+          "texture": "#work_grain"
+        }
+      }
+    },
+    {
+      "name": "farm_ripe_grain_ear",
+      "from": [
+        3.8,
+        9.8,
+        4.28
+      ],
+      "to": [
+        4.4,
+        10.25,
+        4.75
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            0.6000000000000005,
+            0.4499999999999993
+          ],
+          "texture": "#work_grain"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            0.6000000000000005,
+            0.4499999999999993
+          ],
+          "texture": "#work_grain"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            0.46999999999999975,
+            0.4499999999999993
+          ],
+          "texture": "#work_grain"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            0.46999999999999975,
+            0.4499999999999993
+          ],
+          "texture": "#work_grain"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.6000000000000005,
+            0.46999999999999975
+          ],
+          "texture": "#work_grain"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.6000000000000005,
+            0.46999999999999975
+          ],
+          "texture": "#work_grain"
+        }
+      }
+    },
+    {
+      "name": "farm_ripe_grain_ear",
+      "from": [
+        3.8,
+        10.35,
+        4.28
+      ],
+      "to": [
+        4.4,
+        10.8,
+        4.75
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            0.6000000000000005,
+            0.4499999999999993
+          ],
+          "texture": "#work_grain"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            0.6000000000000005,
+            0.4499999999999993
+          ],
+          "texture": "#work_grain"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            0.46999999999999975,
+            0.4499999999999993
+          ],
+          "texture": "#work_grain"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            0.46999999999999975,
+            0.4499999999999993
+          ],
+          "texture": "#work_grain"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.6000000000000005,
+            0.46999999999999975
+          ],
+          "texture": "#work_grain"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.6000000000000005,
+            0.46999999999999975
+          ],
+          "texture": "#work_grain"
+        }
+      }
+    },
+    {
+      "name": "farm_ripe_grain_ear",
+      "from": [
+        3.8,
+        10.9,
+        4.28
+      ],
+      "to": [
+        4.4,
+        11.35,
+        4.75
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            0.6000000000000005,
+            0.4499999999999993
+          ],
+          "texture": "#work_grain"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            0.6000000000000005,
+            0.4499999999999993
+          ],
+          "texture": "#work_grain"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            0.46999999999999975,
+            0.4499999999999993
+          ],
+          "texture": "#work_grain"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            0.46999999999999975,
+            0.4499999999999993
+          ],
+          "texture": "#work_grain"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.6000000000000005,
+            0.46999999999999975
+          ],
+          "texture": "#work_grain"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.6000000000000005,
+            0.46999999999999975
+          ],
+          "texture": "#work_grain"
+        }
+      }
+    },
+    {
+      "name": "farm_wheat_stem",
+      "from": [
+        5.5,
+        7.9,
+        5.8
+      ],
+      "to": [
+        5.7,
+        11.8,
+        6.02
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            0.20000000000000018,
+            3.9000000000000004
+          ],
+          "texture": "#work_green"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            0.20000000000000018,
+            3.9000000000000004
+          ],
+          "texture": "#work_green"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            0.21999999999999975,
+            3.9000000000000004
+          ],
+          "texture": "#work_green"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            0.21999999999999975,
+            3.9000000000000004
+          ],
+          "texture": "#work_green"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.20000000000000018,
+            0.21999999999999975
+          ],
+          "texture": "#work_green"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.20000000000000018,
+            0.21999999999999975
+          ],
+          "texture": "#work_green"
+        }
+      }
+    },
+    {
+      "name": "farm_ripe_grain_ear",
+      "from": [
+        5.1,
+        9.8,
+        5.68
+      ],
+      "to": [
+        5.7,
+        10.25,
+        6.15
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            0.6000000000000005,
+            0.4499999999999993
+          ],
+          "texture": "#work_grain"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            0.6000000000000005,
+            0.4499999999999993
+          ],
+          "texture": "#work_grain"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            0.46999999999999975,
+            0.4499999999999993
+          ],
+          "texture": "#work_grain"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            0.46999999999999975,
+            0.4499999999999993
+          ],
+          "texture": "#work_grain"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.6000000000000005,
+            0.46999999999999975
+          ],
+          "texture": "#work_grain"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.6000000000000005,
+            0.46999999999999975
+          ],
+          "texture": "#work_grain"
+        }
+      }
+    },
+    {
+      "name": "farm_ripe_grain_ear",
+      "from": [
+        5.1,
+        10.35,
+        5.68
+      ],
+      "to": [
+        5.7,
+        10.8,
+        6.15
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            0.6000000000000005,
+            0.4499999999999993
+          ],
+          "texture": "#work_grain"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            0.6000000000000005,
+            0.4499999999999993
+          ],
+          "texture": "#work_grain"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            0.46999999999999975,
+            0.4499999999999993
+          ],
+          "texture": "#work_grain"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            0.46999999999999975,
+            0.4499999999999993
+          ],
+          "texture": "#work_grain"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.6000000000000005,
+            0.46999999999999975
+          ],
+          "texture": "#work_grain"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.6000000000000005,
+            0.46999999999999975
+          ],
+          "texture": "#work_grain"
+        }
+      }
+    },
+    {
+      "name": "farm_ripe_grain_ear",
+      "from": [
+        5.1,
+        10.9,
+        5.68
+      ],
+      "to": [
+        5.7,
+        11.35,
+        6.15
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            0.6000000000000005,
+            0.4499999999999993
+          ],
+          "texture": "#work_grain"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            0.6000000000000005,
+            0.4499999999999993
+          ],
+          "texture": "#work_grain"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            0.46999999999999975,
+            0.4499999999999993
+          ],
+          "texture": "#work_grain"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            0.46999999999999975,
+            0.4499999999999993
+          ],
+          "texture": "#work_grain"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.6000000000000005,
+            0.46999999999999975
+          ],
+          "texture": "#work_grain"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.6000000000000005,
+            0.46999999999999975
+          ],
+          "texture": "#work_grain"
+        }
+      }
+    },
+    {
+      "name": "farm_ripe_grain_ear",
+      "from": [
+        5.5,
+        9.8,
+        5.68
+      ],
+      "to": [
+        6.1,
+        10.25,
+        6.15
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            0.6000000000000005,
+            0.4499999999999993
+          ],
+          "texture": "#work_grain"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            0.6000000000000005,
+            0.4499999999999993
+          ],
+          "texture": "#work_grain"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            0.46999999999999975,
+            0.4499999999999993
+          ],
+          "texture": "#work_grain"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            0.46999999999999975,
+            0.4499999999999993
+          ],
+          "texture": "#work_grain"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.6000000000000005,
+            0.46999999999999975
+          ],
+          "texture": "#work_grain"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.6000000000000005,
+            0.46999999999999975
+          ],
+          "texture": "#work_grain"
+        }
+      }
+    },
+    {
+      "name": "farm_ripe_grain_ear",
+      "from": [
+        5.5,
+        10.35,
+        5.68
+      ],
+      "to": [
+        6.1,
+        10.8,
+        6.15
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            0.6000000000000005,
+            0.4499999999999993
+          ],
+          "texture": "#work_grain"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            0.6000000000000005,
+            0.4499999999999993
+          ],
+          "texture": "#work_grain"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            0.46999999999999975,
+            0.4499999999999993
+          ],
+          "texture": "#work_grain"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            0.46999999999999975,
+            0.4499999999999993
+          ],
+          "texture": "#work_grain"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.6000000000000005,
+            0.46999999999999975
+          ],
+          "texture": "#work_grain"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.6000000000000005,
+            0.46999999999999975
+          ],
+          "texture": "#work_grain"
+        }
+      }
+    },
+    {
+      "name": "farm_ripe_grain_ear",
+      "from": [
+        5.5,
+        10.9,
+        5.68
+      ],
+      "to": [
+        6.1,
+        11.35,
+        6.15
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            0.6000000000000005,
+            0.4499999999999993
+          ],
+          "texture": "#work_grain"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            0.6000000000000005,
+            0.4499999999999993
+          ],
+          "texture": "#work_grain"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            0.46999999999999975,
+            0.4499999999999993
+          ],
+          "texture": "#work_grain"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            0.46999999999999975,
+            0.4499999999999993
+          ],
+          "texture": "#work_grain"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.6000000000000005,
+            0.46999999999999975
+          ],
+          "texture": "#work_grain"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.6000000000000005,
+            0.46999999999999975
+          ],
+          "texture": "#work_grain"
+        }
+      }
+    },
+    {
+      "name": "farm_wheat_stem",
+      "from": [
+        7.8,
+        7.9,
+        4.8
+      ],
+      "to": [
+        8.0,
+        11.8,
+        5.02
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            0.20000000000000018,
+            3.9000000000000004
+          ],
+          "texture": "#work_green"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            0.20000000000000018,
+            3.9000000000000004
+          ],
+          "texture": "#work_green"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            0.21999999999999975,
+            3.9000000000000004
+          ],
+          "texture": "#work_green"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            0.21999999999999975,
+            3.9000000000000004
+          ],
+          "texture": "#work_green"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.20000000000000018,
+            0.21999999999999975
+          ],
+          "texture": "#work_green"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.20000000000000018,
+            0.21999999999999975
+          ],
+          "texture": "#work_green"
+        }
+      }
+    },
+    {
+      "name": "farm_ripe_grain_ear",
+      "from": [
+        7.4,
+        9.8,
+        4.68
+      ],
+      "to": [
+        8.0,
+        10.25,
+        5.15
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            0.6000000000000005,
+            0.4499999999999993
+          ],
+          "texture": "#work_grain"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            0.6000000000000005,
+            0.4499999999999993
+          ],
+          "texture": "#work_grain"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            0.46999999999999975,
+            0.4499999999999993
+          ],
+          "texture": "#work_grain"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            0.46999999999999975,
+            0.4499999999999993
+          ],
+          "texture": "#work_grain"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.6000000000000005,
+            0.46999999999999975
+          ],
+          "texture": "#work_grain"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.6000000000000005,
+            0.46999999999999975
+          ],
+          "texture": "#work_grain"
+        }
+      }
+    },
+    {
+      "name": "farm_ripe_grain_ear",
+      "from": [
+        7.4,
+        10.35,
+        4.68
+      ],
+      "to": [
+        8.0,
+        10.8,
+        5.15
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            0.6000000000000005,
+            0.4499999999999993
+          ],
+          "texture": "#work_grain"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            0.6000000000000005,
+            0.4499999999999993
+          ],
+          "texture": "#work_grain"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            0.46999999999999975,
+            0.4499999999999993
+          ],
+          "texture": "#work_grain"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            0.46999999999999975,
+            0.4499999999999993
+          ],
+          "texture": "#work_grain"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.6000000000000005,
+            0.46999999999999975
+          ],
+          "texture": "#work_grain"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.6000000000000005,
+            0.46999999999999975
+          ],
+          "texture": "#work_grain"
+        }
+      }
+    },
+    {
+      "name": "farm_ripe_grain_ear",
+      "from": [
+        7.4,
+        10.9,
+        4.68
+      ],
+      "to": [
+        8.0,
+        11.35,
+        5.15
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            0.6000000000000005,
+            0.4499999999999993
+          ],
+          "texture": "#work_grain"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            0.6000000000000005,
+            0.4499999999999993
+          ],
+          "texture": "#work_grain"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            0.46999999999999975,
+            0.4499999999999993
+          ],
+          "texture": "#work_grain"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            0.46999999999999975,
+            0.4499999999999993
+          ],
+          "texture": "#work_grain"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.6000000000000005,
+            0.46999999999999975
+          ],
+          "texture": "#work_grain"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.6000000000000005,
+            0.46999999999999975
+          ],
+          "texture": "#work_grain"
+        }
+      }
+    },
+    {
+      "name": "farm_ripe_grain_ear",
+      "from": [
+        7.8,
+        9.8,
+        4.68
+      ],
+      "to": [
+        8.4,
+        10.25,
+        5.15
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            0.6000000000000005,
+            0.4499999999999993
+          ],
+          "texture": "#work_grain"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            0.6000000000000005,
+            0.4499999999999993
+          ],
+          "texture": "#work_grain"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            0.46999999999999975,
+            0.4499999999999993
+          ],
+          "texture": "#work_grain"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            0.46999999999999975,
+            0.4499999999999993
+          ],
+          "texture": "#work_grain"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.6000000000000005,
+            0.46999999999999975
+          ],
+          "texture": "#work_grain"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.6000000000000005,
+            0.46999999999999975
+          ],
+          "texture": "#work_grain"
+        }
+      }
+    },
+    {
+      "name": "farm_ripe_grain_ear",
+      "from": [
+        7.8,
+        10.35,
+        4.68
+      ],
+      "to": [
+        8.4,
+        10.8,
+        5.15
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            0.6000000000000005,
+            0.4499999999999993
+          ],
+          "texture": "#work_grain"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            0.6000000000000005,
+            0.4499999999999993
+          ],
+          "texture": "#work_grain"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            0.46999999999999975,
+            0.4499999999999993
+          ],
+          "texture": "#work_grain"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            0.46999999999999975,
+            0.4499999999999993
+          ],
+          "texture": "#work_grain"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.6000000000000005,
+            0.46999999999999975
+          ],
+          "texture": "#work_grain"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.6000000000000005,
+            0.46999999999999975
+          ],
+          "texture": "#work_grain"
+        }
+      }
+    },
+    {
+      "name": "farm_ripe_grain_ear",
+      "from": [
+        7.8,
+        10.9,
+        4.68
+      ],
+      "to": [
+        8.4,
+        11.35,
+        5.15
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            0.6000000000000005,
+            0.4499999999999993
+          ],
+          "texture": "#work_grain"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            0.6000000000000005,
+            0.4499999999999993
+          ],
+          "texture": "#work_grain"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            0.46999999999999975,
+            0.4499999999999993
+          ],
+          "texture": "#work_grain"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            0.46999999999999975,
+            0.4499999999999993
+          ],
+          "texture": "#work_grain"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.6000000000000005,
+            0.46999999999999975
+          ],
+          "texture": "#work_grain"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.6000000000000005,
+            0.46999999999999975
+          ],
+          "texture": "#work_grain"
+        }
+      }
+    },
+    {
+      "name": "farm_linen_seed_sack",
+      "from": [
+        10.5,
+        6.1,
+        3
+      ],
+      "to": [
+        13,
+        8,
+        6
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            2.5,
+            1.9000000000000004
+          ],
+          "texture": "#work_canvas"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            2.5,
+            1.9000000000000004
+          ],
+          "texture": "#work_canvas"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            3,
+            1.9000000000000004
+          ],
+          "texture": "#work_canvas"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            3,
+            1.9000000000000004
+          ],
+          "texture": "#work_canvas"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            2.5,
+            3
+          ],
+          "texture": "#work_canvas"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            2.5,
+            3
+          ],
+          "texture": "#work_canvas"
+        }
+      }
+    },
+    {
+      "name": "farm_folded_seed_sack",
+      "from": [
+        10.65,
+        8,
+        3.2
+      ],
+      "to": [
+        12.85,
+        8.6,
+        5.8
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            2.1999999999999993,
+            0.5999999999999996
+          ],
+          "texture": "#work_canvas"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            2.1999999999999993,
+            0.5999999999999996
+          ],
+          "texture": "#work_canvas"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            2.5999999999999996,
+            0.5999999999999996
+          ],
+          "texture": "#work_canvas"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            2.5999999999999996,
+            0.5999999999999996
+          ],
+          "texture": "#work_canvas"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            2.1999999999999993,
+            2.5999999999999996
+          ],
+          "texture": "#work_canvas"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            2.1999999999999993,
+            2.5999999999999996
+          ],
+          "texture": "#work_canvas"
+        }
+      }
+    },
+    {
+      "name": "farm_seed_sack_tie",
+      "from": [
+        11.35,
+        8.55,
+        3.5
+      ],
+      "to": [
+        12.15,
+        8.8,
+        5.5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            0.8000000000000007,
+            0.25
+          ],
+          "texture": "#work_green"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            0.8000000000000007,
+            0.25
+          ],
+          "texture": "#work_green"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            2.0,
+            0.25
+          ],
+          "texture": "#work_green"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            2.0,
+            0.25
+          ],
+          "texture": "#work_green"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.8000000000000007,
+            2.0
+          ],
+          "texture": "#work_green"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.8000000000000007,
+            2.0
+          ],
+          "texture": "#work_green"
+        }
+      }
+    },
+    {
+      "name": "farm_sign_wheat_emblem",
+      "from": [
+        6.1,
+        12.0,
+        7.25
+      ],
+      "to": [
+        6.5,
+        14.5,
+        7.65
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            0.40000000000000036,
+            2.5
+          ],
+          "texture": "#work_grain"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            0.40000000000000036,
+            2.5
+          ],
+          "texture": "#work_grain"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            0.40000000000000036,
+            2.5
+          ],
+          "texture": "#work_grain"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            0.40000000000000036,
+            2.5
+          ],
+          "texture": "#work_grain"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.40000000000000036,
+            0.40000000000000036
+          ],
+          "texture": "#work_grain"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.40000000000000036,
+            0.40000000000000036
+          ],
+          "texture": "#work_grain"
+        }
+      }
+    },
+    {
+      "name": "farm_sign_wheat_emblem",
+      "from": [
+        7.0,
+        12.35,
+        7.25
+      ],
+      "to": [
+        7.4,
+        14.5,
+        7.65
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            0.40000000000000036,
+            2.1500000000000004
+          ],
+          "texture": "#work_grain"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            0.40000000000000036,
+            2.1500000000000004
+          ],
+          "texture": "#work_grain"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            0.40000000000000036,
+            2.1500000000000004
+          ],
+          "texture": "#work_grain"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            0.40000000000000036,
+            2.1500000000000004
+          ],
+          "texture": "#work_grain"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.40000000000000036,
+            0.40000000000000036
+          ],
+          "texture": "#work_grain"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.40000000000000036,
+            0.40000000000000036
+          ],
+          "texture": "#work_grain"
+        }
+      }
+    },
+    {
+      "name": "farm_sign_wheat_emblem",
+      "from": [
+        7.9,
+        12.7,
+        7.25
+      ],
+      "to": [
+        8.3,
+        14.5,
+        7.65
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            0.40000000000000124,
+            1.8000000000000007
+          ],
+          "texture": "#work_grain"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            0.40000000000000124,
+            1.8000000000000007
+          ],
+          "texture": "#work_grain"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            0.40000000000000036,
+            1.8000000000000007
+          ],
+          "texture": "#work_grain"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            0.40000000000000036,
+            1.8000000000000007
+          ],
+          "texture": "#work_grain"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.40000000000000124,
+            0.40000000000000036
+          ],
+          "texture": "#work_grain"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.40000000000000124,
+            0.40000000000000036
+          ],
+          "texture": "#work_grain"
+        }
+      }
+    }
+  ]
+}

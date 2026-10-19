@@ -1,8 +1,8 @@
-# Laws & Justice — 0.2.0 Beta
+# Laws & Justice — 0.3.0 Beta
 
 Sistema de prisões construídas pelos jogadores, com celas registadas, penas que contam apenas enquanto o condenado está online e libertação automática. Para **Minecraft 1.21.1, NeoForge 21.1.256 ou superior e Java 21**, em servidor dedicado ou mundo aberto por LAN.
 
-Esta versão inclui prisões, processos, provas, audiências, decisões do Presidente, mandados físicos e algemas. Os trabalhos prisionais, as multas e as fianças seguem nas próximas fases. O [plano completo](PLANO-COMPLETO.md) conserva todas essas funcionalidades.
+Esta versão inclui prisões, processos, provas, audiências, decisões do Presidente, mandados físicos, algemas e seis trabalhos prisionais com zonas próprias e entregas seladas. Multas e fianças seguem na fase 0.4. O [plano completo](PLANO-COMPLETO.md) conserva todas essas funcionalidades.
 
 ## Instalação
 
@@ -54,7 +54,7 @@ A cela é o ponto de chegada e de regresso. Durante a pena, o jogador pode circu
 
 No separador **Penas**, um administrador escolhe um jogador online e vivo, a prisão, uma cela com vaga, a duração em minutos e o motivo. A duração pode ir de **1 a 43 200 minutos**. A decisão fica guardada e o jogador é enviado para a cela.
 
-O jogador condenado pode consultar a sua própria pena ao interagir com o controlo ou com a fechadura. O menu apresenta a pena original, o tempo cumprido online e o tempo restante. As reduções de pena permanecem a zero nesta versão; o Trabalho Comunitário será acrescentado na versão 0.3.
+O jogador condenado pode consultar a sua própria pena ao interagir com o controlo ou com a fechadura. O menu apresenta a pena original, o tempo cumprido online e o tempo restante. O Trabalho Comunitário permite reduzir a pena, por defeito até 50% da sua duração original. O tempo normal continua a decorrer enquanto o jogador trabalha.
 
 - Desligar-se pausa a contagem; voltar a entrar retoma a pena guardada.
 - Morrer, renascer, usar um portal ou teleportar não elimina a condenação. O servidor volta a colocar o jogador na prisão quando necessário.
@@ -88,11 +88,55 @@ Agachar e usar as algemas permite ao acompanhante original ou a um administrador
 
 O tribunal guarda até **256 processos**, com **16 depoimentos por processo**, e até **1024 mandados**. Não elimina provas antigas silenciosamente ao atingir esses limites.
 
+## Trabalho Comunitário
+
+Os trabalhos são opcionais e só contam para um prisioneiro vivo em **Sobrevivência**, com uma tarefa aceite, dentro da prisão e da zona corretas. O Presidente não recebe permissões para configurar objetivos, recursos ou progresso. As regras pertencem ao administrador; os objetivos e a recompensa de uma tarefa já aceite ficam fixados.
+
+| Trabalho | Objetivo padrão | Redução padrão | Como se realiza |
+| --- | --- | --- | --- |
+| Mineração | 64 pedras | 3 minutos | Minerar recursos previamente validados, com uma picareta. |
+| Agricultura | 32 trigos | 4 minutos | Colher trigo validado e maduro. |
+| Carpintaria | 16 tábuas | 2 minutos | Recolher troncos validados com um machado e processá-los na Mesa de Oficina; quatro tábuas por tronco. |
+| Limpeza | 10 pontos | 5 minutos | Utilizar uma escova nos pontos de manutenção validados e permanecer perto durante dois segundos por ponto. |
+| Ferraria | 8 barras de ferro | 5 minutos | Recolher minério de ferro e carvão validados na oficina e processá-los na mesa; um carvão fornece oito unidades de combustível. |
+| Transporte | 16 unidades de carga | 3 minutos | Recolher carga num Posto de Armazém e descarregar noutro da mesma zona, a pelo menos seis blocos de distância. |
+
+A Mesa de Oficina demora **dois segundos por lote de madeira** e **quatro segundos por barra de ferro**, medidos em ticks online. Afastar-se mais de quatro blocos, sair do mundo ou deixar de poder trabalhar interrompe essa ação sem consumir os materiais reservados. Os materiais já recolhidos e o progresso concluído continuam guardados.
+
+### Preparar as zonas
+
+1. Constrói os espaços e coloca um **Quadro de Trabalhos**. Um administrador usa o Agrimensor Prisional para selecionar dois cantos de cada zona, incluindo o chão e a altura onde os jogadores trabalham.
+2. No separador **Zonas**, escolhe a prisão, dá um nome e seleciona **Mina, Horta, Oficina, Armazém ou Pátio**. A zona tem de ficar totalmente dentro da prisão, sem sobreposição com outras zonas. O volume máximo de cada zona é 65 536 blocos.
+3. Coloca os recursos reais: pedra e variantes aceites na mina; trigo na horta; troncos, minério de ferro e minério de carvão na oficina; pontos sólidos expostos no pátio. A inspeção não gera blocos nem recursos.
+4. Seleciona a zona registada e carrega em **Inspecionar e validar os recursos**. Cada ponto fica registado no servidor. Existem até 256 zonas e 8192 pontos de recursos por mundo.
+5. Coloca uma **Caixa de Entrega dentro de cada zona**. Acrescenta o respetivo Posto de Mineração, Posto Agrícola, Mesa de Oficina ou Posto de Manutenção. Para o armazém, coloca dois Postos de Armazém a pelo menos seis blocos de distância.
+6. No separador **Regras**, ajusta a quantidade, os minutos de recompensa e a percentagem máxima da pena original. O padrão é 50%; zero desativa novas recompensas. A percentagem também é verificada na entrega.
+
+As zonas de oficina aceitam carpintaria e ferraria. As restantes zonas correspondem ao trabalho do mesmo tipo. Os postos servem para consultar as instruções e organizar os espaços; a mesa valida a produção e os postos do armazém validam o percurso. Uma zona registada não é deslocada para reiniciar os recursos consumidos.
+
+### Aceitar, trabalhar e entregar
+
+1. O prisioneiro abre o Quadro de Trabalhos e aceita uma tarefa para a sua prisão.
+2. Recebe um **Saco de Trabalho Selado**. O item é uma referência: os materiais e os contadores ficam guardados no servidor.
+3. Realiza as ações na zona indicada. Os recursos validados passam para o saco; não são largados como itens normais. Materiais trazidos de fora ou obtidos em criativo não acrescentam progresso.
+4. No trabalho de produção, utiliza a Mesa de Oficina e permanece perto até terminar cada lote. No transporte, utiliza os dois postos indicados.
+5. Com o objetivo completo e o saco no inventário, abre a Caixa de Entrega **da mesma zona** e entrega-o. O servidor consome a entrega uma única vez e guarda a redução juntamente com o registo do trabalho.
+
+Podes recuperar a referência ao saco num posto se o perderes. As cópias partilham o mesmo progresso e não dão outra recompensa. Abandonar uma tarefa descarta o seu progresso sem descontar tempo. O menu apresenta a pena original, o tempo online, os descontos, o restante e o histórico recente.
+
+Uma recompensa grande é limitada à percentagem disponível e ao tempo que ainda falta. Se a redução completar a pena, o jogador é libertado pelo mesmo sistema normal de saída segura. Quando a pena termina por outro motivo, a tarefa deixa de autorizar qualquer entrega.
+
+### Renovar recursos sem duplicação
+
+Cada ponto validado só conta uma vez. Voltar a inspecionar a mesma zona ou colocar e partir repetidamente um bloco não reinicia esse ponto. Durante os trabalhos, não são gerados itens transferíveis nem recursos automáticos.
+
+Para renovar um ponto consumido, um **administrador em Sobrevivência** tem de substituir fisicamente o recurso e voltar a inspecionar a zona **depois de terminarem ou serem abandonadas as tarefas ativas dessa zona**. A substituição normal consome os blocos ou sementes usados pelo administrador. Colocações de jogadores comuns ou em criativo não autorizam essa renovação. Na horta, a planta também tem de estar madura antes de poder contar de novo.
+
 ## Dados do mundo
 
-Prisões, celas, penas, tempo cumprido, processos, provas, mandados, detenções temporárias, histórico e libertações pendentes ficam no ficheiro **`<mundo>/data/laws_justice.dat`**. Não são guardados no item da porta, no agrimensor ou apenas na memória do cliente.
+Prisões, celas, penas, tempo cumprido, processos, provas, mandados, detenções temporárias, zonas, recursos, tarefas, créditos de trabalho, histórico e libertações pendentes ficam no ficheiro **`<mundo>/data/laws_justice.dat`**. Não são guardados no item da porta, no agrimensor ou apenas na memória do cliente.
 
-Os mundos da versão 0.1 são migrados automaticamente sem reiniciar as penas. As decisões administrativas e judiciais são guardadas imediatamente. O progresso das penas recebe pontos de gravação periódicos e é gravado ao sair e ao encerrar normalmente o mundo. Não há contagem de tempo offline. Um encerramento abrupto pode perder os últimos ticks desde o ponto de gravação, tal como outras alterações recentes do mundo.
+Os mundos das versões 0.1 e 0.2 são migrados automaticamente sem reiniciar as penas. As decisões administrativas e judiciais são guardadas imediatamente. O progresso das penas recebe pontos de gravação periódicos e é gravado ao sair e ao encerrar normalmente o mundo. Não há contagem de tempo offline. Um encerramento abrupto pode perder os últimos ticks desde o ponto de gravação, tal como outras alterações recentes do mundo.
 
 Inclui este ficheiro nas cópias de segurança do mundo. Se os dados estiverem danificados, o mod informa o erro em vez de substituir silenciosamente os registos por uma prisão vazia.
 
