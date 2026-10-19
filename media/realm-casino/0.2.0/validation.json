@@ -1,0 +1,533 @@
+{
+  "success": true,
+  "message": "Six real casino games, original furniture, actual wallet transfers, host restart tags, compact interfaces and native block-entity updates passed.",
+  "step": 68,
+  "checks": [
+    "All registered baked states and all six furniture item models have native geometry and resolved textures.",
+    "All three real furniture blocks photographed together from a three-quarter camera angle, more than 12 seconds after scene creation, with a furnished wall and resolved chunks.",
+    "Actual native owner deposit, withdrawal, pending-credit claim and configuration travelled through C2S and authoritative S2C; real Chronicles balance, casino bank and pending credit conserve the initial fixture money.",
+    "Native slots Play, Rules and Owner tabs fit 320x240; visible controls remain within bounds before and after scrolling.",
+    "Native roulette Play, Rules and Owner tabs fit 320x240; visible controls remain within bounds before and after scrolling.",
+    "The actual roulette block was photographed while its committed 3.2-second animation was running and after settlement, at an unchanged camera and unchanged BE round id; the rendered tabletop region changed pixels.",
+    "Native blackjack Play, Rules and Owner tabs fit 320x240; visible controls remain within bounds before and after scrolling.",
+    "All three actual native games debit the genuine Chronicles wallet, return authoritative server results, update rendered world block entities through native BE packets and preserve wallet + bank + pending credit. Blackjack was stood through actual C2S when the deal remained active; no shoe was sent to the client.",
+    "Native plinko Play, Rules and Owner tabs fit 320x240; visible controls remain within bounds before and after scrolling.",
+    "Native wheel Play, Rules and Owner tabs fit 320x240; visible controls remain within bounds before and after scrolling.",
+    "Native chicken Play, Rules and Owner tabs fit 320x240; visible controls remain within bounds before and after scrolling.",
+    "All six physical game blocks, models, Play/Rules/Owner menus and 320x240 controls passed; the three new games used actual C2S/S2C, server entropy, real Chronicles stakes, pending prize collection, native BE results and conservation of wallet + banks + claims.",
+    "Royal Crossing advanced and cashed out through actual native buttons. Any naturally crashed attempt was debited and audited before retry; no random source or financial snapshot was replaced."
+  ],
+  "screenshots": [
+    "realm-casino-furniture.png",
+    "realm-casino-owner.png",
+    "realm-casino-rules.png",
+    "realm-casino-slots.png",
+    "realm-casino-slots-spinning.png",
+    "realm-casino-slots-result.png",
+    "realm-casino-roulette-world-spinning.png",
+    "realm-casino-roulette-world-settled.png",
+    "realm-casino-roulette.png",
+    "realm-casino-blackjack.png",
+    "realm-casino-blackjack-result.png",
+    "realm-casino-furniture-after-play.png",
+    "realm-casino-slots-detail.png",
+    "realm-casino-roulette-detail.png",
+    "realm-casino-blackjack-detail.png",
+    "realm-casino-arcade-furniture.png",
+    "realm-casino-plinko-detail.png",
+    "realm-casino-wheel-detail.png",
+    "realm-casino-chicken-detail.png",
+    "realm-casino-plinko-rules.png",
+    "realm-casino-plinko-dropping.png",
+    "realm-casino-plinko-result.png",
+    "realm-casino-wheel-rules.png",
+    "realm-casino-wheel-spinning.png",
+    "realm-casino-wheel-world-spinning.png",
+    "realm-casino-wheel-world-settled.png",
+    "realm-casino-wheel-result.png",
+    "realm-casino-chicken-rules.png",
+    "realm-casino-chicken-ready.png",
+    "realm-casino-chicken-crossing.png",
+    "realm-casino-chicken-collected.png"
+  ],
+  "actual_minecraft_client": true,
+  "actual_integrated_server": true,
+  "real_s2c_transport": true,
+  "real_c2s_transport": true,
+  "real_chronicles_wallet": true,
+  "lan_host_wallet_dual_save": true,
+  "actual_host_wallet_saves": [
+    {
+      "operation": "slots_deposit",
+      "balance": 4500000,
+      "receipt": "46bffb65-ff6d-4a63-a1db-5d415762dde8",
+      "player_file": true,
+      "level_dat_host": true,
+      "loaded_host_restart_tag": true
+    },
+    {
+      "operation": "pending_claim",
+      "balance": 4510000,
+      "receipt": "60f7c816-66ba-4ff8-b6b5-f8d641ae12a4",
+      "player_file": true,
+      "level_dat_host": true,
+      "loaded_host_restart_tag": true
+    },
+    {
+      "operation": "slots_bet",
+      "balance": 4509900,
+      "receipt": "775124d3-8c85-4e60-9905-abd9d65b233e",
+      "player_file": true,
+      "level_dat_host": true,
+      "loaded_host_restart_tag": true
+    },
+    {
+      "operation": "roulette_bet",
+      "balance": 4009800,
+      "receipt": "53430aab-7b26-4775-b85b-b6756685db18",
+      "player_file": true,
+      "level_dat_host": true,
+      "loaded_host_restart_tag": true
+    },
+    {
+      "operation": "blackjack_bet",
+      "balance": 3509700,
+      "receipt": "2f1d5c09-b50d-4bb2-9ba0-6841c7ec5cc5",
+      "player_file": true,
+      "level_dat_host": true,
+      "loaded_host_restart_tag": true
+    },
+    {
+      "operation": "plinko_bet",
+      "balance": 3009600,
+      "receipt": "7bc257d0-76b6-42be-9ec4-5d057f9a6edd",
+      "player_file": true,
+      "level_dat_host": true,
+      "loaded_host_restart_tag": true
+    },
+    {
+      "operation": "wheel_bet",
+      "balance": 2509500,
+      "receipt": "df818aa0-a445-489e-93c8-bb6a7b3204a9",
+      "player_file": true,
+      "level_dat_host": true,
+      "loaded_host_restart_tag": true
+    },
+    {
+      "operation": "chicken_bet",
+      "balance": 2009400,
+      "receipt": "2b1a645f-a434-41d8-a125-0df0e11d8e10",
+      "player_file": true,
+      "level_dat_host": true,
+      "loaded_host_restart_tag": true
+    },
+    {
+      "operation": "arcade_claim",
+      "balance": 2010318,
+      "receipt": "767570d2-ad25-4245-bb29-df8ef3b4f36d",
+      "player_file": true,
+      "level_dat_host": true,
+      "loaded_host_restart_tag": true
+    }
+  ],
+  "real_world_models": true,
+  "real_world_animation": true,
+  "server_result_block_entity_updates": 9,
+  "capture_resolution": "1600x900",
+  "capture_gui_scale": 2,
+  "world_animation_changing_pixels": 2110,
+  "fortune_world_animation_changing_pixels": 34145,
+  "demonstration_world_and_money": true,
+  "synthetic_financial_snapshots": false,
+  "server_rng_overridden": false,
+  "actual_c2s_requests": [
+    {
+      "operation": "deposit",
+      "payload": {
+        "amount": 500000,
+        "nonce": "b63ed2d9-7769-4179-9622-a5a9c90f4718",
+        "version": 0
+      }
+    },
+    {
+      "operation": "withdraw",
+      "payload": {
+        "amount": 10000,
+        "nonce": "6e911ee7-1e92-4f20-a7f5-63243562a670",
+        "version": 1
+      }
+    },
+    {
+      "operation": "claim",
+      "payload": {
+        "amount": 0,
+        "nonce": "3ff552fa-e83b-4453-83c0-811ede682f54",
+        "version": 2
+      }
+    },
+    {
+      "operation": "configure",
+      "payload": {
+        "name": "The Velvet Crown",
+        "minBet": 100,
+        "maxBet": 1000,
+        "nonce": "03a087f6-ac95-4826-896b-9efe11dc285a",
+        "version": 2
+      }
+    },
+    {
+      "operation": "bet",
+      "payload": {
+        "amount": 100,
+        "nonce": "d683ad91-b4ae-455f-b3b1-f6d3df842f25",
+        "version": 3
+      }
+    },
+    {
+      "operation": "deposit",
+      "payload": {
+        "amount": 500000,
+        "nonce": "16d10e28-0c57-4ffa-afc4-e154637ad5ac",
+        "version": 0
+      }
+    },
+    {
+      "operation": "bet",
+      "payload": {
+        "amount": 100,
+        "selection": "red",
+        "nonce": "c5ce65af-f3ca-4e33-ab76-2a9bd1a09873",
+        "version": 1
+      }
+    },
+    {
+      "operation": "deposit",
+      "payload": {
+        "amount": 500000,
+        "nonce": "1899ae2a-2ee7-4203-81cb-9034af497048",
+        "version": 0
+      }
+    },
+    {
+      "operation": "bet",
+      "payload": {
+        "amount": 100,
+        "nonce": "ac559555-28af-452a-8a90-47f120d7a0a3",
+        "version": 1
+      }
+    },
+    {
+      "operation": "stand",
+      "payload": {
+        "round": "a152214e-73e4-403b-bcde-02ed7c45aae7",
+        "revision": 1,
+        "nonce": "6f275958-b816-4449-930a-c77e31beaa12",
+        "version": 2
+      }
+    },
+    {
+      "operation": "deposit",
+      "payload": {
+        "amount": 500000,
+        "nonce": "29951090-6f16-439f-9d44-4be0cf598e92",
+        "version": 0
+      }
+    },
+    {
+      "operation": "bet",
+      "payload": {
+        "amount": 100,
+        "nonce": "d2465f0a-8e38-4f73-996f-d54015b4c190",
+        "version": 1
+      }
+    },
+    {
+      "operation": "deposit",
+      "payload": {
+        "amount": 500000,
+        "nonce": "8ee0b298-a42e-4657-bd62-be64a8b83257",
+        "version": 0
+      }
+    },
+    {
+      "operation": "bet",
+      "payload": {
+        "amount": 100,
+        "nonce": "ccc59ed1-4b71-49da-b1a6-6d16929ecb42",
+        "version": 1
+      }
+    },
+    {
+      "operation": "deposit",
+      "payload": {
+        "amount": 500000,
+        "nonce": "77b58022-b03e-48ee-9619-91a56bd89b12",
+        "version": 0
+      }
+    },
+    {
+      "operation": "bet",
+      "payload": {
+        "amount": 100,
+        "nonce": "33b2fe1f-03fd-4684-9d7b-ae5a21d04fd9",
+        "version": 1
+      }
+    },
+    {
+      "operation": "advance",
+      "payload": {
+        "round": "32d16d01-faec-4acc-ac93-673c8b2edc70",
+        "revision": 1,
+        "nonce": "9fa90f53-6936-4c09-9f53-02378fd53b73",
+        "version": 2
+      }
+    },
+    {
+      "operation": "cashout",
+      "payload": {
+        "round": "32d16d01-faec-4acc-ac93-673c8b2edc70",
+        "revision": 2,
+        "nonce": "d50f6ede-2f1c-40d2-ad04-907ff33d94e1",
+        "version": 2
+      }
+    },
+    {
+      "operation": "claim",
+      "payload": {
+        "amount": 0,
+        "nonce": "b1ca2cee-128a-4b05-9222-bfac8cc87140",
+        "version": 3
+      }
+    },
+    {
+      "operation": "refresh",
+      "payload": {}
+    }
+  ],
+  "model_quads": {
+    "Block{realmcasino:slot_machine}[facing\u003dnorth,half\u003dupper]": 454,
+    "Block{realmcasino:slot_machine}[facing\u003dnorth,half\u003dlower]": 316,
+    "Block{realmcasino:slot_machine}[facing\u003dsouth,half\u003dupper]": 454,
+    "Block{realmcasino:slot_machine}[facing\u003dsouth,half\u003dlower]": 316,
+    "Block{realmcasino:slot_machine}[facing\u003dwest,half\u003dupper]": 454,
+    "Block{realmcasino:slot_machine}[facing\u003dwest,half\u003dlower]": 316,
+    "Block{realmcasino:slot_machine}[facing\u003deast,half\u003dupper]": 454,
+    "Block{realmcasino:slot_machine}[facing\u003deast,half\u003dlower]": 316,
+    "Block{realmcasino:roulette_table}[facing\u003dnorth]": 732,
+    "Block{realmcasino:roulette_table}[facing\u003dsouth]": 732,
+    "Block{realmcasino:roulette_table}[facing\u003dwest]": 732,
+    "Block{realmcasino:roulette_table}[facing\u003deast]": 732,
+    "Block{realmcasino:blackjack_table}[facing\u003dnorth]": 816,
+    "Block{realmcasino:blackjack_table}[facing\u003dsouth]": 816,
+    "Block{realmcasino:blackjack_table}[facing\u003dwest]": 816,
+    "Block{realmcasino:blackjack_table}[facing\u003deast]": 816,
+    "Block{realmcasino:plinko_board}[facing\u003dnorth,half\u003dupper]": 706,
+    "Block{realmcasino:plinko_board}[facing\u003dnorth,half\u003dlower]": 676,
+    "Block{realmcasino:plinko_board}[facing\u003dsouth,half\u003dupper]": 706,
+    "Block{realmcasino:plinko_board}[facing\u003dsouth,half\u003dlower]": 676,
+    "Block{realmcasino:plinko_board}[facing\u003dwest,half\u003dupper]": 706,
+    "Block{realmcasino:plinko_board}[facing\u003dwest,half\u003dlower]": 676,
+    "Block{realmcasino:plinko_board}[facing\u003deast,half\u003dupper]": 706,
+    "Block{realmcasino:plinko_board}[facing\u003deast,half\u003dlower]": 676,
+    "Block{realmcasino:fortune_wheel}[facing\u003dnorth,half\u003dupper]": 313,
+    "Block{realmcasino:fortune_wheel}[facing\u003dnorth,half\u003dlower]": 121,
+    "Block{realmcasino:fortune_wheel}[facing\u003dsouth,half\u003dupper]": 313,
+    "Block{realmcasino:fortune_wheel}[facing\u003dsouth,half\u003dlower]": 121,
+    "Block{realmcasino:fortune_wheel}[facing\u003dwest,half\u003dupper]": 313,
+    "Block{realmcasino:fortune_wheel}[facing\u003dwest,half\u003dlower]": 121,
+    "Block{realmcasino:fortune_wheel}[facing\u003deast,half\u003dupper]": 313,
+    "Block{realmcasino:fortune_wheel}[facing\u003deast,half\u003dlower]": 121,
+    "Block{realmcasino:chicken_road_table}[facing\u003dnorth]": 582,
+    "Block{realmcasino:chicken_road_table}[facing\u003dsouth]": 582,
+    "Block{realmcasino:chicken_road_table}[facing\u003dwest]": 582,
+    "Block{realmcasino:chicken_road_table}[facing\u003deast]": 582
+  },
+  "real_server_rounds": {
+    "slots": {
+      "id": "65fdf362-05b3-4fdc-9cbb-93dae458d6b1",
+      "game": "slots",
+      "phase": "settled",
+      "stake": 100,
+      "payout": 0,
+      "maxPayout": 10000,
+      "startedAt": 1792418265906,
+      "deadline": 1792418265906,
+      "revision": 1,
+      "outcome": "lose",
+      "results": [
+        6,
+        1,
+        0
+      ],
+      "playerCards": [],
+      "dealerCards": [],
+      "canHit": false,
+      "canStand": false
+    },
+    "roulette": {
+      "id": "39547710-52ee-4c97-b7c6-554072a91596",
+      "game": "roulette",
+      "phase": "settled",
+      "stake": 100,
+      "payout": 200,
+      "maxPayout": 3600,
+      "startedAt": 1792418271191,
+      "deadline": 1792418271191,
+      "revision": 1,
+      "outcome": "win",
+      "results": [
+        12
+      ],
+      "playerCards": [],
+      "dealerCards": [],
+      "canHit": false,
+      "canStand": false
+    },
+    "blackjack_dealt": {
+      "id": "a152214e-73e4-403b-bcde-02ed7c45aae7",
+      "game": "blackjack",
+      "phase": "active",
+      "stake": 100,
+      "payout": 0,
+      "maxPayout": 250,
+      "startedAt": 1792418280648,
+      "deadline": 1792418340648,
+      "revision": 1,
+      "outcome": "",
+      "results": [],
+      "playerCards": [
+        51,
+        23
+      ],
+      "dealerCards": [
+        12,
+        -1
+      ],
+      "canHit": true,
+      "canStand": true
+    },
+    "blackjack_settled": {
+      "id": "a152214e-73e4-403b-bcde-02ed7c45aae7",
+      "game": "blackjack",
+      "phase": "settled",
+      "stake": 100,
+      "payout": 200,
+      "maxPayout": 250,
+      "startedAt": 1792418280648,
+      "deadline": 1792418340648,
+      "revision": 2,
+      "outcome": "win",
+      "results": [],
+      "playerCards": [
+        51,
+        23
+      ],
+      "dealerCards": [
+        12,
+        28,
+        34
+      ],
+      "canHit": false,
+      "canStand": false
+    },
+    "plinko": {
+      "id": "4d09bcaf-0d31-452a-b8fa-23358d4655a0",
+      "game": "plinko",
+      "phase": "settled",
+      "stake": 100,
+      "payout": 400,
+      "maxPayout": 3200,
+      "startedAt": 1792418293826,
+      "deadline": 1792418293826,
+      "revision": 1,
+      "outcome": "win",
+      "results": [
+        0,
+        1,
+        1,
+        1,
+        1,
+        0,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "playerCards": [],
+      "dealerCards": [],
+      "canHit": false,
+      "canStand": false
+    },
+    "wheel": {
+      "id": "08e31a94-7659-41aa-8531-4201219dd5d9",
+      "game": "wheel",
+      "phase": "settled",
+      "stake": 100,
+      "payout": 0,
+      "maxPayout": 500,
+      "startedAt": 1792418299385,
+      "deadline": 1792418299385,
+      "revision": 1,
+      "outcome": "lose",
+      "results": [
+        13
+      ],
+      "playerCards": [],
+      "dealerCards": [],
+      "canHit": false,
+      "canStand": false
+    },
+    "chicken_crossing": {
+      "id": "32d16d01-faec-4acc-ac93-673c8b2edc70",
+      "game": "chicken",
+      "phase": "active",
+      "stake": 100,
+      "payout": 0,
+      "maxPayout": 884,
+      "startedAt": 1792418309594,
+      "deadline": 1792418369594,
+      "revision": 2,
+      "outcome": "",
+      "steps": 1,
+      "crashed": false,
+      "cashout": 118,
+      "nextPayout": 148,
+      "canAdvance": true,
+      "canCashout": true,
+      "results": [
+        1
+      ],
+      "playerCards": [],
+      "dealerCards": [],
+      "canHit": false,
+      "canStand": false
+    },
+    "chicken_settled": {
+      "id": "32d16d01-faec-4acc-ac93-673c8b2edc70",
+      "game": "chicken",
+      "phase": "settled",
+      "stake": 100,
+      "payout": 118,
+      "maxPayout": 884,
+      "startedAt": 1792418309594,
+      "deadline": 1792418369594,
+      "revision": 3,
+      "outcome": "win",
+      "steps": 1,
+      "crashed": false,
+      "cashout": 118,
+      "nextPayout": 148,
+      "canAdvance": false,
+      "canCashout": false,
+      "results": [
+        1
+      ],
+      "playerCards": [],
+      "dealerCards": [],
+      "canHit": false,
+      "canStand": false
+    }
+  }
+}

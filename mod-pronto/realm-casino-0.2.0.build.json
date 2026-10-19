@@ -1,0 +1,72 @@
+{
+  "unit_tests": 58,
+  "standalone_native_tests": 56,
+  "integrated_native_tests": 56,
+  "actual_client_validation": true,
+  "version": "0.2.0",
+  "source_commit": "9958b05808e82242671c8a75db77fd169c21cb43",
+  "tested_run": "https://github.com/ROCKABITS/Mods/actions/runs/39264214894",
+  "jar_sha256": "25cbf35950be8f021ec1d1d40381c6562c6a3ba476d1b567afcd5ec91aa895d5",
+  "zip_sha256": "b89e0757f986531a181ff0734e69ecaedc2c8876135d24da554c4a2a08f0e1fa",
+  "project_versions": {
+    "realm-casino": "0.2.0"
+  },
+  "runtime_dependency_checksums": {
+    "origins-neoforge-1375372-8758523.jar": "93383233a047a9838af067b64452964183cc4fe9f2d9c269ffb253141136caf6",
+    "jupiter-1072905-7738312.jar": "95af332af250f97fe2d9d288fe6b2057c266673a388348bf33756b0b693ace15",
+    "origins-classes-neoforge-1536425-8758587.jar": "14fcc794ae3fc66f752961f7df480356bb5b7cb01d78a2670e9f1e9d18bafb67"
+  },
+  "companions": {
+    "cronicasrp-0.5.4.jar": "197c2fac53f97eb59159c9a0c26b3065362bdc18c8de1a1c0e61ece4360ba1f5",
+    "contracts-bounties-0.3.2.jar": "2ecf125a188f042f8d6c5011af5e1ff2cc5974925835bcd2cc0180f75d07ff15",
+    "realmcouncil-0.2.2.jar": "0a77af87a5c4e36f55ad12578662834886a7986864896a908a3dc4217e2c19cb",
+    "crown-ledger-0.2.2.jar": "a91afc03da4aae23cb584911bdcd88cf3b5a4fcf91bcc13b683ef6405fe6dab5",
+    "realm-markets-0.2.1.jar": "bfb1e73186015ab94a86c841abba1df02bf1b5851a65771e622234624b806bb1",
+    "realm-rewards-0.1.2.jar": "ab8efe3bd9a7b24a4f725bf6dfe1f07dec0b88ecfaac91533b57c45b11cb7bcb",
+    "realm-notifications-0.1.0.jar": "5aa70ac5a7696ce626ffa40e2e530038e90c06819dbeea6f43be70d42310822a",
+    "realm-titles-0.1.0.jar": "65d854ffd92805f6e8cb0891454f80ba5a6f33394cc0375cf23f64098af2bd16",
+    "realm-identity-0.1.1.jar": "4096147ac74847d31ee733291ad85d8d154ff7340e8d6f0874dd7cb7364823b0"
+  },
+  "native_markers": [
+    "CASINO_NATIVE_PASSED",
+    "CASINO_WALLET_CONSERVATION_PASSED",
+    "CASINO_RECOVERY_PASSED",
+    "CASINO_NOTIFICATIONS_PASSED",
+    "CASINO_ARCADE_NATIVE_PASSED"
+  ],
+  "screenshots": {
+    "realm-casino-furniture.png": "78d1886eb8d33622621319235f0106ac524123d68e98b04fa559743de3dc4307",
+    "realm-casino-owner.png": "09401226f8a3f2dbac940d61a3e7afe1c2889915fb47299fb757638d66b459e7",
+    "realm-casino-rules.png": "a583a2db17ef2f2dbf029dd30b897de8e39a80b5efa3a42bf05fd2384c3bda2b",
+    "realm-casino-slots.png": "5cae1d5b2bc91b957f2b43d750b238148aecc4d7876a8e6c859c7d19bd3924ca",
+    "realm-casino-slots-spinning.png": "717b05193c518d20406407c841df293a8596c11e5a256755496198ed5fca926e",
+    "realm-casino-slots-result.png": "57bdf35d1131ba2ab9fd5f587d5adb8a938606a7ee6151fd0abb57a20752cf16",
+    "realm-casino-roulette-world-spinning.png": "2a74809d952f22f16cba82f762a89e56b730c662f0a3a4d74aad07ec7e1ffb80",
+    "realm-casino-roulette-world-settled.png": "dd40f36decb7d9cf80e91c628a7c00034c12e6b0f1d8e16df46940b6590d4bb3",
+    "realm-casino-roulette.png": "e749ab2fbbf41c5ed4650fd1289d8ec8ee4ae078e50499c5c8f4f9116edad078",
+    "realm-casino-blackjack.png": "f2555f35a91d3ef16d463339873bc2cf2720788b9a9831d772c7f7bffd6e921b",
+    "realm-casino-blackjack-result.png": "982891edf07b95bf8f5fb5ef7e408693620762bd43abe04c048b6a4129b77ef8",
+    "realm-casino-furniture-after-play.png": "1eb9de1f13ef94acd1fc61a909345e9b9fa554af46b0a3857d4ab31366bdc5e2",
+    "realm-casino-slots-detail.png": "141931071f3742f261631c84b13050b1e37d1b9f7d0eb9de6e4418ed096a8db4",
+    "realm-casino-roulette-detail.png": "6a1c0b72cb30cb60d5a9addafe9f83fedb0caafc8b7486a4c6093a3cf3f0ff34",
+    "realm-casino-blackjack-detail.png": "a3e1967103e84af8bc955a09adcaad1f2fb70552a81aa2b186ccb71420062f76",
+    "realm-casino-arcade-furniture.png": "b6083e110a2d35d0d8c4f73c08f72ba7ceffeb2bbc2cbf20369515b55b2d7c08",
+    "realm-casino-plinko-detail.png": "cf7e681ab693de034ee344b4d84dd93f2cf47656dc3259b40f8d56ef927b13b9",
+    "realm-casino-wheel-detail.png": "ba82f937ddac66d8ada9579975eac99672520f1f32c61e8e3fdf6301440fa4a6",
+    "realm-casino-chicken-detail.png": "691e430825f14ece620aae0b0c93117cd201942edbcb4c25ecc824e94d09102f",
+    "realm-casino-plinko-rules.png": "a69cc4c64310f419638435e3acd44e4499674c1c1a476094b0f6a1deae34d384",
+    "realm-casino-plinko-dropping.png": "419f0f007b3f43bec8b0addd5360bde8a6bc315ecc4d01475ee8bc0fa7a2e26d",
+    "realm-casino-plinko-result.png": "091c7244269a8801887ca43d49d4a965891df4d77020b0b393c8ab80782eb8ec",
+    "realm-casino-wheel-rules.png": "11115bab8e9e4447fb3d2a450abc91114cc20f4fb44204daf281daf587dfed90",
+    "realm-casino-wheel-spinning.png": "abe7a9b87ee2d34520a8bfd8fc681fe1f896eb6c7c0e57299f47befdc82844ab",
+    "realm-casino-wheel-world-spinning.png": "32f6783b46fc359b3ecba4749e4e4ceffd4b6416c88266b8de2a742df04feba4",
+    "realm-casino-wheel-world-settled.png": "d31e22508ac98d7d854cd716e4114471f341f0e493a8f33407c018a907645f76",
+    "realm-casino-wheel-result.png": "5424ee6c69aea029f68b67ff7bb847a4ae5df21b6a68a7ee8d18e9541f2a9464",
+    "realm-casino-chicken-rules.png": "fa3111481d6445e8246a49c44a0d81faad6c1cf9c680085593abdf203005a51e",
+    "realm-casino-chicken-ready.png": "84bc8d8a6b73855128ba23d19c9a8ae68ea1cbc2de77a27c2a361dfaed37aa9b",
+    "realm-casino-chicken-crossing.png": "549b633f79e72719eb1ec48c241432e436a3cff4c8f5571cc5df93897e544214",
+    "realm-casino-chicken-collected.png": "e3c5d471eafc0df6ec2d89ff6f11172651db3424a275ef41fd4fbc4a1414d7c2"
+  },
+  "release_phase": "2: six games, adding Plinko, Fortune Wheel and Royal Crossing with durable funded payouts",
+  "currency": "Chronicles RP virtual wallet only; bets disabled without a created character and wallet"
+}
