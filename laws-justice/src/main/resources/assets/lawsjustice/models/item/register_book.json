@@ -1,0 +1,4160 @@
+{
+  "parent": "minecraft:block/block",
+  "render_type": "minecraft:cutout",
+  "ambientocclusion": true,
+  "textures": {
+    "black": "lawsjustice:block/black",
+    "bronze": "lawsjustice:block/bronze",
+    "flame": "lawsjustice:block/flame",
+    "iron": "lawsjustice:block/iron",
+    "iron_dark": "lawsjustice:block/iron_dark",
+    "justice_crest": "lawsjustice:block/justice_crest",
+    "leather": "lawsjustice:block/leather",
+    "ledger_cover": "lawsjustice:block/ledger_cover",
+    "ledger_pages": "lawsjustice:block/ledger_pages",
+    "lock_plate": "lawsjustice:block/lock_plate",
+    "oak": "lawsjustice:block/oak",
+    "oak_dark": "lawsjustice:block/oak_dark",
+    "steel": "lawsjustice:block/steel",
+    "stone": "lawsjustice:block/stone",
+    "stone_dark": "lawsjustice:block/stone_dark",
+    "surveyor_dial": "lawsjustice:block/surveyor_dial",
+    "velvet": "lawsjustice:block/velvet",
+    "wax": "lawsjustice:block/wax",
+    "particle": "lawsjustice:block/iron",
+    "court_parchment": "lawsjustice:block/court_parchment",
+    "garnet": "lawsjustice:block/garnet",
+    "gold_polished": "lawsjustice:block/gold_polished",
+    "mahogany": "lawsjustice:block/mahogany",
+    "mahogany_dark": "lawsjustice:block/mahogany_dark",
+    "royal_wax_seal": "lawsjustice:block/royal_wax_seal",
+    "warrant_parchment": "lawsjustice:block/warrant_parchment",
+    "work_green": "lawsjustice:block/work_green",
+    "work_canvas": "lawsjustice:block/work_canvas",
+    "work_roof": "lawsjustice:block/work_roof",
+    "work_ore": "lawsjustice:block/work_ore",
+    "work_grain": "lawsjustice:block/work_grain",
+    "work_notice": "lawsjustice:block/work_notice",
+    "register_open_pages": "lawsjustice:block/register_open_pages"
+  },
+  "elements": [
+    {
+      "name": "register_stone_octagonal_base",
+      "from": [
+        1,
+        0,
+        1
+      ],
+      "to": [
+        15,
+        0.65,
+        15
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            14,
+            0.65
+          ],
+          "texture": "#stone_dark"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            14,
+            0.65
+          ],
+          "texture": "#stone_dark"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            14,
+            0.65
+          ],
+          "texture": "#stone_dark"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            14,
+            0.65
+          ],
+          "texture": "#stone_dark"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            14,
+            14
+          ],
+          "texture": "#stone_dark"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            14,
+            14
+          ],
+          "texture": "#stone_dark"
+        }
+      }
+    },
+    {
+      "name": "register_stone_bevel",
+      "from": [
+        1.6,
+        0.65,
+        1.6
+      ],
+      "to": [
+        14.4,
+        1.4,
+        14.4
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            12.8,
+            0.7499999999999999
+          ],
+          "texture": "#stone"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            12.8,
+            0.7499999999999999
+          ],
+          "texture": "#stone"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            12.8,
+            0.7499999999999999
+          ],
+          "texture": "#stone"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            12.8,
+            0.7499999999999999
+          ],
+          "texture": "#stone"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            12.8,
+            12.8
+          ],
+          "texture": "#stone"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            12.8,
+            12.8
+          ],
+          "texture": "#stone"
+        }
+      }
+    },
+    {
+      "name": "register_carved_pedestal_foot",
+      "from": [
+        2.8,
+        1.4,
+        3
+      ],
+      "to": [
+        13.2,
+        2,
+        13
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            10.399999999999999,
+            0.6000000000000001
+          ],
+          "texture": "#oak_dark"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            10.399999999999999,
+            0.6000000000000001
+          ],
+          "texture": "#oak_dark"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            10,
+            0.6000000000000001
+          ],
+          "texture": "#oak_dark"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            10,
+            0.6000000000000001
+          ],
+          "texture": "#oak_dark"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            10.399999999999999,
+            10
+          ],
+          "texture": "#oak_dark"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            10.399999999999999,
+            10
+          ],
+          "texture": "#oak_dark"
+        }
+      }
+    },
+    {
+      "name": "register_square_cabinet",
+      "from": [
+        4,
+        2,
+        4.2
+      ],
+      "to": [
+        12,
+        10.6,
+        11.8
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            8,
+            8.6
+          ],
+          "texture": "#oak"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            8,
+            8.6
+          ],
+          "texture": "#oak"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            7.6000000000000005,
+            8.6
+          ],
+          "texture": "#oak"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            7.6000000000000005,
+            8.6
+          ],
+          "texture": "#oak"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            8,
+            7.6000000000000005
+          ],
+          "texture": "#oak"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            8,
+            7.6000000000000005
+          ],
+          "texture": "#oak"
+        }
+      }
+    },
+    {
+      "name": "register_column_recess",
+      "from": [
+        3.8,
+        2,
+        4
+      ],
+      "to": [
+        4.5,
+        10.8,
+        4.9
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            0.7000000000000002,
+            8.8
+          ],
+          "texture": "#oak_dark"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            0.7000000000000002,
+            8.8
+          ],
+          "texture": "#oak_dark"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            0.9000000000000004,
+            8.8
+          ],
+          "texture": "#oak_dark"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            0.9000000000000004,
+            8.8
+          ],
+          "texture": "#oak_dark"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.7000000000000002,
+            0.9000000000000004
+          ],
+          "texture": "#oak_dark"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.7000000000000002,
+            0.9000000000000004
+          ],
+          "texture": "#oak_dark"
+        }
+      }
+    },
+    {
+      "name": "register_column_bronze_collar",
+      "from": [
+        3.7,
+        2.3,
+        3.9
+      ],
+      "to": [
+        4.6,
+        2.6,
+        5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            0.8999999999999999,
+            0.2999999999999998
+          ],
+          "texture": "#bronze"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            0.8999999999999999,
+            0.2999999999999998
+          ],
+          "texture": "#bronze"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            1.1,
+            0.2999999999999998
+          ],
+          "texture": "#bronze"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            1.1,
+            0.2999999999999998
+          ],
+          "texture": "#bronze"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.8999999999999999,
+            1.1
+          ],
+          "texture": "#bronze"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.8999999999999999,
+            1.1
+          ],
+          "texture": "#bronze"
+        }
+      }
+    },
+    {
+      "name": "register_column_bronze_collar",
+      "from": [
+        3.7,
+        9.7,
+        3.9
+      ],
+      "to": [
+        4.6,
+        10.0,
+        5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            0.8999999999999999,
+            0.3000000000000007
+          ],
+          "texture": "#bronze"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            0.8999999999999999,
+            0.3000000000000007
+          ],
+          "texture": "#bronze"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            1.1,
+            0.3000000000000007
+          ],
+          "texture": "#bronze"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            1.1,
+            0.3000000000000007
+          ],
+          "texture": "#bronze"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.8999999999999999,
+            1.1
+          ],
+          "texture": "#bronze"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.8999999999999999,
+            1.1
+          ],
+          "texture": "#bronze"
+        }
+      }
+    },
+    {
+      "name": "register_column_recess",
+      "from": [
+        3.8,
+        2,
+        11.1
+      ],
+      "to": [
+        4.5,
+        10.8,
+        12.0
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            0.7000000000000002,
+            8.8
+          ],
+          "texture": "#oak_dark"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            0.7000000000000002,
+            8.8
+          ],
+          "texture": "#oak_dark"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            0.9000000000000004,
+            8.8
+          ],
+          "texture": "#oak_dark"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            0.9000000000000004,
+            8.8
+          ],
+          "texture": "#oak_dark"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.7000000000000002,
+            0.9000000000000004
+          ],
+          "texture": "#oak_dark"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.7000000000000002,
+            0.9000000000000004
+          ],
+          "texture": "#oak_dark"
+        }
+      }
+    },
+    {
+      "name": "register_column_bronze_collar",
+      "from": [
+        3.7,
+        2.3,
+        11.0
+      ],
+      "to": [
+        4.6,
+        2.6,
+        12.1
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            0.8999999999999999,
+            0.2999999999999998
+          ],
+          "texture": "#bronze"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            0.8999999999999999,
+            0.2999999999999998
+          ],
+          "texture": "#bronze"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            1.0999999999999996,
+            0.2999999999999998
+          ],
+          "texture": "#bronze"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            1.0999999999999996,
+            0.2999999999999998
+          ],
+          "texture": "#bronze"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.8999999999999999,
+            1.0999999999999996
+          ],
+          "texture": "#bronze"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.8999999999999999,
+            1.0999999999999996
+          ],
+          "texture": "#bronze"
+        }
+      }
+    },
+    {
+      "name": "register_column_bronze_collar",
+      "from": [
+        3.7,
+        9.7,
+        11.0
+      ],
+      "to": [
+        4.6,
+        10.0,
+        12.1
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            0.8999999999999999,
+            0.3000000000000007
+          ],
+          "texture": "#bronze"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            0.8999999999999999,
+            0.3000000000000007
+          ],
+          "texture": "#bronze"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            1.0999999999999996,
+            0.3000000000000007
+          ],
+          "texture": "#bronze"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            1.0999999999999996,
+            0.3000000000000007
+          ],
+          "texture": "#bronze"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.8999999999999999,
+            1.0999999999999996
+          ],
+          "texture": "#bronze"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.8999999999999999,
+            1.0999999999999996
+          ],
+          "texture": "#bronze"
+        }
+      }
+    },
+    {
+      "name": "register_column_recess",
+      "from": [
+        11.5,
+        2,
+        4
+      ],
+      "to": [
+        12.2,
+        10.8,
+        4.9
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            0.6999999999999993,
+            8.8
+          ],
+          "texture": "#oak_dark"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            0.6999999999999993,
+            8.8
+          ],
+          "texture": "#oak_dark"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            0.9000000000000004,
+            8.8
+          ],
+          "texture": "#oak_dark"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            0.9000000000000004,
+            8.8
+          ],
+          "texture": "#oak_dark"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.6999999999999993,
+            0.9000000000000004
+          ],
+          "texture": "#oak_dark"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.6999999999999993,
+            0.9000000000000004
+          ],
+          "texture": "#oak_dark"
+        }
+      }
+    },
+    {
+      "name": "register_column_bronze_collar",
+      "from": [
+        11.4,
+        2.3,
+        3.9
+      ],
+      "to": [
+        12.3,
+        2.6,
+        5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            0.9000000000000004,
+            0.2999999999999998
+          ],
+          "texture": "#bronze"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            0.9000000000000004,
+            0.2999999999999998
+          ],
+          "texture": "#bronze"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            1.1,
+            0.2999999999999998
+          ],
+          "texture": "#bronze"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            1.1,
+            0.2999999999999998
+          ],
+          "texture": "#bronze"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.9000000000000004,
+            1.1
+          ],
+          "texture": "#bronze"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.9000000000000004,
+            1.1
+          ],
+          "texture": "#bronze"
+        }
+      }
+    },
+    {
+      "name": "register_column_bronze_collar",
+      "from": [
+        11.4,
+        9.7,
+        3.9
+      ],
+      "to": [
+        12.3,
+        10.0,
+        5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            0.9000000000000004,
+            0.3000000000000007
+          ],
+          "texture": "#bronze"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            0.9000000000000004,
+            0.3000000000000007
+          ],
+          "texture": "#bronze"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            1.1,
+            0.3000000000000007
+          ],
+          "texture": "#bronze"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            1.1,
+            0.3000000000000007
+          ],
+          "texture": "#bronze"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.9000000000000004,
+            1.1
+          ],
+          "texture": "#bronze"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.9000000000000004,
+            1.1
+          ],
+          "texture": "#bronze"
+        }
+      }
+    },
+    {
+      "name": "register_column_recess",
+      "from": [
+        11.5,
+        2,
+        11.1
+      ],
+      "to": [
+        12.2,
+        10.8,
+        12.0
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            0.6999999999999993,
+            8.8
+          ],
+          "texture": "#oak_dark"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            0.6999999999999993,
+            8.8
+          ],
+          "texture": "#oak_dark"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            0.9000000000000004,
+            8.8
+          ],
+          "texture": "#oak_dark"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            0.9000000000000004,
+            8.8
+          ],
+          "texture": "#oak_dark"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.6999999999999993,
+            0.9000000000000004
+          ],
+          "texture": "#oak_dark"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.6999999999999993,
+            0.9000000000000004
+          ],
+          "texture": "#oak_dark"
+        }
+      }
+    },
+    {
+      "name": "register_column_bronze_collar",
+      "from": [
+        11.4,
+        2.3,
+        11.0
+      ],
+      "to": [
+        12.3,
+        2.6,
+        12.1
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            0.9000000000000004,
+            0.2999999999999998
+          ],
+          "texture": "#bronze"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            0.9000000000000004,
+            0.2999999999999998
+          ],
+          "texture": "#bronze"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            1.0999999999999996,
+            0.2999999999999998
+          ],
+          "texture": "#bronze"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            1.0999999999999996,
+            0.2999999999999998
+          ],
+          "texture": "#bronze"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.9000000000000004,
+            1.0999999999999996
+          ],
+          "texture": "#bronze"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.9000000000000004,
+            1.0999999999999996
+          ],
+          "texture": "#bronze"
+        }
+      }
+    },
+    {
+      "name": "register_column_bronze_collar",
+      "from": [
+        11.4,
+        9.7,
+        11.0
+      ],
+      "to": [
+        12.3,
+        10.0,
+        12.1
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            0.9000000000000004,
+            0.3000000000000007
+          ],
+          "texture": "#bronze"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            0.9000000000000004,
+            0.3000000000000007
+          ],
+          "texture": "#bronze"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            1.0999999999999996,
+            0.3000000000000007
+          ],
+          "texture": "#bronze"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            1.0999999999999996,
+            0.3000000000000007
+          ],
+          "texture": "#bronze"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.9000000000000004,
+            1.0999999999999996
+          ],
+          "texture": "#bronze"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.9000000000000004,
+            1.0999999999999996
+          ],
+          "texture": "#bronze"
+        }
+      }
+    },
+    {
+      "name": "register_wine_velvet_front_panel",
+      "from": [
+        5,
+        3.4,
+        3.94
+      ],
+      "to": [
+        11,
+        8.9,
+        4.18
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            6,
+            5.5
+          ],
+          "texture": "#ledger_cover"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            6,
+            5.5
+          ],
+          "texture": "#ledger_cover"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            0.23999999999999977,
+            5.5
+          ],
+          "texture": "#ledger_cover"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            0.23999999999999977,
+            5.5
+          ],
+          "texture": "#ledger_cover"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            6,
+            0.23999999999999977
+          ],
+          "texture": "#ledger_cover"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            6,
+            0.23999999999999977
+          ],
+          "texture": "#ledger_cover"
+        }
+      }
+    },
+    {
+      "name": "register_public_records_crest",
+      "from": [
+        5.35,
+        3.75,
+        3.8
+      ],
+      "to": [
+        10.65,
+        8.55,
+        3.99
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#justice_crest"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            5.300000000000001,
+            4.800000000000001
+          ],
+          "texture": "#justice_crest"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            0.1900000000000004,
+            4.800000000000001
+          ],
+          "texture": "#justice_crest"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            0.1900000000000004,
+            4.800000000000001
+          ],
+          "texture": "#justice_crest"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            5.300000000000001,
+            0.1900000000000004
+          ],
+          "texture": "#justice_crest"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            5.300000000000001,
+            0.1900000000000004
+          ],
+          "texture": "#justice_crest"
+        }
+      }
+    },
+    {
+      "name": "register_cabinet_brass_rivet",
+      "from": [
+        4.5,
+        2.9,
+        3.6
+      ],
+      "to": [
+        4.9,
+        3.3,
+        4.14
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            0.40000000000000036,
+            0.3999999999999999
+          ],
+          "texture": "#gold_polished"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            0.40000000000000036,
+            0.3999999999999999
+          ],
+          "texture": "#gold_polished"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            0.5399999999999996,
+            0.3999999999999999
+          ],
+          "texture": "#gold_polished"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            0.5399999999999996,
+            0.3999999999999999
+          ],
+          "texture": "#gold_polished"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.40000000000000036,
+            0.5399999999999996
+          ],
+          "texture": "#gold_polished"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.40000000000000036,
+            0.5399999999999996
+          ],
+          "texture": "#gold_polished"
+        }
+      }
+    },
+    {
+      "name": "register_cabinet_brass_rivet",
+      "from": [
+        4.5,
+        9.1,
+        3.6
+      ],
+      "to": [
+        4.9,
+        9.5,
+        4.14
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            0.40000000000000036,
+            0.40000000000000036
+          ],
+          "texture": "#gold_polished"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            0.40000000000000036,
+            0.40000000000000036
+          ],
+          "texture": "#gold_polished"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            0.5399999999999996,
+            0.40000000000000036
+          ],
+          "texture": "#gold_polished"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            0.5399999999999996,
+            0.40000000000000036
+          ],
+          "texture": "#gold_polished"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.40000000000000036,
+            0.5399999999999996
+          ],
+          "texture": "#gold_polished"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.40000000000000036,
+            0.5399999999999996
+          ],
+          "texture": "#gold_polished"
+        }
+      }
+    },
+    {
+      "name": "register_cabinet_brass_rivet",
+      "from": [
+        11.1,
+        2.9,
+        3.6
+      ],
+      "to": [
+        11.5,
+        3.3,
+        4.14
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            0.40000000000000036,
+            0.3999999999999999
+          ],
+          "texture": "#gold_polished"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            0.40000000000000036,
+            0.3999999999999999
+          ],
+          "texture": "#gold_polished"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            0.5399999999999996,
+            0.3999999999999999
+          ],
+          "texture": "#gold_polished"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            0.5399999999999996,
+            0.3999999999999999
+          ],
+          "texture": "#gold_polished"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.40000000000000036,
+            0.5399999999999996
+          ],
+          "texture": "#gold_polished"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.40000000000000036,
+            0.5399999999999996
+          ],
+          "texture": "#gold_polished"
+        }
+      }
+    },
+    {
+      "name": "register_cabinet_brass_rivet",
+      "from": [
+        11.1,
+        9.1,
+        3.6
+      ],
+      "to": [
+        11.5,
+        9.5,
+        4.14
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            0.40000000000000036,
+            0.40000000000000036
+          ],
+          "texture": "#gold_polished"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            0.40000000000000036,
+            0.40000000000000036
+          ],
+          "texture": "#gold_polished"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            0.5399999999999996,
+            0.40000000000000036
+          ],
+          "texture": "#gold_polished"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            0.5399999999999996,
+            0.40000000000000036
+          ],
+          "texture": "#gold_polished"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.40000000000000036,
+            0.5399999999999996
+          ],
+          "texture": "#gold_polished"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.40000000000000036,
+            0.5399999999999996
+          ],
+          "texture": "#gold_polished"
+        }
+      }
+    },
+    {
+      "name": "register_reading_desk_lower_lip",
+      "from": [
+        0.8,
+        10.6,
+        1.3
+      ],
+      "to": [
+        15.2,
+        11.3,
+        14.7
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            14.399999999999999,
+            0.7000000000000011
+          ],
+          "texture": "#oak_dark"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            14.399999999999999,
+            0.7000000000000011
+          ],
+          "texture": "#oak_dark"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            13.399999999999999,
+            0.7000000000000011
+          ],
+          "texture": "#oak_dark"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            13.399999999999999,
+            0.7000000000000011
+          ],
+          "texture": "#oak_dark"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            14.399999999999999,
+            13.399999999999999
+          ],
+          "texture": "#oak_dark"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            14.399999999999999,
+            13.399999999999999
+          ],
+          "texture": "#oak_dark"
+        }
+      }
+    },
+    {
+      "name": "register_reading_desk_wood_top",
+      "from": [
+        1,
+        11.3,
+        1.5
+      ],
+      "to": [
+        15,
+        11.9,
+        14.5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            14,
+            0.5999999999999996
+          ],
+          "texture": "#oak"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            14,
+            0.5999999999999996
+          ],
+          "texture": "#oak"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            13.0,
+            0.5999999999999996
+          ],
+          "texture": "#oak"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            13.0,
+            0.5999999999999996
+          ],
+          "texture": "#oak"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            14,
+            13.0
+          ],
+          "texture": "#oak"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            14,
+            13.0
+          ],
+          "texture": "#oak"
+        }
+      }
+    },
+    {
+      "name": "register_brass_desk_rim",
+      "from": [
+        1.1,
+        11.2,
+        1.4
+      ],
+      "to": [
+        1.5,
+        11.9,
+        14.6
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            0.3999999999999999,
+            0.7000000000000011
+          ],
+          "texture": "#bronze"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            0.3999999999999999,
+            0.7000000000000011
+          ],
+          "texture": "#bronze"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            13.2,
+            0.7000000000000011
+          ],
+          "texture": "#bronze"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            13.2,
+            0.7000000000000011
+          ],
+          "texture": "#bronze"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.3999999999999999,
+            13.2
+          ],
+          "texture": "#bronze"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.3999999999999999,
+            13.2
+          ],
+          "texture": "#bronze"
+        }
+      }
+    },
+    {
+      "name": "register_brass_desk_rim",
+      "from": [
+        14.5,
+        11.2,
+        1.4
+      ],
+      "to": [
+        14.9,
+        11.9,
+        14.6
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            0.40000000000000036,
+            0.7000000000000011
+          ],
+          "texture": "#bronze"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            0.40000000000000036,
+            0.7000000000000011
+          ],
+          "texture": "#bronze"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            13.2,
+            0.7000000000000011
+          ],
+          "texture": "#bronze"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            13.2,
+            0.7000000000000011
+          ],
+          "texture": "#bronze"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.40000000000000036,
+            13.2
+          ],
+          "texture": "#bronze"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.40000000000000036,
+            13.2
+          ],
+          "texture": "#bronze"
+        }
+      }
+    },
+    {
+      "name": "register_deep_burgundy_book_binding",
+      "from": [
+        1.4,
+        11.9,
+        2.6
+      ],
+      "to": [
+        14.6,
+        12.3,
+        13.8
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            13.2,
+            0.40000000000000036
+          ],
+          "texture": "#leather"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            13.2,
+            0.40000000000000036
+          ],
+          "texture": "#leather"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            11.200000000000001,
+            0.40000000000000036
+          ],
+          "texture": "#leather"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            11.200000000000001,
+            0.40000000000000036
+          ],
+          "texture": "#leather"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            13.2,
+            11.200000000000001
+          ],
+          "texture": "#leather"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            13.2,
+            11.200000000000001
+          ],
+          "texture": "#leather"
+        }
+      }
+    },
+    {
+      "name": "register_thick_visible_cut_pages",
+      "from": [
+        1.8,
+        12.3,
+        2.9
+      ],
+      "to": [
+        14.2,
+        13.3,
+        13.45
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            12.399999999999999,
+            1.0
+          ],
+          "texture": "#ledger_pages"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            12.399999999999999,
+            1.0
+          ],
+          "texture": "#ledger_pages"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            10.549999999999999,
+            1.0
+          ],
+          "texture": "#ledger_pages"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            10.549999999999999,
+            1.0
+          ],
+          "texture": "#ledger_pages"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            12.399999999999999,
+            10.549999999999999
+          ],
+          "texture": "#ledger_pages"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            12.399999999999999,
+            10.549999999999999
+          ],
+          "texture": "#ledger_pages"
+        }
+      }
+    },
+    {
+      "name": "register_open_leather_cover",
+      "from": [
+        1.5,
+        13.3,
+        2.7
+      ],
+      "to": [
+        7.7,
+        13.65,
+        13.7
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            6.2,
+            0.34999999999999964
+          ],
+          "texture": "#ledger_cover"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            6.2,
+            0.34999999999999964
+          ],
+          "texture": "#ledger_cover"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            11.0,
+            0.34999999999999964
+          ],
+          "texture": "#ledger_cover"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            11.0,
+            0.34999999999999964
+          ],
+          "texture": "#ledger_cover"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            6.2,
+            11.0
+          ],
+          "texture": "#ledger_cover"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            6.2,
+            11.0
+          ],
+          "texture": "#ledger_cover"
+        }
+      }
+    },
+    {
+      "name": "register_gilded_cover_edge",
+      "from": [
+        1.65,
+        13.65,
+        2.9
+      ],
+      "to": [
+        7.5,
+        13.78,
+        3.16
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            5.85,
+            0.129999999999999
+          ],
+          "texture": "#bronze"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            5.85,
+            0.129999999999999
+          ],
+          "texture": "#bronze"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            0.26000000000000023,
+            0.129999999999999
+          ],
+          "texture": "#bronze"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            0.26000000000000023,
+            0.129999999999999
+          ],
+          "texture": "#bronze"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            5.85,
+            0.26000000000000023
+          ],
+          "texture": "#bronze"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            5.85,
+            0.26000000000000023
+          ],
+          "texture": "#bronze"
+        }
+      }
+    },
+    {
+      "name": "register_gilded_cover_edge",
+      "from": [
+        1.65,
+        13.65,
+        13.2
+      ],
+      "to": [
+        7.5,
+        13.78,
+        13.46
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            5.85,
+            0.129999999999999
+          ],
+          "texture": "#bronze"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            5.85,
+            0.129999999999999
+          ],
+          "texture": "#bronze"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            0.2599999999999998,
+            0.129999999999999
+          ],
+          "texture": "#bronze"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            0.2599999999999998,
+            0.129999999999999
+          ],
+          "texture": "#bronze"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            5.85,
+            0.2599999999999998
+          ],
+          "texture": "#bronze"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            5.85,
+            0.2599999999999998
+          ],
+          "texture": "#bronze"
+        }
+      }
+    },
+    {
+      "name": "register_open_leather_cover",
+      "from": [
+        7.75,
+        13.3,
+        2.7
+      ],
+      "to": [
+        13.95,
+        13.65,
+        13.7
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            6.199999999999999,
+            0.34999999999999964
+          ],
+          "texture": "#ledger_cover"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            6.199999999999999,
+            0.34999999999999964
+          ],
+          "texture": "#ledger_cover"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            11.0,
+            0.34999999999999964
+          ],
+          "texture": "#ledger_cover"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            11.0,
+            0.34999999999999964
+          ],
+          "texture": "#ledger_cover"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            6.199999999999999,
+            11.0
+          ],
+          "texture": "#ledger_cover"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            6.199999999999999,
+            11.0
+          ],
+          "texture": "#ledger_cover"
+        }
+      }
+    },
+    {
+      "name": "register_gilded_cover_edge",
+      "from": [
+        7.9,
+        13.65,
+        2.9
+      ],
+      "to": [
+        13.75,
+        13.78,
+        3.16
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            5.85,
+            0.129999999999999
+          ],
+          "texture": "#bronze"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            5.85,
+            0.129999999999999
+          ],
+          "texture": "#bronze"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            0.26000000000000023,
+            0.129999999999999
+          ],
+          "texture": "#bronze"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            0.26000000000000023,
+            0.129999999999999
+          ],
+          "texture": "#bronze"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            5.85,
+            0.26000000000000023
+          ],
+          "texture": "#bronze"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            5.85,
+            0.26000000000000023
+          ],
+          "texture": "#bronze"
+        }
+      }
+    },
+    {
+      "name": "register_gilded_cover_edge",
+      "from": [
+        7.9,
+        13.65,
+        13.2
+      ],
+      "to": [
+        13.75,
+        13.78,
+        13.46
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            5.85,
+            0.129999999999999
+          ],
+          "texture": "#bronze"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            5.85,
+            0.129999999999999
+          ],
+          "texture": "#bronze"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            0.2599999999999998,
+            0.129999999999999
+          ],
+          "texture": "#bronze"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            0.2599999999999998,
+            0.129999999999999
+          ],
+          "texture": "#bronze"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            5.85,
+            0.2599999999999998
+          ],
+          "texture": "#bronze"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            5.85,
+            0.2599999999999998
+          ],
+          "texture": "#bronze"
+        }
+      }
+    },
+    {
+      "name": "register_open_page_bank",
+      "from": [
+        1.95,
+        13.65,
+        3.2
+      ],
+      "to": [
+        7.9,
+        14.15,
+        13.15
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            5.95,
+            0.5
+          ],
+          "texture": "#wax"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            5.95,
+            0.5
+          ],
+          "texture": "#wax"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            9.95,
+            0.5
+          ],
+          "texture": "#wax"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            9.95,
+            0.5
+          ],
+          "texture": "#wax"
+        },
+        "up": {
+          "texture": "#register_open_pages",
+          "uv": [
+            0,
+            0,
+            8,
+            16
+          ]
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            5.95,
+            9.95
+          ],
+          "texture": "#wax"
+        }
+      }
+    },
+    {
+      "name": "register_paper_edge_layers",
+      "from": [
+        2.0,
+        13.64,
+        3.2
+      ],
+      "to": [
+        7.85,
+        13.8,
+        13.18
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            5.8500000000000005,
+            0.16000000000000014
+          ],
+          "texture": "#ledger_pages"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            5.8500000000000005,
+            0.16000000000000014
+          ],
+          "texture": "#ledger_pages"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            9.98,
+            0.16000000000000014
+          ],
+          "texture": "#ledger_pages"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            9.98,
+            0.16000000000000014
+          ],
+          "texture": "#ledger_pages"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            5.8500000000000005,
+            9.98
+          ],
+          "texture": "#ledger_pages"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            5.8500000000000005,
+            9.98
+          ],
+          "texture": "#ledger_pages"
+        }
+      }
+    },
+    {
+      "name": "register_open_page_bank",
+      "from": [
+        8.05,
+        13.65,
+        3.2
+      ],
+      "to": [
+        14.0,
+        14.15,
+        13.15
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            5.949999999999999,
+            0.5
+          ],
+          "texture": "#wax"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            5.949999999999999,
+            0.5
+          ],
+          "texture": "#wax"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            9.95,
+            0.5
+          ],
+          "texture": "#wax"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            9.95,
+            0.5
+          ],
+          "texture": "#wax"
+        },
+        "up": {
+          "texture": "#register_open_pages",
+          "uv": [
+            8,
+            0,
+            16,
+            16
+          ]
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            5.949999999999999,
+            9.95
+          ],
+          "texture": "#wax"
+        }
+      }
+    },
+    {
+      "name": "register_paper_edge_layers",
+      "from": [
+        8.1,
+        13.64,
+        3.2
+      ],
+      "to": [
+        13.95,
+        13.8,
+        13.18
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            5.85,
+            0.16000000000000014
+          ],
+          "texture": "#ledger_pages"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            5.85,
+            0.16000000000000014
+          ],
+          "texture": "#ledger_pages"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            9.98,
+            0.16000000000000014
+          ],
+          "texture": "#ledger_pages"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            9.98,
+            0.16000000000000014
+          ],
+          "texture": "#ledger_pages"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            5.85,
+            9.98
+          ],
+          "texture": "#ledger_pages"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            5.85,
+            9.98
+          ],
+          "texture": "#ledger_pages"
+        }
+      }
+    },
+    {
+      "name": "register_recessed_binding_gutter",
+      "from": [
+        7.72,
+        13.3,
+        3
+      ],
+      "to": [
+        8.28,
+        14.18,
+        13.4
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            0.5599999999999996,
+            0.879999999999999
+          ],
+          "texture": "#oak_dark"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            0.5599999999999996,
+            0.879999999999999
+          ],
+          "texture": "#oak_dark"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            10.4,
+            0.879999999999999
+          ],
+          "texture": "#oak_dark"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            10.4,
+            0.879999999999999
+          ],
+          "texture": "#oak_dark"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.5599999999999996,
+            10.4
+          ],
+          "texture": "#oak_dark"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.5599999999999996,
+            10.4
+          ],
+          "texture": "#oak_dark"
+        }
+      }
+    },
+    {
+      "name": "register_red_silk_bookmark",
+      "from": [
+        10.75,
+        14.16,
+        3
+      ],
+      "to": [
+        11.4,
+        14.27,
+        13.6
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            0.6500000000000004,
+            0.10999999999999943
+          ],
+          "texture": "#velvet"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            0.6500000000000004,
+            0.10999999999999943
+          ],
+          "texture": "#velvet"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            10.6,
+            0.10999999999999943
+          ],
+          "texture": "#velvet"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            10.6,
+            0.10999999999999943
+          ],
+          "texture": "#velvet"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.6500000000000004,
+            10.6
+          ],
+          "texture": "#velvet"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.6500000000000004,
+            10.6
+          ],
+          "texture": "#velvet"
+        }
+      }
+    },
+    {
+      "name": "register_bookmark_hanging_ribbon",
+      "from": [
+        10.75,
+        11.8,
+        2.35
+      ],
+      "to": [
+        11.4,
+        14.27,
+        2.65
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            0.6500000000000004,
+            2.469999999999999
+          ],
+          "texture": "#velvet"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            0.6500000000000004,
+            2.469999999999999
+          ],
+          "texture": "#velvet"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            0.2999999999999998,
+            2.469999999999999
+          ],
+          "texture": "#velvet"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            0.2999999999999998,
+            2.469999999999999
+          ],
+          "texture": "#velvet"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.6500000000000004,
+            0.2999999999999998
+          ],
+          "texture": "#velvet"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.6500000000000004,
+            0.2999999999999998
+          ],
+          "texture": "#velvet"
+        }
+      }
+    },
+    {
+      "name": "register_brass_corner_protector",
+      "from": [
+        1.4,
+        13.7,
+        2.6
+      ],
+      "to": [
+        2.2,
+        14.1,
+        3.2
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            0.8000000000000003,
+            0.40000000000000036
+          ],
+          "texture": "#gold_polished"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            0.8000000000000003,
+            0.40000000000000036
+          ],
+          "texture": "#gold_polished"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            0.6000000000000001,
+            0.40000000000000036
+          ],
+          "texture": "#gold_polished"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            0.6000000000000001,
+            0.40000000000000036
+          ],
+          "texture": "#gold_polished"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.8000000000000003,
+            0.6000000000000001
+          ],
+          "texture": "#gold_polished"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.8000000000000003,
+            0.6000000000000001
+          ],
+          "texture": "#gold_polished"
+        }
+      }
+    },
+    {
+      "name": "register_corner_engraved_stud",
+      "from": [
+        1.6,
+        14.1,
+        2.75
+      ],
+      "to": [
+        2.0,
+        14.2,
+        3.05
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            0.40000000000000013,
+            0.09999999999999964
+          ],
+          "texture": "#bronze"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            0.40000000000000013,
+            0.09999999999999964
+          ],
+          "texture": "#bronze"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            0.30000000000000027,
+            0.09999999999999964
+          ],
+          "texture": "#bronze"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            0.30000000000000027,
+            0.09999999999999964
+          ],
+          "texture": "#bronze"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.40000000000000013,
+            0.30000000000000027
+          ],
+          "texture": "#bronze"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.40000000000000013,
+            0.30000000000000027
+          ],
+          "texture": "#bronze"
+        }
+      }
+    },
+    {
+      "name": "register_brass_corner_protector",
+      "from": [
+        1.4,
+        13.7,
+        13.1
+      ],
+      "to": [
+        2.2,
+        14.1,
+        13.7
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            0.8000000000000003,
+            0.40000000000000036
+          ],
+          "texture": "#gold_polished"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            0.8000000000000003,
+            0.40000000000000036
+          ],
+          "texture": "#gold_polished"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            0.5999999999999996,
+            0.40000000000000036
+          ],
+          "texture": "#gold_polished"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            0.5999999999999996,
+            0.40000000000000036
+          ],
+          "texture": "#gold_polished"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.8000000000000003,
+            0.5999999999999996
+          ],
+          "texture": "#gold_polished"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.8000000000000003,
+            0.5999999999999996
+          ],
+          "texture": "#gold_polished"
+        }
+      }
+    },
+    {
+      "name": "register_corner_engraved_stud",
+      "from": [
+        1.6,
+        14.1,
+        13.25
+      ],
+      "to": [
+        2.0,
+        14.2,
+        13.55
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            0.40000000000000013,
+            0.09999999999999964
+          ],
+          "texture": "#bronze"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            0.40000000000000013,
+            0.09999999999999964
+          ],
+          "texture": "#bronze"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            0.29999999999999893,
+            0.09999999999999964
+          ],
+          "texture": "#bronze"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            0.29999999999999893,
+            0.09999999999999964
+          ],
+          "texture": "#bronze"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.40000000000000013,
+            0.29999999999999893
+          ],
+          "texture": "#bronze"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.40000000000000013,
+            0.29999999999999893
+          ],
+          "texture": "#bronze"
+        }
+      }
+    },
+    {
+      "name": "register_brass_corner_protector",
+      "from": [
+        13.7,
+        13.7,
+        2.6
+      ],
+      "to": [
+        14.5,
+        14.1,
+        3.2
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            0.8000000000000007,
+            0.40000000000000036
+          ],
+          "texture": "#gold_polished"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            0.8000000000000007,
+            0.40000000000000036
+          ],
+          "texture": "#gold_polished"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            0.6000000000000001,
+            0.40000000000000036
+          ],
+          "texture": "#gold_polished"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            0.6000000000000001,
+            0.40000000000000036
+          ],
+          "texture": "#gold_polished"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.8000000000000007,
+            0.6000000000000001
+          ],
+          "texture": "#gold_polished"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.8000000000000007,
+            0.6000000000000001
+          ],
+          "texture": "#gold_polished"
+        }
+      }
+    },
+    {
+      "name": "register_corner_engraved_stud",
+      "from": [
+        13.9,
+        14.1,
+        2.75
+      ],
+      "to": [
+        14.3,
+        14.2,
+        3.05
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            0.40000000000000036,
+            0.09999999999999964
+          ],
+          "texture": "#bronze"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            0.40000000000000036,
+            0.09999999999999964
+          ],
+          "texture": "#bronze"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            0.30000000000000027,
+            0.09999999999999964
+          ],
+          "texture": "#bronze"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            0.30000000000000027,
+            0.09999999999999964
+          ],
+          "texture": "#bronze"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.40000000000000036,
+            0.30000000000000027
+          ],
+          "texture": "#bronze"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.40000000000000036,
+            0.30000000000000027
+          ],
+          "texture": "#bronze"
+        }
+      }
+    },
+    {
+      "name": "register_brass_corner_protector",
+      "from": [
+        13.7,
+        13.7,
+        13.1
+      ],
+      "to": [
+        14.5,
+        14.1,
+        13.7
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            0.8000000000000007,
+            0.40000000000000036
+          ],
+          "texture": "#gold_polished"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            0.8000000000000007,
+            0.40000000000000036
+          ],
+          "texture": "#gold_polished"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            0.5999999999999996,
+            0.40000000000000036
+          ],
+          "texture": "#gold_polished"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            0.5999999999999996,
+            0.40000000000000036
+          ],
+          "texture": "#gold_polished"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.8000000000000007,
+            0.5999999999999996
+          ],
+          "texture": "#gold_polished"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.8000000000000007,
+            0.5999999999999996
+          ],
+          "texture": "#gold_polished"
+        }
+      }
+    },
+    {
+      "name": "register_corner_engraved_stud",
+      "from": [
+        13.9,
+        14.1,
+        13.25
+      ],
+      "to": [
+        14.3,
+        14.2,
+        13.55
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            0.40000000000000036,
+            0.09999999999999964
+          ],
+          "texture": "#bronze"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            0.40000000000000036,
+            0.09999999999999964
+          ],
+          "texture": "#bronze"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            0.29999999999999893,
+            0.09999999999999964
+          ],
+          "texture": "#bronze"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            0.29999999999999893,
+            0.09999999999999964
+          ],
+          "texture": "#bronze"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.40000000000000036,
+            0.29999999999999893
+          ],
+          "texture": "#bronze"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.40000000000000036,
+            0.29999999999999893
+          ],
+          "texture": "#bronze"
+        }
+      }
+    },
+    {
+      "name": "register_linked_security_chain",
+      "from": [
+        12.45,
+        6.6,
+        3.6
+      ],
+      "to": [
+        12.72,
+        7.05,
+        3.9
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            0.27000000000000135,
+            0.4500000000000002
+          ],
+          "texture": "#bronze"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            0.27000000000000135,
+            0.4500000000000002
+          ],
+          "texture": "#bronze"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            0.2999999999999998,
+            0.4500000000000002
+          ],
+          "texture": "#bronze"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            0.2999999999999998,
+            0.4500000000000002
+          ],
+          "texture": "#bronze"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.27000000000000135,
+            0.2999999999999998
+          ],
+          "texture": "#bronze"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.27000000000000135,
+            0.2999999999999998
+          ],
+          "texture": "#bronze"
+        }
+      }
+    },
+    {
+      "name": "register_linked_security_chain",
+      "from": [
+        12.45,
+        7.25,
+        3.4
+      ],
+      "to": [
+        12.72,
+        7.7,
+        3.7
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            0.27000000000000135,
+            0.4500000000000002
+          ],
+          "texture": "#bronze"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            0.27000000000000135,
+            0.4500000000000002
+          ],
+          "texture": "#bronze"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            0.2999999999999998,
+            0.4500000000000002
+          ],
+          "texture": "#bronze"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            0.2999999999999998,
+            0.4500000000000002
+          ],
+          "texture": "#bronze"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.27000000000000135,
+            0.2999999999999998
+          ],
+          "texture": "#bronze"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.27000000000000135,
+            0.2999999999999998
+          ],
+          "texture": "#bronze"
+        }
+      }
+    },
+    {
+      "name": "register_linked_security_chain",
+      "from": [
+        12.45,
+        7.9,
+        3.6
+      ],
+      "to": [
+        12.72,
+        8.35,
+        3.9
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            0.27000000000000135,
+            0.4500000000000002
+          ],
+          "texture": "#bronze"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            0.27000000000000135,
+            0.4500000000000002
+          ],
+          "texture": "#bronze"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            0.2999999999999998,
+            0.4500000000000002
+          ],
+          "texture": "#bronze"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            0.2999999999999998,
+            0.4500000000000002
+          ],
+          "texture": "#bronze"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.27000000000000135,
+            0.2999999999999998
+          ],
+          "texture": "#bronze"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.27000000000000135,
+            0.2999999999999998
+          ],
+          "texture": "#bronze"
+        }
+      }
+    },
+    {
+      "name": "register_linked_security_chain",
+      "from": [
+        12.45,
+        8.55,
+        3.4
+      ],
+      "to": [
+        12.72,
+        9.0,
+        3.7
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            0.27000000000000135,
+            0.4499999999999993
+          ],
+          "texture": "#bronze"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            0.27000000000000135,
+            0.4499999999999993
+          ],
+          "texture": "#bronze"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            0.2999999999999998,
+            0.4499999999999993
+          ],
+          "texture": "#bronze"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            0.2999999999999998,
+            0.4499999999999993
+          ],
+          "texture": "#bronze"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.27000000000000135,
+            0.2999999999999998
+          ],
+          "texture": "#bronze"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.27000000000000135,
+            0.2999999999999998
+          ],
+          "texture": "#bronze"
+        }
+      }
+    },
+    {
+      "name": "register_linked_security_chain",
+      "from": [
+        12.45,
+        9.2,
+        3.6
+      ],
+      "to": [
+        12.72,
+        9.65,
+        3.9
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            0.27000000000000135,
+            0.4499999999999993
+          ],
+          "texture": "#bronze"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            0.27000000000000135,
+            0.4499999999999993
+          ],
+          "texture": "#bronze"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            0.2999999999999998,
+            0.4499999999999993
+          ],
+          "texture": "#bronze"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            0.2999999999999998,
+            0.4499999999999993
+          ],
+          "texture": "#bronze"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.27000000000000135,
+            0.2999999999999998
+          ],
+          "texture": "#bronze"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.27000000000000135,
+            0.2999999999999998
+          ],
+          "texture": "#bronze"
+        }
+      }
+    },
+    {
+      "name": "register_linked_security_chain",
+      "from": [
+        12.45,
+        9.85,
+        3.4
+      ],
+      "to": [
+        12.72,
+        10.3,
+        3.7
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            0.27000000000000135,
+            0.4499999999999993
+          ],
+          "texture": "#bronze"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            0.27000000000000135,
+            0.4499999999999993
+          ],
+          "texture": "#bronze"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            0.2999999999999998,
+            0.4499999999999993
+          ],
+          "texture": "#bronze"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            0.2999999999999998,
+            0.4499999999999993
+          ],
+          "texture": "#bronze"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.27000000000000135,
+            0.2999999999999998
+          ],
+          "texture": "#bronze"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.27000000000000135,
+            0.2999999999999998
+          ],
+          "texture": "#bronze"
+        }
+      }
+    },
+    {
+      "name": "register_linked_security_chain",
+      "from": [
+        12.45,
+        10.5,
+        3.6
+      ],
+      "to": [
+        12.72,
+        10.95,
+        3.9
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            0.27000000000000135,
+            0.4499999999999993
+          ],
+          "texture": "#bronze"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            0.27000000000000135,
+            0.4499999999999993
+          ],
+          "texture": "#bronze"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            0.2999999999999998,
+            0.4499999999999993
+          ],
+          "texture": "#bronze"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            0.2999999999999998,
+            0.4499999999999993
+          ],
+          "texture": "#bronze"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.27000000000000135,
+            0.2999999999999998
+          ],
+          "texture": "#bronze"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.27000000000000135,
+            0.2999999999999998
+          ],
+          "texture": "#bronze"
+        }
+      }
+    },
+    {
+      "name": "register_small_pendant_wax_seal",
+      "from": [
+        12.15,
+        5.7,
+        3.2
+      ],
+      "to": [
+        13.05,
+        6.8,
+        3.65
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            0.9000000000000004,
+            1.0999999999999996
+          ],
+          "texture": "#velvet"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            0.9000000000000004,
+            1.0999999999999996
+          ],
+          "texture": "#velvet"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            0.44999999999999973,
+            1.0999999999999996
+          ],
+          "texture": "#velvet"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            0.44999999999999973,
+            1.0999999999999996
+          ],
+          "texture": "#velvet"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.9000000000000004,
+            0.44999999999999973
+          ],
+          "texture": "#velvet"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.9000000000000004,
+            0.44999999999999973
+          ],
+          "texture": "#velvet"
+        }
+      }
+    },
+    {
+      "name": "register_pendant_stamp",
+      "from": [
+        12.4,
+        5.95,
+        3.05
+      ],
+      "to": [
+        12.8,
+        6.55,
+        3.35
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            0.40000000000000036,
+            0.5999999999999996
+          ],
+          "texture": "#gold_polished"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            0.40000000000000036,
+            0.5999999999999996
+          ],
+          "texture": "#gold_polished"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            0.30000000000000027,
+            0.5999999999999996
+          ],
+          "texture": "#gold_polished"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            0.30000000000000027,
+            0.5999999999999996
+          ],
+          "texture": "#gold_polished"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.40000000000000036,
+            0.30000000000000027
+          ],
+          "texture": "#gold_polished"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.40000000000000036,
+            0.30000000000000027
+          ],
+          "texture": "#gold_polished"
+        }
+      }
+    }
+  ],
+  "display": {
+    "gui": {
+      "rotation": [
+        28,
+        225,
+        0
+      ],
+      "translation": [
+        0,
+        0,
+        0
+      ],
+      "scale": [
+        0.75,
+        0.75,
+        0.75
+      ]
+    },
+    "ground": {
+      "translation": [
+        0,
+        1,
+        0
+      ],
+      "scale": [
+        0.38,
+        0.38,
+        0.38
+      ]
+    },
+    "fixed": {
+      "rotation": [
+        0,
+        180,
+        0
+      ],
+      "translation": [
+        0,
+        0,
+        0
+      ],
+      "scale": [
+        0.75,
+        0.75,
+        0.75
+      ]
+    },
+    "firstperson_righthand": {
+      "rotation": [
+        0,
+        35,
+        0
+      ],
+      "translation": [
+        0,
+        -2,
+        0
+      ],
+      "scale": [
+        0.55,
+        0.55,
+        0.55
+      ]
+    },
+    "firstperson_lefthand": {
+      "rotation": [
+        0,
+        225,
+        0
+      ],
+      "translation": [
+        0,
+        -2,
+        0
+      ],
+      "scale": [
+        0.55,
+        0.55,
+        0.55
+      ]
+    },
+    "thirdperson_righthand": {
+      "rotation": [
+        75,
+        45,
+        0
+      ],
+      "translation": [
+        0,
+        1.5,
+        0
+      ],
+      "scale": [
+        0.42,
+        0.42,
+        0.42
+      ]
+    },
+    "thirdperson_lefthand": {
+      "rotation": [
+        75,
+        225,
+        0
+      ],
+      "translation": [
+        0,
+        1.5,
+        0
+      ],
+      "scale": [
+        0.42,
+        0.42,
+        0.42
+      ]
+    }
+  }
+}

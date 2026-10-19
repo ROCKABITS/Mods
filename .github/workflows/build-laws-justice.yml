@@ -4,6 +4,7 @@ on:
     branches: [main]
     paths:
       - 'laws-justice/**'
+      - 'crown-ledger/**'
       - '.github/workflows/build-laws-justice.yml'
       - '.github/scripts/justice_release.py'
   workflow_dispatch:
@@ -30,13 +31,13 @@ jobs:
           distribution: temurin
           java-version: '21'
           cache: gradle
-      - name: Build Laws & Justice production JAR and full unit suite
+      - name: Build Laws & Justice and Crown production JARs and unit suites
         run: python3 .github/scripts/justice_release.py build
       - name: Snapshot fixture-free production JARs from this commit
         run: python3 .github/scripts/justice_release.py snapshot
       - name: Native independent custody suite
         run: python3 .github/scripts/justice_release.py native
-      - name: Install ten verified roleplay companions
+      - name: Install fresh finance counterparts and verified roleplay companions
         run: python3 .github/scripts/justice_release.py install
       - name: Native custody, persistence and recovery integration
         working-directory: laws-justice
@@ -51,8 +52,16 @@ jobs:
             sudo apt-get update
             sudo apt-get install -y xvfb xauth
           fi
-          timeout 480s xvfb-run -a -s '-screen 0 1600x900x24' ./gradlew --no-daemon --console=plain -PjusticeVisualTests -PintegrationTests runClient 2>&1 | tee visual-client.log
+          timeout 660s xvfb-run -a -s '-screen 0 1600x900x24' ./gradlew --no-daemon --console=plain -PjusticeVisualTests -PintegrationTests runClient 2>&1 | tee visual-client.log
           python3 -c "import json; r=json.load(open('qa-results/justice-client/result.json')); assert r.get('success') is True, r"
+      - name: Actual Minecraft Crown chest and production menus
+        working-directory: crown-ledger
+        env:
+          LIBGL_ALWAYS_SOFTWARE: '1'
+          ALSOFT_DRIVERS: 'null'
+        run: |
+          timeout 300s xvfb-run -a -s '-screen 0 1600x900x24' ./gradlew --no-daemon --console=plain -PcrownVisualTests runClient 2>&1 | tee visual-client.log
+          python3 -c "import json; r=json.load(open('qa-results/crown-client/result.json')); assert r.get('success') is True, r"
       - name: Validation summary and bounded failure diagnostics
         if: always()
         run: python3 .github/scripts/justice_release.py summary
@@ -65,6 +74,7 @@ jobs:
           path: |
             laws-justice/build/justice-release/downloads/
             media/laws-justice/
+            media/crown-ledger/
           if-no-files-found: error
           retention-days: 30
       - name: Publish tested release in one commit
@@ -77,7 +87,7 @@ jobs:
           fi
           python3 .github/scripts/justice_release.py stage
           if git diff --cached --quiet; then exit 0; fi
-          git -c user.name='github-actions[bot]' -c user.email='41898282+github-actions[bot]@users.noreply.github.com' commit -m 'Publish tested Laws & Justice [skip ci]'
+          git -c user.name='github-actions[bot]' -c user.email='41898282+github-actions[bot]@users.noreply.github.com' commit -m 'Publish jointly tested Laws & Justice and Crown Ledger [skip ci]'
           git push origin HEAD:refs/heads/main
       - name: Full validation evidence
         if: always()
@@ -87,6 +97,9 @@ jobs:
           path: |
             */build.log
             */gametests.log
+            crown-ledger/integration.log
+            crown-ledger/visual-client.log
+            crown-ledger/qa-results/
             laws-justice/integration.log
             laws-justice/visual-client.log
             */build/test-results/test/

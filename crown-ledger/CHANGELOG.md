@@ -1,3 +1,12 @@
+# Crown Ledger 0.2.2 — Beta
+
+- Added the server-only CrownIncomeApi v1 for already-funded judicial payments from Laws & Justice 0.4.0.
+- Added persistent, payload-bound transaction receipts. Retrying a receipt confirms the actual saved file and never credits the same transfer twice.
+- Committed income and receipt together using the ordered NeoForge save worker, atomic replacement and file synchronization. Write failures preserve the caller’s funded escrow for later retry.
+- Added judicial income to public treasury history. Confirmed income can fund pending salary cycles under the existing policy.
+- Added treasury format 3 with automatic migration from formats 1 and 2, preserving balances, policy, payroll and activity.
+- Added real compressed-file, queued-save, failure/recovery, migration and replay tests, plus joint release validation with Laws & Justice and the actual Chronicles LAN-host wallet.
+
 # Crown Ledger 0.2.1 — Beta
 
 - Optional Realm Notifications integration for salary availability, actual salary collection, donations and fixed-tax payments.

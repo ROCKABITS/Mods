@@ -30,6 +30,7 @@ public final class JusticeLedger {
     public static final String COMPLETED = "COMPLETED";
     public static final String EMERGENCY_RELEASE = "EMERGENCY_RELEASE";
     public static final String WORK_REDUCTION = "WORK_REDUCTION";
+    public static final String BAIL_RELEASE="BAIL_RELEASE", JUDICIAL_RELEASE="JUDICIAL_RELEASE";
 
     public record Point(int x, int y, int z) {
         public Point {
@@ -129,10 +130,10 @@ public final class JusticeLedger {
             text(playerName, 64, "name"); text(authorityName, 64, "name"); text(reason, 300, "reason");
             require(at >= 0, "date");
             ticks(originalTicks, servedTicks, reductionTicks);
-            require(SENTENCED.equals(action) || COMPLETED.equals(action) || EMERGENCY_RELEASE.equals(action) || WORK_REDUCTION.equals(action), "action");
+            require(SENTENCED.equals(action) || COMPLETED.equals(action) || EMERGENCY_RELEASE.equals(action) || WORK_REDUCTION.equals(action) || BAIL_RELEASE.equals(action) || JUDICIAL_RELEASE.equals(action), "action");
             require(!SENTENCED.equals(action) || servedTicks == 0 && reductionTicks == 0, "history");
             require(!COMPLETED.equals(action) || servedTicks + reductionTicks == originalTicks, "history");
-            require(!EMERGENCY_RELEASE.equals(action) || servedTicks + reductionTicks < originalTicks, "history");
+            require(!(EMERGENCY_RELEASE.equals(action)||BAIL_RELEASE.equals(action)||JUDICIAL_RELEASE.equals(action)) || servedTicks + reductionTicks < originalTicks, "history");
             require(!WORK_REDUCTION.equals(action) || reductionTicks > 0, "history");
         }
     }
@@ -286,13 +287,15 @@ public final class JusticeLedger {
         return new JusticeLedger(this,changed,decisions);
     }
 
-    public JusticeLedger release(UUID player, UUID actor, String actorName, String reason, long now) {
+    public JusticeLedger release(UUID player, UUID actor, String actorName, String reason, long now) {return releaseAs(player,actor,actorName,reason,now,EMERGENCY_RELEASE);}
+    public JusticeLedger judicialRelease(UUID player,UUID actor,String actorName,String reason,long now,boolean bail){return releaseAs(player,actor,actorName,reason,now,bail?BAIL_RELEASE:JUDICIAL_RELEASE);}
+    private JusticeLedger releaseAs(UUID player, UUID actor, String actorName, String reason, long now,String action) {
         notNull(player); notNull(actor); text(actorName, 64, "name"); text(reason, 300, "reason"); require(now >= 0, "date");
         Sentence sentence = active.get(player);
         state(sentence != null, "sentence_missing");
         LinkedHashMap<UUID, Sentence> changed = new LinkedHashMap<>(active);
         changed.remove(player);
-        return new JusticeLedger(this, changed, append(decision(sentence, actor, actorName, EMERGENCY_RELEASE, reason, now)));
+        return new JusticeLedger(this, changed, append(decision(sentence, actor, actorName, action, reason, now)));
     }
 
     private Prison prison(UUID id) {

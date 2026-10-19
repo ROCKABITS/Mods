@@ -138,5 +138,6 @@
   "message.kingdomtreasury.salary_paid": "Recebeste %s de salário do reino.",
   "message.kingdomtreasury.fixed_tax_paid": "Pagaste %s de imposto fixo do reino.",
   "message.kingdomtreasury.contract_income": "A tesouraria recebeu %s de impostos ou devoluções de contratos.",
-  "message.kingdomtreasury.market_income": "A tesouraria recebeu %s de imposto sobre vendas nas bancas."
+  "message.kingdomtreasury.market_income": "A tesouraria recebeu %s de imposto sobre vendas nas bancas.",
+  "gui.kingdomtreasury.justice_income": "Pagamento judicial recebido"
 }

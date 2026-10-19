@@ -1,0 +1,30 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "GBG",
+    "LPL",
+    " S "
+  ],
+  "key": {
+    "G": {
+      "item": "minecraft:gold_nugget"
+    },
+    "B": {
+      "item": "minecraft:book"
+    },
+    "L": {
+      "item": "minecraft:leather"
+    },
+    "P": {
+      "item": "minecraft:dark_oak_planks"
+    },
+    "S": {
+      "item": "minecraft:stone_bricks"
+    }
+  },
+  "result": {
+    "id": "lawsjustice:register_book",
+    "count": 1
+  }
+}

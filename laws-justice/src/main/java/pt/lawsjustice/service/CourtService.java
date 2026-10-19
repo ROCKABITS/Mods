@@ -33,6 +33,8 @@ import pt.lawsjustice.domain.CourtLedger.CaseFile;
 import pt.lawsjustice.domain.CourtLedger.Evidence;
 import pt.lawsjustice.domain.CourtLedger.Warrant;
 import pt.lawsjustice.domain.JusticeLedger;
+import pt.lawsjustice.domain.FinanceLedger;
+import pt.lawsjustice.compat.JusticeWallet;
 import pt.lawsjustice.domain.JusticeLedger.Sentence;
 import pt.lawsjustice.network.JusticeNetwork;
 
@@ -44,7 +46,7 @@ public final class CourtService {
     private static final class RuntimeState {final Map<UUID,Session> sessions=new HashMap<>();int lastTick=Integer.MIN_VALUE;}
     private static final class Session {
         final BlockPos desk;final UUID document;final String dimension;final long openedAt;final int openedTick;
-        UUID nonce=UUID.randomUUID();int casePage,warrantPage,prisonPage,requests,requestTick=Integer.MIN_VALUE;
+        final UUID sessionId=UUID.randomUUID();UUID nonce=UUID.randomUUID();int casePage,warrantPage,prisonPage,requests,requestTick=Integer.MIN_VALUE;
         String error="",message="";
         Session(ServerPlayer p,BlockPos desk,UUID document){this.desk=desk==null?null:desk.immutable();this.document=document;dimension=dimension(p);openedAt=System.nanoTime();openedTick=p.getServer().getTickCount();}
     }
@@ -60,7 +62,8 @@ public final class CourtService {
         boolean elected=president!=null&&president.id().equals(p.getUUID());
         return new Role(admin,admin||elected,elected,president==null?"":president.name(),elected?CourtLedger.PRESIDENT:admin?CourtLedger.ADMIN_EMERGENCY:"",warning);
     }
-    public static void open(ServerPlayer p,BlockPos desk){thread(p);if(!physical(p,desk,dimension(p)))return;JusticeService.closeSession(p);WorkService.closeSession(p);runtime(p.getServer()).sessions.put(p.getUUID(),new Session(p,desk,null));send(p);}
+    public static String judicialAuthority(ServerPlayer p){thread(p);Role current=role(p);judge(current);return current.authority();}
+    public static void open(ServerPlayer p,BlockPos desk){thread(p);if(!physical(p,desk,dimension(p)))return;JusticeService.closeSession(p);WorkService.closeSession(p);FinanceService.closeSession(p);runtime(p.getServer()).sessions.put(p.getUUID(),new Session(p,desk,null));send(p);}
     public static void closeSession(ServerPlayer p){thread(p);runtime(p.getServer()).sessions.remove(p.getUUID());}
     private static boolean physical(ServerPlayer p,BlockPos pos,String dim){return p.isAlive()&&dimension(p).equals(dim)&&p.distanceToSqr(pos.getX()+.5,pos.getY()+.5,pos.getZ()+.5)<=64&&p.level().getBlockState(pos).getBlock()instanceof JusticeDeskBlock;}
     private static boolean valid(ServerPlayer p,Session s){return s!=null&&p.isAlive()&&dimension(p).equals(s.dimension)&&System.nanoTime()-s.openedAt<=300_000_000_000L&&(long)p.getServer().getTickCount()-s.openedTick<=6000
@@ -75,7 +78,7 @@ public final class CourtService {
     public static void inspectWarrant(ServerPlayer p,ItemStack stack){
         thread(p);UUID id=paperId(stack);
         if(id==null||!holding(p,id)||!JusticeData.get(p.getServer()).court().warrants().containsKey(id)){p.displayClientMessage(Component.translatable("lawsjustice.error.warrant_invalid"),false);return;}
-        JusticeService.closeSession(p);WorkService.closeSession(p);runtime(p.getServer()).sessions.put(p.getUUID(),new Session(p,null,id));send(p);
+        JusticeService.closeSession(p);WorkService.closeSession(p);FinanceService.closeSession(p);runtime(p.getServer()).sessions.put(p.getUUID(),new Session(p,null,id));send(p);
     }
     public static void handle(ServerPlayer p,String operation,String raw){
         thread(p);RuntimeState r=runtime(p.getServer());Session s=r.sessions.get(p.getUUID());
@@ -94,6 +97,9 @@ public final class CourtService {
                 send(p);return;
             }
             if(!uuid(request,"nonce").equals(s.nonce)||number(request,"version",0,Long.MAX_VALUE)!=data.version())throw failure("stale");
+            if("court_finance".equals(operation)){keys(request,"nonce","version");FinanceService.open(p,s.desk);return;}
+            if("court_identity".equals(operation)){keys(request,"case","nonce","version");judge(role);CaseFile file=visible(court,uuid(request,"case"),p,role);ServerPlayer target=p.getServer().getPlayerList().getPlayer(file.accused());
+                s.nonce=UUID.randomUUID();pt.lawsjustice.compat.JusticeIdentity.inspect(p,target);s.message="lawsjustice.message.identity_checked";send(p);return;}
             CourtLedger next=court;
             switch(operation){
                 case "court_file"->{
@@ -107,6 +113,14 @@ public final class CourtService {
                 }
                 case "court_hear"->{keys(request,"case","nonce","version");judge(role);next=court.hear(uuid(request,"case"),p.getUUID(),JusticeNames.name(p),role.authority(),now());}
                 case "court_acquit"->{keys(request,"case","reason","nonce","version");judge(role);next=court.decide(uuid(request,"case"),p.getUUID(),JusticeNames.name(p),role.authority(),text(request,"reason",800,true),"",false,now());}
+                case "court_fine"->{
+                    keys(request,"case","amount","reason","nonce","version");judge(role);CaseFile file=visible(court,uuid(request,"case"),p,role);String reason=text(request,"reason",800,true);long at=now();String currency=JusticeWallet.currentCurrency();
+                    long amount=pt.lawsjustice.domain.FinanceAmounts.parse(text(request,"amount",22,false),currency);
+                    next=court.decideFine(file.id(),p.getUUID(),JusticeNames.name(p),role.authority(),reason,at);
+                    FinanceLedger finance=data.finance().issueFine(UUID.randomUUID(),file.id(),file.accused(),file.accusedName(),p.getUUID(),JusticeNames.name(p),role.authority(),reason,currency,amount,at);
+                    data.replaceFinance(data.ledger(),next,finance);s.nonce=UUID.randomUUID();s.message="lawsjustice.message.fine_issued";
+                    ServerPlayer target=p.getServer().getPlayerList().getPlayer(file.accused());if(target!=null)JusticeNotifications.send(target,"lawsjustice.notification.fined");send(p);return;
+                }
                 case "court_convict"->{
                     keys(request,"case","prison","cell","minutes","reason","nonce","version");judge(role);CaseFile file=visible(court,uuid(request,"case"),p,role);
                     JusticeLedger custody=data.ledger();var prison=custody.prisons().get(uuid(request,"prison"));if(prison==null)throw failure("prison_missing");
@@ -114,7 +128,7 @@ public final class CourtService {
                     ServerPlayer accused=p.getServer().getPlayerList().getPlayer(file.accused());JusticeService.validateCell(p.getServer(),prison,cell,accused);
                     String verdict=text(request,"reason",300,true);String reason=verdict.replace('\r',' ').replace('\n',' ');
                     Sentence sentence=new Sentence(UUID.randomUUID(),file.accused(),file.accusedName(),prison.id(),cell.id(),p.getUUID(),JusticeNames.name(p),reason,now(),Math.multiplyExact(number(request,"minutes",1,43200),1200L),0,0,0);
-                    next=court.decide(file.id(),p.getUUID(),JusticeNames.name(p),role.authority(),verdict,sentence.id().toString(),true,now());
+                    next=court.decidePrison(file.id(),p.getUUID(),JusticeNames.name(p),role.authority(),verdict,sentence.id().toString(),sentence.originalTicks(),now());
                     data.replace(custody.sentence(sentence),next);s.nonce=UUID.randomUUID();s.message="lawsjustice.message.court_decided";
                     if(accused!=null){JusticeService.transferToCell(accused);JusticeNotifications.send(accused,"lawsjustice.notification.sentenced");}
                     send(p);return;
@@ -138,11 +152,11 @@ public final class CourtService {
     private static CaseFile visible(CourtLedger court,UUID id,ServerPlayer player,Role role){CaseFile file=court.cases().get(id);if(file==null||!role.judge()&&!file.accused().equals(player.getUUID())&&!file.complainant().equals(player.getUUID()))throw failure("case_missing");return file;}
 
     public static JsonObject snapshot(ServerPlayer p){
-        thread(p);Session s=runtime(p.getServer()).sessions.get(p.getUUID());JsonObject out=new JsonObject();out.addProperty("protocol",2);out.addProperty("kind",s!=null&&s.document!=null?"warrant":"court");out.addProperty("open",valid(p,s));if(!valid(p,s))return out;
+        thread(p);Session s=runtime(p.getServer()).sessions.get(p.getUUID());JsonObject out=new JsonObject();out.addProperty("protocol",2);out.addProperty("kind",s!=null&&s.document!=null?"warrant":"court");out.addProperty("open",valid(p,s));if(!valid(p,s))return out;out.addProperty("session",s.sessionId.toString());
         JusticeData data=JusticeData.get(p.getServer());CourtLedger court=data.court();
         if(s.document!=null){Warrant warrant=court.warrants().get(s.document);if(warrant==null){out.addProperty("open",false);out.addProperty("error","lawsjustice.error.warrant_invalid");return out;}
             boolean valid=court.validWarrant(warrant.id(),warrant.accused(),now());out.addProperty("valid",valid);out.add("warrant",JSON.toJsonTree(warrant));if(!valid)out.addProperty("warning","lawsjustice.error.warrant_inactive");return out;}
-        Role role=role(p);out.addProperty("nonce",s.nonce.toString());out.addProperty("version",data.version());out.addProperty("admin",role.admin());out.addProperty("judge",role.judge());out.addProperty("president",role.president());out.addProperty("presidentName",role.name());out.addProperty("authorityKind",role.authority());
+        Role role=role(p);out.addProperty("currency",JusticeWallet.currentCurrency());out.addProperty("identityAvailable",pt.lawsjustice.compat.JusticeIdentity.loaded());out.addProperty("nonce",s.nonce.toString());out.addProperty("version",data.version());out.addProperty("admin",role.admin());out.addProperty("judge",role.judge());out.addProperty("president",role.president());out.addProperty("presidentName",role.name());out.addProperty("authorityKind",role.authority());
         if(!role.warning().isEmpty())out.addProperty("warning",role.warning());if(!s.error.isEmpty())out.addProperty("error",s.error);if(!s.message.isEmpty())out.addProperty("message",s.message);
         JsonObject pages=new JsonObject();List<CaseFile> cases=court.cases().values().stream().filter(c->role.judge()||c.accused().equals(p.getUUID())||c.complainant().equals(p.getUUID())).sorted(Comparator.comparing(CaseFile::openedAt).reversed().thenComparing(CaseFile::id)).toList();
         s.casePage=page(s.casePage,cases.size(),2);pages.add("cases",pageInfo(s.casePage,cases.size(),2));JsonArray caseRows=new JsonArray();for(CaseFile row:slice(cases,s.casePage,2))caseRows.add(JSON.toJsonTree(row));out.add("cases",caseRows);

@@ -52,7 +52,7 @@ public final class WorkService {
     private static final WeakHashMap<MinecraftServer,RuntimeState> RUNTIMES=new WeakHashMap<>();
     private static final org.slf4j.Logger LOG=com.mojang.logging.LogUtils.getLogger();
     private static final class RuntimeState {final Map<UUID,Session> sessions=new HashMap<>();final Map<UUID,Pending> production=new HashMap<>();int lastTick=Integer.MIN_VALUE;}
-    private static final class Session {final BlockPos anchor;final String dimension;final long opened=System.nanoTime();final int tick;UUID nonce=UUID.randomUUID();int page,requests,requestTick=Integer.MIN_VALUE;String error="",message="";Session(ServerPlayer p,BlockPos pos){anchor=pos.immutable();dimension=dim(p);tick=p.getServer().getTickCount();}}
+    private static final class Session {final BlockPos anchor;final String dimension;final long opened=System.nanoTime();final int tick;final UUID sessionId=UUID.randomUUID();UUID nonce=UUID.randomUUID();int page,requests,requestTick=Integer.MIN_VALUE;String error="",message="";Session(ServerPlayer p,BlockPos pos){anchor=pos.immutable();dimension=dim(p);tick=p.getServer().getTickCount();}}
     private static final class Pending {final UUID job,node;final BlockPos position;final String dimension;final int total;int remaining;Pending(ServerPlayer p,Job job,BlockPos pos,UUID node,int ticks){this.job=job.id();this.node=node;position=pos.immutable();dimension=dim(p);total=ticks;remaining=ticks;}}
     private WorkService(){}
     private static RuntimeState runtime(MinecraftServer s){return RUNTIMES.computeIfAbsent(s,k->new RuntimeState());}
@@ -62,7 +62,7 @@ public final class WorkService {
     private static BlockPos position(Point p){return new BlockPos(p.x(),p.y(),p.z());}
     private static void thread(ServerPlayer p){if(p==null||p.getServer()==null||!p.getServer().isSameThread())throw failure("thread");}
     public static void closeSession(ServerPlayer p){thread(p);runtime(p.getServer()).sessions.remove(p.getUUID());}
-    public static void open(ServerPlayer p,BlockPos pos){thread(p);if(!physical(p,pos,dim(p)))return;JusticeService.closeSession(p);CourtService.closeSession(p);runtime(p.getServer()).sessions.put(p.getUUID(),new Session(p,pos));send(p);}
+    public static void open(ServerPlayer p,BlockPos pos){thread(p);if(!physical(p,pos,dim(p)))return;JusticeService.closeSession(p);CourtService.closeSession(p);FinanceService.closeSession(p);runtime(p.getServer()).sessions.put(p.getUUID(),new Session(p,pos));send(p);}
     private static boolean physical(ServerPlayer p,BlockPos pos,String dimension){return p.isAlive()&&dim(p).equals(dimension)&&p.distanceToSqr(pos.getX()+.5,pos.getY()+.5,pos.getZ()+.5)<=64&&p.level().getBlockState(pos).getBlock()instanceof WorkStationBlock;}
     private static boolean valid(ServerPlayer p,Session s){return s!=null&&physical(p,s.anchor,s.dimension)&&System.nanoTime()-s.opened<=300_000_000_000L&&(long)p.getServer().getTickCount()-s.tick<=6000;}
     private static String station(ServerPlayer p,BlockPos pos){return p.level().getBlockState(pos).getBlock()instanceof WorkStationBlock b?b.kind():"";}
@@ -166,7 +166,7 @@ public final class WorkService {
     private static void removeBundles(ServerPlayer p,UUID job){for(int slot=0;slot<p.getInventory().getContainerSize();slot++)if(bundle(p.getInventory().getItem(slot),job))p.getInventory().setItem(slot,ItemStack.EMPTY);p.getInventory().setChanged();p.containerMenu.broadcastChanges();}
     private static void progress(ServerPlayer p,Job j){p.displayClientMessage(Component.translatable("lawsjustice.work.progress",j.output(),j.quantity(),j.raw(),j.fuel()),true);}
     public static JsonObject snapshot(ServerPlayer p){
-        thread(p);Session s=runtime(p.getServer()).sessions.get(p.getUUID());JsonObject out=new JsonObject();out.addProperty("kind","work");out.addProperty("protocol",3);out.addProperty("open",valid(p,s));if(!valid(p,s))return out;
+        thread(p);Session s=runtime(p.getServer()).sessions.get(p.getUUID());JsonObject out=new JsonObject();out.addProperty("kind","work");out.addProperty("protocol",3);out.addProperty("open",valid(p,s));if(!valid(p,s))return out;out.addProperty("session",s.sessionId.toString());
         JusticeData data=JusticeData.get(p.getServer());WorkLedger work=data.work();boolean admin=p.hasPermissions(2);Sentence self=data.ledger().active().get(p.getUUID());Job job=work.active(p.getUUID());
         out.addProperty("admin",admin);out.addProperty("canWork",self!=null&&p.isAlive()&&!p.isCreative()&&!p.isSpectator()&&!CourtService.restricted(p));out.addProperty("nonce",s.nonce.toString());out.addProperty("version",data.version());out.addProperty("station",station(p,s.anchor));if(!s.error.isEmpty())out.addProperty("error",s.error);if(!s.message.isEmpty())out.addProperty("message",s.message);
         out.add("self",self==null?JsonNull.INSTANCE:JSON.toJsonTree(self));out.add("job",job==null?JsonNull.INSTANCE:JSON.toJsonTree(job));out.add("rules",JSON.toJsonTree(work.rules()));out.addProperty("bundle",job!=null&&hasBundle(p,job.id()));

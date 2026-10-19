@@ -138,5 +138,6 @@
   "message.kingdomtreasury.salary_paid": "Received %s in kingdom salary.",
   "message.kingdomtreasury.fixed_tax_paid": "Paid %s in fixed kingdom tax.",
   "message.kingdomtreasury.contract_income": "The treasury received %s in contract tax or refunds.",
-  "message.kingdomtreasury.market_income": "The treasury received %s in market sales tax."
+  "message.kingdomtreasury.market_income": "The treasury received %s in market sales tax.",
+  "gui.kingdomtreasury.justice_income": "Judicial payment received"
 }

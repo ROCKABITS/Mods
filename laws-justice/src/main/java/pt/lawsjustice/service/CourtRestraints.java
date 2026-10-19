@@ -184,7 +184,7 @@ public final class CourtRestraints {
         Warrant warrant = court.warrants().get(arrest.warrant());
         if (warrant == null || !CourtLedger.EXECUTED.equals(warrant.status())) return false;
         return warrant.caseId().isEmpty()
-                || !CourtLedger.ACQUITTED.equals(court.cases().get(UUID.fromString(warrant.caseId())).status());
+                || !Set.of(CourtLedger.ACQUITTED,CourtLedger.FINED).contains(court.cases().get(UUID.fromString(warrant.caseId())).status());
     }
 
     private static Warrant physicalWarrant(ServerPlayer actor, ServerPlayer target, CourtLedger court, long at) {

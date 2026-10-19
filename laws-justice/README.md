@@ -1,8 +1,8 @@
-# Laws & Justice — 0.3.0 Beta
+# Laws & Justice — 0.4.0 Beta
 
 Sistema de prisões construídas pelos jogadores, com celas registadas, penas que contam apenas enquanto o condenado está online e libertação automática. Para **Minecraft 1.21.1, NeoForge 21.1.256 ou superior e Java 21**, em servidor dedicado ou mundo aberto por LAN.
 
-Esta versão inclui prisões, processos, provas, audiências, decisões do Presidente, mandados físicos, algemas e seis trabalhos prisionais com zonas próprias e entregas seladas. Multas e fianças seguem na fase 0.4. O [plano completo](PLANO-COMPLETO.md) conserva todas essas funcionalidades.
+Inclui prisões, processos, provas, audiências, decisões do Presidente, mandados físicos, algemas, seis trabalhos prisionais, multas, fianças e um Livro de Registos público. O [plano completo](PLANO-COMPLETO.md) conserva o âmbito das quatro fases implementadas.
 
 ## Instalação
 
@@ -10,7 +10,7 @@ Esta versão inclui prisões, processos, provas, audiências, decisões do Presi
 2. Coloca o JAR de Laws & Justice na pasta `mods` do servidor e de cada jogador. Num mundo LAN, instala-o também no cliente que abre o mundo.
 3. Reinicia o jogo ou o servidor. Mantém a mesma versão do mod em todos os participantes.
 
-O mod funciona sozinho. **Chronicles RP** é opcional para apresentar os nomes das personagens; sem ele, aparecem os nomes Minecraft. **Realm Notifications** é opcional para os avisos de condenação e libertação; sem ele, são usadas mensagens do próprio jogo. **Realm Council 0.2.2+** é opcional para reconhecer o Presidente eleito e empossado. Sem esse mod, apenas os administradores têm autoridade judicial de emergência. Esta versão não cobra dinheiro nem exige qualquer mod de economia.
+O mod funciona sozinho. **Chronicles RP** é opcional para apresentar os nomes das personagens; sem ele, aparecem os nomes Minecraft. **Realm Notifications** é opcional para os avisos de condenação e libertação; sem ele, são usadas mensagens do próprio jogo. **Realm Council 0.2.2+** é opcional para reconhecer o Presidente eleito e empossado. Sem esse mod, apenas os administradores têm autoridade judicial de emergência. **Chronicles RP 0.5.4+** permite pagar com a carteira digital existente; sem ele, são usadas esmeraldas reais do inventário. **Crown Ledger 0.2.2+** recebe os pagamentos confirmados; sem tesouraria compatível, o tribunal guarda-os num cofre persistente. **Realm Identity 0.1.1+** permite ao Presidente consultar um documento autêntico apresentado na mão por um acusado a até seis blocos. Nenhuma integração é obrigatória.
 
 ## Blocos e ferramenta
 
@@ -24,7 +24,7 @@ O mod funciona sozinho. **Chronicles RP** é opcional para apresentar os nomes d
 
 A **Mesa de Justiça** abre o tribunal físico. As **Algemas Reais** permitem conduzir um acusado com mandado válido. O **Mandado Selado** é emitido pelo tribunal e não tem receita.
 
-Os blocos e ferramentas fabricáveis têm modelos 3D próprios, receitas e uma aba criativa **Laws & Justice**, com traduções em português e inglês. Os quatro blocos são recolhidos com uma picareta de pedra ou superior. A porta de duas metades deixa cair apenas um item.
+Os blocos e ferramentas fabricáveis têm modelos 3D próprios, receitas e uma aba criativa **Laws & Justice**, com traduções em português e inglês. Os blocos são recolhidos com uma picareta de pedra ou superior. A porta de duas metades deixa cair apenas um item.
 
 A prisão é construída pelos jogadores com os blocos que escolherem. **O mod não gera edifícios, celas ou masmorras automaticamente.**
 
@@ -68,13 +68,13 @@ Durante a detenção, o servidor impede a destruição e colocação de blocos p
 
 Um administrador pode selecionar uma pena ativa, introduzir um motivo e confirmar uma **libertação de emergência**. Se o condenado estiver offline, a libertação fica guardada e é entregue quando voltar a entrar.
 
-O separador **Histórico** apresenta os registos recentes de aplicação de penas, cumprimento e libertação de emergência. Guarda o nome do jogador, a autoridade, o motivo, a data e os tempos da pena. Os dados persistem quando os jogadores saem do mundo. O histórico tem um limite de **2 000 decisões recentes**; não é ainda o sistema completo de processos e registos criminais da versão 0.4.
+O separador **Histórico** apresenta os registos recentes de aplicação de penas, cumprimento e libertação de emergência. Guarda o nome do jogador, a autoridade, o motivo, a data e os tempos da pena. Os dados persistem quando os jogadores saem do mundo. O histórico de custódia tem um limite de **2 000 decisões recentes**. Os processos judiciais finais também aparecem no Livro de Registos, com o veredito, autoridade, data, multa ou duração original da pena. Os processos guardam até 256 entradas por mundo.
 
 ## Tribunal e Presidente
 
 Qualquer jogador pode interagir com uma **Mesa de Justiça**, apresentar uma acusação e juntar depoimentos nos processos em que participa. Cada depoimento guarda o autor e a data; as partes e a autoridade judicial podem consultar as provas. Uma acusação não aplica uma pena automaticamente.
 
-O **Presidente eleito e empossado**, com mandato ativo no Realm Council, abre a audiência, analisa as provas e decide entre absolvição e prisão. A decisão fundamentada e a pena são guardadas na mesma operação. Pode condenar um acusado que entretanto tenha ficado offline. Não existem cargos adicionais de juiz ou guarda. Ao perder o mandato, perde imediatamente os poderes, mesmo com o menu aberto; as penas já existentes continuam a decorrer.
+O **Presidente eleito e empossado**, com mandato ativo no Realm Council, abre a audiência, analisa as provas e decide entre absolvição, multa e prisão. A decisão fundamentada e a pena são guardadas na mesma operação. Pode condenar um acusado que entretanto tenha ficado offline. Não existem cargos adicionais de juiz ou guarda. Ao perder o mandato, perde imediatamente os poderes, mesmo com o menu aberto; as penas já existentes continuam a decorrer.
 
 O controlo da prisão continua reservado aos administradores para registar construções e realizar intervenções de emergência. No tribunal, essas decisões ficam identificadas como **ADMIN_EMERGENCY**, separadas das decisões do Presidente.
 
@@ -132,11 +132,23 @@ Cada ponto validado só conta uma vez. Voltar a inspecionar a mesma zona ou colo
 
 Para renovar um ponto consumido, um **administrador em Sobrevivência** tem de substituir fisicamente o recurso e voltar a inspecionar a zona **depois de terminarem ou serem abandonadas as tarefas ativas dessa zona**. A substituição normal consome os blocos ou sementes usados pelo administrador. Colocações de jogadores comuns ou em criativo não autorizam essa renovação. Na horta, a planta também tem de estar madura antes de poder contar de novo.
 
+## Multas, fianças e registos públicos
+
+Na **Mesa de Justiça**, o separador de julgamento permite aplicar uma multa depois de abrir a audiência e registar um motivo. O valor fica ligado ao veredito e ao UUID do acusado, mesmo que esteja offline. O condenado paga voluntariamente através de **Multas, Fianças e Registos**. Não há cobranças automáticas a jogadores offline, valores enviados pelo cliente ou nova pena por falta de saldo.
+
+No separador **Autoridade**, o Presidente atual escolhe uma pena ativa, introduz um valor e um motivo e confirma uma fiança. O prisioneiro **ou um amigo** pode pagá-la no mesmo menu. A cobrança termina apenas a condenação a que foi associada e regista a libertação. Se o beneficiário estiver offline, a saída é entregue quando voltar. As fianças já autorizadas continuam válidas após a mudança de Presidente até serem pagas, revogadas ou terminar a pena. O Presidente pode revogar cobranças ainda sem pagamento ou autorizar uma libertação fundamentada; isso não altera os créditos dos trabalhos.
+
+Os valores em euros aceitam ponto ou vírgula e até duas casas decimais. As esmeraldas são contadas em unidades inteiras. A moeda fica fixada quando a cobrança é criada; remover Chronicles depois não converte uma multa em esmeraldas. Se o mod estiver instalado mas a personagem ou carteira não estiver disponível, o pagamento fica indisponível.
+
+Cada pagamento segue um recibo persistente: tentativa guardada → carteira/inventário e recibo gravados no jogador → cobrança paga e cofre financiado → recibo único na tesouraria. Nos anfitriões LAN, a confirmação verifica também os dados do jogador em `level.dat`, utilizados pelo Minecraft ao reabrir o mundo. Uma tentativa pendente pode ser repetida com o mesmo recibo; só é possível cancelá-la se não existir cobrança aplicada. Os fundos pagos permanecem guardados quando a tesouraria estiver ausente, indisponível ou cheia. Ao instalar Crown Ledger 0.2.2+, a transferência é retomada automaticamente. O tribunal não permite levantar ou criar esse dinheiro.
+
+O **Livro de Registos Judiciais** é um bloco fabricável próprio, com livro aberto, encadernação, cantos de latão e pedestal. Qualquer jogador pode consultar os vereditos finais e o histórico público de penas. O livro não permite pagar nem decidir à distância, e não publica depoimentos privados ou acusações ainda por resolver. As novas condenações conservam a duração no processo; na migração, a duração das antigas é recuperada da custódia quando ainda estiver disponível.
+
 ## Dados do mundo
 
-Prisões, celas, penas, tempo cumprido, processos, provas, mandados, detenções temporárias, zonas, recursos, tarefas, créditos de trabalho, histórico e libertações pendentes ficam no ficheiro **`<mundo>/data/laws_justice.dat`**. Não são guardados no item da porta, no agrimensor ou apenas na memória do cliente.
+Prisões, celas, penas, tempo cumprido, processos, provas, mandados, detenções temporárias, zonas, recursos, tarefas, créditos de trabalho, histórico, multas, fianças, recibos e libertações pendentes ficam no ficheiro **`<mundo>/data/laws_justice.dat`**. Não são guardados no item da porta, no agrimensor ou apenas na memória do cliente.
 
-Os mundos das versões 0.1 e 0.2 são migrados automaticamente sem reiniciar as penas. As decisões administrativas e judiciais são guardadas imediatamente. O progresso das penas recebe pontos de gravação periódicos e é gravado ao sair e ao encerrar normalmente o mundo. Não há contagem de tempo offline. Um encerramento abrupto pode perder os últimos ticks desde o ponto de gravação, tal como outras alterações recentes do mundo.
+Os mundos das versões 0.1, 0.2 e 0.3 são migrados automaticamente sem reiniciar as penas. As decisões administrativas e judiciais são guardadas imediatamente. O progresso das penas recebe pontos de gravação periódicos e é gravado ao sair e ao encerrar normalmente o mundo. Não há contagem de tempo offline. Um encerramento abrupto pode perder os últimos ticks desde o ponto de gravação, tal como outras alterações recentes do mundo.
 
 Inclui este ficheiro nas cópias de segurança do mundo. Se os dados estiverem danificados, o mod informa o erro em vez de substituir silenciosamente os registos por uma prisão vazia.
 
@@ -144,13 +156,6 @@ Inclui este ficheiro nas cópias de segurança do mundo. Se os dados estiverem d
 
 As receitas, a aba criativa, o agrimensor e os menus físicos permitem preparar e usar o sistema. O comando administrativo opcional **`/justice blocks`** entrega os blocos, o agrimensor e as algemas para facilitar a preparação; não aplica penas nem abre um menu remoto.
 
-## Próximas versões
+## Fases incluídas
 
-| Versão | Funcionalidades previstas |
-| --- | --- |
-| **0.1.0** | Prisões e celas registadas, administração física, penas online e libertação automática. |
-| **0.2.0** | Presidente como juiz, Mesa de Justiça, algemas e mandados físicos validados pelo servidor. |
-| **0.3.0** | Trabalho Comunitário, zonas e postos de trabalho, entregas e redução de pena limitada. |
-| **0.4.0** | Multas, fianças, processos, registos criminais e integrações adicionais. |
-
-Os modelos e as texturas originais podem ser regenerados com `python3 tools/generate_assets.py`, usando Pillow. O código-fonte, as receitas e as traduções acompanham o projeto no repositório `ROCKABITS/Mods`.
+A versão 0.4 inclui as quatro fases: prisões; tribunal eleito, algemas e mandados; trabalhos prisionais; multas, fianças, registos e integrações financeiras. Continua identificada como **Beta**. A [validação](VALIDACAO.md) identifica os testes e os limites da evidência disponível.

@@ -1,6 +1,6 @@
 # Laws & Justice — plano completo aprovado
 
-Este documento conserva o pedido funcional completo do projeto. É um **plano por versões**, não uma lista de funcionalidades já presentes no JAR 0.1.0. O [README](README.md) descreve o conteúdo efetivo da primeira versão.
+Este documento conserva o pedido funcional completo do projeto. É um **plano por versões**, não uma lista de funcionalidades já presentes no JAR 0.1.0. O [README](README.md) descreve o conteúdo efetivo da versão atual, incluindo as quatro fases até 0.4.0. Este plano conserva o pedido original.
 
 ## 1. Objetivo e sistema de prisões
 

@@ -41,7 +41,7 @@ public final class CourtScreen extends Screen {
     private int px,py,pw,ph,bodyTop,bodyBottom,scroll,contentHeight,ticks,waitTicks;
     private boolean waiting,error;
 
-    public CourtScreen(JsonObject snapshot){super(tr("title"));data=snapshot.deepCopy();drafts.put("minutes","30");drafts.put("hours","24");notice();normalize();}
+    public CourtScreen(JsonObject snapshot){super(tr("title"));data=snapshot.deepCopy();drafts.put("minutes","30");drafts.put("hours","24");drafts.put("fine_amount","20.00");notice();normalize();}
     public JsonObject currentState(){return data.deepCopy();}
     public static void receive(String json){
         if(json==null||json.length()>524288)return;final JsonObject snapshot;
@@ -122,6 +122,7 @@ public final class CourtScreen extends Screen {
         label(tr(emergency()?"emergency_audited":judge()?"president_live":"citizen_rights"),x+11,y+23,w-22,JusticeTheme.MUTED,false);return y+h+12;
     }
     private int cases(int x,int y,int w){
+        var payments=bodyButton(x,y,w,25,tr("finance"),()->request("court_finance",new JsonObject()),true);payments.active=!waiting;y+=36;
         y=authority(x,y,w);
         if(wide()){int lw=308;return Math.max(caseList(x,y,lw),fileForm(x+lw+14,y,w-lw-14));}
         return fileForm(x,caseList(x,y,w)+14,w);
@@ -183,6 +184,7 @@ public final class CourtScreen extends Screen {
         y=caseSummary(x,y,w,c)+10;label(tr("hearing_title"),x+3,y,w-6,JusticeTheme.GOLD,true);y+=21;
         y=paragraph(tr("hearing_hint"),x+3,y,w-6,JusticeTheme.MUTED)+11;
         if(num(c,"heardAt")>0){label(tr("heard_at",date(num(c,"heardAt"))),x+3,y,w-6,JusticeTheme.LIGHT,false);y+=21;}
+        if(flag(data,"identityAvailable")){var inspect=bodyButton(x,y,w,24,tr("identity"),()->{var p=new JsonObject();p.addProperty("case",selectedCase);request("court_identity",p);},false);inspect.active=!waiting;y+=34;}
         var hear=bodyButton(x,y,w,24,tr(emergency()?"emergency_hear":"hear"),()->{var p=new JsonObject();p.addProperty("case",selectedCase);request("court_hear",p);},true);hear.active=!waiting&&judge()&&str(c,"status").equals("OPEN");return y+33;
     }
     private int verdictForm(int x,int y,int w,JsonObject c){
@@ -197,7 +199,9 @@ public final class CourtScreen extends Screen {
             if(draft("verdict_reason").strip().length()>300){localError("gui.lawsjustice.court.convict_reason_limit");return;}
             try{int minutes=Integer.parseInt(draft("minutes").strip());if(minutes<1||minutes>43200)throw new IllegalArgumentException();var p=new JsonObject();p.addProperty("case",selectedCase);p.addProperty("prison",selectedPrison);p.addProperty("cell",selectedCell);p.addProperty("minutes",minutes);p.addProperty("reason",draft("verdict_reason"));request("court_convict",p);}catch(RuntimeException invalid){localError("gui.lawsjustice.minutes_invalid");}
         }),true);convict.active=!waiting&&judge()&&heard&&!selectedPrison.isBlank()&&!selectedCell.isBlank();if(confirmation.equals("convict:"+selectedCase))convict.setMessage(tr("confirm_convict"));y+=33;
-        return paragraph(tr(heard?"verdict_hint":"hearing_required"),x+3,y,w-6,JusticeTheme.MUTED)+12;
+        y=paragraph(tr(heard?"verdict_hint":"hearing_required"),x+3,y,w-6,JusticeTheme.MUTED)+16;
+        y=field("fine_amount",tr(str(data,"currency").equals("CHRONICLES")?"fine_euros":"fine_emeralds"),x,y,w,22);
+        var fine=bodyButton(x,y,w,25,tr("fine"),()->confirm("fine:"+selectedCase,()->{var p=new JsonObject();p.addProperty("case",selectedCase);p.addProperty("amount",draft("fine_amount"));p.addProperty("reason",draft("verdict_reason"));request("court_fine",p);}),true);fine.active=!waiting&&judge()&&heard;if(confirmation.equals("fine:"+selectedCase))fine.setMessage(tr("confirm_fine"));return y+35;
     }
     private int warrants(int x,int y,int w){
         y=authority(x,y,w);if(wide()){int lw=(w-14)/2;return Math.max(warrantList(x,y,lw),judge()?warrantForm(x+lw+14,y,w-lw-14):warrantHelp(x+lw+14,y,w-lw-14));}
@@ -271,7 +275,7 @@ public final class CourtScreen extends Screen {
         if(waiting)return;remember();if(!List.of("court_refresh","court_page","court_close").contains(op)){payload.addProperty("nonce",str(data,"nonce"));payload.addProperty("version",num(data,"version"));}
         waiting=true;waitTicks=0;JusticeNetwork.request(op,payload);if(!op.equals("court_refresh"))rebuild();
     }
-    @Override public void onClose(){JusticeNetwork.request("court_close",new JsonObject());super.onClose();}
+    @Override public void onClose(){JusticeClientSessions.close(data);JusticeNetwork.request("court_close",new JsonObject());super.onClose();}
     private void label(Component text,int x,int y,int w,int color,boolean bold){paintings.add(g->g.drawString(font,JusticeTheme.fit(font,text,Math.max(1,w),bold),x,y,color,false));}
     private void centered(Component text,int x,int y,int w,int color,boolean bold){paintings.add(g->{Component fitted=JusticeTheme.fit(font,text,Math.max(1,w),bold);g.drawString(font,fitted,x-font.width(fitted)/2,y,color,false);});}
     private int paragraph(Component text,int x,int y,int w,int color){for(var line:font.split(text,Math.max(1,w))){int yy=y;paintings.add(g->g.drawString(font,line,x,yy,color,false));y+=12;}return y;}

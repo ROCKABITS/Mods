@@ -12,6 +12,7 @@
     "lawsjustice:agricultural_post",
     "lawsjustice:workshop_table",
     "lawsjustice:maintenance_post",
-    "lawsjustice:warehouse_post"
+    "lawsjustice:warehouse_post",
+    "lawsjustice:register_book"
   ]
 }

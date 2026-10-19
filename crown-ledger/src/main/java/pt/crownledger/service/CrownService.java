@@ -516,7 +516,7 @@ public final class CrownService {
         view.put("contracts", contracts);
         view.put("history", treasury.history().stream().map(entry -> {
             Map<String, Object> record = new LinkedHashMap<>();
-            record.put("description", entry.details()); record.put("kind", entry.kind());
+            record.put("description", entry.kind()==Kind.JUSTICE_INCOME?"gui.kingdomtreasury.justice_income":entry.details()); record.put("kind", entry.kind());
             record.put("amount", entry.amount()); record.put("currency", entry.currency()); record.put("at", entry.time());
             return record;
         }).toList());

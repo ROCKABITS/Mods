@@ -12,7 +12,7 @@ Sete blocos originais com madeira, ferro, tecidos verdes, pergaminhos, caixotes,
 
 ![Mesa de Oficina e postos originais](0.3.0/laws-justice-workshop-model.png)
 
-![Postos de Mineração e Agricultura](0.3.0/laws-justice-work-posts-models.png)
+![Postos de trabalho e materiais](0.3.0/laws-justice-work-posts-models.png)
 
 ![Quadro de Trabalhos e Caixa de Entrega](0.3.0/laws-justice-work-board-model.png)
 

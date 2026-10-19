@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.4.0 — Beta, phase four
+
+- Added heard fine judgments, voluntary wallet/emerald payments and President-authorized bail, including payment by friends and queued releases for offline defendants. Unpaid fines never create another prison sentence.
+- Added current-President judicial releases and reasoned revocation of unpaid charges, without modifying earned work credit.
+- Added original Judicial Register furniture, crafting, creative entry and public final decisions/custody history. Private testimony and unresolved accusations remain restricted. New criminal records preserve the original sentence duration.
+- Added physical fine, bail, payment, public record and authority interfaces with confirmations, pagination, small-screen scrolling and Portuguese/English translations.
+- Added durable player debit receipts, death-persistent markers, safe retry/cancellation and authoritative LAN-host level.dat validation. Offline players are never freshly debited.
+- Added backed court escrow and optional Crown Ledger 0.2.2 income receipts. Unavailable or full treasuries retain funded payments for safe later forwarding; receipt replays cannot create a second income.
+- Added optional nearby held-document authentication through Realm Identity and post-commit Realm Notifications.
+- Prevented late server updates from reopening a physical menu after the player closes it.
+- Added strict format-four migration from all prior prison/court/work saves, financial consistency checks, native failure/recovery tests and actual-client payment/LAN persistence validation.
+
 ## 0.3.0 — Beta, phase three
 
 - Added seven original work blocks: Work Board, Delivery Box, Mining Post, Agricultural Post, Workshop Table, Maintenance Post and Warehouse Post, plus a server-issued Sealed Work Pouch.

@@ -43,7 +43,7 @@ if (providers.gradleProperty('crownVisualTests').isPresent()) {
     }
 }
 tasks.named('jar', Jar) {
-    exclude('pt/crownledger/test/**', 'pt/crownledger/visualtest/**', 'data/kingdomtreasury/structure/crown_empty.nbt')
+    exclude('pt/crownledger/test/**', 'pt/crownledger/visualtest/**', 'data/kingdomtreasury/structure/**')
 }
 tasks.withType(JavaCompile).configureEach {
     options.encoding = 'UTF-8'

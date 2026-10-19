@@ -15,6 +15,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.level.saveddata.SavedData;
 import net.minecraft.world.level.storage.LevelResource;
 import pt.crownledger.domain.Policy;
+import pt.crownledger.domain.IncomeLedger;
 import pt.crownledger.domain.Treasury;
 import pt.crownledger.domain.Treasury.Activity;
 import pt.crownledger.domain.Treasury.Currency;
@@ -26,6 +27,7 @@ import pt.crownledger.domain.Treasury.PendingBatch;
 public final class TreasuryData extends SavedData {
     public static final String STORAGE_KEY = "crown_ledger";
     public Treasury treasury = new Treasury();
+    public IncomeLedger income = new IncomeLedger();
 
     public static TreasuryData get(MinecraftServer server) {
         return server.overworld().getDataStorage().computeIfAbsent(new SavedData.Factory<>(() -> {
@@ -39,7 +41,7 @@ public final class TreasuryData extends SavedData {
     public static TreasuryData load(CompoundTag tag, HolderLookup.Provider lookup) {
         type(tag, "version", Tag.TAG_INT);
         int version = tag.getInt("version");
-        if (version != 1 && version != 2) throw new IllegalStateException("Unsupported Crown Ledger storage version");
+        if (version != 1 && version != 2 && version != 3) throw new IllegalStateException("Unsupported Crown Ledger storage version");
         type(tag, "policy", Tag.TAG_COMPOUND);
         type(tag, "periodStartedAt", Tag.TAG_LONG);
         type(tag, "nextCycleAt", Tag.TAG_LONG);
@@ -89,13 +91,27 @@ public final class TreasuryData extends SavedData {
         result.treasury = new Treasury(new Treasury.Snapshot(policy, balances, readAmounts(tag, "claims"),
                 readAmounts(tag, "taxDue"), activity, history, pending, tag.getLong("periodStartedAt"),
                 tag.getLong("nextCycleAt"), tag.hasUUID("standaloneManager") ? tag.getUUID("standaloneManager") : null));
-        if (version == 1) result.setDirty();
+        if(version>=3){
+            Map<java.util.UUID,IncomeLedger.Receipt> receipts=new LinkedHashMap<>();
+            for(Tag raw:list(tag,"incomeReceipts")){
+                CompoundTag entry=(CompoundTag)raw;
+                if(!entry.getAllKeys().equals(java.util.Set.of("id","currency","amount","payer","memo")))throw new IllegalStateException("Unknown income receipt field");
+                uuid(entry,"id");uuid(entry,"payer");type(entry,"currency",Tag.TAG_STRING);type(entry,"amount",Tag.TAG_LONG);type(entry,"memo",Tag.TAG_STRING);
+                var receipt=new IncomeLedger.Receipt(entry.getUUID("id"),Currency.valueOf(entry.getString("currency")),entry.getLong("amount"),entry.getUUID("payer"),entry.getString("memo"));
+                if(receipts.putIfAbsent(receipt.id(),receipt)!=null||receipts.size()>IncomeLedger.MAX_RECEIPTS)throw new IllegalStateException("Duplicate or excessive income receipts");
+            }
+            result.income=new IncomeLedger(receipts);
+        }else if(tag.contains("incomeReceipts"))throw new IllegalStateException("Income receipts cannot be loaded as an older treasury format");
+        if (version < 3) result.setDirty();
         return result;
     }
 
     @Override public CompoundTag save(CompoundTag tag, HolderLookup.Provider lookup) {
         Treasury.Snapshot saved = treasury.snapshot();
-        tag.putInt("version", 2);
+        tag.putInt("version", 3);
+        ListTag receipts=new ListTag();
+        income.receipts().values().forEach(receipt->{CompoundTag entry=new CompoundTag();entry.putUUID("id",receipt.id());entry.putString("currency",receipt.currency().name());entry.putLong("amount",receipt.amount());entry.putUUID("payer",receipt.payer());entry.putString("memo",receipt.memo());receipts.add(entry);});
+        tag.put("incomeReceipts",receipts);
         tag.put("policy", writePolicy(saved.policy()));
         tag.putLong("periodStartedAt", saved.periodStartedAt()); tag.putLong("nextCycleAt", saved.nextCycleAt());
         if (saved.standaloneManager() == null) tag.remove("standaloneManager");

@@ -128,7 +128,7 @@ public final class CourtAuthorityGameTests {
             request.addProperty("prison", f.base.prisonId.toString()); request.addProperty("cell", f.base.cellId.toString()); request.addProperty("minutes", 3);
             f.act(f.judge, "court_convict", request); var decision = f.court().cases().get(id); var sentence = f.base.sentence();
             h.assertTrue(decision.status().equals("CONVICTED") && sentence != null && decision.sentence().equals(sentence.id().toString())
-                    && sentence.player().equals(f.accused.getUUID()) && sentence.originalTicks() == 3600,
+                    && sentence.player().equals(f.accused.getUUID()) && sentence.originalTicks() == 3600 && decision.originalTicks() == 3600,
                     "A court verdict and its exact prison sentence diverged");
             h.assertTrue(decision.judge().equals(f.judge.getUUID().toString()) && decision.authorityKind().equals(f.council == null ? "ADMIN_EMERGENCY" : "PRESIDENT"),
                     "A judicial verdict stored a client-supplied or incorrect judicial authority");
@@ -174,11 +174,11 @@ public final class CourtAuthorityGameTests {
             try {
                 var tag=net.minecraft.nbt.NbtIo.readCompressed(file,net.minecraft.nbt.NbtAccounter.create(16_777_216));
                 var old=com.google.gson.JsonParser.parseString(new String(tag.getByteArray("ledger"),java.nio.charset.StandardCharsets.UTF_8)).getAsJsonObject();
-                old.remove("court");old.remove("work");tag.putInt("format",1);tag.putByteArray("ledger",old.toString().getBytes(java.nio.charset.StandardCharsets.UTF_8));net.minecraft.nbt.NbtIo.writeCompressed(tag,file);
+                old.remove("court");old.remove("work");old.remove("finance");tag.putInt("format",1);tag.putByteArray("ledger",old.toString().getBytes(java.nio.charset.StandardCharsets.UTF_8));net.minecraft.nbt.NbtIo.writeCompressed(tag,file);
                 var migrated=JusticeData.readState(file);
                 h.assertTrue(migrated.ledger().active().equals(f.base.data.ledger().active()) && migrated.court().cases().isEmpty(),"Phase-one migration changed custody or invented a case");
                 migrated.replaceCourt(migrated.court());
-                h.assertTrue(net.minecraft.nbt.NbtIo.readCompressed(file,net.minecraft.nbt.NbtAccounter.create(16_777_216)).getInt("format")==3,"The migrated file did not use the current atomic format");
+                h.assertTrue(net.minecraft.nbt.NbtIo.readCompressed(file,net.minecraft.nbt.NbtAccounter.create(16_777_216)).getInt("format")==4,"The migrated file did not use the current atomic format");
                 h.assertTrue(JusticeData.readState(file).ledger().active().equals(f.base.data.ledger().active()),"Migration lost the sentence on its next reopen");
             } catch(java.io.IOException error) { throw new IllegalStateException(error); }
         }
@@ -212,7 +212,7 @@ public final class CourtAuthorityGameTests {
         try(var f=new CourtFixture(h)){
             f.base.register();UUID id=f.file();f.hear(id);var file=f.base.directory.resolve("laws_justice.dat");
             try{
-                var tag=net.minecraft.nbt.NbtIo.readCompressed(file,net.minecraft.nbt.NbtAccounter.create(16_777_216));var json=com.google.gson.JsonParser.parseString(new String(tag.getByteArray("ledger"),java.nio.charset.StandardCharsets.UTF_8)).getAsJsonObject();json.remove("work");tag.putInt("format",2);tag.putByteArray("ledger",json.toString().getBytes(java.nio.charset.StandardCharsets.UTF_8));net.minecraft.nbt.NbtIo.writeCompressed(tag,file);
+                var tag=net.minecraft.nbt.NbtIo.readCompressed(file,net.minecraft.nbt.NbtAccounter.create(16_777_216));var json=com.google.gson.JsonParser.parseString(new String(tag.getByteArray("ledger"),java.nio.charset.StandardCharsets.UTF_8)).getAsJsonObject();json.remove("work");json.remove("finance");for(var row:json.getAsJsonObject("court").getAsJsonObject("cases").entrySet())row.getValue().getAsJsonObject().remove("originalTicks");tag.putInt("format",2);tag.putByteArray("ledger",json.toString().getBytes(java.nio.charset.StandardCharsets.UTF_8));net.minecraft.nbt.NbtIo.writeCompressed(tag,file);
                 var migrated=JusticeData.readState(file);h.assertTrue(migrated.court().state().equals(f.court().state())&&migrated.work().jobs().isEmpty()&&migrated.work().credits().isEmpty(),"Phase-two migration lost the court or invented work credit");migrated.replaceCourt(migrated.court());h.assertTrue(JusticeData.readState(file).court().cases().get(id).status().equals("HEARING"),"Reopening the migrated court lost its active hearing");
             }catch(java.io.IOException failure){throw new IllegalStateException(failure);}
         }h.succeed();

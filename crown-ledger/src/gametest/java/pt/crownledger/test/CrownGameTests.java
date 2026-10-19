@@ -626,11 +626,11 @@ public final class CrownGameTests {
         data.treasury.setPolicy(marketPolicy(policy, 500), citizen.getUUID(), System.currentTimeMillis());
         var saved = data.save(new CompoundTag(), helper.getLevel().registryAccess());
         var restored = TreasuryData.load(saved, helper.getLevel().registryAccess());
-        helper.assertTrue(saved.getInt("version") == 2 && restored.treasury.policy().marketTaxBasisPoints() == 500
+        helper.assertTrue(saved.getInt("version") == 3 && restored.treasury.policy().marketTaxBasisPoints() == 500
                         && restored.treasury.snapshot().equals(data.treasury.snapshot()),
                 "Version2 native Crown records lost the independently configured sales-tax rule");
         var legacy = saved.copy();
-        legacy.putInt("version", 1);
+        legacy.putInt("version", 1);legacy.remove("incomeReceipts");
         legacy.getCompound("policy").remove("marketTaxBasisPoints");
         var migrated = TreasuryData.load(legacy, helper.getLevel().registryAccess());
         helper.assertTrue(migrated.isDirty() && migrated.treasury.policy().equals(policy)

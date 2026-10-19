@@ -951,3 +951,63 @@ for name,pattern,keys in WORK_RECIPES:
 for tag in ('mineable/pickaxe','needs_stone_tool'):
     write(RES/f'data/minecraft/tags/block/{tag}.json',{'replace':False,'values':blocks+['lawsjustice:justice_desk']+['lawsjustice:'+r[0] for r in WORK_RECIPES]})
 print(json.dumps({'work_models':{k:v for k,v in COUNTS.items() if k.startswith(('work_','delivery','mining','agricultural','maintenance','warehouse'))},'work_recipes':len(WORK_RECIPES),'work_bundle_craftable':False},indent=2))
+
+# Version 0.4: a royal bound register on its carved pedestal, with open pages,
+# raised stitched leather, brass corners, red bookmark and chained seal.
+RNG=random.Random(419102026)
+im=noise((64,64),PAPER,2);d=ImageDraw.Draw(im)
+for page in (0,32):
+    d.rectangle((page+2,2,page+29,61),outline=(158,126,81))
+    d.line((page+5,9,page+26,9),fill=WINE,width=2)
+    for line in range(15,55,6):
+        d.line((page+6,line,page+RNG.randint(20,26),line),fill=(116,98,71))
+        d.line((page+6,line+2,page+RNG.randint(15,25),line+2),fill=(154,130,92))
+d.rectangle((31,0,32,63),fill=(122,99,62));save('register_open_pages',im)
+TEXTURES={**TEXTURES,'register_open_pages':'lawsjustice:block/register_open_pages'}
+ELEMENTS=[]
+box([1,0,1],[15,.65,15],'stone_dark','register_stone_octagonal_base')
+box([1.6,.65,1.6],[14.4,1.4,14.4],'stone','register_stone_bevel')
+box([2.8,1.4,3],[13.2,2,13],'oak_dark','register_carved_pedestal_foot')
+box([4,2,4.2],[12,10.6,11.8],'oak','register_square_cabinet')
+for x in (3.8,11.5):
+    for z in (4,11.1):
+        box([x,2,z],[x+.7,10.8,z+.9],'oak_dark','register_column_recess')
+        for yy in (2.3,9.7):box([x-.1,yy,z-.1],[x+.8,yy+.3,z+1],'bronze','register_column_bronze_collar')
+box([5,3.4,3.94],[11,8.9,4.18],'ledger_cover','register_wine_velvet_front_panel')
+box([5.35,3.75,3.8],[10.65,8.55,3.99],'justice_crest','register_public_records_crest',north='justice_crest')
+for x in (4.5,11.1):
+    for y in (2.9,9.1):box([x,y,3.6],[x+.4,y+.4,4.14],'gold_polished','register_cabinet_brass_rivet')
+# Stepped reading ledge fits inside its single block with a readable top surface.
+box([.8,10.6,1.3],[15.2,11.3,14.7],'oak_dark','register_reading_desk_lower_lip')
+box([1,11.3,1.5],[15,11.9,14.5],'oak','register_reading_desk_wood_top')
+for x in (1.1,14.5):box([x,11.2,1.4],[x+.4,11.9,14.6],'bronze','register_brass_desk_rim')
+box([1.4,11.9,2.6],[14.6,12.3,13.8],'leather','register_deep_burgundy_book_binding')
+box([1.8,12.3,2.9],[14.2,13.3,13.45],'ledger_pages','register_thick_visible_cut_pages')
+for x in (1.5,7.75):
+    box([x,13.3,2.7],[x+6.2,13.65,13.7],'ledger_cover','register_open_leather_cover')
+    for z in (2.9,13.2):box([x+.15,13.65,z],[x+6,13.78,z+.26],'bronze','register_gilded_cover_edge')
+# Original page artwork is split across two genuine 3D page banks with a valley.
+for x,side in ((1.95,0),(8.05,1)):
+    e=box([x,13.65,3.2],[x+5.95,14.15,13.15],'wax','register_open_page_bank')
+    e['faces']['up']={'texture':'#register_open_pages','uv':[side*8,0,side*8+8,16]}
+    box([x+.05,13.64,3.2],[x+5.9,13.8,13.18],'ledger_pages','register_paper_edge_layers')
+box([7.72,13.3,3],[8.28,14.18,13.4],'oak_dark','register_recessed_binding_gutter')
+box([10.75,14.16,3],[11.4,14.27,13.6],'velvet','register_red_silk_bookmark')
+box([10.75,11.8,2.35],[11.4,14.27,2.65],'velvet','register_bookmark_hanging_ribbon')
+for x in (1.4,13.7):
+    for z in (2.6,13.1):
+        box([x,13.7,z],[x+.8,14.1,z+.6],'gold_polished','register_brass_corner_protector')
+        box([x+.2,14.1,z+.15],[x+.6,14.2,z+.45],'bronze','register_corner_engraved_stud')
+# Small pendant key and seal on a nonfunctional decorative chain.
+for index in range(7):
+    y=6.6+index*.65;z=3.4 if index%2 else 3.6
+    box([12.45,y,z],[12.72,y+.45,z+.3],'bronze','register_linked_security_chain')
+box([12.15,5.7,3.2],[13.05,6.8,3.65],'velvet','register_small_pendant_wax_seal')
+box([12.4,5.95,3.05],[12.8,6.55,3.35],'gold_polished','register_pendant_stamp')
+publish('register_book',ELEMENTS)
+name='register_book';pattern=['GBG','LPL',' S '];keys={'G':'gold_nugget','B':'book','L':'leather','P':'dark_oak_planks','S':'stone_bricks'}
+write(RES/f'data/lawsjustice/recipe/{name}.json',{'type':'minecraft:crafting_shaped','category':'misc','pattern':pattern,'key':{k:{'item':'minecraft:'+v} for k,v in keys.items()},'result':{'id':'lawsjustice:'+name,'count':1}})
+write(RES/f'data/lawsjustice/advancement/recipes/decorations/{name}.json',{'parent':'minecraft:recipes/root','criteria':{'has_book':{'trigger':'minecraft:inventory_changed','conditions':{'items':[{'items':['minecraft:book']}]}},'has_recipe':{'trigger':'minecraft:recipe_unlocked','conditions':{'recipe':'lawsjustice:'+name}}},'requirements':[['has_book','has_recipe']],'rewards':{'recipes':['lawsjustice:'+name]}})
+for tag in ('mineable/pickaxe','needs_stone_tool'):
+    write(RES/f'data/minecraft/tags/block/{tag}.json',{'replace':False,'values':blocks+['lawsjustice:justice_desk']+['lawsjustice:'+r[0] for r in WORK_RECIPES]+['lawsjustice:register_book']})
+print(json.dumps({'register_book_cuboids':COUNTS['register_book'],'register_book_craftable':True},indent=2))

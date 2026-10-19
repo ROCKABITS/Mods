@@ -15,14 +15,14 @@ import zipfile
 ROOT = Path(__file__).resolve().parents[2]
 STATE = ROOT / 'laws-justice/build/justice-release'
 # project: mod ID, artifact basename, native property, minimum existing JUnit count
-PROJECTS = {'laws-justice': ('lawsjustice', 'laws-justice', 'justiceGameTests', 106)}
+PROJECTS = {'laws-justice': ('lawsjustice', 'laws-justice', 'justiceGameTests', 130),
+            'crown-ledger': ('kingdomtreasury', 'crown-ledger', 'crownGameTests', 52)}
 WRAPPER_SHA = '423cb469ccc0ecc31f0e4e1c309976198ccb734cdcbb7029d4bda0f18f57e8d9'
 DISTRIBUTION_SHA = '72f44c9f8ebcb1af43838f45ee5c4aa9c5444898b3468ab3f4af7b6076c5bc3f'
 COMPANION_PINS = {
     'cronicasrp-0.5.4.jar': '197c2fac53f97eb59159c9a0c26b3065362bdc18c8de1a1c0e61ece4360ba1f5',
     'contracts-bounties-0.3.2.jar': '2ecf125a188f042f8d6c5011af5e1ff2cc5974925835bcd2cc0180f75d07ff15',
     'realmcouncil-0.2.2.jar': '0a77af87a5c4e36f55ad12578662834886a7986864896a908a3dc4217e2c19cb',
-    'crown-ledger-0.2.1.jar': '120eb1729d5546b76fa27eff2edfeff0fe8e4cb33dc2bb8f7b75a6ac532dcfe8',
     'realm-markets-0.2.1.jar': 'bfb1e73186015ab94a86c841abba1df02bf1b5851a65771e622234624b806bb1',
     'realm-rewards-0.1.2.jar': 'ab8efe3bd9a7b24a4f725bf6dfe1f07dec0b88ecfaac91533b57c45b11cb7bcb',
     'realm-notifications-0.1.0.jar': '5aa70ac5a7696ce626ffa40e2e530038e90c06819dbeea6f43be70d42310822a',
@@ -62,12 +62,17 @@ def validate_jar(project, path):
         assert not any('/test/' in n or '/visualtest/' in n or '/testclient/' in n or '/gametest/' in n
                        or '/structure/' in n or 'ClientQA' in n or '_fixture/' in n
                        for n in names), project + ': bundled test fixture'
-        assert not any(n.endswith('.class') and not n.startswith('pt/lawsjustice/') for n in names), project + ': bundled external class'
-        for required in ('pt/lawsjustice/service/JusticeService.class', 'pt/lawsjustice/data/JusticeData.class',
+        assert not any(n.endswith('.class') and not n.startswith('pt/lawsjustice/' if project == 'laws-justice' else 'pt/crownledger/') for n in names), project + ': bundled external class'
+        required_classes = ('pt/lawsjustice/service/JusticeService.class', 'pt/lawsjustice/data/JusticeData.class',
                          'pt/lawsjustice/client/JusticeScreen.class', 'pt/lawsjustice/service/CourtService.class',
                          'pt/lawsjustice/domain/CourtLedger.class', 'pt/lawsjustice/client/CourtScreen.class',
                          'pt/lawsjustice/service/WorkService.class', 'pt/lawsjustice/domain/WorkLedger.class',
-                         'pt/lawsjustice/client/WorkScreen.class'):
+                         'pt/lawsjustice/client/WorkScreen.class', 'pt/lawsjustice/service/FinanceService.class',
+                         'pt/lawsjustice/service/PaymentReceipts.class', 'pt/lawsjustice/service/MoneySettlement.class',
+                         'pt/lawsjustice/client/FinanceScreen.class', 'pt/lawsjustice/block/RegisterBookBlock.class') if project == 'laws-justice' else (
+                         'pt/crownledger/api/CrownIncomeApi.class', 'pt/crownledger/domain/IncomeLedger.class',
+                         'pt/crownledger/data/TreasuryData.class', 'pt/crownledger/client/TreasuryScreen.class')
+        for required in required_classes:
             assert required in names, project + ': required justice implementation missing: ' + required
 
 
@@ -137,6 +142,11 @@ def native():
     assert success, 'At least one native regression suite failed; see bounded validation summary'
 
 
+def expected_companions(project):
+    return {name: checksum for name, checksum in COMPANION_PINS.items()
+            if project != 'crown-ledger' or not name.startswith('cronicasrp-')}
+
+
 def install():
     data = manifest()
     companions = {}
@@ -148,13 +158,13 @@ def install():
         target = ROOT / project / 'compat-libs'
         target.mkdir(exist_ok=True)
         assert not list(target.glob('*.jar')), project + ': unexpected integration JAR'
-        expected = dict(COMPANION_PINS)
+        expected = expected_companions(project)
         for other, saved in data['production_jars'].items():
             if other == project:
                 continue
             shutil.copyfile(STATE / saved['filename'], target / saved['filename'])
             expected[saved['filename']] = saved['sha256']
-        for name in COMPANION_PINS:
+        for name in expected_companions(project):
             shutil.copyfile(ROOT / 'mod-pronto' / name, target / name)
         companions[project] = expected
     (STATE / 'companions.json').write_text(json.dumps(companions, indent=2) + '\n')
@@ -205,7 +215,7 @@ def validate():
         results[project] = {'unit_tests': unit_count(project),
             'standalone_native_tests': native_count(project, 'gametests.log'),
             'integrated_native_tests': native_count(project, 'integration.log')}
-        expected = dict(COMPANION_PINS)
+        expected = expected_companions(project)
         for other, saved in data['production_jars'].items():
             if other != project:
                 expected[saved['filename']] = saved['sha256']
@@ -216,11 +226,15 @@ def validate():
         log = (base / filename).read_text(errors='replace')
         assert f'JUSTICE_NATIVE_PASSED integration={integration}' in log, filename + ': actual native assertions missing'
         assert f'JUSTICE_RUNTIME_MODE_PASSED integration={integration}' in log, filename + ': wrong runtime mode'
-        for marker in ('COURT_NATIVE_PASSED', 'CROWN_JUDGE_PASSED', 'WORK_NATIVE_PASSED'):
+        for marker in ('COURT_NATIVE_PASSED', 'CROWN_JUDGE_PASSED', 'WORK_NATIVE_PASSED', 'JUSTICE_FINANCE_PAYMENT_PASSED'):
             assert f'{marker} integration={integration}' in log, filename + ': missing actual court assertions ' + marker
         for marker in ('JUSTICE_CUSTODY_PASSED', 'JUSTICE_PERSISTENCE_PASSED', 'WORK_DELIVERY_PASSED',
                        'WORK_TIMED_PASSED', 'WORK_SMITHING_PASSED', 'WORK_CLEANING_PASSED'):
             assert marker in log, filename + ': missing actual custody assertions ' + marker
+    assert 'JUSTICE_IDENTITY_PHYSICAL_PASSED' in (base / 'integration.log').read_text(), 'Actual held-document authentication was not tested'
+    assert 'JUSTICE_CROWN_INCOME_PASSED' in (base / 'integration.log').read_text(), 'Real fresh Crown receipt transfer was not tested'
+    for logname in ('gametests.log', 'integration.log'):
+        assert 'CROWN_INCOME_API_PASSED' in (ROOT / 'crown-ledger' / logname).read_text(), 'Fresh Crown durable income native checks missing'
     client = json.loads((base / 'qa-results/justice-client/result.json').read_text())
     assert client.get('success') is True, 'Actual Minecraft justice client failed'
     for flag in ('actual_minecraft_client', 'actual_integrated_server', 'real_c2s_transport', 'real_s2c_transport',
@@ -228,7 +242,9 @@ def validate():
                  'lan_published', 'teleport_containment', 'death_respawn_containment', 'real_vanilla_permission_removed',
                  'real_court_models', 'real_non_admin_president', 'real_court_evidence', 'real_court_verdict',
                  'real_server_warrant_document', 'real_president_turnover', 'real_work_models', 'real_work_zone_ui',
-                 'real_work_policy_ui', 'real_work_survival_prisoner', 'real_work_deliveries', 'real_work_persistence'):
+                 'real_work_policy_ui', 'real_work_survival_prisoner', 'real_work_deliveries', 'real_work_persistence',
+                 'real_finance_models', 'real_bail_authority_ui', 'real_bail_payment', 'real_fine_verdict_ui',
+                 'real_fine_payment', 'real_crown_income_receipts', 'real_lan_host_payment_persistence', 'real_public_judicial_records'):
         assert client.get(flag) is True, 'Actual integrated client proof missing: ' + flag
     assert set(client.get('work_kinds_completed', [])) == {'MINING', 'FARMING', 'CARPENTRY', 'SMITHING', 'CLEANING', 'TRANSPORT'}, 'Missing real work type'
     assert len(client.get('work_native_actions', [])) >= 6, 'Missing genuine vanilla mining/harvest/brush actions'
@@ -236,13 +252,24 @@ def validate():
     clientlog = (base / 'visual-client.log').read_text(errors='replace')
     assert 'JUSTICE_CLIENT_PASSED' in clientlog and 'BUILD SUCCESSFUL' in clientlog and 'BUILD FAILED' not in clientlog
     images = client.get('screenshots')
-    assert isinstance(images, list) and len(images) >= 35 and len(images) == len(set(images)), 'Missing actual justice screenshots'
+    assert isinstance(images, list) and len(images) >= 47 and len(images) == len(set(images)), 'Missing actual justice screenshots'
     for name in images:
         assert isinstance(name, str) and re.fullmatch(r'[a-z0-9-]+\.png', name), 'Unsafe screenshot name'
         path = base / 'qa-results/justice-client' / name
         assert path.stat().st_size > 1024 and path.read_bytes()[:8] == b'\x89PNG\r\n\x1a\n', name
         import struct
         assert struct.unpack('>II', path.read_bytes()[16:24]) == (1600, 900), name + ': wrong capture resolution'
+    assert client['finance_initial_wallet_cents'] - client['finance_after_payments_wallet_cents'] == 4500
+    assert client['finance_after_payments_crown_cents'] - client['finance_initial_crown_cents'] == 4500
+    crown_client = json.loads((ROOT / 'crown-ledger/qa-results/crown-client/result.json').read_text())
+    assert crown_client.get('success') is True, 'Actual Crown chest/menu client failed'
+    crown_log = (ROOT / 'crown-ledger/visual-client.log').read_text()
+    assert 'CROWN_VISUAL_QA success=true' in crown_log and 'BUILD SUCCESSFUL' in crown_log and 'BUILD FAILED' not in crown_log
+    for name in crown_client['screenshots']:
+        path = ROOT / 'crown-ledger/qa-results/crown-client' / name
+        assert re.fullmatch(r'[a-z0-9-]+\.png', name) and path.stat().st_size > 1024 and path.read_bytes()[:8] == b'\x89PNG\r\n\x1a\n'
+    results['crown-ledger']['actual_client_validation'] = True
+    results['crown-ledger']['live_financial_integration_via_laws_justice'] = True
     results['laws-justice']['actual_client_validation'] = True
     return data, results, client, runtime_dependencies()
 
@@ -284,9 +311,16 @@ def package():
                                    'COURT_NATIVE_PASSED integration=false', 'COURT_NATIVE_PASSED integration=true',
                                    'CROWN_JUDGE_PASSED integration=false', 'CROWN_JUDGE_PASSED integration=true',
                                    'WORK_NATIVE_PASSED integration=false', 'WORK_NATIVE_PASSED integration=true',
-                                   'WORK_DELIVERY_PASSED', 'WORK_TIMED_PASSED', 'WORK_SMITHING_PASSED', 'WORK_CLEANING_PASSED']
-        proof['screenshots'] = {name: digest(ROOT / project / 'qa-results/justice-client' / name) for name in client['screenshots']}
-        proof['release_phase'] = '3: prisons, elected courts, warrants, handcuffs, six community-service tasks, registered work zones, finite resources, timed production and sealed deliveries'
+                                   'WORK_DELIVERY_PASSED', 'WORK_TIMED_PASSED', 'WORK_SMITHING_PASSED', 'WORK_CLEANING_PASSED',
+                                   'JUSTICE_FINANCE_PAYMENT_PASSED integration=false', 'JUSTICE_FINANCE_PAYMENT_PASSED integration=true', 'JUSTICE_CROWN_INCOME_PASSED', 'JUSTICE_IDENTITY_PHYSICAL_PASSED']
+        visual_name = 'justice-client' if project == 'laws-justice' else 'crown-client'
+        project_client = client if project == 'laws-justice' else json.loads((ROOT / project / 'qa-results/crown-client/result.json').read_text())
+        proof['screenshots'] = {name: digest(ROOT / project / 'qa-results' / visual_name / name) for name in project_client['screenshots']}
+        if project == 'crown-ledger':
+            proof['native_markers'] = ['CROWN_INCOME_API_PASSED']
+            proof['client_interface_data'] = 'Demonstration data for Crown menu screenshots; actual host wallet debits and Crown receipts tested in the Laws & Justice integrated client'
+        proof['financial_integration'] = {key: client[key] for key in ('real_bail_payment', 'real_fine_payment', 'real_crown_income_receipts', 'real_lan_host_payment_persistence', 'finance_initial_wallet_cents', 'finance_after_payments_wallet_cents', 'finance_initial_crown_cents', 'finance_after_payments_crown_cents')}
+        proof['release_phase'] = '4: complete prison, court, warrant, work, fine, bail and public record systems with backed, durable, receipt-based money settlement'
         proof['judicial_authority'] = 'Live elected and sworn Realm Council President; explicitly audited administrator emergency authority; no additional roles'
         checksum = jar.with_suffix('.sha256')
         write_fresh(checksum, ''.join(f'{digest(path)}  {path.name}\n' for path in (jar, archive)).encode())
@@ -297,26 +331,29 @@ def package():
                 shutil.copyfile(path, downloads / path.name)
             files.append(str(path.relative_to(ROOT)))
         notice('notice', 'Tested release', f'{jar.name}: {jar.stat().st_size} bytes; SHA256={digest(jar)}; checks={results[project]}')
-    release = version('laws-justice')
-    media = ROOT / 'media/laws-justice' / release
-    assert not media.exists(), 'Refusing to replace an existing media release'
-    media.mkdir(parents=True)
-    visual = ROOT / 'laws-justice/qa-results/justice-client'
-    for name in client['screenshots']:
-        shutil.copyfile(visual / name, media / name)
-    shutil.copyfile(visual / 'result.json', media / 'validation.json')
-    (media / 'README.md').write_text('# Laws & Justice\n\nActual Minecraft 1.21.1 NeoForge integrated-client captures of prison and work furniture, the surveying rod, the justice desk, physical administration, elected court interfaces, sealed warrants and all six community-service tasks. Work demonstrations use one unit and one minute per configured task; default quantities and rewards are larger. Demonstration buildings, players and sentences are test fixtures; this mod does not generate prisons. Server suites verify custody rules, persistence, permissions and online-only sentence completion. These captures do not establish an authenticated two-client session.\n\n' + ''.join(f'![Laws & Justice]({name})\n\n' for name in client['screenshots']))
-    with zipfile.ZipFile(media / f'laws-justice-{release}-media.zip', 'w', zipfile.ZIP_DEFLATED) as zipped:
-        for name in client['screenshots'] + ['README.md']:
-            zipped.write(media / name, name)
-    files.append(str(media.relative_to(ROOT)))
+    for project in PROJECTS:
+        release = version(project)
+        media = ROOT / 'media' / project / release
+        assert not media.exists(), 'Refusing to replace an existing media release'
+        media.mkdir(parents=True)
+        visual = ROOT / project / 'qa-results' / ('justice-client' if project == 'laws-justice' else 'crown-client')
+        report = json.loads((visual / 'result.json').read_text())
+        for name in report['screenshots']:
+            shutil.copyfile(visual / name, media / name)
+        shutil.copyfile(visual / 'result.json', media / 'validation.json')
+        note = ('Actual Minecraft 1.21.1 NeoForge integrated-client captures of original prison, court, work and register furniture, physical menus, warrants, all six Survival work tasks, fines and bail. Buildings, characters, sentences and the initial wallet funding are authored QA fixtures; the mod never generates prisons or grants that fixture money. Payments use real Chronicles wallets, real Crown income receipts and actual LAN-host shutdown/reopen. No synthetic financial snapshots. Work demonstrations use one unit/one minute per task. This does not establish an authenticated two-client session.' if project == 'laws-justice' else 'Actual Minecraft original Crown chest and production menu captures with demonstration menu data. The separately captured Laws & Justice integrated-client suite verifies real Chronicles wallet debits and fresh Crown income receipts, including a real LAN-host world restart. See the joint release provenance.')
+        (media / 'README.md').write_text('# ' + project + '\n\n' + note + '\n\n' + ''.join(f'![{project}]({name})\n\n' for name in report['screenshots']))
+        with zipfile.ZipFile(media / f'{project}-{release}-media.zip', 'w', zipfile.ZIP_DEFLATED) as zipped:
+            for name in report['screenshots'] + ['README.md']:
+                zipped.write(media / name, name)
+        files.append(str(media.relative_to(ROOT)))
     (STATE / 'publish-paths.json').write_text(json.dumps(files, indent=2) + '\n')
 
 
 def stage():
     # Argument array avoids shell interpolation of repository paths.
     paths = json.loads((STATE / 'publish-paths.json').read_text())
-    assert len(paths) == 4 * len(PROJECTS) + 1
+    assert len(paths) == 5 * len(PROJECTS)
     subprocess.run(['git', 'add', '--', *paths], cwd=ROOT, check=True)
 
 

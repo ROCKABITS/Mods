@@ -54,7 +54,7 @@ public final class JusticeService {
     }
     private static final class Session {
         final String dimension;final BlockPos pos;final long openedAt;final int openedTick;
-        UUID nonce=UUID.randomUUID();int prisonPage,activePage,historyPage;String error="",message="";
+        final UUID sessionId=UUID.randomUUID();UUID nonce=UUID.randomUUID();int prisonPage,activePage,historyPage;String error="",message="";
         int requestTick=Integer.MIN_VALUE,requests;
         Session(ServerPlayer p,BlockPos pos){dimension=dimension(p);this.pos=pos.immutable();openedAt=System.nanoTime();openedTick=p.getServer().getTickCount();}
     }
@@ -71,7 +71,7 @@ public final class JusticeService {
     public static void open(ServerPlayer player,BlockPos anchor) {
         thread(player);
         if(!physical(player,anchor,dimension(player)))return;
-        CourtService.closeSession(player);WorkService.closeSession(player);
+        CourtService.closeSession(player);WorkService.closeSession(player);FinanceService.closeSession(player);
         RuntimeState r=runtime(player.getServer());r.sessions.put(player.getUUID(),new Session(player,anchor));
         send(player);
     }
@@ -163,7 +163,7 @@ public final class JusticeService {
 
     public static JsonObject snapshot(ServerPlayer p) {
         thread(p);RuntimeState r=runtime(p.getServer());Session s=r.sessions.get(p.getUUID());JsonObject out=new JsonObject();out.addProperty("protocol",1);out.addProperty("open",valid(p,s));
-        if(!valid(p,s))return out;
+        if(!valid(p,s))return out;out.addProperty("session",s.sessionId.toString());
         JusticeData data=JusticeData.get(p.getServer());JusticeLedger ledger=data.ledger();boolean admin=administrator(p);
         out.addProperty("admin",admin);out.addProperty("nonce",s.nonce.toString());out.addProperty("version",data.version());
         if(!s.error.isEmpty())out.addProperty("error",s.error);if(!s.message.isEmpty())out.addProperty("message",s.message);

@@ -27,6 +27,8 @@ public final class BlockRegistry {
             () -> new ReinforcedLockBlock(metalProperties()));
     public static final DeferredBlock<PrisonControlBlock> PRISON_CONTROL = BLOCKS.register("prison_control",
             () -> new PrisonControlBlock(metalProperties().sound(SoundType.DEEPSLATE)));
+    public static final DeferredBlock<RegisterBookBlock> REGISTER_BOOK=BLOCKS.register("register_book",()->new RegisterBookBlock(metalProperties().sound(SoundType.WOOD)));
+    public static final DeferredItem<BlockItem> REGISTER_BOOK_ITEM=ITEMS.register("register_book",()->new BlockItem(REGISTER_BOOK.get(),new Item.Properties()));
     public static final DeferredBlock<JusticeDeskBlock> JUSTICE_DESK = BLOCKS.register("justice_desk",
             () -> new JusticeDeskBlock(metalProperties().sound(SoundType.WOOD)));
 

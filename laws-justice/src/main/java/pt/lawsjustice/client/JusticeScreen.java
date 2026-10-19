@@ -303,7 +303,7 @@ public final class JusticeScreen extends Screen {
         if(waiting)return;remember();if(!operation.equals("refresh")&&!operation.equals("close")&&!operation.equals("page")){payload.addProperty("nonce",str(data,"nonce"));payload.addProperty("version",num(data,"version"));}
         waiting=true;waitTicks=0;JusticeNetwork.request(operation,payload);if(!operation.equals("refresh"))rebuild();
     }
-    @Override public void onClose(){JusticeNetwork.request("close",new JsonObject());super.onClose();}
+    @Override public void onClose(){JusticeClientSessions.close(data);JusticeNetwork.request("close",new JsonObject());super.onClose();}
     private void label(Component value,int x,int y,int w,int color,boolean bold){paintings.add(g->g.drawString(font,JusticeTheme.fit(font,value,Math.max(1,w),bold),x,y,color,false));}
     private void centered(Component value,int x,int y,int w,int color,boolean bold){paintings.add(g->{Component fitted=JusticeTheme.fit(font,value,Math.max(1,w),bold);g.drawString(font,fitted,x-font.width(fitted)/2,y,color,false);});}
     private int paragraph(Component value,int x,int y,int w,int color){for(var line:font.split(value,Math.max(1,w))){int yy=y;paintings.add(g->g.drawString(font,line,x,yy,color,false));y+=12;}return y;}

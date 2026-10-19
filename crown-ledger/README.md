@@ -94,3 +94,9 @@ O workflow conjunto compila primeiro os dois JARs de produção e executa os tes
 A [execução conjunta aprovada da versão 0.2.0](https://github.com/ROCKABITS/Mods/actions/runs/38924972884), sobre `1a6825f00d37ec07c194e96a4b05c003f892d8d1`, passou **46 testes unitários Crown Ledger, 19 testes nativos independente e 19 com os companheiros reais**. O Realm Markets 0.2.0 compilado no mesmo commit passou 45 unitários e 45 nativos em cada modo. As compras tributadas, recolhas sem dupla tributação e retenção do imposto com o tesouro cheio passaram com os dois JARs novos; os dois clientes Minecraft também foram aprovados. A [proveniência](../mod-pronto/crown-ledger-0.2.0.build.json) identifica os hashes e os resultados.
 
 As imagens são capturas do cliente Minecraft com o modelo distribuído e os menus reais; os saldos e as taxas das imagens são dados de demonstração. A integração completa com o runtime de Chronicles/Origins/Jupiter requer os respetivos JARs em `compat-libs` e não está incluída neste CI. Consulta o estado atual da execução em [VALIDACAO.md](VALIDACAO.md).
+
+## Pagamentos judiciais — 0.2.2
+
+Laws & Justice 0.4.0 envia multas e fianças já pagas para a tesouraria na moeda original. Cada transferência guarda um recibo único no mesmo ficheiro que o saldo. Repetir o recibo, incluindo após reiniciar um mundo LAN, não cria outra entrada de dinheiro. Se a gravação ou o limite de saldo impedir a transferência, o tribunal conserva os fundos até poder entregá-los.
+
+A atualização migra automaticamente o formato 1 ou 2 para o formato 3, conservando as contas, os impostos e os salários. Usa Crown Ledger 0.2.2 no servidor e em todos os clientes. Realm Markets 0.2.1 continua compatível. A API é exclusiva do servidor e não dá aos clientes uma forma de criar dinheiro.

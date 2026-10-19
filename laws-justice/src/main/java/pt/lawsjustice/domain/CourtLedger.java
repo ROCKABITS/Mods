@@ -13,7 +13,7 @@ import java.util.UUID;
 public final class CourtLedger {
     public static final int MAX_CASES=256, MAX_EVIDENCE=16, MAX_WARRANTS=1024, MAX_RESTRAINTS=256;
     public static final long MAX_WARRANT_MILLIS=7L*24*60*60*1000, MAX_RESTRAINT_MILLIS=5L*60*1000;
-    public static final String OPEN="OPEN", HEARING="HEARING", ACQUITTED="ACQUITTED", CONVICTED="CONVICTED";
+    public static final String OPEN="OPEN", HEARING="HEARING", ACQUITTED="ACQUITTED", CONVICTED="CONVICTED", FINED="FINED";
     public static final String ACTIVE="ACTIVE", EXECUTED="EXECUTED", REVOKED="REVOKED";
     public static final String PRESIDENT="PRESIDENT", ADMIN_EMERGENCY="ADMIN_EMERGENCY";
 
@@ -23,14 +23,16 @@ public final class CourtLedger {
 
     public record CaseFile(UUID id,UUID complainant,String complainantName,UUID accused,String accusedName,
                            String accusation,List<Evidence> evidence,String status,long openedAt,long heardAt,
-                           String judge,String judgeName,String authorityKind,String verdict,long decidedAt,String sentence) {
+                           String judge,String judgeName,String authorityKind,String verdict,long decidedAt,String sentence,long originalTicks) {
+        public CaseFile(UUID id,UUID complainant,String complainantName,UUID accused,String accusedName,String accusation,List<Evidence> evidence,String status,long openedAt,long heardAt,String judge,String judgeName,String authorityKind,String verdict,long decidedAt,String sentence){this(id,complainant,complainantName,accused,accusedName,accusation,evidence,status,openedAt,heardAt,judge,judgeName,authorityKind,verdict,decidedAt,sentence,0);}
         public CaseFile {
+            require(originalTicks>=0&&originalTicks<=51_840_000L&&(CONVICTED.equals(status)||originalTicks==0),"case_duration");
             nonNull(id);nonNull(complainant);nonNull(accused);text(complainantName,1,64,"name");text(accusedName,1,64,"name");
             text(accusation,1,800,"accusation");nonNull(evidence);require(evidence.size()<=MAX_EVIDENCE,"capacity");
             Set<UUID> ids=new HashSet<>();for(Evidence entry:evidence){nonNull(entry);require(ids.add(entry.id()),"duplicate");require(entry.at()>=openedAt,"date");}
             evidence=List.copyOf(evidence);optionalUuid(judge);optionalUuid(sentence);text(judgeName,0,64,"name");
             text(verdict,0,800,"verdict");require(openedAt>=0&&heardAt>=0&&decidedAt>=0,"date");
-            require(Set.of(OPEN,HEARING,ACQUITTED,CONVICTED).contains(nonNull(status)),"case_status");
+            require(Set.of(OPEN,HEARING,ACQUITTED,CONVICTED,FINED).contains(nonNull(status)),"case_status");
             if(OPEN.equals(status)){
                 require(heardAt==0&&decidedAt==0&&judge.isEmpty()&&judgeName.isEmpty()&&authorityKind!=null&&authorityKind.isEmpty()
                         &&verdict.isEmpty()&&sentence.isEmpty(),"case_state");
@@ -131,10 +133,19 @@ public final class CourtLedger {
                 guilty?CONVICTED:ACQUITTED,row.openedAt(),row.heardAt(),judge.toString(),name,authority,verdict,at,sentenceId));
     }
 
+    /** Freeze the imposed duration in the criminal record even after the bounded custody audit rolls over. */
+    public CourtLedger decidePrison(UUID caseId,UUID judge,String name,String authority,String verdict,String sentenceId,long originalTicks,long now){
+        require(originalTicks>0&&originalTicks<=51_840_000L,"case_duration");CourtLedger decided=decide(caseId,judge,name,authority,verdict,sentenceId,true,now);CaseFile r=decided.cases().get(caseId);
+        return decided.put(new CaseFile(r.id(),r.complainant(),r.complainantName(),r.accused(),r.accusedName(),r.accusation(),r.evidence(),r.status(),r.openedAt(),r.heardAt(),r.judge(),r.judgeName(),r.authorityKind(),r.verdict(),r.decidedAt(),r.sentence(),originalTicks));
+    }
+    public CourtLedger decideFine(UUID caseId,UUID judge,String name,String authority,String verdict,long now){
+        CourtLedger decided=decide(caseId,judge,name,authority,verdict,"",false,now);CaseFile r=decided.cases().get(caseId);
+        return decided.put(new CaseFile(r.id(),r.complainant(),r.complainantName(),r.accused(),r.accusedName(),r.accusation(),r.evidence(),FINED,r.openedAt(),r.heardAt(),r.judge(),r.judgeName(),r.authorityKind(),r.verdict(),r.decidedAt(),""));
+    }
     public CourtLedger issue(Warrant warrant){
         nonNull(warrant);require(ACTIVE.equals(warrant.status()),"warrant_status");valid(!warrants().containsKey(warrant.id()),"duplicate");
         if(!warrant.caseId().isEmpty()){
-            CaseFile row=caseFile(UUID.fromString(warrant.caseId()));valid(!ACQUITTED.equals(row.status()),"case_resolved");
+            CaseFile row=caseFile(UUID.fromString(warrant.caseId()));valid(!ACQUITTED.equals(row.status())&&!FINED.equals(row.status()),"case_resolved");
         }
         Map<UUID,Warrant> warrants=new LinkedHashMap<>(warrants());warrants.put(warrant.id(),warrant);return with(cases(),warrants,restraints());
     }
@@ -168,7 +179,7 @@ public final class CourtLedger {
     public boolean validWarrant(UUID id,UUID target,long now){
         if(id==null||target==null||now<0)return false;Warrant row=warrants().get(id);
         if(row==null||!row.accused().equals(target)||!ACTIVE.equals(row.status())||now<row.issuedAt()||now>=row.expiresAt())return false;
-        return row.caseId().isEmpty()||!ACQUITTED.equals(cases().get(UUID.fromString(row.caseId())).status());
+        return row.caseId().isEmpty()||!Set.of(ACQUITTED,FINED).contains(cases().get(UUID.fromString(row.caseId())).status());
     }
 
     private CourtLedger put(CaseFile row){Map<UUID,CaseFile> cases=new LinkedHashMap<>(cases());cases.put(row.id(),row);return with(cases,warrants(),restraints());}

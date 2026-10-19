@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "lawsjustice:block/register_book"
+    },
+    "facing=east": {
+      "model": "lawsjustice:block/register_book",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "lawsjustice:block/register_book",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "lawsjustice:block/register_book",
+      "y": 270
+    }
+  }
+}
