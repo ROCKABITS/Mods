@@ -71,9 +71,11 @@ public final class JusticeService {
     public static void open(ServerPlayer player,BlockPos anchor) {
         thread(player);
         if(!physical(player,anchor,dimension(player)))return;
+        CourtService.closeSession(player);
         RuntimeState r=runtime(player.getServer());r.sessions.put(player.getUUID(),new Session(player,anchor));
         send(player);
     }
+    public static void closeSession(ServerPlayer p){thread(p);runtime(p.getServer()).sessions.remove(p.getUUID());}
     private static boolean physical(ServerPlayer player,BlockPos anchor,String dim) {
         if(!player.isAlive()||!dimension(player).equals(dim)||player.distanceToSqr(anchor.getX()+.5,anchor.getY()+.5,anchor.getZ()+.5)>64)return false;
         var block=player.level().getBlockState(anchor).getBlock();
@@ -256,12 +258,20 @@ public final class JusticeService {
     }
     private static ServerLevel level(MinecraftServer server,String dimension){ServerLevel level=server.getLevel(ResourceKey.create(Registries.DIMENSION,ResourceLocation.parse(dimension)));if(level==null)throw failure("dimension");return level;}
     private static void validateArea(ServerLevel l,Area a){if(a.min().y()<l.getMinBuildHeight()||a.max().y()>=l.getMaxBuildHeight()||!l.getWorldBorder().isWithinBounds(pos(a.min()))||!l.getWorldBorder().isWithinBounds(pos(a.max())))throw failure("area");}
+    public static void validateCell(MinecraftServer server,Prison prison,Cell cell,ServerPlayer player) {
+        ServerLevel target=level(server,prison.area().dimension());target.getChunk(pos(cell.spawn()));
+        if(!safe(target,player,cell.spawn()))throw failure("cell_spawn");
+    }
+    public static void transferToCell(ServerPlayer player) {
+        thread(player);JusticeLedger ledger=JusticeData.get(player.getServer()).ledger();Sentence sentence=ledger.active().get(player.getUUID());
+        if(sentence!=null&&player.isAlive())arrive(player,sentence,ledger);
+    }
     public static boolean imprisoned(ServerPlayer p){return JusticeData.get(p.getServer()).ledger().active().containsKey(p.getUUID());}
     public static boolean protectedArea(ServerLevel level,BlockPos at){return JusticeData.get(level.getServer()).ledger().prisons().values().stream().anyMatch(prison->prison.area().dimension().equals(level.dimension().location().toString())&&prison.area().contains(point(at)));}
-    public static boolean canBreak(ServerPlayer p,BlockPos at){return !imprisoned(p);}
+    public static boolean canBreak(ServerPlayer p,BlockPos at){return !imprisoned(p)&&!CourtService.restricted(p);}
     public static boolean canPlace(ServerPlayer p,BlockPos at){return canBreak(p,at);}
-    public static boolean canUseDoor(ServerPlayer p,BlockPos at){return !imprisoned(p);}
-    public static boolean canInteract(ServerPlayer p,BlockPos at){if(!imprisoned(p))return true;var b=p.level().getBlockState(at).getBlock();return b instanceof PrisonControlBlock||b instanceof ReinforcedLockBlock;}
+    public static boolean canUseDoor(ServerPlayer p,BlockPos at){return !imprisoned(p)&&!CourtService.restricted(p);}
+    public static boolean canInteract(ServerPlayer p,BlockPos at){if(!imprisoned(p))return true;var b=p.level().getBlockState(at).getBlock();return b instanceof PrisonControlBlock||b instanceof ReinforcedLockBlock||b instanceof pt.lawsjustice.block.JusticeDeskBlock;}
 
     private static void keys(JsonObject o,String... allowed){Set<String> keys=Set.of(allowed);if(!keys.containsAll(o.keySet()))throw failure("request");}
     private static String text(JsonObject o,String k,int max){JsonElement v=o.get(k);if(v==null||!v.isJsonPrimitive()||!v.getAsJsonPrimitive().isString())throw failure("request");String t=v.getAsString().strip();if(t.isEmpty()||t.length()>max||t.codePoints().anyMatch(Character::isISOControl))throw failure("request");return t;}

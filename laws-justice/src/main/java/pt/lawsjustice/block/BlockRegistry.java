@@ -11,6 +11,8 @@ import net.neoforged.neoforge.registries.DeferredBlock;
 import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import pt.lawsjustice.item.AreaSelectorItem;
+import pt.lawsjustice.item.HandcuffsItem;
+import pt.lawsjustice.item.WarrantItem;
 
 /** Physical furniture and tools; prison authority is always kept on the server. */
 public final class BlockRegistry {
@@ -25,6 +27,8 @@ public final class BlockRegistry {
             () -> new ReinforcedLockBlock(metalProperties()));
     public static final DeferredBlock<PrisonControlBlock> PRISON_CONTROL = BLOCKS.register("prison_control",
             () -> new PrisonControlBlock(metalProperties().sound(SoundType.DEEPSLATE)));
+    public static final DeferredBlock<JusticeDeskBlock> JUSTICE_DESK = BLOCKS.register("justice_desk",
+            () -> new JusticeDeskBlock(metalProperties().sound(SoundType.WOOD)));
 
     public static final DeferredItem<DoubleHighBlockItem> PRISON_DOOR_ITEM = ITEMS.register("prison_door",
             () -> new DoubleHighBlockItem(PRISON_DOOR.get(), new Item.Properties()));
@@ -36,6 +40,12 @@ public final class BlockRegistry {
             () -> new BlockItem(PRISON_CONTROL.get(), new Item.Properties()));
     public static final DeferredItem<AreaSelectorItem> AREA_SELECTOR = ITEMS.register("area_selector",
             () -> new AreaSelectorItem(new Item.Properties().stacksTo(1)));
+    public static final DeferredItem<BlockItem> JUSTICE_DESK_ITEM = ITEMS.register("justice_desk",
+            () -> new BlockItem(JUSTICE_DESK.get(), new Item.Properties()));
+    public static final DeferredItem<HandcuffsItem> HANDCUFFS = ITEMS.register("handcuffs",
+            () -> new HandcuffsItem(new Item.Properties().stacksTo(1)));
+    public static final DeferredItem<WarrantItem> WARRANT = ITEMS.register("warrant",
+            () -> new WarrantItem(new Item.Properties().stacksTo(1)));
 
     private BlockRegistry() {}
 

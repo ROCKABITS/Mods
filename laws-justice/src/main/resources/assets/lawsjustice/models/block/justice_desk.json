@@ -1,0 +1,9764 @@
+{
+  "parent": "minecraft:block/block",
+  "render_type": "minecraft:cutout",
+  "ambientocclusion": true,
+  "textures": {
+    "black": "lawsjustice:block/black",
+    "bronze": "lawsjustice:block/bronze",
+    "flame": "lawsjustice:block/flame",
+    "iron": "lawsjustice:block/iron",
+    "iron_dark": "lawsjustice:block/iron_dark",
+    "justice_crest": "lawsjustice:block/justice_crest",
+    "leather": "lawsjustice:block/leather",
+    "ledger_cover": "lawsjustice:block/ledger_cover",
+    "ledger_pages": "lawsjustice:block/ledger_pages",
+    "lock_plate": "lawsjustice:block/lock_plate",
+    "oak": "lawsjustice:block/oak",
+    "oak_dark": "lawsjustice:block/oak_dark",
+    "steel": "lawsjustice:block/steel",
+    "stone": "lawsjustice:block/stone",
+    "stone_dark": "lawsjustice:block/stone_dark",
+    "surveyor_dial": "lawsjustice:block/surveyor_dial",
+    "velvet": "lawsjustice:block/velvet",
+    "wax": "lawsjustice:block/wax",
+    "particle": "lawsjustice:block/iron",
+    "court_parchment": "lawsjustice:block/court_parchment",
+    "garnet": "lawsjustice:block/garnet",
+    "gold_polished": "lawsjustice:block/gold_polished",
+    "mahogany": "lawsjustice:block/mahogany",
+    "mahogany_dark": "lawsjustice:block/mahogany_dark",
+    "royal_wax_seal": "lawsjustice:block/royal_wax_seal",
+    "warrant_parchment": "lawsjustice:block/warrant_parchment"
+  },
+  "elements": [
+    {
+      "name": "desk_stone_foot",
+      "from": [
+        1.05,
+        0,
+        1.05
+      ],
+      "to": [
+        3.35,
+        0.45,
+        3.35
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            2.3,
+            0.45
+          ],
+          "texture": "#stone_dark"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            2.3,
+            0.45
+          ],
+          "texture": "#stone_dark"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            2.3,
+            0.45
+          ],
+          "texture": "#stone_dark"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            2.3,
+            0.45
+          ],
+          "texture": "#stone_dark"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            2.3,
+            2.3
+          ],
+          "texture": "#stone_dark"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            2.3,
+            2.3
+          ],
+          "texture": "#stone_dark"
+        }
+      }
+    },
+    {
+      "name": "desk_dressed_foot_bevel",
+      "from": [
+        1.17,
+        0.45,
+        1.17
+      ],
+      "to": [
+        3.23,
+        0.9,
+        3.23
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            2.0600000000000005,
+            0.45
+          ],
+          "texture": "#stone"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            2.0600000000000005,
+            0.45
+          ],
+          "texture": "#stone"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            2.0600000000000005,
+            0.45
+          ],
+          "texture": "#stone"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            2.0600000000000005,
+            0.45
+          ],
+          "texture": "#stone"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            2.0600000000000005,
+            2.0600000000000005
+          ],
+          "texture": "#stone"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            2.0600000000000005,
+            2.0600000000000005
+          ],
+          "texture": "#stone"
+        }
+      }
+    },
+    {
+      "name": "desk_carved_mahogany_leg",
+      "from": [
+        1.4,
+        0.9,
+        1.4
+      ],
+      "to": [
+        3.0,
+        7.9,
+        3.0
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            1.6,
+            7.0
+          ],
+          "texture": "#mahogany"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            1.6,
+            7.0
+          ],
+          "texture": "#mahogany"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            1.6,
+            7.0
+          ],
+          "texture": "#mahogany"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            1.6,
+            7.0
+          ],
+          "texture": "#mahogany"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            1.6,
+            1.6
+          ],
+          "texture": "#mahogany"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            1.6,
+            1.6
+          ],
+          "texture": "#mahogany"
+        }
+      }
+    },
+    {
+      "name": "desk_fluted_leg_recess",
+      "from": [
+        1.62,
+        2,
+        1.3
+      ],
+      "to": [
+        2.78,
+        6.7,
+        1.44
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            1.1600000000000001,
+            4.7
+          ],
+          "texture": "#mahogany_dark"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            1.1600000000000001,
+            4.7
+          ],
+          "texture": "#mahogany_dark"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            0.1399999999999999,
+            4.7
+          ],
+          "texture": "#mahogany_dark"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            0.1399999999999999,
+            4.7
+          ],
+          "texture": "#mahogany_dark"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            1.1600000000000001,
+            0.1399999999999999
+          ],
+          "texture": "#mahogany_dark"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            1.1600000000000001,
+            0.1399999999999999
+          ],
+          "texture": "#mahogany_dark"
+        }
+      }
+    },
+    {
+      "name": "desk_leg_gold_fluting",
+      "from": [
+        2.0,
+        2.2,
+        1.22
+      ],
+      "to": [
+        2.4,
+        6.5,
+        1.34
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            0.40000000000000036,
+            4.3
+          ],
+          "texture": "#gold_polished"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            0.40000000000000036,
+            4.3
+          ],
+          "texture": "#gold_polished"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            0.1200000000000001,
+            4.3
+          ],
+          "texture": "#gold_polished"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            0.1200000000000001,
+            4.3
+          ],
+          "texture": "#gold_polished"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.40000000000000036,
+            0.1200000000000001
+          ],
+          "texture": "#gold_polished"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.40000000000000036,
+            0.1200000000000001
+          ],
+          "texture": "#gold_polished"
+        }
+      }
+    },
+    {
+      "name": "desk_iron_leg_collar",
+      "from": [
+        1.23,
+        1.15,
+        1.23
+      ],
+      "to": [
+        3.17,
+        1.5,
+        3.17
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            1.94,
+            0.3500000000000001
+          ],
+          "texture": "#iron"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            1.94,
+            0.3500000000000001
+          ],
+          "texture": "#iron"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            1.94,
+            0.3500000000000001
+          ],
+          "texture": "#iron"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            1.94,
+            0.3500000000000001
+          ],
+          "texture": "#iron"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            1.94,
+            1.94
+          ],
+          "texture": "#iron"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            1.94,
+            1.94
+          ],
+          "texture": "#iron"
+        }
+      }
+    },
+    {
+      "name": "desk_iron_leg_collar",
+      "from": [
+        1.23,
+        7.35,
+        1.23
+      ],
+      "to": [
+        3.17,
+        7.7,
+        3.17
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            1.94,
+            0.34999999999999964
+          ],
+          "texture": "#iron"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            1.94,
+            0.34999999999999964
+          ],
+          "texture": "#iron"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            1.94,
+            0.34999999999999964
+          ],
+          "texture": "#iron"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            1.94,
+            0.34999999999999964
+          ],
+          "texture": "#iron"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            1.94,
+            1.94
+          ],
+          "texture": "#iron"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            1.94,
+            1.94
+          ],
+          "texture": "#iron"
+        }
+      }
+    },
+    {
+      "name": "desk_carved_capital",
+      "from": [
+        1.13,
+        7.9,
+        1.13
+      ],
+      "to": [
+        3.27,
+        8.8,
+        3.27
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            2.1400000000000006,
+            0.9000000000000004
+          ],
+          "texture": "#mahogany_dark"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            2.1400000000000006,
+            0.9000000000000004
+          ],
+          "texture": "#mahogany_dark"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            2.1400000000000006,
+            0.9000000000000004
+          ],
+          "texture": "#mahogany_dark"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            2.1400000000000006,
+            0.9000000000000004
+          ],
+          "texture": "#mahogany_dark"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            2.1400000000000006,
+            2.1400000000000006
+          ],
+          "texture": "#mahogany_dark"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            2.1400000000000006,
+            2.1400000000000006
+          ],
+          "texture": "#mahogany_dark"
+        }
+      }
+    },
+    {
+      "name": "desk_stone_foot",
+      "from": [
+        12.65,
+        0,
+        1.05
+      ],
+      "to": [
+        14.95,
+        0.45,
+        3.35
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            2.299999999999999,
+            0.45
+          ],
+          "texture": "#stone_dark"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            2.299999999999999,
+            0.45
+          ],
+          "texture": "#stone_dark"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            2.3,
+            0.45
+          ],
+          "texture": "#stone_dark"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            2.3,
+            0.45
+          ],
+          "texture": "#stone_dark"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            2.299999999999999,
+            2.3
+          ],
+          "texture": "#stone_dark"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            2.299999999999999,
+            2.3
+          ],
+          "texture": "#stone_dark"
+        }
+      }
+    },
+    {
+      "name": "desk_dressed_foot_bevel",
+      "from": [
+        12.77,
+        0.45,
+        1.17
+      ],
+      "to": [
+        14.83,
+        0.9,
+        3.23
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            2.0600000000000005,
+            0.45
+          ],
+          "texture": "#stone"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            2.0600000000000005,
+            0.45
+          ],
+          "texture": "#stone"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            2.0600000000000005,
+            0.45
+          ],
+          "texture": "#stone"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            2.0600000000000005,
+            0.45
+          ],
+          "texture": "#stone"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            2.0600000000000005,
+            2.0600000000000005
+          ],
+          "texture": "#stone"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            2.0600000000000005,
+            2.0600000000000005
+          ],
+          "texture": "#stone"
+        }
+      }
+    },
+    {
+      "name": "desk_carved_mahogany_leg",
+      "from": [
+        13.0,
+        0.9,
+        1.4
+      ],
+      "to": [
+        14.6,
+        7.9,
+        3.0
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            1.5999999999999996,
+            7.0
+          ],
+          "texture": "#mahogany"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            1.5999999999999996,
+            7.0
+          ],
+          "texture": "#mahogany"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            1.6,
+            7.0
+          ],
+          "texture": "#mahogany"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            1.6,
+            7.0
+          ],
+          "texture": "#mahogany"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            1.5999999999999996,
+            1.6
+          ],
+          "texture": "#mahogany"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            1.5999999999999996,
+            1.6
+          ],
+          "texture": "#mahogany"
+        }
+      }
+    },
+    {
+      "name": "desk_fluted_leg_recess",
+      "from": [
+        13.22,
+        2,
+        1.3
+      ],
+      "to": [
+        14.38,
+        6.7,
+        1.44
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            1.1600000000000001,
+            4.7
+          ],
+          "texture": "#mahogany_dark"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            1.1600000000000001,
+            4.7
+          ],
+          "texture": "#mahogany_dark"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            0.1399999999999999,
+            4.7
+          ],
+          "texture": "#mahogany_dark"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            0.1399999999999999,
+            4.7
+          ],
+          "texture": "#mahogany_dark"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            1.1600000000000001,
+            0.1399999999999999
+          ],
+          "texture": "#mahogany_dark"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            1.1600000000000001,
+            0.1399999999999999
+          ],
+          "texture": "#mahogany_dark"
+        }
+      }
+    },
+    {
+      "name": "desk_leg_gold_fluting",
+      "from": [
+        13.6,
+        2.2,
+        1.22
+      ],
+      "to": [
+        14.0,
+        6.5,
+        1.34
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            0.40000000000000036,
+            4.3
+          ],
+          "texture": "#gold_polished"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            0.40000000000000036,
+            4.3
+          ],
+          "texture": "#gold_polished"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            0.1200000000000001,
+            4.3
+          ],
+          "texture": "#gold_polished"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            0.1200000000000001,
+            4.3
+          ],
+          "texture": "#gold_polished"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.40000000000000036,
+            0.1200000000000001
+          ],
+          "texture": "#gold_polished"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.40000000000000036,
+            0.1200000000000001
+          ],
+          "texture": "#gold_polished"
+        }
+      }
+    },
+    {
+      "name": "desk_iron_leg_collar",
+      "from": [
+        12.83,
+        1.15,
+        1.23
+      ],
+      "to": [
+        14.77,
+        1.5,
+        3.17
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            1.9399999999999995,
+            0.3500000000000001
+          ],
+          "texture": "#iron"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            1.9399999999999995,
+            0.3500000000000001
+          ],
+          "texture": "#iron"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            1.94,
+            0.3500000000000001
+          ],
+          "texture": "#iron"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            1.94,
+            0.3500000000000001
+          ],
+          "texture": "#iron"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            1.9399999999999995,
+            1.94
+          ],
+          "texture": "#iron"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            1.9399999999999995,
+            1.94
+          ],
+          "texture": "#iron"
+        }
+      }
+    },
+    {
+      "name": "desk_iron_leg_collar",
+      "from": [
+        12.83,
+        7.35,
+        1.23
+      ],
+      "to": [
+        14.77,
+        7.7,
+        3.17
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            1.9399999999999995,
+            0.34999999999999964
+          ],
+          "texture": "#iron"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            1.9399999999999995,
+            0.34999999999999964
+          ],
+          "texture": "#iron"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            1.94,
+            0.34999999999999964
+          ],
+          "texture": "#iron"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            1.94,
+            0.34999999999999964
+          ],
+          "texture": "#iron"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            1.9399999999999995,
+            1.94
+          ],
+          "texture": "#iron"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            1.9399999999999995,
+            1.94
+          ],
+          "texture": "#iron"
+        }
+      }
+    },
+    {
+      "name": "desk_carved_capital",
+      "from": [
+        12.73,
+        7.9,
+        1.13
+      ],
+      "to": [
+        14.87,
+        8.8,
+        3.27
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            2.1400000000000006,
+            0.9000000000000004
+          ],
+          "texture": "#mahogany_dark"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            2.1400000000000006,
+            0.9000000000000004
+          ],
+          "texture": "#mahogany_dark"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            2.1400000000000006,
+            0.9000000000000004
+          ],
+          "texture": "#mahogany_dark"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            2.1400000000000006,
+            0.9000000000000004
+          ],
+          "texture": "#mahogany_dark"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            2.1400000000000006,
+            2.1400000000000006
+          ],
+          "texture": "#mahogany_dark"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            2.1400000000000006,
+            2.1400000000000006
+          ],
+          "texture": "#mahogany_dark"
+        }
+      }
+    },
+    {
+      "name": "desk_stone_foot",
+      "from": [
+        1.05,
+        0,
+        12.65
+      ],
+      "to": [
+        3.35,
+        0.45,
+        14.95
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            2.3,
+            0.45
+          ],
+          "texture": "#stone_dark"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            2.3,
+            0.45
+          ],
+          "texture": "#stone_dark"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            2.299999999999999,
+            0.45
+          ],
+          "texture": "#stone_dark"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            2.299999999999999,
+            0.45
+          ],
+          "texture": "#stone_dark"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            2.3,
+            2.299999999999999
+          ],
+          "texture": "#stone_dark"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            2.3,
+            2.299999999999999
+          ],
+          "texture": "#stone_dark"
+        }
+      }
+    },
+    {
+      "name": "desk_dressed_foot_bevel",
+      "from": [
+        1.17,
+        0.45,
+        12.77
+      ],
+      "to": [
+        3.23,
+        0.9,
+        14.83
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            2.0600000000000005,
+            0.45
+          ],
+          "texture": "#stone"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            2.0600000000000005,
+            0.45
+          ],
+          "texture": "#stone"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            2.0600000000000005,
+            0.45
+          ],
+          "texture": "#stone"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            2.0600000000000005,
+            0.45
+          ],
+          "texture": "#stone"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            2.0600000000000005,
+            2.0600000000000005
+          ],
+          "texture": "#stone"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            2.0600000000000005,
+            2.0600000000000005
+          ],
+          "texture": "#stone"
+        }
+      }
+    },
+    {
+      "name": "desk_carved_mahogany_leg",
+      "from": [
+        1.4,
+        0.9,
+        13.0
+      ],
+      "to": [
+        3.0,
+        7.9,
+        14.6
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            1.6,
+            7.0
+          ],
+          "texture": "#mahogany"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            1.6,
+            7.0
+          ],
+          "texture": "#mahogany"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            1.5999999999999996,
+            7.0
+          ],
+          "texture": "#mahogany"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            1.5999999999999996,
+            7.0
+          ],
+          "texture": "#mahogany"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            1.6,
+            1.5999999999999996
+          ],
+          "texture": "#mahogany"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            1.6,
+            1.5999999999999996
+          ],
+          "texture": "#mahogany"
+        }
+      }
+    },
+    {
+      "name": "desk_fluted_leg_recess",
+      "from": [
+        1.62,
+        2,
+        12.9
+      ],
+      "to": [
+        2.78,
+        6.7,
+        13.04
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            1.1600000000000001,
+            4.7
+          ],
+          "texture": "#mahogany_dark"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            1.1600000000000001,
+            4.7
+          ],
+          "texture": "#mahogany_dark"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            0.14000000000000057,
+            4.7
+          ],
+          "texture": "#mahogany_dark"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            0.14000000000000057,
+            4.7
+          ],
+          "texture": "#mahogany_dark"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            1.1600000000000001,
+            0.14000000000000057
+          ],
+          "texture": "#mahogany_dark"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            1.1600000000000001,
+            0.14000000000000057
+          ],
+          "texture": "#mahogany_dark"
+        }
+      }
+    },
+    {
+      "name": "desk_leg_gold_fluting",
+      "from": [
+        2.0,
+        2.2,
+        12.82
+      ],
+      "to": [
+        2.4,
+        6.5,
+        12.94
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            0.40000000000000036,
+            4.3
+          ],
+          "texture": "#gold_polished"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            0.40000000000000036,
+            4.3
+          ],
+          "texture": "#gold_polished"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            0.11999999999999922,
+            4.3
+          ],
+          "texture": "#gold_polished"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            0.11999999999999922,
+            4.3
+          ],
+          "texture": "#gold_polished"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.40000000000000036,
+            0.11999999999999922
+          ],
+          "texture": "#gold_polished"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.40000000000000036,
+            0.11999999999999922
+          ],
+          "texture": "#gold_polished"
+        }
+      }
+    },
+    {
+      "name": "desk_iron_leg_collar",
+      "from": [
+        1.23,
+        1.15,
+        12.83
+      ],
+      "to": [
+        3.17,
+        1.5,
+        14.77
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            1.94,
+            0.3500000000000001
+          ],
+          "texture": "#iron"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            1.94,
+            0.3500000000000001
+          ],
+          "texture": "#iron"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            1.9399999999999995,
+            0.3500000000000001
+          ],
+          "texture": "#iron"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            1.9399999999999995,
+            0.3500000000000001
+          ],
+          "texture": "#iron"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            1.94,
+            1.9399999999999995
+          ],
+          "texture": "#iron"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            1.94,
+            1.9399999999999995
+          ],
+          "texture": "#iron"
+        }
+      }
+    },
+    {
+      "name": "desk_iron_leg_collar",
+      "from": [
+        1.23,
+        7.35,
+        12.83
+      ],
+      "to": [
+        3.17,
+        7.7,
+        14.77
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            1.94,
+            0.34999999999999964
+          ],
+          "texture": "#iron"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            1.94,
+            0.34999999999999964
+          ],
+          "texture": "#iron"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            1.9399999999999995,
+            0.34999999999999964
+          ],
+          "texture": "#iron"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            1.9399999999999995,
+            0.34999999999999964
+          ],
+          "texture": "#iron"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            1.94,
+            1.9399999999999995
+          ],
+          "texture": "#iron"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            1.94,
+            1.9399999999999995
+          ],
+          "texture": "#iron"
+        }
+      }
+    },
+    {
+      "name": "desk_carved_capital",
+      "from": [
+        1.13,
+        7.9,
+        12.73
+      ],
+      "to": [
+        3.27,
+        8.8,
+        14.87
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            2.1400000000000006,
+            0.9000000000000004
+          ],
+          "texture": "#mahogany_dark"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            2.1400000000000006,
+            0.9000000000000004
+          ],
+          "texture": "#mahogany_dark"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            2.1400000000000006,
+            0.9000000000000004
+          ],
+          "texture": "#mahogany_dark"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            2.1400000000000006,
+            0.9000000000000004
+          ],
+          "texture": "#mahogany_dark"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            2.1400000000000006,
+            2.1400000000000006
+          ],
+          "texture": "#mahogany_dark"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            2.1400000000000006,
+            2.1400000000000006
+          ],
+          "texture": "#mahogany_dark"
+        }
+      }
+    },
+    {
+      "name": "desk_stone_foot",
+      "from": [
+        12.65,
+        0,
+        12.65
+      ],
+      "to": [
+        14.95,
+        0.45,
+        14.95
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            2.299999999999999,
+            0.45
+          ],
+          "texture": "#stone_dark"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            2.299999999999999,
+            0.45
+          ],
+          "texture": "#stone_dark"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            2.299999999999999,
+            0.45
+          ],
+          "texture": "#stone_dark"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            2.299999999999999,
+            0.45
+          ],
+          "texture": "#stone_dark"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            2.299999999999999,
+            2.299999999999999
+          ],
+          "texture": "#stone_dark"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            2.299999999999999,
+            2.299999999999999
+          ],
+          "texture": "#stone_dark"
+        }
+      }
+    },
+    {
+      "name": "desk_dressed_foot_bevel",
+      "from": [
+        12.77,
+        0.45,
+        12.77
+      ],
+      "to": [
+        14.83,
+        0.9,
+        14.83
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            2.0600000000000005,
+            0.45
+          ],
+          "texture": "#stone"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            2.0600000000000005,
+            0.45
+          ],
+          "texture": "#stone"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            2.0600000000000005,
+            0.45
+          ],
+          "texture": "#stone"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            2.0600000000000005,
+            0.45
+          ],
+          "texture": "#stone"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            2.0600000000000005,
+            2.0600000000000005
+          ],
+          "texture": "#stone"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            2.0600000000000005,
+            2.0600000000000005
+          ],
+          "texture": "#stone"
+        }
+      }
+    },
+    {
+      "name": "desk_carved_mahogany_leg",
+      "from": [
+        13.0,
+        0.9,
+        13.0
+      ],
+      "to": [
+        14.6,
+        7.9,
+        14.6
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            1.5999999999999996,
+            7.0
+          ],
+          "texture": "#mahogany"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            1.5999999999999996,
+            7.0
+          ],
+          "texture": "#mahogany"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            1.5999999999999996,
+            7.0
+          ],
+          "texture": "#mahogany"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            1.5999999999999996,
+            7.0
+          ],
+          "texture": "#mahogany"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            1.5999999999999996,
+            1.5999999999999996
+          ],
+          "texture": "#mahogany"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            1.5999999999999996,
+            1.5999999999999996
+          ],
+          "texture": "#mahogany"
+        }
+      }
+    },
+    {
+      "name": "desk_fluted_leg_recess",
+      "from": [
+        13.22,
+        2,
+        12.9
+      ],
+      "to": [
+        14.38,
+        6.7,
+        13.04
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            1.1600000000000001,
+            4.7
+          ],
+          "texture": "#mahogany_dark"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            1.1600000000000001,
+            4.7
+          ],
+          "texture": "#mahogany_dark"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            0.14000000000000057,
+            4.7
+          ],
+          "texture": "#mahogany_dark"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            0.14000000000000057,
+            4.7
+          ],
+          "texture": "#mahogany_dark"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            1.1600000000000001,
+            0.14000000000000057
+          ],
+          "texture": "#mahogany_dark"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            1.1600000000000001,
+            0.14000000000000057
+          ],
+          "texture": "#mahogany_dark"
+        }
+      }
+    },
+    {
+      "name": "desk_leg_gold_fluting",
+      "from": [
+        13.6,
+        2.2,
+        12.82
+      ],
+      "to": [
+        14.0,
+        6.5,
+        12.94
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            0.40000000000000036,
+            4.3
+          ],
+          "texture": "#gold_polished"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            0.40000000000000036,
+            4.3
+          ],
+          "texture": "#gold_polished"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            0.11999999999999922,
+            4.3
+          ],
+          "texture": "#gold_polished"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            0.11999999999999922,
+            4.3
+          ],
+          "texture": "#gold_polished"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.40000000000000036,
+            0.11999999999999922
+          ],
+          "texture": "#gold_polished"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.40000000000000036,
+            0.11999999999999922
+          ],
+          "texture": "#gold_polished"
+        }
+      }
+    },
+    {
+      "name": "desk_iron_leg_collar",
+      "from": [
+        12.83,
+        1.15,
+        12.83
+      ],
+      "to": [
+        14.77,
+        1.5,
+        14.77
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            1.9399999999999995,
+            0.3500000000000001
+          ],
+          "texture": "#iron"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            1.9399999999999995,
+            0.3500000000000001
+          ],
+          "texture": "#iron"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            1.9399999999999995,
+            0.3500000000000001
+          ],
+          "texture": "#iron"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            1.9399999999999995,
+            0.3500000000000001
+          ],
+          "texture": "#iron"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            1.9399999999999995,
+            1.9399999999999995
+          ],
+          "texture": "#iron"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            1.9399999999999995,
+            1.9399999999999995
+          ],
+          "texture": "#iron"
+        }
+      }
+    },
+    {
+      "name": "desk_iron_leg_collar",
+      "from": [
+        12.83,
+        7.35,
+        12.83
+      ],
+      "to": [
+        14.77,
+        7.7,
+        14.77
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            1.9399999999999995,
+            0.34999999999999964
+          ],
+          "texture": "#iron"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            1.9399999999999995,
+            0.34999999999999964
+          ],
+          "texture": "#iron"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            1.9399999999999995,
+            0.34999999999999964
+          ],
+          "texture": "#iron"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            1.9399999999999995,
+            0.34999999999999964
+          ],
+          "texture": "#iron"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            1.9399999999999995,
+            1.9399999999999995
+          ],
+          "texture": "#iron"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            1.9399999999999995,
+            1.9399999999999995
+          ],
+          "texture": "#iron"
+        }
+      }
+    },
+    {
+      "name": "desk_carved_capital",
+      "from": [
+        12.73,
+        7.9,
+        12.73
+      ],
+      "to": [
+        14.87,
+        8.8,
+        14.87
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            2.1400000000000006,
+            0.9000000000000004
+          ],
+          "texture": "#mahogany_dark"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            2.1400000000000006,
+            0.9000000000000004
+          ],
+          "texture": "#mahogany_dark"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            2.1400000000000006,
+            0.9000000000000004
+          ],
+          "texture": "#mahogany_dark"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            2.1400000000000006,
+            0.9000000000000004
+          ],
+          "texture": "#mahogany_dark"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            2.1400000000000006,
+            2.1400000000000006
+          ],
+          "texture": "#mahogany_dark"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            2.1400000000000006,
+            2.1400000000000006
+          ],
+          "texture": "#mahogany_dark"
+        }
+      }
+    },
+    {
+      "name": "desk_side_stretcher",
+      "from": [
+        1.9,
+        2.1,
+        2.3
+      ],
+      "to": [
+        3.0,
+        2.65,
+        13.7
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            1.1,
+            0.5499999999999998
+          ],
+          "texture": "#mahogany_dark"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            1.1,
+            0.5499999999999998
+          ],
+          "texture": "#mahogany_dark"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            11.399999999999999,
+            0.5499999999999998
+          ],
+          "texture": "#mahogany_dark"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            11.399999999999999,
+            0.5499999999999998
+          ],
+          "texture": "#mahogany_dark"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            1.1,
+            11.399999999999999
+          ],
+          "texture": "#mahogany_dark"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            1.1,
+            11.399999999999999
+          ],
+          "texture": "#mahogany_dark"
+        }
+      }
+    },
+    {
+      "name": "desk_side_apron",
+      "from": [
+        1.9,
+        7.1,
+        2.2
+      ],
+      "to": [
+        3.0,
+        8.85,
+        13.8
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            1.1,
+            1.75
+          ],
+          "texture": "#mahogany"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            1.1,
+            1.75
+          ],
+          "texture": "#mahogany"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            11.600000000000001,
+            1.75
+          ],
+          "texture": "#mahogany"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            11.600000000000001,
+            1.75
+          ],
+          "texture": "#mahogany"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            1.1,
+            11.600000000000001
+          ],
+          "texture": "#mahogany"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            1.1,
+            11.600000000000001
+          ],
+          "texture": "#mahogany"
+        }
+      }
+    },
+    {
+      "name": "desk_side_stretcher",
+      "from": [
+        13,
+        2.1,
+        2.3
+      ],
+      "to": [
+        14.1,
+        2.65,
+        13.7
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            1.0999999999999996,
+            0.5499999999999998
+          ],
+          "texture": "#mahogany_dark"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            1.0999999999999996,
+            0.5499999999999998
+          ],
+          "texture": "#mahogany_dark"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            11.399999999999999,
+            0.5499999999999998
+          ],
+          "texture": "#mahogany_dark"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            11.399999999999999,
+            0.5499999999999998
+          ],
+          "texture": "#mahogany_dark"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            1.0999999999999996,
+            11.399999999999999
+          ],
+          "texture": "#mahogany_dark"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            1.0999999999999996,
+            11.399999999999999
+          ],
+          "texture": "#mahogany_dark"
+        }
+      }
+    },
+    {
+      "name": "desk_side_apron",
+      "from": [
+        13,
+        7.1,
+        2.2
+      ],
+      "to": [
+        14.1,
+        8.85,
+        13.8
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            1.0999999999999996,
+            1.75
+          ],
+          "texture": "#mahogany"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            1.0999999999999996,
+            1.75
+          ],
+          "texture": "#mahogany"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            11.600000000000001,
+            1.75
+          ],
+          "texture": "#mahogany"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            11.600000000000001,
+            1.75
+          ],
+          "texture": "#mahogany"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            1.0999999999999996,
+            11.600000000000001
+          ],
+          "texture": "#mahogany"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            1.0999999999999996,
+            11.600000000000001
+          ],
+          "texture": "#mahogany"
+        }
+      }
+    },
+    {
+      "name": "desk_cross_stretcher",
+      "from": [
+        2.4,
+        2.18,
+        7.5
+      ],
+      "to": [
+        13.6,
+        2.78,
+        8.5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            11.2,
+            0.5999999999999996
+          ],
+          "texture": "#iron_dark"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            11.2,
+            0.5999999999999996
+          ],
+          "texture": "#iron_dark"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            1.0,
+            0.5999999999999996
+          ],
+          "texture": "#iron_dark"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            1.0,
+            0.5999999999999996
+          ],
+          "texture": "#iron_dark"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            11.2,
+            1.0
+          ],
+          "texture": "#iron_dark"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            11.2,
+            1.0
+          ],
+          "texture": "#iron_dark"
+        }
+      }
+    },
+    {
+      "name": "desk_front_justice_panel",
+      "from": [
+        2.9,
+        4,
+        1.7
+      ],
+      "to": [
+        13.1,
+        8.85,
+        2.25
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            10.2,
+            4.85
+          ],
+          "texture": "#mahogany_dark"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            10.2,
+            4.85
+          ],
+          "texture": "#mahogany_dark"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            0.55,
+            4.85
+          ],
+          "texture": "#mahogany_dark"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            0.55,
+            4.85
+          ],
+          "texture": "#mahogany_dark"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            10.2,
+            0.55
+          ],
+          "texture": "#mahogany_dark"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            10.2,
+            0.55
+          ],
+          "texture": "#mahogany_dark"
+        }
+      }
+    },
+    {
+      "name": "desk_raised_front_moulding",
+      "from": [
+        3.3,
+        4.4,
+        1.5
+      ],
+      "to": [
+        12.7,
+        8.5,
+        1.8
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            9.399999999999999,
+            4.1
+          ],
+          "texture": "#mahogany"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            9.399999999999999,
+            4.1
+          ],
+          "texture": "#mahogany"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            0.30000000000000004,
+            4.1
+          ],
+          "texture": "#mahogany"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            0.30000000000000004,
+            4.1
+          ],
+          "texture": "#mahogany"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            9.399999999999999,
+            0.30000000000000004
+          ],
+          "texture": "#mahogany"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            9.399999999999999,
+            0.30000000000000004
+          ],
+          "texture": "#mahogany"
+        }
+      }
+    },
+    {
+      "name": "desk_burgundy_public_panel",
+      "from": [
+        3.65,
+        4.75,
+        1.37
+      ],
+      "to": [
+        12.35,
+        8.15,
+        1.56
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            8.7,
+            3.4000000000000004
+          ],
+          "texture": "#velvet"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            8.7,
+            3.4000000000000004
+          ],
+          "texture": "#velvet"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            0.18999999999999995,
+            3.4000000000000004
+          ],
+          "texture": "#velvet"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            0.18999999999999995,
+            3.4000000000000004
+          ],
+          "texture": "#velvet"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            8.7,
+            0.18999999999999995
+          ],
+          "texture": "#velvet"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            8.7,
+            0.18999999999999995
+          ],
+          "texture": "#velvet"
+        }
+      }
+    },
+    {
+      "name": "desk_public_panel_side_inlay",
+      "from": [
+        3.8,
+        4.85,
+        1.22
+      ],
+      "to": [
+        3.96,
+        8.05,
+        1.43
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            0.16000000000000014,
+            3.200000000000001
+          ],
+          "texture": "#gold_polished"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            0.16000000000000014,
+            3.200000000000001
+          ],
+          "texture": "#gold_polished"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            0.20999999999999996,
+            3.200000000000001
+          ],
+          "texture": "#gold_polished"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            0.20999999999999996,
+            3.200000000000001
+          ],
+          "texture": "#gold_polished"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.16000000000000014,
+            0.20999999999999996
+          ],
+          "texture": "#gold_polished"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.16000000000000014,
+            0.20999999999999996
+          ],
+          "texture": "#gold_polished"
+        }
+      }
+    },
+    {
+      "name": "desk_public_panel_side_inlay",
+      "from": [
+        12,
+        4.85,
+        1.22
+      ],
+      "to": [
+        12.16,
+        8.05,
+        1.43
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            0.16000000000000014,
+            3.200000000000001
+          ],
+          "texture": "#gold_polished"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            0.16000000000000014,
+            3.200000000000001
+          ],
+          "texture": "#gold_polished"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            0.20999999999999996,
+            3.200000000000001
+          ],
+          "texture": "#gold_polished"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            0.20999999999999996,
+            3.200000000000001
+          ],
+          "texture": "#gold_polished"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.16000000000000014,
+            0.20999999999999996
+          ],
+          "texture": "#gold_polished"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.16000000000000014,
+            0.20999999999999996
+          ],
+          "texture": "#gold_polished"
+        }
+      }
+    },
+    {
+      "name": "desk_public_panel_horizontal_inlay",
+      "from": [
+        3.8,
+        4.9,
+        1.22
+      ],
+      "to": [
+        12.16,
+        5.06,
+        1.43
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            8.36,
+            0.16000000000000014
+          ],
+          "texture": "#gold_polished"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            8.36,
+            0.16000000000000014
+          ],
+          "texture": "#gold_polished"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            0.20999999999999996,
+            0.16000000000000014
+          ],
+          "texture": "#gold_polished"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            0.20999999999999996,
+            0.16000000000000014
+          ],
+          "texture": "#gold_polished"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            8.36,
+            0.20999999999999996
+          ],
+          "texture": "#gold_polished"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            8.36,
+            0.20999999999999996
+          ],
+          "texture": "#gold_polished"
+        }
+      }
+    },
+    {
+      "name": "desk_public_panel_horizontal_inlay",
+      "from": [
+        3.8,
+        7.9,
+        1.22
+      ],
+      "to": [
+        12.16,
+        8.06,
+        1.43
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            8.36,
+            0.16000000000000014
+          ],
+          "texture": "#gold_polished"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            8.36,
+            0.16000000000000014
+          ],
+          "texture": "#gold_polished"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            0.20999999999999996,
+            0.16000000000000014
+          ],
+          "texture": "#gold_polished"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            0.20999999999999996,
+            0.16000000000000014
+          ],
+          "texture": "#gold_polished"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            8.36,
+            0.20999999999999996
+          ],
+          "texture": "#gold_polished"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            8.36,
+            0.20999999999999996
+          ],
+          "texture": "#gold_polished"
+        }
+      }
+    },
+    {
+      "name": "desk_public_balance_shield",
+      "from": [
+        6.25,
+        4.9,
+        1.12
+      ],
+      "to": [
+        9.75,
+        8.05,
+        1.41
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#justice_crest"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            3.5,
+            3.1500000000000004
+          ],
+          "texture": "#justice_crest"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            0.2899999999999998,
+            3.1500000000000004
+          ],
+          "texture": "#justice_crest"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            0.2899999999999998,
+            3.1500000000000004
+          ],
+          "texture": "#justice_crest"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            3.5,
+            0.2899999999999998
+          ],
+          "texture": "#justice_crest"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            3.5,
+            0.2899999999999998
+          ],
+          "texture": "#justice_crest"
+        }
+      }
+    },
+    {
+      "name": "desk_panel_mounted_rivet",
+      "from": [
+        4.4,
+        5.35,
+        1.17
+      ],
+      "to": [
+        4.75,
+        5.7,
+        1.42
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            0.34999999999999964,
+            0.34999999999999964
+          ],
+          "texture": "#bronze"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            0.34999999999999964,
+            0.34999999999999964
+          ],
+          "texture": "#bronze"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            0.25,
+            0.34999999999999964
+          ],
+          "texture": "#bronze"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            0.25,
+            0.34999999999999964
+          ],
+          "texture": "#bronze"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.34999999999999964,
+            0.25
+          ],
+          "texture": "#bronze"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.34999999999999964,
+            0.25
+          ],
+          "texture": "#bronze"
+        }
+      }
+    },
+    {
+      "name": "desk_panel_mounted_rivet",
+      "from": [
+        4.4,
+        7.3,
+        1.17
+      ],
+      "to": [
+        4.75,
+        7.65,
+        1.42
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            0.34999999999999964,
+            0.34999999999999964
+          ],
+          "texture": "#bronze"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            0.34999999999999964,
+            0.34999999999999964
+          ],
+          "texture": "#bronze"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            0.25,
+            0.34999999999999964
+          ],
+          "texture": "#bronze"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            0.25,
+            0.34999999999999964
+          ],
+          "texture": "#bronze"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.34999999999999964,
+            0.25
+          ],
+          "texture": "#bronze"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.34999999999999964,
+            0.25
+          ],
+          "texture": "#bronze"
+        }
+      }
+    },
+    {
+      "name": "desk_panel_mounted_rivet",
+      "from": [
+        11.3,
+        5.35,
+        1.17
+      ],
+      "to": [
+        11.65,
+        5.7,
+        1.42
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            0.34999999999999964,
+            0.34999999999999964
+          ],
+          "texture": "#bronze"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            0.34999999999999964,
+            0.34999999999999964
+          ],
+          "texture": "#bronze"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            0.25,
+            0.34999999999999964
+          ],
+          "texture": "#bronze"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            0.25,
+            0.34999999999999964
+          ],
+          "texture": "#bronze"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.34999999999999964,
+            0.25
+          ],
+          "texture": "#bronze"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.34999999999999964,
+            0.25
+          ],
+          "texture": "#bronze"
+        }
+      }
+    },
+    {
+      "name": "desk_panel_mounted_rivet",
+      "from": [
+        11.3,
+        7.3,
+        1.17
+      ],
+      "to": [
+        11.65,
+        7.65,
+        1.42
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            0.34999999999999964,
+            0.34999999999999964
+          ],
+          "texture": "#bronze"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            0.34999999999999964,
+            0.34999999999999964
+          ],
+          "texture": "#bronze"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            0.25,
+            0.34999999999999964
+          ],
+          "texture": "#bronze"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            0.25,
+            0.34999999999999964
+          ],
+          "texture": "#bronze"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.34999999999999964,
+            0.25
+          ],
+          "texture": "#bronze"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.34999999999999964,
+            0.25
+          ],
+          "texture": "#bronze"
+        }
+      }
+    },
+    {
+      "name": "desk_side_apron_iron_band",
+      "from": [
+        1.77,
+        7.35,
+        3
+      ],
+      "to": [
+        2.22,
+        8.45,
+        13
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            0.4500000000000002,
+            1.0999999999999996
+          ],
+          "texture": "#iron_dark"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            0.4500000000000002,
+            1.0999999999999996
+          ],
+          "texture": "#iron_dark"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            10,
+            1.0999999999999996
+          ],
+          "texture": "#iron_dark"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            10,
+            1.0999999999999996
+          ],
+          "texture": "#iron_dark"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.4500000000000002,
+            10
+          ],
+          "texture": "#iron_dark"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.4500000000000002,
+            10
+          ],
+          "texture": "#iron_dark"
+        }
+      }
+    },
+    {
+      "name": "desk_side_band_rivet",
+      "from": [
+        1.67,
+        7.65,
+        3.8
+      ],
+      "to": [
+        2.32,
+        8,
+        4.15
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            0.6500000000000004,
+            0.34999999999999964
+          ],
+          "texture": "#steel"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            0.6500000000000004,
+            0.34999999999999964
+          ],
+          "texture": "#steel"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            0.34999999999999964,
+            0.34999999999999964
+          ],
+          "texture": "#steel"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            0.34999999999999964,
+            0.34999999999999964
+          ],
+          "texture": "#steel"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.6500000000000004,
+            0.34999999999999964
+          ],
+          "texture": "#steel"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.6500000000000004,
+            0.34999999999999964
+          ],
+          "texture": "#steel"
+        }
+      }
+    },
+    {
+      "name": "desk_side_band_rivet",
+      "from": [
+        1.67,
+        7.65,
+        12.1
+      ],
+      "to": [
+        2.32,
+        8,
+        12.45
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            0.6500000000000004,
+            0.34999999999999964
+          ],
+          "texture": "#steel"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            0.6500000000000004,
+            0.34999999999999964
+          ],
+          "texture": "#steel"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            0.34999999999999964,
+            0.34999999999999964
+          ],
+          "texture": "#steel"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            0.34999999999999964,
+            0.34999999999999964
+          ],
+          "texture": "#steel"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.6500000000000004,
+            0.34999999999999964
+          ],
+          "texture": "#steel"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.6500000000000004,
+            0.34999999999999964
+          ],
+          "texture": "#steel"
+        }
+      }
+    },
+    {
+      "name": "desk_side_apron_iron_band",
+      "from": [
+        13.75,
+        7.35,
+        3
+      ],
+      "to": [
+        14.2,
+        8.45,
+        13
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            0.4499999999999993,
+            1.0999999999999996
+          ],
+          "texture": "#iron_dark"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            0.4499999999999993,
+            1.0999999999999996
+          ],
+          "texture": "#iron_dark"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            10,
+            1.0999999999999996
+          ],
+          "texture": "#iron_dark"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            10,
+            1.0999999999999996
+          ],
+          "texture": "#iron_dark"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.4499999999999993,
+            10
+          ],
+          "texture": "#iron_dark"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.4499999999999993,
+            10
+          ],
+          "texture": "#iron_dark"
+        }
+      }
+    },
+    {
+      "name": "desk_side_band_rivet",
+      "from": [
+        13.65,
+        7.65,
+        3.8
+      ],
+      "to": [
+        14.3,
+        8,
+        4.15
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            0.6500000000000004,
+            0.34999999999999964
+          ],
+          "texture": "#steel"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            0.6500000000000004,
+            0.34999999999999964
+          ],
+          "texture": "#steel"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            0.34999999999999964,
+            0.34999999999999964
+          ],
+          "texture": "#steel"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            0.34999999999999964,
+            0.34999999999999964
+          ],
+          "texture": "#steel"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.6500000000000004,
+            0.34999999999999964
+          ],
+          "texture": "#steel"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.6500000000000004,
+            0.34999999999999964
+          ],
+          "texture": "#steel"
+        }
+      }
+    },
+    {
+      "name": "desk_side_band_rivet",
+      "from": [
+        13.65,
+        7.65,
+        12.1
+      ],
+      "to": [
+        14.3,
+        8,
+        12.45
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            0.6500000000000004,
+            0.34999999999999964
+          ],
+          "texture": "#steel"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            0.6500000000000004,
+            0.34999999999999964
+          ],
+          "texture": "#steel"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            0.34999999999999964,
+            0.34999999999999964
+          ],
+          "texture": "#steel"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            0.34999999999999964,
+            0.34999999999999964
+          ],
+          "texture": "#steel"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.6500000000000004,
+            0.34999999999999964
+          ],
+          "texture": "#steel"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.6500000000000004,
+            0.34999999999999964
+          ],
+          "texture": "#steel"
+        }
+      }
+    },
+    {
+      "name": "desk_rear_document_drawer",
+      "from": [
+        3,
+        7.05,
+        13.5
+      ],
+      "to": [
+        13,
+        8.75,
+        14.1
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            10,
+            1.7000000000000002
+          ],
+          "texture": "#mahogany"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            10,
+            1.7000000000000002
+          ],
+          "texture": "#mahogany"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            0.5999999999999996,
+            1.7000000000000002
+          ],
+          "texture": "#mahogany"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            0.5999999999999996,
+            1.7000000000000002
+          ],
+          "texture": "#mahogany"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            10,
+            0.5999999999999996
+          ],
+          "texture": "#mahogany"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            10,
+            0.5999999999999996
+          ],
+          "texture": "#mahogany"
+        }
+      }
+    },
+    {
+      "name": "desk_document_drawer_backplate",
+      "from": [
+        7.1,
+        7.55,
+        14.1
+      ],
+      "to": [
+        8.9,
+        8.2,
+        14.33
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            1.8000000000000007,
+            0.6499999999999995
+          ],
+          "texture": "#bronze"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            1.8000000000000007,
+            0.6499999999999995
+          ],
+          "texture": "#bronze"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            0.23000000000000043,
+            0.6499999999999995
+          ],
+          "texture": "#bronze"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            0.23000000000000043,
+            0.6499999999999995
+          ],
+          "texture": "#bronze"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            1.8000000000000007,
+            0.23000000000000043
+          ],
+          "texture": "#bronze"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            1.8000000000000007,
+            0.23000000000000043
+          ],
+          "texture": "#bronze"
+        }
+      }
+    },
+    {
+      "name": "desk_document_drawer_pull",
+      "from": [
+        7.35,
+        7.68,
+        14.33
+      ],
+      "to": [
+        8.65,
+        8.02,
+        14.65
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            1.3000000000000007,
+            0.33999999999999986
+          ],
+          "texture": "#iron_dark"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            1.3000000000000007,
+            0.33999999999999986
+          ],
+          "texture": "#iron_dark"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            0.3200000000000003,
+            0.33999999999999986
+          ],
+          "texture": "#iron_dark"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            0.3200000000000003,
+            0.33999999999999986
+          ],
+          "texture": "#iron_dark"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            1.3000000000000007,
+            0.3200000000000003
+          ],
+          "texture": "#iron_dark"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            1.3000000000000007,
+            0.3200000000000003
+          ],
+          "texture": "#iron_dark"
+        }
+      }
+    },
+    {
+      "name": "desk_lower_cornice",
+      "from": [
+        0.65,
+        8.75,
+        0.65
+      ],
+      "to": [
+        15.35,
+        9.1,
+        15.35
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            14.7,
+            0.34999999999999964
+          ],
+          "texture": "#mahogany_dark"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            14.7,
+            0.34999999999999964
+          ],
+          "texture": "#mahogany_dark"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            14.7,
+            0.34999999999999964
+          ],
+          "texture": "#mahogany_dark"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            14.7,
+            0.34999999999999964
+          ],
+          "texture": "#mahogany_dark"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            14.7,
+            14.7
+          ],
+          "texture": "#mahogany_dark"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            14.7,
+            14.7
+          ],
+          "texture": "#mahogany_dark"
+        }
+      }
+    },
+    {
+      "name": "desk_fine_gold_table_lip",
+      "from": [
+        0.4,
+        9.1,
+        0.4
+      ],
+      "to": [
+        15.6,
+        9.42,
+        15.6
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            15.2,
+            0.3200000000000003
+          ],
+          "texture": "#gold_polished"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            15.2,
+            0.3200000000000003
+          ],
+          "texture": "#gold_polished"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            15.2,
+            0.3200000000000003
+          ],
+          "texture": "#gold_polished"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            15.2,
+            0.3200000000000003
+          ],
+          "texture": "#gold_polished"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            15.2,
+            15.2
+          ],
+          "texture": "#gold_polished"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            15.2,
+            15.2
+          ],
+          "texture": "#gold_polished"
+        }
+      }
+    },
+    {
+      "name": "desk_solid_top_bevel",
+      "from": [
+        0.6,
+        9.42,
+        0.6
+      ],
+      "to": [
+        15.4,
+        9.8,
+        15.4
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            14.8,
+            0.3800000000000008
+          ],
+          "texture": "#mahogany"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            14.8,
+            0.3800000000000008
+          ],
+          "texture": "#mahogany"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            14.8,
+            0.3800000000000008
+          ],
+          "texture": "#mahogany"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            14.8,
+            0.3800000000000008
+          ],
+          "texture": "#mahogany"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            14.8,
+            14.8
+          ],
+          "texture": "#mahogany"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            14.8,
+            14.8
+          ],
+          "texture": "#mahogany"
+        }
+      }
+    },
+    {
+      "name": "desk_upper_writing_surface",
+      "from": [
+        0.85,
+        9.8,
+        0.85
+      ],
+      "to": [
+        15.15,
+        9.94,
+        15.15
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            14.3,
+            0.1399999999999988
+          ],
+          "texture": "#mahogany_dark"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            14.3,
+            0.1399999999999988
+          ],
+          "texture": "#mahogany_dark"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            14.3,
+            0.1399999999999988
+          ],
+          "texture": "#mahogany_dark"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            14.3,
+            0.1399999999999988
+          ],
+          "texture": "#mahogany_dark"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            14.3,
+            14.3
+          ],
+          "texture": "#mahogany_dark"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            14.3,
+            14.3
+          ],
+          "texture": "#mahogany_dark"
+        }
+      }
+    },
+    {
+      "name": "court_fine_front_inlay",
+      "from": [
+        1.05,
+        9.95,
+        1.05
+      ],
+      "to": [
+        14.95,
+        10.04,
+        1.19
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            13.899999999999999,
+            0.08999999999999986
+          ],
+          "texture": "#gold_polished"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            13.899999999999999,
+            0.08999999999999986
+          ],
+          "texture": "#gold_polished"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            0.1399999999999999,
+            0.08999999999999986
+          ],
+          "texture": "#gold_polished"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            0.1399999999999999,
+            0.08999999999999986
+          ],
+          "texture": "#gold_polished"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            13.899999999999999,
+            0.1399999999999999
+          ],
+          "texture": "#gold_polished"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            13.899999999999999,
+            0.1399999999999999
+          ],
+          "texture": "#gold_polished"
+        }
+      }
+    },
+    {
+      "name": "court_fine_rear_inlay",
+      "from": [
+        1.05,
+        9.95,
+        14.81
+      ],
+      "to": [
+        14.95,
+        10.04,
+        14.95
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            13.899999999999999,
+            0.08999999999999986
+          ],
+          "texture": "#gold_polished"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            13.899999999999999,
+            0.08999999999999986
+          ],
+          "texture": "#gold_polished"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            0.14000000000000057,
+            0.08999999999999986
+          ],
+          "texture": "#gold_polished"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            0.14000000000000057,
+            0.08999999999999986
+          ],
+          "texture": "#gold_polished"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            13.899999999999999,
+            0.14000000000000057
+          ],
+          "texture": "#gold_polished"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            13.899999999999999,
+            0.14000000000000057
+          ],
+          "texture": "#gold_polished"
+        }
+      }
+    },
+    {
+      "name": "court_fine_left_inlay",
+      "from": [
+        1.05,
+        9.95,
+        1.19
+      ],
+      "to": [
+        1.19,
+        10.04,
+        14.81
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            0.1399999999999999,
+            0.08999999999999986
+          ],
+          "texture": "#gold_polished"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            0.1399999999999999,
+            0.08999999999999986
+          ],
+          "texture": "#gold_polished"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            13.62,
+            0.08999999999999986
+          ],
+          "texture": "#gold_polished"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            13.62,
+            0.08999999999999986
+          ],
+          "texture": "#gold_polished"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.1399999999999999,
+            13.62
+          ],
+          "texture": "#gold_polished"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.1399999999999999,
+            13.62
+          ],
+          "texture": "#gold_polished"
+        }
+      }
+    },
+    {
+      "name": "court_fine_right_inlay",
+      "from": [
+        14.81,
+        9.95,
+        1.19
+      ],
+      "to": [
+        14.95,
+        10.04,
+        14.81
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            0.14000000000000057,
+            0.08999999999999986
+          ],
+          "texture": "#gold_polished"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            0.14000000000000057,
+            0.08999999999999986
+          ],
+          "texture": "#gold_polished"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            13.62,
+            0.08999999999999986
+          ],
+          "texture": "#gold_polished"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            13.62,
+            0.08999999999999986
+          ],
+          "texture": "#gold_polished"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.14000000000000057,
+            13.62
+          ],
+          "texture": "#gold_polished"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.14000000000000057,
+            13.62
+          ],
+          "texture": "#gold_polished"
+        }
+      }
+    },
+    {
+      "name": "desk_burgundy_writing_pad",
+      "from": [
+        1.7,
+        9.95,
+        1.7
+      ],
+      "to": [
+        14.3,
+        10.02,
+        9.4
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            12.600000000000001,
+            0.07000000000000028
+          ],
+          "texture": "#velvet"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            12.600000000000001,
+            0.07000000000000028
+          ],
+          "texture": "#velvet"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            7.7,
+            0.07000000000000028
+          ],
+          "texture": "#velvet"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            7.7,
+            0.07000000000000028
+          ],
+          "texture": "#velvet"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            12.600000000000001,
+            7.7
+          ],
+          "texture": "#velvet"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            12.600000000000001,
+            7.7
+          ],
+          "texture": "#velvet"
+        }
+      }
+    },
+    {
+      "name": "court_fine_front_inlay",
+      "from": [
+        1.85,
+        10.025,
+        1.85
+      ],
+      "to": [
+        14.15,
+        10.115,
+        1.95
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            12.3,
+            0.08999999999999986
+          ],
+          "texture": "#bronze"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            12.3,
+            0.08999999999999986
+          ],
+          "texture": "#bronze"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            0.10000000000000009,
+            0.08999999999999986
+          ],
+          "texture": "#bronze"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            0.10000000000000009,
+            0.08999999999999986
+          ],
+          "texture": "#bronze"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            12.3,
+            0.10000000000000009
+          ],
+          "texture": "#bronze"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            12.3,
+            0.10000000000000009
+          ],
+          "texture": "#bronze"
+        }
+      }
+    },
+    {
+      "name": "court_fine_rear_inlay",
+      "from": [
+        1.85,
+        10.025,
+        9.15
+      ],
+      "to": [
+        14.15,
+        10.115,
+        9.25
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            12.3,
+            0.08999999999999986
+          ],
+          "texture": "#bronze"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            12.3,
+            0.08999999999999986
+          ],
+          "texture": "#bronze"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            0.09999999999999964,
+            0.08999999999999986
+          ],
+          "texture": "#bronze"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            0.09999999999999964,
+            0.08999999999999986
+          ],
+          "texture": "#bronze"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            12.3,
+            0.09999999999999964
+          ],
+          "texture": "#bronze"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            12.3,
+            0.09999999999999964
+          ],
+          "texture": "#bronze"
+        }
+      }
+    },
+    {
+      "name": "court_fine_left_inlay",
+      "from": [
+        1.85,
+        10.025,
+        1.95
+      ],
+      "to": [
+        1.95,
+        10.115,
+        9.15
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            0.10000000000000009,
+            0.08999999999999986
+          ],
+          "texture": "#bronze"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            0.10000000000000009,
+            0.08999999999999986
+          ],
+          "texture": "#bronze"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            7.2,
+            0.08999999999999986
+          ],
+          "texture": "#bronze"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            7.2,
+            0.08999999999999986
+          ],
+          "texture": "#bronze"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.10000000000000009,
+            7.2
+          ],
+          "texture": "#bronze"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.10000000000000009,
+            7.2
+          ],
+          "texture": "#bronze"
+        }
+      }
+    },
+    {
+      "name": "court_fine_right_inlay",
+      "from": [
+        14.05,
+        10.025,
+        1.95
+      ],
+      "to": [
+        14.15,
+        10.115,
+        9.15
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            0.09999999999999964,
+            0.08999999999999986
+          ],
+          "texture": "#bronze"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            0.09999999999999964,
+            0.08999999999999986
+          ],
+          "texture": "#bronze"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            7.2,
+            0.08999999999999986
+          ],
+          "texture": "#bronze"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            7.2,
+            0.08999999999999986
+          ],
+          "texture": "#bronze"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.09999999999999964,
+            7.2
+          ],
+          "texture": "#bronze"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.09999999999999964,
+            7.2
+          ],
+          "texture": "#bronze"
+        }
+      }
+    },
+    {
+      "name": "desk_ivory_docket_stack",
+      "from": [
+        2.25,
+        10.03,
+        2.15
+      ],
+      "to": [
+        8.25,
+        10.16,
+        8.65
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            6.0,
+            0.13000000000000078
+          ],
+          "texture": "#wax"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            6.0,
+            0.13000000000000078
+          ],
+          "texture": "#wax"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            6.5,
+            0.13000000000000078
+          ],
+          "texture": "#wax"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            6.5,
+            0.13000000000000078
+          ],
+          "texture": "#wax"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            6.0,
+            6.5
+          ],
+          "texture": "#wax"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            6.0,
+            6.5
+          ],
+          "texture": "#wax"
+        }
+      }
+    },
+    {
+      "name": "desk_docket_paper_edge",
+      "from": [
+        2.23,
+        10.07,
+        2.12
+      ],
+      "to": [
+        8.27,
+        10.095,
+        2.18
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            6.039999999999999,
+            0.025000000000000355
+          ],
+          "texture": "#oak"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            6.039999999999999,
+            0.025000000000000355
+          ],
+          "texture": "#oak"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            0.06000000000000005,
+            0.025000000000000355
+          ],
+          "texture": "#oak"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            0.06000000000000005,
+            0.025000000000000355
+          ],
+          "texture": "#oak"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            6.039999999999999,
+            0.06000000000000005
+          ],
+          "texture": "#oak"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            6.039999999999999,
+            0.06000000000000005
+          ],
+          "texture": "#oak"
+        }
+      }
+    },
+    {
+      "name": "desk_docket_paper_edge",
+      "from": [
+        2.23,
+        10.12,
+        2.12
+      ],
+      "to": [
+        8.27,
+        10.145,
+        2.18
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            6.039999999999999,
+            0.025000000000000355
+          ],
+          "texture": "#oak"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            6.039999999999999,
+            0.025000000000000355
+          ],
+          "texture": "#oak"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            0.06000000000000005,
+            0.025000000000000355
+          ],
+          "texture": "#oak"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            0.06000000000000005,
+            0.025000000000000355
+          ],
+          "texture": "#oak"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            6.039999999999999,
+            0.06000000000000005
+          ],
+          "texture": "#oak"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            6.039999999999999,
+            0.06000000000000005
+          ],
+          "texture": "#oak"
+        }
+      }
+    },
+    {
+      "name": "desk_written_court_docket",
+      "from": [
+        2.25,
+        10.16,
+        2.15
+      ],
+      "to": [
+        8.25,
+        10.21,
+        8.65
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            6.0,
+            0.05000000000000071
+          ],
+          "texture": "#court_parchment"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            6.0,
+            0.05000000000000071
+          ],
+          "texture": "#court_parchment"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            6.5,
+            0.05000000000000071
+          ],
+          "texture": "#court_parchment"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            6.5,
+            0.05000000000000071
+          ],
+          "texture": "#court_parchment"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#court_parchment"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            6.0,
+            6.5
+          ],
+          "texture": "#court_parchment"
+        }
+      }
+    },
+    {
+      "name": "desk_wax_seal_ribbon_left",
+      "from": [
+        7.2,
+        10.22,
+        6.4
+      ],
+      "to": [
+        7.55,
+        10.26,
+        9.25
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            0.34999999999999964,
+            0.03999999999999915
+          ],
+          "texture": "#velvet"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            0.34999999999999964,
+            0.03999999999999915
+          ],
+          "texture": "#velvet"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            2.8499999999999996,
+            0.03999999999999915
+          ],
+          "texture": "#velvet"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            2.8499999999999996,
+            0.03999999999999915
+          ],
+          "texture": "#velvet"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.34999999999999964,
+            2.8499999999999996
+          ],
+          "texture": "#velvet"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.34999999999999964,
+            2.8499999999999996
+          ],
+          "texture": "#velvet"
+        }
+      }
+    },
+    {
+      "name": "desk_wax_seal_ribbon_right",
+      "from": [
+        7.7,
+        10.22,
+        6.4
+      ],
+      "to": [
+        8.05,
+        10.26,
+        9.1
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            0.35000000000000053,
+            0.03999999999999915
+          ],
+          "texture": "#velvet"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            0.35000000000000053,
+            0.03999999999999915
+          ],
+          "texture": "#velvet"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            2.6999999999999993,
+            0.03999999999999915
+          ],
+          "texture": "#velvet"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            2.6999999999999993,
+            0.03999999999999915
+          ],
+          "texture": "#velvet"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.35000000000000053,
+            2.6999999999999993
+          ],
+          "texture": "#velvet"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.35000000000000053,
+            2.6999999999999993
+          ],
+          "texture": "#velvet"
+        }
+      }
+    },
+    {
+      "name": "court_octagonal_wax_outer",
+      "from": [
+        6.97,
+        10.27,
+        6.6
+      ],
+      "to": [
+        8.38,
+        10.43,
+        8.25
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            1.410000000000001,
+            0.16000000000000014
+          ],
+          "texture": "#velvet"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            1.410000000000001,
+            0.16000000000000014
+          ],
+          "texture": "#velvet"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            1.6500000000000004,
+            0.16000000000000014
+          ],
+          "texture": "#velvet"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            1.6500000000000004,
+            0.16000000000000014
+          ],
+          "texture": "#velvet"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            1.410000000000001,
+            1.6500000000000004
+          ],
+          "texture": "#velvet"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            1.410000000000001,
+            1.6500000000000004
+          ],
+          "texture": "#velvet"
+        }
+      }
+    },
+    {
+      "name": "court_octagonal_wax_side_bevel",
+      "from": [
+        6.85,
+        10.27,
+        6.72
+      ],
+      "to": [
+        8.5,
+        10.43,
+        8.13
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            1.6500000000000004,
+            0.16000000000000014
+          ],
+          "texture": "#velvet"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            1.6500000000000004,
+            0.16000000000000014
+          ],
+          "texture": "#velvet"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            1.410000000000001,
+            0.16000000000000014
+          ],
+          "texture": "#velvet"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            1.410000000000001,
+            0.16000000000000014
+          ],
+          "texture": "#velvet"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            1.6500000000000004,
+            1.410000000000001
+          ],
+          "texture": "#velvet"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            1.6500000000000004,
+            1.410000000000001
+          ],
+          "texture": "#velvet"
+        }
+      }
+    },
+    {
+      "name": "court_pressed_balance_wax_seal",
+      "from": [
+        6.95,
+        10.43,
+        6.7
+      ],
+      "to": [
+        8.4,
+        10.51,
+        8.15
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            1.450000000000001,
+            0.08000000000000007
+          ],
+          "texture": "#royal_wax_seal"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            1.450000000000001,
+            0.08000000000000007
+          ],
+          "texture": "#royal_wax_seal"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            1.450000000000001,
+            0.08000000000000007
+          ],
+          "texture": "#royal_wax_seal"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            1.450000000000001,
+            0.08000000000000007
+          ],
+          "texture": "#royal_wax_seal"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#royal_wax_seal"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            1.450000000000001,
+            1.450000000000001
+          ],
+          "texture": "#royal_wax_seal"
+        }
+      }
+    },
+    {
+      "name": "gavel_octagonal_sound_block",
+      "from": [
+        9.7,
+        10.03,
+        2.7
+      ],
+      "to": [
+        14,
+        10.22,
+        5.75
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            4.300000000000001,
+            0.19000000000000128
+          ],
+          "texture": "#mahogany_dark"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            4.300000000000001,
+            0.19000000000000128
+          ],
+          "texture": "#mahogany_dark"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            3.05,
+            0.19000000000000128
+          ],
+          "texture": "#mahogany_dark"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            3.05,
+            0.19000000000000128
+          ],
+          "texture": "#mahogany_dark"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            4.300000000000001,
+            3.05
+          ],
+          "texture": "#mahogany_dark"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            4.300000000000001,
+            3.05
+          ],
+          "texture": "#mahogany_dark"
+        }
+      }
+    },
+    {
+      "name": "gavel_sound_block_corner_bevel",
+      "from": [
+        10.05,
+        10.03,
+        2.4
+      ],
+      "to": [
+        13.65,
+        10.22,
+        6.05
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            3.5999999999999996,
+            0.19000000000000128
+          ],
+          "texture": "#mahogany_dark"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            3.5999999999999996,
+            0.19000000000000128
+          ],
+          "texture": "#mahogany_dark"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            3.65,
+            0.19000000000000128
+          ],
+          "texture": "#mahogany_dark"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            3.65,
+            0.19000000000000128
+          ],
+          "texture": "#mahogany_dark"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            3.5999999999999996,
+            3.65
+          ],
+          "texture": "#mahogany_dark"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            3.5999999999999996,
+            3.65
+          ],
+          "texture": "#mahogany_dark"
+        }
+      }
+    },
+    {
+      "name": "gavel_sound_block_top",
+      "from": [
+        10,
+        10.22,
+        2.85
+      ],
+      "to": [
+        13.7,
+        10.35,
+        5.6
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            3.6999999999999993,
+            0.129999999999999
+          ],
+          "texture": "#mahogany"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            3.6999999999999993,
+            0.129999999999999
+          ],
+          "texture": "#mahogany"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            2.7499999999999996,
+            0.129999999999999
+          ],
+          "texture": "#mahogany"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            2.7499999999999996,
+            0.129999999999999
+          ],
+          "texture": "#mahogany"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            3.6999999999999993,
+            2.7499999999999996
+          ],
+          "texture": "#mahogany"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            3.6999999999999993,
+            2.7499999999999996
+          ],
+          "texture": "#mahogany"
+        }
+      }
+    },
+    {
+      "name": "court_fine_front_inlay",
+      "from": [
+        10.1,
+        10.36,
+        2.95
+      ],
+      "to": [
+        13.6,
+        10.45,
+        3.06
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            3.5,
+            0.08999999999999986
+          ],
+          "texture": "#bronze"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            3.5,
+            0.08999999999999986
+          ],
+          "texture": "#bronze"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            0.10999999999999988,
+            0.08999999999999986
+          ],
+          "texture": "#bronze"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            0.10999999999999988,
+            0.08999999999999986
+          ],
+          "texture": "#bronze"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            3.5,
+            0.10999999999999988
+          ],
+          "texture": "#bronze"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            3.5,
+            0.10999999999999988
+          ],
+          "texture": "#bronze"
+        }
+      }
+    },
+    {
+      "name": "court_fine_rear_inlay",
+      "from": [
+        10.1,
+        10.36,
+        5.39
+      ],
+      "to": [
+        13.6,
+        10.45,
+        5.5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            3.5,
+            0.08999999999999986
+          ],
+          "texture": "#bronze"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            3.5,
+            0.08999999999999986
+          ],
+          "texture": "#bronze"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            0.11000000000000032,
+            0.08999999999999986
+          ],
+          "texture": "#bronze"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            0.11000000000000032,
+            0.08999999999999986
+          ],
+          "texture": "#bronze"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            3.5,
+            0.11000000000000032
+          ],
+          "texture": "#bronze"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            3.5,
+            0.11000000000000032
+          ],
+          "texture": "#bronze"
+        }
+      }
+    },
+    {
+      "name": "court_fine_left_inlay",
+      "from": [
+        10.1,
+        10.36,
+        3.06
+      ],
+      "to": [
+        10.21,
+        10.45,
+        5.39
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            0.10999999999999943,
+            0.08999999999999986
+          ],
+          "texture": "#bronze"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            0.10999999999999943,
+            0.08999999999999986
+          ],
+          "texture": "#bronze"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            2.3299999999999996,
+            0.08999999999999986
+          ],
+          "texture": "#bronze"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            2.3299999999999996,
+            0.08999999999999986
+          ],
+          "texture": "#bronze"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.10999999999999943,
+            2.3299999999999996
+          ],
+          "texture": "#bronze"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.10999999999999943,
+            2.3299999999999996
+          ],
+          "texture": "#bronze"
+        }
+      }
+    },
+    {
+      "name": "court_fine_right_inlay",
+      "from": [
+        13.49,
+        10.36,
+        3.06
+      ],
+      "to": [
+        13.6,
+        10.45,
+        5.39
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            0.10999999999999943,
+            0.08999999999999986
+          ],
+          "texture": "#bronze"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            0.10999999999999943,
+            0.08999999999999986
+          ],
+          "texture": "#bronze"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            2.3299999999999996,
+            0.08999999999999986
+          ],
+          "texture": "#bronze"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            2.3299999999999996,
+            0.08999999999999986
+          ],
+          "texture": "#bronze"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.10999999999999943,
+            2.3299999999999996
+          ],
+          "texture": "#bronze"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.10999999999999943,
+            2.3299999999999996
+          ],
+          "texture": "#bronze"
+        }
+      }
+    },
+    {
+      "name": "gavel_turned_head",
+      "from": [
+        10.05,
+        10.47,
+        3.72
+      ],
+      "to": [
+        13.65,
+        11.47,
+        4.98
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            3.5999999999999996,
+            1.0
+          ],
+          "texture": "#mahogany"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            3.5999999999999996,
+            1.0
+          ],
+          "texture": "#mahogany"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            1.2600000000000002,
+            1.0
+          ],
+          "texture": "#mahogany"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            1.2600000000000002,
+            1.0
+          ],
+          "texture": "#mahogany"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            3.5999999999999996,
+            1.2600000000000002
+          ],
+          "texture": "#mahogany"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            3.5999999999999996,
+            1.2600000000000002
+          ],
+          "texture": "#mahogany"
+        }
+      }
+    },
+    {
+      "name": "gavel_left_striking_face",
+      "from": [
+        9.85,
+        10.62,
+        3.88
+      ],
+      "to": [
+        10.18,
+        11.32,
+        4.82
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            0.33000000000000007,
+            0.7000000000000011
+          ],
+          "texture": "#mahogany_dark"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            0.33000000000000007,
+            0.7000000000000011
+          ],
+          "texture": "#mahogany_dark"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            0.9400000000000004,
+            0.7000000000000011
+          ],
+          "texture": "#mahogany_dark"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            0.9400000000000004,
+            0.7000000000000011
+          ],
+          "texture": "#mahogany_dark"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.33000000000000007,
+            0.9400000000000004
+          ],
+          "texture": "#mahogany_dark"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.33000000000000007,
+            0.9400000000000004
+          ],
+          "texture": "#mahogany_dark"
+        }
+      }
+    },
+    {
+      "name": "gavel_right_striking_face",
+      "from": [
+        13.52,
+        10.62,
+        3.88
+      ],
+      "to": [
+        13.85,
+        11.32,
+        4.82
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            0.33000000000000007,
+            0.7000000000000011
+          ],
+          "texture": "#mahogany_dark"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            0.33000000000000007,
+            0.7000000000000011
+          ],
+          "texture": "#mahogany_dark"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            0.9400000000000004,
+            0.7000000000000011
+          ],
+          "texture": "#mahogany_dark"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            0.9400000000000004,
+            0.7000000000000011
+          ],
+          "texture": "#mahogany_dark"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.33000000000000007,
+            0.9400000000000004
+          ],
+          "texture": "#mahogany_dark"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.33000000000000007,
+            0.9400000000000004
+          ],
+          "texture": "#mahogany_dark"
+        }
+      }
+    },
+    {
+      "name": "gavel_polished_head_band",
+      "from": [
+        10.45,
+        10.42,
+        3.67
+      ],
+      "to": [
+        10.8,
+        11.52,
+        5.03
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            0.34999999999999964,
+            1.0999999999999996
+          ],
+          "texture": "#gold_polished"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            0.34999999999999964,
+            1.0999999999999996
+          ],
+          "texture": "#gold_polished"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            1.3600000000000003,
+            1.0999999999999996
+          ],
+          "texture": "#gold_polished"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            1.3600000000000003,
+            1.0999999999999996
+          ],
+          "texture": "#gold_polished"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.34999999999999964,
+            1.3600000000000003
+          ],
+          "texture": "#gold_polished"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.34999999999999964,
+            1.3600000000000003
+          ],
+          "texture": "#gold_polished"
+        }
+      }
+    },
+    {
+      "name": "gavel_polished_head_band",
+      "from": [
+        12.8,
+        10.42,
+        3.67
+      ],
+      "to": [
+        13.15,
+        11.52,
+        5.03
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            0.34999999999999964,
+            1.0999999999999996
+          ],
+          "texture": "#gold_polished"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            0.34999999999999964,
+            1.0999999999999996
+          ],
+          "texture": "#gold_polished"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            1.3600000000000003,
+            1.0999999999999996
+          ],
+          "texture": "#gold_polished"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            1.3600000000000003,
+            1.0999999999999996
+          ],
+          "texture": "#gold_polished"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.34999999999999964,
+            1.3600000000000003
+          ],
+          "texture": "#gold_polished"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.34999999999999964,
+            1.3600000000000003
+          ],
+          "texture": "#gold_polished"
+        }
+      }
+    },
+    {
+      "name": "gavel_oak_handle",
+      "from": [
+        11.55,
+        10.68,
+        4.85
+      ],
+      "to": [
+        12.05,
+        11.18,
+        8.45
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            0.5,
+            0.5
+          ],
+          "texture": "#mahogany"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            0.5,
+            0.5
+          ],
+          "texture": "#mahogany"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            3.5999999999999996,
+            0.5
+          ],
+          "texture": "#mahogany"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            3.5999999999999996,
+            0.5
+          ],
+          "texture": "#mahogany"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.5,
+            3.5999999999999996
+          ],
+          "texture": "#mahogany"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.5,
+            3.5999999999999996
+          ],
+          "texture": "#mahogany"
+        }
+      }
+    },
+    {
+      "name": "gavel_handle_pommel",
+      "from": [
+        11.46,
+        10.59,
+        7.6
+      ],
+      "to": [
+        12.14,
+        11.27,
+        8.7
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            0.6799999999999997,
+            0.6799999999999997
+          ],
+          "texture": "#mahogany_dark"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            0.6799999999999997,
+            0.6799999999999997
+          ],
+          "texture": "#mahogany_dark"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            1.0999999999999996,
+            0.6799999999999997
+          ],
+          "texture": "#mahogany_dark"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            1.0999999999999996,
+            0.6799999999999997
+          ],
+          "texture": "#mahogany_dark"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.6799999999999997,
+            1.0999999999999996
+          ],
+          "texture": "#mahogany_dark"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.6799999999999997,
+            1.0999999999999996
+          ],
+          "texture": "#mahogany_dark"
+        }
+      }
+    },
+    {
+      "name": "gavel_handle_pommel_band",
+      "from": [
+        11.43,
+        10.56,
+        7.54
+      ],
+      "to": [
+        12.17,
+        11.3,
+        7.8
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            0.7400000000000002,
+            0.7400000000000002
+          ],
+          "texture": "#bronze"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            0.7400000000000002,
+            0.7400000000000002
+          ],
+          "texture": "#bronze"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            0.2599999999999998,
+            0.7400000000000002
+          ],
+          "texture": "#bronze"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            0.2599999999999998,
+            0.7400000000000002
+          ],
+          "texture": "#bronze"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.7400000000000002,
+            0.2599999999999998
+          ],
+          "texture": "#bronze"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.7400000000000002,
+            0.2599999999999998
+          ],
+          "texture": "#bronze"
+        }
+      }
+    },
+    {
+      "name": "scales_octagonal_base",
+      "from": [
+        6.25,
+        9.97,
+        10.05
+      ],
+      "to": [
+        9.75,
+        10.23,
+        13.65
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            3.5,
+            0.2599999999999998
+          ],
+          "texture": "#mahogany_dark"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            3.5,
+            0.2599999999999998
+          ],
+          "texture": "#mahogany_dark"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            3.5999999999999996,
+            0.2599999999999998
+          ],
+          "texture": "#mahogany_dark"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            3.5999999999999996,
+            0.2599999999999998
+          ],
+          "texture": "#mahogany_dark"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            3.5,
+            3.5999999999999996
+          ],
+          "texture": "#mahogany_dark"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            3.5,
+            3.5999999999999996
+          ],
+          "texture": "#mahogany_dark"
+        }
+      }
+    },
+    {
+      "name": "scales_base_octagonal_bevel",
+      "from": [
+        6.55,
+        9.97,
+        9.75
+      ],
+      "to": [
+        9.45,
+        10.23,
+        13.95
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            2.8999999999999995,
+            0.2599999999999998
+          ],
+          "texture": "#mahogany_dark"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            2.8999999999999995,
+            0.2599999999999998
+          ],
+          "texture": "#mahogany_dark"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            4.199999999999999,
+            0.2599999999999998
+          ],
+          "texture": "#mahogany_dark"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            4.199999999999999,
+            0.2599999999999998
+          ],
+          "texture": "#mahogany_dark"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            2.8999999999999995,
+            4.199999999999999
+          ],
+          "texture": "#mahogany_dark"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            2.8999999999999995,
+            4.199999999999999
+          ],
+          "texture": "#mahogany_dark"
+        }
+      }
+    },
+    {
+      "name": "scales_polished_base",
+      "from": [
+        6.5,
+        10.23,
+        10.3
+      ],
+      "to": [
+        9.5,
+        10.49,
+        13.4
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            3.0,
+            0.2599999999999998
+          ],
+          "texture": "#gold_polished"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            3.0,
+            0.2599999999999998
+          ],
+          "texture": "#gold_polished"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            3.0999999999999996,
+            0.2599999999999998
+          ],
+          "texture": "#gold_polished"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            3.0999999999999996,
+            0.2599999999999998
+          ],
+          "texture": "#gold_polished"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            3.0,
+            3.0999999999999996
+          ],
+          "texture": "#gold_polished"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            3.0,
+            3.0999999999999996
+          ],
+          "texture": "#gold_polished"
+        }
+      }
+    },
+    {
+      "name": "scales_base_raised_capital",
+      "from": [
+        7.28,
+        10.49,
+        11.08
+      ],
+      "to": [
+        8.72,
+        10.86,
+        12.52
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            1.4400000000000004,
+            0.3699999999999992
+          ],
+          "texture": "#bronze"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            1.4400000000000004,
+            0.3699999999999992
+          ],
+          "texture": "#bronze"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            1.4399999999999995,
+            0.3699999999999992
+          ],
+          "texture": "#bronze"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            1.4399999999999995,
+            0.3699999999999992
+          ],
+          "texture": "#bronze"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            1.4400000000000004,
+            1.4399999999999995
+          ],
+          "texture": "#bronze"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            1.4400000000000004,
+            1.4399999999999995
+          ],
+          "texture": "#bronze"
+        }
+      }
+    },
+    {
+      "name": "scales_upright_balanced_column",
+      "from": [
+        7.72,
+        10.86,
+        11.52
+      ],
+      "to": [
+        8.28,
+        14.8,
+        12.08
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            0.5599999999999996,
+            3.9400000000000013
+          ],
+          "texture": "#gold_polished"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            0.5599999999999996,
+            3.9400000000000013
+          ],
+          "texture": "#gold_polished"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            0.5600000000000005,
+            3.9400000000000013
+          ],
+          "texture": "#gold_polished"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            0.5600000000000005,
+            3.9400000000000013
+          ],
+          "texture": "#gold_polished"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.5599999999999996,
+            0.5600000000000005
+          ],
+          "texture": "#gold_polished"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.5599999999999996,
+            0.5600000000000005
+          ],
+          "texture": "#gold_polished"
+        }
+      }
+    },
+    {
+      "name": "scales_column_moulded_collar",
+      "from": [
+        7.56,
+        11.15,
+        11.36
+      ],
+      "to": [
+        8.44,
+        11.43,
+        12.24
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            0.8799999999999999,
+            0.27999999999999936
+          ],
+          "texture": "#gold_polished"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            0.8799999999999999,
+            0.27999999999999936
+          ],
+          "texture": "#gold_polished"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            0.8800000000000008,
+            0.27999999999999936
+          ],
+          "texture": "#gold_polished"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            0.8800000000000008,
+            0.27999999999999936
+          ],
+          "texture": "#gold_polished"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.8799999999999999,
+            0.8800000000000008
+          ],
+          "texture": "#gold_polished"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.8799999999999999,
+            0.8800000000000008
+          ],
+          "texture": "#gold_polished"
+        }
+      }
+    },
+    {
+      "name": "scales_column_moulded_collar",
+      "from": [
+        7.56,
+        13.9,
+        11.36
+      ],
+      "to": [
+        8.44,
+        14.18,
+        12.24
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            0.8799999999999999,
+            0.27999999999999936
+          ],
+          "texture": "#gold_polished"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            0.8799999999999999,
+            0.27999999999999936
+          ],
+          "texture": "#gold_polished"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            0.8800000000000008,
+            0.27999999999999936
+          ],
+          "texture": "#gold_polished"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            0.8800000000000008,
+            0.27999999999999936
+          ],
+          "texture": "#gold_polished"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.8799999999999999,
+            0.8800000000000008
+          ],
+          "texture": "#gold_polished"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.8799999999999999,
+            0.8800000000000008
+          ],
+          "texture": "#gold_polished"
+        }
+      }
+    },
+    {
+      "name": "scales_horizontal_balance_beam",
+      "from": [
+        2.4,
+        14.36,
+        11.5
+      ],
+      "to": [
+        13.6,
+        14.7,
+        12.1
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            11.2,
+            0.33999999999999986
+          ],
+          "texture": "#gold_polished"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            11.2,
+            0.33999999999999986
+          ],
+          "texture": "#gold_polished"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            0.5999999999999996,
+            0.33999999999999986
+          ],
+          "texture": "#gold_polished"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            0.5999999999999996,
+            0.33999999999999986
+          ],
+          "texture": "#gold_polished"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            11.2,
+            0.5999999999999996
+          ],
+          "texture": "#gold_polished"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            11.2,
+            0.5999999999999996
+          ],
+          "texture": "#gold_polished"
+        }
+      }
+    },
+    {
+      "name": "scales_left_beam_finial",
+      "from": [
+        2.15,
+        14.26,
+        11.4
+      ],
+      "to": [
+        2.65,
+        14.8,
+        12.2
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            0.5,
+            0.5400000000000009
+          ],
+          "texture": "#bronze"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            0.5,
+            0.5400000000000009
+          ],
+          "texture": "#bronze"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            0.7999999999999989,
+            0.5400000000000009
+          ],
+          "texture": "#bronze"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            0.7999999999999989,
+            0.5400000000000009
+          ],
+          "texture": "#bronze"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.5,
+            0.7999999999999989
+          ],
+          "texture": "#bronze"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.5,
+            0.7999999999999989
+          ],
+          "texture": "#bronze"
+        }
+      }
+    },
+    {
+      "name": "scales_right_beam_finial",
+      "from": [
+        13.35,
+        14.26,
+        11.4
+      ],
+      "to": [
+        13.85,
+        14.8,
+        12.2
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            0.5,
+            0.5400000000000009
+          ],
+          "texture": "#bronze"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            0.5,
+            0.5400000000000009
+          ],
+          "texture": "#bronze"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            0.7999999999999989,
+            0.5400000000000009
+          ],
+          "texture": "#bronze"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            0.7999999999999989,
+            0.5400000000000009
+          ],
+          "texture": "#bronze"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.5,
+            0.7999999999999989
+          ],
+          "texture": "#bronze"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.5,
+            0.7999999999999989
+          ],
+          "texture": "#bronze"
+        }
+      }
+    },
+    {
+      "name": "scales_central_beam_pivot",
+      "from": [
+        7.45,
+        14.7,
+        11.25
+      ],
+      "to": [
+        8.55,
+        15.12,
+        12.35
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            1.1000000000000005,
+            0.41999999999999993
+          ],
+          "texture": "#gold_polished"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            1.1000000000000005,
+            0.41999999999999993
+          ],
+          "texture": "#gold_polished"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            1.0999999999999996,
+            0.41999999999999993
+          ],
+          "texture": "#gold_polished"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            1.0999999999999996,
+            0.41999999999999993
+          ],
+          "texture": "#gold_polished"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            1.1000000000000005,
+            1.0999999999999996
+          ],
+          "texture": "#gold_polished"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            1.1000000000000005,
+            1.0999999999999996
+          ],
+          "texture": "#gold_polished"
+        }
+      }
+    },
+    {
+      "name": "scales_garnet_royal_finial",
+      "from": [
+        7.62,
+        15.12,
+        11.42
+      ],
+      "to": [
+        8.38,
+        15.9,
+        12.18
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#garnet"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#garnet"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#garnet"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#garnet"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#garnet"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#garnet"
+        }
+      }
+    },
+    {
+      "name": "scales_suspended_pan_chain",
+      "from": [
+        2.885,
+        11.65,
+        10.9
+      ],
+      "to": [
+        3.015,
+        14.45,
+        11.03
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            0.1299999999999999,
+            2.799999999999999
+          ],
+          "texture": "#bronze"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            0.1299999999999999,
+            2.799999999999999
+          ],
+          "texture": "#bronze"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            0.13000000000000078,
+            2.799999999999999
+          ],
+          "texture": "#bronze"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            0.13000000000000078,
+            2.799999999999999
+          ],
+          "texture": "#bronze"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.1299999999999999,
+            0.13000000000000078
+          ],
+          "texture": "#bronze"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.1299999999999999,
+            0.13000000000000078
+          ],
+          "texture": "#bronze"
+        }
+      }
+    },
+    {
+      "name": "scales_small_chain_link",
+      "from": [
+        2.84,
+        12.35,
+        10.87
+      ],
+      "to": [
+        3.06,
+        12.5,
+        11.06
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            0.21999999999999975,
+            0.15000000000000036
+          ],
+          "texture": "#gold_polished"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            0.21999999999999975,
+            0.15000000000000036
+          ],
+          "texture": "#gold_polished"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            0.1899999999999995,
+            0.15000000000000036
+          ],
+          "texture": "#gold_polished"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            0.1899999999999995,
+            0.15000000000000036
+          ],
+          "texture": "#gold_polished"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.21999999999999975,
+            0.1899999999999995
+          ],
+          "texture": "#gold_polished"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.21999999999999975,
+            0.1899999999999995
+          ],
+          "texture": "#gold_polished"
+        }
+      }
+    },
+    {
+      "name": "scales_small_chain_link",
+      "from": [
+        2.84,
+        13.35,
+        10.87
+      ],
+      "to": [
+        3.06,
+        13.5,
+        11.06
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            0.21999999999999975,
+            0.15000000000000036
+          ],
+          "texture": "#gold_polished"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            0.21999999999999975,
+            0.15000000000000036
+          ],
+          "texture": "#gold_polished"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            0.1899999999999995,
+            0.15000000000000036
+          ],
+          "texture": "#gold_polished"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            0.1899999999999995,
+            0.15000000000000036
+          ],
+          "texture": "#gold_polished"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.21999999999999975,
+            0.1899999999999995
+          ],
+          "texture": "#gold_polished"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.21999999999999975,
+            0.1899999999999995
+          ],
+          "texture": "#gold_polished"
+        }
+      }
+    },
+    {
+      "name": "scales_suspended_pan_chain",
+      "from": [
+        2.885,
+        11.65,
+        12.55
+      ],
+      "to": [
+        3.015,
+        14.45,
+        12.68
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            0.1299999999999999,
+            2.799999999999999
+          ],
+          "texture": "#bronze"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            0.1299999999999999,
+            2.799999999999999
+          ],
+          "texture": "#bronze"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            0.13000000000000078,
+            2.799999999999999
+          ],
+          "texture": "#bronze"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            0.13000000000000078,
+            2.799999999999999
+          ],
+          "texture": "#bronze"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.1299999999999999,
+            0.13000000000000078
+          ],
+          "texture": "#bronze"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.1299999999999999,
+            0.13000000000000078
+          ],
+          "texture": "#bronze"
+        }
+      }
+    },
+    {
+      "name": "scales_small_chain_link",
+      "from": [
+        2.84,
+        12.35,
+        12.52
+      ],
+      "to": [
+        3.06,
+        12.5,
+        12.71
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            0.21999999999999975,
+            0.15000000000000036
+          ],
+          "texture": "#gold_polished"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            0.21999999999999975,
+            0.15000000000000036
+          ],
+          "texture": "#gold_polished"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            0.1899999999999995,
+            0.15000000000000036
+          ],
+          "texture": "#gold_polished"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            0.1899999999999995,
+            0.15000000000000036
+          ],
+          "texture": "#gold_polished"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.21999999999999975,
+            0.1899999999999995
+          ],
+          "texture": "#gold_polished"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.21999999999999975,
+            0.1899999999999995
+          ],
+          "texture": "#gold_polished"
+        }
+      }
+    },
+    {
+      "name": "scales_small_chain_link",
+      "from": [
+        2.84,
+        13.35,
+        12.52
+      ],
+      "to": [
+        3.06,
+        13.5,
+        12.71
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            0.21999999999999975,
+            0.15000000000000036
+          ],
+          "texture": "#gold_polished"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            0.21999999999999975,
+            0.15000000000000036
+          ],
+          "texture": "#gold_polished"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            0.1899999999999995,
+            0.15000000000000036
+          ],
+          "texture": "#gold_polished"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            0.1899999999999995,
+            0.15000000000000036
+          ],
+          "texture": "#gold_polished"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.21999999999999975,
+            0.1899999999999995
+          ],
+          "texture": "#gold_polished"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.21999999999999975,
+            0.1899999999999995
+          ],
+          "texture": "#gold_polished"
+        }
+      }
+    },
+    {
+      "name": "scales_suspended_pan_chain",
+      "from": [
+        5.185,
+        11.65,
+        10.9
+      ],
+      "to": [
+        5.315,
+        14.45,
+        11.03
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            0.13000000000000078,
+            2.799999999999999
+          ],
+          "texture": "#bronze"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            0.13000000000000078,
+            2.799999999999999
+          ],
+          "texture": "#bronze"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            0.13000000000000078,
+            2.799999999999999
+          ],
+          "texture": "#bronze"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            0.13000000000000078,
+            2.799999999999999
+          ],
+          "texture": "#bronze"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.13000000000000078,
+            0.13000000000000078
+          ],
+          "texture": "#bronze"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.13000000000000078,
+            0.13000000000000078
+          ],
+          "texture": "#bronze"
+        }
+      }
+    },
+    {
+      "name": "scales_small_chain_link",
+      "from": [
+        5.14,
+        12.35,
+        10.87
+      ],
+      "to": [
+        5.36,
+        12.5,
+        11.06
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            0.22000000000000064,
+            0.15000000000000036
+          ],
+          "texture": "#gold_polished"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            0.22000000000000064,
+            0.15000000000000036
+          ],
+          "texture": "#gold_polished"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            0.1899999999999995,
+            0.15000000000000036
+          ],
+          "texture": "#gold_polished"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            0.1899999999999995,
+            0.15000000000000036
+          ],
+          "texture": "#gold_polished"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.22000000000000064,
+            0.1899999999999995
+          ],
+          "texture": "#gold_polished"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.22000000000000064,
+            0.1899999999999995
+          ],
+          "texture": "#gold_polished"
+        }
+      }
+    },
+    {
+      "name": "scales_small_chain_link",
+      "from": [
+        5.14,
+        13.35,
+        10.87
+      ],
+      "to": [
+        5.36,
+        13.5,
+        11.06
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            0.22000000000000064,
+            0.15000000000000036
+          ],
+          "texture": "#gold_polished"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            0.22000000000000064,
+            0.15000000000000036
+          ],
+          "texture": "#gold_polished"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            0.1899999999999995,
+            0.15000000000000036
+          ],
+          "texture": "#gold_polished"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            0.1899999999999995,
+            0.15000000000000036
+          ],
+          "texture": "#gold_polished"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.22000000000000064,
+            0.1899999999999995
+          ],
+          "texture": "#gold_polished"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.22000000000000064,
+            0.1899999999999995
+          ],
+          "texture": "#gold_polished"
+        }
+      }
+    },
+    {
+      "name": "scales_suspended_pan_chain",
+      "from": [
+        5.185,
+        11.65,
+        12.55
+      ],
+      "to": [
+        5.315,
+        14.45,
+        12.68
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            0.13000000000000078,
+            2.799999999999999
+          ],
+          "texture": "#bronze"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            0.13000000000000078,
+            2.799999999999999
+          ],
+          "texture": "#bronze"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            0.13000000000000078,
+            2.799999999999999
+          ],
+          "texture": "#bronze"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            0.13000000000000078,
+            2.799999999999999
+          ],
+          "texture": "#bronze"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.13000000000000078,
+            0.13000000000000078
+          ],
+          "texture": "#bronze"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.13000000000000078,
+            0.13000000000000078
+          ],
+          "texture": "#bronze"
+        }
+      }
+    },
+    {
+      "name": "scales_small_chain_link",
+      "from": [
+        5.14,
+        12.35,
+        12.52
+      ],
+      "to": [
+        5.36,
+        12.5,
+        12.71
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            0.22000000000000064,
+            0.15000000000000036
+          ],
+          "texture": "#gold_polished"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            0.22000000000000064,
+            0.15000000000000036
+          ],
+          "texture": "#gold_polished"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            0.1899999999999995,
+            0.15000000000000036
+          ],
+          "texture": "#gold_polished"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            0.1899999999999995,
+            0.15000000000000036
+          ],
+          "texture": "#gold_polished"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.22000000000000064,
+            0.1899999999999995
+          ],
+          "texture": "#gold_polished"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.22000000000000064,
+            0.1899999999999995
+          ],
+          "texture": "#gold_polished"
+        }
+      }
+    },
+    {
+      "name": "scales_small_chain_link",
+      "from": [
+        5.14,
+        13.35,
+        12.52
+      ],
+      "to": [
+        5.36,
+        13.5,
+        12.71
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            0.22000000000000064,
+            0.15000000000000036
+          ],
+          "texture": "#gold_polished"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            0.22000000000000064,
+            0.15000000000000036
+          ],
+          "texture": "#gold_polished"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            0.1899999999999995,
+            0.15000000000000036
+          ],
+          "texture": "#gold_polished"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            0.1899999999999995,
+            0.15000000000000036
+          ],
+          "texture": "#gold_polished"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.22000000000000064,
+            0.1899999999999995
+          ],
+          "texture": "#gold_polished"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.22000000000000064,
+            0.1899999999999995
+          ],
+          "texture": "#gold_polished"
+        }
+      }
+    },
+    {
+      "name": "scales_pan_octagonal_rim",
+      "from": [
+        2.62,
+        11.38,
+        10.72
+      ],
+      "to": [
+        5.58,
+        11.55,
+        12.88
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            2.9600000000000004,
+            0.16999999999999993
+          ],
+          "texture": "#gold_polished"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            2.9600000000000004,
+            0.16999999999999993
+          ],
+          "texture": "#gold_polished"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            2.16,
+            0.16999999999999993
+          ],
+          "texture": "#gold_polished"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            2.16,
+            0.16999999999999993
+          ],
+          "texture": "#gold_polished"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            2.9600000000000004,
+            2.16
+          ],
+          "texture": "#gold_polished"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            2.9600000000000004,
+            2.16
+          ],
+          "texture": "#gold_polished"
+        }
+      }
+    },
+    {
+      "name": "scales_pan_rim_corner_bevel",
+      "from": [
+        2.45,
+        11.38,
+        10.95
+      ],
+      "to": [
+        5.75,
+        11.55,
+        12.65
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            3.3000000000000003,
+            0.16999999999999993
+          ],
+          "texture": "#gold_polished"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            3.3000000000000003,
+            0.16999999999999993
+          ],
+          "texture": "#gold_polished"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            1.700000000000001,
+            0.16999999999999993
+          ],
+          "texture": "#gold_polished"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            1.700000000000001,
+            0.16999999999999993
+          ],
+          "texture": "#gold_polished"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            3.3000000000000003,
+            1.700000000000001
+          ],
+          "texture": "#gold_polished"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            3.3000000000000003,
+            1.700000000000001
+          ],
+          "texture": "#gold_polished"
+        }
+      }
+    },
+    {
+      "name": "scales_pan_bowl_middle",
+      "from": [
+        2.95,
+        11.18,
+        10.98
+      ],
+      "to": [
+        5.25,
+        11.38,
+        12.62
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            2.3000000000000003,
+            0.20000000000000107
+          ],
+          "texture": "#bronze"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            2.3000000000000003,
+            0.20000000000000107
+          ],
+          "texture": "#bronze"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            1.6399999999999988,
+            0.20000000000000107
+          ],
+          "texture": "#bronze"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            1.6399999999999988,
+            0.20000000000000107
+          ],
+          "texture": "#bronze"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            2.3000000000000003,
+            1.6399999999999988
+          ],
+          "texture": "#bronze"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            2.3000000000000003,
+            1.6399999999999988
+          ],
+          "texture": "#bronze"
+        }
+      }
+    },
+    {
+      "name": "scales_pan_bowl_bottom",
+      "from": [
+        3.25,
+        11.04,
+        11.22
+      ],
+      "to": [
+        4.95,
+        11.18,
+        12.38
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            1.6999999999999997,
+            0.14000000000000057
+          ],
+          "texture": "#gold_polished"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            1.6999999999999997,
+            0.14000000000000057
+          ],
+          "texture": "#gold_polished"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            1.1600000000000001,
+            0.14000000000000057
+          ],
+          "texture": "#gold_polished"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            1.1600000000000001,
+            0.14000000000000057
+          ],
+          "texture": "#gold_polished"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            1.6999999999999997,
+            1.1600000000000001
+          ],
+          "texture": "#gold_polished"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            1.6999999999999997,
+            1.1600000000000001
+          ],
+          "texture": "#gold_polished"
+        }
+      }
+    },
+    {
+      "name": "scales_pan_inner_surface",
+      "from": [
+        2.88,
+        11.55,
+        11
+      ],
+      "to": [
+        5.32,
+        11.62,
+        12.6
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            2.4399999999999995,
+            0.06999999999999851
+          ],
+          "texture": "#bronze"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            2.4399999999999995,
+            0.06999999999999851
+          ],
+          "texture": "#bronze"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            1.5999999999999996,
+            0.06999999999999851
+          ],
+          "texture": "#bronze"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            1.5999999999999996,
+            0.06999999999999851
+          ],
+          "texture": "#bronze"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            2.4399999999999995,
+            1.5999999999999996
+          ],
+          "texture": "#bronze"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            2.4399999999999995,
+            1.5999999999999996
+          ],
+          "texture": "#bronze"
+        }
+      }
+    },
+    {
+      "name": "scales_suspended_pan_chain",
+      "from": [
+        10.685,
+        11.65,
+        10.9
+      ],
+      "to": [
+        10.815,
+        14.45,
+        11.03
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            0.129999999999999,
+            2.799999999999999
+          ],
+          "texture": "#bronze"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            0.129999999999999,
+            2.799999999999999
+          ],
+          "texture": "#bronze"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            0.13000000000000078,
+            2.799999999999999
+          ],
+          "texture": "#bronze"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            0.13000000000000078,
+            2.799999999999999
+          ],
+          "texture": "#bronze"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.129999999999999,
+            0.13000000000000078
+          ],
+          "texture": "#bronze"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.129999999999999,
+            0.13000000000000078
+          ],
+          "texture": "#bronze"
+        }
+      }
+    },
+    {
+      "name": "scales_small_chain_link",
+      "from": [
+        10.64,
+        12.35,
+        10.87
+      ],
+      "to": [
+        10.86,
+        12.5,
+        11.06
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            0.21999999999999886,
+            0.15000000000000036
+          ],
+          "texture": "#gold_polished"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            0.21999999999999886,
+            0.15000000000000036
+          ],
+          "texture": "#gold_polished"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            0.1899999999999995,
+            0.15000000000000036
+          ],
+          "texture": "#gold_polished"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            0.1899999999999995,
+            0.15000000000000036
+          ],
+          "texture": "#gold_polished"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.21999999999999886,
+            0.1899999999999995
+          ],
+          "texture": "#gold_polished"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.21999999999999886,
+            0.1899999999999995
+          ],
+          "texture": "#gold_polished"
+        }
+      }
+    },
+    {
+      "name": "scales_small_chain_link",
+      "from": [
+        10.64,
+        13.35,
+        10.87
+      ],
+      "to": [
+        10.86,
+        13.5,
+        11.06
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            0.21999999999999886,
+            0.15000000000000036
+          ],
+          "texture": "#gold_polished"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            0.21999999999999886,
+            0.15000000000000036
+          ],
+          "texture": "#gold_polished"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            0.1899999999999995,
+            0.15000000000000036
+          ],
+          "texture": "#gold_polished"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            0.1899999999999995,
+            0.15000000000000036
+          ],
+          "texture": "#gold_polished"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.21999999999999886,
+            0.1899999999999995
+          ],
+          "texture": "#gold_polished"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.21999999999999886,
+            0.1899999999999995
+          ],
+          "texture": "#gold_polished"
+        }
+      }
+    },
+    {
+      "name": "scales_suspended_pan_chain",
+      "from": [
+        10.685,
+        11.65,
+        12.55
+      ],
+      "to": [
+        10.815,
+        14.45,
+        12.68
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            0.129999999999999,
+            2.799999999999999
+          ],
+          "texture": "#bronze"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            0.129999999999999,
+            2.799999999999999
+          ],
+          "texture": "#bronze"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            0.13000000000000078,
+            2.799999999999999
+          ],
+          "texture": "#bronze"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            0.13000000000000078,
+            2.799999999999999
+          ],
+          "texture": "#bronze"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.129999999999999,
+            0.13000000000000078
+          ],
+          "texture": "#bronze"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.129999999999999,
+            0.13000000000000078
+          ],
+          "texture": "#bronze"
+        }
+      }
+    },
+    {
+      "name": "scales_small_chain_link",
+      "from": [
+        10.64,
+        12.35,
+        12.52
+      ],
+      "to": [
+        10.86,
+        12.5,
+        12.71
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            0.21999999999999886,
+            0.15000000000000036
+          ],
+          "texture": "#gold_polished"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            0.21999999999999886,
+            0.15000000000000036
+          ],
+          "texture": "#gold_polished"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            0.1899999999999995,
+            0.15000000000000036
+          ],
+          "texture": "#gold_polished"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            0.1899999999999995,
+            0.15000000000000036
+          ],
+          "texture": "#gold_polished"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.21999999999999886,
+            0.1899999999999995
+          ],
+          "texture": "#gold_polished"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.21999999999999886,
+            0.1899999999999995
+          ],
+          "texture": "#gold_polished"
+        }
+      }
+    },
+    {
+      "name": "scales_small_chain_link",
+      "from": [
+        10.64,
+        13.35,
+        12.52
+      ],
+      "to": [
+        10.86,
+        13.5,
+        12.71
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            0.21999999999999886,
+            0.15000000000000036
+          ],
+          "texture": "#gold_polished"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            0.21999999999999886,
+            0.15000000000000036
+          ],
+          "texture": "#gold_polished"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            0.1899999999999995,
+            0.15000000000000036
+          ],
+          "texture": "#gold_polished"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            0.1899999999999995,
+            0.15000000000000036
+          ],
+          "texture": "#gold_polished"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.21999999999999886,
+            0.1899999999999995
+          ],
+          "texture": "#gold_polished"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.21999999999999886,
+            0.1899999999999995
+          ],
+          "texture": "#gold_polished"
+        }
+      }
+    },
+    {
+      "name": "scales_suspended_pan_chain",
+      "from": [
+        12.985,
+        11.65,
+        10.9
+      ],
+      "to": [
+        13.115,
+        14.45,
+        11.03
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            0.129999999999999,
+            2.799999999999999
+          ],
+          "texture": "#bronze"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            0.129999999999999,
+            2.799999999999999
+          ],
+          "texture": "#bronze"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            0.13000000000000078,
+            2.799999999999999
+          ],
+          "texture": "#bronze"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            0.13000000000000078,
+            2.799999999999999
+          ],
+          "texture": "#bronze"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.129999999999999,
+            0.13000000000000078
+          ],
+          "texture": "#bronze"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.129999999999999,
+            0.13000000000000078
+          ],
+          "texture": "#bronze"
+        }
+      }
+    },
+    {
+      "name": "scales_small_chain_link",
+      "from": [
+        12.94,
+        12.35,
+        10.87
+      ],
+      "to": [
+        13.16,
+        12.5,
+        11.06
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            0.21999999999999886,
+            0.15000000000000036
+          ],
+          "texture": "#gold_polished"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            0.21999999999999886,
+            0.15000000000000036
+          ],
+          "texture": "#gold_polished"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            0.1899999999999995,
+            0.15000000000000036
+          ],
+          "texture": "#gold_polished"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            0.1899999999999995,
+            0.15000000000000036
+          ],
+          "texture": "#gold_polished"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.21999999999999886,
+            0.1899999999999995
+          ],
+          "texture": "#gold_polished"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.21999999999999886,
+            0.1899999999999995
+          ],
+          "texture": "#gold_polished"
+        }
+      }
+    },
+    {
+      "name": "scales_small_chain_link",
+      "from": [
+        12.94,
+        13.35,
+        10.87
+      ],
+      "to": [
+        13.16,
+        13.5,
+        11.06
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            0.21999999999999886,
+            0.15000000000000036
+          ],
+          "texture": "#gold_polished"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            0.21999999999999886,
+            0.15000000000000036
+          ],
+          "texture": "#gold_polished"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            0.1899999999999995,
+            0.15000000000000036
+          ],
+          "texture": "#gold_polished"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            0.1899999999999995,
+            0.15000000000000036
+          ],
+          "texture": "#gold_polished"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.21999999999999886,
+            0.1899999999999995
+          ],
+          "texture": "#gold_polished"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.21999999999999886,
+            0.1899999999999995
+          ],
+          "texture": "#gold_polished"
+        }
+      }
+    },
+    {
+      "name": "scales_suspended_pan_chain",
+      "from": [
+        12.985,
+        11.65,
+        12.55
+      ],
+      "to": [
+        13.115,
+        14.45,
+        12.68
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            0.129999999999999,
+            2.799999999999999
+          ],
+          "texture": "#bronze"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            0.129999999999999,
+            2.799999999999999
+          ],
+          "texture": "#bronze"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            0.13000000000000078,
+            2.799999999999999
+          ],
+          "texture": "#bronze"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            0.13000000000000078,
+            2.799999999999999
+          ],
+          "texture": "#bronze"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.129999999999999,
+            0.13000000000000078
+          ],
+          "texture": "#bronze"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.129999999999999,
+            0.13000000000000078
+          ],
+          "texture": "#bronze"
+        }
+      }
+    },
+    {
+      "name": "scales_small_chain_link",
+      "from": [
+        12.94,
+        12.35,
+        12.52
+      ],
+      "to": [
+        13.16,
+        12.5,
+        12.71
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            0.21999999999999886,
+            0.15000000000000036
+          ],
+          "texture": "#gold_polished"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            0.21999999999999886,
+            0.15000000000000036
+          ],
+          "texture": "#gold_polished"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            0.1899999999999995,
+            0.15000000000000036
+          ],
+          "texture": "#gold_polished"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            0.1899999999999995,
+            0.15000000000000036
+          ],
+          "texture": "#gold_polished"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.21999999999999886,
+            0.1899999999999995
+          ],
+          "texture": "#gold_polished"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.21999999999999886,
+            0.1899999999999995
+          ],
+          "texture": "#gold_polished"
+        }
+      }
+    },
+    {
+      "name": "scales_small_chain_link",
+      "from": [
+        12.94,
+        13.35,
+        12.52
+      ],
+      "to": [
+        13.16,
+        13.5,
+        12.71
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            0.21999999999999886,
+            0.15000000000000036
+          ],
+          "texture": "#gold_polished"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            0.21999999999999886,
+            0.15000000000000036
+          ],
+          "texture": "#gold_polished"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            0.1899999999999995,
+            0.15000000000000036
+          ],
+          "texture": "#gold_polished"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            0.1899999999999995,
+            0.15000000000000036
+          ],
+          "texture": "#gold_polished"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.21999999999999886,
+            0.1899999999999995
+          ],
+          "texture": "#gold_polished"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.21999999999999886,
+            0.1899999999999995
+          ],
+          "texture": "#gold_polished"
+        }
+      }
+    },
+    {
+      "name": "scales_pan_octagonal_rim",
+      "from": [
+        10.42,
+        11.38,
+        10.72
+      ],
+      "to": [
+        13.38,
+        11.55,
+        12.88
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            2.960000000000001,
+            0.16999999999999993
+          ],
+          "texture": "#gold_polished"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            2.960000000000001,
+            0.16999999999999993
+          ],
+          "texture": "#gold_polished"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            2.16,
+            0.16999999999999993
+          ],
+          "texture": "#gold_polished"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            2.16,
+            0.16999999999999993
+          ],
+          "texture": "#gold_polished"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            2.960000000000001,
+            2.16
+          ],
+          "texture": "#gold_polished"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            2.960000000000001,
+            2.16
+          ],
+          "texture": "#gold_polished"
+        }
+      }
+    },
+    {
+      "name": "scales_pan_rim_corner_bevel",
+      "from": [
+        10.25,
+        11.38,
+        10.95
+      ],
+      "to": [
+        13.55,
+        11.55,
+        12.65
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            3.3000000000000007,
+            0.16999999999999993
+          ],
+          "texture": "#gold_polished"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            3.3000000000000007,
+            0.16999999999999993
+          ],
+          "texture": "#gold_polished"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            1.700000000000001,
+            0.16999999999999993
+          ],
+          "texture": "#gold_polished"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            1.700000000000001,
+            0.16999999999999993
+          ],
+          "texture": "#gold_polished"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            3.3000000000000007,
+            1.700000000000001
+          ],
+          "texture": "#gold_polished"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            3.3000000000000007,
+            1.700000000000001
+          ],
+          "texture": "#gold_polished"
+        }
+      }
+    },
+    {
+      "name": "scales_pan_bowl_middle",
+      "from": [
+        10.75,
+        11.18,
+        10.98
+      ],
+      "to": [
+        13.05,
+        11.38,
+        12.62
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            2.3000000000000007,
+            0.20000000000000107
+          ],
+          "texture": "#bronze"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            2.3000000000000007,
+            0.20000000000000107
+          ],
+          "texture": "#bronze"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            1.6399999999999988,
+            0.20000000000000107
+          ],
+          "texture": "#bronze"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            1.6399999999999988,
+            0.20000000000000107
+          ],
+          "texture": "#bronze"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            2.3000000000000007,
+            1.6399999999999988
+          ],
+          "texture": "#bronze"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            2.3000000000000007,
+            1.6399999999999988
+          ],
+          "texture": "#bronze"
+        }
+      }
+    },
+    {
+      "name": "scales_pan_bowl_bottom",
+      "from": [
+        11.05,
+        11.04,
+        11.22
+      ],
+      "to": [
+        12.75,
+        11.18,
+        12.38
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            1.6999999999999993,
+            0.14000000000000057
+          ],
+          "texture": "#gold_polished"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            1.6999999999999993,
+            0.14000000000000057
+          ],
+          "texture": "#gold_polished"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            1.1600000000000001,
+            0.14000000000000057
+          ],
+          "texture": "#gold_polished"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            1.1600000000000001,
+            0.14000000000000057
+          ],
+          "texture": "#gold_polished"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            1.6999999999999993,
+            1.1600000000000001
+          ],
+          "texture": "#gold_polished"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            1.6999999999999993,
+            1.1600000000000001
+          ],
+          "texture": "#gold_polished"
+        }
+      }
+    },
+    {
+      "name": "scales_pan_inner_surface",
+      "from": [
+        10.68,
+        11.55,
+        11
+      ],
+      "to": [
+        13.12,
+        11.62,
+        12.6
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            2.4400000000000013,
+            0.06999999999999851
+          ],
+          "texture": "#bronze"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            2.4400000000000013,
+            0.06999999999999851
+          ],
+          "texture": "#bronze"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            1.5999999999999996,
+            0.06999999999999851
+          ],
+          "texture": "#bronze"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            1.5999999999999996,
+            0.06999999999999851
+          ],
+          "texture": "#bronze"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            2.4400000000000013,
+            1.5999999999999996
+          ],
+          "texture": "#bronze"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            2.4400000000000013,
+            1.5999999999999996
+          ],
+          "texture": "#bronze"
+        }
+      }
+    }
+  ]
+}

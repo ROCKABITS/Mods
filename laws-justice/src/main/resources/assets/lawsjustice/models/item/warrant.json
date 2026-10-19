@@ -1,0 +1,1876 @@
+{
+  "parent": "minecraft:block/block",
+  "render_type": "minecraft:cutout",
+  "ambientocclusion": true,
+  "textures": {
+    "black": "lawsjustice:block/black",
+    "bronze": "lawsjustice:block/bronze",
+    "flame": "lawsjustice:block/flame",
+    "iron": "lawsjustice:block/iron",
+    "iron_dark": "lawsjustice:block/iron_dark",
+    "justice_crest": "lawsjustice:block/justice_crest",
+    "leather": "lawsjustice:block/leather",
+    "ledger_cover": "lawsjustice:block/ledger_cover",
+    "ledger_pages": "lawsjustice:block/ledger_pages",
+    "lock_plate": "lawsjustice:block/lock_plate",
+    "oak": "lawsjustice:block/oak",
+    "oak_dark": "lawsjustice:block/oak_dark",
+    "steel": "lawsjustice:block/steel",
+    "stone": "lawsjustice:block/stone",
+    "stone_dark": "lawsjustice:block/stone_dark",
+    "surveyor_dial": "lawsjustice:block/surveyor_dial",
+    "velvet": "lawsjustice:block/velvet",
+    "wax": "lawsjustice:block/wax",
+    "particle": "lawsjustice:block/iron",
+    "court_parchment": "lawsjustice:block/court_parchment",
+    "garnet": "lawsjustice:block/garnet",
+    "gold_polished": "lawsjustice:block/gold_polished",
+    "mahogany": "lawsjustice:block/mahogany",
+    "mahogany_dark": "lawsjustice:block/mahogany_dark",
+    "royal_wax_seal": "lawsjustice:block/royal_wax_seal",
+    "warrant_parchment": "lawsjustice:block/warrant_parchment"
+  },
+  "elements": [
+    {
+      "name": "warrant_thin_ivory_parchment",
+      "from": [
+        3,
+        1.5,
+        7.75
+      ],
+      "to": [
+        13,
+        14.7,
+        8
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            10,
+            13.2
+          ],
+          "texture": "#wax"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            10,
+            13.2
+          ],
+          "texture": "#wax"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            0.25,
+            13.2
+          ],
+          "texture": "#wax"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            0.25,
+            13.2
+          ],
+          "texture": "#wax"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            10,
+            0.25
+          ],
+          "texture": "#wax"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            10,
+            0.25
+          ],
+          "texture": "#wax"
+        }
+      }
+    },
+    {
+      "name": "warrant_decorative_front",
+      "from": [
+        3,
+        1.5,
+        7.69
+      ],
+      "to": [
+        13,
+        14.7,
+        7.78
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#warrant_parchment"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            10,
+            13.2
+          ],
+          "texture": "#warrant_parchment"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            0.08999999999999986,
+            13.2
+          ],
+          "texture": "#warrant_parchment"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            0.08999999999999986,
+            13.2
+          ],
+          "texture": "#warrant_parchment"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            10,
+            0.08999999999999986
+          ],
+          "texture": "#warrant_parchment"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            10,
+            0.08999999999999986
+          ],
+          "texture": "#warrant_parchment"
+        }
+      }
+    },
+    {
+      "name": "warrant_decorative_back",
+      "from": [
+        3,
+        1.5,
+        7.97
+      ],
+      "to": [
+        13,
+        14.7,
+        8.06
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            10,
+            13.2
+          ],
+          "texture": "#warrant_parchment"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#warrant_parchment"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            0.09000000000000075,
+            13.2
+          ],
+          "texture": "#warrant_parchment"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            0.09000000000000075,
+            13.2
+          ],
+          "texture": "#warrant_parchment"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            10,
+            0.09000000000000075
+          ],
+          "texture": "#warrant_parchment"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            10,
+            0.09000000000000075
+          ],
+          "texture": "#warrant_parchment"
+        }
+      }
+    },
+    {
+      "name": "warrant_rolled_parchment_end",
+      "from": [
+        2.6,
+        1.1,
+        7.2
+      ],
+      "to": [
+        13.4,
+        2.0,
+        8.55
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            10.8,
+            0.8999999999999999
+          ],
+          "texture": "#wax"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            10.8,
+            0.8999999999999999
+          ],
+          "texture": "#wax"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            1.3500000000000005,
+            0.8999999999999999
+          ],
+          "texture": "#wax"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            1.3500000000000005,
+            0.8999999999999999
+          ],
+          "texture": "#wax"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            10.8,
+            1.3500000000000005
+          ],
+          "texture": "#wax"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            10.8,
+            1.3500000000000005
+          ],
+          "texture": "#wax"
+        }
+      }
+    },
+    {
+      "name": "warrant_scroll_end_bevel",
+      "from": [
+        2.8,
+        0.98,
+        7.38
+      ],
+      "to": [
+        13.2,
+        2.12,
+        8.37
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            10.399999999999999,
+            1.1400000000000001
+          ],
+          "texture": "#wax"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            10.399999999999999,
+            1.1400000000000001
+          ],
+          "texture": "#wax"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            0.9899999999999993,
+            1.1400000000000001
+          ],
+          "texture": "#wax"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            0.9899999999999993,
+            1.1400000000000001
+          ],
+          "texture": "#wax"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            10.399999999999999,
+            0.9899999999999993
+          ],
+          "texture": "#wax"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            10.399999999999999,
+            0.9899999999999993
+          ],
+          "texture": "#wax"
+        }
+      }
+    },
+    {
+      "name": "warrant_rolled_end_gold_cap",
+      "from": [
+        2.28,
+        1.15,
+        7.27
+      ],
+      "to": [
+        2.75,
+        1.95,
+        8.48
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            0.4700000000000002,
+            0.8
+          ],
+          "texture": "#bronze"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            0.4700000000000002,
+            0.8
+          ],
+          "texture": "#bronze"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            1.2100000000000009,
+            0.8
+          ],
+          "texture": "#bronze"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            1.2100000000000009,
+            0.8
+          ],
+          "texture": "#bronze"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.4700000000000002,
+            1.2100000000000009
+          ],
+          "texture": "#bronze"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.4700000000000002,
+            1.2100000000000009
+          ],
+          "texture": "#bronze"
+        }
+      }
+    },
+    {
+      "name": "warrant_end_cap_front_glint",
+      "from": [
+        2.36,
+        1.27,
+        7.12
+      ],
+      "to": [
+        2.67,
+        1.83,
+        7.38
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            0.31000000000000005,
+            0.56
+          ],
+          "texture": "#gold_polished"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            0.31000000000000005,
+            0.56
+          ],
+          "texture": "#gold_polished"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            0.2599999999999998,
+            0.56
+          ],
+          "texture": "#gold_polished"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            0.2599999999999998,
+            0.56
+          ],
+          "texture": "#gold_polished"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.31000000000000005,
+            0.2599999999999998
+          ],
+          "texture": "#gold_polished"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.31000000000000005,
+            0.2599999999999998
+          ],
+          "texture": "#gold_polished"
+        }
+      }
+    },
+    {
+      "name": "warrant_rolled_end_gold_cap",
+      "from": [
+        13.25,
+        1.15,
+        7.27
+      ],
+      "to": [
+        13.72,
+        1.95,
+        8.48
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            0.47000000000000064,
+            0.8
+          ],
+          "texture": "#bronze"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            0.47000000000000064,
+            0.8
+          ],
+          "texture": "#bronze"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            1.2100000000000009,
+            0.8
+          ],
+          "texture": "#bronze"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            1.2100000000000009,
+            0.8
+          ],
+          "texture": "#bronze"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.47000000000000064,
+            1.2100000000000009
+          ],
+          "texture": "#bronze"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.47000000000000064,
+            1.2100000000000009
+          ],
+          "texture": "#bronze"
+        }
+      }
+    },
+    {
+      "name": "warrant_end_cap_front_glint",
+      "from": [
+        13.33,
+        1.27,
+        7.12
+      ],
+      "to": [
+        13.64,
+        1.83,
+        7.38
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            0.3100000000000005,
+            0.56
+          ],
+          "texture": "#gold_polished"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            0.3100000000000005,
+            0.56
+          ],
+          "texture": "#gold_polished"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            0.2599999999999998,
+            0.56
+          ],
+          "texture": "#gold_polished"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            0.2599999999999998,
+            0.56
+          ],
+          "texture": "#gold_polished"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.3100000000000005,
+            0.2599999999999998
+          ],
+          "texture": "#gold_polished"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.3100000000000005,
+            0.2599999999999998
+          ],
+          "texture": "#gold_polished"
+        }
+      }
+    },
+    {
+      "name": "warrant_rolled_parchment_end",
+      "from": [
+        2.6,
+        14.35,
+        7.2
+      ],
+      "to": [
+        13.4,
+        15.25,
+        8.55
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            10.8,
+            0.9000000000000004
+          ],
+          "texture": "#wax"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            10.8,
+            0.9000000000000004
+          ],
+          "texture": "#wax"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            1.3500000000000005,
+            0.9000000000000004
+          ],
+          "texture": "#wax"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            1.3500000000000005,
+            0.9000000000000004
+          ],
+          "texture": "#wax"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            10.8,
+            1.3500000000000005
+          ],
+          "texture": "#wax"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            10.8,
+            1.3500000000000005
+          ],
+          "texture": "#wax"
+        }
+      }
+    },
+    {
+      "name": "warrant_scroll_end_bevel",
+      "from": [
+        2.8,
+        14.23,
+        7.38
+      ],
+      "to": [
+        13.2,
+        15.37,
+        8.37
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            10.399999999999999,
+            1.1399999999999988
+          ],
+          "texture": "#wax"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            10.399999999999999,
+            1.1399999999999988
+          ],
+          "texture": "#wax"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            0.9899999999999993,
+            1.1399999999999988
+          ],
+          "texture": "#wax"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            0.9899999999999993,
+            1.1399999999999988
+          ],
+          "texture": "#wax"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            10.399999999999999,
+            0.9899999999999993
+          ],
+          "texture": "#wax"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            10.399999999999999,
+            0.9899999999999993
+          ],
+          "texture": "#wax"
+        }
+      }
+    },
+    {
+      "name": "warrant_rolled_end_gold_cap",
+      "from": [
+        2.28,
+        14.4,
+        7.27
+      ],
+      "to": [
+        2.75,
+        15.2,
+        8.48
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            0.4700000000000002,
+            0.7999999999999989
+          ],
+          "texture": "#bronze"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            0.4700000000000002,
+            0.7999999999999989
+          ],
+          "texture": "#bronze"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            1.2100000000000009,
+            0.7999999999999989
+          ],
+          "texture": "#bronze"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            1.2100000000000009,
+            0.7999999999999989
+          ],
+          "texture": "#bronze"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.4700000000000002,
+            1.2100000000000009
+          ],
+          "texture": "#bronze"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.4700000000000002,
+            1.2100000000000009
+          ],
+          "texture": "#bronze"
+        }
+      }
+    },
+    {
+      "name": "warrant_end_cap_front_glint",
+      "from": [
+        2.36,
+        14.52,
+        7.12
+      ],
+      "to": [
+        2.67,
+        15.08,
+        7.38
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            0.31000000000000005,
+            0.5600000000000005
+          ],
+          "texture": "#gold_polished"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            0.31000000000000005,
+            0.5600000000000005
+          ],
+          "texture": "#gold_polished"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            0.2599999999999998,
+            0.5600000000000005
+          ],
+          "texture": "#gold_polished"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            0.2599999999999998,
+            0.5600000000000005
+          ],
+          "texture": "#gold_polished"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.31000000000000005,
+            0.2599999999999998
+          ],
+          "texture": "#gold_polished"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.31000000000000005,
+            0.2599999999999998
+          ],
+          "texture": "#gold_polished"
+        }
+      }
+    },
+    {
+      "name": "warrant_rolled_end_gold_cap",
+      "from": [
+        13.25,
+        14.4,
+        7.27
+      ],
+      "to": [
+        13.72,
+        15.2,
+        8.48
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            0.47000000000000064,
+            0.7999999999999989
+          ],
+          "texture": "#bronze"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            0.47000000000000064,
+            0.7999999999999989
+          ],
+          "texture": "#bronze"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            1.2100000000000009,
+            0.7999999999999989
+          ],
+          "texture": "#bronze"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            1.2100000000000009,
+            0.7999999999999989
+          ],
+          "texture": "#bronze"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.47000000000000064,
+            1.2100000000000009
+          ],
+          "texture": "#bronze"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.47000000000000064,
+            1.2100000000000009
+          ],
+          "texture": "#bronze"
+        }
+      }
+    },
+    {
+      "name": "warrant_end_cap_front_glint",
+      "from": [
+        13.33,
+        14.52,
+        7.12
+      ],
+      "to": [
+        13.64,
+        15.08,
+        7.38
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            0.3100000000000005,
+            0.5600000000000005
+          ],
+          "texture": "#gold_polished"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            0.3100000000000005,
+            0.5600000000000005
+          ],
+          "texture": "#gold_polished"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            0.2599999999999998,
+            0.5600000000000005
+          ],
+          "texture": "#gold_polished"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            0.2599999999999998,
+            0.5600000000000005
+          ],
+          "texture": "#gold_polished"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.3100000000000005,
+            0.2599999999999998
+          ],
+          "texture": "#gold_polished"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.3100000000000005,
+            0.2599999999999998
+          ],
+          "texture": "#gold_polished"
+        }
+      }
+    },
+    {
+      "name": "warrant_hanging_burgundy_ribbon",
+      "from": [
+        9.95,
+        1.1,
+        7.22
+      ],
+      "to": [
+        10.6,
+        4.55,
+        7.66
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            0.6500000000000004,
+            3.4499999999999997
+          ],
+          "texture": "#velvet"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            0.6500000000000004,
+            3.4499999999999997
+          ],
+          "texture": "#velvet"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            0.4400000000000004,
+            3.4499999999999997
+          ],
+          "texture": "#velvet"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            0.4400000000000004,
+            3.4499999999999997
+          ],
+          "texture": "#velvet"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.6500000000000004,
+            0.4400000000000004
+          ],
+          "texture": "#velvet"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.6500000000000004,
+            0.4400000000000004
+          ],
+          "texture": "#velvet"
+        }
+      }
+    },
+    {
+      "name": "warrant_ribbon_forked_tail",
+      "from": [
+        10.05,
+        0.65,
+        7.22
+      ],
+      "to": [
+        10.5,
+        1.15,
+        7.66
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            0.45000000000000107,
+            0.4999999999999999
+          ],
+          "texture": "#velvet"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            0.45000000000000107,
+            0.4999999999999999
+          ],
+          "texture": "#velvet"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            0.4400000000000004,
+            0.4999999999999999
+          ],
+          "texture": "#velvet"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            0.4400000000000004,
+            0.4999999999999999
+          ],
+          "texture": "#velvet"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.45000000000000107,
+            0.4400000000000004
+          ],
+          "texture": "#velvet"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.45000000000000107,
+            0.4400000000000004
+          ],
+          "texture": "#velvet"
+        }
+      }
+    },
+    {
+      "name": "warrant_hanging_burgundy_ribbon",
+      "from": [
+        11.75,
+        1.1,
+        7.22
+      ],
+      "to": [
+        12.4,
+        4.55,
+        7.66
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            0.6500000000000004,
+            3.4499999999999997
+          ],
+          "texture": "#velvet"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            0.6500000000000004,
+            3.4499999999999997
+          ],
+          "texture": "#velvet"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            0.4400000000000004,
+            3.4499999999999997
+          ],
+          "texture": "#velvet"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            0.4400000000000004,
+            3.4499999999999997
+          ],
+          "texture": "#velvet"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.6500000000000004,
+            0.4400000000000004
+          ],
+          "texture": "#velvet"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.6500000000000004,
+            0.4400000000000004
+          ],
+          "texture": "#velvet"
+        }
+      }
+    },
+    {
+      "name": "warrant_ribbon_forked_tail",
+      "from": [
+        11.85,
+        0.65,
+        7.22
+      ],
+      "to": [
+        12.3,
+        1.15,
+        7.66
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            0.45000000000000107,
+            0.4999999999999999
+          ],
+          "texture": "#velvet"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            0.45000000000000107,
+            0.4999999999999999
+          ],
+          "texture": "#velvet"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            0.4400000000000004,
+            0.4999999999999999
+          ],
+          "texture": "#velvet"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            0.4400000000000004,
+            0.4999999999999999
+          ],
+          "texture": "#velvet"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.45000000000000107,
+            0.4400000000000004
+          ],
+          "texture": "#velvet"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.45000000000000107,
+            0.4400000000000004
+          ],
+          "texture": "#velvet"
+        }
+      }
+    },
+    {
+      "name": "warrant_octagonal_royal_seal_base",
+      "from": [
+        9.55,
+        3.25,
+        7.05
+      ],
+      "to": [
+        12.85,
+        5.75,
+        7.7
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            3.299999999999999,
+            2.5
+          ],
+          "texture": "#velvet"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            3.299999999999999,
+            2.5
+          ],
+          "texture": "#velvet"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            0.6500000000000004,
+            2.5
+          ],
+          "texture": "#velvet"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            0.6500000000000004,
+            2.5
+          ],
+          "texture": "#velvet"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            3.299999999999999,
+            0.6500000000000004
+          ],
+          "texture": "#velvet"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            3.299999999999999,
+            0.6500000000000004
+          ],
+          "texture": "#velvet"
+        }
+      }
+    },
+    {
+      "name": "warrant_royal_seal_corner_bevel",
+      "from": [
+        9.85,
+        2.95,
+        7.05
+      ],
+      "to": [
+        12.55,
+        6.05,
+        7.7
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            2.700000000000001,
+            3.0999999999999996
+          ],
+          "texture": "#velvet"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            2.700000000000001,
+            3.0999999999999996
+          ],
+          "texture": "#velvet"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            0.6500000000000004,
+            3.0999999999999996
+          ],
+          "texture": "#velvet"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            0.6500000000000004,
+            3.0999999999999996
+          ],
+          "texture": "#velvet"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            2.700000000000001,
+            0.6500000000000004
+          ],
+          "texture": "#velvet"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            2.700000000000001,
+            0.6500000000000004
+          ],
+          "texture": "#velvet"
+        }
+      }
+    },
+    {
+      "name": "warrant_impressed_balance_seal",
+      "from": [
+        9.82,
+        3.2,
+        6.84
+      ],
+      "to": [
+        12.58,
+        5.82,
+        7.13
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#royal_wax_seal"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            2.76,
+            2.62
+          ],
+          "texture": "#royal_wax_seal"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            0.29000000000000004,
+            2.62
+          ],
+          "texture": "#royal_wax_seal"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            0.29000000000000004,
+            2.62
+          ],
+          "texture": "#royal_wax_seal"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            2.76,
+            0.29000000000000004
+          ],
+          "texture": "#royal_wax_seal"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            2.76,
+            0.29000000000000004
+          ],
+          "texture": "#royal_wax_seal"
+        }
+      }
+    },
+    {
+      "name": "warrant_parchment_edge_fold",
+      "from": [
+        12.8,
+        4.4,
+        7.56
+      ],
+      "to": [
+        13.13,
+        5.2,
+        7.82
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            0.33000000000000007,
+            0.7999999999999998
+          ],
+          "texture": "#wax"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            0.33000000000000007,
+            0.7999999999999998
+          ],
+          "texture": "#wax"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            0.2600000000000007,
+            0.7999999999999998
+          ],
+          "texture": "#wax"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            0.2600000000000007,
+            0.7999999999999998
+          ],
+          "texture": "#wax"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.33000000000000007,
+            0.2600000000000007
+          ],
+          "texture": "#wax"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.33000000000000007,
+            0.2600000000000007
+          ],
+          "texture": "#wax"
+        }
+      }
+    },
+    {
+      "name": "warrant_parchment_edge_fold",
+      "from": [
+        12.8,
+        8.7,
+        7.56
+      ],
+      "to": [
+        13.13,
+        9.5,
+        7.82
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            0.33000000000000007,
+            0.8000000000000007
+          ],
+          "texture": "#wax"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            0.33000000000000007,
+            0.8000000000000007
+          ],
+          "texture": "#wax"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            0.2600000000000007,
+            0.8000000000000007
+          ],
+          "texture": "#wax"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            0.2600000000000007,
+            0.8000000000000007
+          ],
+          "texture": "#wax"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.33000000000000007,
+            0.2600000000000007
+          ],
+          "texture": "#wax"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.33000000000000007,
+            0.2600000000000007
+          ],
+          "texture": "#wax"
+        }
+      }
+    },
+    {
+      "name": "warrant_parchment_edge_fold",
+      "from": [
+        12.8,
+        11.6,
+        7.56
+      ],
+      "to": [
+        13.13,
+        12.4,
+        7.82
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            0.33000000000000007,
+            0.8000000000000007
+          ],
+          "texture": "#wax"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            0.33000000000000007,
+            0.8000000000000007
+          ],
+          "texture": "#wax"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            0.2600000000000007,
+            0.8000000000000007
+          ],
+          "texture": "#wax"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            0.2600000000000007,
+            0.8000000000000007
+          ],
+          "texture": "#wax"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.33000000000000007,
+            0.2600000000000007
+          ],
+          "texture": "#wax"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.33000000000000007,
+            0.2600000000000007
+          ],
+          "texture": "#wax"
+        }
+      }
+    }
+  ],
+  "display": {
+    "gui": {
+      "rotation": [
+        5,
+        170,
+        -8
+      ],
+      "translation": [
+        0,
+        0,
+        0
+      ],
+      "scale": [
+        0.92,
+        0.92,
+        0.92
+      ]
+    },
+    "ground": {
+      "translation": [
+        0,
+        1,
+        0
+      ],
+      "scale": [
+        0.38,
+        0.38,
+        0.38
+      ]
+    },
+    "fixed": {
+      "rotation": [
+        0,
+        180,
+        0
+      ],
+      "translation": [
+        0,
+        0,
+        0
+      ],
+      "scale": [
+        0.75,
+        0.75,
+        0.75
+      ]
+    },
+    "firstperson_righthand": {
+      "rotation": [
+        0,
+        175,
+        -8
+      ],
+      "translation": [
+        0,
+        0,
+        0
+      ],
+      "scale": [
+        0.85,
+        0.85,
+        0.85
+      ]
+    },
+    "firstperson_lefthand": {
+      "rotation": [
+        0,
+        185,
+        8
+      ],
+      "translation": [
+        0,
+        0,
+        0
+      ],
+      "scale": [
+        0.85,
+        0.85,
+        0.85
+      ]
+    },
+    "thirdperson_righthand": {
+      "rotation": [
+        75,
+        45,
+        0
+      ],
+      "translation": [
+        0,
+        1.5,
+        0
+      ],
+      "scale": [
+        0.42,
+        0.42,
+        0.42
+      ]
+    },
+    "thirdperson_lefthand": {
+      "rotation": [
+        75,
+        225,
+        0
+      ],
+      "translation": [
+        0,
+        1.5,
+        0
+      ],
+      "scale": [
+        0.42,
+        0.42,
+        0.42
+      ]
+    }
+  }
+}

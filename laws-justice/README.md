@@ -1,8 +1,8 @@
-# Laws & Justice — 0.1.0 Beta
+# Laws & Justice — 0.2.0 Beta
 
 Sistema de prisões construídas pelos jogadores, com celas registadas, penas que contam apenas enquanto o condenado está online e libertação automática. Para **Minecraft 1.21.1, NeoForge 21.1.256 ou superior e Java 21**, em servidor dedicado ou mundo aberto por LAN.
 
-Esta primeira versão inclui a administração prisional. A justiça exercida pelo Presidente, os mandados, as algemas, os trabalhos prisionais, as multas e as fianças pertencem às próximas versões. O [plano completo](PLANO-COMPLETO.md) conserva todas essas funcionalidades.
+Esta versão inclui prisões, processos, provas, audiências, decisões do Presidente, mandados físicos e algemas. Os trabalhos prisionais, as multas e as fianças seguem nas próximas fases. O [plano completo](PLANO-COMPLETO.md) conserva todas essas funcionalidades.
 
 ## Instalação
 
@@ -10,11 +10,11 @@ Esta primeira versão inclui a administração prisional. A justiça exercida pe
 2. Coloca o JAR de Laws & Justice na pasta `mods` do servidor e de cada jogador. Num mundo LAN, instala-o também no cliente que abre o mundo.
 3. Reinicia o jogo ou o servidor. Mantém a mesma versão do mod em todos os participantes.
 
-O mod funciona sozinho. **Chronicles RP** é opcional para apresentar os nomes das personagens; sem ele, aparecem os nomes Minecraft. **Realm Notifications** é opcional para os avisos de condenação e libertação; sem ele, são usadas mensagens do próprio jogo. Esta versão não cobra dinheiro nem exige qualquer mod de economia.
+O mod funciona sozinho. **Chronicles RP** é opcional para apresentar os nomes das personagens; sem ele, aparecem os nomes Minecraft. **Realm Notifications** é opcional para os avisos de condenação e libertação; sem ele, são usadas mensagens do próprio jogo. **Realm Council 0.2.2+** é opcional para reconhecer o Presidente eleito e empossado. Sem esse mod, apenas os administradores têm autoridade judicial de emergência. Esta versão não cobra dinheiro nem exige qualquer mod de economia.
 
 ## Blocos e ferramenta
 
-| Objeto | Utilização na versão 0.1.0 |
+| Objeto | Utilização |
 | --- | --- |
 | **Porta de Cela** | Porta de ferro com grades e duas metades. Um condenado não a pode abrir manualmente. |
 | **Grades de Prisão** | Painel de ferro para construir as paredes e janelas da prisão. |
@@ -22,7 +22,9 @@ O mod funciona sozinho. **Chronicles RP** é opcional para apresentar os nomes d
 | **Controlo da Prisão** | Abre a interface física para registar prisões e celas, administrar penas e consultar o histórico de custódia. |
 | **Agrimensor Prisional** | Seleciona dois cantos e um ponto de referência no mundo. Só um administrador pode utilizar a seleção. |
 
-Todos têm modelos 3D próprios, receitas e uma aba criativa **Laws & Justice**, com traduções em português e inglês. Os quatro blocos são recolhidos com uma picareta de pedra ou superior. A porta de duas metades deixa cair apenas um item.
+A **Mesa de Justiça** abre o tribunal físico. As **Algemas Reais** permitem conduzir um acusado com mandado válido. O **Mandado Selado** é emitido pelo tribunal e não tem receita.
+
+Os blocos e ferramentas fabricáveis têm modelos 3D próprios, receitas e uma aba criativa **Laws & Justice**, com traduções em português e inglês. Os quatro blocos são recolhidos com uma picareta de pedra ou superior. A porta de duas metades deixa cair apenas um item.
 
 A prisão é construída pelos jogadores com os blocos que escolherem. **O mod não gera edifícios, celas ou masmorras automaticamente.**
 
@@ -68,19 +70,35 @@ Um administrador pode selecionar uma pena ativa, introduzir um motivo e confirma
 
 O separador **Histórico** apresenta os registos recentes de aplicação de penas, cumprimento e libertação de emergência. Guarda o nome do jogador, a autoridade, o motivo, a data e os tempos da pena. Os dados persistem quando os jogadores saem do mundo. O histórico tem um limite de **2 000 decisões recentes**; não é ainda o sistema completo de processos e registos criminais da versão 0.4.
 
-Nesta versão, **apenas administradores autorizam penas e libertações**. O Presidente do Realm Council ainda não recebe poderes judiciais. A integração prevista para a versão 0.2 usará o Presidente eleito e empossado, sem criar cargos adicionais de juiz, guarda ou chefe da prisão.
+## Tribunal e Presidente
+
+Qualquer jogador pode interagir com uma **Mesa de Justiça**, apresentar uma acusação e juntar depoimentos nos processos em que participa. Cada depoimento guarda o autor e a data; as partes e a autoridade judicial podem consultar as provas. Uma acusação não aplica uma pena automaticamente.
+
+O **Presidente eleito e empossado**, com mandato ativo no Realm Council, abre a audiência, analisa as provas e decide entre absolvição e prisão. A decisão fundamentada e a pena são guardadas na mesma operação. Pode condenar um acusado que entretanto tenha ficado offline. Não existem cargos adicionais de juiz ou guarda. Ao perder o mandato, perde imediatamente os poderes, mesmo com o menu aberto; as penas já existentes continuam a decorrer.
+
+O controlo da prisão continua reservado aos administradores para registar construções e realizar intervenções de emergência. No tribunal, essas decisões ficam identificadas como **ADMIN_EMERGENCY**, separadas das decisões do Presidente.
+
+## Mandados e algemas
+
+O Presidente emite mandados físicos na Mesa de Justiça, com acusado, motivo, autor, data e validade entre **1 e 168 horas**. Pode revogá-los ou recuperar uma cópia em papel. Usar o pergaminho abre o registo validado pelo servidor; nomes e texto do item não concedem autoridade.
+
+Qualquer jogador em sobrevivência pode conduzir o acusado se transportar um mandado válido para esse jogador e usar as algemas a uma distância máxima de **três blocos**. O mandado autoriza **uma única detenção**, de até **cinco minutos**, e reduz a velocidade em 60%. O acompanhamento utiliza movimento com colisões normais. Não altera o modo de jogo nem concede uma condenação à prisão.
+
+Agachar e usar as algemas permite ao acompanhante original ou a um administrador retirar as algemas. A detenção termina quando expira, quando o acompanhante sai ou deixa de poder conduzir, quando o acusado é absolvido no processo associado ou quando entra em custódia prisional. Sair e voltar a entrar como acusado conserva a detenção dentro da validade original. Cópias de um mandado executado, revogado ou expirado não permitem uma segunda detenção.
+
+O tribunal guarda até **256 processos**, com **16 depoimentos por processo**, e até **1024 mandados**. Não elimina provas antigas silenciosamente ao atingir esses limites.
 
 ## Dados do mundo
 
-Prisões, celas, penas, tempo cumprido, histórico e libertações pendentes ficam no ficheiro **`<mundo>/data/laws_justice.dat`**. Não são guardados no item da porta, no agrimensor ou apenas na memória do cliente.
+Prisões, celas, penas, tempo cumprido, processos, provas, mandados, detenções temporárias, histórico e libertações pendentes ficam no ficheiro **`<mundo>/data/laws_justice.dat`**. Não são guardados no item da porta, no agrimensor ou apenas na memória do cliente.
 
-As decisões administrativas são guardadas imediatamente. O progresso das penas recebe pontos de gravação periódicos e é gravado ao sair e ao encerrar normalmente o mundo. Não há contagem de tempo offline. Um encerramento abrupto pode perder os últimos ticks desde o ponto de gravação, tal como outras alterações recentes do mundo.
+Os mundos da versão 0.1 são migrados automaticamente sem reiniciar as penas. As decisões administrativas e judiciais são guardadas imediatamente. O progresso das penas recebe pontos de gravação periódicos e é gravado ao sair e ao encerrar normalmente o mundo. Não há contagem de tempo offline. Um encerramento abrupto pode perder os últimos ticks desde o ponto de gravação, tal como outras alterações recentes do mundo.
 
 Inclui este ficheiro nas cópias de segurança do mundo. Se os dados estiverem danificados, o mod informa o erro em vez de substituir silenciosamente os registos por uma prisão vazia.
 
 ## Utilização sem comandos
 
-As receitas, a aba criativa, o agrimensor e os menus físicos permitem preparar e usar o sistema. O comando administrativo opcional **`/justice blocks`** entrega os quatro blocos e o agrimensor para facilitar a preparação; não aplica penas nem abre um menu remoto.
+As receitas, a aba criativa, o agrimensor e os menus físicos permitem preparar e usar o sistema. O comando administrativo opcional **`/justice blocks`** entrega os blocos, o agrimensor e as algemas para facilitar a preparação; não aplica penas nem abre um menu remoto.
 
 ## Próximas versões
 

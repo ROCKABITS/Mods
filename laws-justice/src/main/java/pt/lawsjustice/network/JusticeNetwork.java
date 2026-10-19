@@ -9,13 +9,23 @@ import pt.lawsjustice.service.JusticeService;
 public final class JusticeNetwork {
     private JusticeNetwork() {}
     public static void register(RegisterPayloadHandlersEvent event) {
-        var registrar = event.registrar("1");
+        var registrar = event.registrar("2");
         registrar.playToServer(JusticePackets.Action.TYPE, JusticePackets.Action.CODEC, (packet, context) -> {
             if (context.player() instanceof ServerPlayer player)
-                context.enqueueWork(() -> JusticeService.handle(player, packet.operation(), packet.json()));
+                context.enqueueWork(() -> {
+                    if(packet.operation().startsWith("court_"))pt.lawsjustice.service.CourtService.handle(player,packet.operation(),packet.json());
+                    else JusticeService.handle(player, packet.operation(), packet.json());
+                });
         });
         registrar.playToClient(JusticePackets.Snapshot.TYPE, JusticePackets.Snapshot.CODEC,
-                (packet, context) -> context.enqueueWork(() -> pt.lawsjustice.client.JusticeScreen.receive(packet.json())));
+                (packet, context) -> context.enqueueWork(() -> {
+                    try {
+                        var snapshot=com.google.gson.JsonParser.parseString(packet.json()).getAsJsonObject();
+                        String kind=snapshot.has("kind")?snapshot.get("kind").getAsString():"";
+                        if(kind.equals("court")||kind.equals("warrant"))pt.lawsjustice.client.CourtScreen.receive(packet.json());
+                        else pt.lawsjustice.client.JusticeScreen.receive(packet.json());
+                    }catch(RuntimeException malformed){ /* Never open a screen from a malformed document. */ }
+                }));
     }
     public static void send(ServerPlayer player, String json) {
         if (json == null || json.length() > 524288) throw new IllegalArgumentException("error.lawsjustice.invalid_request");

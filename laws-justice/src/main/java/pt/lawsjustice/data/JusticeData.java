@@ -22,6 +22,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.level.storage.LevelResource;
 import pt.lawsjustice.domain.JusticeLedger;
 import pt.lawsjustice.domain.JusticeLedger.Point;
+import pt.lawsjustice.domain.CourtLedger;
 
 /** World-owned custody. The wall clock never determines time served. */
 public final class JusticeData {
@@ -30,6 +31,7 @@ public final class JusticeData {
     private static final Gson JSON=new Gson();
     private Path file;
     private JusticeLedger ledger=JusticeLedger.empty();
+    private CourtLedger court=CourtLedger.empty();
     private Map<UUID,ReleaseTarget> pendingReleases=Map.of();
     private long version;
     private boolean dirty;
@@ -39,7 +41,9 @@ public final class JusticeData {
     }
     private record Stored(Map<UUID,JusticeLedger.Prison> prisons,Map<UUID,JusticeLedger.Sentence> active,
                           java.util.List<JusticeLedger.Decision> history,Map<UUID,ReleaseTarget> pendingReleases) {}
-    private record Loaded(JusticeLedger ledger,Map<UUID,ReleaseTarget> releases,long revision) {}
+    private record StoredV2(Map<UUID,JusticeLedger.Prison> prisons,Map<UUID,JusticeLedger.Sentence> active,
+                            java.util.List<JusticeLedger.Decision> history,Map<UUID,ReleaseTarget> pendingReleases,CourtLedger.State court) {}
+    private record Loaded(JusticeLedger ledger,CourtLedger court,Map<UUID,ReleaseTarget> releases,long revision) {}
 
     public JusticeData() {}
     public static JusticeData get(MinecraftServer server) {
@@ -54,23 +58,27 @@ public final class JusticeData {
     }
     public static void drop(MinecraftServer server) { LOADED.remove(server); }
     public JusticeLedger ledger(){return ledger;}
+    public CourtLedger court(){return court;}
     public long version(){return version;}
     public Map<UUID,ReleaseTarget> pendingReleases(){return pendingReleases;}
     public static JusticeLedger read(Path path){return load(path).ledger();}
     /** Reopens the complete durable state, including undelivered offline releases. */
     public static JusticeData readState(Path path){
         Loaded loaded=load(path);JusticeData data=new JusticeData();data.file=path;
-        data.ledger=loaded.ledger();data.pendingReleases=loaded.releases();data.version=loaded.revision();return data;
+        data.ledger=loaded.ledger();data.court=loaded.court();data.pendingReleases=loaded.releases();data.version=loaded.revision();return data;
     }
 
     /** Administrative changes are durable before they take effect in the world. */
-    public void replace(JusticeLedger next) { commit(next,pendingReleases); }
+    public void replace(JusticeLedger next) { commit(next,court,pendingReleases); }
+    /** Verdict and custody are committed in the same atomic world file. */
+    public void replace(JusticeLedger next,CourtLedger nextCourt) { commit(next,nextCourt,pendingReleases); }
+    public void replaceCourt(CourtLedger nextCourt) { commit(ledger,nextCourt,pendingReleases); }
     public void replaceAndQueue(JusticeLedger next,UUID player,ReleaseTarget target) {
-        Map<UUID,ReleaseTarget> changed=new HashMap<>(pendingReleases);changed.put(player,target);commit(next,changed);
+        Map<UUID,ReleaseTarget> changed=new HashMap<>(pendingReleases);changed.put(player,target);commit(next,court,changed);
     }
     public void completeRelease(UUID player) {
         if(!pendingReleases.containsKey(player))return;
-        Map<UUID,ReleaseTarget> changed=new HashMap<>(pendingReleases);changed.remove(player);commit(ledger,changed);
+        Map<UUID,ReleaseTarget> changed=new HashMap<>(pendingReleases);changed.remove(player);commit(ledger,court,changed);
     }
     public void replaceProgress(JusticeLedger next) {
         java.util.Objects.requireNonNull(next);validateReleases(next,pendingReleases);ledger=next;dirty=true;
@@ -81,22 +89,23 @@ public final class JusticeData {
         Map<UUID,ReleaseTarget> copy=Map.copyOf(changed);validateReleases(next,copy);
         long revision=nextVersion();ledger=next;pendingReleases=copy;version=revision;dirty=true;
     }
-    private void commit(JusticeLedger next,Map<UUID,ReleaseTarget> releases) {
-        java.util.Objects.requireNonNull(next);long revision=nextVersion();
+    private void commit(JusticeLedger next,CourtLedger nextCourt,Map<UUID,ReleaseTarget> releases) {
+        java.util.Objects.requireNonNull(next);java.util.Objects.requireNonNull(nextCourt);long revision=nextVersion();
         Map<UUID,ReleaseTarget> copy=Map.copyOf(releases);validateReleases(next,copy);
-        write(next,copy,revision);ledger=next;pendingReleases=copy;version=revision;dirty=false;
+        validateCourt(next,nextCourt);validateNewVerdicts(court,next,nextCourt);
+        write(next,nextCourt,copy,revision);ledger=next;court=nextCourt;pendingReleases=copy;version=revision;dirty=false;
     }
-    public void flush() { if(dirty){write(ledger,pendingReleases,version);dirty=false;} }
+    public void flush() { if(dirty){write(ledger,court,pendingReleases,version);dirty=false;} }
 
-    private void write(JusticeLedger next,Map<UUID,ReleaseTarget> releases,long revision) {
+    private void write(JusticeLedger next,CourtLedger nextCourt,Map<UUID,ReleaseTarget> releases,long revision) {
         if(file==null)throw error("storage",null);
         Path temp=file.resolveSibling(file.getFileName()+".tmp");
         try {
             Files.createDirectories(file.getParent());
-            String serialized=JSON.toJson(new Stored(next.prisons(),next.active(),next.history(),releases));
+            String serialized=JSON.toJson(new StoredV2(next.prisons(),next.active(),next.history(),releases,nextCourt.state()));
             byte[] encoded=serialized.getBytes(java.nio.charset.StandardCharsets.UTF_8);
             if(encoded.length>MAX_LEDGER_BYTES)throw error("capacity",null);
-            CompoundTag tag=new CompoundTag();tag.putInt("format",1);tag.putLong("revision",revision);tag.putByteArray("ledger",encoded);
+            CompoundTag tag=new CompoundTag();tag.putInt("format",2);tag.putLong("revision",revision);tag.putByteArray("ledger",encoded);
             NbtIo.writeCompressed(tag,temp);force(temp);
             Files.move(temp,file,StandardCopyOption.ATOMIC_MOVE,StandardCopyOption.REPLACE_EXISTING);
             if(!System.getProperty("os.name","").toLowerCase(java.util.Locale.ROOT).contains("win"))forceDirectory(file.getParent());
@@ -110,7 +119,7 @@ public final class JusticeData {
             if(!Files.isRegularFile(path)||Files.size(path)>16_777_216)throw error("data",null);
             CompoundTag root=NbtIo.readCompressed(path,NbtAccounter.create(16_777_216));
             if(!root.getAllKeys().equals(Set.of("format","revision","ledger"))||!root.contains("format",Tag.TAG_INT)
-                    ||root.getInt("format")!=1||!root.contains("revision",Tag.TAG_LONG)||root.getLong("revision")<0
+                    ||(root.getInt("format")!=1&&root.getInt("format")!=2)||!root.contains("revision",Tag.TAG_LONG)||root.getLong("revision")<0
                     ||!(root.contains("ledger",Tag.TAG_STRING)||root.contains("ledger",Tag.TAG_BYTE_ARRAY)))throw error("data",null);
             String text;
             if(root.contains("ledger",Tag.TAG_BYTE_ARRAY)){
@@ -121,12 +130,17 @@ public final class JusticeData {
                 text=root.getString("ledger");if(text.getBytes(java.nio.charset.StandardCharsets.UTF_8).length>MAX_LEDGER_BYTES)throw error("data",null);
             }
             com.google.gson.stream.JsonReader reader=new com.google.gson.stream.JsonReader(new java.io.StringReader(text));reader.setLenient(false);
-            JsonElement tree=readJson(reader,0);if(reader.peek()!=com.google.gson.stream.JsonToken.END_DOCUMENT)throw error("data",null);validateShape(tree,Stored.class);
-            JsonObject obj=tree.getAsJsonObject();if(!obj.keySet().equals(Set.of("prisons","active","history","pendingReleases")))throw error("data",null);
-            Stored stored=JSON.fromJson(tree,Stored.class);
+            JsonElement tree=readJson(reader,0);if(reader.peek()!=com.google.gson.stream.JsonToken.END_DOCUMENT)throw error("data",null);
+            Stored stored;CourtLedger court;
+            if(root.getInt("format")==1){
+                validateShape(tree,Stored.class);stored=JSON.fromJson(tree,Stored.class);court=CourtLedger.empty();
+            }else{
+                validateShape(tree,StoredV2.class);StoredV2 v2=JSON.fromJson(tree,StoredV2.class);
+                stored=new Stored(v2.prisons(),v2.active(),v2.history(),v2.pendingReleases());court=CourtLedger.restore(v2.court());
+            }
             JusticeLedger ledger=JusticeLedger.restore(stored.prisons(),stored.active(),stored.history());
             Map<UUID,ReleaseTarget> releases=Map.copyOf(stored.pendingReleases());validateReleases(ledger,releases);
-            return new Loaded(ledger,releases,root.getLong("revision"));
+            validateCourt(ledger,court);return new Loaded(ledger,court,releases,root.getLong("revision"));
         }catch(IOException|RuntimeException failure){throw error("data",failure);}
     }
     private static JsonElement readJson(com.google.gson.stream.JsonReader reader,int depth)throws IOException {
@@ -163,6 +177,23 @@ public final class JusticeData {
         // can reject a new admission, but can never trap a completed prisoner.
         if((long)releases.size()+ledger.active().size()>JusticeLedger.MAX_ACTIVE)throw error("capacity",null);
         for(var entry:releases.entrySet())if(entry.getKey()==null||entry.getValue()==null||ledger.active().containsKey(entry.getKey()))throw error("data",null);
+    }
+    private static void validateCourt(JusticeLedger custody,CourtLedger court){
+        Map<UUID,UUID> players=new HashMap<>();for(var sentence:custody.active().values())players.put(sentence.id(),sentence.player());
+        for(var decision:custody.history())players.put(decision.sentence(),decision.player());
+        for(var file:court.cases().values())if(CourtLedger.CONVICTED.equals(file.status())){
+            UUID player=players.get(UUID.fromString(file.sentence()));if(player!=null&&!player.equals(file.accused()))throw error("case_reference",null);
+        }
+    }
+    private static void validateNewVerdicts(CourtLedger previous,JusticeLedger custody,CourtLedger next){
+        for(var file:next.cases().values())if(CourtLedger.CONVICTED.equals(file.status())){
+            var old=previous.cases().get(file.id());
+            if(old==null||!CourtLedger.CONVICTED.equals(old.status())){
+                UUID id=UUID.fromString(file.sentence());boolean present=custody.active().values().stream()
+                        .anyMatch(sentence->sentence.id().equals(id)&&sentence.player().equals(file.accused()));
+                if(!present)throw error("court_atomic",null);
+            }
+        }
     }
     /** Opaque session token; wrapping invalidates old MAX_VALUE snapshots. */
     private long nextVersion(){return version==Long.MAX_VALUE?0:version+1;}

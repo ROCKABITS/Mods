@@ -15,7 +15,7 @@ import zipfile
 ROOT = Path(__file__).resolve().parents[2]
 STATE = ROOT / 'laws-justice/build/justice-release'
 # project: mod ID, artifact basename, native property, minimum existing JUnit count
-PROJECTS = {'laws-justice': ('lawsjustice', 'laws-justice', 'justiceGameTests', 51)}
+PROJECTS = {'laws-justice': ('lawsjustice', 'laws-justice', 'justiceGameTests', 85)}
 WRAPPER_SHA = '423cb469ccc0ecc31f0e4e1c309976198ccb734cdcbb7029d4bda0f18f57e8d9'
 DISTRIBUTION_SHA = '72f44c9f8ebcb1af43838f45ee5c4aa9c5444898b3468ab3f4af7b6076c5bc3f'
 COMPANION_PINS = {
@@ -64,7 +64,8 @@ def validate_jar(project, path):
                        for n in names), project + ': bundled test fixture'
         assert not any(n.endswith('.class') and not n.startswith('pt/lawsjustice/') for n in names), project + ': bundled external class'
         for required in ('pt/lawsjustice/service/JusticeService.class', 'pt/lawsjustice/data/JusticeData.class',
-                         'pt/lawsjustice/client/JusticeScreen.class'):
+                         'pt/lawsjustice/client/JusticeScreen.class', 'pt/lawsjustice/service/CourtService.class',
+                         'pt/lawsjustice/domain/CourtLedger.class', 'pt/lawsjustice/client/CourtScreen.class'):
             assert required in names, project + ': required justice implementation missing: ' + required
 
 
@@ -213,19 +214,23 @@ def validate():
         log = (base / filename).read_text(errors='replace')
         assert f'JUSTICE_NATIVE_PASSED integration={integration}' in log, filename + ': actual native assertions missing'
         assert f'JUSTICE_RUNTIME_MODE_PASSED integration={integration}' in log, filename + ': wrong runtime mode'
+        for marker in ('COURT_NATIVE_PASSED', 'CROWN_JUDGE_PASSED'):
+            assert f'{marker} integration={integration}' in log, filename + ': missing actual court assertions ' + marker
         for marker in ('JUSTICE_CUSTODY_PASSED', 'JUSTICE_PERSISTENCE_PASSED'):
             assert marker in log, filename + ': missing actual custody assertions ' + marker
     client = json.loads((base / 'qa-results/justice-client/result.json').read_text())
     assert client.get('success') is True, 'Actual Minecraft justice client failed'
     for flag in ('actual_minecraft_client', 'actual_integrated_server', 'real_c2s_transport', 'real_s2c_transport',
                  'real_world_models', 'online_only_sentence_clock', 'automatic_release', 'lan_persistence',
-                 'lan_published', 'teleport_containment', 'death_respawn_containment', 'real_vanilla_permission_removed'):
+                 'lan_published', 'teleport_containment', 'death_respawn_containment', 'real_vanilla_permission_removed',
+                 'real_court_models', 'real_non_admin_president', 'real_court_evidence', 'real_court_verdict',
+                 'real_server_warrant_document', 'real_president_turnover'):
         assert client.get(flag) is True, 'Actual integrated client proof missing: ' + flag
     assert client.get('synthetic_s2c_snapshots') is False, 'Visual tests must use authoritative S2C state'
     clientlog = (base / 'visual-client.log').read_text(errors='replace')
     assert 'JUSTICE_CLIENT_PASSED' in clientlog and 'BUILD SUCCESSFUL' in clientlog and 'BUILD FAILED' not in clientlog
     images = client.get('screenshots')
-    assert isinstance(images, list) and len(images) >= 8 and len(images) == len(set(images)), 'Missing actual justice screenshots'
+    assert isinstance(images, list) and len(images) >= 20 and len(images) == len(set(images)), 'Missing actual justice screenshots'
     for name in images:
         assert isinstance(name, str) and re.fullmatch(r'[a-z0-9-]+\.png', name), 'Unsafe screenshot name'
         path = base / 'qa-results/justice-client' / name
@@ -269,10 +274,12 @@ def package():
         proof['companions'] = json.loads((STATE / 'companions.json').read_text())[project]
         proof['native_markers'] = ['JUSTICE_NATIVE_PASSED integration=false', 'JUSTICE_NATIVE_PASSED integration=true',
                                    'JUSTICE_RUNTIME_MODE_PASSED integration=false', 'JUSTICE_RUNTIME_MODE_PASSED integration=true',
-                                   'JUSTICE_CUSTODY_PASSED', 'JUSTICE_PERSISTENCE_PASSED']
+                                   'JUSTICE_CUSTODY_PASSED', 'JUSTICE_PERSISTENCE_PASSED',
+                                   'COURT_NATIVE_PASSED integration=false', 'COURT_NATIVE_PASSED integration=true',
+                                   'CROWN_JUDGE_PASSED integration=false', 'CROWN_JUDGE_PASSED integration=true']
         proof['screenshots'] = {name: digest(ROOT / project / 'qa-results/justice-client' / name) for name in client['screenshots']}
-        proof['release_phase'] = '1: player-built prisons, cells, physical administration, online-only sentences, containment and automatic release'
-        proof['judicial_authority'] = 'Administrator-only emergency administration in phase one; elected-president powers are planned for phase two'
+        proof['release_phase'] = '2: prisons, online-only sentences, elected President, hearings, evidence, verdicts, sealed warrants and temporary handcuffs'
+        proof['judicial_authority'] = 'Live elected and sworn Realm Council President; explicitly audited administrator emergency authority; no additional roles'
         checksum = jar.with_suffix('.sha256')
         write_fresh(checksum, ''.join(f'{digest(path)}  {path.name}\n' for path in (jar, archive)).encode())
         provenance = jar.with_suffix('.build.json')
@@ -290,7 +297,7 @@ def package():
     for name in client['screenshots']:
         shutil.copyfile(visual / name, media / name)
     shutil.copyfile(visual / 'result.json', media / 'validation.json')
-    (media / 'README.md').write_text('# Laws & Justice\n\nActual Minecraft 1.21.1 NeoForge integrated-client captures of four prison blocks, the surveying rod, physical prison administration and sentence interfaces. Demonstration buildings, players and sentences are test fixtures; this mod does not generate prisons. Server suites verify custody rules, persistence, permissions and online-only sentence completion. These captures do not establish an authenticated two-client session.\n\n' + ''.join(f'![Laws & Justice]({name})\n\n' for name in client['screenshots']))
+    (media / 'README.md').write_text('# Laws & Justice\n\nActual Minecraft 1.21.1 NeoForge integrated-client captures of prison blocks, the surveying rod, the justice desk, physical prison administration, elected court interfaces and server-validated warrants. Demonstration buildings, players and sentences are test fixtures; this mod does not generate prisons. Server suites verify custody rules, persistence, permissions and online-only sentence completion. These captures do not establish an authenticated two-client session.\n\n' + ''.join(f'![Laws & Justice]({name})\n\n' for name in client['screenshots']))
     with zipfile.ZipFile(media / f'laws-justice-{release}-media.zip', 'w', zipfile.ZIP_DEFLATED) as zipped:
         for name in client['screenshots'] + ['README.md']:
             zipped.write(media / name, name)
