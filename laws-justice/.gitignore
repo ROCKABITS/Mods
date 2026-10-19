@@ -11,3 +11,4 @@ runs/
 *.iml
 compat-libs/
 integration.log
+*.log
