@@ -1,52 +1,55 @@
-# Validação — Laws & Justice 0.3.0 Beta
+# Laws & Justice 0.4.0 — validação da Beta
 
-[Execução aprovada](https://github.com/ROCKABITS/Mods/actions/runs/39221369761), código `a9ec0d82aef467b82016e6119d4640f87619d6fa`. JAR e 37 capturas publicados no commit `816727d`. Os testes locais e a repetição independente no GitHub Actions passaram.
+As quatro fases do [plano aprovado](PLANO-COMPLETO.md) estão implementadas nesta versão: prisões, tribunal do Presidente, mandados e algemas, trabalhos prisionais, multas, fianças e registos públicos. O Crown Ledger 0.2.2 acrescenta os recibos necessários para receber pagamentos judiciais sem duplicação.
 
-| Verificação | Resultado |
-| --- | ---: |
-| Testes unitários | 106, sem falhas ou ignorados |
-| GameTests independentes | 95 |
-| GameTests com dez mods companheiros | 95 |
-| Cliente Minecraft real integrado | Aprovado, 37 capturas |
+## Compilação e proveniência
 
-A galeria inclui dois enquadramentos aproximados dos postos, além das 35 capturas funcionais verificadas localmente. As validações publicadas das fases [0.1](VALIDACAO-0.1.0.md) e [0.2](VALIDACAO-0.2.0.md) conservam a proveniência das versões anteriores.
+- Minecraft **1.21.1**, NeoForge **21.1.256**, Java **21**.
+- Fonte de ambos os JARs: [`86b9398`](https://github.com/ROCKABITS/Mods/commit/86b93988a7ef5bfe9736f56085c6a861adddb66e).
+- [Compilação e validação conjunta concluída](https://github.com/ROCKABITS/Mods/actions/runs/39253815267). Os JARs de produção foram guardados antes dos testes e utilizados como contrapartes novas da mesma revisão.
+- Os JARs não contêm classes, estruturas de teste, cenários de demonstração, outros mods ou dependências empacotadas.
 
-## Trabalho e redução de pena
+| Projeto | Testes unitários | GameTests independente | GameTests com integrações | Imagens no cliente real |
+| --- | ---: | ---: | ---: | ---: |
+| Laws & Justice 0.4.0 | 130 | 115 | 115 | 47 |
+| Crown Ledger 0.2.2 | 52 | 25 | 25 | 3 |
 
-O servidor validou as seis tarefas com blocos e eventos reais: mineração, colheita de trigo maduro, carpintaria, ferraria com minério e combustível finitos, limpeza com escova e transporte entre dois postos separados. A produção da mesa e a limpeza terminaram através dos ticks normais do servidor; o relógio da pena continuou a avançar. Afastar-se interrompeu a produção sem consumir as matérias-primas.
+Não houve testes ignorados, falhas ou erros nas suítes publicadas. Os relatórios e checksums completos acompanham os ficheiros `.build.json` em `mod-pronto`.
 
-Os testes rejeitaram trabalho sem condenação, modo criativo, alterações de regras por prisioneiros, progresso inventado pelo cliente, materiais externos, contadores falsificados no saco, repetição de recursos, entrega numa zona errada e repetição da mesma entrega. A inspeção não reiniciou pontos consumidos. Só uma reposição física por um administrador em Sobrevivência permitiu a renovação deliberada.
+## Comportamentos verificados
 
-A conclusão, o crédito real de trabalho e a redução da pena ficam no mesmo ficheiro atómico. A falha real de uma escrita não consumiu o saco nem atribuiu metade da recompensa. Reduções sem crédito e créditos sem redução foram rejeitados. A recompensa foi limitada a 50% da pena original e ao tempo restante. Uma entrega que terminou a condenação utilizou a fila e a saída normais de libertação, sem duplicar o registo COMPLETED.
+- As penas contam ticks online. Teleporte, morte, renascimento e reabertura do mundo mantêm a custódia; o cumprimento liberta automaticamente uma única vez. A fila de libertação funciona com beneficiários offline.
+- Apenas o Presidente eleito, empossado e com mandato atual pode julgar normalmente. A mudança do mandato retira poderes a menus já abertos. As intervenções administrativas de emergência ficam identificadas.
+- Acusações e provas ficam restritas às partes e à autoridade. As audiências precedem os vereditos; mandados e algemas dependem dos registos autênticos do servidor.
+- Os seis trabalhos foram realizados pelo anfitrião real em Sobrevivência, sem permissões de operador ou voo: mineração, agricultura, carpintaria, limpeza, ferraria e transporte. Houve ações Vanilla reais, produção temporizada, dois postos de armazém e entregas seladas.
+- Os recursos são finitos e validados na zona certa. Itens externos, criativos, sacos copiados, recolhas repetidas e entregas duplicadas não autorizam progresso ou recompensas. A pena e os créditos de trabalho ficam consistentes no mesmo ficheiro.
+- As multas só surgem após audiência e veredito. A falta de saldo não aplica outra pena. As fianças pertencem à condenação exata e podem ser pagas por amigos, incluindo quando o beneficiário está offline. Uma tentativa sem cobrança não pode debitar uma fiança depois de terminar a pena.
+- Foram provocadas falhas reais de gravação: o mesmo recibo retoma uma cobrança aplicada; uma tentativa ainda sem cobrança pode ser cancelada. Os marcadores sobrevivem ao mecanismo Vanilla de cópia após morte. Jogadores offline não são debitados de novo.
+- O cliente integrado pagou **20 € de fiança e 25 € de multa** com a carteira real do Chronicles. O saldo passou de **100 € para 55 €**, e a tesouraria real recebeu **45 €**. Repetir os recibos antes e depois de uma segunda paragem/reabertura efetiva do mundo LAN manteve os mesmos saldos.
+- O recibo do anfitrião foi verificado em `level.dat`, que o Minecraft utiliza ao reabrir o mundo. Para participantes de servidor dedicado/LAN, foi verificado o ficheiro individual do jogador.
+- O Crown Ledger grava o saldo e os recibos em conjunto, na mesma fila de escrita do NeoForge. Os testes cobrem uma gravação antiga já em fila, substituição de ficheiro falhada, recibo alterado/duplicado, confirmação de recibo ausente e recuperação sem voltar a creditar.
+- Sem Chronicles, são usadas esmeraldas reais. Sem uma tesouraria compatível, o pagamento confirmado continua guardado no tribunal para transferência posterior.
+- A integração com Realm Identity verificou um documento físico emitido pelo mod real e rejeitou documentos falsificados ou apresentados à distância.
+- Os modelos originais e texturas resolvem no cliente real. Os menus administrativos, do prisioneiro, do tribunal, dos trabalhos e dos pagamentos foram verificados com deslocamento e limites de **320 × 240**. Atualizações atrasadas não reabrem sessões que o jogador fechou.
+- A migração dos formatos anteriores conserva prisões, processos e trabalhos; as novas condenações guardam a duração original no processo mesmo após a rotação do histórico de custódia.
 
-## Persistência e migração
+## Alcance da evidência
 
-O formato três acrescenta zonas, pontos finitos, regras, tarefas, sacos lógicos e créditos. Os formatos um e dois são migrados sem reiniciar as penas ou apagar processos. Os testes incluem ficheiros comprimidos reais e rejeição de créditos divergentes, objetivos inválidos e recursos com referências inexistentes. O fim da condenação cancela a autorização de trabalho antiga, também depois de reabrir os dados.
+As capturas mostram o cliente Minecraft real e um servidor integrado efetivamente aberto por LAN, com paragem e reabertura do mundo. **Não foi feita uma ligação autenticada de dois clientes Minecraft independentes.** Os GameTests utilizam jogadores de teste nativos para validar regras, inventários, anexos, persistência e integrações no servidor.
 
-A base das prisões e o tribunal continuam testados: relógio online, morte/respawn, contenção, capacidade, decisões atómicas, libertação, dados estritos, mandato empossado, perda imediata de autoridade do Presidente, provas privadas, audiência obrigatória, mandados e algemas. Não foram criados cargos adicionais.
+Os edifícios, personagens e o saldo inicial de 100 € são cenários de teste; o mod não gera prisões nem atribui esse saldo. A demonstração dos trabalhos configura uma unidade e um minuto por tarefa, em vez dos valores padrão maiores. As imagens do próprio Crown Ledger usam dados de demonstração nas interfaces de produção; os pagamentos, recibos e saldos reais são comprovados pela sequência integrada do Laws & Justice.
 
-## Cliente e blocos originais
+O Laws & Justice foi carregado com os dez mods associados, incluindo a nova contrapartida Crown Ledger e os JARs reais de Chronicles RP, Realm Council, Contracts, Markets, Identity, Notifications, Rewards, Titles e Casino, mais as dependências Origins/Jupiter/Classes. A suíte nativa própria do Crown mantém o seu modo sem Chronicles; a integração financeira com a carteira real foi verificada na suíte completa e no cliente do Laws & Justice.
 
-O cliente real carregou as sete novas peças e as 28 orientações correspondentes, além do Saco de Trabalho Selado. Todos os modelos anteriores foram conservados. Os limites e UVs dos 35 modelos JSON foram verificados; os recursos antigos permanecem iguais byte a byte. Os novos blocos têm receitas, criativo/pesquisa e traduções em português e inglês. O saco não tem receita nem guarda contadores editáveis.
+## Ficheiros publicados
 
-Os botões reais registaram uma zona selecionada pelo agrimensor, validaram os recursos e guardaram as regras. Os cinco separadores administrativos e os três do prisioneiro passaram nas verificações de scroll e limites a 320 × 240.
+| Ficheiro | SHA-256 |
+| --- | --- |
+| `laws-justice-0.4.0.jar` | `78c32b0c3acc8930ffd508c9bb44cc98b794a4b87900438b19ab812c21d36f7b` |
+| `laws-justice-0.4.0.zip` | `b3cbbd4271f9688c94ac9841fb7ea3208c2b8fec3a00d33bed959ad5dda58a54` |
+| `crown-ledger-0.2.2.jar` | `a91afc03da4aae23cb584911bdcd88cf3b5a4fcf91bcc13b683ef6405fe6dab5` |
+| `crown-ledger-0.2.2.zip` | `ffacf2862f3b00e9415669f449aa6125e27218a6b05dd681fe005c1dc1cc2e71` |
 
-Um anfitrião real, em Sobrevivência, sem operador nem voo, completou os seis trabalhos através de pacotes normais de mineração, colheita, machado, minério/carvão e escova, dos botões temporizados da mesa e de dois postos físicos do armazém. Cada tarefa de demonstração foi configurada para uma unidade e um minuto de recompensa. As seis entregas deram exatamente 7200 ticks de redução à pena real de vinte minutos; o ficheiro reaberto conservou os seis registos e o mesmo crédito. Não foram injetados contadores de progresso ou snapshots S2C.
+[Downloads](../mod-pronto/) · [47 imagens do Laws & Justice](../media/laws-justice/0.4.0/) · [3 imagens do Crown Ledger](../media/crown-ledger/0.2.2/).
 
-O mesmo percurso de validação inclui a morte/respawn, o teleporte e o fecho/reabertura real do mundo LAN da base prisional, uma libertação pelo relógio natural, o Presidente sem operador, processos, provas, audiência, absolvição, pergaminho usado através do cliente e perda de autoridade após troca do mandato.
-
-## Limites
-
-Construções, personagens, mandato, processos e regras reduzidas das imagens são demonstrações de teste. O mod não gera prisões nem recursos; as quantidades e recompensas normais são as documentadas no guia. A prova usa um cliente integrado e não estabelece uma sessão autenticada entre dois clientes remotos.
-
-Foram utilizados os dez companheiros publicados, incluindo Chronicles RP, Realm Council, Crown Ledger, Markets, Rewards, Notifications, Titles, Identity, Casino e Contracts, com Origins/Jupiter reais e checksums fixados. Windows e todas as combinações possíveis de mods não foram testados. Conserva cópias de segurança do mundo; um encerramento abrupto pode perder os últimos ticks desde o checkpoint.
-
-Multas, fianças e integrações financeiras continuam na fase 0.4 do [plano completo](PLANO-COMPLETO.md). A fechadura continua a ser um bloco auxiliar de controlo, sem associação de chaves a portas.
-
-## Publicação verificada
-
-JAR, ZIP e 37 PNGs foram verificados por SHA-256 depois de obter o commit publicado. O download HTTP do JAR também corresponde ao checksum.
-
-- [JAR](../mod-pronto/laws-justice-0.3.0.jar): 462 028 bytes; SHA-256 `f9474d2ede74ab859c0d697baa01a6c1ca097b25a74b2ecf44ab3325e96fe43e`.
-- [ZIP](../mod-pronto/laws-justice-0.3.0.zip): 434 832 bytes; SHA-256 `b4a9df54a65b1c24cfa0b74e22dac006fc6954276a64763cea2f5760d7ddb107`.
-- [Proveniência](../mod-pronto/laws-justice-0.3.0.build.json) · [37 imagens](../media/laws-justice/0.3.0/README.md).
+Validações anteriores: [0.1.0](VALIDACAO-0.1.0.md), [0.2.0](VALIDACAO-0.2.0.md) e [0.3.0](VALIDACAO-0.3.0.md). Os respetivos artefactos são conservados.

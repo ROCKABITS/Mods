@@ -1,14 +1,14 @@
 # Crown Ledger — Tesouro da Coroa
 
-A versão **0.2.1** integra opcionalmente o **Realm Notifications 0.1.0+** para salários, doações, imposto fixo e receitas da tesouraria. Um aviso de salário financiado indica que tens de o levantar no Cofre da Coroa; só a recolha concluída é apresentada como dinheiro recebido. O governante recebe avisos das receitas enquanto está online; receitas de contratos e bancas são agrupadas durante cerca de dez segundos para evitar uma notificação por venda. O formato dos dados continua na versão 2.
+A versão **0.2.2** recebe pagamentos judiciais do **Laws & Justice 0.4.0**, com recibos persistentes que impedem duplicar uma transferência. Mantém as notificações opcionais para salários, donativos e receitas. O formato 3 conserva as contas, regras e salários dos formatos anteriores.
 
 Tesouro público para Minecraft **1.21.1**, **NeoForge 21.1.256+** e **Java 21**. Instala o mesmo JAR no servidor e nos clientes. O identificador técnico é `kingdomtreasury`.
 
 ## Instalação e primeiro uso
 
-1. Antes de atualizar um mundo existente, faz uma cópia de segurança do mundo completo e dos perfis do Chronicles. Esta versão migra o registo do tesouro para o formato 2; voltar ao JAR antigo exige restaurar a cópia anterior à atualização.
-2. Coloca `crown-ledger-0.2.1.jar` na pasta `mods` de cada cliente e do servidor. Se usas Realm Markets, atualiza também para **Realm Markets 0.2.0+** em todos eles; substitui os JARs antigos e não deixes duas versões do mesmo mod.
-3. Para integrar os restantes sistemas, usa **Contracts & Bounties 0.3.1+**, **Realm Council 0.2.1+** e, opcionalmente, **Chronicles RP 0.5.2** com as suas dependências.
+1. Antes de atualizar um mundo existente, faz uma cópia de segurança do mundo completo e dos perfis do Chronicles. Esta versão migra o registo do tesouro para o formato 3; voltar ao JAR antigo exige restaurar a cópia anterior à atualização.
+2. Coloca `crown-ledger-0.2.2.jar` na pasta `mods` de cada cliente e do servidor. Se usas Realm Markets, atualiza também para **Realm Markets 0.2.1+** em todos eles; substitui os JARs antigos e não deixes duas versões do mesmo mod.
+3. Para integrar os restantes sistemas, usa **Contracts & Bounties 0.3.2+**, **Realm Council 0.2.2+** e, opcionalmente, **Chronicles RP 0.5.4** com as suas dependências.
 4. Fabrica o **Cofre da Coroa** e clica nele com o botão direito. Também aparece na aba criativa **Crown Ledger** e na pesquisa.
 
 Receita, de cima para baixo:
@@ -48,7 +48,7 @@ Por defeito, imposto e salário começam em **zero**. O reino precisa de donativ
 
 ## Imposto das bancas de mercado — 0.2.0
 
-Com **Realm Markets 0.2.0+**, o governante pode definir no Cofre da Coroa uma percentagem de imposto sobre as vendas entre **0% e 100%**, inicialmente **0%**. Esta regra é independente da percentagem dos contratos e do imposto fixo por ciclo: pode haver imposto de mercado mesmo com o sistema fiscal dos contratos em modo fixo.
+Com **Realm Markets 0.2.1+**, o governante pode definir no Cofre da Coroa uma percentagem de imposto sobre as vendas entre **0% e 100%**, inicialmente **0%**. Esta regra é independente da percentagem dos contratos e do imposto fixo por ciclo: pode haver imposto de mercado mesmo com o sistema fiscal dos contratos em modo fixo.
 
 Numa compra de **20 € a 5%**, o comprador paga **20 €**, o vendedor ganha **19 €** e o tesouro recebe **1 €**. O imposto sai do valor da venda, sem acrescentar uma cobrança ao comprador. O cálculo usa o total da compra e arredonda para baixo à unidade mínima da moeda: cêntimos no Chronicles e esmeraldas inteiras no modo independente. Por exemplo, uma compra de uma esmeralda a 5% gera imposto zero; uma compra de 20 esmeraldas gera uma. A 100%, o vendedor recebe zero, com o valor indicado antes da compra.
 
@@ -70,9 +70,9 @@ O governante define a reputação necessária para publicar contratos particular
 
 Sem Chronicles, a moeda normal é a esmeralda inteira. Com Chronicles, os valores digitais usam cêntimos e o perfil original do jogador. Cada moeda tem saldo e créditos separados; não existe conversão automática. O separador de donativos permite escolher a moeda. Nas regras, o governante pode escolher a moeda fiscal; mudar essa escolha repõe os campos de salário e imposto fixo em zero, sem converter saldos nem créditos anteriores. Os pagamentos de personagens offline ficam pendentes, sem editar os seus ficheiros de perfil.
 
-O ficheiro `data/crown_ledger.dat` guarda regras, saldo disponível, salários reservados, atividade, ciclo pendente e os últimos 256 movimentos, incluindo receitas de imposto de mercado. Os contratos usam também `data/contracts_ledger.dat`; as bancas e os impostos ainda reservados usam `data/realm_markets.dat`. A migração automática do formato 1 para o 2 conserva os valores anteriores e inicia a taxa de mercado em zero. As cópias de segurança devem incluir o mundo completo e os perfis do Chronicles. As transferências entre mods são verificadas no mesmo thread do servidor; estes ficheiros continuam a ser guardados pelo mecanismo normal de mundos do Minecraft, sem uma transação de disco única entre mods.
+O ficheiro `data/crown_ledger.dat` guarda regras, saldo disponível, salários reservados, atividade, ciclo pendente e os últimos 256 movimentos, incluindo receitas de imposto de mercado. Os contratos usam também `data/contracts_ledger.dat`; as bancas e os impostos ainda reservados usam `data/realm_markets.dat`. Os recibos judiciais são guardados no mesmo ficheiro que o saldo da tesouraria e não dependem da rotação dos últimos movimentos. O formato 3 migra automaticamente os formatos 1 e 2, conservando valores e regras e acrescentando recibos de pagamentos judiciais. As cópias de segurança devem incluir o mundo completo e os perfis do Chronicles. As transferências entre mods são verificadas no mesmo thread do servidor. Os pagamentos judiciais usam gravações confirmadas e recibos únicos para conciliar ficheiros separados; as restantes operações mantêm os mecanismos existentes.
 
-[Changelog](CHANGELOG.md) · [Resultados e limites da validação](VALIDACAO.md) · [JAR](../mod-pronto/crown-ledger-0.2.1.jar) · [ZIP](../mod-pronto/crown-ledger-0.2.1.zip) · [Imagens](../media/crown-ledger/0.2.0/README.md).
+[Changelog](CHANGELOG.md) · [Resultados e limites da validação](VALIDACAO.md) · [JAR](../mod-pronto/crown-ledger-0.2.2.jar) · [ZIP](../mod-pronto/crown-ledger-0.2.2.zip) · [Imagens](../media/crown-ledger/0.2.2/README.md).
 
 ## Desenvolvimento e validação
 
@@ -80,20 +80,19 @@ O ficheiro `data/crown_ledger.dat` guarda regras, saldo disponível, salários r
 ./gradlew build
 ./gradlew -PcrownGameTests runGameTestServer
 mkdir -p compat-libs
-# Copiar para compat-libs o JAR de produção Realm Markets 0.2.0 compilado
-# a partir do mesmo commit, mais Contracts 0.3.1, Realm Council 0.2.1
-# e Realm Identity 0.1.0 publicados.
+# Copiar o JAR Laws & Justice 0.4.0 compilado a partir do mesmo commit,
+# mais os companheiros publicados definidos em .github/scripts/justice_release.py.
+# A suíte nativa própria Crown usa estes companheiros sem Chronicles;
+# o runtime completo da carteira é verificado pela suíte Laws & Justice.
 ./gradlew -PcrownGameTests -PintegrationTests runGameTestServer
 ./gradlew -PcrownVisualTests runClient
 ```
 
 Na máquina cloud, usa `python3 tools/cloud_gradle.py` em vez de `./gradlew`; mantém o proxy e a verificação TLS configurados. O domínio independente corre com `python3 tools/test_domain.py` sem descarregar o Minecraft. Os testes nativos e visuais são opcionais no desenvolvimento e excluídos do JAR distribuído. A publicação automatizada exige que todos passem.
 
-O workflow conjunto compila primeiro os dois JARs de produção e executa os testes unitários. Depois testa cada mod sozinho e com o outro JAR novo, compilado no mesmo commit, mais os JARs publicados e verificados de Contracts, Realm Council e Realm Identity. As duas validações de cliente também têm de passar antes de uma única publicação conjunta. A proveniência identifica o commit e o hash exato do outro JAR usado; não se testa uma versão antiga do outro mod para aprovar esta integração.
+O [workflow conjunto aprovado](https://github.com/ROCKABITS/Mods/actions/runs/39253815267) compilou Laws & Justice 0.4.0 e Crown Ledger 0.2.2 a partir da mesma revisão, guardou os JARs de produção antes dos testes e utilizou as contrapartes novas nas integrações. O Crown passou **52 testes unitários, 25 GameTests independente e 25 com os companheiros**, além das três capturas do modelo e das interfaces no cliente real.
 
-A [execução conjunta aprovada da versão 0.2.0](https://github.com/ROCKABITS/Mods/actions/runs/38924972884), sobre `1a6825f00d37ec07c194e96a4b05c003f892d8d1`, passou **46 testes unitários Crown Ledger, 19 testes nativos independente e 19 com os companheiros reais**. O Realm Markets 0.2.0 compilado no mesmo commit passou 45 unitários e 45 nativos em cada modo. As compras tributadas, recolhas sem dupla tributação e retenção do imposto com o tesouro cheio passaram com os dois JARs novos; os dois clientes Minecraft também foram aprovados. A [proveniência](../mod-pronto/crown-ledger-0.2.0.build.json) identifica os hashes e os resultados.
-
-As imagens são capturas do cliente Minecraft com o modelo distribuído e os menus reais; os saldos e as taxas das imagens são dados de demonstração. A integração completa com o runtime de Chronicles/Origins/Jupiter requer os respetivos JARs em `compat-libs` e não está incluída neste CI. Consulta o estado atual da execução em [VALIDACAO.md](VALIDACAO.md).
+A suíte completa do Laws & Justice comprovou os débitos na carteira real do Chronicles e os créditos únicos na tesouraria, incluindo a reabertura efetiva de um mundo LAN. As imagens próprias do Crown usam dados de demonstração; a prova financeira vem dessa sequência integrada. [Resultados, hashes e limites da evidência](VALIDACAO.md).
 
 ## Pagamentos judiciais — 0.2.2
 

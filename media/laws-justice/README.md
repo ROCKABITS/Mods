@@ -1,3 +1,19 @@
+# Laws & Justice — imagens
+
+A versão atual é a **0.4.0**: [47 imagens reais do Minecraft](0.4.0/) e [ZIP da galeria](0.4.0/laws-justice-0.4.0-media.zip). Mostram os blocos originais, os menus físicos, os seis trabalhos, as multas, as fianças e o Livro de Registos. Os edifícios e personagens são cenários de demonstração; o mod não gera uma prisão.
+
+![Livro de Registos Judiciais](0.4.0/laws-justice-register-book-model.png)
+
+![Pagamento de multas](0.4.0/laws-justice-fine-payment.png)
+
+![Autorização de fianças](0.4.0/laws-justice-bail-authority.png)
+
+![Decisões públicas após reabrir o mundo LAN](0.4.0/laws-justice-records-after-lan-restart.png)
+
+[Validação completa](../../laws-justice/VALIDACAO.md). As imagens do Crown Ledger e os seus dados de demonstração estão [na galeria própria](../crown-ledger/0.2.2/).
+
+## Galeria anterior — 0.3.0
+
 # Laws & Justice 0.3.0 Beta
 
 **Publicação testada e aprovada.** [Resultados e limites da validação](../../laws-justice/VALIDACAO-0.3.0.md).
