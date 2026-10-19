@@ -1,15 +1,15 @@
 # Validação — Laws & Justice 0.3.0 Beta
 
-A fase três foi compilada e validada localmente com Java 21, Minecraft 1.21.1 e NeoForge 21.1.256. A publicação do JAR fica condicionada à repetição dos testes no GitHub Actions; a execução e os checksums serão registados depois dessa publicação.
+[Execução aprovada](https://github.com/ROCKABITS/Mods/actions/runs/39221369761), código `a9ec0d82aef467b82016e6119d4640f87619d6fa`. JAR e 37 capturas publicados no commit `816727d`. Os testes locais e a repetição independente no GitHub Actions passaram.
 
-| Verificação local | Resultado |
+| Verificação | Resultado |
 | --- | ---: |
 | Testes unitários | 106, sem falhas ou ignorados |
 | GameTests independentes | 95 |
 | GameTests com dez mods companheiros | 95 |
-| Cliente Minecraft real integrado | Aprovado, 35 capturas funcionais |
+| Cliente Minecraft real integrado | Aprovado, 37 capturas |
 
-A galeria de publicação acrescenta dois enquadramentos aproximados dos postos. As validações publicadas das fases [0.1](VALIDACAO-0.1.0.md) e [0.2](VALIDACAO-0.2.0.md) conservam a proveniência das versões anteriores.
+A galeria inclui dois enquadramentos aproximados dos postos, além das 35 capturas funcionais verificadas localmente. As validações publicadas das fases [0.1](VALIDACAO-0.1.0.md) e [0.2](VALIDACAO-0.2.0.md) conservam a proveniência das versões anteriores.
 
 ## Trabalho e redução de pena
 
@@ -42,3 +42,11 @@ Construções, personagens, mandato, processos e regras reduzidas das imagens s�
 Foram utilizados os dez companheiros publicados, incluindo Chronicles RP, Realm Council, Crown Ledger, Markets, Rewards, Notifications, Titles, Identity, Casino e Contracts, com Origins/Jupiter reais e checksums fixados. Windows e todas as combinações possíveis de mods não foram testados. Conserva cópias de segurança do mundo; um encerramento abrupto pode perder os últimos ticks desde o checkpoint.
 
 Multas, fianças e integrações financeiras continuam na fase 0.4 do [plano completo](PLANO-COMPLETO.md). A fechadura continua a ser um bloco auxiliar de controlo, sem associação de chaves a portas.
+
+## Publicação verificada
+
+JAR, ZIP e 37 PNGs foram verificados por SHA-256 depois de obter o commit publicado. O download HTTP do JAR também corresponde ao checksum.
+
+- [JAR](../mod-pronto/laws-justice-0.3.0.jar): 462 028 bytes; SHA-256 `f9474d2ede74ab859c0d697baa01a6c1ca097b25a74b2ecf44ab3325e96fe43e`.
+- [ZIP](../mod-pronto/laws-justice-0.3.0.zip): 434 832 bytes; SHA-256 `b4a9df54a65b1c24cfa0b74e22dac006fc6954276a64763cea2f5760d7ddb107`.
+- [Proveniência](../mod-pronto/laws-justice-0.3.0.build.json) · [37 imagens](../media/laws-justice/0.3.0/README.md).
