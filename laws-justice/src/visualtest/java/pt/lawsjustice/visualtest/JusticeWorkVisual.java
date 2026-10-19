@@ -44,7 +44,7 @@ final class JusticeWorkVisual {
     private static double standX,standY,standZ;
     private static int nodeIndex;
     private static long policyVersion;
-    private static UUID task,sentence;
+    private static UUID task,sentence;private static volatile String expectedWorkSession="";
     private JusticeWorkVisual(){}
     static void begin(){
         if(Minecraft.getInstance().screen!=null)Minecraft.getInstance().screen.onClose();Minecraft.getInstance().setScreen(null);Minecraft.getInstance().options.hideGui=true;
@@ -62,7 +62,7 @@ final class JusticeWorkVisual {
     private static void closeMenu(){var mc=Minecraft.getInstance();if(mc.screen!=null)mc.screen.onClose();mc.setScreen(null);}
     private static boolean workReady(){return ready()&&string(state(),"kind").equals("work");}
     private static JsonObject job(){return state()!=null&&state().has("job")&&state().get("job").isJsonObject()?state().getAsJsonObject("job"):null;}
-    private static boolean atWorkScreen(){return workReady()&&Minecraft.getInstance().screen.getClass().getSimpleName().equals("WorkScreen");}
+    private static boolean atWorkScreen(){return workReady()&&Minecraft.getInstance().screen.getClass().getSimpleName().equals("WorkScreen")&&expectedWorkSession.equals(string(state(),"session"));}
     private static WorkLedger.Zone currentZone(){return JusticeData.get(player().getServer()).work().zones().get(ZONES.get(WorkLedger.zoneType(currentKind())));}
     private static int index(){return (step-130)/20;}
     private static int phase(){return (step-130)%20;}
@@ -76,12 +76,12 @@ final class JusticeWorkVisual {
                 if(data.ledger().active().containsKey(p.getUUID())&&!prison.area().contains(point(q)))continue;
                 if(zone!=null&&!board&&!zone.area().contains(point(q)))continue;stand=q;break;
             }
-            check(stand!=null,"No safe authored approach to actual work station "+anchor);p.connection.teleport(stand.getX()+.5,stand.getY(),stand.getZ()+.5,0,14);WorkService.open(p,anchor);opened=true;
+            check(stand!=null,"No safe authored approach to actual work station "+anchor);p.connection.teleport(stand.getX()+.5,stand.getY(),stand.getZ()+.5,0,14);WorkService.open(p,anchor);expectedWorkSession=WorkService.snapshot(p).get("session").getAsString();opened=true;
         });
     }
     private static JusticeLedger.Point point(BlockPos p){return new JusticeLedger.Point(p.getX(),p.getY(),p.getZ());}
     private static void selectMine(){opened=false;server(()->{var p=player();p.setItemInHand(InteractionHand.MAIN_HAND,new ItemStack(BuiltInRegistries.ITEM.get(key("area_selector"))));
-        for(BlockPos corner:List.of(new BlockPos(-5,160,1),new BlockPos(-3,164,3))){p.setPos(corner.getX()+.5,corner.getY()+1,corner.getZ()+.5);JusticeService.select(p,corner,false);}p.connection.teleport(OUTSIDE.getX()+2.5,161,OUTSIDE.getZ()+.5,0,12);WorkService.open(p,OUTSIDE);opened=true;});}
+        for(BlockPos corner:List.of(new BlockPos(-5,160,1),new BlockPos(-3,164,3))){p.setPos(corner.getX()+.5,corner.getY()+1,corner.getZ()+.5);JusticeService.select(p,corner,false);}p.connection.teleport(OUTSIDE.getX()+2.5,161,OUTSIDE.getZ()+.5,0,12);WorkService.open(p,OUTSIDE);expectedWorkSession=WorkService.snapshot(p).get("session").getAsString();opened=true;});}
     private static void prepareRemaining(){configured=false;server(()->{
         var p=player();JusticeData data=JusticeData.get(p.getServer());WorkLedger work=data.work();
         for(String type:List.of("FARM","WORKSHOP","YARD","WAREHOUSE")){
