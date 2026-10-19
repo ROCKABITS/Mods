@@ -2,7 +2,7 @@
 
 **Laws & Justice 0.3.0 Beta — publicação aprovada:** [Seleção visual](laws-justice/README.md) · [Download dos 37 PNGs](laws-justice/0.3.0/laws-justice-0.3.0-media.zip). Capturas reais de prisões, tribunal, mandados, sete blocos de trabalho e seis tarefas completas com produção temporizada e entregas seladas. A prisão e as regras de uma unidade por tarefa são demonstrações; não são geradas construções ou recursos. Multas e fianças seguem na fase 0.4.
 
-**Realm Casino 0.1.0 Beta:** [Seleção visual](realm-casino/README.md) · [Download dos 15 PNGs](realm-casino/0.1.0/realm-casino-0.1.0-media.zip). Capturas reais dos três blocos medievais, slots, roleta europeia, blackjack e menus de regras e proprietário, com personagens e fundos virtuais de demonstração.
+**Realm Casino 0.2.0 Beta:** [Seleção visual](realm-casino/README.md) · [Download dos 31 PNGs](realm-casino/0.2.0/realm-casino-0.2.0-media.zip). Capturas reais dos seis blocos medievais, slots, roleta, blackjack, Plinko, Roda da Fortuna, Travessia Real e menus de regras e proprietário, com personagens e fundos virtuais de demonstração.
 
 **Realm Titles 0.1.0:** [Seleção visual](realm-titles/README.md) · [Download PNG](realm-titles/0.1.0/realm-titles-0.1.0-media.zip). Capturas reais da Mesa do Selo Real nas quatro direções, registo público, menus do governante e títulos atuais num documento autêntico do Identity; personagens e nomeações de demonstração.
 

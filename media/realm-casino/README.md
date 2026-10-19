@@ -1,37 +1,35 @@
-# Realm Casino 0.1.0 Beta
+# Realm Casino 0.2.0 Beta
 
-Slots, roleta europeia e blackjack em Minecraft 1.21.1/NeoForge. Estas imagens são capturas do cliente real, com personagens e fundos virtuais de demonstração. [Galeria completa e relatório](0.1.0/README.md) · [Download dos 15 PNGs](0.1.0/realm-casino-0.1.0-media.zip).
+Capturas reais de Minecraft 1.21.1/NeoForge, com os seis jogos, blocos e menus medievais. As personagens, o cenário e os fundos são de demonstração.
 
-## Máquina de slots
+[Galeria completa](0.2.0/README.md) · [Download dos PNGs](0.2.0/realm-casino-0.2.0-media.zip) · [Validação](../../realm-casino/VALIDACAO.md).
 
-Madeira escura, entalhes dourados, joias, alavanca e rolos animados. Móvel de dois blocos de altura, com receita de sobrevivência.
+## Plinko
 
-![Máquina de slots no Minecraft](0.1.0/realm-casino-slots-detail.png)
+Painel de dois blocos, pinos de latão, caixas individuais e bola animada.
 
-![Interface de slots com resultado confirmado pelo servidor](0.1.0/realm-casino-slots-result.png)
+![Painel de Plinko](0.2.0/realm-casino-plinko-detail.png)
 
-## Roleta europeia
+![Interface de Plinko](0.2.0/realm-casino-plinko-result.png)
 
-Mesa com roda, tapete numerado, pilhas de fichas e bola animada. Apostas em número, cor ou paridade.
+## Roda da Fortuna
 
-![Mesa de roleta no Minecraft](0.1.0/realm-casino-roulette-detail.png)
+Pedestal de madeira, coroa, aro dourado, ponteiro de rubi e vinte setores.
 
-![Interface de roleta europeia](0.1.0/realm-casino-roulette.png)
+![Roda da Fortuna](0.2.0/realm-casino-wheel-detail.png)
 
-## Blackjack
+![Interface da roda](0.2.0/realm-casino-wheel-result.png)
 
-Mesa com rebordo acolchoado, cartas e baralho. Uma pessoa de cada vez contra a banca; pedir carta ou parar.
+## Travessia Real
 
-![Mesa de blackjack no Minecraft](0.1.0/realm-casino-blackjack-detail.png)
+Mesa com estrada em miniatura, carroças, sebes, arco e galinha. O menu permite avançar ou recolher o prémio atingido.
 
-![Uma mão de blackjack com a carta oculta da banca](0.1.0/realm-casino-blackjack.png)
+![Mesa da Travessia Real](0.2.0/realm-casino-chicken-detail.png)
 
-## Banca e regras
+![Travessia da galinha](0.2.0/realm-casino-chicken-crossing.png)
 
-O proprietário abastece a banca e escolhe os limites de aposta. As regras e os retornos ficam disponíveis no próprio menu.
+![Prémio recolhido](0.2.0/realm-casino-chicken-collected.png)
 
-![Gestão da banca pelo proprietário](0.1.0/realm-casino-owner.png)
+Os jogos usam carteira real do Chronicles, pedidos C2S e respostas S2C nativos, com resultados do servidor. A prova utiliza um servidor integrado; não representa uma ligação autenticada com dois clientes.
 
-![Regras e probabilidades no menu real](0.1.0/realm-casino-rules.png)
-
-O cliente usou rede C2S/S2C, carteira do Chronicles e resultados aleatórios do servidor reais. O cenário e o dinheiro inicial são de teste. Esta prova usa um servidor integrado e não representa uma sessão autenticada com dois clientes. Os restantes jogos do guião ficam para fases futuras.
+[Galeria anterior — 0.1.0](0.1.0/README.md).

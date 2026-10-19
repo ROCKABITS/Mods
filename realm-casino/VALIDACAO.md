@@ -1,5 +1,12 @@
 # Validação — Realm Casino 0.2.0 Beta
 
+[Execução aprovada](https://github.com/ROCKABITS/Mods/actions/runs/39264214894), código `9958b05808e82242671c8a75db77fd169c21cb43`. O JAR publicado passou a compilação, 58 testes JUnit, 56 testes nativos independentes e 56 com integrações, além do cliente real. A galeria inclui **31 capturas de 1600 × 900**.
+
+- JAR: 346428 bytes; SHA-256 `25cbf35950be8f021ec1d1d40381c6562c6a3ba476d1b567afcd5ec91aa895d5`.
+- ZIP: 325466 bytes; SHA-256 `b89e0757f986531a181ff0734e69ecaedc2c8876135d24da554c4a2a08f0e1fa`.
+- [Proveniência e dependências](../mod-pronto/realm-casino-0.2.0.build.json) · [galeria](../media/realm-casino/0.2.0/README.md).
+- Animação física da Roda da Fortuna: 34145 píxeis alterados na região observada, com a mesma câmara e o mesmo resultado.
+
 A atualização acrescenta Plinko, Roda da Fortuna e Travessia Real aos três jogos existentes. A publicação automática só disponibiliza o JAR depois de repetir a compilação, os testes unitários, os dois modos do servidor e a verificação do cliente real sobre o mesmo commit.
 
 ## Cobertura
