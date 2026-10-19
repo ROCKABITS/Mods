@@ -1,8 +1,8 @@
 # Validação — Laws & Justice 0.2.0 Beta
 
-A fase dois foi compilada e validada localmente com Java 21, Minecraft 1.21.1 e NeoForge 21.1.256. A publicação do JAR fica condicionada à repetição dos testes no GitHub Actions; a execução e os checksums serão registados depois dessa publicação.
+[Execução aprovada](https://github.com/ROCKABITS/Mods/actions/runs/39215840002), código `9bf540a3be4847c9905153398cf2207d9f0e0122`. JAR e imagens publicados no commit `f6e1575`. Os testes locais e a repetição independente no GitHub Actions passaram.
 
-| Verificação local | Resultado |
+| Verificação | Resultado |
 | --- | ---: |
 | Testes unitários | 85, sem falhas ou ignorados |
 | GameTests independentes | 73 |
@@ -36,3 +36,11 @@ A prisão, personagem, mandato e processo usados nas imagens são demonstraçõe
 Trabalhos e zonas prisionais pertencem à fase 0.3; multas, fianças e integrações financeiras à fase 0.4. O desenvolvimento continua segundo o [plano completo](PLANO-COMPLETO.md). A fechadura permanece um bloco de controlo auxiliar; não associa chaves a portas.
 
 Foram testadas as versões publicadas de Chronicles RP 0.5.4, Contracts & Bounties 0.3.2, Realm Council 0.2.2, Crown Ledger 0.2.1, Realm Markets 0.2.1, Realm Rewards 0.1.2, Realm Notifications 0.1.0, Realm Titles 0.1.0, Realm Identity 0.1.1 e Realm Casino 0.1.0, com dependências Origins/Jupiter reais verificadas por SHA-256. Não foi testado Windows nem todas as combinações de mods. Conserva cópias de segurança do mundo; um encerramento abrupto pode perder os últimos ticks desde o checkpoint.
+
+## Publicação verificada
+
+JAR, ZIP e os 20 PNGs foram verificados por SHA-256 depois de obter o commit publicado. O download HTTP do JAR também corresponde ao checksum.
+
+- [JAR](../mod-pronto/laws-justice-0.2.0.jar): 321 080 bytes; SHA-256 `b3cf6b5788cd13035a271228b6e4076f6a1b29e31191e1ca735290fd7fb0c858`.
+- [ZIP](../mod-pronto/laws-justice-0.2.0.zip): 304 701 bytes; SHA-256 `91b278c097a74b5a49127174a6b1231bbe6117bd2367f11aaa500744b5f2b3f3`.
+- [Proveniência e checksums](../mod-pronto/laws-justice-0.2.0.build.json) · [20 imagens](../media/laws-justice/0.2.0/README.md).

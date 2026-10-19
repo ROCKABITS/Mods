@@ -1,6 +1,6 @@
 # Mod galleries
 
-**Laws & Justice 0.1.0 Beta — validação final e publicação pendentes:** [Seleção visual](laws-justice/README.md) · [Download previsto dos 13 PNGs](laws-justice/0.1.0/laws-justice-0.1.0-media.zip). Capturas do cliente Minecraft real: quatro blocos medievais, livro administrativo, celas, pena do prisioneiro, reinício do mundo LAN e libertação. A prisão e a personagem são demonstrações de teste; a construção não é gerada pelo mod. Esta fase contém administração prisional, sem poderes do Presidente, trabalhos ou economia.
+**Laws & Justice 0.2.0 Beta — publicação aprovada:** [Seleção visual](laws-justice/README.md) · [Download dos 20 PNGs](laws-justice/0.2.0/laws-justice-0.2.0-media.zip). Capturas reais de prisões, Mesa de Justiça, provas, audiências, mandados e perda de autoridade do antigo Presidente, além da persistência LAN e libertação. Construção e processos de demonstração; o mod não gera prisões. Trabalhos e economia seguem nas próximas fases.
 
 **Realm Casino 0.1.0 Beta:** [Seleção visual](realm-casino/README.md) · [Download dos 15 PNGs](realm-casino/0.1.0/realm-casino-0.1.0-media.zip). Capturas reais dos três blocos medievais, slots, roleta europeia, blackjack e menus de regras e proprietário, com personagens e fundos virtuais de demonstração.
 
