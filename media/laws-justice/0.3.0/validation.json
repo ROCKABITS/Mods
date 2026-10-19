@@ -1,0 +1,418 @@
+{
+  "real_work_models": true,
+  "real_work_zone_ui": true,
+  "real_work_policy_ui": true,
+  "real_work_survival_prisoner": true,
+  "real_work_deliveries": true,
+  "real_work_persistence": true,
+  "work_kinds_completed": [
+    "MINING",
+    "FARMING",
+    "CARPENTRY",
+    "SMITHING",
+    "CLEANING",
+    "TRANSPORT"
+  ],
+  "work_native_actions": [
+    {
+      "task": "MINING",
+      "position": "-4, 161, 2",
+      "action": "vanilla_block_break"
+    },
+    {
+      "task": "FARMING",
+      "position": "-1, 161, 2",
+      "action": "vanilla_block_break"
+    },
+    {
+      "task": "CARPENTRY",
+      "position": "-4, 161, 6",
+      "action": "vanilla_block_break"
+    },
+    {
+      "task": "SMITHING",
+      "position": "-3, 161, 6",
+      "action": "vanilla_block_break"
+    },
+    {
+      "task": "SMITHING",
+      "position": "-2, 161, 6",
+      "action": "vanilla_block_break"
+    },
+    {
+      "task": "CLEANING",
+      "position": "-1, 160, 6",
+      "action": "vanilla_brush_use"
+    }
+  ],
+  "work_demonstration_quantity_per_task": 1,
+  "work_demonstration_reduction_per_task_ticks": 1200,
+  "work_sentence_id": "e3f3d093-c603-4fc2-bee0-c6b831ff09c1",
+  "success": true,
+  "message": "Actual custody, LAN restart, elected court and warrants passed; all six community-service tasks, finite world resources, timed work, sealed deliveries, matching persistent credits and original work furniture also passed.",
+  "step": 254,
+  "checks": [
+    "All native door states and four facings of bars, lock and control have baked geometry with resolved textures; all five original item models resolve.",
+    "All five administrator tabs fit 320x240; visible widget bounds remain valid while scrolling.",
+    "The read-only prisoner\u0027s status fit 320x240; visible widget bounds remain valid while scrolling.",
+    "The genuine integrated world was opened to LAN, stopped, left offline for at least five seconds, and reopened with the same host UUID and sentence id. The production world-file parser retained served ticks; only actual online ticks advanced after reconnect.",
+    "A real non-operator host received only their own custody status. Actual outside teleport and vanilla death/respawn both returned the same active sentence to the authored prison.",
+    "A one-minute sentence completed through real server post ticks, removed active custody, wrote exactly one COMPLETED audit decision, and teleported the host to the configured release block without any manual advance/reduction.",
+    "All four real justice-desk facings and actual desk, handcuffs and warrant item models resolve original geometry and textures.",
+    "All four native court tabs fit 320x240 with scrolling, using genuine server snapshots.",
+    "A genuine claimed Realm Council mandate gave the actual non-operator host ordinary presidential judicial access. Real native C2S filed a self-fixture case, appended attributed evidence, opened a hearing, issued a physical warrant and acquitted; no authority or financial snapshots were injected.",
+    "The real warrant item was moved from the issuing inventory into the player\u0027s hand, used through the genuine client item-use packet and displayed only after server validation. Replacing the real sworn mandate removed the former president\u0027s judicial access and controls without granting administrator powers.",
+    "Actual administrator work tabs remain within 320x240 bounds while scrolling.",
+    "Actual prisoner work tabs remain within 320x240 bounds while scrolling.",
+    "The real Work Board C2S registered and commissioned a surveyed mine and saved work policy. All five administrator and three non-operator prisoner tabs passed 320x240 bounds and scrolling.",
+    "The actual Survival host, without operator or flight privileges, used genuine client mining, wheat harvest, axe, ore/coal and brush packets, timed table buttons, two physical warehouse posts and sealed delivery buttons to complete all six configured demonstration tasks. Each one-unit task awarded one minute; the real twenty-minute sentence retained exactly six minutes of work reduction and the same amount of durable work credit. No client progress or S2C snapshots were injected."
+  ],
+  "screenshots": [
+    "laws-justice-prison-courtyard.png",
+    "laws-justice-control-ledger.png",
+    "laws-justice-door-bars-lock.png",
+    "laws-justice-admin-overview.png",
+    "laws-justice-admin-prisons.png",
+    "laws-justice-admin-cells.png",
+    "laws-justice-admin-sentence-form.png",
+    "laws-justice-custody-history.png",
+    "laws-justice-prisoner-status.png",
+    "laws-justice-prisoner-after-respawn.png",
+    "laws-justice-prisoner-after-world-restart.png",
+    "laws-justice-release-courtyard.png",
+    "laws-justice-history-after-release.png",
+    "laws-justice-court-desk.png",
+    "laws-justice-court-cases.png",
+    "laws-justice-court-evidence.png",
+    "laws-justice-court-judgment.png",
+    "laws-justice-court-warrants.png",
+    "laws-justice-warrant-document.png",
+    "laws-justice-court-former-president.png",
+    "laws-justice-work-furniture.png",
+    "laws-justice-work-board-model.png",
+    "laws-justice-workshop-model.png",
+    "laws-justice-work-posts-models.png",
+    "laws-justice-work-zones.png",
+    "laws-justice-work-rules.png",
+    "laws-justice-work-board-menu.png",
+    "laws-justice-mining-work.png",
+    "laws-justice-farming-work.png",
+    "laws-justice-workshop-production.png",
+    "laws-justice-carpentry-work.png",
+    "laws-justice-forge-production.png",
+    "laws-justice-smithing-work.png",
+    "laws-justice-cleaning-work.png",
+    "laws-justice-transport-work.png",
+    "laws-justice-work-sentence-reductions.png",
+    "laws-justice-work-history.png"
+  ],
+  "actual_minecraft_client": true,
+  "actual_integrated_server": true,
+  "real_c2s_transport": true,
+  "real_s2c_transport": true,
+  "real_world_models": true,
+  "online_only_sentence_clock": true,
+  "automatic_release": true,
+  "lan_persistence": true,
+  "lan_published": true,
+  "teleport_containment": true,
+  "death_respawn_containment": true,
+  "real_vanilla_permission_removed": true,
+  "real_court_models": true,
+  "real_non_admin_president": true,
+  "real_court_evidence": true,
+  "real_court_verdict": true,
+  "real_server_warrant_document": true,
+  "real_president_turnover": true,
+  "court_case_id": "b9ad3e6e-c16f-4b8e-92a8-b25595a86834",
+  "court_warrant_id": "d80cecc4-79a6-4915-a40c-ec82669cbab6",
+  "court_demonstration_case_accuses_the_local_fixture_character": true,
+  "world_fixture_only": true,
+  "synthetic_s2c_snapshots": false,
+  "capture_resolution": "1600x900",
+  "capture_gui_scale": 2,
+  "observed_native_button_actions": [
+    {
+      "operation": "save_prison",
+      "observed_before_nonce": "8066db6a-9970-4f27-bf73-837b02ab6d78",
+      "observed_before_version": 0,
+      "native_button_pressed_at": 1792397825868
+    },
+    {
+      "operation": "save_cell",
+      "observed_before_nonce": "f14182ea-46af-46ee-89ff-a66831d11785",
+      "observed_before_version": 1,
+      "native_button_pressed_at": 1792397827168
+    },
+    {
+      "operation": "sentence",
+      "observed_before_nonce": "f5b6d242-3a8c-4e4f-ae71-6fb6c0539515",
+      "observed_before_version": 2,
+      "native_button_pressed_at": 1792397828990
+    },
+    {
+      "operation": "court_file",
+      "observed_before_nonce": "158ade6e-a1bd-4d4b-958e-79ddbf18545f",
+      "observed_before_version": 5,
+      "native_button_pressed_at": 1792397906265
+    },
+    {
+      "operation": "court_evidence",
+      "observed_before_nonce": "e9e5d43a-de2f-4efc-98ad-6220c10b87f0",
+      "observed_before_version": 6,
+      "native_button_pressed_at": 1792397907309
+    },
+    {
+      "operation": "court_hear",
+      "observed_before_nonce": "a8f94912-7f3e-4e59-8234-0a63baf52d93",
+      "observed_before_version": 7,
+      "native_button_pressed_at": 1792397908336
+    },
+    {
+      "operation": "court_warrant",
+      "observed_before_nonce": "a24193f9-7387-4b18-87b1-61709cb2912a",
+      "observed_before_version": 8,
+      "native_button_pressed_at": 1792397909326
+    },
+    {
+      "operation": "court_acquit",
+      "observed_before_nonce": "264f7392-7897-40b8-8a98-2e621d50626f",
+      "observed_before_version": 9,
+      "native_button_pressed_at": 1792397911702
+    },
+    {
+      "operation": "work_zone",
+      "observed_before_nonce": "bac86047-8a30-4f55-b956-6e145f577bef",
+      "observed_before_version": 11,
+      "native_button_pressed_at": 1792397917568
+    },
+    {
+      "operation": "work_commission",
+      "observed_before_nonce": "131b2681-0570-4146-a6a6-612e6691460a",
+      "observed_before_version": 12,
+      "native_button_pressed_at": 1792397917853
+    },
+    {
+      "operation": "work_policy",
+      "observed_before_nonce": "b31cac37-741d-4ac4-ad51-4995795454b8",
+      "observed_before_version": 13,
+      "native_button_pressed_at": 1792397918949
+    },
+    {
+      "operation": "sentence",
+      "observed_before_nonce": "b3f49548-8558-41d0-9c2d-26258d8ec340",
+      "observed_before_version": 15,
+      "native_button_pressed_at": 1792397920420
+    },
+    {
+      "operation": "work_accept",
+      "observed_before_nonce": "cc0b0268-0366-4a2c-aac7-ad36bb5de5c4",
+      "observed_before_version": 16,
+      "native_button_pressed_at": 1792397922284
+    },
+    {
+      "operation": "work_deliver",
+      "observed_before_nonce": "62a6562c-53ca-4697-a9f8-caddf54ad138",
+      "observed_before_version": 18,
+      "native_button_pressed_at": 1792397926523
+    },
+    {
+      "operation": "work_accept",
+      "observed_before_nonce": "e513ee28-fc77-43af-a324-dab2d1239504",
+      "observed_before_version": 19,
+      "native_button_pressed_at": 1792397927612
+    },
+    {
+      "operation": "work_deliver",
+      "observed_before_nonce": "daa0e282-35ea-4931-98ee-02ca703abd18",
+      "observed_before_version": 21,
+      "native_button_pressed_at": 1792397929642
+    },
+    {
+      "operation": "work_accept",
+      "observed_before_nonce": "fdbe48cb-9c3a-4e2d-9f22-8898e8bdc506",
+      "observed_before_version": 22,
+      "native_button_pressed_at": 1792397930778
+    },
+    {
+      "operation": "work_produce",
+      "observed_before_nonce": "6a712e4a-31e4-48cf-a047-b10ec03c98f0",
+      "observed_before_version": 24,
+      "native_button_pressed_at": 1792397936039
+    },
+    {
+      "operation": "work_deliver",
+      "observed_before_nonce": "62d11161-0e73-4e83-a3c2-07fd4bf796b8",
+      "observed_before_version": 25,
+      "native_button_pressed_at": 1792397939159
+    },
+    {
+      "operation": "work_accept",
+      "observed_before_nonce": "ee1e6569-acd0-4fe0-8076-185ed505ad9c",
+      "observed_before_version": 26,
+      "native_button_pressed_at": 1792397940330
+    },
+    {
+      "operation": "work_produce",
+      "observed_before_nonce": "c50ee488-091a-48e3-8772-b39b8b8402a5",
+      "observed_before_version": 29,
+      "native_button_pressed_at": 1792397952977
+    },
+    {
+      "operation": "work_deliver",
+      "observed_before_nonce": "1afb7558-ca74-48d0-8dec-e09e40a7c1cb",
+      "observed_before_version": 30,
+      "native_button_pressed_at": 1792397958159
+    },
+    {
+      "operation": "work_accept",
+      "observed_before_nonce": "268f4606-a826-46b6-888e-0355ac1014fe",
+      "observed_before_version": 31,
+      "native_button_pressed_at": 1792397959275
+    },
+    {
+      "operation": "work_deliver",
+      "observed_before_nonce": "afa1f3a8-50ce-42bc-9fd0-3a552736a148",
+      "observed_before_version": 33,
+      "native_button_pressed_at": 1792397963527
+    },
+    {
+      "operation": "work_accept",
+      "observed_before_nonce": "e0ecf05d-1d72-4dcb-9ac7-3d017f4a9e23",
+      "observed_before_version": 34,
+      "native_button_pressed_at": 1792397964649
+    },
+    {
+      "operation": "work_cargo",
+      "observed_before_nonce": "372a8608-ed67-4301-8af2-5c83e70bcbfb",
+      "observed_before_version": 35,
+      "native_button_pressed_at": 1792397965244
+    },
+    {
+      "operation": "work_cargo",
+      "observed_before_nonce": "8af4eeac-9acc-4079-83af-1c0f4bb87cef",
+      "observed_before_version": 36,
+      "native_button_pressed_at": 1792397965787
+    },
+    {
+      "operation": "work_deliver",
+      "observed_before_nonce": "cbfa3e22-5e0e-45c5-a884-e98aad749185",
+      "observed_before_version": 37,
+      "native_button_pressed_at": 1792397967062
+    }
+  ],
+  "model_quads": {
+    "Block{lawsjustice:prison_door}[facing\u003dnorth,half\u003dupper,hinge\u003dleft,open\u003dtrue,powered\u003dtrue]": 279,
+    "Block{lawsjustice:prison_door}[facing\u003dnorth,half\u003dupper,hinge\u003dleft,open\u003dtrue,powered\u003dfalse]": 279,
+    "Block{lawsjustice:prison_door}[facing\u003dnorth,half\u003dupper,hinge\u003dleft,open\u003dfalse,powered\u003dtrue]": 279,
+    "Block{lawsjustice:prison_door}[facing\u003dnorth,half\u003dupper,hinge\u003dleft,open\u003dfalse,powered\u003dfalse]": 279,
+    "Block{lawsjustice:prison_door}[facing\u003dnorth,half\u003dupper,hinge\u003dright,open\u003dtrue,powered\u003dtrue]": 279,
+    "Block{lawsjustice:prison_door}[facing\u003dnorth,half\u003dupper,hinge\u003dright,open\u003dtrue,powered\u003dfalse]": 279,
+    "Block{lawsjustice:prison_door}[facing\u003dnorth,half\u003dupper,hinge\u003dright,open\u003dfalse,powered\u003dtrue]": 279,
+    "Block{lawsjustice:prison_door}[facing\u003dnorth,half\u003dupper,hinge\u003dright,open\u003dfalse,powered\u003dfalse]": 279,
+    "Block{lawsjustice:prison_door}[facing\u003dnorth,half\u003dlower,hinge\u003dleft,open\u003dtrue,powered\u003dtrue]": 339,
+    "Block{lawsjustice:prison_door}[facing\u003dnorth,half\u003dlower,hinge\u003dleft,open\u003dtrue,powered\u003dfalse]": 339,
+    "Block{lawsjustice:prison_door}[facing\u003dnorth,half\u003dlower,hinge\u003dleft,open\u003dfalse,powered\u003dtrue]": 339,
+    "Block{lawsjustice:prison_door}[facing\u003dnorth,half\u003dlower,hinge\u003dleft,open\u003dfalse,powered\u003dfalse]": 339,
+    "Block{lawsjustice:prison_door}[facing\u003dnorth,half\u003dlower,hinge\u003dright,open\u003dtrue,powered\u003dtrue]": 339,
+    "Block{lawsjustice:prison_door}[facing\u003dnorth,half\u003dlower,hinge\u003dright,open\u003dtrue,powered\u003dfalse]": 339,
+    "Block{lawsjustice:prison_door}[facing\u003dnorth,half\u003dlower,hinge\u003dright,open\u003dfalse,powered\u003dtrue]": 339,
+    "Block{lawsjustice:prison_door}[facing\u003dnorth,half\u003dlower,hinge\u003dright,open\u003dfalse,powered\u003dfalse]": 339,
+    "Block{lawsjustice:prison_door}[facing\u003dsouth,half\u003dupper,hinge\u003dleft,open\u003dtrue,powered\u003dtrue]": 279,
+    "Block{lawsjustice:prison_door}[facing\u003dsouth,half\u003dupper,hinge\u003dleft,open\u003dtrue,powered\u003dfalse]": 279,
+    "Block{lawsjustice:prison_door}[facing\u003dsouth,half\u003dupper,hinge\u003dleft,open\u003dfalse,powered\u003dtrue]": 279,
+    "Block{lawsjustice:prison_door}[facing\u003dsouth,half\u003dupper,hinge\u003dleft,open\u003dfalse,powered\u003dfalse]": 279,
+    "Block{lawsjustice:prison_door}[facing\u003dsouth,half\u003dupper,hinge\u003dright,open\u003dtrue,powered\u003dtrue]": 279,
+    "Block{lawsjustice:prison_door}[facing\u003dsouth,half\u003dupper,hinge\u003dright,open\u003dtrue,powered\u003dfalse]": 279,
+    "Block{lawsjustice:prison_door}[facing\u003dsouth,half\u003dupper,hinge\u003dright,open\u003dfalse,powered\u003dtrue]": 279,
+    "Block{lawsjustice:prison_door}[facing\u003dsouth,half\u003dupper,hinge\u003dright,open\u003dfalse,powered\u003dfalse]": 279,
+    "Block{lawsjustice:prison_door}[facing\u003dsouth,half\u003dlower,hinge\u003dleft,open\u003dtrue,powered\u003dtrue]": 339,
+    "Block{lawsjustice:prison_door}[facing\u003dsouth,half\u003dlower,hinge\u003dleft,open\u003dtrue,powered\u003dfalse]": 339,
+    "Block{lawsjustice:prison_door}[facing\u003dsouth,half\u003dlower,hinge\u003dleft,open\u003dfalse,powered\u003dtrue]": 339,
+    "Block{lawsjustice:prison_door}[facing\u003dsouth,half\u003dlower,hinge\u003dleft,open\u003dfalse,powered\u003dfalse]": 339,
+    "Block{lawsjustice:prison_door}[facing\u003dsouth,half\u003dlower,hinge\u003dright,open\u003dtrue,powered\u003dtrue]": 339,
+    "Block{lawsjustice:prison_door}[facing\u003dsouth,half\u003dlower,hinge\u003dright,open\u003dtrue,powered\u003dfalse]": 339,
+    "Block{lawsjustice:prison_door}[facing\u003dsouth,half\u003dlower,hinge\u003dright,open\u003dfalse,powered\u003dtrue]": 339,
+    "Block{lawsjustice:prison_door}[facing\u003dsouth,half\u003dlower,hinge\u003dright,open\u003dfalse,powered\u003dfalse]": 339,
+    "Block{lawsjustice:prison_door}[facing\u003dwest,half\u003dupper,hinge\u003dleft,open\u003dtrue,powered\u003dtrue]": 279,
+    "Block{lawsjustice:prison_door}[facing\u003dwest,half\u003dupper,hinge\u003dleft,open\u003dtrue,powered\u003dfalse]": 279,
+    "Block{lawsjustice:prison_door}[facing\u003dwest,half\u003dupper,hinge\u003dleft,open\u003dfalse,powered\u003dtrue]": 279,
+    "Block{lawsjustice:prison_door}[facing\u003dwest,half\u003dupper,hinge\u003dleft,open\u003dfalse,powered\u003dfalse]": 279,
+    "Block{lawsjustice:prison_door}[facing\u003dwest,half\u003dupper,hinge\u003dright,open\u003dtrue,powered\u003dtrue]": 279,
+    "Block{lawsjustice:prison_door}[facing\u003dwest,half\u003dupper,hinge\u003dright,open\u003dtrue,powered\u003dfalse]": 279,
+    "Block{lawsjustice:prison_door}[facing\u003dwest,half\u003dupper,hinge\u003dright,open\u003dfalse,powered\u003dtrue]": 279,
+    "Block{lawsjustice:prison_door}[facing\u003dwest,half\u003dupper,hinge\u003dright,open\u003dfalse,powered\u003dfalse]": 279,
+    "Block{lawsjustice:prison_door}[facing\u003dwest,half\u003dlower,hinge\u003dleft,open\u003dtrue,powered\u003dtrue]": 339,
+    "Block{lawsjustice:prison_door}[facing\u003dwest,half\u003dlower,hinge\u003dleft,open\u003dtrue,powered\u003dfalse]": 339,
+    "Block{lawsjustice:prison_door}[facing\u003dwest,half\u003dlower,hinge\u003dleft,open\u003dfalse,powered\u003dtrue]": 339,
+    "Block{lawsjustice:prison_door}[facing\u003dwest,half\u003dlower,hinge\u003dleft,open\u003dfalse,powered\u003dfalse]": 339,
+    "Block{lawsjustice:prison_door}[facing\u003dwest,half\u003dlower,hinge\u003dright,open\u003dtrue,powered\u003dtrue]": 339,
+    "Block{lawsjustice:prison_door}[facing\u003dwest,half\u003dlower,hinge\u003dright,open\u003dtrue,powered\u003dfalse]": 339,
+    "Block{lawsjustice:prison_door}[facing\u003dwest,half\u003dlower,hinge\u003dright,open\u003dfalse,powered\u003dtrue]": 339,
+    "Block{lawsjustice:prison_door}[facing\u003dwest,half\u003dlower,hinge\u003dright,open\u003dfalse,powered\u003dfalse]": 339,
+    "Block{lawsjustice:prison_door}[facing\u003deast,half\u003dupper,hinge\u003dleft,open\u003dtrue,powered\u003dtrue]": 279,
+    "Block{lawsjustice:prison_door}[facing\u003deast,half\u003dupper,hinge\u003dleft,open\u003dtrue,powered\u003dfalse]": 279,
+    "Block{lawsjustice:prison_door}[facing\u003deast,half\u003dupper,hinge\u003dleft,open\u003dfalse,powered\u003dtrue]": 279,
+    "Block{lawsjustice:prison_door}[facing\u003deast,half\u003dupper,hinge\u003dleft,open\u003dfalse,powered\u003dfalse]": 279,
+    "Block{lawsjustice:prison_door}[facing\u003deast,half\u003dupper,hinge\u003dright,open\u003dtrue,powered\u003dtrue]": 279,
+    "Block{lawsjustice:prison_door}[facing\u003deast,half\u003dupper,hinge\u003dright,open\u003dtrue,powered\u003dfalse]": 279,
+    "Block{lawsjustice:prison_door}[facing\u003deast,half\u003dupper,hinge\u003dright,open\u003dfalse,powered\u003dtrue]": 279,
+    "Block{lawsjustice:prison_door}[facing\u003deast,half\u003dupper,hinge\u003dright,open\u003dfalse,powered\u003dfalse]": 279,
+    "Block{lawsjustice:prison_door}[facing\u003deast,half\u003dlower,hinge\u003dleft,open\u003dtrue,powered\u003dtrue]": 339,
+    "Block{lawsjustice:prison_door}[facing\u003deast,half\u003dlower,hinge\u003dleft,open\u003dtrue,powered\u003dfalse]": 339,
+    "Block{lawsjustice:prison_door}[facing\u003deast,half\u003dlower,hinge\u003dleft,open\u003dfalse,powered\u003dtrue]": 339,
+    "Block{lawsjustice:prison_door}[facing\u003deast,half\u003dlower,hinge\u003dleft,open\u003dfalse,powered\u003dfalse]": 339,
+    "Block{lawsjustice:prison_door}[facing\u003deast,half\u003dlower,hinge\u003dright,open\u003dtrue,powered\u003dtrue]": 339,
+    "Block{lawsjustice:prison_door}[facing\u003deast,half\u003dlower,hinge\u003dright,open\u003dtrue,powered\u003dfalse]": 339,
+    "Block{lawsjustice:prison_door}[facing\u003deast,half\u003dlower,hinge\u003dright,open\u003dfalse,powered\u003dtrue]": 339,
+    "Block{lawsjustice:prison_door}[facing\u003deast,half\u003dlower,hinge\u003dright,open\u003dfalse,powered\u003dfalse]": 339,
+    "Block{lawsjustice:prison_bars}[facing\u003dnorth]": 348,
+    "Block{lawsjustice:prison_bars}[facing\u003dsouth]": 348,
+    "Block{lawsjustice:prison_bars}[facing\u003dwest]": 348,
+    "Block{lawsjustice:prison_bars}[facing\u003deast]": 348,
+    "Block{lawsjustice:reinforced_lock}[facing\u003dnorth]": 192,
+    "Block{lawsjustice:reinforced_lock}[facing\u003dsouth]": 192,
+    "Block{lawsjustice:reinforced_lock}[facing\u003dwest]": 192,
+    "Block{lawsjustice:reinforced_lock}[facing\u003deast]": 192,
+    "Block{lawsjustice:prison_control}[facing\u003dnorth]": 666,
+    "Block{lawsjustice:prison_control}[facing\u003dsouth]": 666,
+    "Block{lawsjustice:prison_control}[facing\u003dwest]": 666,
+    "Block{lawsjustice:prison_control}[facing\u003deast]": 666,
+    "Block{lawsjustice:justice_desk}[facing\u003dnorth]": 846,
+    "Block{lawsjustice:justice_desk}[facing\u003dsouth]": 846,
+    "Block{lawsjustice:justice_desk}[facing\u003dwest]": 846,
+    "Block{lawsjustice:justice_desk}[facing\u003deast]": 846,
+    "Block{lawsjustice:work_board}[facing\u003dnorth]": 282,
+    "Block{lawsjustice:work_board}[facing\u003dsouth]": 282,
+    "Block{lawsjustice:work_board}[facing\u003dwest]": 282,
+    "Block{lawsjustice:work_board}[facing\u003deast]": 282,
+    "Block{lawsjustice:delivery_box}[facing\u003dnorth]": 240,
+    "Block{lawsjustice:delivery_box}[facing\u003dsouth]": 240,
+    "Block{lawsjustice:delivery_box}[facing\u003dwest]": 240,
+    "Block{lawsjustice:delivery_box}[facing\u003deast]": 240,
+    "Block{lawsjustice:mining_post}[facing\u003dnorth]": 252,
+    "Block{lawsjustice:mining_post}[facing\u003dsouth]": 252,
+    "Block{lawsjustice:mining_post}[facing\u003dwest]": 252,
+    "Block{lawsjustice:mining_post}[facing\u003deast]": 252,
+    "Block{lawsjustice:agricultural_post}[facing\u003dnorth]": 282,
+    "Block{lawsjustice:agricultural_post}[facing\u003dsouth]": 282,
+    "Block{lawsjustice:agricultural_post}[facing\u003dwest]": 282,
+    "Block{lawsjustice:agricultural_post}[facing\u003deast]": 282,
+    "Block{lawsjustice:workshop_table}[facing\u003dnorth]": 294,
+    "Block{lawsjustice:workshop_table}[facing\u003dsouth]": 294,
+    "Block{lawsjustice:workshop_table}[facing\u003dwest]": 294,
+    "Block{lawsjustice:workshop_table}[facing\u003deast]": 294,
+    "Block{lawsjustice:maintenance_post}[facing\u003dnorth]": 252,
+    "Block{lawsjustice:maintenance_post}[facing\u003dsouth]": 252,
+    "Block{lawsjustice:maintenance_post}[facing\u003dwest]": 252,
+    "Block{lawsjustice:maintenance_post}[facing\u003deast]": 252,
+    "Block{lawsjustice:warehouse_post}[facing\u003dnorth]": 288,
+    "Block{lawsjustice:warehouse_post}[facing\u003dsouth]": 288,
+    "Block{lawsjustice:warehouse_post}[facing\u003dwest]": 288,
+    "Block{lawsjustice:warehouse_post}[facing\u003deast]": 288
+  },
+  "host_uuid": "380df991-f603-344c-a090-369bad2a924a",
+  "sentence_id": "013fd9a7-e5d6-43da-aa0a-0718f408d5ef",
+  "offline_saved_served_ticks": 140,
+  "after_actual_restart_served_ticks": 152
+}
