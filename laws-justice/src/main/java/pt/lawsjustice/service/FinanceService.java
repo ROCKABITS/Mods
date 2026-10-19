@@ -69,8 +69,8 @@ public final class FinanceService {
                 }
                 case "finance_revoke"->{keys(req,"charge","reason","nonce","version");String auth=CourtService.judicialAuthority(p);data.replaceFinance(data.finance().revoke(uuid(req,"charge"),p.getUUID(),JusticeNames.name(p),auth,text(req,"reason",300),now()));s.message="lawsjustice.message.charge_revoked";}
                 case "finance_release"->{
-                    keys(req,"sentence","reason","nonce","version");CourtService.judicialAuthority(p);UUID id=uuid(req,"sentence");var sentence=data.ledger().active().values().stream().filter(v->v.id().equals(id)).findFirst().orElseThrow(()->error("bail_sentence"));
-                    var prison=data.ledger().prisons().get(sentence.prison());JusticeLedger next=data.ledger().judicialRelease(sentence.player(),p.getUUID(),JusticeNames.name(p),text(req,"reason",300),now(),false);
+                    keys(req,"sentence","reason","nonce","version");String auth=CourtService.judicialAuthority(p);UUID id=uuid(req,"sentence");var sentence=data.ledger().active().values().stream().filter(v->v.id().equals(id)).findFirst().orElseThrow(()->error("bail_sentence"));
+                    var prison=data.ledger().prisons().get(sentence.prison());String reason=text(req,"reason",300);JusticeLedger next=auth.equals(CourtLedger.ADMIN_EMERGENCY)?data.ledger().release(sentence.player(),p.getUUID(),JusticeNames.name(p),reason,now()):data.ledger().judicialRelease(sentence.player(),p.getUUID(),JusticeNames.name(p),reason,now(),false);
                     data.replaceFinanceAndQueue(next,data.finance(),sentence.player(),new JusticeData.ReleaseTarget(prison.area().dimension(),prison.release()));ServerPlayer target=p.getServer().getPlayerList().getPlayer(sentence.player());if(target!=null){JusticeService.login(target);JusticeNotifications.send(target,"lawsjustice.notification.judicial_release");}s.message="lawsjustice.message.judicial_release";
                 }
                 default->throw error("request");
