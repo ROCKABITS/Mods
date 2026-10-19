@@ -1,0 +1,67 @@
+{
+  "unit_tests": 85,
+  "standalone_native_tests": 73,
+  "integrated_native_tests": 73,
+  "actual_client_validation": true,
+  "version": "0.2.0",
+  "source_commit": "9bf540a3be4847c9905153398cf2207d9f0e0122",
+  "tested_run": "https://github.com/ROCKABITS/Mods/actions/runs/39215840002",
+  "jar_sha256": "b3cf6b5788cd13035a271228b6e4076f6a1b29e31191e1ca735290fd7fb0c858",
+  "zip_sha256": "91b278c097a74b5a49127174a6b1231bbe6117bd2367f11aaa500744b5f2b3f3",
+  "project_versions": {
+    "laws-justice": "0.2.0"
+  },
+  "runtime_dependency_checksums": {
+    "origins-neoforge-1375372-8758523.jar": "93383233a047a9838af067b64452964183cc4fe9f2d9c269ffb253141136caf6",
+    "jupiter-1072905-7738312.jar": "95af332af250f97fe2d9d288fe6b2057c266673a388348bf33756b0b693ace15",
+    "origins-classes-neoforge-1536425-8758587.jar": "14fcc794ae3fc66f752961f7df480356bb5b7cb01d78a2670e9f1e9d18bafb67"
+  },
+  "companions": {
+    "cronicasrp-0.5.4.jar": "197c2fac53f97eb59159c9a0c26b3065362bdc18c8de1a1c0e61ece4360ba1f5",
+    "contracts-bounties-0.3.2.jar": "2ecf125a188f042f8d6c5011af5e1ff2cc5974925835bcd2cc0180f75d07ff15",
+    "realmcouncil-0.2.2.jar": "0a77af87a5c4e36f55ad12578662834886a7986864896a908a3dc4217e2c19cb",
+    "crown-ledger-0.2.1.jar": "120eb1729d5546b76fa27eff2edfeff0fe8e4cb33dc2bb8f7b75a6ac532dcfe8",
+    "realm-markets-0.2.1.jar": "bfb1e73186015ab94a86c841abba1df02bf1b5851a65771e622234624b806bb1",
+    "realm-rewards-0.1.2.jar": "ab8efe3bd9a7b24a4f725bf6dfe1f07dec0b88ecfaac91533b57c45b11cb7bcb",
+    "realm-notifications-0.1.0.jar": "5aa70ac5a7696ce626ffa40e2e530038e90c06819dbeea6f43be70d42310822a",
+    "realm-titles-0.1.0.jar": "65d854ffd92805f6e8cb0891454f80ba5a6f33394cc0375cf23f64098af2bd16",
+    "realm-identity-0.1.1.jar": "4096147ac74847d31ee733291ad85d8d154ff7340e8d6f0874dd7cb7364823b0",
+    "realm-casino-0.1.0.jar": "8f4410f7469da0c60ec35b97976aae62f31873c76459c52c46f7717f6526587b"
+  },
+  "native_markers": [
+    "JUSTICE_NATIVE_PASSED integration=false",
+    "JUSTICE_NATIVE_PASSED integration=true",
+    "JUSTICE_RUNTIME_MODE_PASSED integration=false",
+    "JUSTICE_RUNTIME_MODE_PASSED integration=true",
+    "JUSTICE_CUSTODY_PASSED",
+    "JUSTICE_PERSISTENCE_PASSED",
+    "COURT_NATIVE_PASSED integration=false",
+    "COURT_NATIVE_PASSED integration=true",
+    "CROWN_JUDGE_PASSED integration=false",
+    "CROWN_JUDGE_PASSED integration=true"
+  ],
+  "screenshots": {
+    "laws-justice-prison-courtyard.png": "72ebb957ebd134365a334b189ec5aeab6b9b7b770ac0410117f5516ef5b59500",
+    "laws-justice-control-ledger.png": "0456069c729d9a606a825c1ae33b17df480b78290fd0742084d886e5269e6341",
+    "laws-justice-door-bars-lock.png": "ab7e201c4ff2978aa3bf9594fd626e03d0af5ddc2a4473ef44ebac3ad4c7ddc9",
+    "laws-justice-admin-overview.png": "c7739bd17f1cd236b945a284607dee2ec5301273589fe261b2cdc396487fa9ea",
+    "laws-justice-admin-prisons.png": "6b0f90571851696ce3305c92695991d64238aae2c44c67c05d56aabb00dbedee",
+    "laws-justice-admin-cells.png": "42ab967f40ca3e90740222637c0129817e0451dec78bd519e57dd35c704af1e2",
+    "laws-justice-admin-sentence-form.png": "f9a551cd015ae4e4ac7d75d528e2ed4e215686880305dde69e0a47cdacdc812a",
+    "laws-justice-custody-history.png": "541e790055d610e2c95592b22fb7592204fdb67b9ec2c962671ab01cbb4f9527",
+    "laws-justice-prisoner-status.png": "16152572ef7f0eba41b9de7c607c42cdd482e28be0497022e26faf604d8e7344",
+    "laws-justice-prisoner-after-respawn.png": "ec6cec96e255f438a1ff600b5145e12d67f9d1af76bc196ae3f628cf574cad56",
+    "laws-justice-prisoner-after-world-restart.png": "99d3667561d146d105c963870c4eff4459fd33dacbc838627a495db03a55488b",
+    "laws-justice-release-courtyard.png": "6d4061124d295aaaa9051d068bdc3c8a9c13714a241a2279ea291df7eda9b308",
+    "laws-justice-history-after-release.png": "2fbdc2702fcfefd9060fccb2a44de87643639565feba4019a196d326be4a550e",
+    "laws-justice-court-desk.png": "f67766e9afa7f6d8f1f89f9939b736e73f6cf1c5ef5f7523be075fe5f27a9ce0",
+    "laws-justice-court-cases.png": "15c11e83e8ce917a1ee5dd3f1cc1ba7b7f95c7fd79d42ae881533f73e05d5005",
+    "laws-justice-court-evidence.png": "ab39d0c11037fa8c3f7280646d28686adbf8bb7ff274a25653a728adbd2b487d",
+    "laws-justice-court-judgment.png": "63d7f0cd4e236e6add5881af3fdd3822dacd5682d3cc1a4409316080c98cd5b4",
+    "laws-justice-court-warrants.png": "c782fd4aba1c5daa869eb83794143dacd863b133c7275b84e9404a2874a0fe47",
+    "laws-justice-warrant-document.png": "eec1510b42b85f139a8718c1f0cf6cc408846b525fcfb7c5efe3d47bc4b51f27",
+    "laws-justice-court-former-president.png": "799f9585086b271e58a21bff06c973ede812f861c36f387357c24b176249fe91"
+  },
+  "release_phase": "2: prisons, online-only sentences, elected President, hearings, evidence, verdicts, sealed warrants and temporary handcuffs",
+  "judicial_authority": "Live elected and sworn Realm Council President; explicitly audited administrator emergency authority; no additional roles"
+}
