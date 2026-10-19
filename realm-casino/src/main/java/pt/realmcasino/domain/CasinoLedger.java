@@ -20,7 +20,7 @@ public final class CasinoLedger {
     public static final int MAX_CREDITORS = 100_000;
     public static final int MAX_HISTORY = 200;
     public static final int MAX_NAME = 48;
-    public enum Kind { SLOTS, ROULETTE, BLACKJACK }
+    public enum Kind { SLOTS, ROULETTE, BLACKJACK, PLINKO, WHEEL, CHICKEN }
     private record Location(String dimension, long position) {}
 
     public record Machine(UUID id, UUID owner, Kind kind, String dimension, long position,
@@ -198,6 +198,9 @@ public final class CasinoLedger {
             case SLOTS -> Money.multiply(stake, Slots.MAX_MULTIPLIER);
             case ROULETTE -> Money.multiply(stake, Roulette.MAX_MULTIPLIER);
             case BLACKJACK -> Blackjack.maximumPayout(stake);
+            case PLINKO -> Plinko.maximumPayout(stake);
+            case WHEEL -> FortuneWheel.maximumPayout(stake);
+            case CHICKEN -> ChickenRoad.maximumPayout(stake);
         };
     }
     private CasinoLedger settleInternal(Round round, long grossPayout, long now) {
@@ -221,6 +224,9 @@ public final class CasinoLedger {
             case SLOTS -> payout == stake || Slots.TRIPLE_RETURNS.stream().anyMatch(multiplier -> Money.multiply(stake, multiplier) == payout);
             case ROULETTE -> payout == Money.multiply(stake, 2) || payout == Money.multiply(stake, 36);
             case BLACKJACK -> payout == stake || payout == Money.multiply(stake, 2) || payout == Blackjack.maximumPayout(stake);
+            case PLINKO -> Plinko.permitted(stake,payout);
+            case WHEEL -> FortuneWheel.permitted(stake,payout);
+            case CHICKEN -> ChickenRoad.permitted(stake,payout);
         };
     }
     private Machine require(UUID id) { return machine(id).orElseThrow(() -> new DomainException("machine_missing")); }

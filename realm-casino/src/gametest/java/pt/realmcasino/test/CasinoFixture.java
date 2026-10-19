@@ -91,6 +91,7 @@ final class CasinoFixture implements AutoCloseable {
     }
     @Override public void close() {
         for (var actor : actors.actors) CasinoService.logout(actor);
+        for(int half=block.isTall()?1:0;half>=0;half--)helper.getLevel().setBlock(pos.above(half),net.minecraft.world.level.block.Blocks.AIR.defaultBlockState(),net.minecraft.world.level.block.Block.UPDATE_CLIENTS|net.minecraft.world.level.block.Block.UPDATE_KNOWN_SHAPE);
         loaded.put(helper.getLevel().getServer(), previous);
         actors.close();
         try (var paths = Files.walk(directory)) { paths.sorted(java.util.Comparator.reverseOrder()).forEach(path -> {

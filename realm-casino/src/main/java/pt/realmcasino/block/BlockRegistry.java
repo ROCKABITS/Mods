@@ -10,7 +10,7 @@ import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import pt.realmcasino.blockentity.CasinoBlockEntities;
 
-/** Three original pieces of furniture; no bank data is ever written to items. */
+/** Original pieces of furniture; no bank data is ever written to items. */
 public final class BlockRegistry {
     private static final DeferredRegister.Blocks BLOCKS = DeferredRegister.createBlocks("realmcasino");
     private static final DeferredRegister.Items ITEMS = DeferredRegister.createItems("realmcasino");
@@ -20,6 +20,13 @@ public final class BlockRegistry {
     public static final DeferredItem<CasinoMachineBlock.MachineItem> SLOT_MACHINE_ITEM = ITEMS.register("slot_machine", () -> new CasinoMachineBlock.MachineItem(SLOT_MACHINE.get(), new Item.Properties()));
     public static final DeferredItem<CasinoMachineBlock.MachineItem> ROULETTE_TABLE_ITEM = ITEMS.register("roulette_table", () -> new CasinoMachineBlock.MachineItem(ROULETTE_TABLE.get(), new Item.Properties()));
     public static final DeferredItem<CasinoMachineBlock.MachineItem> BLACKJACK_TABLE_ITEM = ITEMS.register("blackjack_table", () -> new CasinoMachineBlock.MachineItem(BLACKJACK_TABLE.get(), new Item.Properties()));
+
+    public static final DeferredBlock<PlinkoBoardBlock> PLINKO_BOARD=BLOCKS.register("plinko_board",()->new PlinkoBoardBlock(properties()));
+    public static final DeferredItem<CasinoMachineBlock.MachineItem> PLINKO_BOARD_ITEM=ITEMS.register("plinko_board",()->new CasinoMachineBlock.MachineItem(PLINKO_BOARD.get(),new Item.Properties()));
+    public static final DeferredBlock<FortuneWheelBlock> FORTUNE_WHEEL=BLOCKS.register("fortune_wheel",()->new FortuneWheelBlock(properties()));
+    public static final DeferredItem<CasinoMachineBlock.MachineItem> FORTUNE_WHEEL_ITEM=ITEMS.register("fortune_wheel",()->new CasinoMachineBlock.MachineItem(FORTUNE_WHEEL.get(),new Item.Properties()));
+    public static final DeferredBlock<ChickenRoadTableBlock> CHICKEN_ROAD_TABLE=BLOCKS.register("chicken_road_table",()->new ChickenRoadTableBlock(properties()));
+    public static final DeferredItem<CasinoMachineBlock.MachineItem> CHICKEN_ROAD_TABLE_ITEM=ITEMS.register("chicken_road_table",()->new CasinoMachineBlock.MachineItem(CHICKEN_ROAD_TABLE.get(),new Item.Properties()));
 
     private static BlockBehaviour.Properties properties() {
         return BlockBehaviour.Properties.of().strength(2.5F, 3_600_000F).sound(SoundType.WOOD)

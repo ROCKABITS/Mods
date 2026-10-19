@@ -23,6 +23,12 @@ public final class Money {
         try { return checked(Math.multiplyExact(checked(value), factor)); }
         catch (ArithmeticException exception) { throw new DomainException("invalid"); }
     }
+    /** Exact rational gross return, rounded down to a whole cent without intermediate overflow. */
+    public static long ratio(long value,long numerator,long denominator) {
+        checked(value);if(numerator<0||denominator<=0)throw new DomainException("invalid");
+        try{return checked(java.math.BigInteger.valueOf(value).multiply(java.math.BigInteger.valueOf(numerator)).divide(java.math.BigInteger.valueOf(denominator)).longValueExact());}
+        catch(ArithmeticException failure){throw new DomainException("invalid");}
+    }
     public static long parse(String text) {
         if (text == null || !text.strip().matches("[0-9]+([.,][0-9]{1,2})?"))
             throw new DomainException("invalid");

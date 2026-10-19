@@ -38,6 +38,9 @@ import pt.realmcasino.domain.CasinoLedger.Machine;
 import pt.realmcasino.domain.Money;
 import pt.realmcasino.domain.Roulette;
 import pt.realmcasino.domain.Slots;
+import pt.realmcasino.domain.Plinko;
+import pt.realmcasino.domain.FortuneWheel;
+import pt.realmcasino.domain.ChickenRoad;
 import pt.realmcasino.network.CasinoNetwork;
 
 /** Every result, identity, reservation and transaction is authoritative on the server thread. */
@@ -134,7 +137,7 @@ public final class CasinoService {
             if(operation.equals("refresh")) {fields(payload,Set.of());SESSIONS.put(player.getUUID(),SESSIONS.get(player.getUUID()).refreshNonce());send(player,"","");return;}
             Set<String> allowed=switch(operation) {
                 case "bet"->Set.of("nonce","version","amount","selection","number");
-                case "hit","stand"->Set.of("nonce","version","round","revision");
+                case "hit","stand","advance","cashout"->Set.of("nonce","version","round","revision");
                 case "deposit","withdraw","claim"->Set.of("nonce","version","amount");
                 case "configure"->Set.of("nonce","version","name","minBet","maxBet");
                 default->throw failure("invalid_request");
@@ -146,6 +149,7 @@ public final class CasinoService {
             String message=switch(operation) {
                 case "bet"->{bet(player,machine,payload);yield "gui.realmcasino.bet_accepted";}
                 case "hit","stand"->{playCard(player,machine,payload,operation.equals("hit"));yield "";}
+                case "advance","cashout"->{playChicken(player,machine,payload,operation.equals("advance"));yield "";}
                 case "deposit"->{requireEconomy(player);long amount=positive(payload,"amount");WalletJournal.transfer(player,-amount,"deposit",data.ledger().deposit(machine.id(),player.getUUID(),amount),data.states());yield "gui.realmcasino.deposited";}
                 case "withdraw"->{requireEconomy(player);long amount=positive(payload,"amount");data.replace(data.ledger().withdraw(machine.id(),player.getUUID(),amount),data.states());yield "gui.realmcasino.withdrawn_pending";}
                 case "claim"->{claim(player,payload);yield "gui.realmcasino.claimed";}
@@ -176,6 +180,11 @@ public final class CasinoService {
                 int number=type==Roulette.Type.NUMBER?Math.toIntExact(integer(payload,"number")):-1;
                 Roulette.Bet bet=new Roulette.Bet(type,number);yield GameState.roulette(round,machine.id(),player.getUUID(),stake,now,bet,Roulette.draw(RANDOM::nextInt));
             }
+            case PLINKO, WHEEL, CHICKEN->{
+                if(!selection.isEmpty()||payload.has("number"))throw failure("invalid_request");
+                List<Integer> path=machine.kind()==Kind.PLINKO?Plinko.draw(RANDOM::nextInt):machine.kind()==Kind.WHEEL?List.of(FortuneWheel.draw(RANDOM::nextInt)):List.of();
+                yield GameState.arcade(round,machine.id(),player.getUUID(),machine.kind(),stake,now,path);
+            }
             case BLACKJACK->{if(!selection.isEmpty()||payload.has("number"))throw failure("invalid_request");yield GameState.blackjack(round,machine.id(),player.getUUID(),stake,now,Blackjack.deal(RANDOM::nextInt));}
         };
         Map<UUID,GameState> games=new LinkedHashMap<>(data.states());games.put(player.getUUID(),game);
@@ -186,9 +195,27 @@ public final class CasinoService {
     }
     private static void playCard(ServerPlayer player,Machine machine,JsonObject payload,boolean hit) {
         CasinoData data=CasinoData.get(player.getServer());GameState game=data.states().get(player.getUUID());
-        if(game==null||game.finished()||!game.machine().equals(machine.id())||!game.id().equals(uuid(payload,"round"))||game.revision()!=integer(payload,"revision"))throw failure("stale_round");
+        if(game==null||game.kind()!=Kind.BLACKJACK||game.finished()||!game.machine().equals(machine.id())||!game.id().equals(uuid(payload,"round"))||game.revision()!=integer(payload,"revision"))throw failure("stale_round");
         if(now()>=game.deadline()){settleHand(player.getServer(),game,false);throw failure("hand_expired");}
         settleHand(player.getServer(),game,hit);
+    }
+    private static void playChicken(ServerPlayer player,Machine machine,JsonObject payload,boolean advance) {
+        CasinoData data=CasinoData.get(player.getServer());GameState game=data.states().get(player.getUUID());
+        if(game==null||game.kind()!=Kind.CHICKEN||game.finished()||!game.machine().equals(machine.id())||!game.id().equals(uuid(payload,"round"))||game.revision()!=integer(payload,"revision"))throw failure("stale_round");
+        if(now()>=game.deadline()){settleChicken(player.getServer(),game,false);throw failure("hand_expired");}
+        settleChicken(player.getServer(),game,advance);
+    }
+    private static void settleChicken(MinecraftServer server,GameState before,boolean advance) {
+        CasinoData data=CasinoData.get(server);data.requireAvailable();
+        GameState game=before.chicken(advance,RANDOM::nextInt);
+        Map<UUID,GameState> games=new LinkedHashMap<>(data.states());games.put(game.player(),game);
+        CasinoLedger ledger=data.ledger();if(game.finished())ledger=ledger.settle(game.id(),game.payout(),Math.max(now(),game.startedAt()));
+        data.replace(ledger,games);publish(server,game);
+        ServerPlayer player=server.getPlayerList().getPlayer(game.player());
+        if(game.finished()&&player!=null)NotificationsBridge.send(player,"notification.realmcasino.result",game.payout());
+    }
+    private static void endActive(MinecraftServer server,GameState game) {
+        if(game.kind()==Kind.CHICKEN)settleChicken(server,game,false);else settleHand(server,game,false);
     }
     private static void settleHand(MinecraftServer server,GameState before,boolean hit) {
         CasinoData data=CasinoData.get(server);data.requireAvailable();
@@ -239,7 +266,13 @@ public final class CasinoService {
         out.addProperty("outcome",!game.finished()?"":game.kind()==Kind.BLACKJACK?(game.blackjack().outcome()==Blackjack.Outcome.LOSS?"lose":game.blackjack().outcome().name().toLowerCase(Locale.ROOT)):game.payout()>game.stake()?"win":game.payout()==game.stake()?"push":"lose");
         JsonArray result=new JsonArray(),pc=new JsonArray(),dc=new JsonArray();game.reels().forEach(result::add);if(game.kind()==Kind.ROULETTE)result.add(game.rouletteNumber());
         if(game.blackjack()!=null){game.blackjack().player().forEach(pc::add);dc.add(game.blackjack().dealer().getFirst());if(game.finished())for(int i=1;i<game.blackjack().dealer().size();i++)dc.add(game.blackjack().dealer().get(i));else dc.add(-1);}
-        out.add("results",result);out.add("playerCards",pc);out.add("dealerCards",dc);out.addProperty("canHit",!game.finished());out.addProperty("canStand",!game.finished());return out;
+        if(game.kind()==Kind.CHICKEN){
+            out.addProperty("steps",game.reels().size());out.addProperty("crashed",ChickenRoad.crashed(game.reels()));
+            out.addProperty("cashout",ChickenRoad.payout(game.stake(),game.reels().size()));
+            out.addProperty("nextPayout",ChickenRoad.payout(game.stake(),Math.min(10,game.reels().size()+1)));
+            out.addProperty("canAdvance",!game.finished());out.addProperty("canCashout",!game.finished());
+        }
+        out.add("results",result);out.add("playerCards",pc);out.add("dealerCards",dc);out.addProperty("canHit",game.kind()==Kind.BLACKJACK&&!game.finished());out.addProperty("canStand",game.kind()==Kind.BLACKJACK&&!game.finished());return out;
     }
     public static void login(ServerPlayer player){try{WalletJournal.recover(player);}catch(RuntimeException|LinkageError ignored){/* A frozen intent remains inspectable; no hidden retry or reset. */}}
     public static void logout(ServerPlayer player) {
@@ -248,7 +281,7 @@ public final class CasinoService {
         SESSIONS.remove(player.getUUID());
     }
     private static void autoStand(MinecraftServer server,UUID player) {
-        GameState game=CasinoData.get(server).states().get(player);if(game!=null&&!game.finished())settleHand(server,game,false);
+        GameState game=CasinoData.get(server).states().get(player);if(game!=null&&!game.finished())endActive(server,game);
     }
     public static void tick(MinecraftServer server) {
         TICKS.merge(server,1L,Long::sum);if(ticks(server)%20!=0)return;
@@ -257,7 +290,7 @@ public final class CasinoService {
             for(GameState game:new ArrayList<>(data.states().values())) {
                 if(game.finished())continue;ServerPlayer player=server.getPlayerList().getPlayer(game.player());boolean end=player==null||now()>=game.deadline();
                 if(!end)try{Machine machine=requireSession(player);end=!machine.id().equals(game.machine());}catch(RuntimeException|LinkageError failure){end=true;}
-                if(end){settleHand(server,game,false);if(player!=null&&SESSIONS.containsKey(player.getUUID()))try{send(player,"gui.realmcasino.auto_stand","");}catch(RuntimeException|LinkageError ignored){}}
+                if(end){endActive(server,game);if(player!=null&&SESSIONS.containsKey(player.getUUID()))try{send(player,"gui.realmcasino.auto_stand","");}catch(RuntimeException|LinkageError ignored){}}
             }
         }catch(RuntimeException|LinkageError ignored){/* IO or invalid registry freezes money instead of resetting it. */}
     }
@@ -268,7 +301,7 @@ public final class CasinoService {
         BlockPos position=BlockPos.of(machine.position());if(!level.hasChunkAt(position))return;
         if(level.getBlockEntity(position)instanceof CasinoBlockEntity entity) {
             int[] result=switch(game.kind()) {
-                case SLOTS->game.reels().stream().mapToInt(Integer::intValue).toArray();
+                case SLOTS, PLINKO, WHEEL, CHICKEN->game.reels().stream().mapToInt(Integer::intValue).toArray();
                 case ROULETTE->new int[]{game.rouletteNumber()};
                 case BLACKJACK->game.finished()?game.blackjack().dealer().stream().mapToInt(Integer::intValue).toArray():new int[]{game.blackjack().dealer().getFirst(),-1};
             };

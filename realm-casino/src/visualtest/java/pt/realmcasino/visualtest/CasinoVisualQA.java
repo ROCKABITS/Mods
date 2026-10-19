@@ -60,10 +60,10 @@ import pt.realmcasino.service.WalletJournal;
 @EventBusSubscriber(modid = "realmcasino", value = Dist.CLIENT)
 public final class CasinoVisualQA {
     private static final Path OUT = Path.of(System.getProperty("casino.qaOutput", "qa-results/casino-client")).toAbsolutePath().normalize();
-    private static final BlockPos[] MACHINES = {new BlockPos(0, 161, 0), new BlockPos(-3, 161, 0), new BlockPos(3, 161, 0)};
-    private static final String[] GAMES = {"slots", "roulette", "blackjack"};
-    private static final String[] BLOCKS = {"slot_machine", "roulette_table", "blackjack_table"};
-    private static final long INITIAL = 2_000_000, DEPOSIT = 500_000;
+    private static final BlockPos[] MACHINES = {new BlockPos(0, 161, 0), new BlockPos(-3, 161, 0), new BlockPos(3, 161, 0),new BlockPos(-3,161,-6),new BlockPos(0,161,-6),new BlockPos(3,161,-6)};
+    private static final String[] GAMES = {"slots", "roulette", "blackjack", "plinko", "wheel", "chicken"};
+    private static final String[] BLOCKS = {"slot_machine", "roulette_table", "blackjack_table", "plinko_board", "fortune_wheel", "chicken_road_table"};
+    private static final long INITIAL = 5_000_000, DEPOSIT = 500_000;
     private static final List<String> CHECKS = new ArrayList<>(), CAPTURES = new ArrayList<>();
     private static final List<Map<String, Object>> REQUESTS = new ArrayList<>();
     private static final Map<String, Integer> MODEL_QUADS = new LinkedHashMap<>();
@@ -79,7 +79,8 @@ public final class CasinoVisualQA {
     private static boolean done, languageRequested, realS2c, realC2s;
     private static JsonObject committedRound;
     private static int[] movingWheelPixels;
-    private static int animatedPixelChanges;
+    private static int animatedPixelChanges,fortuneAnimatedPixelChanges,roadAttempts;
+    private static volatile boolean arcadePrepared;
 
     private CasinoVisualQA() {}
     private static void check(boolean value, String message) { if (!value) throw new IllegalStateException(message); }
@@ -187,7 +188,7 @@ public final class CasinoVisualQA {
         if (state.hasProperty(BlockStateProperties.DOUBLE_BLOCK_HALF)) state = state.setValue(BlockStateProperties.DOUBLE_BLOCK_HALF, DoubleBlockHalf.LOWER);
         int flags = Block.UPDATE_CLIENTS | Block.UPDATE_KNOWN_SHAPE;
         check(level.setBlock(MACHINES[index], state, flags), "Could not place actual " + BLOCKS[index]);
-        if (index == 0) check(level.setBlock(MACHINES[index].above(), state.setValue(BlockStateProperties.DOUBLE_BLOCK_HALF, DoubleBlockHalf.UPPER), flags), "Could not place actual slots upper half");
+        if (state.hasProperty(BlockStateProperties.DOUBLE_BLOCK_HALF)) check(level.setBlock(MACHINES[index].above(), state.setValue(BlockStateProperties.DOUBLE_BLOCK_HALF, DoubleBlockHalf.UPPER), flags), "Could not place actual slots upper half");
         level.updateNeighborsAt(MACHINES[index], block); CasinoService.placed(player, MACHINES[index], GAMES[index]);
         check(level.getBlockEntity(MACHINES[index]) != null, "Casino machine has no actual block entity");
     }
@@ -226,9 +227,9 @@ public final class CasinoVisualQA {
         server(() -> { var player = player(); player.getAbilities().flying = true; player.onUpdateAbilities(); player.connection.teleport(x, 162.2, z, yaw, pitch); moved = true; });
     }
     private static void detailCamera(int game) {
-        var mc = Minecraft.getInstance(); mc.options.fov().set(game == 0 ? 50 : 42);
+        var mc = Minecraft.getInstance(); mc.options.fov().set(game == 0 || game == 3 || game == 4 ? 50 : 42);
         cameraX = MACHINES[game].getX() + 2; cameraY = 161; cameraZ = MACHINES[game].getZ() - 2.6;
-        cameraYaw = 30; cameraPitch = game == 0 ? 11 : 22; moved = false;
+        cameraYaw = 30; cameraPitch = game == 0 || game == 3 || game == 4 ? 11 : 22; moved = false;
         server(() -> { var player = player(); player.connection.teleport(cameraX, cameraY, cameraZ, cameraYaw, cameraPitch); moved = true; });
     }
     private static boolean cameraReady() {
@@ -293,7 +294,7 @@ public final class CasinoVisualQA {
     }
     private static boolean hostWalletSavesComplete() {
         var operations = HOST_WALLET_SAVES.stream().map(saved -> saved.get("operation")).collect(java.util.stream.Collectors.toSet());
-        return operations.containsAll(List.of("slots_deposit", "pending_claim", "slots_bet", "roulette_bet", "blackjack_bet"));
+        return operations.containsAll(List.of("slots_deposit", "pending_claim", "slots_bet", "roulette_bet", "blackjack_bet","plinko_bet","wheel_bet","chicken_bet","arcade_claim"));
     }
     private static CompoundTag persistedWallet(CompoundTag tag, UUID player, long balance) {
         check(tag.hasUUID("UUID") && tag.getUUID("UUID").equals(player), "Saved host wallet has the wrong player UUID");
@@ -329,7 +330,7 @@ public final class CasinoVisualQA {
             var item = BuiltInRegistries.ITEM.get(key(name)); check(item != Items.AIR, "Casino furniture item missing: " + name);
             check(!mc.getItemRenderer().getModel(new ItemStack(item), null, null, 0).getParticleIcon().contents().name().equals(MissingTextureAtlasSprite.getLocation()), "Casino item texture missing: " + name);
         }
-        CHECKS.add("All registered baked states and all three furniture item models have native geometry and resolved textures.");
+        CHECKS.add("All registered baked states and all six furniture item models have native geometry and resolved textures.");
     }
     private static boolean worldResult(int game, JsonObject round) {
         var mc = Minecraft.getInstance(); var be = mc.level.getBlockEntity(MACHINES[game]); if (be == null) return false;
@@ -338,7 +339,7 @@ public final class CasinoVisualQA {
             check(mc.getBlockEntityRenderDispatcher().getRenderer(be) != null, "Actual casino block entity has no client animation renderer");
             check(be.getClass().getMethod("game").invoke(be).equals(GAMES[game]), "Native BE packet contains wrong game");
             var result = (int[]) be.getClass().getMethod("result").invoke(be);
-            if (game < 2) {
+            if (game != 2) {
                 int[] expected = new int[round.getAsJsonArray("results").size()]; for (int i = 0; i < expected.length; i++) expected[i] = round.getAsJsonArray("results").get(i).getAsInt();
                 check(Arrays.equals(result, expected), "Native BE committed result differs from authoritative S2C result");
                 check(((Long) be.getClass().getMethod("payout").invoke(be)) == round.get("payout").getAsLong(), "Native BE committed payout differs from authoritative S2C");
@@ -393,9 +394,9 @@ public final class CasinoVisualQA {
             report.put("real_c2s_transport", realC2s); report.put("real_chronicles_wallet", walletFixture && conservationChecked);
             report.put("lan_host_wallet_dual_save", hostWalletSavesComplete());
             report.put("actual_host_wallet_saves", HOST_WALLET_SAVES);
-            report.put("real_world_models", !MODEL_QUADS.isEmpty()); report.put("real_world_animation", worldAnimations >= 3);
+            report.put("real_world_models", !MODEL_QUADS.isEmpty()); report.put("real_world_animation", worldAnimations >= 6);
             report.put("server_result_block_entity_updates", worldAnimations); report.put("capture_resolution", "1600x900"); report.put("capture_gui_scale", 2);
-            report.put("world_animation_changing_pixels", animatedPixelChanges);
+            report.put("world_animation_changing_pixels", animatedPixelChanges);report.put("fortune_world_animation_changing_pixels",fortuneAnimatedPixelChanges);
             report.put("demonstration_world_and_money", true); report.put("synthetic_financial_snapshots", false); report.put("server_rng_overridden", false);
             report.put("actual_c2s_requests", REQUESTS); report.put("model_quads", MODEL_QUADS); report.put("real_server_rounds", ROUNDS);
             Files.writeString(OUT.resolve("result.json"), new GsonBuilder().setPrettyPrinting().create().toJson(report));
@@ -454,7 +455,47 @@ public final class CasinoVisualQA {
                 case 32 -> { if (!cameraReady()) return; stagePhoto(now); step++; }
                 case 33 -> { check(cameraReady(),"Roulette detail camera did not settle"); capture("realm-casino-roulette-detail.png"); detailCamera(2); step++; }
                 case 34 -> { if (!cameraReady()) return; stagePhoto(now); step++; }
-                case 35 -> { check(cameraReady(),"Blackjack detail camera did not settle"); capture("realm-casino-blackjack-detail.png"); check(c2sCount>=9 && worldAnimations>=3 && animatedPixelChanges>24 && realC2s && realS2c && hostWalletSavesComplete(), "Actual transport/animation coverage incomplete"); CHECKS.add("All three original furniture models were also photographed individually from synchronized three-quarter detail cameras."); CHECKS.add("After real deposit, claim and each game stake, both playerdata UUID.dat and level.dat Data.Player contain the exact Chronicles balance and identical casino receipt; loading each actual host restart tag into a fresh server player restores that balance. This is integrated-host persistence proof, not a remote authenticated multiplayer reconnect."); complete(true,"Actual integrated Minecraft world, all three custom furniture models and game menus, owner controls, real Chronicles finances, native C2S/S2C/BE updates and compact controls passed."); }
+                case 35 -> { check(cameraReady(),"Blackjack detail camera did not settle"); capture("realm-casino-blackjack-detail.png");server(()->{for(int i=3;i<6;i++)place(player(),i);arcadePrepared=true;});step++; }
+                case 36 -> { if(!arcadePrepared)return;mc.options.fov().set(56);move(5.6,-13.2,36,12);step++; }
+                case 37 -> { if(!cameraReady())return;stagePhoto(now);step++; }
+                case 38 -> { capture("realm-casino-arcade-furniture.png");detailCamera(3);step++; }
+                case 39 -> { if(!cameraReady())return;stagePhoto(now);step++; }
+                case 40 -> { capture("realm-casino-plinko-detail.png");detailCamera(4);step++; }
+                case 41 -> { if(!cameraReady())return;stagePhoto(now);step++; }
+                case 42 -> { capture("realm-casino-wheel-detail.png");detailCamera(5);step++; }
+                case 43 -> { if(!cameraReady())return;stagePhoto(now);step++; }
+                case 44 -> { capture("realm-casino-chicken-detail.png");mc.options.hideGui=false;open(3);step++; }
+                case 45 -> { if(!ready(3))return;recordTransport();compact();tab("OWNER");input("amountInput","5000.00");check(click("gui.realmcasino.deposit"),"Plinko deposit unavailable");request("deposit");step++; }
+                case 46 -> { if(!ready(3)||data().get("bank").getAsLong()!=DEPOSIT)return;tab("RULES");stagePhoto(now);step++; }
+                case 47 -> { capture("realm-casino-plinko-rules.png");tab("PLAY");input("stakeInput","1.00");expectedBalance=data().get("balance").getAsLong()-100;check(click("gui.realmcasino.drop_ball"),"Plinko bet unavailable");request("bet");step++; }
+                case 48 -> { if(!ready(3)||round(data())==null)return;committedRound=round(data()).deepCopy();check(data().get("balance").getAsLong()==expectedBalance,"Plinko did not debit real Chronicles wallet");hostWalletSave("plinko_bet");if(!worldResult(3,committedRound))return;ROUNDS.put("plinko",committedRound);scrollTop();stagePhoto(now);step++; }
+                case 49 -> { capture("realm-casino-plinko-dropping.png");nextAction=now+3200;step++; }
+                case 50 -> { capture("realm-casino-plinko-result.png");conservation();open(4);step++; }
+                case 51 -> { if(!ready(4)||!conservationChecked)return;recordTransport();compact();tab("OWNER");input("amountInput","5000.00");check(click("gui.realmcasino.deposit"),"Wheel deposit unavailable");request("deposit");step++; }
+                case 52 -> { if(!ready(4)||data().get("bank").getAsLong()!=DEPOSIT)return;tab("RULES");stagePhoto(now);step++; }
+                case 53 -> { capture("realm-casino-wheel-rules.png");tab("PLAY");input("stakeInput","1.00");expectedBalance=data().get("balance").getAsLong()-100;check(click("gui.realmcasino.wheel_spin"),"Wheel bet unavailable");request("bet");step++; }
+                case 54 -> { if(!ready(4)||round(data())==null)return;committedRound=round(data()).deepCopy();check(data().get("balance").getAsLong()==expectedBalance,"Wheel did not debit real wallet");hostWalletSave("wheel_bet");if(!worldResult(4,committedRound))return;ROUNDS.put("wheel",committedRound);scrollTop();stagePhoto(now);step++; }
+                case 55 -> { capture("realm-casino-wheel-spinning.png");mc.setScreen(null);mc.options.hideGui=true;cameraX=MACHINES[4].getX()+.5;cameraY=161;cameraZ=-9;cameraYaw=0;cameraPitch=11;moved=false;server(()->{player().connection.teleport(cameraX,cameraY,cameraZ,cameraYaw,cameraPitch);moved=true;});nextAction=now+300;step=550; }
+                case 550 -> { if(!cameraReady())return;check(now-committedRound.get("startedAt").getAsLong()<3200,"Fortune animation ended before capture");capture("realm-casino-wheel-world-spinning.png");movingWheelPixels=wheelPixels();nextAction=now+3600;step=551; }
+                case 551 -> { check(cameraReady()&&worldResult(4,committedRound),"Fortune camera or committed display changed");capture("realm-casino-wheel-world-settled.png");int[] settled=wheelPixels();for(int i=0;i<settled.length;i++)if(settled[i]!=movingWheelPixels[i])fortuneAnimatedPixelChanges++;check(fortuneAnimatedPixelChanges>24,"Fortune physical wheel did not animate");mc.options.hideGui=false;open(4);step=552; }
+                case 552 -> { if(!ready(4))return;scrollTop();stagePhoto(now);nextAction=now+3500;step=56; }
+                case 56 -> { capture("realm-casino-wheel-result.png");conservation();open(5);step++; }
+                case 57 -> { if(!ready(5)||!conservationChecked)return;recordTransport();compact();tab("OWNER");input("amountInput","5000.00");check(click("gui.realmcasino.deposit"),"Road deposit unavailable");request("deposit");step++; }
+                case 58 -> { if(!ready(5)||data().get("bank").getAsLong()!=DEPOSIT)return;tab("RULES");stagePhoto(now);step++; }
+                case 59 -> { capture("realm-casino-chicken-rules.png");tab("PLAY");input("stakeInput","1.00");step++; }
+                case 60 -> { if(!ready(5))return;expectedBalance=data().get("balance").getAsLong()-100;check(click("gui.realmcasino.chicken_start"),"Road wager unavailable");request("bet");roadAttempts++;step++; }
+                case 61 -> { if(!ready(5)||round(data())==null||!round(data()).get("phase").getAsString().equals("active"))return;check(data().get("balance").getAsLong()==expectedBalance,"Road did not debit the real wallet");hostWalletSave("chicken_bet");committedRound=round(data()).deepCopy();if(!worldResult(5,committedRound))return;scrollTop();stagePhoto(now);nextAction=now+1000;step++; }
+                case 62 -> { if(roadAttempts==1)capture("realm-casino-chicken-ready.png");check(click("gui.realmcasino.advance"),"Real road advance button unavailable");request("advance");step++; }
+                case 63 -> { if(!ready(5)||round(data()).get("revision").getAsLong()<2)return;committedRound=round(data()).deepCopy();check(data().get("balance").getAsLong()==expectedBalance,"A crossing charged a second stake");if(!worldResult(5,committedRound))return;stagePhoto(now);nextAction=now+1100;step++; }
+                case 64 -> {
+                    if(committedRound.get("phase").getAsString().equals("settled")){
+                        if(roadAttempts==1)capture("realm-casino-chicken-crash.png");check(roadAttempts<16,"Unusually many consecutive natural road crashes");step=60;
+                    }else{capture("realm-casino-chicken-crossing.png");ROUNDS.put("chicken_crossing",committedRound);check(click("gui.realmcasino.cashout"),"Real road cashout unavailable");request("cashout");step++;}
+                }
+                case 65 -> { if(!ready(5)||!round(data()).get("phase").getAsString().equals("settled"))return;check(round(data()).get("payout").getAsLong()==118&&data().get("reserved").getAsLong()==0,"Road cashout did not conserve the committed one-step prize");ROUNDS.put("chicken_settled",round(data()).deepCopy());conservation();scrollTop();stagePhoto(now);nextAction=now+1000;step++; }
+                case 66 -> { if(!conservationChecked)return;capture("realm-casino-chicken-collected.png");expectedBalance=data().get("balance").getAsLong()+data().get("pending").getAsLong();check(click("gui.realmcasino.claim"),"Arcade winnings claim unavailable");request("claim");step++; }
+                case 67 -> { if(!ready(5)||data().get("pending").getAsLong()!=0)return;check(data().get("balance").getAsLong()==expectedBalance,"Arcade prize claim changed wrong wallet amount");hostWalletSave("arcade_claim");conservation();step++; }
+                case 68 -> { if(!conservationChecked||!hostWalletSavesComplete())return;check(c2sCount>=18&&worldAnimations>=6&&animatedPixelChanges>24&&fortuneAnimatedPixelChanges>24&&realC2s&&realS2c,"Actual transport/animation coverage incomplete");CHECKS.add("All six physical game blocks, models, Play/Rules/Owner menus and 320x240 controls passed; the three new games used actual C2S/S2C, server entropy, real Chronicles stakes, pending prize collection, native BE results and conservation of wallet + banks + claims.");CHECKS.add("Royal Crossing advanced and cashed out through actual native buttons. Any naturally crashed attempt was debited and audited before retry; no random source or financial snapshot was replaced.");complete(true,"Six real casino games, original furniture, actual wallet transfers, host restart tags, compact interfaces and native block-entity updates passed."); }
                 default -> throw new IllegalStateException("Unexpected Casino client QA stage");
             }
             System.out.println("CASINO_CLIENT_STEP " + step + " screen=" + (mc.screen == null ? "world" : mc.screen.getClass().getSimpleName()));

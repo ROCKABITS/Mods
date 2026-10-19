@@ -35,7 +35,7 @@ import pt.realmcasino.service.CasinoService;
 public final class CasinoBlockGameTests {
     private CasinoBlockGameTests() {}
     static List<CasinoMachineBlock> machines() {
-        return List.of(BlockRegistry.SLOT_MACHINE.get(), BlockRegistry.ROULETTE_TABLE.get(), BlockRegistry.BLACKJACK_TABLE.get());
+        return List.of(BlockRegistry.SLOT_MACHINE.get(), BlockRegistry.ROULETTE_TABLE.get(), BlockRegistry.BLACKJACK_TABLE.get(),BlockRegistry.PLINKO_BOARD.get(),BlockRegistry.FORTUNE_WHEEL.get(),BlockRegistry.CHICKEN_ROAD_TABLE.get());
     }
     static BlockPos base(GameTestHelper helper) { return helper.absolutePos(new BlockPos(4, 1, 4)); }
     static void place(GameTestHelper helper, CasinoActors.Actor owner, BlockPos pos, CasinoMachineBlock block, Direction facing) {
@@ -58,7 +58,7 @@ public final class CasinoBlockGameTests {
     }
 
     @GameTest(template = "casino_empty", timeoutTicks = 100)
-    public static void allThreePhysicalMachinesHaveRecipesCreativeSearchAndBlockedPistons(GameTestHelper helper) {
+    public static void allSixPhysicalMachinesHaveRecipesCreativeSearchAndBlockedPistons(GameTestHelper helper) {
         var tab = BuiltInRegistries.CREATIVE_MODE_TAB.get(ResourceLocation.fromNamespaceAndPath("realmcasino", "realm_casino"));
         helper.assertTrue(tab != null, "The casino creative tab is missing");
         tab.buildContents(new CreativeModeTab.ItemDisplayParameters(FeatureFlags.DEFAULT_FLAGS, true, helper.getLevel().registryAccess()));
@@ -98,10 +98,10 @@ public final class CasinoBlockGameTests {
     }
 
     @GameTest(template = "casino_empty", timeoutTicks = 100)
-    public static void breakingEitherEmptySlotHalfInSurvivalDropsExactlyOneItem(GameTestHelper helper) {
+    public static void breakingEitherEmptyTallMachineHalfInSurvivalDropsExactlyOneItem(GameTestHelper helper) {
         try (var actors = new CasinoActors(helper)) {
-            BlockPos pos = base(helper); var block = BlockRegistry.SLOT_MACHINE.get();
-            for (boolean upper : List.of(false, true)) {
+            BlockPos pos = base(helper);
+            for(var block:List.of(BlockRegistry.SLOT_MACHINE.get(),BlockRegistry.PLINKO_BOARD.get(),BlockRegistry.FORTUNE_WHEEL.get()))for (boolean upper : List.of(false, true)) {
                 var owner = actors.actor("SlotBreakerQA", 100_000); place(helper, owner, pos, block, Direction.NORTH);
                 owner.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(Items.DIAMOND_AXE));
                 helper.assertTrue(owner.gameMode.destroyBlock(upper ? pos.above() : pos), "The owner could not dismantle an empty slot machine");

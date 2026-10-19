@@ -50,7 +50,7 @@ class CasinoLedgerTest {
         for (CasinoLedger.Kind kind : CasinoLedger.Kind.values()) {
             CasinoLedger ledger = empty(kind).deposit(MACHINE, OWNER, 100_000);
             CasinoLedger active = start(ledger, 100);
-            long expected = switch (kind) { case SLOTS -> 10_000; case ROULETTE -> 3600; case BLACKJACK -> 250; };
+            long expected = switch (kind) { case SLOTS -> 10_000; case ROULETTE -> 3600; case BLACKJACK -> 250; case PLINKO -> 3200; case WHEEL -> 500; case CHICKEN -> 884; };
             assertEquals(expected, active.rounds().get(ROUND).maxPayout());
             assertEquals(expected, active.machine(MACHINE).orElseThrow().reserved());
         }

@@ -3,6 +3,9 @@
   "values": [
     "realmcasino:slot_machine",
     "realmcasino:roulette_table",
-    "realmcasino:blackjack_table"
+    "realmcasino:blackjack_table",
+    "realmcasino:plinko_board",
+    "realmcasino:fortune_wheel",
+    "realmcasino:chicken_road_table"
   ]
 }

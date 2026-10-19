@@ -274,6 +274,42 @@ for index in range(8):
     atlas.alpha_composite(glyph,(index*16,0))
 save("symbols",atlas)
 
+# Phase two: original fortune wheel, road board and engraved Plinko panel.
+_rng_state=RNG.getstate()
+im=noise((64,128),(17,48,43),2);d=ImageDraw.Draw(im)
+d.rectangle((1,1,62,126),outline=GOLD,width=2)
+d.rectangle((4,4,59,123),outline=(74,111,80,255))
+crown(d,25,6,1.3)
+for y in range(25,108,7):
+    for x in range(7,60,8):d.point((x,y),fill=(34,67,53,255))
+for x in (7,56):
+    for y in range(13,119,11):diamond(d,x,y,1,GOLD)
+save("plinko_panel",im)
+wheel_returns=[0,.5,1,0,1.5,.5,0,2,.5,1,0,.5,3,0,.5,1,0,.5,5,1.5]
+im=Image.new("RGBA",(128,128));d=ImageDraw.Draw(im)
+d.ellipse((1,1,126,126),fill=DEEP,outline=LIGHT,width=2)
+for i,m in enumerate(wheel_returns):
+    color=(42,99,76,255) if m>0 else (92,39,49,255)
+    if m>=3:color=(175,119,40,255)
+    d.pieslice((4,4,123,123),-99+i*18,-81+i*18,fill=color,outline=GOLD,width=1)
+    angle=math.radians(-90+i*18);x=64+math.cos(angle)*46;y=64+math.sin(angle)*46
+    text=f"{m:g}";d.text((round(x)-len(text)*3,round(y)-4),text,fill=CREAM)
+d.ellipse((45,45,82,82),fill=(61,39,30,255),outline=LIGHT,width=2)
+crown(d,53,53,2)
+save("fortune_face",im)
+im=noise((128,128),(44,78,49),2);d=ImageDraw.Draw(im)
+d.rectangle((1,1,126,126),outline=GOLD,width=2)
+for lane in range(10):
+    x=12+lane*10;d.rectangle((x,9,x+7,118),fill=(62,65,57,255))
+    for y in range(12,116,12):
+        d.line((x+1,y,x+5,y),fill=(95,96,77,255));d.point((x+6,y+5),fill=(29,40,34,255))
+for x in (5,120):
+    for y in range(10,120,9):diamond(d,x,y,2,(71,112,56,255))
+save("chicken_road",im)
+im=Image.new("RGBA",(16,16));d=ImageDraw.Draw(im)
+d.ellipse((1,1,14,14),fill=GOLD);d.ellipse((2,2,12,12),fill=CREAM);d.rectangle((4,3,7,5),fill=(255,250,213,255));save("ivory_ball",im)
+RNG.setstate(_rng_state)
+
 TEXTURES={p.stem:"realmcasino:block/"+p.stem for p in sorted(TEX.glob("*.png"))}
 TEXTURES["particle"]="realmcasino:block/walnut"
 ELEMENTS=[]
@@ -525,17 +561,92 @@ for x in (3.7,4.75,5.8,6.85):
     box([x,12.94,3.15],[x+.7,13.3,3.95],"chip_red" if x<5 else "chip_green","dealer_chip_rack_tokens",up="chip_red" if x<5 else "chip_green")
 publish("blackjack_table",ELEMENTS)
 
+# Plinko is a two-cell mechanical cabinet with 78 protruding brass pins,
+# thirteen individual payout pockets and an ivory drop gate.
+ELEMENTS=[]
+box([1,0,2],[15,.6,14],"walnut_dark","plinko_stepped_plinth")
+box([1.3,.6,2.3],[14.7,1.3,13.7],"brass","plinko_gilt_base")
+box([1.7,1.3,2.7],[14.3,7.1,12.6],"walnut","plinko_lower_cabinet")
+box([2.4,2.1,2.55],[13.6,6.3,2.8],"carved_panel","plinko_carved_door",north="carved_panel")
+box([1.5,7.1,3.3],[14.5,29.2,5.3],"walnut_dark","plinko_board_back")
+box([1.9,7.6,3.05],[14.1,28.8,3.3],"plinko_panel","plinko_engraved_velvet",north="plinko_panel")
+for x in (1.2,14.15):
+    box([x,6.8,2.6],[x+.65,29.5,5.7],"walnut","plinko_side_pillar")
+    box([x+.2,7.2,2.4],[x+.45,29.25,2.65],"brass","plinko_pillar_inlay")
+    for y in (7.2,28.8):box([x-.1,y,2.4],[x+.75,y+.35,5.9],"brass","plinko_pillar_capital")
+for row in range(12):
+    for col in range(row+1):
+        x=8+(col-row/2)*.88;y=27.4-row*1.27
+        box([x-.16,y-.16,2.45],[x+.16,y+.16,3.2],"brass",f"plinko_pin_{row}_{col}")
+        box([x-.11,y-.11,2.31],[x+.11,y+.11,2.46],"amber","polished_pin_tip",full=True)
+for i in range(13):
+    x=2.28+i*.88
+    box([x,9.6,1.9],[x+.10,12.1,3.3],"brass","individual_pocket_wall")
+    box([x+.1,9.6,1.9],[x+.86,9.85,3.3],"brass","pocket_floor")
+    box([x+.13,10.0,2.07],[x+.77,10.8,2.31],"ruby" if i in (0,12) else "emerald","pocket_jewel",full=True)
+box([7.4,28.0,1.9],[8.6,29.4,3.35],"brass","ivory_drop_gate")
+box([7.7,28.2,1.75],[8.3,28.8,2.0],"card_ace","gate_ball")
+box([1.1,29.5,2.3],[14.9,30.0,6.0],"brass","plinko_upper_cornice")
+box([2.1,30,2.8],[13.9,31.8,5.4],"marquee","plinko_crowned_header",north="marquee")
+publish("plinko_board",ELEMENTS,True)
+
+# The wheel has a gilded circular rim, raised ruby pointer and sculpted stand.
+ELEMENTS=[]
+box([1.8,0,2.4],[14.2,.7,13.6],"walnut_dark","wheel_broad_foot")
+box([2.2,.7,2.8],[13.8,1.3,13.2],"brass","wheel_foot_bevel")
+box([3,1.3,3.6],[13,7.8,11.8],"walnut","wheel_carved_pedestal")
+box([3.5,2.1,3.42],[12.5,6.8,3.65],"carved_panel","wheel_pedestal_crest",north="carved_panel")
+for x in (3,12.5):box([x,1.4,3.25],[x+.5,7.8,3.65],"brass","wheel_pedestal_flute")
+box([5.8,7.8,5.5],[10.2,18,9.3],"walnut_dark","wheel_upright")
+for x in (5.65,10.1):box([x,7.8,5.35],[x+.25,16,5.7],"brass","wheel_stand_inlay")
+box([1.6,14.6,3.5],[14.4,27.4,5.2],"walnut_dark","wheel_solid_axle_back")
+box([1.7,14.7,3.05],[14.3,27.3,3.5],"fortune_face","wheel_numbered_face",north="fortune_face")
+for i in range(32):
+    a=math.pi*2*i/32;x=8+math.sin(a)*6.45;y=21+math.cos(a)*6.45
+    box([x-.39,y-.39,2.9],[x+.39,y+.39,3.65],"brass","wheel_circular_rim")
+    if i%2==0:box([x-.12,y-.12,2.77],[x+.12,y+.12,2.95],"amber","wheel_rim_rivet",full=True)
+box([7.25,20.25,2.7],[8.75,21.75,3.15],"brass","wheel_raised_centre_hub")
+box([7.7,20.7,2.55],[8.3,21.3,2.75],"ruby","wheel_hub_ruby",full=True)
+box([7.1,27.6,2.4],[8.9,28.7,4.6],"walnut","wheel_pointer_mount")
+box([7.7,26.9,2.2],[8.3,28.3,2.65],"ruby","fixed_ruby_winning_pointer",full=True)
+box([3.4,29,3.9],[12.6,29.5,6.2],"brass","wheel_crown_band")
+for x,h in ((3.5,30.5),(5.2,31.0),(7.1,31.8),(9.8,31.0),(11.4,30.5)):
+    box([x,29.5,4.1],[x+1.1,h,5.9],"brass","wheel_crown_prong")
+publish("fortune_wheel",ELEMENTS,True)
+
+# A miniature medieval road diorama, with ten cobbled lanes, hedges, a
+# finish arch, market carts and a tiny chicken at the starting gate.
+ELEMENTS=[];table_base()
+box([1.2,12.52,1.2],[14.8,12.72,14.8],"chicken_road","miniature_cobbled_road_board",up="chicken_road")
+border(1.2,12.73,1.2,14.8,14.8,.15)
+for x in (1.4,14.15):
+    for z in (2.2,5,7.8,10.6,13.1):box([x,12.74,z],[x+.45,13.2,z+1.2],"emerald","miniature_hedgerow",full=True)
+for i in range(10):
+    x=2.25+i*1.12
+    box([x,12.73,1.7],[x+.10,12.88,14.3],"brass","engraved_lane_divider")
+for x,z in ((4.2,4.0),(7.6,10.1),(11.0,6.9)):
+    box([x,12.74,z],[x+.75,13.17,z+1.35],"walnut","miniature_cart_bed")
+    box([x-.12,12.74,z+.15],[x+.1,13.02,z+.45],"walnut_dark","miniature_cart_wheel")
+    box([x+.65,12.74,z+.9],[x+.9,13.02,z+1.2],"walnut_dark","miniature_cart_wheel")
+    box([x+.08,13.17,z+.15],[x+.67,13.44,z+1.2],"wine","miniature_cart_load")
+for z in (5.8,9.8):box([13.6,12.74,z],[14,14.55,z+.4],"brass","finish_gate_pillar")
+box([13.5,14.55,5.8],[14.1,14.9,10.2],"marquee","finish_gate_banner",up="marquee")
+publish("chicken_road_table",ELEMENTS)
+
 for name,pattern,keys in (
     ("slot_machine",["GAG","RER","WWW"],{"G":"gold_ingot","A":"amethyst_shard","R":"redstone","E":"emerald","W":"dark_oak_planks"}),
     ("roulette_table",["GCG","WEW","WWW"],{"G":"gold_ingot","C":"compass","W":"dark_oak_planks","E":"green_wool"}),
-    ("blackjack_table",["PGP","WEW","WWW"],{"P":"paper","G":"gold_ingot","W":"dark_oak_planks","E":"green_wool"})):
+    ("blackjack_table",["PGP","WEW","WWW"],{"P":"paper","G":"gold_ingot","W":"dark_oak_planks","E":"green_wool"}),
+    ("plinko_board",["GIG","IRI","WWW"],{"G":"gold_ingot","I":"iron_nugget","R":"redstone","W":"dark_oak_planks"}),
+    ("fortune_wheel",["GAG","GRG","WWW"],{"G":"gold_ingot","A":"amethyst_shard","R":"redstone","W":"dark_oak_planks"}),
+    ("chicken_road_table",["FGF","WEW","WWW"],{"F":"feather","G":"gold_ingot","E":"egg","W":"dark_oak_planks"})):
     write(RES/f"data/realmcasino/recipe/{name}.json",{"type":"minecraft:crafting_shaped","category":"misc","pattern":pattern,"key":{k:{"item":"minecraft:"+v} for k,v in keys.items()},"result":{"id":"realmcasino:"+name,"count":1}})
     write(RES/f"data/realmcasino/advancement/recipes/decorations/{name}.json",{
         "parent":"minecraft:recipes/root","criteria":{
             "has_gold":{"trigger":"minecraft:inventory_changed","conditions":{"items":[{"items":["minecraft:gold_ingot"]}]}},
             "has_the_recipe":{"trigger":"minecraft:recipe_unlocked","conditions":{"recipe":"realmcasino:"+name}}},
         "requirements":[["has_gold","has_the_recipe"]],"rewards":{"recipes":["realmcasino:"+name]}})
-write(RES/"data/minecraft/tags/block/mineable/axe.json",{"replace":False,"values":["realmcasino:"+n for n in ("slot_machine","roulette_table","blackjack_table")]})
+write(RES/"data/minecraft/tags/block/mineable/axe.json",{"replace":False,"values":["realmcasino:"+n for n in ("slot_machine","roulette_table","blackjack_table","plinko_board","fortune_wheel","chicken_road_table")]})
 write(RES/"pack.mcmeta",{"pack":{"pack_format":34,"description":"Realm Casino — original walnut, brass, velvet and jewel artwork"}})
 
 # A crisp 256px list icon: embroidered emerald frame, crowned velvet cabinet,
@@ -564,4 +675,4 @@ for x,y,base in ((86,105,(39,108,78,255)),(99,109,RED),(77,114,(43,70,112,255)))
     d.ellipse((x-9,y-4,x+9,y+4),fill=base,outline=CREAM)
     d.ellipse((x-6,y-3,x+6,y+3),outline=GOLD)
 icon.resize((256,256),Image.Resampling.NEAREST).save(ASSETS/"icon.png")
-print(len(TEXTURES)-1,"original material textures, 3 craftable models and 256px icon")
+print(len(TEXTURES)-1,"original material textures, 6 craftable models and 256px icon")

@@ -123,7 +123,7 @@ public final class CasinoData extends SavedData {
     public static CasinoData load(CompoundTag root, HolderLookup.Provider lookup) {
         try {
             keys(root,Set.of("version","ledger","states","journal"),Set.of("version","ledger","states"));
-            type(root,"version",Tag.TAG_INT); if(root.getInt("version")!=1)throw corrupt(null);
+            type(root,"version",Tag.TAG_INT); if(root.getInt("version")!=1&&root.getInt("version")!=2)throw corrupt(null);
             CasinoData data=new CasinoData();
             data.ledger=readLedger(compound(root,"ledger")); data.states=readStates(list(root,"states",MAX_STATES));
             validate(data.ledger,data.states);
@@ -138,7 +138,7 @@ public final class CasinoData extends SavedData {
     }
     private static CompoundTag encode(CasinoLedger ledger,Map<UUID,GameState> states,Journal journal) {
         validate(ledger,states);
-        CompoundTag root=new CompoundTag(); root.putInt("version",1); root.put("ledger",writeLedger(ledger)); root.put("states",writeStates(states));
+        CompoundTag root=new CompoundTag(); root.putInt("version",2); root.put("ledger",writeLedger(ledger)); root.put("states",writeStates(states));
         if(journal!=null) {
             CompoundTag j=new CompoundTag(); j.putUUID("id",journal.id());j.putUUID("player",journal.player());j.putLong("before",journal.before());j.putLong("after",journal.after());j.putString("kind",journal.kind());
             j.put("ledger",writeLedger(journal.ledger()));j.put("states",writeStates(journal.states()));root.put("journal",j);
@@ -203,7 +203,7 @@ public final class CasinoData extends SavedData {
                 b=new Blackjack.State(ints(a,"deck",52),integer(a,"cursor"),ints(a,"player",52),ints(a,"dealer",52),Blackjack.Status.valueOf(string(a,"status",16)),Blackjack.Outcome.valueOf(string(a,"outcome",16)));
             }
             type(t,"finished",Tag.TAG_BYTE);if(t.getByte("finished")!=0&&t.getByte("finished")!=1)throw corrupt(null);
-            GameState state=new GameState(uuid(t,"id"),uuid(t,"machine"),uuid(t,"player"),Kind.valueOf(string(t,"kind",16)),number(t,"stake"),number(t,"started"),number(t,"deadline"),number(t,"revision"),b,ints(t,"reels",3),integer(t,"roulette"),string(t,"betType",16),integer(t,"betNumber"),number(t,"payout"),t.getBoolean("finished"));
+            GameState state=new GameState(uuid(t,"id"),uuid(t,"machine"),uuid(t,"player"),Kind.valueOf(string(t,"kind",16)),number(t,"stake"),number(t,"started"),number(t,"deadline"),number(t,"revision"),b,ints(t,"reels",12),integer(t,"roulette"),string(t,"betType",16),integer(t,"betNumber"),number(t,"payout"),t.getBoolean("finished"));
             if(states.put(state.player(),state)!=null)throw corrupt(null);
         }
         return Map.copyOf(states);

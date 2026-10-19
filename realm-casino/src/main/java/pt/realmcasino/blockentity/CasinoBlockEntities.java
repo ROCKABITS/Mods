@@ -11,7 +11,7 @@ public final class CasinoBlockEntities {
     private static final DeferredRegister<BlockEntityType<?>> TYPES = DeferredRegister.create(Registries.BLOCK_ENTITY_TYPE, "realmcasino");
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<CasinoBlockEntity>> MACHINE = TYPES.register("machine",
             () -> BlockEntityType.Builder.of(CasinoBlockEntity::new, BlockRegistry.SLOT_MACHINE.get(),
-                    BlockRegistry.ROULETTE_TABLE.get(), BlockRegistry.BLACKJACK_TABLE.get()).build(null));
+                    BlockRegistry.ROULETTE_TABLE.get(), BlockRegistry.BLACKJACK_TABLE.get(), BlockRegistry.PLINKO_BOARD.get(), BlockRegistry.FORTUNE_WHEEL.get(), BlockRegistry.CHICKEN_ROAD_TABLE.get()).build(null));
     private CasinoBlockEntities() {}
     public static void register(IEventBus bus) { TYPES.register(bus); }
 }

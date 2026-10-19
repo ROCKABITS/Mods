@@ -1,0 +1,1449 @@
+{
+  "parent": "minecraft:block/block",
+  "render_type": "minecraft:cutout",
+  "ambientocclusion": true,
+  "textures": {
+    "amber": "realmcasino:block/amber",
+    "black": "realmcasino:block/black",
+    "blackjack_felt": "realmcasino:block/blackjack_felt",
+    "brass": "realmcasino:block/brass",
+    "card_ace": "realmcasino:block/card_ace",
+    "card_back": "realmcasino:block/card_back",
+    "card_king": "realmcasino:block/card_king",
+    "carved_panel": "realmcasino:block/carved_panel",
+    "chicken_road": "realmcasino:block/chicken_road",
+    "chip_black": "realmcasino:block/chip_black",
+    "chip_black_edge": "realmcasino:block/chip_black_edge",
+    "chip_blue": "realmcasino:block/chip_blue",
+    "chip_blue_edge": "realmcasino:block/chip_blue_edge",
+    "chip_edge": "realmcasino:block/chip_edge",
+    "chip_green": "realmcasino:block/chip_green",
+    "chip_green_edge": "realmcasino:block/chip_green_edge",
+    "chip_red": "realmcasino:block/chip_red",
+    "chip_red_edge": "realmcasino:block/chip_red_edge",
+    "emerald": "realmcasino:block/emerald",
+    "felt": "realmcasino:block/felt",
+    "fortune_face": "realmcasino:block/fortune_face",
+    "ivory_ball": "realmcasino:block/ivory_ball",
+    "marquee": "realmcasino:block/marquee",
+    "plinko_panel": "realmcasino:block/plinko_panel",
+    "reel_crown": "realmcasino:block/reel_crown",
+    "reel_gem": "realmcasino:block/reel_gem",
+    "reel_star": "realmcasino:block/reel_star",
+    "roulette_layout": "realmcasino:block/roulette_layout",
+    "roulette_wheel": "realmcasino:block/roulette_wheel",
+    "ruby": "realmcasino:block/ruby",
+    "symbols": "realmcasino:block/symbols",
+    "walnut": "realmcasino:block/walnut",
+    "walnut_dark": "realmcasino:block/walnut_dark",
+    "walnut_top": "realmcasino:block/walnut_top",
+    "wine": "realmcasino:block/wine",
+    "particle": "realmcasino:block/walnut"
+  },
+  "elements": [
+    {
+      "name": "wheel_broad_foot",
+      "from": [
+        1.8,
+        0,
+        2.4
+      ],
+      "to": [
+        14.2,
+        0.7,
+        13.6
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0.0,
+            12.399999999999999,
+            0.7
+          ],
+          "texture": "#walnut_dark"
+        },
+        "south": {
+          "uv": [
+            0,
+            0.0,
+            12.399999999999999,
+            0.7
+          ],
+          "texture": "#walnut_dark"
+        },
+        "east": {
+          "uv": [
+            0,
+            0.0,
+            11.2,
+            0.7
+          ],
+          "texture": "#walnut_dark"
+        },
+        "west": {
+          "uv": [
+            0,
+            0.0,
+            11.2,
+            0.7
+          ],
+          "texture": "#walnut_dark"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            12.399999999999999,
+            11.2
+          ],
+          "texture": "#walnut_dark"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            12.399999999999999,
+            11.2
+          ],
+          "texture": "#walnut_dark"
+        }
+      }
+    },
+    {
+      "name": "wheel_foot_bevel",
+      "from": [
+        2.2,
+        0.7,
+        2.8
+      ],
+      "to": [
+        13.8,
+        1.3,
+        13.2
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0.0,
+            11.600000000000001,
+            0.6
+          ],
+          "texture": "#brass"
+        },
+        "south": {
+          "uv": [
+            0,
+            0.0,
+            11.600000000000001,
+            0.6
+          ],
+          "texture": "#brass"
+        },
+        "east": {
+          "uv": [
+            0,
+            0.0,
+            10.399999999999999,
+            0.6
+          ],
+          "texture": "#brass"
+        },
+        "west": {
+          "uv": [
+            0,
+            0.0,
+            10.399999999999999,
+            0.6
+          ],
+          "texture": "#brass"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            11.600000000000001,
+            10.399999999999999
+          ],
+          "texture": "#brass"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            11.600000000000001,
+            10.399999999999999
+          ],
+          "texture": "#brass"
+        }
+      }
+    },
+    {
+      "name": "wheel_carved_pedestal",
+      "from": [
+        3,
+        1.3,
+        3.6
+      ],
+      "to": [
+        13,
+        7.8,
+        11.8
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0.0,
+            10,
+            6.5
+          ],
+          "texture": "#walnut"
+        },
+        "south": {
+          "uv": [
+            0,
+            0.0,
+            10,
+            6.5
+          ],
+          "texture": "#walnut"
+        },
+        "east": {
+          "uv": [
+            0,
+            0.0,
+            8.200000000000001,
+            6.5
+          ],
+          "texture": "#walnut"
+        },
+        "west": {
+          "uv": [
+            0,
+            0.0,
+            8.200000000000001,
+            6.5
+          ],
+          "texture": "#walnut"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            10,
+            8.200000000000001
+          ],
+          "texture": "#walnut"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            10,
+            8.200000000000001
+          ],
+          "texture": "#walnut"
+        }
+      }
+    },
+    {
+      "name": "wheel_pedestal_crest",
+      "from": [
+        3.5,
+        2.1,
+        3.42
+      ],
+      "to": [
+        12.5,
+        6.8,
+        3.65
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            16.0
+          ],
+          "texture": "#carved_panel"
+        },
+        "south": {
+          "uv": [
+            0,
+            0.0,
+            9.0,
+            4.7
+          ],
+          "texture": "#carved_panel"
+        },
+        "east": {
+          "uv": [
+            0,
+            0.0,
+            0.22999999999999998,
+            4.7
+          ],
+          "texture": "#carved_panel"
+        },
+        "west": {
+          "uv": [
+            0,
+            0.0,
+            0.22999999999999998,
+            4.7
+          ],
+          "texture": "#carved_panel"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            9.0,
+            0.22999999999999998
+          ],
+          "texture": "#carved_panel"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            9.0,
+            0.22999999999999998
+          ],
+          "texture": "#carved_panel"
+        }
+      }
+    },
+    {
+      "name": "wheel_pedestal_flute",
+      "from": [
+        3,
+        1.4,
+        3.25
+      ],
+      "to": [
+        3.5,
+        7.8,
+        3.65
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0.0,
+            0.5,
+            6.4
+          ],
+          "texture": "#brass"
+        },
+        "south": {
+          "uv": [
+            0,
+            0.0,
+            0.5,
+            6.4
+          ],
+          "texture": "#brass"
+        },
+        "east": {
+          "uv": [
+            0,
+            0.0,
+            0.3999999999999999,
+            6.4
+          ],
+          "texture": "#brass"
+        },
+        "west": {
+          "uv": [
+            0,
+            0.0,
+            0.3999999999999999,
+            6.4
+          ],
+          "texture": "#brass"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.5,
+            0.3999999999999999
+          ],
+          "texture": "#brass"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.5,
+            0.3999999999999999
+          ],
+          "texture": "#brass"
+        }
+      }
+    },
+    {
+      "name": "wheel_pedestal_flute",
+      "from": [
+        12.5,
+        1.4,
+        3.25
+      ],
+      "to": [
+        13.0,
+        7.8,
+        3.65
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0.0,
+            0.5,
+            6.4
+          ],
+          "texture": "#brass"
+        },
+        "south": {
+          "uv": [
+            0,
+            0.0,
+            0.5,
+            6.4
+          ],
+          "texture": "#brass"
+        },
+        "east": {
+          "uv": [
+            0,
+            0.0,
+            0.3999999999999999,
+            6.4
+          ],
+          "texture": "#brass"
+        },
+        "west": {
+          "uv": [
+            0,
+            0.0,
+            0.3999999999999999,
+            6.4
+          ],
+          "texture": "#brass"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.5,
+            0.3999999999999999
+          ],
+          "texture": "#brass"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.5,
+            0.3999999999999999
+          ],
+          "texture": "#brass"
+        }
+      }
+    },
+    {
+      "name": "wheel_upright",
+      "from": [
+        5.8,
+        7.8,
+        5.5
+      ],
+      "to": [
+        10.2,
+        16,
+        9.3
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            2.0,
+            4.3999999999999995,
+            10.2
+          ],
+          "texture": "#walnut_dark"
+        },
+        "south": {
+          "uv": [
+            0,
+            2.0,
+            4.3999999999999995,
+            10.2
+          ],
+          "texture": "#walnut_dark"
+        },
+        "east": {
+          "uv": [
+            0,
+            2.0,
+            3.8000000000000007,
+            10.2
+          ],
+          "texture": "#walnut_dark"
+        },
+        "west": {
+          "uv": [
+            0,
+            2.0,
+            3.8000000000000007,
+            10.2
+          ],
+          "texture": "#walnut_dark"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            4.3999999999999995,
+            3.8000000000000007
+          ],
+          "texture": "#walnut_dark"
+        }
+      }
+    },
+    {
+      "name": "wheel_stand_inlay",
+      "from": [
+        5.65,
+        7.8,
+        5.35
+      ],
+      "to": [
+        5.9,
+        16,
+        5.7
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0.0,
+            0.25,
+            8.2
+          ],
+          "texture": "#brass"
+        },
+        "south": {
+          "uv": [
+            0,
+            0.0,
+            0.25,
+            8.2
+          ],
+          "texture": "#brass"
+        },
+        "east": {
+          "uv": [
+            0,
+            0.0,
+            0.35000000000000053,
+            8.2
+          ],
+          "texture": "#brass"
+        },
+        "west": {
+          "uv": [
+            0,
+            0.0,
+            0.35000000000000053,
+            8.2
+          ],
+          "texture": "#brass"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.25,
+            0.35000000000000053
+          ],
+          "texture": "#brass"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.25,
+            0.35000000000000053
+          ],
+          "texture": "#brass"
+        }
+      }
+    },
+    {
+      "name": "wheel_stand_inlay",
+      "from": [
+        10.1,
+        7.8,
+        5.35
+      ],
+      "to": [
+        10.35,
+        16,
+        5.7
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0.0,
+            0.25,
+            8.2
+          ],
+          "texture": "#brass"
+        },
+        "south": {
+          "uv": [
+            0,
+            0.0,
+            0.25,
+            8.2
+          ],
+          "texture": "#brass"
+        },
+        "east": {
+          "uv": [
+            0,
+            0.0,
+            0.35000000000000053,
+            8.2
+          ],
+          "texture": "#brass"
+        },
+        "west": {
+          "uv": [
+            0,
+            0.0,
+            0.35000000000000053,
+            8.2
+          ],
+          "texture": "#brass"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.25,
+            0.35000000000000053
+          ],
+          "texture": "#brass"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.25,
+            0.35000000000000053
+          ],
+          "texture": "#brass"
+        }
+      }
+    },
+    {
+      "name": "wheel_solid_axle_back",
+      "from": [
+        1.6,
+        14.6,
+        3.5
+      ],
+      "to": [
+        14.4,
+        16,
+        5.2
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            11.4,
+            12.8,
+            12.8
+          ],
+          "texture": "#walnut_dark"
+        },
+        "south": {
+          "uv": [
+            0,
+            11.4,
+            12.8,
+            12.8
+          ],
+          "texture": "#walnut_dark"
+        },
+        "east": {
+          "uv": [
+            0,
+            11.4,
+            1.7000000000000002,
+            12.8
+          ],
+          "texture": "#walnut_dark"
+        },
+        "west": {
+          "uv": [
+            0,
+            11.4,
+            1.7000000000000002,
+            12.8
+          ],
+          "texture": "#walnut_dark"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            12.8,
+            1.7000000000000002
+          ],
+          "texture": "#walnut_dark"
+        }
+      }
+    },
+    {
+      "name": "wheel_numbered_face",
+      "from": [
+        1.7,
+        14.7,
+        3.05
+      ],
+      "to": [
+        14.3,
+        16,
+        3.5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            14.34921,
+            16,
+            16.0
+          ],
+          "texture": "#fortune_face"
+        },
+        "south": {
+          "uv": [
+            0,
+            11.3,
+            12.600000000000001,
+            12.6
+          ],
+          "texture": "#fortune_face"
+        },
+        "east": {
+          "uv": [
+            0,
+            11.3,
+            0.4500000000000002,
+            12.6
+          ],
+          "texture": "#fortune_face"
+        },
+        "west": {
+          "uv": [
+            0,
+            11.3,
+            0.4500000000000002,
+            12.6
+          ],
+          "texture": "#fortune_face"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            12.600000000000001,
+            0.4500000000000002
+          ],
+          "texture": "#fortune_face"
+        }
+      }
+    },
+    {
+      "name": "wheel_circular_rim",
+      "from": [
+        11.193428002976434,
+        15.24702,
+        2.9
+      ],
+      "to": [
+        11.973428002976435,
+        16,
+        3.65
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0.02702,
+            0.7800000000000011,
+            0.78
+          ],
+          "texture": "#brass"
+        },
+        "south": {
+          "uv": [
+            0,
+            0.02702,
+            0.7800000000000011,
+            0.78
+          ],
+          "texture": "#brass"
+        },
+        "east": {
+          "uv": [
+            0,
+            0.02702,
+            0.75,
+            0.78
+          ],
+          "texture": "#brass"
+        },
+        "west": {
+          "uv": [
+            0,
+            0.02702,
+            0.75,
+            0.78
+          ],
+          "texture": "#brass"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.7800000000000011,
+            0.75
+          ],
+          "texture": "#brass"
+        }
+      }
+    },
+    {
+      "name": "wheel_circular_rim",
+      "from": [
+        10.07830813875483,
+        14.65098,
+        2.9
+      ],
+      "to": [
+        10.85830813875483,
+        15.43098,
+        3.65
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0.0,
+            0.7800000000000011,
+            0.78
+          ],
+          "texture": "#brass"
+        },
+        "south": {
+          "uv": [
+            0,
+            0.0,
+            0.7800000000000011,
+            0.78
+          ],
+          "texture": "#brass"
+        },
+        "east": {
+          "uv": [
+            0,
+            0.0,
+            0.75,
+            0.78
+          ],
+          "texture": "#brass"
+        },
+        "west": {
+          "uv": [
+            0,
+            0.0,
+            0.75,
+            0.78
+          ],
+          "texture": "#brass"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.7800000000000011,
+            0.75
+          ],
+          "texture": "#brass"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.7800000000000011,
+            0.75
+          ],
+          "texture": "#brass"
+        }
+      }
+    },
+    {
+      "name": "wheel_rim_rivet",
+      "from": [
+        10.348308138754831,
+        14.92098,
+        2.77
+      ],
+      "to": [
+        10.58830813875483,
+        15.16098,
+        2.95
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            16.0
+          ],
+          "texture": "#amber"
+        },
+        "south": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            16.0
+          ],
+          "texture": "#amber"
+        },
+        "east": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            16.0
+          ],
+          "texture": "#amber"
+        },
+        "west": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            16.0
+          ],
+          "texture": "#amber"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#amber"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#amber"
+        }
+      }
+    },
+    {
+      "name": "wheel_circular_rim",
+      "from": [
+        8.868332577004029,
+        14.28393,
+        2.9
+      ],
+      "to": [
+        9.64833257700403,
+        15.06393,
+        3.65
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0.0,
+            0.7800000000000011,
+            0.78
+          ],
+          "texture": "#brass"
+        },
+        "south": {
+          "uv": [
+            0,
+            0.0,
+            0.7800000000000011,
+            0.78
+          ],
+          "texture": "#brass"
+        },
+        "east": {
+          "uv": [
+            0,
+            0.0,
+            0.75,
+            0.78
+          ],
+          "texture": "#brass"
+        },
+        "west": {
+          "uv": [
+            0,
+            0.0,
+            0.75,
+            0.78
+          ],
+          "texture": "#brass"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.7800000000000011,
+            0.75
+          ],
+          "texture": "#brass"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.7800000000000011,
+            0.75
+          ],
+          "texture": "#brass"
+        }
+      }
+    },
+    {
+      "name": "wheel_circular_rim",
+      "from": [
+        7.61,
+        14.16,
+        2.9
+      ],
+      "to": [
+        8.39,
+        14.94,
+        3.65
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0.0,
+            0.7800000000000002,
+            0.78
+          ],
+          "texture": "#brass"
+        },
+        "south": {
+          "uv": [
+            0,
+            0.0,
+            0.7800000000000002,
+            0.78
+          ],
+          "texture": "#brass"
+        },
+        "east": {
+          "uv": [
+            0,
+            0.0,
+            0.75,
+            0.78
+          ],
+          "texture": "#brass"
+        },
+        "west": {
+          "uv": [
+            0,
+            0.0,
+            0.75,
+            0.78
+          ],
+          "texture": "#brass"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.7800000000000002,
+            0.75
+          ],
+          "texture": "#brass"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.7800000000000002,
+            0.75
+          ],
+          "texture": "#brass"
+        }
+      }
+    },
+    {
+      "name": "wheel_rim_rivet",
+      "from": [
+        7.88,
+        14.43,
+        2.77
+      ],
+      "to": [
+        8.12,
+        14.67,
+        2.95
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            16.0
+          ],
+          "texture": "#amber"
+        },
+        "south": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            16.0
+          ],
+          "texture": "#amber"
+        },
+        "east": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            16.0
+          ],
+          "texture": "#amber"
+        },
+        "west": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            16.0
+          ],
+          "texture": "#amber"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#amber"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#amber"
+        }
+      }
+    },
+    {
+      "name": "wheel_circular_rim",
+      "from": [
+        6.351667422995972,
+        14.28393,
+        2.9
+      ],
+      "to": [
+        7.131667422995972,
+        15.06393,
+        3.65
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0.0,
+            0.7799999999999994,
+            0.78
+          ],
+          "texture": "#brass"
+        },
+        "south": {
+          "uv": [
+            0,
+            0.0,
+            0.7799999999999994,
+            0.78
+          ],
+          "texture": "#brass"
+        },
+        "east": {
+          "uv": [
+            0,
+            0.0,
+            0.75,
+            0.78
+          ],
+          "texture": "#brass"
+        },
+        "west": {
+          "uv": [
+            0,
+            0.0,
+            0.75,
+            0.78
+          ],
+          "texture": "#brass"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.7799999999999994,
+            0.75
+          ],
+          "texture": "#brass"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.7799999999999994,
+            0.75
+          ],
+          "texture": "#brass"
+        }
+      }
+    },
+    {
+      "name": "wheel_circular_rim",
+      "from": [
+        5.141691861245172,
+        14.65098,
+        2.9
+      ],
+      "to": [
+        5.921691861245171,
+        15.43098,
+        3.65
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0.0,
+            0.7799999999999994,
+            0.78
+          ],
+          "texture": "#brass"
+        },
+        "south": {
+          "uv": [
+            0,
+            0.0,
+            0.7799999999999994,
+            0.78
+          ],
+          "texture": "#brass"
+        },
+        "east": {
+          "uv": [
+            0,
+            0.0,
+            0.75,
+            0.78
+          ],
+          "texture": "#brass"
+        },
+        "west": {
+          "uv": [
+            0,
+            0.0,
+            0.75,
+            0.78
+          ],
+          "texture": "#brass"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.7799999999999994,
+            0.75
+          ],
+          "texture": "#brass"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.7799999999999994,
+            0.75
+          ],
+          "texture": "#brass"
+        }
+      }
+    },
+    {
+      "name": "wheel_rim_rivet",
+      "from": [
+        5.411691861245171,
+        14.92098,
+        2.77
+      ],
+      "to": [
+        5.651691861245172,
+        15.16098,
+        2.95
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            16.0
+          ],
+          "texture": "#amber"
+        },
+        "south": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            16.0
+          ],
+          "texture": "#amber"
+        },
+        "east": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            16.0
+          ],
+          "texture": "#amber"
+        },
+        "west": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            16.0
+          ],
+          "texture": "#amber"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#amber"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#amber"
+        }
+      }
+    },
+    {
+      "name": "wheel_circular_rim",
+      "from": [
+        4.026571997023567,
+        15.24702,
+        2.9
+      ],
+      "to": [
+        4.806571997023567,
+        16,
+        3.65
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0.02702,
+            0.7799999999999994,
+            0.78
+          ],
+          "texture": "#brass"
+        },
+        "south": {
+          "uv": [
+            0,
+            0.02702,
+            0.7799999999999994,
+            0.78
+          ],
+          "texture": "#brass"
+        },
+        "east": {
+          "uv": [
+            0,
+            0.02702,
+            0.75,
+            0.78
+          ],
+          "texture": "#brass"
+        },
+        "west": {
+          "uv": [
+            0,
+            0.02702,
+            0.75,
+            0.78
+          ],
+          "texture": "#brass"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.7799999999999994,
+            0.75
+          ],
+          "texture": "#brass"
+        }
+      }
+    }
+  ]
+}

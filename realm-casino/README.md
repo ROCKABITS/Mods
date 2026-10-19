@@ -1,14 +1,17 @@
 # Realm Casino — Cassino do Reino
 
-**Minecraft 1.21.1 · NeoForge 21.1.256+ · Java 21 · 0.1.0 Beta**
+**Minecraft 1.21.1 · NeoForge 21.1.256+ · Java 21 · 0.2.0 Beta**
 
-Constrói o teu casino com máquinas e mesas medievais funcionais. Esta primeira fase inclui **slots de três rolos, roleta europeia e blackjack contra a banca**, com modelos próprios, animações, sons e menus em inglês e português.
+Constrói o teu casino com máquinas e mesas medievais funcionais. Esta atualização inclui **slots de três rolos, roleta europeia, blackjack contra a banca, Plinko, Roda da Fortuna e Travessia Real**, o jogo da galinha a atravessar a estrada, com modelos próprios, animações, sons e menus em inglês e português.
 
 ## Blocos e utilização
 
 - **Máquina de slots:** móvel de dois blocos de altura, madeira escura, molduras douradas, três rolos, joias e alavanca.
 - **Mesa de roleta:** mesa de um bloco com roda, veludo e pilhas de fichas decorativas.
 - **Mesa de blackjack:** mesa de um bloco com rebordo trabalhado, cartas, veludo e detalhes dourados.
+- **Painel de Plinko:** móvel de dois blocos, 78 pinos de latão em relevo, treze caixas e bola animada.
+- **Roda da Fortuna:** móvel de dois blocos com coroa, pedestal trabalhado, aro dourado e ponteiro de rubi.
+- **Mesa da Travessia Real:** diorama de uma estrada medieval com dez vias, carroças, sebes, arco de chegada e galinha em miniatura.
 
 Fabrica os blocos na bancada de trabalho e consulta as receitas no livro do Minecraft. Também aparecem na aba criativa **Realm Casino** e na pesquisa. O jogador que coloca um bloco torna-se o seu proprietário. Abre os menus com o botão direito; não há tecla nem comando para jogar à distância. Um operador pode obter os três itens com `/casino blocks`.
 
@@ -76,15 +79,45 @@ Uma pessoa de cada vez por mesa, com um baralho novo de 52 cartas baralhado pelo
 
 O blackjack depende das decisões do jogador; não é anunciado um RTP fixo.
 
+### Plinko
+
+Doze decisões independentes, com 50% de probabilidade de esquerda/direita. O servidor guarda o percurso completo antes de cobrar a aposta e apresentar a animação. As treze caixas têm retornos brutos, da esquerda para a direita:
+
+**32× · 12× · 4× · 2× · 1× · 0,5× · 0,25× · 0,5× · 1× · 2× · 4× · 12× · 32×**
+
+Os 4096 percursos são equiprováveis; as caixas seguem uma distribuição binomial. Por exemplo, cada extremo corresponde a 1 percurso, enquanto a caixa central corresponde a 924. O retorno teórico bruto é **92,1142578125%**, antes de arredondar os prémios para baixo ao cêntimo. A banca reserva o prémio máximo de 32× antes de aceitar a aposta.
+
+### Roda da Fortuna
+
+Vinte setores equiprováveis: seis de 0×, seis de 0,5×, três de 1×, dois de 1,5×, um de 2×, um de 3× e um de 5×. O retorno teórico bruto é **95%** antes de arredondar para baixo ao cêntimo. A roda física e a interface mostram o setor confirmado pelo servidor; o ponteiro para sobre esse setor.
+
+### Travessia Real — a galinha
+
+Aposta uma vez e ajuda a galinha a atravessar até dez vias. **Cada avanço tem 80% de sucesso e 20% de risco de atropelamento.** Podes parar entre avanços e recolher o valor atingido. Se falhares, o retorno é zero; não se cobra uma nova aposta a cada passo.
+
+O retorno bruto após `n` sucessos é `aposta × 0,95 / 0,8^n`, arredondado para baixo ao cêntimo. Para uma aposta de 1 €:
+
+| Travessias seguras | Valor a recolher |
+| --- | ---: |
+| 1 | 1,18 € |
+| 2 | 1,48 € |
+| 3 | 1,85 € |
+| 5 | 2,89 € |
+| 10 | 8,84 € |
+
+Ao décimo sucesso, a recolha é automática. Fechar o menu, afastar-te do bloco, sair do mundo ou atingir o prazo de 60 segundos recolhe automaticamente o valor já alcançado. Parar antes do primeiro avanço devolve apenas a aposta. As quantias ficam por receber no casino, usando a recolha habitual para a carteira. O prazo permanece guardado após reiniciar o mundo.
+
+A banca reserva o prémio de dez sucessos desde o início. Para uma etapa escolhida antecipadamente, o retorno teórico é 95% antes do arredondamento. O risco de cada avanço mantém-se em 20%; a probabilidade de chegar às últimas etapas diminui. As carroças ilustram os resultados: escolher o momento do clique não altera as probabilidades.
+
 ## Animações e integrações
 
-Os rolos, a roleta e as cartas apresentam resultados que o servidor já confirmou. Fechar uma animação não repete uma aposta nem muda um prémio. O som pode ser silenciado nas preferências da interface.
+Os rolos, as rodas, a bola, a galinha e as cartas apresentam resultados que o servidor já confirmou. Fechar uma animação não repete uma aposta nem muda um prémio. O som pode ser silenciado nas preferências da interface.
 
 **Realm Notifications** é opcional e mostra resultados e recolhas após a confirmação económica. Sem o canal disponível, existe uma alternativa no chat. O **Crown Ledger** não cobra imposto sobre este casino nesta versão; essa integração fica para uma fase futura.
 
 ## Persistência
 
-O registo financeiro e as mãos ficam em `data/realm_casino.dat`. Para o anfitrião singleplayer/LAN, a transferência confirma também a cópia da personagem em `level.dat`, que o Minecraft pode preferir ao reabrir o mundo. As transferências da carteira usam um registo de intenção persistente e um recibo guardado com os dados do jogador, para confirmar uma operação uma única vez. O mod não altera ficheiros de perfis offline.
+O registo financeiro e as mãos ficam em `data/realm_casino.dat`. Para o anfitrião singleplayer/LAN, a transferência confirma também a cópia da personagem em `level.dat`, que o Minecraft pode preferir ao reabrir o mundo. O formato 2 do registo lê automaticamente os mundos do formato 1, mantendo bancas, prémios e mãos existentes. Não voltes à 0.1.0 depois de guardar um mundo com a 0.2.0; conserva uma cópia de segurança anterior se precisares de regressar. As transferências da carteira usam um registo de intenção persistente e um recibo guardado com os dados do jogador, para confirmar uma operação uma única vez. O mod não altera ficheiros de perfis offline.
 
 Se uma falha de armazenamento ou um estado ambíguo impedir provar a transferência, as operações económicas ficam bloqueadas até à recuperação. O mod conserva os dados e evita repetir uma cobrança às cegas. Os ficheiros são sincronizados para disco antes de confirmar a transferência. A sincronização do diretório depende do sistema operativo; no Windows, o Java utiliza a substituição atómica e a sincronização do ficheiro, sem sincronizar um handle de diretório. Não se promete recuperação de qualquer falha de hardware ou restauro parcial. Mantém as cópias de segurança habituais do mundo, incluindo `playerdata` e o registo do casino em conjunto.
 
@@ -99,4 +132,4 @@ python3 tools/cloud_gradle.py -PcasinoGameTests runGameTestServer --console=plai
 
 `-PintegrationTests` carrega os companheiros verificados em `compat-libs/` e as dependências fixadas do Origins/Jupiter/Classes. `-PcasinoVisualTests -PintegrationTests runClient` ativa os fixtures visuais, excluídos do JAR distribuído.
 
-Esta fase não inclui slots de cinco rolos, Plinko, roda da sorte, poker, jogos PvP, dados, cara ou coroa ou corridas de cavalos. O guião completo conserva esses jogos para atualizações posteriores. [Resultados e limites da validação](VALIDACAO.md).
+As próximas fases ainda incluem slots de cinco rolos, poker, jogos PvP, dados, cara ou coroa, corridas de cavalos e impostos do Crown Ledger, sem ordem nem versões definidas. Plinko, Roda da Fortuna e Travessia Real já fazem parte desta atualização. [Plano dos mods](../PLANO-DOS-MODS.md) · [Resultados e limites da validação](VALIDACAO.md).

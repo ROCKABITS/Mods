@@ -74,6 +74,19 @@ O imposto de vendas foi implementado no Crown Ledger e Realm Markets 0.2.0; os r
 
 A **0.1.0 Beta está publicada**, com [ZIP](https://github.com/ROCKABITS/Mods/raw/refs/heads/main/mod-pronto/realm-casino-0.1.0.zip) e [galeria](media/realm-casino/README.md). Os resultados estão em [VALIDACAO.md](realm-casino/VALIDACAO.md) e na proveniência do JAR.
 
+#### Realm Casino — atualização 0.2.0
+
+Implementados e em validação: Plinko, Roda da Fortuna e Travessia Real (galinha), com três blocos próprios, interfaces, animações, integração com a carteira, reservas e recolha automática da travessia.
+
+#### Realm Casino — próximas atualizações
+
+Sem ordem nem versões definidas:
+
+- Slots de cinco rolos.
+- Poker e jogos entre jogadores, dados e cara ou coroa.
+- Corridas de cavalos com apostas.
+- Integração de impostos com o Crown Ledger.
+
 ### Laws & Justice — desenvolvimento por versões
 
 A fase **0.3.0 Beta está publicada**, incluindo a base das prisões, o Presidente como juiz e os seis trabalhos prisionais. Os [links do ZIP](https://github.com/ROCKABITS/Mods/raw/refs/heads/main/mod-pronto/laws-justice-0.3.0.zip) e [JAR](https://github.com/ROCKABITS/Mods/raw/refs/heads/main/mod-pronto/laws-justice-0.3.0.jar) permitem descarregar a versão testada. O [guia](laws-justice/README.md) explica a utilização e a [galeria](media/laws-justice/README.md) reúne os modelos e menus reais do cliente.

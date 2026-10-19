@@ -1,0 +1,8229 @@
+{
+  "parent": "minecraft:block/block",
+  "render_type": "minecraft:cutout",
+  "ambientocclusion": true,
+  "textures": {
+    "amber": "realmcasino:block/amber",
+    "black": "realmcasino:block/black",
+    "blackjack_felt": "realmcasino:block/blackjack_felt",
+    "brass": "realmcasino:block/brass",
+    "card_ace": "realmcasino:block/card_ace",
+    "card_back": "realmcasino:block/card_back",
+    "card_king": "realmcasino:block/card_king",
+    "carved_panel": "realmcasino:block/carved_panel",
+    "chicken_road": "realmcasino:block/chicken_road",
+    "chip_black": "realmcasino:block/chip_black",
+    "chip_black_edge": "realmcasino:block/chip_black_edge",
+    "chip_blue": "realmcasino:block/chip_blue",
+    "chip_blue_edge": "realmcasino:block/chip_blue_edge",
+    "chip_edge": "realmcasino:block/chip_edge",
+    "chip_green": "realmcasino:block/chip_green",
+    "chip_green_edge": "realmcasino:block/chip_green_edge",
+    "chip_red": "realmcasino:block/chip_red",
+    "chip_red_edge": "realmcasino:block/chip_red_edge",
+    "emerald": "realmcasino:block/emerald",
+    "felt": "realmcasino:block/felt",
+    "fortune_face": "realmcasino:block/fortune_face",
+    "ivory_ball": "realmcasino:block/ivory_ball",
+    "marquee": "realmcasino:block/marquee",
+    "plinko_panel": "realmcasino:block/plinko_panel",
+    "reel_crown": "realmcasino:block/reel_crown",
+    "reel_gem": "realmcasino:block/reel_gem",
+    "reel_star": "realmcasino:block/reel_star",
+    "roulette_layout": "realmcasino:block/roulette_layout",
+    "roulette_wheel": "realmcasino:block/roulette_wheel",
+    "ruby": "realmcasino:block/ruby",
+    "symbols": "realmcasino:block/symbols",
+    "walnut": "realmcasino:block/walnut",
+    "walnut_dark": "realmcasino:block/walnut_dark",
+    "walnut_top": "realmcasino:block/walnut_top",
+    "wine": "realmcasino:block/wine",
+    "particle": "realmcasino:block/walnut"
+  },
+  "elements": [
+    {
+      "name": "plinko_board_back",
+      "from": [
+        1.5,
+        0,
+        3.3
+      ],
+      "to": [
+        14.5,
+        13.2,
+        5.3
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0.0,
+            13.0,
+            9.55656
+          ],
+          "texture": "#walnut_dark"
+        },
+        "south": {
+          "uv": [
+            0,
+            0.0,
+            13.0,
+            9.55656
+          ],
+          "texture": "#walnut_dark"
+        },
+        "east": {
+          "uv": [
+            0,
+            0.0,
+            2.0,
+            9.55656
+          ],
+          "texture": "#walnut_dark"
+        },
+        "west": {
+          "uv": [
+            0,
+            0.0,
+            2.0,
+            9.55656
+          ],
+          "texture": "#walnut_dark"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            13.0,
+            2.0
+          ],
+          "texture": "#walnut_dark"
+        }
+      }
+    },
+    {
+      "name": "plinko_engraved_velvet",
+      "from": [
+        1.9,
+        0,
+        3.05
+      ],
+      "to": [
+        14.1,
+        12.8,
+        3.3
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            9.66038
+          ],
+          "texture": "#plinko_panel"
+        },
+        "south": {
+          "uv": [
+            0,
+            0.0,
+            12.2,
+            9.66038
+          ],
+          "texture": "#plinko_panel"
+        },
+        "east": {
+          "uv": [
+            0,
+            0.0,
+            0.25,
+            9.66038
+          ],
+          "texture": "#plinko_panel"
+        },
+        "west": {
+          "uv": [
+            0,
+            0.0,
+            0.25,
+            9.66038
+          ],
+          "texture": "#plinko_panel"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            12.2,
+            0.25
+          ],
+          "texture": "#plinko_panel"
+        }
+      }
+    },
+    {
+      "name": "plinko_side_pillar",
+      "from": [
+        1.2,
+        0,
+        2.6
+      ],
+      "to": [
+        1.85,
+        13.5,
+        5.7
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0.0,
+            0.6500000000000001,
+            9.51542
+          ],
+          "texture": "#walnut"
+        },
+        "south": {
+          "uv": [
+            0,
+            0.0,
+            0.6500000000000001,
+            9.51542
+          ],
+          "texture": "#walnut"
+        },
+        "east": {
+          "uv": [
+            0,
+            0.0,
+            3.1,
+            9.51542
+          ],
+          "texture": "#walnut"
+        },
+        "west": {
+          "uv": [
+            0,
+            0.0,
+            3.1,
+            9.51542
+          ],
+          "texture": "#walnut"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.6500000000000001,
+            3.1
+          ],
+          "texture": "#walnut"
+        }
+      }
+    },
+    {
+      "name": "plinko_pillar_inlay",
+      "from": [
+        1.4,
+        0,
+        2.4
+      ],
+      "to": [
+        1.65,
+        13.25,
+        2.65
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0.0,
+            0.25,
+            9.61451
+          ],
+          "texture": "#brass"
+        },
+        "south": {
+          "uv": [
+            0,
+            0.0,
+            0.25,
+            9.61451
+          ],
+          "texture": "#brass"
+        },
+        "east": {
+          "uv": [
+            0,
+            0.0,
+            0.25,
+            9.61451
+          ],
+          "texture": "#brass"
+        },
+        "west": {
+          "uv": [
+            0,
+            0.0,
+            0.25,
+            9.61451
+          ],
+          "texture": "#brass"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.25,
+            0.25
+          ],
+          "texture": "#brass"
+        }
+      }
+    },
+    {
+      "name": "plinko_pillar_capital",
+      "from": [
+        1.0999999999999999,
+        12.8,
+        2.4
+      ],
+      "to": [
+        1.95,
+        13.15,
+        5.9
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0.0,
+            0.8500000000000001,
+            0.35
+          ],
+          "texture": "#brass"
+        },
+        "south": {
+          "uv": [
+            0,
+            0.0,
+            0.8500000000000001,
+            0.35
+          ],
+          "texture": "#brass"
+        },
+        "east": {
+          "uv": [
+            0,
+            0.0,
+            3.5000000000000004,
+            0.35
+          ],
+          "texture": "#brass"
+        },
+        "west": {
+          "uv": [
+            0,
+            0.0,
+            3.5000000000000004,
+            0.35
+          ],
+          "texture": "#brass"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.8500000000000001,
+            3.5000000000000004
+          ],
+          "texture": "#brass"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.8500000000000001,
+            3.5000000000000004
+          ],
+          "texture": "#brass"
+        }
+      }
+    },
+    {
+      "name": "plinko_side_pillar",
+      "from": [
+        14.15,
+        0,
+        2.6
+      ],
+      "to": [
+        14.8,
+        13.5,
+        5.7
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0.0,
+            0.6500000000000004,
+            9.51542
+          ],
+          "texture": "#walnut"
+        },
+        "south": {
+          "uv": [
+            0,
+            0.0,
+            0.6500000000000004,
+            9.51542
+          ],
+          "texture": "#walnut"
+        },
+        "east": {
+          "uv": [
+            0,
+            0.0,
+            3.1,
+            9.51542
+          ],
+          "texture": "#walnut"
+        },
+        "west": {
+          "uv": [
+            0,
+            0.0,
+            3.1,
+            9.51542
+          ],
+          "texture": "#walnut"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.6500000000000004,
+            3.1
+          ],
+          "texture": "#walnut"
+        }
+      }
+    },
+    {
+      "name": "plinko_pillar_inlay",
+      "from": [
+        14.35,
+        0,
+        2.4
+      ],
+      "to": [
+        14.6,
+        13.25,
+        2.65
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0.0,
+            0.25,
+            9.61451
+          ],
+          "texture": "#brass"
+        },
+        "south": {
+          "uv": [
+            0,
+            0.0,
+            0.25,
+            9.61451
+          ],
+          "texture": "#brass"
+        },
+        "east": {
+          "uv": [
+            0,
+            0.0,
+            0.25,
+            9.61451
+          ],
+          "texture": "#brass"
+        },
+        "west": {
+          "uv": [
+            0,
+            0.0,
+            0.25,
+            9.61451
+          ],
+          "texture": "#brass"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.25,
+            0.25
+          ],
+          "texture": "#brass"
+        }
+      }
+    },
+    {
+      "name": "plinko_pillar_capital",
+      "from": [
+        14.05,
+        12.8,
+        2.4
+      ],
+      "to": [
+        14.9,
+        13.15,
+        5.9
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0.0,
+            0.8499999999999996,
+            0.35
+          ],
+          "texture": "#brass"
+        },
+        "south": {
+          "uv": [
+            0,
+            0.0,
+            0.8499999999999996,
+            0.35
+          ],
+          "texture": "#brass"
+        },
+        "east": {
+          "uv": [
+            0,
+            0.0,
+            3.5000000000000004,
+            0.35
+          ],
+          "texture": "#brass"
+        },
+        "west": {
+          "uv": [
+            0,
+            0.0,
+            3.5000000000000004,
+            0.35
+          ],
+          "texture": "#brass"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.8499999999999996,
+            3.5000000000000004
+          ],
+          "texture": "#brass"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.8499999999999996,
+            3.5000000000000004
+          ],
+          "texture": "#brass"
+        }
+      }
+    },
+    {
+      "name": "plinko_pin_0_0",
+      "from": [
+        7.84,
+        11.24,
+        2.45
+      ],
+      "to": [
+        8.16,
+        11.56,
+        3.2
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0.0,
+            0.3200000000000003,
+            0.32
+          ],
+          "texture": "#brass"
+        },
+        "south": {
+          "uv": [
+            0,
+            0.0,
+            0.3200000000000003,
+            0.32
+          ],
+          "texture": "#brass"
+        },
+        "east": {
+          "uv": [
+            0,
+            0.0,
+            0.75,
+            0.32
+          ],
+          "texture": "#brass"
+        },
+        "west": {
+          "uv": [
+            0,
+            0.0,
+            0.75,
+            0.32
+          ],
+          "texture": "#brass"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.3200000000000003,
+            0.75
+          ],
+          "texture": "#brass"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.3200000000000003,
+            0.75
+          ],
+          "texture": "#brass"
+        }
+      }
+    },
+    {
+      "name": "polished_pin_tip",
+      "from": [
+        7.89,
+        11.29,
+        2.31
+      ],
+      "to": [
+        8.11,
+        11.51,
+        2.46
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            16.0
+          ],
+          "texture": "#amber"
+        },
+        "south": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            16.0
+          ],
+          "texture": "#amber"
+        },
+        "east": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            16.0
+          ],
+          "texture": "#amber"
+        },
+        "west": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            16.0
+          ],
+          "texture": "#amber"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#amber"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#amber"
+        }
+      }
+    },
+    {
+      "name": "plinko_pin_1_0",
+      "from": [
+        7.3999999999999995,
+        9.97,
+        2.45
+      ],
+      "to": [
+        7.72,
+        10.29,
+        3.2
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0.0,
+            0.3200000000000003,
+            0.32
+          ],
+          "texture": "#brass"
+        },
+        "south": {
+          "uv": [
+            0,
+            0.0,
+            0.3200000000000003,
+            0.32
+          ],
+          "texture": "#brass"
+        },
+        "east": {
+          "uv": [
+            0,
+            0.0,
+            0.75,
+            0.32
+          ],
+          "texture": "#brass"
+        },
+        "west": {
+          "uv": [
+            0,
+            0.0,
+            0.75,
+            0.32
+          ],
+          "texture": "#brass"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.3200000000000003,
+            0.75
+          ],
+          "texture": "#brass"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.3200000000000003,
+            0.75
+          ],
+          "texture": "#brass"
+        }
+      }
+    },
+    {
+      "name": "polished_pin_tip",
+      "from": [
+        7.449999999999999,
+        10.02,
+        2.31
+      ],
+      "to": [
+        7.67,
+        10.24,
+        2.46
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            16.0
+          ],
+          "texture": "#amber"
+        },
+        "south": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            16.0
+          ],
+          "texture": "#amber"
+        },
+        "east": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            16.0
+          ],
+          "texture": "#amber"
+        },
+        "west": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            16.0
+          ],
+          "texture": "#amber"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#amber"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#amber"
+        }
+      }
+    },
+    {
+      "name": "plinko_pin_1_1",
+      "from": [
+        8.28,
+        9.97,
+        2.45
+      ],
+      "to": [
+        8.6,
+        10.29,
+        3.2
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0.0,
+            0.3200000000000003,
+            0.32
+          ],
+          "texture": "#brass"
+        },
+        "south": {
+          "uv": [
+            0,
+            0.0,
+            0.3200000000000003,
+            0.32
+          ],
+          "texture": "#brass"
+        },
+        "east": {
+          "uv": [
+            0,
+            0.0,
+            0.75,
+            0.32
+          ],
+          "texture": "#brass"
+        },
+        "west": {
+          "uv": [
+            0,
+            0.0,
+            0.75,
+            0.32
+          ],
+          "texture": "#brass"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.3200000000000003,
+            0.75
+          ],
+          "texture": "#brass"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.3200000000000003,
+            0.75
+          ],
+          "texture": "#brass"
+        }
+      }
+    },
+    {
+      "name": "polished_pin_tip",
+      "from": [
+        8.33,
+        10.02,
+        2.31
+      ],
+      "to": [
+        8.549999999999999,
+        10.24,
+        2.46
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            16.0
+          ],
+          "texture": "#amber"
+        },
+        "south": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            16.0
+          ],
+          "texture": "#amber"
+        },
+        "east": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            16.0
+          ],
+          "texture": "#amber"
+        },
+        "west": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            16.0
+          ],
+          "texture": "#amber"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#amber"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#amber"
+        }
+      }
+    },
+    {
+      "name": "plinko_pin_2_0",
+      "from": [
+        6.96,
+        8.7,
+        2.45
+      ],
+      "to": [
+        7.28,
+        9.02,
+        3.2
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0.0,
+            0.3200000000000003,
+            0.32
+          ],
+          "texture": "#brass"
+        },
+        "south": {
+          "uv": [
+            0,
+            0.0,
+            0.3200000000000003,
+            0.32
+          ],
+          "texture": "#brass"
+        },
+        "east": {
+          "uv": [
+            0,
+            0.0,
+            0.75,
+            0.32
+          ],
+          "texture": "#brass"
+        },
+        "west": {
+          "uv": [
+            0,
+            0.0,
+            0.75,
+            0.32
+          ],
+          "texture": "#brass"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.3200000000000003,
+            0.75
+          ],
+          "texture": "#brass"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.3200000000000003,
+            0.75
+          ],
+          "texture": "#brass"
+        }
+      }
+    },
+    {
+      "name": "polished_pin_tip",
+      "from": [
+        7.01,
+        8.75,
+        2.31
+      ],
+      "to": [
+        7.23,
+        8.97,
+        2.46
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            16.0
+          ],
+          "texture": "#amber"
+        },
+        "south": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            16.0
+          ],
+          "texture": "#amber"
+        },
+        "east": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            16.0
+          ],
+          "texture": "#amber"
+        },
+        "west": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            16.0
+          ],
+          "texture": "#amber"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#amber"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#amber"
+        }
+      }
+    },
+    {
+      "name": "plinko_pin_2_1",
+      "from": [
+        7.84,
+        8.7,
+        2.45
+      ],
+      "to": [
+        8.16,
+        9.02,
+        3.2
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0.0,
+            0.3200000000000003,
+            0.32
+          ],
+          "texture": "#brass"
+        },
+        "south": {
+          "uv": [
+            0,
+            0.0,
+            0.3200000000000003,
+            0.32
+          ],
+          "texture": "#brass"
+        },
+        "east": {
+          "uv": [
+            0,
+            0.0,
+            0.75,
+            0.32
+          ],
+          "texture": "#brass"
+        },
+        "west": {
+          "uv": [
+            0,
+            0.0,
+            0.75,
+            0.32
+          ],
+          "texture": "#brass"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.3200000000000003,
+            0.75
+          ],
+          "texture": "#brass"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.3200000000000003,
+            0.75
+          ],
+          "texture": "#brass"
+        }
+      }
+    },
+    {
+      "name": "polished_pin_tip",
+      "from": [
+        7.89,
+        8.75,
+        2.31
+      ],
+      "to": [
+        8.11,
+        8.97,
+        2.46
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            16.0
+          ],
+          "texture": "#amber"
+        },
+        "south": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            16.0
+          ],
+          "texture": "#amber"
+        },
+        "east": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            16.0
+          ],
+          "texture": "#amber"
+        },
+        "west": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            16.0
+          ],
+          "texture": "#amber"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#amber"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#amber"
+        }
+      }
+    },
+    {
+      "name": "plinko_pin_2_2",
+      "from": [
+        8.72,
+        8.7,
+        2.45
+      ],
+      "to": [
+        9.040000000000001,
+        9.02,
+        3.2
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0.0,
+            0.3200000000000003,
+            0.32
+          ],
+          "texture": "#brass"
+        },
+        "south": {
+          "uv": [
+            0,
+            0.0,
+            0.3200000000000003,
+            0.32
+          ],
+          "texture": "#brass"
+        },
+        "east": {
+          "uv": [
+            0,
+            0.0,
+            0.75,
+            0.32
+          ],
+          "texture": "#brass"
+        },
+        "west": {
+          "uv": [
+            0,
+            0.0,
+            0.75,
+            0.32
+          ],
+          "texture": "#brass"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.3200000000000003,
+            0.75
+          ],
+          "texture": "#brass"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.3200000000000003,
+            0.75
+          ],
+          "texture": "#brass"
+        }
+      }
+    },
+    {
+      "name": "polished_pin_tip",
+      "from": [
+        8.770000000000001,
+        8.75,
+        2.31
+      ],
+      "to": [
+        8.99,
+        8.97,
+        2.46
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            16.0
+          ],
+          "texture": "#amber"
+        },
+        "south": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            16.0
+          ],
+          "texture": "#amber"
+        },
+        "east": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            16.0
+          ],
+          "texture": "#amber"
+        },
+        "west": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            16.0
+          ],
+          "texture": "#amber"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#amber"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#amber"
+        }
+      }
+    },
+    {
+      "name": "plinko_pin_3_0",
+      "from": [
+        6.52,
+        7.43,
+        2.45
+      ],
+      "to": [
+        6.84,
+        7.75,
+        3.2
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0.0,
+            0.3200000000000003,
+            0.32
+          ],
+          "texture": "#brass"
+        },
+        "south": {
+          "uv": [
+            0,
+            0.0,
+            0.3200000000000003,
+            0.32
+          ],
+          "texture": "#brass"
+        },
+        "east": {
+          "uv": [
+            0,
+            0.0,
+            0.75,
+            0.32
+          ],
+          "texture": "#brass"
+        },
+        "west": {
+          "uv": [
+            0,
+            0.0,
+            0.75,
+            0.32
+          ],
+          "texture": "#brass"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.3200000000000003,
+            0.75
+          ],
+          "texture": "#brass"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.3200000000000003,
+            0.75
+          ],
+          "texture": "#brass"
+        }
+      }
+    },
+    {
+      "name": "polished_pin_tip",
+      "from": [
+        6.569999999999999,
+        7.48,
+        2.31
+      ],
+      "to": [
+        6.79,
+        7.7,
+        2.46
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            16.0
+          ],
+          "texture": "#amber"
+        },
+        "south": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            16.0
+          ],
+          "texture": "#amber"
+        },
+        "east": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            16.0
+          ],
+          "texture": "#amber"
+        },
+        "west": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            16.0
+          ],
+          "texture": "#amber"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#amber"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#amber"
+        }
+      }
+    },
+    {
+      "name": "plinko_pin_3_1",
+      "from": [
+        7.3999999999999995,
+        7.43,
+        2.45
+      ],
+      "to": [
+        7.72,
+        7.75,
+        3.2
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0.0,
+            0.3200000000000003,
+            0.32
+          ],
+          "texture": "#brass"
+        },
+        "south": {
+          "uv": [
+            0,
+            0.0,
+            0.3200000000000003,
+            0.32
+          ],
+          "texture": "#brass"
+        },
+        "east": {
+          "uv": [
+            0,
+            0.0,
+            0.75,
+            0.32
+          ],
+          "texture": "#brass"
+        },
+        "west": {
+          "uv": [
+            0,
+            0.0,
+            0.75,
+            0.32
+          ],
+          "texture": "#brass"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.3200000000000003,
+            0.75
+          ],
+          "texture": "#brass"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.3200000000000003,
+            0.75
+          ],
+          "texture": "#brass"
+        }
+      }
+    },
+    {
+      "name": "polished_pin_tip",
+      "from": [
+        7.449999999999999,
+        7.48,
+        2.31
+      ],
+      "to": [
+        7.67,
+        7.7,
+        2.46
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            16.0
+          ],
+          "texture": "#amber"
+        },
+        "south": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            16.0
+          ],
+          "texture": "#amber"
+        },
+        "east": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            16.0
+          ],
+          "texture": "#amber"
+        },
+        "west": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            16.0
+          ],
+          "texture": "#amber"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#amber"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#amber"
+        }
+      }
+    },
+    {
+      "name": "plinko_pin_3_2",
+      "from": [
+        8.28,
+        7.43,
+        2.45
+      ],
+      "to": [
+        8.6,
+        7.75,
+        3.2
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0.0,
+            0.3200000000000003,
+            0.32
+          ],
+          "texture": "#brass"
+        },
+        "south": {
+          "uv": [
+            0,
+            0.0,
+            0.3200000000000003,
+            0.32
+          ],
+          "texture": "#brass"
+        },
+        "east": {
+          "uv": [
+            0,
+            0.0,
+            0.75,
+            0.32
+          ],
+          "texture": "#brass"
+        },
+        "west": {
+          "uv": [
+            0,
+            0.0,
+            0.75,
+            0.32
+          ],
+          "texture": "#brass"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.3200000000000003,
+            0.75
+          ],
+          "texture": "#brass"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.3200000000000003,
+            0.75
+          ],
+          "texture": "#brass"
+        }
+      }
+    },
+    {
+      "name": "polished_pin_tip",
+      "from": [
+        8.33,
+        7.48,
+        2.31
+      ],
+      "to": [
+        8.549999999999999,
+        7.7,
+        2.46
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            16.0
+          ],
+          "texture": "#amber"
+        },
+        "south": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            16.0
+          ],
+          "texture": "#amber"
+        },
+        "east": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            16.0
+          ],
+          "texture": "#amber"
+        },
+        "west": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            16.0
+          ],
+          "texture": "#amber"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#amber"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#amber"
+        }
+      }
+    },
+    {
+      "name": "plinko_pin_3_3",
+      "from": [
+        9.16,
+        7.43,
+        2.45
+      ],
+      "to": [
+        9.48,
+        7.75,
+        3.2
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0.0,
+            0.3200000000000003,
+            0.32
+          ],
+          "texture": "#brass"
+        },
+        "south": {
+          "uv": [
+            0,
+            0.0,
+            0.3200000000000003,
+            0.32
+          ],
+          "texture": "#brass"
+        },
+        "east": {
+          "uv": [
+            0,
+            0.0,
+            0.75,
+            0.32
+          ],
+          "texture": "#brass"
+        },
+        "west": {
+          "uv": [
+            0,
+            0.0,
+            0.75,
+            0.32
+          ],
+          "texture": "#brass"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.3200000000000003,
+            0.75
+          ],
+          "texture": "#brass"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.3200000000000003,
+            0.75
+          ],
+          "texture": "#brass"
+        }
+      }
+    },
+    {
+      "name": "polished_pin_tip",
+      "from": [
+        9.21,
+        7.48,
+        2.31
+      ],
+      "to": [
+        9.43,
+        7.7,
+        2.46
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            16.0
+          ],
+          "texture": "#amber"
+        },
+        "south": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            16.0
+          ],
+          "texture": "#amber"
+        },
+        "east": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            16.0
+          ],
+          "texture": "#amber"
+        },
+        "west": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            16.0
+          ],
+          "texture": "#amber"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#amber"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#amber"
+        }
+      }
+    },
+    {
+      "name": "plinko_pin_4_0",
+      "from": [
+        6.08,
+        6.16,
+        2.45
+      ],
+      "to": [
+        6.4,
+        6.48,
+        3.2
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0.0,
+            0.3200000000000003,
+            0.32
+          ],
+          "texture": "#brass"
+        },
+        "south": {
+          "uv": [
+            0,
+            0.0,
+            0.3200000000000003,
+            0.32
+          ],
+          "texture": "#brass"
+        },
+        "east": {
+          "uv": [
+            0,
+            0.0,
+            0.75,
+            0.32
+          ],
+          "texture": "#brass"
+        },
+        "west": {
+          "uv": [
+            0,
+            0.0,
+            0.75,
+            0.32
+          ],
+          "texture": "#brass"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.3200000000000003,
+            0.75
+          ],
+          "texture": "#brass"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.3200000000000003,
+            0.75
+          ],
+          "texture": "#brass"
+        }
+      }
+    },
+    {
+      "name": "polished_pin_tip",
+      "from": [
+        6.13,
+        6.21,
+        2.31
+      ],
+      "to": [
+        6.3500000000000005,
+        6.43,
+        2.46
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            16.0
+          ],
+          "texture": "#amber"
+        },
+        "south": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            16.0
+          ],
+          "texture": "#amber"
+        },
+        "east": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            16.0
+          ],
+          "texture": "#amber"
+        },
+        "west": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            16.0
+          ],
+          "texture": "#amber"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#amber"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#amber"
+        }
+      }
+    },
+    {
+      "name": "plinko_pin_4_1",
+      "from": [
+        6.96,
+        6.16,
+        2.45
+      ],
+      "to": [
+        7.28,
+        6.48,
+        3.2
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0.0,
+            0.3200000000000003,
+            0.32
+          ],
+          "texture": "#brass"
+        },
+        "south": {
+          "uv": [
+            0,
+            0.0,
+            0.3200000000000003,
+            0.32
+          ],
+          "texture": "#brass"
+        },
+        "east": {
+          "uv": [
+            0,
+            0.0,
+            0.75,
+            0.32
+          ],
+          "texture": "#brass"
+        },
+        "west": {
+          "uv": [
+            0,
+            0.0,
+            0.75,
+            0.32
+          ],
+          "texture": "#brass"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.3200000000000003,
+            0.75
+          ],
+          "texture": "#brass"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.3200000000000003,
+            0.75
+          ],
+          "texture": "#brass"
+        }
+      }
+    },
+    {
+      "name": "polished_pin_tip",
+      "from": [
+        7.01,
+        6.21,
+        2.31
+      ],
+      "to": [
+        7.23,
+        6.43,
+        2.46
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            16.0
+          ],
+          "texture": "#amber"
+        },
+        "south": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            16.0
+          ],
+          "texture": "#amber"
+        },
+        "east": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            16.0
+          ],
+          "texture": "#amber"
+        },
+        "west": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            16.0
+          ],
+          "texture": "#amber"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#amber"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#amber"
+        }
+      }
+    },
+    {
+      "name": "plinko_pin_4_2",
+      "from": [
+        7.84,
+        6.16,
+        2.45
+      ],
+      "to": [
+        8.16,
+        6.48,
+        3.2
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0.0,
+            0.3200000000000003,
+            0.32
+          ],
+          "texture": "#brass"
+        },
+        "south": {
+          "uv": [
+            0,
+            0.0,
+            0.3200000000000003,
+            0.32
+          ],
+          "texture": "#brass"
+        },
+        "east": {
+          "uv": [
+            0,
+            0.0,
+            0.75,
+            0.32
+          ],
+          "texture": "#brass"
+        },
+        "west": {
+          "uv": [
+            0,
+            0.0,
+            0.75,
+            0.32
+          ],
+          "texture": "#brass"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.3200000000000003,
+            0.75
+          ],
+          "texture": "#brass"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.3200000000000003,
+            0.75
+          ],
+          "texture": "#brass"
+        }
+      }
+    },
+    {
+      "name": "polished_pin_tip",
+      "from": [
+        7.89,
+        6.21,
+        2.31
+      ],
+      "to": [
+        8.11,
+        6.43,
+        2.46
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            16.0
+          ],
+          "texture": "#amber"
+        },
+        "south": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            16.0
+          ],
+          "texture": "#amber"
+        },
+        "east": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            16.0
+          ],
+          "texture": "#amber"
+        },
+        "west": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            16.0
+          ],
+          "texture": "#amber"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#amber"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#amber"
+        }
+      }
+    },
+    {
+      "name": "plinko_pin_4_3",
+      "from": [
+        8.72,
+        6.16,
+        2.45
+      ],
+      "to": [
+        9.040000000000001,
+        6.48,
+        3.2
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0.0,
+            0.3200000000000003,
+            0.32
+          ],
+          "texture": "#brass"
+        },
+        "south": {
+          "uv": [
+            0,
+            0.0,
+            0.3200000000000003,
+            0.32
+          ],
+          "texture": "#brass"
+        },
+        "east": {
+          "uv": [
+            0,
+            0.0,
+            0.75,
+            0.32
+          ],
+          "texture": "#brass"
+        },
+        "west": {
+          "uv": [
+            0,
+            0.0,
+            0.75,
+            0.32
+          ],
+          "texture": "#brass"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.3200000000000003,
+            0.75
+          ],
+          "texture": "#brass"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.3200000000000003,
+            0.75
+          ],
+          "texture": "#brass"
+        }
+      }
+    },
+    {
+      "name": "polished_pin_tip",
+      "from": [
+        8.770000000000001,
+        6.21,
+        2.31
+      ],
+      "to": [
+        8.99,
+        6.43,
+        2.46
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            16.0
+          ],
+          "texture": "#amber"
+        },
+        "south": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            16.0
+          ],
+          "texture": "#amber"
+        },
+        "east": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            16.0
+          ],
+          "texture": "#amber"
+        },
+        "west": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            16.0
+          ],
+          "texture": "#amber"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#amber"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#amber"
+        }
+      }
+    },
+    {
+      "name": "plinko_pin_4_4",
+      "from": [
+        9.6,
+        6.16,
+        2.45
+      ],
+      "to": [
+        9.92,
+        6.48,
+        3.2
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0.0,
+            0.3200000000000003,
+            0.32
+          ],
+          "texture": "#brass"
+        },
+        "south": {
+          "uv": [
+            0,
+            0.0,
+            0.3200000000000003,
+            0.32
+          ],
+          "texture": "#brass"
+        },
+        "east": {
+          "uv": [
+            0,
+            0.0,
+            0.75,
+            0.32
+          ],
+          "texture": "#brass"
+        },
+        "west": {
+          "uv": [
+            0,
+            0.0,
+            0.75,
+            0.32
+          ],
+          "texture": "#brass"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.3200000000000003,
+            0.75
+          ],
+          "texture": "#brass"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.3200000000000003,
+            0.75
+          ],
+          "texture": "#brass"
+        }
+      }
+    },
+    {
+      "name": "polished_pin_tip",
+      "from": [
+        9.65,
+        6.21,
+        2.31
+      ],
+      "to": [
+        9.87,
+        6.43,
+        2.46
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            16.0
+          ],
+          "texture": "#amber"
+        },
+        "south": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            16.0
+          ],
+          "texture": "#amber"
+        },
+        "east": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            16.0
+          ],
+          "texture": "#amber"
+        },
+        "west": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            16.0
+          ],
+          "texture": "#amber"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#amber"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#amber"
+        }
+      }
+    },
+    {
+      "name": "plinko_pin_5_0",
+      "from": [
+        5.64,
+        4.89,
+        2.45
+      ],
+      "to": [
+        5.96,
+        5.21,
+        3.2
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0.0,
+            0.3200000000000003,
+            0.32
+          ],
+          "texture": "#brass"
+        },
+        "south": {
+          "uv": [
+            0,
+            0.0,
+            0.3200000000000003,
+            0.32
+          ],
+          "texture": "#brass"
+        },
+        "east": {
+          "uv": [
+            0,
+            0.0,
+            0.75,
+            0.32
+          ],
+          "texture": "#brass"
+        },
+        "west": {
+          "uv": [
+            0,
+            0.0,
+            0.75,
+            0.32
+          ],
+          "texture": "#brass"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.3200000000000003,
+            0.75
+          ],
+          "texture": "#brass"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.3200000000000003,
+            0.75
+          ],
+          "texture": "#brass"
+        }
+      }
+    },
+    {
+      "name": "polished_pin_tip",
+      "from": [
+        5.6899999999999995,
+        4.94,
+        2.31
+      ],
+      "to": [
+        5.91,
+        5.16,
+        2.46
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            16.0
+          ],
+          "texture": "#amber"
+        },
+        "south": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            16.0
+          ],
+          "texture": "#amber"
+        },
+        "east": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            16.0
+          ],
+          "texture": "#amber"
+        },
+        "west": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            16.0
+          ],
+          "texture": "#amber"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#amber"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#amber"
+        }
+      }
+    },
+    {
+      "name": "plinko_pin_5_1",
+      "from": [
+        6.52,
+        4.89,
+        2.45
+      ],
+      "to": [
+        6.84,
+        5.21,
+        3.2
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0.0,
+            0.3200000000000003,
+            0.32
+          ],
+          "texture": "#brass"
+        },
+        "south": {
+          "uv": [
+            0,
+            0.0,
+            0.3200000000000003,
+            0.32
+          ],
+          "texture": "#brass"
+        },
+        "east": {
+          "uv": [
+            0,
+            0.0,
+            0.75,
+            0.32
+          ],
+          "texture": "#brass"
+        },
+        "west": {
+          "uv": [
+            0,
+            0.0,
+            0.75,
+            0.32
+          ],
+          "texture": "#brass"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.3200000000000003,
+            0.75
+          ],
+          "texture": "#brass"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.3200000000000003,
+            0.75
+          ],
+          "texture": "#brass"
+        }
+      }
+    },
+    {
+      "name": "polished_pin_tip",
+      "from": [
+        6.569999999999999,
+        4.94,
+        2.31
+      ],
+      "to": [
+        6.79,
+        5.16,
+        2.46
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            16.0
+          ],
+          "texture": "#amber"
+        },
+        "south": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            16.0
+          ],
+          "texture": "#amber"
+        },
+        "east": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            16.0
+          ],
+          "texture": "#amber"
+        },
+        "west": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            16.0
+          ],
+          "texture": "#amber"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#amber"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#amber"
+        }
+      }
+    },
+    {
+      "name": "plinko_pin_5_2",
+      "from": [
+        7.3999999999999995,
+        4.89,
+        2.45
+      ],
+      "to": [
+        7.72,
+        5.21,
+        3.2
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0.0,
+            0.3200000000000003,
+            0.32
+          ],
+          "texture": "#brass"
+        },
+        "south": {
+          "uv": [
+            0,
+            0.0,
+            0.3200000000000003,
+            0.32
+          ],
+          "texture": "#brass"
+        },
+        "east": {
+          "uv": [
+            0,
+            0.0,
+            0.75,
+            0.32
+          ],
+          "texture": "#brass"
+        },
+        "west": {
+          "uv": [
+            0,
+            0.0,
+            0.75,
+            0.32
+          ],
+          "texture": "#brass"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.3200000000000003,
+            0.75
+          ],
+          "texture": "#brass"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.3200000000000003,
+            0.75
+          ],
+          "texture": "#brass"
+        }
+      }
+    },
+    {
+      "name": "polished_pin_tip",
+      "from": [
+        7.449999999999999,
+        4.94,
+        2.31
+      ],
+      "to": [
+        7.67,
+        5.16,
+        2.46
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            16.0
+          ],
+          "texture": "#amber"
+        },
+        "south": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            16.0
+          ],
+          "texture": "#amber"
+        },
+        "east": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            16.0
+          ],
+          "texture": "#amber"
+        },
+        "west": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            16.0
+          ],
+          "texture": "#amber"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#amber"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#amber"
+        }
+      }
+    },
+    {
+      "name": "plinko_pin_5_3",
+      "from": [
+        8.28,
+        4.89,
+        2.45
+      ],
+      "to": [
+        8.6,
+        5.21,
+        3.2
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0.0,
+            0.3200000000000003,
+            0.32
+          ],
+          "texture": "#brass"
+        },
+        "south": {
+          "uv": [
+            0,
+            0.0,
+            0.3200000000000003,
+            0.32
+          ],
+          "texture": "#brass"
+        },
+        "east": {
+          "uv": [
+            0,
+            0.0,
+            0.75,
+            0.32
+          ],
+          "texture": "#brass"
+        },
+        "west": {
+          "uv": [
+            0,
+            0.0,
+            0.75,
+            0.32
+          ],
+          "texture": "#brass"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.3200000000000003,
+            0.75
+          ],
+          "texture": "#brass"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.3200000000000003,
+            0.75
+          ],
+          "texture": "#brass"
+        }
+      }
+    },
+    {
+      "name": "polished_pin_tip",
+      "from": [
+        8.33,
+        4.94,
+        2.31
+      ],
+      "to": [
+        8.549999999999999,
+        5.16,
+        2.46
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            16.0
+          ],
+          "texture": "#amber"
+        },
+        "south": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            16.0
+          ],
+          "texture": "#amber"
+        },
+        "east": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            16.0
+          ],
+          "texture": "#amber"
+        },
+        "west": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            16.0
+          ],
+          "texture": "#amber"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#amber"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#amber"
+        }
+      }
+    },
+    {
+      "name": "plinko_pin_5_4",
+      "from": [
+        9.16,
+        4.89,
+        2.45
+      ],
+      "to": [
+        9.48,
+        5.21,
+        3.2
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0.0,
+            0.3200000000000003,
+            0.32
+          ],
+          "texture": "#brass"
+        },
+        "south": {
+          "uv": [
+            0,
+            0.0,
+            0.3200000000000003,
+            0.32
+          ],
+          "texture": "#brass"
+        },
+        "east": {
+          "uv": [
+            0,
+            0.0,
+            0.75,
+            0.32
+          ],
+          "texture": "#brass"
+        },
+        "west": {
+          "uv": [
+            0,
+            0.0,
+            0.75,
+            0.32
+          ],
+          "texture": "#brass"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.3200000000000003,
+            0.75
+          ],
+          "texture": "#brass"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.3200000000000003,
+            0.75
+          ],
+          "texture": "#brass"
+        }
+      }
+    },
+    {
+      "name": "polished_pin_tip",
+      "from": [
+        9.21,
+        4.94,
+        2.31
+      ],
+      "to": [
+        9.43,
+        5.16,
+        2.46
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            16.0
+          ],
+          "texture": "#amber"
+        },
+        "south": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            16.0
+          ],
+          "texture": "#amber"
+        },
+        "east": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            16.0
+          ],
+          "texture": "#amber"
+        },
+        "west": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            16.0
+          ],
+          "texture": "#amber"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#amber"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#amber"
+        }
+      }
+    },
+    {
+      "name": "plinko_pin_5_5",
+      "from": [
+        10.04,
+        4.89,
+        2.45
+      ],
+      "to": [
+        10.36,
+        5.21,
+        3.2
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0.0,
+            0.3200000000000003,
+            0.32
+          ],
+          "texture": "#brass"
+        },
+        "south": {
+          "uv": [
+            0,
+            0.0,
+            0.3200000000000003,
+            0.32
+          ],
+          "texture": "#brass"
+        },
+        "east": {
+          "uv": [
+            0,
+            0.0,
+            0.75,
+            0.32
+          ],
+          "texture": "#brass"
+        },
+        "west": {
+          "uv": [
+            0,
+            0.0,
+            0.75,
+            0.32
+          ],
+          "texture": "#brass"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.3200000000000003,
+            0.75
+          ],
+          "texture": "#brass"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.3200000000000003,
+            0.75
+          ],
+          "texture": "#brass"
+        }
+      }
+    },
+    {
+      "name": "polished_pin_tip",
+      "from": [
+        10.09,
+        4.94,
+        2.31
+      ],
+      "to": [
+        10.309999999999999,
+        5.16,
+        2.46
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            16.0
+          ],
+          "texture": "#amber"
+        },
+        "south": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            16.0
+          ],
+          "texture": "#amber"
+        },
+        "east": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            16.0
+          ],
+          "texture": "#amber"
+        },
+        "west": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            16.0
+          ],
+          "texture": "#amber"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#amber"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#amber"
+        }
+      }
+    },
+    {
+      "name": "plinko_pin_6_0",
+      "from": [
+        5.199999999999999,
+        3.62,
+        2.45
+      ],
+      "to": [
+        5.52,
+        3.94,
+        3.2
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0.0,
+            0.3200000000000003,
+            0.32
+          ],
+          "texture": "#brass"
+        },
+        "south": {
+          "uv": [
+            0,
+            0.0,
+            0.3200000000000003,
+            0.32
+          ],
+          "texture": "#brass"
+        },
+        "east": {
+          "uv": [
+            0,
+            0.0,
+            0.75,
+            0.32
+          ],
+          "texture": "#brass"
+        },
+        "west": {
+          "uv": [
+            0,
+            0.0,
+            0.75,
+            0.32
+          ],
+          "texture": "#brass"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.3200000000000003,
+            0.75
+          ],
+          "texture": "#brass"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.3200000000000003,
+            0.75
+          ],
+          "texture": "#brass"
+        }
+      }
+    },
+    {
+      "name": "polished_pin_tip",
+      "from": [
+        5.249999999999999,
+        3.67,
+        2.31
+      ],
+      "to": [
+        5.47,
+        3.89,
+        2.46
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            16.0
+          ],
+          "texture": "#amber"
+        },
+        "south": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            16.0
+          ],
+          "texture": "#amber"
+        },
+        "east": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            16.0
+          ],
+          "texture": "#amber"
+        },
+        "west": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            16.0
+          ],
+          "texture": "#amber"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#amber"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#amber"
+        }
+      }
+    },
+    {
+      "name": "plinko_pin_6_1",
+      "from": [
+        6.08,
+        3.62,
+        2.45
+      ],
+      "to": [
+        6.4,
+        3.94,
+        3.2
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0.0,
+            0.3200000000000003,
+            0.32
+          ],
+          "texture": "#brass"
+        },
+        "south": {
+          "uv": [
+            0,
+            0.0,
+            0.3200000000000003,
+            0.32
+          ],
+          "texture": "#brass"
+        },
+        "east": {
+          "uv": [
+            0,
+            0.0,
+            0.75,
+            0.32
+          ],
+          "texture": "#brass"
+        },
+        "west": {
+          "uv": [
+            0,
+            0.0,
+            0.75,
+            0.32
+          ],
+          "texture": "#brass"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.3200000000000003,
+            0.75
+          ],
+          "texture": "#brass"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.3200000000000003,
+            0.75
+          ],
+          "texture": "#brass"
+        }
+      }
+    },
+    {
+      "name": "polished_pin_tip",
+      "from": [
+        6.13,
+        3.67,
+        2.31
+      ],
+      "to": [
+        6.3500000000000005,
+        3.89,
+        2.46
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            16.0
+          ],
+          "texture": "#amber"
+        },
+        "south": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            16.0
+          ],
+          "texture": "#amber"
+        },
+        "east": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            16.0
+          ],
+          "texture": "#amber"
+        },
+        "west": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            16.0
+          ],
+          "texture": "#amber"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#amber"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#amber"
+        }
+      }
+    },
+    {
+      "name": "plinko_pin_6_2",
+      "from": [
+        6.96,
+        3.62,
+        2.45
+      ],
+      "to": [
+        7.28,
+        3.94,
+        3.2
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0.0,
+            0.3200000000000003,
+            0.32
+          ],
+          "texture": "#brass"
+        },
+        "south": {
+          "uv": [
+            0,
+            0.0,
+            0.3200000000000003,
+            0.32
+          ],
+          "texture": "#brass"
+        },
+        "east": {
+          "uv": [
+            0,
+            0.0,
+            0.75,
+            0.32
+          ],
+          "texture": "#brass"
+        },
+        "west": {
+          "uv": [
+            0,
+            0.0,
+            0.75,
+            0.32
+          ],
+          "texture": "#brass"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.3200000000000003,
+            0.75
+          ],
+          "texture": "#brass"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.3200000000000003,
+            0.75
+          ],
+          "texture": "#brass"
+        }
+      }
+    },
+    {
+      "name": "polished_pin_tip",
+      "from": [
+        7.01,
+        3.67,
+        2.31
+      ],
+      "to": [
+        7.23,
+        3.89,
+        2.46
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            16.0
+          ],
+          "texture": "#amber"
+        },
+        "south": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            16.0
+          ],
+          "texture": "#amber"
+        },
+        "east": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            16.0
+          ],
+          "texture": "#amber"
+        },
+        "west": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            16.0
+          ],
+          "texture": "#amber"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#amber"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#amber"
+        }
+      }
+    },
+    {
+      "name": "plinko_pin_6_3",
+      "from": [
+        7.84,
+        3.62,
+        2.45
+      ],
+      "to": [
+        8.16,
+        3.94,
+        3.2
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0.0,
+            0.3200000000000003,
+            0.32
+          ],
+          "texture": "#brass"
+        },
+        "south": {
+          "uv": [
+            0,
+            0.0,
+            0.3200000000000003,
+            0.32
+          ],
+          "texture": "#brass"
+        },
+        "east": {
+          "uv": [
+            0,
+            0.0,
+            0.75,
+            0.32
+          ],
+          "texture": "#brass"
+        },
+        "west": {
+          "uv": [
+            0,
+            0.0,
+            0.75,
+            0.32
+          ],
+          "texture": "#brass"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.3200000000000003,
+            0.75
+          ],
+          "texture": "#brass"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.3200000000000003,
+            0.75
+          ],
+          "texture": "#brass"
+        }
+      }
+    },
+    {
+      "name": "polished_pin_tip",
+      "from": [
+        7.89,
+        3.67,
+        2.31
+      ],
+      "to": [
+        8.11,
+        3.89,
+        2.46
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            16.0
+          ],
+          "texture": "#amber"
+        },
+        "south": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            16.0
+          ],
+          "texture": "#amber"
+        },
+        "east": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            16.0
+          ],
+          "texture": "#amber"
+        },
+        "west": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            16.0
+          ],
+          "texture": "#amber"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#amber"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#amber"
+        }
+      }
+    },
+    {
+      "name": "plinko_pin_6_4",
+      "from": [
+        8.72,
+        3.62,
+        2.45
+      ],
+      "to": [
+        9.040000000000001,
+        3.94,
+        3.2
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0.0,
+            0.3200000000000003,
+            0.32
+          ],
+          "texture": "#brass"
+        },
+        "south": {
+          "uv": [
+            0,
+            0.0,
+            0.3200000000000003,
+            0.32
+          ],
+          "texture": "#brass"
+        },
+        "east": {
+          "uv": [
+            0,
+            0.0,
+            0.75,
+            0.32
+          ],
+          "texture": "#brass"
+        },
+        "west": {
+          "uv": [
+            0,
+            0.0,
+            0.75,
+            0.32
+          ],
+          "texture": "#brass"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.3200000000000003,
+            0.75
+          ],
+          "texture": "#brass"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.3200000000000003,
+            0.75
+          ],
+          "texture": "#brass"
+        }
+      }
+    },
+    {
+      "name": "polished_pin_tip",
+      "from": [
+        8.770000000000001,
+        3.67,
+        2.31
+      ],
+      "to": [
+        8.99,
+        3.89,
+        2.46
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            16.0
+          ],
+          "texture": "#amber"
+        },
+        "south": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            16.0
+          ],
+          "texture": "#amber"
+        },
+        "east": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            16.0
+          ],
+          "texture": "#amber"
+        },
+        "west": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            16.0
+          ],
+          "texture": "#amber"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#amber"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#amber"
+        }
+      }
+    },
+    {
+      "name": "plinko_pin_6_5",
+      "from": [
+        9.6,
+        3.62,
+        2.45
+      ],
+      "to": [
+        9.92,
+        3.94,
+        3.2
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0.0,
+            0.3200000000000003,
+            0.32
+          ],
+          "texture": "#brass"
+        },
+        "south": {
+          "uv": [
+            0,
+            0.0,
+            0.3200000000000003,
+            0.32
+          ],
+          "texture": "#brass"
+        },
+        "east": {
+          "uv": [
+            0,
+            0.0,
+            0.75,
+            0.32
+          ],
+          "texture": "#brass"
+        },
+        "west": {
+          "uv": [
+            0,
+            0.0,
+            0.75,
+            0.32
+          ],
+          "texture": "#brass"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.3200000000000003,
+            0.75
+          ],
+          "texture": "#brass"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.3200000000000003,
+            0.75
+          ],
+          "texture": "#brass"
+        }
+      }
+    },
+    {
+      "name": "polished_pin_tip",
+      "from": [
+        9.65,
+        3.67,
+        2.31
+      ],
+      "to": [
+        9.87,
+        3.89,
+        2.46
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            16.0
+          ],
+          "texture": "#amber"
+        },
+        "south": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            16.0
+          ],
+          "texture": "#amber"
+        },
+        "east": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            16.0
+          ],
+          "texture": "#amber"
+        },
+        "west": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            16.0
+          ],
+          "texture": "#amber"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#amber"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#amber"
+        }
+      }
+    },
+    {
+      "name": "plinko_pin_6_6",
+      "from": [
+        10.48,
+        3.62,
+        2.45
+      ],
+      "to": [
+        10.8,
+        3.94,
+        3.2
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0.0,
+            0.3200000000000003,
+            0.32
+          ],
+          "texture": "#brass"
+        },
+        "south": {
+          "uv": [
+            0,
+            0.0,
+            0.3200000000000003,
+            0.32
+          ],
+          "texture": "#brass"
+        },
+        "east": {
+          "uv": [
+            0,
+            0.0,
+            0.75,
+            0.32
+          ],
+          "texture": "#brass"
+        },
+        "west": {
+          "uv": [
+            0,
+            0.0,
+            0.75,
+            0.32
+          ],
+          "texture": "#brass"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.3200000000000003,
+            0.75
+          ],
+          "texture": "#brass"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.3200000000000003,
+            0.75
+          ],
+          "texture": "#brass"
+        }
+      }
+    },
+    {
+      "name": "polished_pin_tip",
+      "from": [
+        10.530000000000001,
+        3.67,
+        2.31
+      ],
+      "to": [
+        10.75,
+        3.89,
+        2.46
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            16.0
+          ],
+          "texture": "#amber"
+        },
+        "south": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            16.0
+          ],
+          "texture": "#amber"
+        },
+        "east": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            16.0
+          ],
+          "texture": "#amber"
+        },
+        "west": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            16.0
+          ],
+          "texture": "#amber"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#amber"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#amber"
+        }
+      }
+    },
+    {
+      "name": "plinko_pin_7_0",
+      "from": [
+        4.76,
+        2.35,
+        2.45
+      ],
+      "to": [
+        5.08,
+        2.67,
+        3.2
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0.0,
+            0.3200000000000003,
+            0.32
+          ],
+          "texture": "#brass"
+        },
+        "south": {
+          "uv": [
+            0,
+            0.0,
+            0.3200000000000003,
+            0.32
+          ],
+          "texture": "#brass"
+        },
+        "east": {
+          "uv": [
+            0,
+            0.0,
+            0.75,
+            0.32
+          ],
+          "texture": "#brass"
+        },
+        "west": {
+          "uv": [
+            0,
+            0.0,
+            0.75,
+            0.32
+          ],
+          "texture": "#brass"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.3200000000000003,
+            0.75
+          ],
+          "texture": "#brass"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.3200000000000003,
+            0.75
+          ],
+          "texture": "#brass"
+        }
+      }
+    },
+    {
+      "name": "polished_pin_tip",
+      "from": [
+        4.81,
+        2.4,
+        2.31
+      ],
+      "to": [
+        5.03,
+        2.62,
+        2.46
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            16.0
+          ],
+          "texture": "#amber"
+        },
+        "south": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            16.0
+          ],
+          "texture": "#amber"
+        },
+        "east": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            16.0
+          ],
+          "texture": "#amber"
+        },
+        "west": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            16.0
+          ],
+          "texture": "#amber"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#amber"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#amber"
+        }
+      }
+    },
+    {
+      "name": "plinko_pin_7_1",
+      "from": [
+        5.64,
+        2.35,
+        2.45
+      ],
+      "to": [
+        5.96,
+        2.67,
+        3.2
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0.0,
+            0.3200000000000003,
+            0.32
+          ],
+          "texture": "#brass"
+        },
+        "south": {
+          "uv": [
+            0,
+            0.0,
+            0.3200000000000003,
+            0.32
+          ],
+          "texture": "#brass"
+        },
+        "east": {
+          "uv": [
+            0,
+            0.0,
+            0.75,
+            0.32
+          ],
+          "texture": "#brass"
+        },
+        "west": {
+          "uv": [
+            0,
+            0.0,
+            0.75,
+            0.32
+          ],
+          "texture": "#brass"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.3200000000000003,
+            0.75
+          ],
+          "texture": "#brass"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.3200000000000003,
+            0.75
+          ],
+          "texture": "#brass"
+        }
+      }
+    },
+    {
+      "name": "polished_pin_tip",
+      "from": [
+        5.6899999999999995,
+        2.4,
+        2.31
+      ],
+      "to": [
+        5.91,
+        2.62,
+        2.46
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            16.0
+          ],
+          "texture": "#amber"
+        },
+        "south": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            16.0
+          ],
+          "texture": "#amber"
+        },
+        "east": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            16.0
+          ],
+          "texture": "#amber"
+        },
+        "west": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            16.0
+          ],
+          "texture": "#amber"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#amber"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#amber"
+        }
+      }
+    },
+    {
+      "name": "plinko_pin_7_2",
+      "from": [
+        6.52,
+        2.35,
+        2.45
+      ],
+      "to": [
+        6.84,
+        2.67,
+        3.2
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0.0,
+            0.3200000000000003,
+            0.32
+          ],
+          "texture": "#brass"
+        },
+        "south": {
+          "uv": [
+            0,
+            0.0,
+            0.3200000000000003,
+            0.32
+          ],
+          "texture": "#brass"
+        },
+        "east": {
+          "uv": [
+            0,
+            0.0,
+            0.75,
+            0.32
+          ],
+          "texture": "#brass"
+        },
+        "west": {
+          "uv": [
+            0,
+            0.0,
+            0.75,
+            0.32
+          ],
+          "texture": "#brass"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.3200000000000003,
+            0.75
+          ],
+          "texture": "#brass"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.3200000000000003,
+            0.75
+          ],
+          "texture": "#brass"
+        }
+      }
+    },
+    {
+      "name": "polished_pin_tip",
+      "from": [
+        6.569999999999999,
+        2.4,
+        2.31
+      ],
+      "to": [
+        6.79,
+        2.62,
+        2.46
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            16.0
+          ],
+          "texture": "#amber"
+        },
+        "south": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            16.0
+          ],
+          "texture": "#amber"
+        },
+        "east": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            16.0
+          ],
+          "texture": "#amber"
+        },
+        "west": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            16.0
+          ],
+          "texture": "#amber"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#amber"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#amber"
+        }
+      }
+    },
+    {
+      "name": "plinko_pin_7_3",
+      "from": [
+        7.3999999999999995,
+        2.35,
+        2.45
+      ],
+      "to": [
+        7.72,
+        2.67,
+        3.2
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0.0,
+            0.3200000000000003,
+            0.32
+          ],
+          "texture": "#brass"
+        },
+        "south": {
+          "uv": [
+            0,
+            0.0,
+            0.3200000000000003,
+            0.32
+          ],
+          "texture": "#brass"
+        },
+        "east": {
+          "uv": [
+            0,
+            0.0,
+            0.75,
+            0.32
+          ],
+          "texture": "#brass"
+        },
+        "west": {
+          "uv": [
+            0,
+            0.0,
+            0.75,
+            0.32
+          ],
+          "texture": "#brass"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.3200000000000003,
+            0.75
+          ],
+          "texture": "#brass"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.3200000000000003,
+            0.75
+          ],
+          "texture": "#brass"
+        }
+      }
+    },
+    {
+      "name": "polished_pin_tip",
+      "from": [
+        7.449999999999999,
+        2.4,
+        2.31
+      ],
+      "to": [
+        7.67,
+        2.62,
+        2.46
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            16.0
+          ],
+          "texture": "#amber"
+        },
+        "south": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            16.0
+          ],
+          "texture": "#amber"
+        },
+        "east": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            16.0
+          ],
+          "texture": "#amber"
+        },
+        "west": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            16.0
+          ],
+          "texture": "#amber"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#amber"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#amber"
+        }
+      }
+    },
+    {
+      "name": "plinko_pin_7_4",
+      "from": [
+        8.28,
+        2.35,
+        2.45
+      ],
+      "to": [
+        8.6,
+        2.67,
+        3.2
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0.0,
+            0.3200000000000003,
+            0.32
+          ],
+          "texture": "#brass"
+        },
+        "south": {
+          "uv": [
+            0,
+            0.0,
+            0.3200000000000003,
+            0.32
+          ],
+          "texture": "#brass"
+        },
+        "east": {
+          "uv": [
+            0,
+            0.0,
+            0.75,
+            0.32
+          ],
+          "texture": "#brass"
+        },
+        "west": {
+          "uv": [
+            0,
+            0.0,
+            0.75,
+            0.32
+          ],
+          "texture": "#brass"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.3200000000000003,
+            0.75
+          ],
+          "texture": "#brass"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.3200000000000003,
+            0.75
+          ],
+          "texture": "#brass"
+        }
+      }
+    },
+    {
+      "name": "polished_pin_tip",
+      "from": [
+        8.33,
+        2.4,
+        2.31
+      ],
+      "to": [
+        8.549999999999999,
+        2.62,
+        2.46
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            16.0
+          ],
+          "texture": "#amber"
+        },
+        "south": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            16.0
+          ],
+          "texture": "#amber"
+        },
+        "east": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            16.0
+          ],
+          "texture": "#amber"
+        },
+        "west": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            16.0
+          ],
+          "texture": "#amber"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#amber"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#amber"
+        }
+      }
+    },
+    {
+      "name": "plinko_pin_7_5",
+      "from": [
+        9.16,
+        2.35,
+        2.45
+      ],
+      "to": [
+        9.48,
+        2.67,
+        3.2
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0.0,
+            0.3200000000000003,
+            0.32
+          ],
+          "texture": "#brass"
+        },
+        "south": {
+          "uv": [
+            0,
+            0.0,
+            0.3200000000000003,
+            0.32
+          ],
+          "texture": "#brass"
+        },
+        "east": {
+          "uv": [
+            0,
+            0.0,
+            0.75,
+            0.32
+          ],
+          "texture": "#brass"
+        },
+        "west": {
+          "uv": [
+            0,
+            0.0,
+            0.75,
+            0.32
+          ],
+          "texture": "#brass"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.3200000000000003,
+            0.75
+          ],
+          "texture": "#brass"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.3200000000000003,
+            0.75
+          ],
+          "texture": "#brass"
+        }
+      }
+    },
+    {
+      "name": "polished_pin_tip",
+      "from": [
+        9.21,
+        2.4,
+        2.31
+      ],
+      "to": [
+        9.43,
+        2.62,
+        2.46
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            16.0
+          ],
+          "texture": "#amber"
+        },
+        "south": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            16.0
+          ],
+          "texture": "#amber"
+        },
+        "east": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            16.0
+          ],
+          "texture": "#amber"
+        },
+        "west": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            16.0
+          ],
+          "texture": "#amber"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#amber"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#amber"
+        }
+      }
+    },
+    {
+      "name": "plinko_pin_7_6",
+      "from": [
+        10.04,
+        2.35,
+        2.45
+      ],
+      "to": [
+        10.36,
+        2.67,
+        3.2
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0.0,
+            0.3200000000000003,
+            0.32
+          ],
+          "texture": "#brass"
+        },
+        "south": {
+          "uv": [
+            0,
+            0.0,
+            0.3200000000000003,
+            0.32
+          ],
+          "texture": "#brass"
+        },
+        "east": {
+          "uv": [
+            0,
+            0.0,
+            0.75,
+            0.32
+          ],
+          "texture": "#brass"
+        },
+        "west": {
+          "uv": [
+            0,
+            0.0,
+            0.75,
+            0.32
+          ],
+          "texture": "#brass"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.3200000000000003,
+            0.75
+          ],
+          "texture": "#brass"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.3200000000000003,
+            0.75
+          ],
+          "texture": "#brass"
+        }
+      }
+    },
+    {
+      "name": "polished_pin_tip",
+      "from": [
+        10.09,
+        2.4,
+        2.31
+      ],
+      "to": [
+        10.309999999999999,
+        2.62,
+        2.46
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            16.0
+          ],
+          "texture": "#amber"
+        },
+        "south": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            16.0
+          ],
+          "texture": "#amber"
+        },
+        "east": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            16.0
+          ],
+          "texture": "#amber"
+        },
+        "west": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            16.0
+          ],
+          "texture": "#amber"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#amber"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#amber"
+        }
+      }
+    },
+    {
+      "name": "plinko_pin_7_7",
+      "from": [
+        10.92,
+        2.35,
+        2.45
+      ],
+      "to": [
+        11.24,
+        2.67,
+        3.2
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0.0,
+            0.3200000000000003,
+            0.32
+          ],
+          "texture": "#brass"
+        },
+        "south": {
+          "uv": [
+            0,
+            0.0,
+            0.3200000000000003,
+            0.32
+          ],
+          "texture": "#brass"
+        },
+        "east": {
+          "uv": [
+            0,
+            0.0,
+            0.75,
+            0.32
+          ],
+          "texture": "#brass"
+        },
+        "west": {
+          "uv": [
+            0,
+            0.0,
+            0.75,
+            0.32
+          ],
+          "texture": "#brass"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.3200000000000003,
+            0.75
+          ],
+          "texture": "#brass"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.3200000000000003,
+            0.75
+          ],
+          "texture": "#brass"
+        }
+      }
+    },
+    {
+      "name": "polished_pin_tip",
+      "from": [
+        10.97,
+        2.4,
+        2.31
+      ],
+      "to": [
+        11.19,
+        2.62,
+        2.46
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            16.0
+          ],
+          "texture": "#amber"
+        },
+        "south": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            16.0
+          ],
+          "texture": "#amber"
+        },
+        "east": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            16.0
+          ],
+          "texture": "#amber"
+        },
+        "west": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            16.0
+          ],
+          "texture": "#amber"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#amber"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#amber"
+        }
+      }
+    },
+    {
+      "name": "plinko_pin_8_0",
+      "from": [
+        4.32,
+        1.08,
+        2.45
+      ],
+      "to": [
+        4.640000000000001,
+        1.4,
+        3.2
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0.0,
+            0.3200000000000003,
+            0.32
+          ],
+          "texture": "#brass"
+        },
+        "south": {
+          "uv": [
+            0,
+            0.0,
+            0.3200000000000003,
+            0.32
+          ],
+          "texture": "#brass"
+        },
+        "east": {
+          "uv": [
+            0,
+            0.0,
+            0.75,
+            0.32
+          ],
+          "texture": "#brass"
+        },
+        "west": {
+          "uv": [
+            0,
+            0.0,
+            0.75,
+            0.32
+          ],
+          "texture": "#brass"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.3200000000000003,
+            0.75
+          ],
+          "texture": "#brass"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.3200000000000003,
+            0.75
+          ],
+          "texture": "#brass"
+        }
+      }
+    },
+    {
+      "name": "polished_pin_tip",
+      "from": [
+        4.37,
+        1.13,
+        2.31
+      ],
+      "to": [
+        4.590000000000001,
+        1.35,
+        2.46
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            16.0
+          ],
+          "texture": "#amber"
+        },
+        "south": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            16.0
+          ],
+          "texture": "#amber"
+        },
+        "east": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            16.0
+          ],
+          "texture": "#amber"
+        },
+        "west": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            16.0
+          ],
+          "texture": "#amber"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#amber"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#amber"
+        }
+      }
+    },
+    {
+      "name": "plinko_pin_8_1",
+      "from": [
+        5.199999999999999,
+        1.08,
+        2.45
+      ],
+      "to": [
+        5.52,
+        1.4,
+        3.2
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0.0,
+            0.3200000000000003,
+            0.32
+          ],
+          "texture": "#brass"
+        },
+        "south": {
+          "uv": [
+            0,
+            0.0,
+            0.3200000000000003,
+            0.32
+          ],
+          "texture": "#brass"
+        },
+        "east": {
+          "uv": [
+            0,
+            0.0,
+            0.75,
+            0.32
+          ],
+          "texture": "#brass"
+        },
+        "west": {
+          "uv": [
+            0,
+            0.0,
+            0.75,
+            0.32
+          ],
+          "texture": "#brass"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.3200000000000003,
+            0.75
+          ],
+          "texture": "#brass"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.3200000000000003,
+            0.75
+          ],
+          "texture": "#brass"
+        }
+      }
+    },
+    {
+      "name": "polished_pin_tip",
+      "from": [
+        5.249999999999999,
+        1.13,
+        2.31
+      ],
+      "to": [
+        5.47,
+        1.35,
+        2.46
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            16.0
+          ],
+          "texture": "#amber"
+        },
+        "south": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            16.0
+          ],
+          "texture": "#amber"
+        },
+        "east": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            16.0
+          ],
+          "texture": "#amber"
+        },
+        "west": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            16.0
+          ],
+          "texture": "#amber"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#amber"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#amber"
+        }
+      }
+    },
+    {
+      "name": "plinko_pin_8_2",
+      "from": [
+        6.08,
+        1.08,
+        2.45
+      ],
+      "to": [
+        6.4,
+        1.4,
+        3.2
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0.0,
+            0.3200000000000003,
+            0.32
+          ],
+          "texture": "#brass"
+        },
+        "south": {
+          "uv": [
+            0,
+            0.0,
+            0.3200000000000003,
+            0.32
+          ],
+          "texture": "#brass"
+        },
+        "east": {
+          "uv": [
+            0,
+            0.0,
+            0.75,
+            0.32
+          ],
+          "texture": "#brass"
+        },
+        "west": {
+          "uv": [
+            0,
+            0.0,
+            0.75,
+            0.32
+          ],
+          "texture": "#brass"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.3200000000000003,
+            0.75
+          ],
+          "texture": "#brass"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.3200000000000003,
+            0.75
+          ],
+          "texture": "#brass"
+        }
+      }
+    },
+    {
+      "name": "polished_pin_tip",
+      "from": [
+        6.13,
+        1.13,
+        2.31
+      ],
+      "to": [
+        6.3500000000000005,
+        1.35,
+        2.46
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            16.0
+          ],
+          "texture": "#amber"
+        },
+        "south": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            16.0
+          ],
+          "texture": "#amber"
+        },
+        "east": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            16.0
+          ],
+          "texture": "#amber"
+        },
+        "west": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            16.0
+          ],
+          "texture": "#amber"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#amber"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#amber"
+        }
+      }
+    },
+    {
+      "name": "plinko_pin_8_3",
+      "from": [
+        6.96,
+        1.08,
+        2.45
+      ],
+      "to": [
+        7.28,
+        1.4,
+        3.2
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0.0,
+            0.3200000000000003,
+            0.32
+          ],
+          "texture": "#brass"
+        },
+        "south": {
+          "uv": [
+            0,
+            0.0,
+            0.3200000000000003,
+            0.32
+          ],
+          "texture": "#brass"
+        },
+        "east": {
+          "uv": [
+            0,
+            0.0,
+            0.75,
+            0.32
+          ],
+          "texture": "#brass"
+        },
+        "west": {
+          "uv": [
+            0,
+            0.0,
+            0.75,
+            0.32
+          ],
+          "texture": "#brass"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.3200000000000003,
+            0.75
+          ],
+          "texture": "#brass"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.3200000000000003,
+            0.75
+          ],
+          "texture": "#brass"
+        }
+      }
+    },
+    {
+      "name": "polished_pin_tip",
+      "from": [
+        7.01,
+        1.13,
+        2.31
+      ],
+      "to": [
+        7.23,
+        1.35,
+        2.46
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            16.0
+          ],
+          "texture": "#amber"
+        },
+        "south": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            16.0
+          ],
+          "texture": "#amber"
+        },
+        "east": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            16.0
+          ],
+          "texture": "#amber"
+        },
+        "west": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            16.0
+          ],
+          "texture": "#amber"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#amber"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#amber"
+        }
+      }
+    },
+    {
+      "name": "plinko_pin_8_4",
+      "from": [
+        7.84,
+        1.08,
+        2.45
+      ],
+      "to": [
+        8.16,
+        1.4,
+        3.2
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0.0,
+            0.3200000000000003,
+            0.32
+          ],
+          "texture": "#brass"
+        },
+        "south": {
+          "uv": [
+            0,
+            0.0,
+            0.3200000000000003,
+            0.32
+          ],
+          "texture": "#brass"
+        },
+        "east": {
+          "uv": [
+            0,
+            0.0,
+            0.75,
+            0.32
+          ],
+          "texture": "#brass"
+        },
+        "west": {
+          "uv": [
+            0,
+            0.0,
+            0.75,
+            0.32
+          ],
+          "texture": "#brass"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.3200000000000003,
+            0.75
+          ],
+          "texture": "#brass"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.3200000000000003,
+            0.75
+          ],
+          "texture": "#brass"
+        }
+      }
+    },
+    {
+      "name": "polished_pin_tip",
+      "from": [
+        7.89,
+        1.13,
+        2.31
+      ],
+      "to": [
+        8.11,
+        1.35,
+        2.46
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            16.0
+          ],
+          "texture": "#amber"
+        },
+        "south": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            16.0
+          ],
+          "texture": "#amber"
+        },
+        "east": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            16.0
+          ],
+          "texture": "#amber"
+        },
+        "west": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            16.0
+          ],
+          "texture": "#amber"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#amber"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#amber"
+        }
+      }
+    },
+    {
+      "name": "plinko_pin_8_5",
+      "from": [
+        8.72,
+        1.08,
+        2.45
+      ],
+      "to": [
+        9.040000000000001,
+        1.4,
+        3.2
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0.0,
+            0.3200000000000003,
+            0.32
+          ],
+          "texture": "#brass"
+        },
+        "south": {
+          "uv": [
+            0,
+            0.0,
+            0.3200000000000003,
+            0.32
+          ],
+          "texture": "#brass"
+        },
+        "east": {
+          "uv": [
+            0,
+            0.0,
+            0.75,
+            0.32
+          ],
+          "texture": "#brass"
+        },
+        "west": {
+          "uv": [
+            0,
+            0.0,
+            0.75,
+            0.32
+          ],
+          "texture": "#brass"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.3200000000000003,
+            0.75
+          ],
+          "texture": "#brass"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.3200000000000003,
+            0.75
+          ],
+          "texture": "#brass"
+        }
+      }
+    },
+    {
+      "name": "polished_pin_tip",
+      "from": [
+        8.770000000000001,
+        1.13,
+        2.31
+      ],
+      "to": [
+        8.99,
+        1.35,
+        2.46
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            16.0
+          ],
+          "texture": "#amber"
+        },
+        "south": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            16.0
+          ],
+          "texture": "#amber"
+        },
+        "east": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            16.0
+          ],
+          "texture": "#amber"
+        },
+        "west": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            16.0
+          ],
+          "texture": "#amber"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#amber"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#amber"
+        }
+      }
+    },
+    {
+      "name": "plinko_pin_8_6",
+      "from": [
+        9.6,
+        1.08,
+        2.45
+      ],
+      "to": [
+        9.92,
+        1.4,
+        3.2
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0.0,
+            0.3200000000000003,
+            0.32
+          ],
+          "texture": "#brass"
+        },
+        "south": {
+          "uv": [
+            0,
+            0.0,
+            0.3200000000000003,
+            0.32
+          ],
+          "texture": "#brass"
+        },
+        "east": {
+          "uv": [
+            0,
+            0.0,
+            0.75,
+            0.32
+          ],
+          "texture": "#brass"
+        },
+        "west": {
+          "uv": [
+            0,
+            0.0,
+            0.75,
+            0.32
+          ],
+          "texture": "#brass"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.3200000000000003,
+            0.75
+          ],
+          "texture": "#brass"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.3200000000000003,
+            0.75
+          ],
+          "texture": "#brass"
+        }
+      }
+    },
+    {
+      "name": "polished_pin_tip",
+      "from": [
+        9.65,
+        1.13,
+        2.31
+      ],
+      "to": [
+        9.87,
+        1.35,
+        2.46
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            16.0
+          ],
+          "texture": "#amber"
+        },
+        "south": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            16.0
+          ],
+          "texture": "#amber"
+        },
+        "east": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            16.0
+          ],
+          "texture": "#amber"
+        },
+        "west": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            16.0
+          ],
+          "texture": "#amber"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#amber"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#amber"
+        }
+      }
+    },
+    {
+      "name": "plinko_pin_8_7",
+      "from": [
+        10.48,
+        1.08,
+        2.45
+      ],
+      "to": [
+        10.8,
+        1.4,
+        3.2
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0.0,
+            0.3200000000000003,
+            0.32
+          ],
+          "texture": "#brass"
+        },
+        "south": {
+          "uv": [
+            0,
+            0.0,
+            0.3200000000000003,
+            0.32
+          ],
+          "texture": "#brass"
+        },
+        "east": {
+          "uv": [
+            0,
+            0.0,
+            0.75,
+            0.32
+          ],
+          "texture": "#brass"
+        },
+        "west": {
+          "uv": [
+            0,
+            0.0,
+            0.75,
+            0.32
+          ],
+          "texture": "#brass"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.3200000000000003,
+            0.75
+          ],
+          "texture": "#brass"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.3200000000000003,
+            0.75
+          ],
+          "texture": "#brass"
+        }
+      }
+    },
+    {
+      "name": "polished_pin_tip",
+      "from": [
+        10.530000000000001,
+        1.13,
+        2.31
+      ],
+      "to": [
+        10.75,
+        1.35,
+        2.46
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            16.0
+          ],
+          "texture": "#amber"
+        },
+        "south": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            16.0
+          ],
+          "texture": "#amber"
+        },
+        "east": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            16.0
+          ],
+          "texture": "#amber"
+        },
+        "west": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            16.0
+          ],
+          "texture": "#amber"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#amber"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#amber"
+        }
+      }
+    },
+    {
+      "name": "plinko_pin_8_8",
+      "from": [
+        11.36,
+        1.08,
+        2.45
+      ],
+      "to": [
+        11.68,
+        1.4,
+        3.2
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0.0,
+            0.3200000000000003,
+            0.32
+          ],
+          "texture": "#brass"
+        },
+        "south": {
+          "uv": [
+            0,
+            0.0,
+            0.3200000000000003,
+            0.32
+          ],
+          "texture": "#brass"
+        },
+        "east": {
+          "uv": [
+            0,
+            0.0,
+            0.75,
+            0.32
+          ],
+          "texture": "#brass"
+        },
+        "west": {
+          "uv": [
+            0,
+            0.0,
+            0.75,
+            0.32
+          ],
+          "texture": "#brass"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.3200000000000003,
+            0.75
+          ],
+          "texture": "#brass"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.3200000000000003,
+            0.75
+          ],
+          "texture": "#brass"
+        }
+      }
+    },
+    {
+      "name": "polished_pin_tip",
+      "from": [
+        11.41,
+        1.13,
+        2.31
+      ],
+      "to": [
+        11.629999999999999,
+        1.35,
+        2.46
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            16.0
+          ],
+          "texture": "#amber"
+        },
+        "south": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            16.0
+          ],
+          "texture": "#amber"
+        },
+        "east": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            16.0
+          ],
+          "texture": "#amber"
+        },
+        "west": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            16.0
+          ],
+          "texture": "#amber"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#amber"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#amber"
+        }
+      }
+    },
+    {
+      "name": "plinko_pin_9_0",
+      "from": [
+        3.88,
+        0,
+        2.45
+      ],
+      "to": [
+        4.2,
+        0.13,
+        3.2
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0.0,
+            0.3200000000000003,
+            0.13
+          ],
+          "texture": "#brass"
+        },
+        "south": {
+          "uv": [
+            0,
+            0.0,
+            0.3200000000000003,
+            0.13
+          ],
+          "texture": "#brass"
+        },
+        "east": {
+          "uv": [
+            0,
+            0.0,
+            0.75,
+            0.13
+          ],
+          "texture": "#brass"
+        },
+        "west": {
+          "uv": [
+            0,
+            0.0,
+            0.75,
+            0.13
+          ],
+          "texture": "#brass"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.3200000000000003,
+            0.75
+          ],
+          "texture": "#brass"
+        }
+      }
+    },
+    {
+      "name": "polished_pin_tip",
+      "from": [
+        3.93,
+        0,
+        2.31
+      ],
+      "to": [
+        4.15,
+        0.08,
+        2.46
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            5.81818
+          ],
+          "texture": "#amber"
+        },
+        "south": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            5.81818
+          ],
+          "texture": "#amber"
+        },
+        "east": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            5.81818
+          ],
+          "texture": "#amber"
+        },
+        "west": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            5.81818
+          ],
+          "texture": "#amber"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#amber"
+        }
+      }
+    },
+    {
+      "name": "plinko_pin_9_1",
+      "from": [
+        4.76,
+        0,
+        2.45
+      ],
+      "to": [
+        5.08,
+        0.13,
+        3.2
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0.0,
+            0.3200000000000003,
+            0.13
+          ],
+          "texture": "#brass"
+        },
+        "south": {
+          "uv": [
+            0,
+            0.0,
+            0.3200000000000003,
+            0.13
+          ],
+          "texture": "#brass"
+        },
+        "east": {
+          "uv": [
+            0,
+            0.0,
+            0.75,
+            0.13
+          ],
+          "texture": "#brass"
+        },
+        "west": {
+          "uv": [
+            0,
+            0.0,
+            0.75,
+            0.13
+          ],
+          "texture": "#brass"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.3200000000000003,
+            0.75
+          ],
+          "texture": "#brass"
+        }
+      }
+    },
+    {
+      "name": "polished_pin_tip",
+      "from": [
+        4.81,
+        0,
+        2.31
+      ],
+      "to": [
+        5.03,
+        0.08,
+        2.46
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            5.81818
+          ],
+          "texture": "#amber"
+        },
+        "south": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            5.81818
+          ],
+          "texture": "#amber"
+        },
+        "east": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            5.81818
+          ],
+          "texture": "#amber"
+        },
+        "west": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            5.81818
+          ],
+          "texture": "#amber"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#amber"
+        }
+      }
+    },
+    {
+      "name": "plinko_pin_9_2",
+      "from": [
+        5.64,
+        0,
+        2.45
+      ],
+      "to": [
+        5.96,
+        0.13,
+        3.2
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0.0,
+            0.3200000000000003,
+            0.13
+          ],
+          "texture": "#brass"
+        },
+        "south": {
+          "uv": [
+            0,
+            0.0,
+            0.3200000000000003,
+            0.13
+          ],
+          "texture": "#brass"
+        },
+        "east": {
+          "uv": [
+            0,
+            0.0,
+            0.75,
+            0.13
+          ],
+          "texture": "#brass"
+        },
+        "west": {
+          "uv": [
+            0,
+            0.0,
+            0.75,
+            0.13
+          ],
+          "texture": "#brass"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.3200000000000003,
+            0.75
+          ],
+          "texture": "#brass"
+        }
+      }
+    },
+    {
+      "name": "polished_pin_tip",
+      "from": [
+        5.6899999999999995,
+        0,
+        2.31
+      ],
+      "to": [
+        5.91,
+        0.08,
+        2.46
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            5.81818
+          ],
+          "texture": "#amber"
+        },
+        "south": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            5.81818
+          ],
+          "texture": "#amber"
+        },
+        "east": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            5.81818
+          ],
+          "texture": "#amber"
+        },
+        "west": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            5.81818
+          ],
+          "texture": "#amber"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#amber"
+        }
+      }
+    },
+    {
+      "name": "plinko_pin_9_3",
+      "from": [
+        6.52,
+        0,
+        2.45
+      ],
+      "to": [
+        6.84,
+        0.13,
+        3.2
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0.0,
+            0.3200000000000003,
+            0.13
+          ],
+          "texture": "#brass"
+        },
+        "south": {
+          "uv": [
+            0,
+            0.0,
+            0.3200000000000003,
+            0.13
+          ],
+          "texture": "#brass"
+        },
+        "east": {
+          "uv": [
+            0,
+            0.0,
+            0.75,
+            0.13
+          ],
+          "texture": "#brass"
+        },
+        "west": {
+          "uv": [
+            0,
+            0.0,
+            0.75,
+            0.13
+          ],
+          "texture": "#brass"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.3200000000000003,
+            0.75
+          ],
+          "texture": "#brass"
+        }
+      }
+    },
+    {
+      "name": "polished_pin_tip",
+      "from": [
+        6.569999999999999,
+        0,
+        2.31
+      ],
+      "to": [
+        6.79,
+        0.08,
+        2.46
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            5.81818
+          ],
+          "texture": "#amber"
+        },
+        "south": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            5.81818
+          ],
+          "texture": "#amber"
+        },
+        "east": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            5.81818
+          ],
+          "texture": "#amber"
+        },
+        "west": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            5.81818
+          ],
+          "texture": "#amber"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#amber"
+        }
+      }
+    },
+    {
+      "name": "plinko_pin_9_4",
+      "from": [
+        7.3999999999999995,
+        0,
+        2.45
+      ],
+      "to": [
+        7.72,
+        0.13,
+        3.2
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0.0,
+            0.3200000000000003,
+            0.13
+          ],
+          "texture": "#brass"
+        },
+        "south": {
+          "uv": [
+            0,
+            0.0,
+            0.3200000000000003,
+            0.13
+          ],
+          "texture": "#brass"
+        },
+        "east": {
+          "uv": [
+            0,
+            0.0,
+            0.75,
+            0.13
+          ],
+          "texture": "#brass"
+        },
+        "west": {
+          "uv": [
+            0,
+            0.0,
+            0.75,
+            0.13
+          ],
+          "texture": "#brass"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.3200000000000003,
+            0.75
+          ],
+          "texture": "#brass"
+        }
+      }
+    },
+    {
+      "name": "polished_pin_tip",
+      "from": [
+        7.449999999999999,
+        0,
+        2.31
+      ],
+      "to": [
+        7.67,
+        0.08,
+        2.46
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            5.81818
+          ],
+          "texture": "#amber"
+        },
+        "south": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            5.81818
+          ],
+          "texture": "#amber"
+        },
+        "east": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            5.81818
+          ],
+          "texture": "#amber"
+        },
+        "west": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            5.81818
+          ],
+          "texture": "#amber"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#amber"
+        }
+      }
+    },
+    {
+      "name": "plinko_pin_9_5",
+      "from": [
+        8.28,
+        0,
+        2.45
+      ],
+      "to": [
+        8.6,
+        0.13,
+        3.2
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0.0,
+            0.3200000000000003,
+            0.13
+          ],
+          "texture": "#brass"
+        },
+        "south": {
+          "uv": [
+            0,
+            0.0,
+            0.3200000000000003,
+            0.13
+          ],
+          "texture": "#brass"
+        },
+        "east": {
+          "uv": [
+            0,
+            0.0,
+            0.75,
+            0.13
+          ],
+          "texture": "#brass"
+        },
+        "west": {
+          "uv": [
+            0,
+            0.0,
+            0.75,
+            0.13
+          ],
+          "texture": "#brass"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.3200000000000003,
+            0.75
+          ],
+          "texture": "#brass"
+        }
+      }
+    },
+    {
+      "name": "polished_pin_tip",
+      "from": [
+        8.33,
+        0,
+        2.31
+      ],
+      "to": [
+        8.549999999999999,
+        0.08,
+        2.46
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            5.81818
+          ],
+          "texture": "#amber"
+        },
+        "south": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            5.81818
+          ],
+          "texture": "#amber"
+        },
+        "east": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            5.81818
+          ],
+          "texture": "#amber"
+        },
+        "west": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            5.81818
+          ],
+          "texture": "#amber"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#amber"
+        }
+      }
+    },
+    {
+      "name": "plinko_pin_9_6",
+      "from": [
+        9.16,
+        0,
+        2.45
+      ],
+      "to": [
+        9.48,
+        0.13,
+        3.2
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0.0,
+            0.3200000000000003,
+            0.13
+          ],
+          "texture": "#brass"
+        },
+        "south": {
+          "uv": [
+            0,
+            0.0,
+            0.3200000000000003,
+            0.13
+          ],
+          "texture": "#brass"
+        },
+        "east": {
+          "uv": [
+            0,
+            0.0,
+            0.75,
+            0.13
+          ],
+          "texture": "#brass"
+        },
+        "west": {
+          "uv": [
+            0,
+            0.0,
+            0.75,
+            0.13
+          ],
+          "texture": "#brass"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.3200000000000003,
+            0.75
+          ],
+          "texture": "#brass"
+        }
+      }
+    },
+    {
+      "name": "polished_pin_tip",
+      "from": [
+        9.21,
+        0,
+        2.31
+      ],
+      "to": [
+        9.43,
+        0.08,
+        2.46
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            5.81818
+          ],
+          "texture": "#amber"
+        },
+        "south": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            5.81818
+          ],
+          "texture": "#amber"
+        },
+        "east": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            5.81818
+          ],
+          "texture": "#amber"
+        },
+        "west": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            5.81818
+          ],
+          "texture": "#amber"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#amber"
+        }
+      }
+    },
+    {
+      "name": "plinko_pin_9_7",
+      "from": [
+        10.04,
+        0,
+        2.45
+      ],
+      "to": [
+        10.36,
+        0.13,
+        3.2
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0.0,
+            0.3200000000000003,
+            0.13
+          ],
+          "texture": "#brass"
+        },
+        "south": {
+          "uv": [
+            0,
+            0.0,
+            0.3200000000000003,
+            0.13
+          ],
+          "texture": "#brass"
+        },
+        "east": {
+          "uv": [
+            0,
+            0.0,
+            0.75,
+            0.13
+          ],
+          "texture": "#brass"
+        },
+        "west": {
+          "uv": [
+            0,
+            0.0,
+            0.75,
+            0.13
+          ],
+          "texture": "#brass"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.3200000000000003,
+            0.75
+          ],
+          "texture": "#brass"
+        }
+      }
+    },
+    {
+      "name": "polished_pin_tip",
+      "from": [
+        10.09,
+        0,
+        2.31
+      ],
+      "to": [
+        10.309999999999999,
+        0.08,
+        2.46
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            5.81818
+          ],
+          "texture": "#amber"
+        },
+        "south": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            5.81818
+          ],
+          "texture": "#amber"
+        },
+        "east": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            5.81818
+          ],
+          "texture": "#amber"
+        },
+        "west": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            5.81818
+          ],
+          "texture": "#amber"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#amber"
+        }
+      }
+    },
+    {
+      "name": "plinko_pin_9_8",
+      "from": [
+        10.92,
+        0,
+        2.45
+      ],
+      "to": [
+        11.24,
+        0.13,
+        3.2
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0.0,
+            0.3200000000000003,
+            0.13
+          ],
+          "texture": "#brass"
+        },
+        "south": {
+          "uv": [
+            0,
+            0.0,
+            0.3200000000000003,
+            0.13
+          ],
+          "texture": "#brass"
+        },
+        "east": {
+          "uv": [
+            0,
+            0.0,
+            0.75,
+            0.13
+          ],
+          "texture": "#brass"
+        },
+        "west": {
+          "uv": [
+            0,
+            0.0,
+            0.75,
+            0.13
+          ],
+          "texture": "#brass"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.3200000000000003,
+            0.75
+          ],
+          "texture": "#brass"
+        }
+      }
+    },
+    {
+      "name": "polished_pin_tip",
+      "from": [
+        10.97,
+        0,
+        2.31
+      ],
+      "to": [
+        11.19,
+        0.08,
+        2.46
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            5.81818
+          ],
+          "texture": "#amber"
+        },
+        "south": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            5.81818
+          ],
+          "texture": "#amber"
+        },
+        "east": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            5.81818
+          ],
+          "texture": "#amber"
+        },
+        "west": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            5.81818
+          ],
+          "texture": "#amber"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#amber"
+        }
+      }
+    },
+    {
+      "name": "plinko_pin_9_9",
+      "from": [
+        11.8,
+        0,
+        2.45
+      ],
+      "to": [
+        12.120000000000001,
+        0.13,
+        3.2
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0.0,
+            0.3200000000000003,
+            0.13
+          ],
+          "texture": "#brass"
+        },
+        "south": {
+          "uv": [
+            0,
+            0.0,
+            0.3200000000000003,
+            0.13
+          ],
+          "texture": "#brass"
+        },
+        "east": {
+          "uv": [
+            0,
+            0.0,
+            0.75,
+            0.13
+          ],
+          "texture": "#brass"
+        },
+        "west": {
+          "uv": [
+            0,
+            0.0,
+            0.75,
+            0.13
+          ],
+          "texture": "#brass"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.3200000000000003,
+            0.75
+          ],
+          "texture": "#brass"
+        }
+      }
+    },
+    {
+      "name": "polished_pin_tip",
+      "from": [
+        11.850000000000001,
+        0,
+        2.31
+      ],
+      "to": [
+        12.07,
+        0.08,
+        2.46
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            5.81818
+          ],
+          "texture": "#amber"
+        },
+        "south": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            5.81818
+          ],
+          "texture": "#amber"
+        },
+        "east": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            5.81818
+          ],
+          "texture": "#amber"
+        },
+        "west": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            5.81818
+          ],
+          "texture": "#amber"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#amber"
+        }
+      }
+    },
+    {
+      "name": "ivory_drop_gate",
+      "from": [
+        7.4,
+        12.0,
+        1.9
+      ],
+      "to": [
+        8.6,
+        13.4,
+        3.35
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0.0,
+            1.1999999999999993,
+            1.4
+          ],
+          "texture": "#brass"
+        },
+        "south": {
+          "uv": [
+            0,
+            0.0,
+            1.1999999999999993,
+            1.4
+          ],
+          "texture": "#brass"
+        },
+        "east": {
+          "uv": [
+            0,
+            0.0,
+            1.4500000000000002,
+            1.4
+          ],
+          "texture": "#brass"
+        },
+        "west": {
+          "uv": [
+            0,
+            0.0,
+            1.4500000000000002,
+            1.4
+          ],
+          "texture": "#brass"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            1.1999999999999993,
+            1.4500000000000002
+          ],
+          "texture": "#brass"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            1.1999999999999993,
+            1.4500000000000002
+          ],
+          "texture": "#brass"
+        }
+      }
+    },
+    {
+      "name": "gate_ball",
+      "from": [
+        7.7,
+        12.2,
+        1.75
+      ],
+      "to": [
+        8.3,
+        12.8,
+        2.0
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0.0,
+            0.6000000000000005,
+            0.6
+          ],
+          "texture": "#card_ace"
+        },
+        "south": {
+          "uv": [
+            0,
+            0.0,
+            0.6000000000000005,
+            0.6
+          ],
+          "texture": "#card_ace"
+        },
+        "east": {
+          "uv": [
+            0,
+            0.0,
+            0.25,
+            0.6
+          ],
+          "texture": "#card_ace"
+        },
+        "west": {
+          "uv": [
+            0,
+            0.0,
+            0.25,
+            0.6
+          ],
+          "texture": "#card_ace"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.6000000000000005,
+            0.25
+          ],
+          "texture": "#card_ace"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.6000000000000005,
+            0.25
+          ],
+          "texture": "#card_ace"
+        }
+      }
+    },
+    {
+      "name": "plinko_upper_cornice",
+      "from": [
+        1.1,
+        13.5,
+        2.3
+      ],
+      "to": [
+        14.9,
+        14.0,
+        6.0
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0.0,
+            13.8,
+            0.5
+          ],
+          "texture": "#brass"
+        },
+        "south": {
+          "uv": [
+            0,
+            0.0,
+            13.8,
+            0.5
+          ],
+          "texture": "#brass"
+        },
+        "east": {
+          "uv": [
+            0,
+            0.0,
+            3.7,
+            0.5
+          ],
+          "texture": "#brass"
+        },
+        "west": {
+          "uv": [
+            0,
+            0.0,
+            3.7,
+            0.5
+          ],
+          "texture": "#brass"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            13.8,
+            3.7
+          ],
+          "texture": "#brass"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            13.8,
+            3.7
+          ],
+          "texture": "#brass"
+        }
+      }
+    },
+    {
+      "name": "plinko_crowned_header",
+      "from": [
+        2.1,
+        14,
+        2.8
+      ],
+      "to": [
+        13.9,
+        15.8,
+        5.4
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0.0,
+            16,
+            16.0
+          ],
+          "texture": "#marquee"
+        },
+        "south": {
+          "uv": [
+            0,
+            0.0,
+            11.8,
+            1.8
+          ],
+          "texture": "#marquee"
+        },
+        "east": {
+          "uv": [
+            0,
+            0.0,
+            2.6000000000000005,
+            1.8
+          ],
+          "texture": "#marquee"
+        },
+        "west": {
+          "uv": [
+            0,
+            0.0,
+            2.6000000000000005,
+            1.8
+          ],
+          "texture": "#marquee"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            11.8,
+            2.6000000000000005
+          ],
+          "texture": "#marquee"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            11.8,
+            2.6000000000000005
+          ],
+          "texture": "#marquee"
+        }
+      }
+    }
+  ]
+}

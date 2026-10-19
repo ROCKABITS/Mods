@@ -42,6 +42,7 @@ public final class CasinoScreen extends Screen {
     private long animatedRevision=-1,animationStart;
     private boolean waiting,error,completionSound;
     private boolean lastActive;
+    private int animationFromStep;
 
     private CasinoScreen(JsonObject snapshot) {
         super(Component.translatable("gui.realmcasino.title"));data=snapshot;
@@ -59,7 +60,7 @@ public final class CasinoScreen extends Screen {
         });
     }
     private void accept(JsonObject snapshot) {
-        remember();data=snapshot;waiting=false;waitTicks=0;readNotice();beginAnimation(true);
+        remember();animationFromStep=str(round(),"id").equals(str(snapshot.has("round")&&snapshot.get("round").isJsonObject()?snapshot.getAsJsonObject("round"):new JsonObject(),"id"))?(int)num(round(),"steps"):0;data=snapshot;waiting=false;waitTicks=0;readNotice();beginAnimation(true);
         if(!flag(data,"owner"))tab=tab==Tab.OWNER?Tab.PLAY:tab;
         if("gui.realmcasino.configured".equals(str(data,"message"))){nameDraft=str(data,"name");minDraft=decimal(num(data,"minBet"));maxDraft=decimal(num(data,"maxBet"));}
         rebuild();
@@ -85,17 +86,18 @@ public final class CasinoScreen extends Screen {
         animationStart=(received||recent)&&CasinoPreferences.get().motion?now():now()-10_000;
         if(received)sound(0);
     }
-    private long duration(){return game().equals("slots")?2_600:game().equals("roulette")?3_200:850;}
+    private long duration(){return switch(game()){case "slots"->2600;case "roulette","wheel"->3200;case "plinko"->3000;case "chicken"->650;default->850;};}
     private double progress(){return Math.clamp((now()-animationStart)/(double)duration(),0,1);}
     private boolean animating(){return !str(round(),"id").isBlank()&&progress()<1;}
-    private void sound(int kind){if(!CasinoPreferences.get().sound)return;var event=kind==2?SoundEvents.EXPERIENCE_ORB_PICKUP:kind==1?SoundEvents.NOTE_BLOCK_HAT.value():SoundEvents.UI_BUTTON_CLICK.value();Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forUI(event,kind==2?1.25f:kind==1?0.8f:0.85f,kind==2?0.13f:0.09f));}
+    private void sound(int kind){if(!CasinoPreferences.get().sound)return;var event=kind==3?SoundEvents.CHICKEN_AMBIENT:kind==4?SoundEvents.NOTE_BLOCK_BASS.value():kind==2?SoundEvents.EXPERIENCE_ORB_PICKUP:kind==1?SoundEvents.NOTE_BLOCK_HAT.value():SoundEvents.UI_BUTTON_CLICK.value();Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forUI(event,kind==2?1.25f:kind==1?0.8f:0.85f,kind==2?0.13f:0.09f));}
     @Override public boolean isPauseScreen(){return false;}
     @Override public void renderBackground(GuiGraphics g,int mouseX,int mouseY,float partial){}
     @Override public void tick(){
         ticks++;if(waiting&&++waitTicks>200){remember();waiting=false;notice="gui.realmcasino.connection_wait";error=true;rebuild();}
         if(!str(round(),"id").isBlank()){
             double p=progress();if(game().equals("slots")){int stops=(p>=.68?1:0)+(p>=.84?1:0)+(p>=1?1:0);while(reelSounds<stops){sound(1);reelSounds++;}}
-            if(p>=1&&!completionSound){remember();completionSound=true;if(!activeHand()&&num(round(),"payout")>num(round(),"stake"))sound(2);rebuild();}
+            if(CasinoPreferences.get().motion&&p<1&&(game().equals("plinko")||game().equals("wheel"))){int contacts=game().equals("plinko")?Math.min(12,(int)(p*13)):(int)(80*(1-Math.pow(1-p,4)));if(contacts>reelSounds){sound(1);reelSounds=contacts;}}
+            if(p>=1&&!completionSound){remember();completionSound=true;if(game().equals("chicken")&&num(round(),"steps")>animationFromStep)sound(flag(round(),"crashed")?4:3);if(!activeHand()&&num(round(),"payout")>num(round(),"stake"))sound(2);rebuild();}
         }
         // Refresh also detects a timeout, another user's busy hand, or a dismantled physical machine.
         if(ticks%120==0&&!waiting&&!animating()&&bodyWidgets.stream().noneMatch(e->e.widget() instanceof EditBox box&&box.isFocused()))request("refresh",new JsonObject());
@@ -126,8 +128,8 @@ public final class CasinoScreen extends Screen {
     private void remember(){if(stakeInput!=null)stakeDraft=stakeInput.getValue();if(amountInput!=null)amountDraft=amountInput.getValue();if(nameInput!=null)nameDraft=nameInput.getValue();if(minInput!=null)minDraft=minInput.getValue();if(maxInput!=null)maxDraft=maxInput.getValue();}
     private void rebuild(){clearWidgets();init();}
     private int gamePanel(int x,int y,int w){
-        int h=game().equals("roulette")?249:game().equals("blackjack")?238:225;
-        final int top=y;paintings.add(g->{CasinoTheme.felt(g,x,top,w,h);if(game().equals("slots"))drawSlots(g,x,top,w,h);else if(game().equals("roulette"))drawRoulette(g,x,top,w,h);else drawBlackjack(g,x,top,w,h);});
+        int h=switch(game()){case "plinko"->270;case "wheel"->266;case "chicken"->242;case "roulette"->249;case "blackjack"->238;default->225;};
+        final int top=y;paintings.add(g->{CasinoTheme.felt(g,x,top,w,h);if(game().equals("slots"))drawSlots(g,x,top,w,h);else if(game().equals("roulette"))drawRoulette(g,x,top,w,h);else if(game().equals("blackjack"))drawBlackjack(g,x,top,w,h);else drawArcade(g,x,top,w,h);});
         y+=h+8;
         if(game().equals("roulette")){
             label(tr("bet_choice"),x+3,y,w,CasinoTheme.MUTED,false);y+=15;
@@ -138,6 +140,10 @@ public final class CasinoScreen extends Screen {
             label(tr("your_turn"),x+4,y,w-8,CasinoTheme.LIGHT,true);y+=17;
             var hit=bodyButton(x,y,(w-5)/2,23,tr("hit"),()->handAction("hit"),false);hit.active=flag(round(),"canHit")&&!waiting&&!animating();
             var stand=bodyButton(x+(w+5)/2,y,(w-5)/2,23,tr("stand"),()->handAction("stand"),true);stand.active=flag(round(),"canStand")&&!waiting&&!animating();y+=30;
+        }else if(activeHand()&&game().equals("chicken")){
+            y=paragraph(tr("chicken_choice",money(num(round(),"cashout")),money(num(round(),"nextPayout"))),x+3,y,w-6,CasinoTheme.LIGHT)+8;
+            var advance=bodyButton(x,y,(w-5)/2,25,tr("advance"),()->handAction("advance"),false);advance.active=!waiting&&!animating();
+            var cashout=bodyButton(x+(w+5)/2,y,(w-5)/2,25,tr("cashout"),()->handAction("cashout"),true);cashout.active=!waiting&&!animating();y+=34;
         }else if(!wide())y=stakeControls(x,y,w);
         return y;
     }
@@ -146,7 +152,7 @@ public final class CasinoScreen extends Screen {
             stakeInput=input(x,y,Math.max(60,w-176),stakeDraft,22,tr("stake"));
             int bx=x+Math.max(60,w-176)+5,bw=(w-Math.max(60,w-176)-10)/2;
             bodyButton(bx,y,bw,20,tr("half"),()->adjustStake(false),false);bodyButton(bx+bw+5,y,bw,20,tr("double"),()->adjustStake(true),false);y+=27;
-            String key=game().equals("slots")?"spin":game().equals("roulette")?"roulette_spin":"deal";
+            String key=playKey();
             var play=bodyButton(x,y,w,25,tr(key),this::bet,true);play.active=canBet();y+=32;
             Component restriction=!flag(data,"economyAvailable")?tr("chronicles_required"):flag(data,"busy")?tr("busy"):!affordable()?tr("bank_unavailable"):tr("rules_hint");
             y=paragraph(restriction,x+3,y,w-6,!flag(data,"economyAvailable")||flag(data,"busy")?0xFFDEA286:CasinoTheme.MUTED)+4;
@@ -180,7 +186,10 @@ public final class CasinoScreen extends Screen {
             for(int i=0;i<8;i++){int sx=x+6+(i%cols)*cell,sy=y+(i/cols)*38,idx=i;paintings.add(g->{CasinoTheme.plaque(g,sx,sy,cell-6,33);CasinoTheme.symbol(g,idx,sx+18,sy+16,1);});label(tr("symbol_"+SYMBOLS[i]),sx+37,sy+7,cell-96,CasinoTheme.LIGHT,false);label(Component.literal(TRIPLES[i]+"×"),sx+cell-53,sy+12,42,CasinoTheme.GOLD,true);}
             y+=((8+cols-1)/cols)*38+6;y=paragraph(tr("slots_probability"),x+7,y,textW,CasinoTheme.MUTED)+9;y=paragraph(tr("slots_pair"),x+7,y,textW,CasinoTheme.LIGHT)+6;y=paragraph(tr("slots_none"),x+7,y,textW,CasinoTheme.MUTED)+12;
         }else if(game().equals("roulette"))y=paragraph(tr("roulette_rtp"),x+7,y,textW,CasinoTheme.GOLD)+15;
-        else {y=paragraph(tr("blackjack_returns"),x+7,y,textW,CasinoTheme.GOLD)+12;y=paragraph(tr("blackjack_rtp"),x+7,y,textW,CasinoTheme.MUTED)+12;y=paragraph(tr("blackjack_leaving"),x+7,y,textW,CasinoTheme.LIGHT)+12;}
+        else if(game().equals("blackjack")) {y=paragraph(tr("blackjack_returns"),x+7,y,textW,CasinoTheme.GOLD)+12;y=paragraph(tr("blackjack_rtp"),x+7,y,textW,CasinoTheme.MUTED)+12;y=paragraph(tr("blackjack_leaving"),x+7,y,textW,CasinoTheme.LIGHT)+12;}
+        if(game().equals("plinko"))y=paragraph(tr("plinko_rtp"),x+7,y,textW,CasinoTheme.GOLD)+12;
+        if(game().equals("wheel"))y=paragraph(tr("wheel_rtp"),x+7,y,textW,CasinoTheme.GOLD)+12;
+        if(game().equals("chicken"))y=paragraph(tr("chicken_leaving"),x+7,y,textW,CasinoTheme.GOLD)+12;
         y=paragraph(tr("payout_explanation"),x+7,y,textW,CasinoTheme.LIGHT)+12;y=paragraph(tr("server_only"),x+7,y,textW,CasinoTheme.MUTED)+12;y=paragraph(tr("bank_cover"),x+7,y,textW,CasinoTheme.MUTED)+12;return paragraph(tr("virtual_only"),x+7,y,textW,CasinoTheme.GOLD)+12;
     }
     private int owner(int x,int y,int w){
@@ -208,8 +217,9 @@ public final class CasinoScreen extends Screen {
     }
     private void adjustStake(boolean up){remember();try{long current=parseAmount(stakeDraft),next=up?Math.multiplyExact(current,2):current/2;next=Math.clamp(next,num(data,"minBet"),num(data,"maxBet"));if(game().equals("blackjack")&&next%2!=0)next=Math.max(num(data,"minBet"),next-1);stakeDraft=decimal(next);rebuild();}catch(RuntimeException invalid){localAmountError();}}
     private long draftStake(){try{return parseAmount(stakeInput!=null?stakeInput.getValue():stakeDraft);}catch(RuntimeException invalid){return -1;}}
-    private boolean affordable(){long amount=draftStake();if(amount<=0)return false;try{long max=game().equals("slots")?Math.multiplyExact(amount,100):game().equals("roulette")?Math.multiplyExact(amount,36):Math.addExact(Math.multiplyExact(amount,2),amount/2);return Math.addExact(num(data,"available"),amount)>=max;}catch(ArithmeticException overflow){return false;}}
-    private boolean canBet(){long amount=draftStake();return !waiting&&!animating()&&!flag(data,"busy")&&flag(data,"economyAvailable")&&amount>=num(data,"minBet")&&amount<=num(data,"maxBet")&&amount>0&&amount<=num(data,"balance")&&affordable()&&(!game().equals("blackjack")||amount%2==0);}
+    private boolean affordable(){long amount=draftStake();if(amount<=0)return false;try{long max=pt.realmcasino.domain.CasinoLedger.maximumPayout(pt.realmcasino.domain.CasinoLedger.Kind.valueOf(game().toUpperCase(Locale.ROOT)),amount);return Math.addExact(num(data,"available"),amount)>=max;}catch(RuntimeException overflow){return false;}}
+    private boolean canBet(){long amount=draftStake();return !activeHand()&&!waiting&&!animating()&&!flag(data,"busy")&&flag(data,"economyAvailable")&&amount>=num(data,"minBet")&&amount<=num(data,"maxBet")&&amount>0&&amount<=num(data,"balance")&&affordable()&&(!game().equals("blackjack")||amount%2==0);}
+    private String playKey(){return switch(game()){case "slots"->"spin";case "roulette"->"roulette_spin";case "plinko"->"drop_ball";case "wheel"->"wheel_spin";case "chicken"->"chicken_start";default->"deal";};}
     private void bet(){remember();if(!canBet())return;JsonObject args=new JsonObject();args.addProperty("amount",parseAmount(stakeDraft));if(game().equals("roulette")){args.addProperty("selection",selection);if(selection.equals("number"))args.addProperty("number",selectedNumber);}request("bet",args);}
     private void handAction(String operation){JsonObject args=new JsonObject();args.addProperty("round",str(round(),"id"));args.addProperty("revision",num(round(),"revision"));request(operation,args);}
     private void funds(String operation){remember();try{long amount=parseAmount(amountDraft);if(amount<=0)throw new IllegalArgumentException();JsonObject args=new JsonObject();args.addProperty("amount",amount);request(operation,args);}catch(RuntimeException invalid){localAmountError();}}
@@ -284,11 +294,21 @@ public final class CasinoScreen extends Screen {
         }
         if(dealer){int value=total(cards);if(value>=0&&!animating())centered(g,tr("total",value),x+w/2,y+h+6,w,CasinoTheme.MUTED,false);}
     }
+    private void drawArcade(GuiGraphics g,int x,int y,int w,int h){
+        centered(g,tr(game()+"_subtitle"),x+w/2,y+15,w-24,CasinoTheme.GOLD,true);
+        if(game().equals("plinko"))CasinoArcadeArt.plinko(g,font,x,y,w,array(round(),"results"),progress());
+        else if(game().equals("wheel"))CasinoArcadeArt.wheel(g,font,x,y,w,array(round(),"results"),progress());
+        else {
+            CasinoArcadeArt.chicken(g,font,x,y,w,(int)num(round(),"steps"),animationFromStep,flag(round(),"crashed"),progress(),now(),CasinoPreferences.get().motion);
+            centered(g,tr("chicken_progress",num(round(),"steps")),x+w/2,y+198,w-24,CasinoTheme.MUTED,false);
+        }
+        drawOutcome(g,x,y+h-24,w);
+    }
     private void drawOutcome(GuiGraphics g,int x,int y,int w){
         JsonObject r=round();if(str(r,"id").isBlank()){centered(g,tr("no_round"),x+w/2,y,w-24,CasinoTheme.GOLD,true);return;}
         if(animating()){centered(g,tr("settling"),x+w/2,y,w-20,CasinoTheme.MUTED,false);return;}
-        if(activeHand()){centered(g,tr("your_turn"),x+w/2,y,w-20,CasinoTheme.LIGHT,false);return;}
-        long payout=num(r,"payout"),stake=num(r,"stake");Component text=payout>stake?tr("won",money(payout-stake)):payout==stake?tr("push"):tr("lost",money(stake));
+        if(activeHand()){centered(g,tr(game().equals("chicken")?"chicken_choose":"your_turn"),x+w/2,y,w-20,CasinoTheme.LIGHT,false);return;}
+        long payout=num(r,"payout"),stake=num(r,"stake");Component text=payout>stake?tr("won",money(payout-stake)):payout==stake?tr("push"):tr("lost",money(stake-payout));
         centered(g,text,x+w/2,y,w-20,payout>=stake?CasinoTheme.GOLD:0xFFD6A49B,true);
     }
     @Override public void render(GuiGraphics g,int mouseX,int mouseY,float partial){
@@ -300,7 +320,7 @@ public final class CasinoScreen extends Screen {
         g.fill(px+17,bodyBottom+5,px+pw-17,bodyBottom+6,0xFF795E3F);
         Component status=waiting?tr("waiting"):!notice.isBlank()?Component.translatable(notice):tr("virtual_only");g.drawString(font,CasinoTheme.fit(font,status,pw-122,false),px+17,py+ph-23,error?0xFFF1AAA0:CasinoTheme.MUTED,false);
         super.render(g,mouseX,mouseY,partial);
-        if(stakeInput!=null){for(var entry:bodyWidgets)if(entry.widget() instanceof CasinoButton b&&List.of(tr("spin").getString(),tr("roulette_spin").getString(),tr("deal").getString()).contains(b.getMessage().getString()))b.active=canBet();}
+        if(stakeInput!=null){for(var entry:bodyWidgets)if(entry.widget() instanceof CasinoButton b&&tr(playKey()).getString().equals(b.getMessage().getString()))b.active=canBet();}
     }
     @Override public boolean mouseScrolled(double mouseX,double mouseY,double horizontal,double vertical){if(mouseX>=px&&mouseX<px+pw&&mouseY>=bodyTop&&mouseY<bodyBottom){remember();scroll=Math.clamp(scroll-(int)(vertical*29),0,maximumScroll());positionWidgets();return true;}return super.mouseScrolled(mouseX,mouseY,horizontal,vertical);}
     private final class CasinoButton extends AbstractButton{

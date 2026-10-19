@@ -29,7 +29,7 @@ public final class RealmCasinoMod {
     static {
         TABS.register("realm_casino",()->CreativeModeTab.builder().title(Component.translatable("itemGroup.realmcasino"))
                 .icon(()->new ItemStack(BlockRegistry.SLOT_MACHINE_ITEM.get()))
-                .displayItems((parameters,output)->{output.accept(BlockRegistry.SLOT_MACHINE_ITEM.get());output.accept(BlockRegistry.ROULETTE_TABLE_ITEM.get());output.accept(BlockRegistry.BLACKJACK_TABLE_ITEM.get());}).build());
+                .displayItems((parameters,output)->{output.accept(BlockRegistry.SLOT_MACHINE_ITEM.get());output.accept(BlockRegistry.ROULETTE_TABLE_ITEM.get());output.accept(BlockRegistry.BLACKJACK_TABLE_ITEM.get());output.accept(BlockRegistry.PLINKO_BOARD_ITEM.get());output.accept(BlockRegistry.FORTUNE_WHEEL_ITEM.get());output.accept(BlockRegistry.CHICKEN_ROAD_TABLE_ITEM.get());}).build());
     }
     public RealmCasinoMod(IEventBus bus) {
         BlockRegistry.register(bus);TABS.register(bus);bus.addListener(CasinoNetwork::register);
@@ -44,7 +44,7 @@ public final class RealmCasinoMod {
     }
     private static void commands(RegisterCommandsEvent event) {
         event.getDispatcher().register(Commands.literal("casino").executes(context->{context.getSource().sendSuccess(()->Component.translatable("gui.realmcasino.command_help"),false);return 1;})
-                .then(Commands.literal("blocks").requires(source->source.hasPermission(2)).executes(context->{ServerPlayer player=context.getSource().getPlayerOrException();for(var item:java.util.List.of(BlockRegistry.SLOT_MACHINE_ITEM.get(),BlockRegistry.ROULETTE_TABLE_ITEM.get(),BlockRegistry.BLACKJACK_TABLE_ITEM.get())){ItemStack stack=new ItemStack(item);if(!player.getInventory().add(stack))player.drop(stack,false);}return 1;})));
+                .then(Commands.literal("blocks").requires(source->source.hasPermission(2)).executes(context->{ServerPlayer player=context.getSource().getPlayerOrException();for(var item:java.util.List.of(BlockRegistry.SLOT_MACHINE_ITEM.get(),BlockRegistry.ROULETTE_TABLE_ITEM.get(),BlockRegistry.BLACKJACK_TABLE_ITEM.get(),BlockRegistry.PLINKO_BOARD_ITEM.get(),BlockRegistry.FORTUNE_WHEEL_ITEM.get(),BlockRegistry.CHICKEN_ROAD_TABLE_ITEM.get())){ItemStack stack=new ItemStack(item);if(!player.getInventory().add(stack))player.drop(stack,false);}return 1;})));
     }
     private static void login(PlayerEvent.PlayerLoggedInEvent event){if(event.getEntity()instanceof ServerPlayer player)CasinoService.login(player);}
     private static void logout(PlayerEvent.PlayerLoggedOutEvent event){if(event.getEntity()instanceof ServerPlayer player)CasinoService.logout(player);}

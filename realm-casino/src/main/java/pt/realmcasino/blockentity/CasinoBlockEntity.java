@@ -51,6 +51,9 @@ public final class CasinoBlockEntity extends BlockEntity {
             case "slots" -> values.length == 3 && validRange(values, 0, 7);
             case "roulette" -> values.length == 1 && validRange(values, 0, 36);
             case "blackjack" -> values.length <= 24 && validRange(values, -1, 51);
+            case "plinko" -> values.length == 12 && validRange(values,0,1);
+            case "wheel" -> values.length == 1 && validRange(values,0,19);
+            case "chicken" -> values.length <= 10 && validRange(values,0,1);
             default -> false;
         };
     }

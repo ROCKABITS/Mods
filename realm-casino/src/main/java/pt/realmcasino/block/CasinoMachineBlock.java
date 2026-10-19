@@ -51,7 +51,7 @@ public abstract class CasinoMachineBlock extends HorizontalDirectionalBlock impl
     }
 
     public abstract String game();
-    public final boolean isTall() { return this instanceof SlotMachineBlock; }
+    public final boolean isTall() { return this instanceof SlotMachineBlock || this instanceof PlinkoBoardBlock || this instanceof FortuneWheelBlock; }
 
     @Override protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         builder.add(FACING);

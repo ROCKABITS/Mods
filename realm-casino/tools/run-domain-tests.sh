@@ -55,6 +55,7 @@ if output.exists():
 classes = output / 'classes'
 classes.mkdir(parents=True)
 sources = sorted((project / 'src/main/java/pt/realmcasino/domain').rglob('*.java'))
+sources += [project / 'src/main/java/pt/realmcasino/data/GameState.java']
 sources += sorted((project / 'src/test/java/pt/realmcasino/domain').rglob('*.java'))
 subprocess.run([javac, '--release', '21', '-encoding', 'UTF-8', '-cp', str(jar),
                 '-d', str(classes), *map(str, sources)], check=True)
