@@ -56,8 +56,9 @@ public final class DailyScreen extends Screen {
     private Component details(JsonObject quest,JsonObject round){
         JsonObject t=quest.getAsJsonObject("template");String detail=label(str(t,"title")).getString()+"\n"+DailyTheme.tr("category."+str(t,"category").toLowerCase(Locale.ROOT)).getString()+" · "+DailyTheme.tr("difficulty."+str(t,"difficulty").toLowerCase(Locale.ROOT)).getString();
         detail+="\n"+DailyTheme.tr("objective",number(t,"quantity"),target(t)).getString()+"\n"+DailyTheme.tr("gross",amount(round,number(quest,"gross"))).getString();
-        detail+="\n"+DailyTheme.tr("bonus",amount(round,number(quest,"bonus"))).getString()+"\n"+DailyTheme.tr("reputation",number(quest,"reputation")).getString();
-        JsonObject r=reward(str(quest,"id"));long tax=r==null?DailyRules.tax(number(quest,"gross"),bool(data,"treasury")?(int)number(data.getAsJsonObject("settings"),"taxBps"):0):number(r,"tax");
+        JsonObject r=reward(str(quest,"id"));
+        detail+="\n"+DailyTheme.tr("bonus",amount(round,number(quest,"bonus"))).getString()+"\n"+DailyTheme.tr("reputation",number(r==null?quest:r,"reputation")).getString();
+        long tax=r==null?DailyRules.tax(number(quest,"gross"),bool(data,"treasury")?(int)number(data.getAsJsonObject("settings"),"taxBps"):0,str(round,"currency")):number(r,"tax");
         detail+="\n"+DailyTheme.tr("tax",amount(round,tax)).getString()+"\n"+DailyTheme.tr("net",amount(round,number(quest,"gross")-tax)).getString();
         if(str(round,"currency").equals("EMERALD"))detail+="\n"+DailyTheme.tr("emerald_mode").getString();
         if(r!=null&&!str(r,"error").isBlank())detail+="\n"+Component.translatable(str(r,"error")).getString();

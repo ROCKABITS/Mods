@@ -56,6 +56,7 @@ public final class DailyRules {
     }
     public static String identifier(String value){if(value==null||value.length()>180||!value.matches("[a-z0-9_.-]+:[a-z0-9/._-]+"))throw new IllegalArgumentException("Invalid registry ID");return value;}
     public static long tax(long cents,int bps){if(cents<0||cents>1_000_000_000L||bps<0||bps>10000)throw new IllegalArgumentException("Invalid tax");return cents*bps/10000;}
+    public static long tax(long cents,int bps,String currency){return switch(currency){case "EMERALD"->tax(cents/100,bps)*100;case "CHRONICLES"->tax(cents,bps);default->throw new IllegalArgumentException("Invalid daily currency");};}
     public static UUID key(String value){return UUID.nameUUIDFromBytes(value.getBytes(java.nio.charset.StandardCharsets.UTF_8));}
     public static void jsonEnvelope(String json,int limit){
         if(json==null||json.length()>limit||!json.stripLeading().startsWith("{"))throw new IllegalArgumentException("Invalid daily JSON envelope");

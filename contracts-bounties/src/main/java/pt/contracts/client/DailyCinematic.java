@@ -49,7 +49,7 @@ public final class DailyCinematic {
         }catch(RuntimeException ignored){}
     }
     private static void fallback(JsonObject e){
-        Component title=DailyTheme.tr(DailyScreen.str(e,"difficulty").equals("ALL")?"all_complete":"complete_title"),body=Component.literal(DailyScreen.label(DailyScreen.str(e,"title")).getString()+" · +"+DailyTheme.money(DailyScreen.number(e,"money")));
+        Component title=DailyTheme.tr(DailyScreen.str(e,"difficulty").equals("ALL")?"all_complete":"complete_title"),body=Component.literal(DailyScreen.label(DailyScreen.str(e,"title")).getString()+" · +"+(DailyScreen.str(e,"currency").equals("EMERALD")?DailyTheme.tr("emerald_amount",DailyScreen.number(e,"money")/100).getString():DailyTheme.money(DailyScreen.number(e,"money"))));
         try{Class.forName("pt.realmnotifications.client.NotificationsClient").getMethod("receive",String.class,Component.class,Component.class).invoke(null,"reward",title,body);}
         catch(ReflectiveOperationException|RuntimeException|LinkageError absent){var player=Minecraft.getInstance().player;if(player!=null)player.displayClientMessage(Component.literal(title.getString()+" "+body.getString()),true);}
     }

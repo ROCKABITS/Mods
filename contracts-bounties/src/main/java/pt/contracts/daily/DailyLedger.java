@@ -133,7 +133,7 @@ public final class DailyLedger {
         q.completedAt=now;q.state=State.PENDING;r.grossCompleted+=q.gross;a.reputationReserved+=reputation;return reward;
     }
     private Reward reward(UUID player,UUID quest,long day,long gross,int taxBps,String currency,String title,Difficulty difficulty,int reputation,int missions,long now){
-        Reward r=new Reward();r.id=quest;r.player=player;r.quest=quest;r.day=day;r.gross=gross;r.tax=currency.equals("EMERALD")?DailyRules.tax(gross/100,taxBps)*100:DailyRules.tax(gross,taxBps);r.net=gross-r.tax;r.currency=currency;r.title=title;r.difficulty=difficulty;r.reputation=reputation;r.missions=missions;r.completedAt=now;return r;
+        Reward r=new Reward();r.id=quest;r.player=player;r.quest=quest;r.day=day;r.gross=gross;r.tax=DailyRules.tax(gross,taxBps,currency);r.net=gross-r.tax;r.currency=currency;r.title=title;r.difficulty=difficulty;r.reputation=reputation;r.missions=missions;r.completedAt=now;return r;
     }
     public Reward special(UUID player,long now,int taxBps){
         return special(player,account(player).round,now,taxBps);
