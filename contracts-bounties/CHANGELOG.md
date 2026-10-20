@@ -1,3 +1,16 @@
+# Contracts & Bounties 0.4.0 — Daily Quests & RPG Celebrations
+
+- Added five server-generated daily RNG quests per UUID: two easy, two medium and one hard, with 57 configurable templates across mining, combat, farming, fishing, exploration and physical deliveries.
+- Added persistent real UTC renewal, accepted-only progress, distinct objectives, frozen rewards/incentives, expired quests and a default €300 gross daily-set cap, including the optional five-quest bonus.
+- Added server-validated survival events, tracked placed/consumed blocks, natural-spawn kill attribution, mature harvesting, real rod catches, new discoveries and transactional material consumption.
+- Added recoverable Chronicles wallet, reputation and mission-counter payments, pending credits, shared public-contract reputation limits and administrator-enabled emerald fallback.
+- Added live, sworn Realm Council presidential tax and future category incentives, bounded by administrator policy; requires Crown Ledger 0.2.6+ for idempotent public daily-tax receipts.
+- Added physical daily-quest, journal, government, administration, catalogue, audit and safe repair menus; JSON file and datapack templates support optional modpack content.
+- Added original silver, gold and royal-purple parchment cinematics, animated seals, particles, reward count-up, four fanfares and a distinct 5/5 crown celebration. Queued HUD animations leave movement and camera controls available.
+- Added configurable effects, reduced particles, simplified mode, volume, normal duration and rebindable Backspace skip; payments never depend on presentation. Avoided duplicate Realm Notifications completion notices.
+- Preserved all three existing 3D noticeboards, recipes, private/public contracts, escrow and legacy saved data. Daily data uses a separate recoverable ledger; update client and server together, network protocol 3.
+- Added unit, native dedicated-server, optional integration and actual integrated-LAN-host client validation, including interrupted treasury writes and real world close/reopen. Documented observable anti-exploit limits and untested two-authenticated-client scope.
+
 # Contracts & Bounties 0.3.2 — Optional Realm Notifications
 
 - Added optional medieval HUD notifications for published, completed and cancelled contracts, material deliveries and collected rewards/refunds.

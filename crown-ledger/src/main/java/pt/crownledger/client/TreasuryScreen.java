@@ -434,6 +434,7 @@ public final class TreasuryScreen extends Screen {
             String description = str(entry, "description", str(entry, "kind", ""));
             String label=Component.translatable(description).getString();if("gui.kingdomtreasury.villager_policy_changed".equals(description))label+=" "+str(entry,"details","")+" · "+str(entry,"actorName","");
             if("gui.kingdomtreasury.economy_policy_changed".equals(description)){label=economicApproval(str(entry,"details",""))+" · "+str(entry,"actorName","");}else if("gui.kingdomtreasury.economy_tax_income".equals(description)){String details=str(entry,"details","");if(details.startsWith("realmeconomy.service-tax:"))label+=" · "+Component.translatable("gui.kingdomtreasury.service."+details.substring("realmeconomy.service-tax:".length()).toLowerCase(java.util.Locale.ROOT)).getString();}
+            if(str(entry,"details","").equals("contracts.daily-tax"))label=Component.translatable("gui.kingdomtreasury.daily_quest_tax").getString();
             line(g,label,x+15,rowY+3,w-30,INK);
             line(g, date(number(entry, "at")) + " · " + money(number(entry, "amount"), str(entry, "currency", currency())),
                     x + 15, rowY + 16, w - 30, MUTED);

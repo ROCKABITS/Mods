@@ -1,0 +1,15 @@
+{
+  "id": "contracts:exploration_structure_medium",
+  "title": "daily.contracts.quest.exploration_structure_medium",
+  "category": "EXPLORATION",
+  "difficulty": "MEDIUM",
+  "target": "*new_structure",
+  "quantity": 1,
+  "reward": -1,
+  "weight": 10,
+  "mods": [],
+  "dimensions": [],
+  "biomes": [],
+  "enabled": true,
+  "validation": "NEW_STRUCTURE"
+}

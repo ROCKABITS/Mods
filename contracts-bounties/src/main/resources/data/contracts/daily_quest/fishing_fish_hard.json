@@ -1,0 +1,14 @@
+{
+  "id": "contracts:fishing_fish_hard",
+  "title": "daily.contracts.quest.fishing_fish_hard",
+  "category": "FISHING",
+  "difficulty": "HARD",
+  "target": "*fish",
+  "quantity": 40,
+  "reward": -1,
+  "weight": 10,
+  "mods": [],
+  "dimensions": [],
+  "biomes": [],
+  "enabled": true
+}

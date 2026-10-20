@@ -1,3 +1,15 @@
+# Validação — Crown Ledger 0.2.6
+
+A compilação local aprovou **59 testes JUnit** e **29 GameTests próprios**. A suíte integrada de 29 testes diários do Contracts & Bounties verifica a nova CrownDailyApi v1 com o tesouro real: conservação bruto = carteira + imposto, classificação fiscal, recibo repetido e falha de escrita provocada no ficheiro do Crown, seguida de recuperação sem voltar a pagar à carteira.
+
+O cliente Minecraft real concluiu cinco quests e confirmou a carteira Chronicles, o tesouro e os recibos dos dois ficheiros do anfitrião. O servidor integrado foi realmente aberto à LAN e o mundo fechado/reaberto. Não é uma validação com dois clientes autenticados nem uma nova inspeção gráfica de todas as interfaces do Crown. O formato 6 e as restantes APIs foram preservados.
+
+A publicação conjunta exige nova execução destes testes no commit publicado. As contagens, hashes e execução ficam em [crown-ledger-0.2.6.build.json](../mod-pronto/crown-ledger-0.2.6.build.json). Os testes do novo imposto estão em `contracts-bounties/src/dailygametest/` e o workflow em [build-daily-quests.yml](../.github/workflows/build-daily-quests.yml).
+
+---
+
+## Validação histórica 0.2.5
+
 # Validação — Crown Ledger 0.2.5
 
 [Execução aprovada](https://github.com/ROCKABITS/Mods/actions/runs/39410537589), código `e70c29deb9c661dceff2ebdbdc3ee44c90b714dc`. Passaram **59 testes JUnit**, **29 testes nativos independentes**, **29 com integrações** e o cliente Minecraft real.

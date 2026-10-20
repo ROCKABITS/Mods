@@ -10,3 +10,7 @@ runs/
 .idea/
 *.iml
 compat-libs/
+
+daily-compat-libs/
+daily-gametests.log
+daily-integration.log

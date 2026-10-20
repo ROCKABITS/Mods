@@ -1,0 +1,14 @@
+{
+  "id": "contracts:fishing_pufferfish_medium",
+  "title": "daily.contracts.quest.fishing_pufferfish_medium",
+  "category": "FISHING",
+  "difficulty": "MEDIUM",
+  "target": "minecraft:pufferfish",
+  "quantity": 3,
+  "reward": -1,
+  "weight": 10,
+  "mods": [],
+  "dimensions": [],
+  "biomes": [],
+  "enabled": true
+}

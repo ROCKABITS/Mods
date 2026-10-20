@@ -1,0 +1,14 @@
+{
+  "id": "contracts:farming_beetroots_medium",
+  "title": "daily.contracts.quest.farming_beetroots_medium",
+  "category": "FARMING",
+  "difficulty": "MEDIUM",
+  "target": "minecraft:beetroots",
+  "quantity": 32,
+  "reward": -1,
+  "weight": 10,
+  "mods": [],
+  "dimensions": [],
+  "biomes": [],
+  "enabled": true
+}

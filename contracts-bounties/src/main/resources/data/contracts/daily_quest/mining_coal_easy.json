@@ -1,0 +1,14 @@
+{
+  "id": "contracts:mining_coal_easy",
+  "title": "daily.contracts.quest.mining_coal_easy",
+  "category": "MINING",
+  "difficulty": "EASY",
+  "target": "#minecraft:coal_ores",
+  "quantity": 16,
+  "reward": -1,
+  "weight": 10,
+  "mods": [],
+  "dimensions": [],
+  "biomes": [],
+  "enabled": true
+}

@@ -59,6 +59,9 @@ public final class ContractsMod {
         ITEMS.register(bus);
         TABS.register(bus);
         bus.addListener(ContractsNetwork::register);
+        bus.addListener(pt.contracts.daily.DailyNetwork::register);
+        pt.contracts.daily.DailySounds.register(bus);
+        NeoForge.EVENT_BUS.addListener(pt.contracts.daily.DailyCatalog::register);
         NeoForge.EVENT_BUS.addListener(ContractsMod::commands);
         NeoForge.EVENT_BUS.addListener(ContractsMod::logout);
         NeoForge.EVENT_BUS.addListener(ContractsMod::stopped);
@@ -84,6 +87,7 @@ public final class ContractsMod {
 
     private static void logout(PlayerEvent.PlayerLoggedOutEvent event) {
         ContractsService.logout(event.getEntity().getUUID());
+        pt.contracts.daily.DailyService.logout(event.getEntity().getUUID());
     }
-    private static void stopped(ServerStoppedEvent event) { ContractsService.clearSessions(); }
+    private static void stopped(ServerStoppedEvent event) { ContractsService.clearSessions();pt.contracts.daily.DailyService.clear();pt.contracts.daily.DailyEvents.clear(); }
 }

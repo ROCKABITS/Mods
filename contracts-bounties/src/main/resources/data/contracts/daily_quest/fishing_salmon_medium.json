@@ -1,0 +1,14 @@
+{
+  "id": "contracts:fishing_salmon_medium",
+  "title": "daily.contracts.quest.fishing_salmon_medium",
+  "category": "FISHING",
+  "difficulty": "MEDIUM",
+  "target": "minecraft:salmon",
+  "quantity": 8,
+  "reward": -1,
+  "weight": 10,
+  "mods": [],
+  "dimensions": [],
+  "biomes": [],
+  "enabled": true
+}

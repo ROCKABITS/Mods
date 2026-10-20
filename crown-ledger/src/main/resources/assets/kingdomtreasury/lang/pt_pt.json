@@ -156,5 +156,6 @@
   "gui.kingdomtreasury.service.brewing": "Produção de poções",
   "gui.kingdomtreasury.service.beacon": "Ativação de beacons",
   "gui.kingdomtreasury.economy_change": "%s: %s € → %s €; %s%% → %s%%",
-  "gui.kingdomtreasury.period_change": "Beacon: %s → %s s"
+  "gui.kingdomtreasury.period_change": "Beacon: %s → %s s",
+  "gui.kingdomtreasury.daily_quest_tax": "Imposto sobre recompensas diárias"
 }

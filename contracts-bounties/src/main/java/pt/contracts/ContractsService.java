@@ -88,6 +88,7 @@ public final class ContractsService {
             long now = System.nanoTime();
             if (now - session.lastAction < 50_000_000L) { send(player, ""); return; }
             session.lastAction = now;
+            if(packet.operation().equals("daily_open")){pt.contracts.daily.DailyService.open(player);return;}
             String message;
             switch (packet.operation()) {
                 case "publish" -> {
@@ -151,7 +152,12 @@ public final class ContractsService {
         requireThread(player);
         ContractsData data = ContractsData.get(player.server);
         Ledger next = copy(data.ledger);
-        next.complete(id, player.getUUID(), LocalDate.now(ZoneOffset.UTC).toEpochDay());
+        long epochDay=LocalDate.now(ZoneOffset.UTC).toEpochDay();int dailyReputation=0;
+        if(contract(next,id).funding()==Funding.KINGDOM)try{
+            var daily=pt.contracts.daily.DailyData.get(player.getServer());daily.available();
+            epochDay=Math.max(epochDay,Math.floorDiv(daily.ledger.highWater,86_400_000L));dailyReputation=daily.ledger.reputation(player.getUUID(),System.currentTimeMillis());
+        }catch(RuntimeException|LinkageError unavailable){dailyReputation=100;ContractsMod.LOG.warn("Daily reputation is unavailable; public delivery and money remain usable with no additional reputation");}
+        next.complete(id,player.getUUID(),epochDay,dailyReputation);
         Contract contract = next.list().stream().filter(c -> c.id().equals(id)).findFirst().orElseThrow();
         List<ItemStack> inventory = inventory(player);
         remove(inventory, item(contract.item()), contract.quantity());

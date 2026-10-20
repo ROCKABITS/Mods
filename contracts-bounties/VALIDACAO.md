@@ -1,3 +1,21 @@
+# Validação — Contracts & Bounties 0.4.0
+
+Os testes locais executados nesta atualização aprovaram **82 JUnit**, os **38 GameTests existentes**, **29 novos GameTests diários independentes** e **29 com integrações**. O Crown Ledger mantém **59 JUnit** e **29 testes nativos próprios**. A publicação é bloqueada pelo workflow até executar novamente as verificações sobre os JARs do commit publicado.
+
+A suíte diária verifica geração e distribuição, renovação UTC e relógio recuado, expiração, recompensas congeladas, teto com incentivos e bónus, pagamentos únicos, créditos pendentes, reputação partilhada com contratos públicos, entregas consumidas, armazenamento, exploração real, eventos de sobrevivência, modos de jogo, sessões físicas, sucessão/posse do Presidente, administração e falha real de escrita do tesouro com recuperação sem repetir a carteira.
+
+O cliente Minecraft real foi executado com servidor integrado **aberto à LAN**, Chronicles RP 0.5.4, Crown Ledger 0.2.6 e dez companheiros publicados, incluindo Realm Notifications 0.1.1. As três variantes de mural foram colocadas e utilizadas. Cinco quests com quantidades controladas foram aceites através dos botões C2S reais e concluídas através de eventos reais de mineração, colheita, combate, pesca Vanilla e entrega consumida. Os valores financeiros vieram do servidor, sem snapshots financeiros inventados.
+
+Foram verificados os menus de governo, limites administrativos e modelos RNG, a fila dos três níveis e das 5/5, modo simples, volume zero, tecla de ignorar, movimentos e câmara disponíveis, limites dos controlos em 320×240 e ausência de conclusão duplicada no Realm Notifications. As 16 capturas são de um framebuffer real de 1600×900. O mundo foi fechado e reaberto e preservou UUID, cinco IDs, saldos, imposto, reputação, contador de missões e confirmações visuais. O recibo foi confirmado tanto no ficheiro UUID.dat como no level.dat do anfitrião.
+
+O contrato da integração Realm Admin foi testado através de um fornecedor de teste; não existe um Realm Admin executável disponível. Não se realizou uma sessão com dois clientes autenticados. Os limites de origem de blocos/mobs, exploração anterior à instalação, culturas personalizadas e conteúdo registado mas inacessível estão documentados em [DAILY_QUESTS.md](DAILY_QUESTS.md).
+
+O workflow [Build daily quests and Crown Ledger](../.github/workflows/build-daily-quests.yml) fixa checksums dos companheiros, guarda o JAR de produção antes das fixtures e impede testes/fixtures/dependências empacotados no JAR. A publicação acrescenta os hashes, contagens e execução em [contracts-bounties-0.4.0.build.json](../mod-pronto/contracts-bounties-0.4.0.build.json), sem substituir versões antigas. A galeria validada fica em [media/contracts-bounties/0.4.0](../media/contracts-bounties/0.4.0/README.md).
+
+---
+
+## Validações históricas
+
 # Validação atual — Contracts & Bounties 0.3.2
 
 **Aprovada.** A [execução conjunta 39009308013](https://github.com/ROCKABITS/Mods/actions/runs/39009308013), sobre o código [`0d9e459`](https://github.com/ROCKABITS/Mods/commit/0d9e45962ae298e4fac98f46c6c9b5823e0ffc8d), compilou o JAR de produção e aprovou **46 testes unitários** e **38 GameTests nativos em modo independente**, com Minecraft 1.21.1, NeoForge 21.1.256 e Java 21. Os [metadados desta compilação](../mod-pronto/contracts-bounties-0.3.2.build.json) registam as contagens, versões e hashes.

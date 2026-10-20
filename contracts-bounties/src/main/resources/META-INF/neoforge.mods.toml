@@ -3,9 +3,9 @@ loaderVersion="[4,)"
 license="All Rights Reserved"
 [[mods]]
 modId="contracts"
-version="0.3.2"
+version="0.4.0"
 displayName="Contracts & Bounties"
-description='''Material delivery contracts with reserved rewards, three physical noticeboards, optional Crónicas RP economy and reputation, and a server API for Kingdom Treasury rules and public contracts.'''
+description='''Three physical medieval noticeboards, private and public escrow contracts, five daily survival RNG quests, RPG completion cinematics, optional Chronicles RP wallet/reputation and governed Crown Ledger tax.'''
 [[dependencies.contracts]]
 modId="neoforge"
 type="required"

@@ -111,8 +111,10 @@ public final class ContractsScreen extends Screen {
         h = Math.min(390, height - 16);
         x = (width - w) / 2;
         y = (height - h) / 2;
-        button(x + 10, y + 31, (w - 24) / 2, "browse", () -> switchView(false)).active = creating;
-        PaperButton create = button(x + 14 + (w - 24) / 2, y + 31, (w - 24) / 2, "create", () -> switchView(true));
+        int tabWidth=(w-28)/3;
+        button(x + 10, y + 31, tabWidth, "browse", () -> switchView(false)).active = creating;
+        PaperButton create = button(x + 14 + tabWidth, y + 31, tabWidth, "create", () -> switchView(true));
+        button(x + 18 + tabWidth*2,y + 31,tabWidth,"daily",()->send("daily_open","","","",0,0,""));
         create.active = !creating && snapshot.canPublish && !waiting;
         create.setTooltip(Tooltip.create(Component.literal(publicationDetails())));
         if (creating) initForm(); else initBoard();

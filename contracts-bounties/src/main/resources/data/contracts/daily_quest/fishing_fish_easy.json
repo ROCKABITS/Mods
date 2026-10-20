@@ -1,0 +1,14 @@
+{
+  "id": "contracts:fishing_fish_easy",
+  "title": "daily.contracts.quest.fishing_fish_easy",
+  "category": "FISHING",
+  "difficulty": "EASY",
+  "target": "*fish",
+  "quantity": 8,
+  "reward": -1,
+  "weight": 10,
+  "mods": [],
+  "dimensions": [],
+  "biomes": [],
+  "enabled": true
+}

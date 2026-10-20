@@ -1,0 +1,14 @@
+{
+  "id": "contracts:farming_wheat_hard",
+  "title": "daily.contracts.quest.farming_wheat_hard",
+  "category": "FARMING",
+  "difficulty": "HARD",
+  "target": "minecraft:wheat",
+  "quantity": 128,
+  "reward": -1,
+  "weight": 10,
+  "mods": [],
+  "dimensions": [],
+  "biomes": [],
+  "enabled": true
+}

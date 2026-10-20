@@ -223,6 +223,12 @@ public final class Ledger {
     }
 
     public synchronized void complete(UUID id, UUID worker, long epochDay) {
+        complete(id,worker,epochDay,0);
+    }
+
+    /** Daily RNG quests share the existing UTC reputation ceiling with public contracts. */
+    public synchronized void complete(UUID id, UUID worker, long epochDay, int dailyQuestReputation) {
+        if(dailyQuestReputation<0||dailyQuestReputation>100)throw new IllegalArgumentException("Invalid daily quest reputation");
         require(worker, "Worker");
         Contract contract = openContract(id);
         if (contract.author().equals(worker)) {
@@ -252,7 +258,7 @@ public final class Ledger {
             DailyProgress previous = daily.get(worker);
             long day = previous == null ? epochDay : Math.max(epochDay, previous.day());
             int earned = previous == null || epochDay > previous.day() ? 0 : previous.reputation();
-            int award = Math.min(contract.reputationReward(), Math.max(0, contract.dailyReputationLimit() - earned));
+            int award = Math.min(contract.reputationReward(), Math.max(0, contract.dailyReputationLimit() - earned - dailyQuestReputation));
             Progress pending = pendingProgress(worker);
             newProgress = new Progress(Math.min(100, pending.reputation() + award),
                     Math.min(MAX_PENDING_MISSIONS, pending.missions() + 1));

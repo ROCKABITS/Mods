@@ -1,0 +1,38 @@
+{
+  "daily_easy": {
+    "subtitle": "daily.contracts.sound.easy",
+    "sounds": [
+      {
+        "name": "contracts:daily/easy",
+        "stream": false
+      }
+    ]
+  },
+  "daily_medium": {
+    "subtitle": "daily.contracts.sound.medium",
+    "sounds": [
+      {
+        "name": "contracts:daily/medium",
+        "stream": false
+      }
+    ]
+  },
+  "daily_hard": {
+    "subtitle": "daily.contracts.sound.hard",
+    "sounds": [
+      {
+        "name": "contracts:daily/hard",
+        "stream": false
+      }
+    ]
+  },
+  "daily_all": {
+    "subtitle": "daily.contracts.sound.all",
+    "sounds": [
+      {
+        "name": "contracts:daily/all",
+        "stream": false
+      }
+    ]
+  }
+}

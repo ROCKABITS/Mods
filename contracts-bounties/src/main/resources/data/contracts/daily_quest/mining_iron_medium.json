@@ -1,0 +1,14 @@
+{
+  "id": "contracts:mining_iron_medium",
+  "title": "daily.contracts.quest.mining_iron_medium",
+  "category": "MINING",
+  "difficulty": "MEDIUM",
+  "target": "#minecraft:iron_ores",
+  "quantity": 24,
+  "reward": -1,
+  "weight": 10,
+  "mods": [],
+  "dimensions": [],
+  "biomes": [],
+  "enabled": true
+}

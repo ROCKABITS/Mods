@@ -1,0 +1,14 @@
+{
+  "id": "contracts:mining_coal_medium",
+  "title": "daily.contracts.quest.mining_coal_medium",
+  "category": "MINING",
+  "difficulty": "MEDIUM",
+  "target": "#minecraft:coal_ores",
+  "quantity": 32,
+  "reward": -1,
+  "weight": 10,
+  "mods": [],
+  "dimensions": [],
+  "biomes": [],
+  "enabled": true
+}

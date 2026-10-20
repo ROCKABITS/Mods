@@ -1,14 +1,14 @@
 # Crown Ledger — Tesouro da Coroa
 
-A versão **0.2.5** recebe impostos dos serviços do **Realm Economy 0.4.0** e regista preços, limites e impostos anteriores e novos, com autor e data. Mantém o imposto do Casino, pagamentos judiciais, vendas de mercado, contratos e salários. O formato 6 conserva as contas e recibos anteriores.
+A versão **0.2.6** recebe o imposto das **quests diárias do Contracts & Bounties 0.4.0**, com recibos idempotentes e categoria fiscal no histórico. Mantém as integrações de serviços, Villagers, Casino, justiça, mercados, contratos e salários. O formato 6 preserva as contas e recibos existentes. A política das quests é gerida no mural, por um Presidente empossado ou administrador, dentro dos limites configurados.
 
 Tesouro público para Minecraft **1.21.1**, **NeoForge 21.1.256+** e **Java 21**. Instala o mesmo JAR no servidor e nos clientes. O identificador técnico é `kingdomtreasury`.
 
 ## Instalação e primeiro uso
 
 1. Antes de atualizar um mundo existente, faz uma cópia de segurança do mundo completo e dos perfis do Chronicles. Esta versão migra o registo do tesouro para o formato 6; voltar ao JAR antigo exige restaurar a cópia anterior à atualização.
-2. Coloca `crown-ledger-0.2.5.jar` na pasta `mods` de cada cliente e do servidor. Se usas Realm Markets, atualiza também para **Realm Markets 0.2.1+** em todos eles; substitui os JARs antigos e não deixes duas versões do mesmo mod.
-3. Para integrar os restantes sistemas, usa **Contracts & Bounties 0.3.2+**, **Realm Council 0.2.2+** e, opcionalmente, **Chronicles RP 0.5.4** com as suas dependências.
+2. Coloca `crown-ledger-0.2.6.jar` na pasta `mods` de cada cliente e do servidor. Se usas Realm Markets, atualiza também para **Realm Markets 0.2.1+** em todos eles; substitui os JARs antigos e não deixes duas versões do mesmo mod.
+3. Para integrar os restantes sistemas, usa **Contracts & Bounties 0.4.0+**, **Realm Council 0.2.2+** e, opcionalmente, **Chronicles RP 0.5.4** com as suas dependências.
 4. Fabrica o **Cofre da Coroa** e clica nele com o botão direito. Também aparece na aba criativa **Crown Ledger** e na pesquisa.
 
 Receita, de cima para baixo:

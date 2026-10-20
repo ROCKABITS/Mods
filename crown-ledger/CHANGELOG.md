@@ -1,3 +1,11 @@
+# Crown Ledger 0.2.6 — Daily Quest Tax
+
+- Added CrownDailyApi v1 for the already-reserved public share of Contracts & Bounties 0.4.0 daily quest rewards.
+- Reused payload-bound, idempotent and durably persisted CrownIncomeApi receipts: interrupted transfers remain recoverable without duplicate treasury income.
+- Classified daily quest tax as public tax income and added a readable English/Portuguese history label.
+- Preserved treasury format 6, existing balances, fiscal policies, salaries, contracts, markets, casino and judicial/economic integrations.
+- Validated native existing regressions and actual cross-mod wallet/treasury conservation, interrupted-write recovery and integrated LAN-owner world reopen.
+
 # Crown Ledger 0.2.4 — Beta
 
 - Added CrownVillagerApi v1 for already-funded public tax from Realm Villager Economy purchases.

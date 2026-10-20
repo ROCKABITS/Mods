@@ -1,0 +1,14 @@
+{
+  "id": "contracts:fishing_tropical_fish_hard",
+  "title": "daily.contracts.quest.fishing_tropical_fish_hard",
+  "category": "FISHING",
+  "difficulty": "HARD",
+  "target": "minecraft:tropical_fish",
+  "quantity": 8,
+  "reward": -1,
+  "weight": 10,
+  "mods": [],
+  "dimensions": [],
+  "biomes": [],
+  "enabled": true
+}

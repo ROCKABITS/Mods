@@ -1,19 +1,21 @@
-# Contracts & Bounties — 0.3.2
+# Contracts & Bounties — 0.4.0
 
 Mod para Minecraft **1.21.1**, **NeoForge 21.1.256** e **Java 21**, instalado no cliente e no servidor.
 
-[Descarregar JAR](https://github.com/ROCKABITS/Mods/raw/refs/heads/main/mod-pronto/contracts-bounties-0.3.2.jar) · [ZIP](https://github.com/ROCKABITS/Mods/raw/refs/heads/main/mod-pronto/contracts-bounties-0.3.2.zip) · [Changelog em inglês](CHANGELOG.md) · [Validação](VALIDACAO.md).
+[Descarregar JAR](https://github.com/ROCKABITS/Mods/raw/refs/heads/main/mod-pronto/contracts-bounties-0.4.0.jar) · [ZIP](https://github.com/ROCKABITS/Mods/raw/refs/heads/main/mod-pronto/contracts-bounties-0.4.0.zip) · [Changelog em inglês](CHANGELOG.md) · [Validação](VALIDACAO.md).
 
-A 0.3.2 mantém os três murais e acrescenta acesso físico obrigatório, menus de reputação e imposto, contratos públicos e uma API para o Crown Ledger — Tesouro da Coroa.
+A **0.4.0** acrescenta **cinco quests RNG diárias por jogador**, atividades de sobrevivência, pagamentos automáticos e **celebrações RPG com pergaminhos, selos, partículas e sons originais**. Mantém os três murais, contratos particulares/públicos, dinheiro reservado, impostos e reputação.
 
-**A tesouraria está disponível no mod separado [Crown Ledger](../crown-ledger/README.md).** As suas regras ficam ativas quando esse mod está instalado. Sem integração, os contratos particulares continuam disponíveis com **0% de imposto e reputação mínima 0**. O Crónicas RP 0.5.2 fornece dinheiro e reputação quando instalado; sem ele, os pagamentos usam esmeraldas.
+Abre **Quests Diárias** em qualquer mural. São duas fáceis, duas médias e uma difícil, com renovação às 00:00 UTC e limite inicial de 300 € brutos. O progresso começa depois de aceitar. [Regras, configuração, datapacks, administração, animações e limitações](DAILY_QUESTS.md). Para o imposto destas quests, atualiza também o **Crown Ledger para 0.2.6+**.
+
+**A tesouraria está disponível no mod separado [Crown Ledger](../crown-ledger/README.md).** As suas regras ficam ativas quando esse mod está instalado. Sem integração, os contratos particulares continuam disponíveis com **0% de imposto e reputação mínima 0**. O Chronicles RP 0.5.4 fornece dinheiro e reputação. Os contratos mantêm o seu fallback em esmeraldas; nas quests diárias esse modo é uma opção administrativa, desligada por defeito.
 
 Com o **[Realm Notifications](../realm-notifications/README.md) 0.1.0+** no servidor e no cliente, os avisos aparecem no HUD medieval. Sem o canal opcional, continuam a ser apresentados no chat. A integração apenas apresenta acontecimentos confirmados; não modifica saldos, regras ou permissões.
 
 ## Atualizar e abrir
 
 1. Guardar uma cópia do mundo antes de atualizar. Fechar o jogo e o servidor e substituir o JAR antigo, mantendo uma única versão do mod.
-2. Atualizar cliente e servidor juntos para a 0.3.2: o protocolo de rede mantém-se em **2**.
+2. Atualizar cliente e servidor juntos para a 0.4.0: o protocolo de rede passa a **3**.
 3. Colocar um mural e interagir com ele. A abertura remota por `/contracts` foi retirada. O jogador precisa de permanecer na mesma dimensão e a oito blocos da estrutura intacta; o menu verifica a sessão a cada cinco segundos e as ações são verificadas no servidor. Ao fim de cinco minutos, voltar a interagir com o mural.
 
 Os três murais aparecem na aba **Contracts & Bounties** e na pesquisa. Operadores podem obter o pequeno com `/contracts board` ou os três com `/contracts boards`. Estes comandos entregam itens e não abrem o menu.
@@ -50,7 +52,7 @@ Contratos particulares e trabalhos públicos concluídos pelo próprio emissor n
 
 Quando o perfil ou a integração estiverem indisponíveis, o progresso fica pendente no servidor. É tentado novamente na abertura e atualização do mural; uma falha de progresso não retira um pagamento já concluído. A atualização do perfil preserva identidade, dinheiro, profissão e medalhas.
 
-Esta versão prepara ganhos de reputação. Aceitação, reservas de missões, prazos e penalizações por abandono pertencem a uma evolução posterior.
+As quests diárias têm aceitação e expiração próprias e partilham o limite de reputação dos contratos públicos. Os contratos particulares mantêm as regras de entrega existentes.
 
 ## Contratos públicos e conta do reino
 

@@ -1,0 +1,14 @@
+{
+  "id": "contracts:farming_pumpkin_medium",
+  "title": "daily.contracts.quest.farming_pumpkin_medium",
+  "category": "FARMING",
+  "difficulty": "MEDIUM",
+  "target": "minecraft:pumpkin",
+  "quantity": 32,
+  "reward": -1,
+  "weight": 10,
+  "mods": [],
+  "dimensions": [],
+  "biomes": [],
+  "enabled": true
+}

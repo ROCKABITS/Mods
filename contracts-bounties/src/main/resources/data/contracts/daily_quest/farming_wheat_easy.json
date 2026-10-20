@@ -1,0 +1,14 @@
+{
+  "id": "contracts:farming_wheat_easy",
+  "title": "daily.contracts.quest.farming_wheat_easy",
+  "category": "FARMING",
+  "difficulty": "EASY",
+  "target": "minecraft:wheat",
+  "quantity": 32,
+  "reward": -1,
+  "weight": 10,
+  "mods": [],
+  "dimensions": [],
+  "biomes": [],
+  "enabled": true
+}

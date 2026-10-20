@@ -1,0 +1,14 @@
+{
+  "id": "contracts:farming_carrots_medium",
+  "title": "daily.contracts.quest.farming_carrots_medium",
+  "category": "FARMING",
+  "difficulty": "MEDIUM",
+  "target": "minecraft:carrots",
+  "quantity": 48,
+  "reward": -1,
+  "weight": 10,
+  "mods": [],
+  "dimensions": [],
+  "biomes": [],
+  "enabled": true
+}
