@@ -1,0 +1,63 @@
+{
+  "success": true,
+  "message": "Native merchant UI, real C2S/S2C, public tax, inventory, physical emeralds and integrated-host persistence passed.",
+  "step": 24,
+  "screenshots": [
+    "realm-villager-market.png",
+    "realm-villager-base-price.png",
+    "realm-villager-tax-policy.png",
+    "realm-villager-tax-breakdown.png",
+    "realm-villager-purchase-receipt.png",
+    "realm-villager-emerald-sale.png",
+    "realm-villager-sale-receipt.png",
+    "realm-villager-extra-material.png",
+    "realm-villager-hero-discount.png",
+    "realm-villager-librarian.png",
+    "realm-villager-crown-history.png"
+  ],
+  "checks": [
+    "Native visible trading controls fit 320x240.",
+    "Native visible trading controls fit 320x240.",
+    "Actual native UI confirmed a 100 euro base plus 10 euro public tax; the real Chronicles wallet paid 110 euros and Crown received 10 euros.",
+    "Material sales preserved physical emeralds, digital balance, and complete native host restart files. An extra book was consumed, Vanilla hero discount and native librarian offers rendered.",
+    "The native Crown Chest displayed the actual purchase-tax payments and the dated approval, including author and rate. Any independent Realm Rewards advancement income is separate from the receipted 110 euro debit."
+  ],
+  "actual_minecraft_client": true,
+  "actual_integrated_server": true,
+  "real_c2s_requests": [
+    {
+      "rate": 1000,
+      "nonce": "868fc8dd-06b4-4c51-9736-d1faac504d6e",
+      "quote": "5df67ca73a8211c5d320c0c5c6492bbc13b6b245d965991865e63960ca02b20f",
+      "operation": "policy"
+    },
+    {
+      "offer": 0,
+      "nonce": "1a5b4c58-c6a0-4696-acd5-e5c5e43a55d4",
+      "quote": "b0a60f718fdc5cd2096a568784cf0beb4fa1a866a0ec3d83616cb5229937084d",
+      "operation": "trade"
+    },
+    {
+      "offer": 1,
+      "nonce": "76c8d806-c4f1-40bc-9de8-2286264ca7a9",
+      "quote": "26ae2b7c0a7e9ec372064621999b856968e4bb96a8c40abb292f4396e1bab164",
+      "operation": "trade"
+    },
+    {
+      "operation": "refresh"
+    },
+    {
+      "offer": 2,
+      "nonce": "a1eb5e0e-1260-4193-9b69-f0c469206f03",
+      "quote": "22c18c04489d8153d130e542bdd76fd2a2a735f09cdb923b4f9c07c9c0910c4e",
+      "operation": "trade"
+    }
+  ],
+  "real_chronicles_wallet": true,
+  "lan_host_dual_save": true,
+  "real_crown_tax": true,
+  "external_reward_after_first_purchase": 200,
+  "authenticated_two_clients": false,
+  "synthetic_financial_snapshots": false,
+  "demonstration_money_and_offers": true
+}

@@ -1,0 +1,48 @@
+{
+  "unit_tests": 9,
+  "standalone_native_tests": 26,
+  "integrated_native_tests": 26,
+  "actual_client_validation": true,
+  "version": "0.1.0",
+  "source_commit": "ae4923c97a26bd253a5168d653a89aeeb7ae01c2",
+  "tested_run": "https://github.com/ROCKABITS/Mods/actions/runs/39401374465",
+  "jar_sha256": "c1124018341b401dc71841c5bc830085d011944cba2e507d1426b1cc15669633",
+  "zip_sha256": "4bda1fcf5b9ce35fa25c3ff6e553f37ac6d4c382e8e2e1242d92b1cb5f3144e9",
+  "project_versions": {
+    "realm-villager-economy": "0.1.0",
+    "crown-ledger": "0.2.4"
+  },
+  "companions": {
+    "realm-casino-0.3.0.jar": "99c6c457d26be354f6cddddc4c865fe444f765b8d359004de12921aa0fad9117",
+    "laws-justice-0.4.0.jar": "78c32b0c3acc8930ffd508c9bb44cc98b794a4b87900438b19ab812c21d36f7b",
+    "cronicasrp-0.5.4.jar": "197c2fac53f97eb59159c9a0c26b3065362bdc18c8de1a1c0e61ece4360ba1f5",
+    "contracts-bounties-0.3.2.jar": "2ecf125a188f042f8d6c5011af5e1ff2cc5974925835bcd2cc0180f75d07ff15",
+    "realmcouncil-0.2.2.jar": "0a77af87a5c4e36f55ad12578662834886a7986864896a908a3dc4217e2c19cb",
+    "realm-markets-0.2.1.jar": "bfb1e73186015ab94a86c841abba1df02bf1b5851a65771e622234624b806bb1",
+    "realm-rewards-0.1.2.jar": "ab8efe3bd9a7b24a4f725bf6dfe1f07dec0b88ecfaac91533b57c45b11cb7bcb",
+    "realm-notifications-0.1.0.jar": "5aa70ac5a7696ce626ffa40e2e530038e90c06819dbeea6f43be70d42310822a",
+    "realm-titles-0.1.0.jar": "65d854ffd92805f6e8cb0891454f80ba5a6f33394cc0375cf23f64098af2bd16",
+    "realm-identity-0.1.1.jar": "4096147ac74847d31ee733291ad85d8d154ff7340e8d6f0874dd7cb7364823b0",
+    "crown-ledger-0.2.4.jar": "b2a35c7d39615b0ee943b96a29055406cbea5a059b82e0b49b2a0787392e67ec"
+  },
+  "runtime_dependency_checksums": {
+    "origins-neoforge-1375372-8758523.jar": "93383233a047a9838af067b64452964183cc4fe9f2d9c269ffb253141136caf6",
+    "jupiter-1072905-7738312.jar": "95af332af250f97fe2d9d288fe6b2057c266673a388348bf33756b0b693ace15",
+    "origins-classes-neoforge-1536425-8758587.jar": "14fcc794ae3fc66f752961f7df480356bb5b7cb01d78a2670e9f1e9d18bafb67"
+  },
+  "authenticated_two_clients": false,
+  "screenshots": {
+    "realm-villager-market.png": "5e008f13bcbbf05c3329f732ebc8e0ca525d4bb5d58deed97212df150807f5a8",
+    "realm-villager-base-price.png": "898ab2830144daa7b30d7d7e8a4369b9d5cdfab6f900b287fa4bafb1410cb031",
+    "realm-villager-tax-policy.png": "ebfead4657bfd5d6efec6866124901f654ee23651603687f62598ea2c3a30571",
+    "realm-villager-tax-breakdown.png": "e5003308c8b8d3503fc8c938f04471ce716659b0f5dd9dfc68bf8df3356b58e2",
+    "realm-villager-purchase-receipt.png": "d946e7cf03f8a5256f3738710b76d6402966f2699cf0225f299aa729648f4d43",
+    "realm-villager-emerald-sale.png": "3f85b2473039f961a06bcc151690278749a58016007923f09b38ec8058869a79",
+    "realm-villager-sale-receipt.png": "fb7885963281fab28c963552983c6e426bcd0049ae498df27a2838f18359a512",
+    "realm-villager-extra-material.png": "d66b915112fec7b2efb669409a19281c7c7629b617170790c93089fc60feb2d9",
+    "realm-villager-hero-discount.png": "93f492fa95f8b412864d258da05f45046d34f82b3c7b8962ad41320c2afe993d",
+    "realm-villager-librarian.png": "213681aacda359496da740de88982a766363571b307f1a1c306388fe9c6110bd",
+    "realm-villager-crown-history.png": "e8af7db857a0fbf4594921ca74b63ab8991116d719659fd47432b9296ef72c90"
+  },
+  "scope": "Wallet-funded Villager purchases, base-price sink, public purchase tax, physical emerald sales, durable inventory and merchant receipts"
+}
