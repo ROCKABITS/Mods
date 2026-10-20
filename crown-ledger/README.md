@@ -1,3 +1,5 @@
+> **0.2.7:** acrescenta a receção idempotente da taxa de casamento do Realm Marriage. O dinheiro já foi reservado pelos noivos; entra apenas uma vez no tesouro e aparece no histórico como taxa de casamento. Mantém o formato de dados 6 e as integrações anteriores.
+
 # Crown Ledger — Tesouro da Coroa
 
 A versão **0.2.6** recebe o imposto das **quests diárias do Contracts & Bounties 0.4.0**, com recibos idempotentes e categoria fiscal no histórico. Mantém as integrações de serviços, Villagers, Casino, justiça, mercados, contratos e salários. O formato 6 preserva as contas e recibos existentes. A política das quests é gerida no mural, por um Presidente empossado ou administrador, dentro dos limites configurados.

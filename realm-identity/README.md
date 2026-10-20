@@ -1,3 +1,5 @@
+> **0.1.2:** integração opcional com Realm Marriage: estado civil e cônjuge consultados no servidor, respeitando a privacidade do titular. Usa uma certidão com Shift para validar os nomes, celebrante, testemunhas, data e regime. Documentos de identidade existentes continuam válidos, sem segunda via; protocolo 2 preservado.
+
 # Realm Identity — Documento de Personagem
 
 Documentos físicos de roleplay para **Minecraft 1.21.1**, **NeoForge 21.1.256+** e **Java 21**. Instala `realm-identity-0.1.1.jar` no servidor e em todos os clientes. Identificador: `realmidentity`.

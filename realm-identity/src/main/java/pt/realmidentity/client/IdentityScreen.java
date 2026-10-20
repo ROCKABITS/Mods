@@ -172,6 +172,7 @@ public final class IdentityScreen extends Screen {
     }
 
     private int renderBody(GuiGraphics g, int cy) {
+        if(state.has("marriageDocument"))return renderMarriageCertificate(g,cy);
         int left = x + 21, inner = w - 42;
         boolean invalid = "INVALID".equals(str(state, "status", ""));
         g.drawString(font, tr(station() ? "preview" : "issued_snapshot"), left, cy, MUTED, false);
@@ -214,6 +215,7 @@ public final class IdentityScreen extends Screen {
             cy += 17;
         }
         if (!invalid) cy = renderTitles(g, left, cy + 4, inner);
+        if(!invalid && state.has("marriage")){JsonObject marriage=object(state,"marriage");cy=paragraph(g,text("marriage_status",text("marriage_"+str(marriage,"status","UNAVAILABLE"))),left,cy+5,inner,GREEN)+5;if(!str(marriage,"name","").isBlank())cy=paragraph(g,text("marriage_spouse",str(marriage,"name","")),left,cy,inner,INK)+5;}
         if (!station()) {
             if (!invalid) {
                 String serial = str(state, "serial", "—");
@@ -233,6 +235,18 @@ public final class IdentityScreen extends Screen {
             cy = paragraph(g, text("snapshot_hint"), left, cy + 7, inner, MUTED);
         } else cy = paragraph(g, text("station_hint"), left, cy + 2, inner, MUTED);
         return cy + 8;
+    }
+
+    private int renderMarriageCertificate(GuiGraphics g,int cy){
+        JsonObject doc=object(state,"marriageDocument");int left=x+19,inner=w-38;
+        cy=paragraph(g,text("marriage_certificate"),left,cy,inner,GREEN)+12;
+        cy=paragraph(g,str(doc,"a","")+" & "+str(doc,"b",""),left,cy,inner,INK)+10;
+        cy=paragraph(g,text("marriage_priest",str(doc,"priest","")),left,cy,inner,INK)+8;
+        cy=paragraph(g,text("marriage_regime",text("marriage_mode_"+str(doc,"mode","SEPARATE"))),left,cy,inner,INK)+8;
+        cy=paragraph(g,text("marriage_date",DATE.format(Instant.ofEpochMilli(number(doc,"marriedAt")))),left,cy,inner,INK)+8;
+        if(doc.has("witnesses"))for(var row:doc.getAsJsonArray("witnesses"))cy=paragraph(g,text("marriage_witness",row.getAsString()),left,cy,inner,INK)+5;
+        cy=paragraph(g,text(str(doc,"phase","").equals("MARRIED")?"marriage_current":"marriage_historical"),left,cy+7,inner,GREEN)+10;
+        cy=paragraph(g,text("marriage_verified",str(doc,"id","")),left,cy,inner,MUTED)+12;return cy;
     }
 
     /** Only public honours from this consultation; never part of the issued profile. */

@@ -180,6 +180,21 @@ public final class IdentityService {
         return stack;
     }
 
+    /** Realm Marriage verifies the opaque registry token, not names or lore copied into an item. */
+    public static void inspectMarriageHeld(ServerPlayer player, InteractionHand hand) {
+        requirePlayer(player);
+        if(!net.neoforged.fml.ModList.get().isLoaded("realmmarriage") || !net.minecraft.core.registries.BuiltInRegistries.ITEM.getKey(player.getItemInHand(hand).getItem()).toString().equals("realmmarriage:marriage_certificate"))throw new IllegalStateException("gui.realmidentity.document_invalid");
+        try {
+            Class<?> api=Class.forName("pt.realmmarriage.api.MarriageApi");
+            if(api.getField("VERSION").getInt(null)!=1)throw new IllegalStateException();
+            String raw=(String)api.getMethod("documentJson",ServerPlayer.class,ItemStack.class).invoke(null,player,player.getItemInHand(hand));
+            if(raw==null||raw.length()>8192)throw new IllegalStateException();
+            var doc=JsonParser.parseString(raw).getAsJsonObject();
+            if(!doc.has("authentic")||!doc.get("authentic").getAsBoolean())throw new IllegalStateException();
+            Map<String,Object> view=emptyView("ITEM");putHolder(view,player);view.put("authentic",true);view.put("status","CURRENT");view.put("marriageDocument",doc);STATIONS.remove(player.getUUID());IdentityNetwork.send(player,JSON.toJson(view));
+        }catch(ReflectiveOperationException|RuntimeException|LinkageError e){throw new IllegalStateException("gui.realmidentity.document_invalid",e);}
+    }
+
     public static void inspectHeld(ServerPlayer player, InteractionHand hand) {
         try {
             requirePlayer(player);
@@ -200,7 +215,7 @@ public final class IdentityService {
         Map<String, Object> view = emptyView("ITEM");
         putHolder(view, holder);
         Optional<Document> document = authenticated(holder.getServer(), physical);
-        if (document.isPresent()) putDocument(view, holder.getServer(), document.get(), holder);
+        if (document.isPresent()) { putDocument(view, holder.getServer(), document.get(), holder);pt.realmidentity.compat.MarriageBridge.addTo(view,holder.getServer(),document.get().owner(),holder.getUUID()); }
         return view;
     }
 
@@ -256,6 +271,7 @@ public final class IdentityService {
             Map<String, Object> view = emptyView("PRESENTED");
             putHolder(view, presenter);
             putDocument(view, viewer.getServer(), document, presenter);
+            pt.realmidentity.compat.MarriageBridge.addTo(view,viewer.getServer(),document.owner(),viewer.getUUID());
             view.put("presenterName", presenter.getGameProfile().getName());
             view.put("presenterUuid", presenter.getUUID().toString());
             IdentityNetwork.send(viewer, JSON.toJson(view));
@@ -322,6 +338,7 @@ public final class IdentityService {
             view.put("canIssue", current.isEmpty() && paper > 0 && ink > 0);
             view.put("canReissue", current.isPresent() && paper > 0 && ink > 0);
             TitlesBridge.addTo(view, player.getServer(), player.getUUID());
+            pt.realmidentity.compat.MarriageBridge.addTo(view,player.getServer(),player.getUUID(),player.getUUID());
         } catch (RuntimeException | LinkageError failure) {
             view.put("status", "PROFILE_UNAVAILABLE");
             if (message.isBlank()) message = error(failure);

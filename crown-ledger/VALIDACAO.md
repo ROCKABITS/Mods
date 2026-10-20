@@ -29,3 +29,7 @@ A publicação conjunta com Realm Economy exige 59 testes JUnit e 29 testes nati
 O cliente abre o cofre real e consulta os impostos e aprovações produzidos pelos serviços. Os testes de administração delegada validam o contrato do Economy; não existe ainda um Realm Admin no repositório. Não é uma prova com dois clientes LAN autenticados.
 
 [Validação da 0.2.4](VALIDACAO-0.2.4.md).
+
+## 0.2.7 — Realm Marriage
+
+A suite local preservou os **59 testes JUnit e 29 GameTests** existentes. O novo CrownMarriageApi também foi exercitado pelos 23 GameTests integrados do Realm Marriage: taxa positiva, recibo repetido, falha real de gravação da tesouraria e recuperação sem novo débito das carteiras. A sessão de quatro clientes TCP LAN verificou a taxa pública de 5000 cêntimos e a conservação após divórcio e reabertura do mundo. A publicação conjunta exige repetir estas verificações no CI; o `.build.json` do artefacto conserva a origem e os resultados. [Âmbito e limites](../realm-marriage/VALIDACAO.md).

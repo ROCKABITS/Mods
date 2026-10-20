@@ -1,3 +1,10 @@
+# Realm Identity 0.1.2 — Civil Status
+
+- Added optional live Realm Marriage civil status and spouse display, respecting the actual viewer and the owner's privacy setting.
+- Added server-verified marriage certificate inspection with Shift-use, including recorded partners, celebrant, witnesses, date, financial mode and historical status.
+- Kept marriage data out of permanent identity snapshots; existing identity documents remain valid without reissue.
+- Preserved document authentication, consent, proximity and owner checks, and protocol 2.
+
 # Realm Identity 0.1.1 — Beta
 
 - Added optional read-only Realm Titles API v1 integration. Authenticated document inspections and physical desk previews read current public honours from the server, including offline owners.

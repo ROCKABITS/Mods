@@ -1,0 +1,38 @@
+{
+  "countdown": {
+    "sounds": [
+      {
+        "name": "realmmarriage:ceremony/countdown",
+        "stream": false
+      }
+    ],
+    "subtitle": "marriage.sound.countdown"
+  },
+  "opening": {
+    "sounds": [
+      {
+        "name": "realmmarriage:ceremony/opening",
+        "stream": false
+      }
+    ],
+    "subtitle": "marriage.sound.opening"
+  },
+  "objection": {
+    "sounds": [
+      {
+        "name": "realmmarriage:ceremony/objection",
+        "stream": false
+      }
+    ],
+    "subtitle": "marriage.sound.objection"
+  },
+  "married": {
+    "sounds": [
+      {
+        "name": "realmmarriage:ceremony/married",
+        "stream": false
+      }
+    ],
+    "subtitle": "marriage.sound.married"
+  }
+}

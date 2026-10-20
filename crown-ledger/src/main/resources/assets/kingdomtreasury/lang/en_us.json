@@ -157,5 +157,6 @@
   "gui.kingdomtreasury.service.beacon": "Beacon activation",
   "gui.kingdomtreasury.economy_change": "%s: %s € → %s €; %s%% → %s%%",
   "gui.kingdomtreasury.period_change": "Beacon: %s → %s s",
-  "gui.kingdomtreasury.daily_quest_tax": "Daily quest reward tax"
+  "gui.kingdomtreasury.daily_quest_tax": "Daily quest reward tax",
+  "gui.kingdomtreasury.marriage_fee": "Marriage ceremony fee"
 }

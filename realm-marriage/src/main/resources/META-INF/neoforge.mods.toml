@@ -1,0 +1,40 @@
+modLoader="javafml"
+loaderVersion="[4,)"
+license="All Rights Reserved"
+[[mods]]
+modId="realmmarriage"
+version="0.1.0"
+displayName="Realm Marriage"
+authors="ROCKABITS"
+logoFile="assets/realmmarriage/icon.png"
+description='''Consensual medieval weddings, player-chosen celebrants, live objections, authenticated documents and recoverable matrimonial accounts.'''
+[[dependencies.realmmarriage]]
+modId="neoforge"
+type="required"
+versionRange="[21.1.256,)"
+ordering="NONE"
+side="BOTH"
+[[dependencies.realmmarriage]]
+modId="minecraft"
+type="required"
+versionRange="[1.21.1]"
+ordering="NONE"
+side="BOTH"
+[[dependencies.realmmarriage]]
+modId="realmcouncil"
+type="optional"
+versionRange="[0.2.2,)"
+ordering="AFTER"
+side="BOTH"
+[[dependencies.realmmarriage]]
+modId="cronicasrp"
+type="optional"
+versionRange="[0.5.2,0.6)"
+ordering="AFTER"
+side="BOTH"
+[[dependencies.realmmarriage]]
+modId="realmnotifications"
+type="optional"
+versionRange="[0.1.0,)"
+ordering="AFTER"
+side="BOTH"

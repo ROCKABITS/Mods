@@ -45,3 +45,7 @@ O registo e o inventário usam a persistência normal do mundo. A verificação 
 ## Ambiente cloud
 
 A obtenção local de NeoForm 2.0.31 continua a devolver HTTP 403 no Maven NeoForge, antes da compilação Minecraft. A compilação Java completa e os testes nativos/visuais acima correram no GitHub Actions. Não foi desativada a verificação TLS nem alterado qualquer checksum.
+
+## 0.1.2 — Realm Marriage
+
+A suite local preservou os **35 testes JUnit e 23 GameTests** existentes. A integração Marriage testa a ponte real de estado civil com dois viewers: o cônjuge privado fica oculto para terceiros e visível para o titular. A sessão com quatro clientes TCP LAN validou uma certidão real na IdentityScreen, com celebrante, testemunha, regime, data e referência autenticada. Documentos de identidade existentes não mudam. A publicação conjunta exige os gates do Realm Marriage, com proveniência e resultados no `.build.json`. [Âmbito e limites](../realm-marriage/VALIDACAO.md).

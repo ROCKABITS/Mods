@@ -1,3 +1,10 @@
+# Crown Ledger 0.2.7 — Wedding Fees
+
+- Added CrownMarriageApi v1 for wedding fees already reserved by Realm Marriage.
+- Reused payload-bound, durable treasury receipts to recover interrupted credits without duplicate income.
+- Added readable English and Portuguese marriage-fee history labels.
+- Preserved treasury format 6 and existing balances, taxes, salaries and integrations.
+
 # Crown Ledger 0.2.6 — Daily Quest Tax
 
 - Added CrownDailyApi v1 for the already-reserved public share of Contracts & Bounties 0.4.0 daily quest rewards.
