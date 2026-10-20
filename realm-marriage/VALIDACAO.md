@@ -2,6 +2,15 @@
 
 Minecraft **1.21.1**, NeoForge **21.1.256**, Java **21**. As automações ficam em `src/test`, `src/gametest` e `src/visualtest` e são excluídas do JAR de produção. A publicação conjunta executa `.github/scripts/marriage_release.py`; uma falha em qualquer verificação bloqueia a publicação dos três JARs.
 
+
+## Resultado publicado — 20/10/2026
+
+**Aprovado:** [GitHub Actions 39488185732](https://github.com/ROCKABITS/Mods/actions/runs/39488185732), origem `26ac0103890ab6db62f314ff3ea4ef06cd032ec0`, artefactos publicados em `31043148f630e74fa88f44adb93ae933b014e9d1`.
+
+Passaram os **139 testes JUnit**, as suites nativas da tabela e a sessão com **quatro processos Minecraft ligados por TCP LAN, usando identidades offline**. As carteiras e o Crown conservaram os valores esperados depois do divórcio e da reabertura do mundo. Os três JARs e os ZIPs publicados foram descarregados novamente e verificados por SHA-256, integridade, versões, origem e ausência de fixtures. As dez capturas públicas também correspondem aos hashes do relatório.
+
+O [ZIP com os três mods](../mod-pronto/realm-marriage-0.1.0-suite.zip) tem 481760 bytes e SHA-256 `9f592acf0d0077b4dea9f6cf8e90e377734e445354da11670f03812402c5c9a5`. [Galeria e ícone](../media/realm-marriage/0.1.0/README.md).
+
 ## Suites e critérios de publicação
 
 | Projeto | JUnit | GameTests independentes | GameTests com integrações |
