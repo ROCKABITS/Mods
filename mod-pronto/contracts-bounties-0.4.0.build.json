@@ -1,0 +1,57 @@
+{
+  "unit_tests": 82,
+  "standalone_existing_native_tests": 38,
+  "standalone_daily_native_tests": 29,
+  "integrated_daily_native_tests": 29,
+  "version": "0.4.0",
+  "source_commit": "e67578e5d38f8e450023f3f91b839b7de916aaf0",
+  "tested_run": "https://github.com/ROCKABITS/Mods/actions/runs/39458831632",
+  "jar_sha256": "d1bd4726ac210e6d5904829bf9185efef76920aa8070ffb292d6e479689ee07e",
+  "zip_sha256": "c2d3d20bb7cbb8e0ed44bfabd218d4749936650ac2c9f35f77d3d7ff6eb214cc",
+  "project_versions": {
+    "contracts-bounties": "0.4.0",
+    "crown-ledger": "0.2.6"
+  },
+  "companions": {
+    "realm-casino-0.3.0.jar": "99c6c457d26be354f6cddddc4c865fe444f765b8d359004de12921aa0fad9117",
+    "laws-justice-0.4.0.jar": "78c32b0c3acc8930ffd508c9bb44cc98b794a4b87900438b19ab812c21d36f7b",
+    "cronicasrp-0.5.4.jar": "197c2fac53f97eb59159c9a0c26b3065362bdc18c8de1a1c0e61ece4360ba1f5",
+    "realmcouncil-0.2.2.jar": "0a77af87a5c4e36f55ad12578662834886a7986864896a908a3dc4217e2c19cb",
+    "realm-markets-0.2.1.jar": "bfb1e73186015ab94a86c841abba1df02bf1b5851a65771e622234624b806bb1",
+    "realm-rewards-0.1.2.jar": "ab8efe3bd9a7b24a4f725bf6dfe1f07dec0b88ecfaac91533b57c45b11cb7bcb",
+    "realm-titles-0.1.0.jar": "65d854ffd92805f6e8cb0891454f80ba5a6f33394cc0375cf23f64098af2bd16",
+    "realm-identity-0.1.1.jar": "4096147ac74847d31ee733291ad85d8d154ff7340e8d6f0874dd7cb7364823b0",
+    "realm-notifications-0.1.1.jar": "2fb85c87eb296e49f3f68c0d7defd709ceca8913fa5a3f6ef9442d9b9548c99e",
+    "realm-economy-0.4.0.jar": "eb7b25c11b64e842297d5ed174c067749989b6d5440fbc858834bd0922f55ddf",
+    "crown-ledger-0.2.6.jar": "966f67d556a9911127fd8aa271e20debe1166370c5d0ea33aabd66bbc1106daf"
+  },
+  "runtime_dependency_checksums": {
+    "origins-neoforge-1375372-8758523.jar": "93383233a047a9838af067b64452964183cc4fe9f2d9c269ffb253141136caf6",
+    "jupiter-1072905-7738312.jar": "95af332af250f97fe2d9d288fe6b2057c266673a388348bf33756b0b693ace15",
+    "origins-classes-neoforge-1536425-8758587.jar": "14fcc794ae3fc66f752961f7df480356bb5b7cb01d78a2670e9f1e9d18bafb67"
+  },
+  "authenticated_two_clients": false,
+  "actual_realm_admin": false,
+  "actual_lan_publication": true,
+  "actual_world_close_and_reopen": true,
+  "lan_owner_dual_save": true,
+  "scope": "Five daily RNG quests, survival validation, wallet and treasury receipt recovery, shared reputation, governance, physical menus and queued real-client celebrations.",
+  "screenshots": {
+    "daily-three-boards.png": "10f34cc74516e11c0e69402b4e5c0a7de72903602436ff9574809d7e6a6f2637",
+    "daily-available.png": "bc37936885ed03afcded6d1a2d861cee95d750953e19cb219af4b5c6f6e52e77",
+    "daily-government.png": "bc37936885ed03afcded6d1a2d861cee95d750953e19cb219af4b5c6f6e52e77",
+    "daily-administration.png": "b32a838c67b73d5ca26f7ccbab9e6d4bb00c60f603d020c562ac63452f5154c1",
+    "daily-template-editor.png": "f0f26ca3e1eaa62af73e47a36f9210dd5ccb229ced39b24fd0546a32f226d3dc",
+    "daily-accepted.png": "9e9c02685d7e72d8421e03cf6069e7fb018ece5ffb8db36b30c13d312762fca8",
+    "daily-cinematic-easy.png": "5eaad51bca6ef08bea76857b6289b51fba5ebce587937cb5b4634fd0be857481",
+    "daily-cinematic-medium.png": "df7ab327bce00e30e362e4eb0bb216224f5573ac5c186e904f6ce9f487868f9b",
+    "daily-cinematic-simplified.png": "041b189f4e9b8e15bac3a39706cd37a33859796f5112456e75a438847d46b70c",
+    "daily-four-complete.png": "6627631257f3b7f0093569c96be88098c5283f15b632af8ae40beca31e589f49",
+    "daily-five-complete.png": "60d4f8d35b50e7167625ae7be60f16b8026f0731c23c1084b1d4dd17d6bf8dce",
+    "daily-cinematic-hard-counting.png": "405b0b9107c12a7503623bfa77301c7f2a5329bc89924d9bc35b3a507f2a097d",
+    "daily-cinematic-hard.png": "f3d52f9a18b5060412f927d4933d7654d6f6d584247797d1fc1b761f98bdcfde",
+    "daily-cinematic-all.png": "d3e4ce1355a3414a9a01b7b5078d8414d934263916fcaf8686113795fc79bab7",
+    "daily-visual-preferences.png": "a8ee9a4c0441cc924a64f9a97350295ef2588a797f11957fbab89f99387e0d2f",
+    "daily-after-world-reopen.png": "2abf2f0e6d19f42253dea9789ff1f55128dfd54856071060aabc9f63110a9dbc"
+  }
+}
