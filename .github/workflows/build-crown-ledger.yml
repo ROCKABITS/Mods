@@ -18,7 +18,7 @@ concurrency:
 jobs:
   build:
     # Suite releases are validated and published by their owning workflow.
-    if: ${{ github.event_name != 'push' || (!contains(github.event.head_commit.message, '[notifications-suite]') && !contains(github.event.head_commit.message, '[justice-finance-suite]') && !contains(github.event.head_commit.message, '[realm-casino-release]') && !contains(github.event.head_commit.message, '[villager-economy-release]')) }}
+    if: ${{ github.event_name != 'push' || (!contains(github.event.head_commit.message, '[notifications-suite]') && !contains(github.event.head_commit.message, '[justice-finance-suite]') && !contains(github.event.head_commit.message, '[realm-casino-release]') && !contains(github.event.head_commit.message, '[villager-economy-release]') && !contains(github.event.head_commit.message, '[realm-economy-release]')) }}
     runs-on: ubuntu-latest
     timeout-minutes: 50
     defaults:

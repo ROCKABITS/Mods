@@ -180,3 +180,7 @@ Cartas e encomendas entre jogadores, incluindo pagamentos. Prever destinatários
 ### Realm Villager Economy — 0.1.0
 
 Compras com a carteira Chronicles, conversão inicial de uma esmeralda para 5 €, descontos e ofertas Vanilla preservados. Vendas continuam a dar esmeraldas físicas. Imposto público adicional, inicialmente 0%, com limite administrativo inicial de 25%, aprovado pelo Presidente empossado ou administrador em emergência e entregue ao Crown Ledger 0.2.4. O menu mostra base, imposto e total antes da confirmação. [Guia](realm-villager-economy/README.md).
+
+### Realm Economy — 0.4.0
+
+Evolução do Villager Economy: Mesa da Economia 3D, conversão governada, preços e impostos por atividade, limites administrativos, XP substituído por euros, ferraria, lotes de poções e beacons temporários. Integra Crown Ledger 0.2.5 e Notifications. O futuro Realm Admin pode fornecer permissões pela API; ainda não existe um mod Realm Admin para testar. [Plano original](realm-economy/PLANO-REALM-ECONOMY.md) · [Guia](realm-economy/README.md).

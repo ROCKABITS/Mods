@@ -433,11 +433,16 @@ public final class TreasuryScreen extends Screen {
             frame(g, x + 10, rowY, w - 20, 28, i % 2 == 0 ? LIGHT : 0xFFE0CAA2, 0xFFC0A87E);
             String description = str(entry, "description", str(entry, "kind", ""));
             String label=Component.translatable(description).getString();if("gui.kingdomtreasury.villager_policy_changed".equals(description))label+=" "+str(entry,"details","")+" · "+str(entry,"actorName","");
+            if("gui.kingdomtreasury.economy_policy_changed".equals(description)){label=economicApproval(str(entry,"details",""))+" · "+str(entry,"actorName","");}else if("gui.kingdomtreasury.economy_tax_income".equals(description)){String details=str(entry,"details","");if(details.startsWith("realmeconomy.service-tax:"))label+=" · "+Component.translatable("gui.kingdomtreasury.service."+details.substring("realmeconomy.service-tax:".length()).toLowerCase(java.util.Locale.ROOT)).getString();}
             line(g,label,x+15,rowY+3,w-30,INK);
             line(g, date(number(entry, "at")) + " · " + money(number(entry, "amount"), str(entry, "currency", currency())),
                     x + 15, rowY + 16, w - 30, MUTED);
         }
         renderPage(g, history.size(), count);
+    }
+
+    private static String economicApproval(String text){
+        try{String[] p=text.split(":",2);String[] values=p[1].split(">");if(p[0].equals("BEACON_PERIOD"))return Component.translatable("gui.kingdomtreasury.period_change",values[0],values[1]).getString();String[] old=values[0].split(","),next=values[1].split(",");return Component.translatable("gui.kingdomtreasury.economy_change",Component.translatable("gui.kingdomtreasury.service."+p[0].toLowerCase(java.util.Locale.ROOT)),java.math.BigDecimal.valueOf(Long.parseLong(old[0]),2).toPlainString(),java.math.BigDecimal.valueOf(Long.parseLong(next[0]),2).toPlainString(),java.math.BigDecimal.valueOf(Long.parseLong(old[3]),2).stripTrailingZeros().toPlainString(),java.math.BigDecimal.valueOf(Long.parseLong(next[3]),2).stripTrailingZeros().toPlainString()).getString();}catch(RuntimeException invalid){return Component.translatable("gui.kingdomtreasury.economy_policy_changed").getString();}
     }
 
     private void renderContracts(GuiGraphics g) {

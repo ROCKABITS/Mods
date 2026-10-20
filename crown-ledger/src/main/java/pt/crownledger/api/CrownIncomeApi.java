@@ -68,8 +68,9 @@ public final class CrownIncomeApi {
     }
     private static Treasury candidate(TreasuryData data,Receipt receipt){
         Treasury next=data.treasury.copy();long at=Math.max(0,System.currentTimeMillis());
-        if(IncomeLedger.validPolicy(receipt.memo())&&receipt.amount()==0){String[] pieces=receipt.memo().split(":");next.recordVillagerPolicy(receipt.payer(),Integer.parseInt(pieces[1]),Long.parseLong(pieces[2]));}
-        else {Treasury.Kind kind=receipt.memo().equals("realmcasino.profit-tax")?Treasury.Kind.CASINO_TAX:receipt.memo().equals("realmvillagereconomy.purchase-tax")?Treasury.Kind.VILLAGER_TAX:Treasury.Kind.JUSTICE_INCOME;next.addFunds(receipt.currency(),receipt.amount(),kind,receipt.payer(),receipt.memo(),at);next.settlePending(at);}return next;
+        if(IncomeLedger.validEconomicPolicy(receipt.memo())){String[] p=receipt.memo().split(":");next.recordEconomyPolicy(receipt.payer(),p[1]+":"+p[3]+">"+p[4],Long.parseLong(p[2]));}
+        else if(IncomeLedger.validPolicy(receipt.memo())&&receipt.amount()==0){String[] pieces=receipt.memo().split(":");next.recordVillagerPolicy(receipt.payer(),Integer.parseInt(pieces[1]),Long.parseLong(pieces[2]));}
+        else {Treasury.Kind kind=receipt.memo().startsWith("realmeconomy.service-tax:")?Treasury.Kind.ECONOMY_TAX:receipt.memo().equals("realmcasino.profit-tax")?Treasury.Kind.CASINO_TAX:receipt.memo().equals("realmvillagereconomy.purchase-tax")?Treasury.Kind.VILLAGER_TAX:Treasury.Kind.JUSTICE_INCOME;next.addFunds(receipt.currency(),receipt.amount(),kind,receipt.payer(),receipt.memo(),at);next.settlePending(at);}return next;
     }
     private static void write(Path file,CompoundTag root,AtomicBoolean moved)throws IOException {
         Files.createDirectories(file.getParent());Path temporary=Files.createTempFile(file.getParent(),"crown-income-",".tmp");

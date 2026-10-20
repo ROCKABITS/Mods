@@ -1,0 +1,17 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "pt.realmeconomy.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "mixins": [
+    "PlayerSeedAccess",
+    "AnvilMenuGate",
+    "SmithingMenuGate",
+    "EnchantmentMenuGate",
+    "BrewingGate",
+    "BeaconGate"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

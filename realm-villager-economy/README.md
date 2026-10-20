@@ -1,5 +1,7 @@
 # Realm Villager Economy
 
+Este projeto foi integrado no [Realm Economy 0.4.0](../realm-economy/README.md). A nova instalação substitui o JAR Villager Economy; a versão 0.1.0 permanece arquivada.
+
 **Minecraft 1.21.1 · NeoForge 21.1.256+ · Java 21 · 0.1.0 Beta**
 
 As compras aos aldeões utilizam a carteira digital do **Chronicles RP 0.5.4**. As vendas de materiais continuam a pagar **esmeraldas físicas**. O Presidente empossado pode acrescentar um imposto público, recebido pelo **Crown Ledger 0.2.4+**.

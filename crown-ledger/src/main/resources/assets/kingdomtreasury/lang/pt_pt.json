@@ -144,5 +144,17 @@
   "gui.kingdomtreasury.casino_tax_income": "Imposto dos lucros do casino",
   "gui.kingdomtreasury.casino_tax_rate": "Imposto do lucro do casino: %s%%",
   "gui.kingdomtreasury.villager_tax_income": "Imposto de compras aos aldeões",
-  "gui.kingdomtreasury.villager_policy_changed": "Imposto dos aldeões alterado para"
+  "gui.kingdomtreasury.villager_policy_changed": "Imposto dos aldeões alterado para",
+  "gui.kingdomtreasury.economy_tax_income": "Imposto de serviços económicos",
+  "gui.kingdomtreasury.economy_policy_changed": "Política económica aprovada",
+  "gui.kingdomtreasury.service.villager": "Compras aos aldeões",
+  "gui.kingdomtreasury.service.anvil_repair": "Reparação na bigorna",
+  "gui.kingdomtreasury.service.anvil_combine": "Combinar encantamentos",
+  "gui.kingdomtreasury.service.anvil_rename": "Renomear na bigorna",
+  "gui.kingdomtreasury.service.enchant": "Mesa de encantamentos",
+  "gui.kingdomtreasury.service.smithing": "Mesa de ferraria",
+  "gui.kingdomtreasury.service.brewing": "Produção de poções",
+  "gui.kingdomtreasury.service.beacon": "Ativação de beacons",
+  "gui.kingdomtreasury.economy_change": "%s: %s € → %s €; %s%% → %s%%",
+  "gui.kingdomtreasury.period_change": "Beacon: %s → %s s"
 }

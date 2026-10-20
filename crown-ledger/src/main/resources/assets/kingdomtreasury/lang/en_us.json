@@ -144,5 +144,17 @@
   "gui.kingdomtreasury.casino_tax_income": "Casino profit tax",
   "gui.kingdomtreasury.casino_tax_rate": "Casino profit tax: %s%%",
   "gui.kingdomtreasury.villager_tax_income": "Villager purchase tax",
-  "gui.kingdomtreasury.villager_policy_changed": "Villager purchase tax changed to"
+  "gui.kingdomtreasury.villager_policy_changed": "Villager purchase tax changed to",
+  "gui.kingdomtreasury.economy_tax_income": "Economic service tax",
+  "gui.kingdomtreasury.economy_policy_changed": "Economic policy approved",
+  "gui.kingdomtreasury.service.villager": "Villager purchases",
+  "gui.kingdomtreasury.service.anvil_repair": "Anvil repairs",
+  "gui.kingdomtreasury.service.anvil_combine": "Enchantment combining",
+  "gui.kingdomtreasury.service.anvil_rename": "Anvil renaming",
+  "gui.kingdomtreasury.service.enchant": "Enchanting table",
+  "gui.kingdomtreasury.service.smithing": "Smithing table",
+  "gui.kingdomtreasury.service.brewing": "Potion brewing",
+  "gui.kingdomtreasury.service.beacon": "Beacon activation",
+  "gui.kingdomtreasury.economy_change": "%s: %s € → %s €; %s%% → %s%%",
+  "gui.kingdomtreasury.period_change": "Beacon: %s → %s s"
 }
