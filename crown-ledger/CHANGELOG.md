@@ -1,3 +1,12 @@
+# Crown Ledger 0.2.3 — Beta
+
+- Added an independent governor-configured casino profit tax (0–100%, default 0%) for Realm Casino 0.3.0.
+- Added CrownCasinoApi v1 for funded owner-profit transfers, retaining CrownIncomeApi v1 compatibility for judicial payments.
+- Added idempotent, payload-bound casino receipts, atomic treasury persistence and a distinct public casino-tax history category.
+- Added casino tax to the physical Crown Chest policy controls and public overview in English and Portuguese.
+- Added treasury format 4 with migration from formats 1–3, preserving balances, existing policy, judicial receipts and salaries. Previous worlds start with zero casino tax.
+- Extended governor/succession, migration, native transfer failure/retry and real-client menu validation. Update server and clients together (network protocol 3).
+
 # Crown Ledger 0.2.2 — Beta
 
 - Added the server-only CrownIncomeApi v1 for already-funded judicial payments from Laws & Justice 0.4.0.

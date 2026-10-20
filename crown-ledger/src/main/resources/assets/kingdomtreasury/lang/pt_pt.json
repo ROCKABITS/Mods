@@ -35,7 +35,7 @@
   "gui.kingdomtreasury.participation_page": "Atividade / reputação →",
   "gui.kingdomtreasury.economy_page": "← Impostos / salários",
   "gui.kingdomtreasury.save_policy": "Guardar regras do reino",
-  "gui.kingdomtreasury.policy_hint": "A percentagem dos contratos e o imposto fixo continuam a ser alternativas. O imposto de vendas é independente e aplica-se apenas a novas compras, nunca à recolha de ganhos. Os salários usam o tesouro. Os contratos existentes mantêm os termos.",
+  "gui.kingdomtreasury.policy_hint": "Escolhe percentagem dos contratos ou imposto fixo por ciclo. Impostos de mercado e do casino são independentes. O casino tributa o lucro levantado pelo dono em moedas Chronicles, após devolver o capital depositado. Salários usam fundos existentes. Contratos anteriores mantêm as condições.",
   "gui.kingdomtreasury.invalid_policy": "Verifica as regras: ambos os impostos 0–100%, ciclo 1–720 horas, atividade 1–1440 minutos e reputação 0–100. Os valores não podem ser negativos.",
   "gui.kingdomtreasury.contract_title": "Título do contrato",
   "gui.kingdomtreasury.contract_item": "Identificador do material",
@@ -139,5 +139,8 @@
   "message.kingdomtreasury.fixed_tax_paid": "Pagaste %s de imposto fixo do reino.",
   "message.kingdomtreasury.contract_income": "A tesouraria recebeu %s de impostos ou devoluções de contratos.",
   "message.kingdomtreasury.market_income": "A tesouraria recebeu %s de imposto sobre vendas nas bancas.",
-  "gui.kingdomtreasury.justice_income": "Pagamento judicial recebido"
+  "gui.kingdomtreasury.justice_income": "Pagamento judicial recebido",
+  "gui.kingdomtreasury.casino_tax_percent": "Imposto dos lucros do casino (%)",
+  "gui.kingdomtreasury.casino_tax_income": "Imposto dos lucros do casino",
+  "gui.kingdomtreasury.casino_tax_rate": "Imposto do lucro do casino: %s%%"
 }

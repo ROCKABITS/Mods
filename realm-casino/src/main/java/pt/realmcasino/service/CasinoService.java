@@ -28,6 +28,10 @@ import net.minecraft.world.phys.Vec3;
 import pt.realmcasino.block.CasinoMachineBlock;
 import pt.realmcasino.blockentity.CasinoBlockEntity;
 import pt.realmcasino.compat.ChroniclesBridge;
+import pt.realmcasino.compat.CrownBridge;
+import pt.realmcasino.domain.FiveReelSlots;
+import pt.realmcasino.domain.HorseRace;
+import pt.realmcasino.domain.TableGame;
 import pt.realmcasino.compat.NotificationsBridge;
 import pt.realmcasino.data.CasinoData;
 import pt.realmcasino.data.GameState;
@@ -50,7 +54,7 @@ public final class CasinoService {
     private static final Map<MinecraftServer,Long> TICKS=new java.util.WeakHashMap<>();
     private static final String PREFIX="error.realmcasino.";
     private record Session(MinecraftServer server,ResourceKey<Level> dimension,BlockPos master,UUID machine,UUID nonce,long expires,long tick) {
-        Session refreshNonce(){return new Session(server,dimension,master,machine,UUID.randomUUID(),expires,tick);}
+        Session refreshNonce(){return new Session(server,dimension,master,machine,UUID.randomUUID(),now()+300000,ticks(server)+6000);}
     }
     private CasinoService() {}
 
@@ -94,7 +98,7 @@ public final class CasinoService {
         CasinoData data=CasinoData.get(player.getServer());
         if(data.ledger().at(dimension(player.level()),master.asLong()).isPresent())return;
         CasinoConfig config=CasinoConfig.get();Kind kind=kind(game);
-        long minimum=kind==Kind.BLACKJACK?Math.addExact(config.minBet(),config.minBet()%2):config.minBet();
+        long minimum=kind==Kind.BLACKJACK?Math.addExact(config.minBet(),config.minBet()%2):kind==Kind.POKER?Math.max(2,config.minBet()):config.minBet();
         long maximum=kind==Kind.BLACKJACK?config.maxBet()-config.maxBet()%2:config.maxBet();
         if(minimum>maximum)throw failure("invalid_limits");
         data.replace(data.ledger().register(UUID.randomUUID(),player.getUUID(),kind,dimension(player.level()),master.asLong(),"Realm Casino",minimum,maximum),data.states());
@@ -109,7 +113,7 @@ public final class CasinoService {
             requirePlayer(player);CasinoData data=CasinoData.get(player.getServer());
             if(data.frozen()||data.journal()!=null)return false;
             var machine=data.ledger().at(dimension(player.level()),master.asLong());
-            return machine.isEmpty()||(machine.get().owner().equals(player.getUUID())&&machine.get().bank()==0&&machine.get().reserved()==0);
+            return machine.isEmpty()||(machine.get().owner().equals(player.getUUID())&&machine.get().bank()==0&&machine.get().reserved()==0&&!data.ledger().tableBusy(machine.get().id()));
         }catch(RuntimeException|LinkageError problem){return false;}
     }
     public static boolean hasFunds(Level level,BlockPos master) {
@@ -117,7 +121,7 @@ public final class CasinoService {
         try {
             CasinoData data=CasinoData.get(level.getServer());
             if(data.frozen()||data.journal()!=null)return true;
-            return data.ledger().at(dimension(level),master.asLong()).map(machine->machine.bank()!=0||machine.reserved()!=0).orElse(false);
+            return data.ledger().at(dimension(level),master.asLong()).map(machine->machine.bank()!=0||machine.reserved()!=0||data.ledger().tableBusy(machine.id())).orElse(false);
         }catch(RuntimeException|LinkageError problem){return true;}
     }
     public static void removed(Level level,BlockPos master) {
@@ -125,7 +129,7 @@ public final class CasinoService {
         try {
             CasinoData data=CasinoData.get(level.getServer());if(data.frozen()||data.journal()!=null)return;
             var record=data.ledger().at(dimension(level),master.asLong());
-            if(record.isPresent()&&record.get().bank()==0&&record.get().reserved()==0)data.replace(data.ledger().remove(record.get().id(),record.get().owner()),data.states());
+            if(record.isPresent()&&record.get().bank()==0&&record.get().reserved()==0&&!data.ledger().tableBusy(record.get().id()))data.replace(data.ledger().remove(record.get().id(),record.get().owner()),data.states());
         }catch(RuntimeException|LinkageError ignored){/* Funded/unreadable records are retained for safe restoration at the same location. */}
     }
 
@@ -136,7 +140,9 @@ public final class CasinoService {
             Machine machine=requireSession(player);CasinoData data=CasinoData.get(player.getServer());
             if(operation.equals("refresh")) {fields(payload,Set.of());SESSIONS.put(player.getUUID(),SESSIONS.get(player.getUUID()).refreshNonce());send(player,"","");return;}
             Set<String> allowed=switch(operation) {
-                case "bet"->Set.of("nonce","version","amount","selection","number");
+                case "bet","table_join"->Set.of("nonce","version","amount","selection","number");
+                case "table_start","table_leave","table_hit","table_stand","table_fold","table_check","table_call","table_allin"->Set.of("nonce","version","round","revision");
+                case "table_raise"->Set.of("nonce","version","round","revision","amount");
                 case "hit","stand","advance","cashout"->Set.of("nonce","version","round","revision");
                 case "deposit","withdraw","claim"->Set.of("nonce","version","amount");
                 case "configure"->Set.of("nonce","version","name","minBet","maxBet");
@@ -148,15 +154,17 @@ public final class CasinoService {
             SESSIONS.put(player.getUUID(),session.refreshNonce());data.requireAvailable();
             String message=switch(operation) {
                 case "bet"->{bet(player,machine,payload);yield "gui.realmcasino.bet_accepted";}
+                case "table_join"->{join(player,machine,payload);yield "gui.realmcasino.table_joined";}
+                case "table_start","table_leave","table_hit","table_stand","table_fold","table_check","table_call","table_allin","table_raise"->{tableAction(player,machine,payload,operation.substring(6));yield "";}
                 case "hit","stand"->{playCard(player,machine,payload,operation.equals("hit"));yield "";}
                 case "advance","cashout"->{playChicken(player,machine,payload,operation.equals("advance"));yield "";}
                 case "deposit"->{requireEconomy(player);long amount=positive(payload,"amount");WalletJournal.transfer(player,-amount,"deposit",data.ledger().deposit(machine.id(),player.getUUID(),amount),data.states());yield "gui.realmcasino.deposited";}
-                case "withdraw"->{requireEconomy(player);long amount=positive(payload,"amount");data.replace(data.ledger().withdraw(machine.id(),player.getUUID(),amount),data.states());yield "gui.realmcasino.withdrawn_pending";}
+                case "withdraw"->{withdraw(player,machine,payload);yield "gui.realmcasino.withdrawn_pending";}
                 case "claim"->{claim(player,payload);yield "gui.realmcasino.claimed";}
                 case "configure"->{configure(player,machine,payload);yield "gui.realmcasino.configured";}
                 default->throw failure("invalid_request");
             };
-            send(player,message,"");
+            send(player,message,"");if(TableGame.shared(machine.kind()))broadcast(player.getServer(),machine.id(),player.getUUID());
         }catch(RuntimeException|LinkageError problem) {
             try {requireSession(player);send(player,"",error(problem));}
             catch(RuntimeException|LinkageError expired){closeSnapshot(player,error(problem));}
@@ -172,6 +180,9 @@ public final class CasinoService {
         CasinoLedger next=data.ledger().startBet(machine.id(),player.getUUID(),stake,round,machine.version(),now);
         String selection=optionalString(payload,"selection",16,"");
         GameState game=switch(machine.kind()) {
+            case POKER,BLACKJACK_PVP,DICE,COIN->throw failure("table_use_join");
+            case SLOTS_FIVE->{if(!selection.isEmpty()||payload.has("number"))throw failure("invalid_request");yield GameState.fiveReels(round,machine.id(),player.getUUID(),stake,now,FiveReelSlots.draw(RANDOM::nextInt));}
+            case HORSES->{if(!selection.isEmpty())throw failure("invalid_request");yield GameState.horses(round,machine.id(),player.getUUID(),stake,now,Math.toIntExact(integer(payload,"number")),HorseRace.draw(RANDOM::nextInt));}
             case SLOTS->{if(!selection.isEmpty()||payload.has("number"))throw failure("invalid_request");yield GameState.slots(round,machine.id(),player.getUUID(),stake,now,Slots.draw(RANDOM::nextInt));}
             case ROULETTE->{
                 Roulette.Type type;
@@ -226,6 +237,73 @@ public final class CasinoService {
         ServerPlayer player=server.getPlayerList().getPlayer(game.player());
         if(game.finished()&&player!=null)NotificationsBridge.send(player,"notification.realmcasino.result",game.payout());
     }
+    private static void withdraw(ServerPlayer player,Machine machine,JsonObject payload){
+        requireEconomy(player);CasinoData data=CasinoData.get(player.getServer());long amount=positive(payload,"amount");int rate=CrownBridge.rate(player.getServer());
+        long tax=Money.ratio(data.ledger().taxableProfit(machine.id(),amount),rate,10000);UUID receipt=tax>0?UUID.randomUUID():null;
+        if(tax>0)CrownBridge.preflight(player.getServer(),receipt,player.getUUID(),tax);
+        data.replace(data.ledger().withdrawTax(machine.id(),player.getUUID(),amount,tax,receipt),data.states());flushTaxes(player.getServer());
+    }
+    private static void flushTaxes(MinecraftServer server){
+        if(!CrownBridge.available())return;CasinoData data=CasinoData.get(server);if(data.frozen()||data.journal()!=null)return;
+        int count=0;for(var tax:new ArrayList<>(data.ledger().taxes().values())){if(count++>=20)break;try{CrownBridge.credit(server,tax.id(),tax.payer(),tax.amount());data.replace(data.ledger().taxPaid(tax.id()),data.states());}catch(RuntimeException|LinkageError failure){break;}}
+    }
+    private static void join(ServerPlayer player,Machine machine,JsonObject payload){
+        requireEconomy(player);if(!TableGame.shared(machine.kind())||payload.has("number"))throw failure("invalid_request");
+        CasinoData data=CasinoData.get(player.getServer());CasinoConfig config=CasinoConfig.get();long stake=positive(payload,"amount");if(stake<config.minBet()||stake>config.maxBet())throw failure("invalid_stake");
+        String choice=optionalString(payload,"selection",8,"");int side=0;
+        if(machine.kind()==Kind.COIN){if(!choice.isEmpty()&&!choice.equals("heads")&&!choice.equals("tails"))throw failure("invalid_selection");side=choice.equals("tails")?1:0;}else if(!choice.isEmpty())throw failure("invalid_selection");
+        TableGame existing=data.ledger().tables().get(machine.id());if(existing!=null&&!existing.finished()&&now()>=existing.deadline())throw failure("hand_expired");
+        CasinoLedger next=data.ledger().joinTable(machine.id(),player.getUUID(),stake,UUID.randomUUID(),machine.version(),side,now());
+        WalletJournal.transfer(player,-stake,"bet",next,data.states());
+    }
+    private static void tableAction(ServerPlayer player,Machine machine,JsonObject payload,String action){
+        CasinoData data=CasinoData.get(player.getServer());TableGame table=data.ledger().tables().get(machine.id());
+        if(table==null||table.seat(player.getUUID())==null||!table.id().equals(uuid(payload,"round"))||table.revision()!=integer(payload,"revision"))throw failure("stale_round");
+        if(table.phase()==TableGame.Phase.WAITING){
+            if(action.equals("leave")){data.replace(data.ledger().leaveTable(machine.id(),player.getUUID(),now()),data.states());return;}
+            if(!action.equals("start")||now()>=table.deadline())throw failure("table_unavailable");
+            commitTable(player.getServer(),table.start(now(),RANDOM::nextInt));
+        }else{
+            if(now()>=table.deadline()){commitTable(player.getServer(),table.timeout(now()));throw failure("hand_expired");}
+            if(action.equals("leave")){commitTable(player.getServer(),table.departure(player.getUUID(),now()));return;}
+            long amount=action.equals("raise")?positive(payload,"amount"):0;commitTable(player.getServer(),table.act(player.getUUID(),action,amount,now()));
+        }
+    }
+    private static void commitTable(MinecraftServer server,TableGame table){
+        CasinoData data=CasinoData.get(server);TableGame before=data.ledger().tables().get(table.machine());if(before==table)return;
+        data.replace(data.ledger().updateTable(table,now()),data.states());
+        Machine machine=data.ledger().machines().get(table.machine());if(machine!=null){
+            var level=server.getLevel(ResourceKey.create(Registries.DIMENSION,ResourceLocation.parse(machine.dimension())));BlockPos pos=BlockPos.of(machine.position());
+            if(level!=null&&level.hasChunkAt(pos)&&level.getBlockEntity(pos)instanceof CasinoBlockEntity entity){
+                List<Integer> display=table.kind()==Kind.POKER?table.board():table.results();if(table.kind()==Kind.BLACKJACK_PVP&&table.finished())display=table.seats().getFirst().cards();
+                entity.show(table.id(),game(table.kind()),now(),display.stream().mapToInt(Integer::intValue).toArray(),table.finished()?table.stake()*table.seats().size():table.pot(),!table.finished());
+            }
+        }
+        if(table.finished())for(var seat:table.seats()){ServerPlayer participant=server.getPlayerList().getPlayer(seat.player());if(participant!=null)NotificationsBridge.send(participant,"notification.realmcasino.result",table.payouts().get(seat.player()));}
+        broadcast(server,table.machine(),null);
+    }
+    private static void departTables(MinecraftServer server,UUID player){
+        CasinoData data=CasinoData.get(server);if(data.frozen()||data.journal()!=null)return;
+        for(TableGame table:new ArrayList<>(data.ledger().tables().values()))if(!table.finished()&&table.seat(player)!=null){
+            if(table.phase()==TableGame.Phase.WAITING)data.replace(data.ledger().leaveTable(table.machine(),player,now()),data.states());else commitTable(server,table.departure(player,now()));broadcast(server,table.machine(),player);
+        }
+    }
+    private static void broadcast(MinecraftServer server,UUID machine,UUID exclude){
+        for(var entry:new ArrayList<>(SESSIONS.entrySet()))if(entry.getValue().server()==server&&entry.getValue().machine().equals(machine)&&!entry.getKey().equals(exclude)){
+            ServerPlayer observer=server.getPlayerList().getPlayer(entry.getKey());if(observer!=null)try{send(observer,"","");}catch(RuntimeException|LinkageError ignored){}
+        }
+    }
+    private static JsonObject tableSnapshot(ServerPlayer viewer,TableGame table){
+        JsonObject out=new JsonObject();out.addProperty("id",table.id().toString());out.addProperty("revision",table.revision());out.addProperty("phase",table.phase().name().toLowerCase(Locale.ROOT));out.addProperty("stake",table.stake());out.addProperty("pot",table.pot());out.addProperty("escrow",table.escrow());out.addProperty("street",table.street());out.addProperty("currentBet",table.currentBet());out.addProperty("minimumRaise",table.minimumRaise());out.addProperty("deadline",table.deadline());out.addProperty("dealer",table.dealer());out.addProperty("actor",table.actor());out.addProperty("coinChoice",table.coinChoice());
+        boolean seated=table.seat(viewer.getUUID())!=null;boolean turn=table.phase()==TableGame.Phase.PLAYING&&table.seats().get(table.actor()).player().equals(viewer.getUUID());out.addProperty("seated",seated);out.addProperty("yourTurn",turn);out.addProperty("canStart",seated&&table.phase()==TableGame.Phase.WAITING&&table.seats().size()>=2);out.addProperty("canRaise",turn&&table.raiseRights().contains(viewer.getUUID()));
+        JsonArray seats=new JsonArray(),board=new JsonArray(),results=new JsonArray();table.board().forEach(board::add);table.results().forEach(results::add);
+        for(var s:table.seats()){
+            JsonObject seat=new JsonObject();seat.addProperty("id",s.player().toString());seat.addProperty("name",publicName(viewer.getServer(),s.player()));seat.addProperty("buyin",s.buyIn());seat.addProperty("stack",s.stack());seat.addProperty("committed",s.committed());seat.addProperty("streetBet",s.streetBet());seat.addProperty("folded",s.folded());seat.addProperty("stood",s.stood());seat.addProperty("you",s.player().equals(viewer.getUUID()));seat.addProperty("payout",table.payouts().getOrDefault(s.player(),0L));
+            boolean reveal=s.player().equals(viewer.getUUID())||table.finished()&&!s.folded();JsonArray cards=new JsonArray();for(int c:s.cards())cards.add(reveal?c:-1);seat.add("cards",cards);seats.add(seat);
+            if(s.player().equals(viewer.getUUID())){out.addProperty("call",Math.min(s.stack(),table.currentBet()-s.streetBet()));out.addProperty("maxRaise",s.stack()+s.streetBet());}
+        }
+        out.add("seats",seats);out.add("board",board);out.add("results",results);return out;
+    }
     private static void claim(ServerPlayer player,JsonObject payload) {
         requireEconomy(player);CasinoData data=CasinoData.get(player.getServer());long requested=integer(payload,"amount");
         if(requested<0)throw failure("invalid_amount");long pending=data.ledger().pending(player.getUUID());
@@ -252,9 +330,13 @@ public final class CasinoService {
         try{economy=ChroniclesBridge.loaded()&&ChroniclesBridge.available(player);if(economy)balance=ChroniclesBridge.balance(player);}catch(RuntimeException|LinkageError ignored){}
         out.addProperty("economyAvailable",economy&&!data.frozen()&&data.journal()==null);out.addProperty("balance",balance);
         out.addProperty("bank",machine.bank());out.addProperty("reserved",machine.reserved());out.addProperty("available",machine.available());out.addProperty("pending",data.ledger().pending(player.getUUID()));
+        out.addProperty("shared",TableGame.shared(machine.kind()));out.addProperty("playerId",player.getUUID().toString());
+        out.addProperty("capital",machine.capital());out.addProperty("casinoTaxBasisPoints",CrownBridge.rate(player.getServer()));out.addProperty("treasuryAvailable",CrownBridge.available());
         out.addProperty("minBet",machine.minBet());out.addProperty("maxBet",machine.maxBet());out.addProperty("serverMin",config.minBet());out.addProperty("serverMax",config.maxBet());
         out.addProperty("message","");out.addProperty("error",data.frozen()||data.journal()!=null?PREFIX+"ledger_frozen":"");
         boolean busy=data.ledger().rounds().values().stream().anyMatch(round->round.machineId().equals(machine.id())&&!round.player().equals(player.getUUID()));out.addProperty("busy",busy);
+        TableGame table=data.ledger().tables().get(machine.id());out.add("table",table==null?JsonNull.INSTANCE:tableSnapshot(player,table));
+        out.addProperty("canJoin",TableGame.shared(machine.kind())&&!data.ledger().playerBusy(player.getUUID())&&(table==null||table.finished()||table.phase()==TableGame.Phase.WAITING&&table.seats().size()<TableGame.capacity(table.kind())));
         GameState state=data.states().get(player.getUUID());
         if(state!=null&&state.machine().equals(machine.id()))out.add("round",round(state));else out.add("round",JsonNull.INSTANCE);
         JsonArray history=new JsonArray();List<CasinoLedger.History> all=data.ledger().history();
@@ -262,7 +344,7 @@ public final class CasinoService {
         out.add("history",history);return out;
     }
     private static JsonObject round(GameState game) {
-        JsonObject out=new JsonObject();out.addProperty("id",game.id().toString());out.addProperty("game",game(game.kind()));out.addProperty("phase",game.finished()?"settled":"active");out.addProperty("stake",game.stake());out.addProperty("payout",game.payout());out.addProperty("maxPayout",CasinoLedger.maximumPayout(game.kind(),game.stake()));out.addProperty("startedAt",game.startedAt());out.addProperty("deadline",game.deadline());out.addProperty("revision",game.revision());
+        JsonObject out=new JsonObject();out.addProperty("id",game.id().toString());out.addProperty("game",game(game.kind()));out.addProperty("phase",game.finished()?"settled":"active");out.addProperty("stake",game.stake());out.addProperty("payout",game.payout());out.addProperty("maxPayout",CasinoLedger.maximumPayout(game.kind(),game.stake()));out.addProperty("startedAt",game.startedAt());out.addProperty("deadline",game.deadline());out.addProperty("revision",game.revision());out.addProperty("selectionNumber",game.betNumber());
         out.addProperty("outcome",!game.finished()?"":game.kind()==Kind.BLACKJACK?(game.blackjack().outcome()==Blackjack.Outcome.LOSS?"lose":game.blackjack().outcome().name().toLowerCase(Locale.ROOT)):game.payout()>game.stake()?"win":game.payout()==game.stake()?"push":"lose");
         JsonArray result=new JsonArray(),pc=new JsonArray(),dc=new JsonArray();game.reels().forEach(result::add);if(game.kind()==Kind.ROULETTE)result.add(game.rouletteNumber());
         if(game.blackjack()!=null){game.blackjack().player().forEach(pc::add);dc.add(game.blackjack().dealer().getFirst());if(game.finished())for(int i=1;i<game.blackjack().dealer().size();i++)dc.add(game.blackjack().dealer().get(i));else dc.add(-1);}
@@ -281,12 +363,26 @@ public final class CasinoService {
         SESSIONS.remove(player.getUUID());
     }
     private static void autoStand(MinecraftServer server,UUID player) {
-        GameState game=CasinoData.get(server).states().get(player);if(game!=null&&!game.finished())endActive(server,game);
+        GameState game=CasinoData.get(server).states().get(player);if(game!=null&&!game.finished())endActive(server,game);departTables(server,player);
     }
     public static void tick(MinecraftServer server) {
         TICKS.merge(server,1L,Long::sum);if(ticks(server)%20!=0)return;
         try {
             CasinoData data=CasinoData.get(server);if(data.frozen()||data.journal()!=null)return;
+            flushTaxes(server);
+            for(TableGame original:new ArrayList<>(data.ledger().tables().values())){
+                TableGame table=data.ledger().tables().get(original.machine());if(table==null||table.finished())continue;
+                if(table.phase()==TableGame.Phase.WAITING){if(now()>=table.deadline())for(var seat:new ArrayList<>(table.seats())){data.replace(data.ledger().leaveTable(table.machine(),seat.player(),now()),data.states());} }
+                else {
+                    for(var seat:new ArrayList<>(table.seats())){
+                        TableGame current=data.ledger().tables().get(table.machine());if(current==null||current.finished())break;
+                        ServerPlayer participant=server.getPlayerList().getPlayer(seat.player());boolean present=participant!=null;
+                        if(present)try{present=requireSession(participant).id().equals(table.machine());}catch(RuntimeException|LinkageError expired){present=false;}
+                        if(!present)commitTable(server,current.departure(seat.player(),now()));
+                    }
+                    TableGame current=data.ledger().tables().get(table.machine());if(current!=null&&!current.finished()&&(now()>=current.deadline()||now()-current.createdAt()>=900000))commitTable(server,current.timeout(now()));
+                }
+            }
             for(GameState game:new ArrayList<>(data.states().values())) {
                 if(game.finished())continue;ServerPlayer player=server.getPlayerList().getPlayer(game.player());boolean end=player==null||now()>=game.deadline();
                 if(!end)try{Machine machine=requireSession(player);end=!machine.id().equals(game.machine());}catch(RuntimeException|LinkageError failure){end=true;}
@@ -301,8 +397,9 @@ public final class CasinoService {
         BlockPos position=BlockPos.of(machine.position());if(!level.hasChunkAt(position))return;
         if(level.getBlockEntity(position)instanceof CasinoBlockEntity entity) {
             int[] result=switch(game.kind()) {
-                case SLOTS, PLINKO, WHEEL, CHICKEN->game.reels().stream().mapToInt(Integer::intValue).toArray();
+                case SLOTS, SLOTS_FIVE, HORSES, PLINKO, WHEEL, CHICKEN->game.reels().stream().mapToInt(Integer::intValue).toArray();
                 case ROULETTE->new int[]{game.rouletteNumber()};
+                case POKER,BLACKJACK_PVP,DICE,COIN->throw failure("invalid_request");
                 case BLACKJACK->game.finished()?game.blackjack().dealer().stream().mapToInt(Integer::intValue).toArray():new int[]{game.blackjack().dealer().getFirst(),-1};
             };
             entity.show(game.id(),game(game.kind()),game.startedAt(),result,game.payout(),!game.finished());

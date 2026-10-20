@@ -15,14 +15,14 @@ import zipfile
 ROOT = Path(__file__).resolve().parents[2]
 STATE = ROOT / 'realm-casino/build/casino-release'
 # project: mod ID, artifact basename, native property, minimum existing JUnit count
-PROJECTS = {'realm-casino': ('realmcasino', 'realm-casino', 'casinoGameTests', 58)}
+PROJECTS = {'realm-casino': ('realmcasino', 'realm-casino', 'casinoGameTests', 82),
+            'crown-ledger': ('kingdomtreasury', 'crown-ledger', 'crownGameTests', 52)}
 WRAPPER_SHA = '423cb469ccc0ecc31f0e4e1c309976198ccb734cdcbb7029d4bda0f18f57e8d9'
 DISTRIBUTION_SHA = '72f44c9f8ebcb1af43838f45ee5c4aa9c5444898b3468ab3f4af7b6076c5bc3f'
 COMPANION_PINS = {
     'cronicasrp-0.5.4.jar': '197c2fac53f97eb59159c9a0c26b3065362bdc18c8de1a1c0e61ece4360ba1f5',
     'contracts-bounties-0.3.2.jar': '2ecf125a188f042f8d6c5011af5e1ff2cc5974925835bcd2cc0180f75d07ff15',
     'realmcouncil-0.2.2.jar': '0a77af87a5c4e36f55ad12578662834886a7986864896a908a3dc4217e2c19cb',
-    'crown-ledger-0.2.2.jar': 'a91afc03da4aae23cb584911bdcd88cf3b5a4fcf91bcc13b683ef6405fe6dab5',
     'realm-markets-0.2.1.jar': 'bfb1e73186015ab94a86c841abba1df02bf1b5851a65771e622234624b806bb1',
     'realm-rewards-0.1.2.jar': 'ab8efe3bd9a7b24a4f725bf6dfe1f07dec0b88ecfaac91533b57c45b11cb7bcb',
     'realm-notifications-0.1.0.jar': '5aa70ac5a7696ce626ffa40e2e530038e90c06819dbeea6f43be70d42310822a',
@@ -34,6 +34,11 @@ RUNTIME_PINS = {
     'jupiter-1072905-7738312.jar': '95af332af250f97fe2d9d288fe6b2057c266673a388348bf33756b0b693ace15',
     'origins-classes-neoforge-1536425-8758587.jar': '14fcc794ae3fc66f752961f7df480356bb5b7cb01d78a2670e9f1e9d18bafb67',
 }
+
+
+def pins(project):
+    return {name: checksum for name, checksum in COMPANION_PINS.items()
+            if project != 'crown-ledger' or not name.startswith('cronicasrp-')}
 
 
 def digest(path):
@@ -59,18 +64,28 @@ def validate_jar(project, path):
         assert not any(n.startswith(('net/minecraft/', 'net/neoforged/', 'com/iafenvoy/', 'META-INF/jarjar/')) for n in names), project + ': bundled external dependency'
         assert not any('/test/' in n or '/visualtest/' in n or '/testclient/' in n or '/gametest/' in n or '/structure/' in n or 'ClientQA' in n for n in names), project + ': bundled test fixture'
         assert not any(n.startswith(('data/rp_fixture/', 'data/rewards_fixture/', 'data/notifications_fixture/')) for n in names)
-        for required in ('pt/realmcasino/service/CasinoService.class', 'pt/realmcasino/data/CasinoData.class',
-                         'pt/realmcasino/client/CasinoScreen.class', 'pt/realmcasino/blockentity/CasinoBlockEntity.class'):
-            assert required in names, project + ': required casino implementation missing: ' + required
-        for game in ('ChickenRoad', 'Plinko', 'FortuneWheel'):
-            assert 'pt/realmcasino/domain/' + game + '.class' in names, 'New game implementation missing: ' + game
-        for block in ('slot_machine','roulette_table','blackjack_table','plinko_board','fortune_wheel','chicken_road_table'):
+        if project == 'crown-ledger':
+            for required in ('pt/crownledger/api/CrownCasinoApi.class','pt/crownledger/api/CrownIncomeApi.class',
+                             'pt/crownledger/client/TreasuryScreen.class','data/kingdomtreasury/recipe/crown_chest.json'):
+                assert required in names, project + ': missing ' + required
+            for language in ('en_us','pt_pt'):
+                translations=json.loads(jar.read('assets/kingdomtreasury/lang/'+language+'.json'))
+                assert translations.get('gui.kingdomtreasury.casino_tax_percent'), 'Casino profit tax label missing'
+            return
+        for required in ('pt/realmcasino/service/CasinoService.class','pt/realmcasino/data/CasinoData.class',
+                         'pt/realmcasino/client/CasinoScreen.class','pt/realmcasino/blockentity/CasinoBlockEntity.class'):
+            assert required in names, project + ': missing ' + required
+        for game in ('ChickenRoad','Plinko','FortuneWheel','FiveReelSlots','HorseRace','PokerHands','TableGame'):
+            assert 'pt/realmcasino/domain/'+game+'.class' in names, 'Game missing: '+game
+        for block in ('slot_machine','roulette_table','blackjack_table','plinko_board','fortune_wheel','chicken_road_table',
+                      'five_slot_machine','horse_race_table','poker_table','multiplayer_blackjack_table','dice_table','coin_table'):
             for resource in ('assets/realmcasino/blockstates/','assets/realmcasino/models/item/','data/realmcasino/recipe/','data/realmcasino/loot_table/blocks/'):
-                assert resource + block + '.json' in names, 'Physical game resource missing: ' + resource + block
+                assert resource+block+'.json' in names, 'Physical game resource missing: '+resource+block
         for language in ('en_us','pt_pt','pt_br'):
             translations=json.loads(jar.read('assets/realmcasino/lang/'+language+'.json'))
-            for game in ('plinko','wheel','chicken'):
-                assert translations.get('gui.realmcasino.'+game+'_rules'), 'New rules translation missing'
+            for game in ('plinko','wheel','chicken','slots_five','horses','poker','blackjack_pvp','dice','coin'):
+                assert translations.get('gui.realmcasino.'+game+'_rules'), 'Game rules translation missing'
+
 
 
 
@@ -151,13 +166,13 @@ def install():
         target = ROOT / project / 'compat-libs'
         target.mkdir(exist_ok=True)
         assert not list(target.glob('*.jar')), project + ': unexpected integration JAR'
-        expected = dict(COMPANION_PINS)
+        expected = pins(project)
         for other, saved in data['production_jars'].items():
             if other == project:
                 continue
             shutil.copyfile(STATE / saved['filename'], target / saved['filename'])
             expected[saved['filename']] = saved['sha256']
-        for name in COMPANION_PINS:
+        for name in pins(project):
             shutil.copyfile(ROOT / 'mod-pronto' / name, target / name)
         companions[project] = expected
     (STATE / 'companions.json').write_text(json.dumps(companions, indent=2) + '\n')
@@ -208,7 +223,7 @@ def validate():
         results[project] = {'unit_tests': unit_count(project),
             'standalone_native_tests': native_count(project, 'gametests.log'),
             'integrated_native_tests': native_count(project, 'integration.log')}
-        expected = dict(COMPANION_PINS)
+        expected = pins(project)
         for other, saved in data['production_jars'].items():
             if other != project:
                 expected[saved['filename']] = saved['sha256']
@@ -220,7 +235,7 @@ def validate():
         assert 'CASINO_NATIVE_PASSED' in log, filename + ': actual native assertions missing'
         assert f'CASINO_RUNTIME_MODE_PASSED integration={integration}' in log, filename + ': wrong runtime mode'
         if integration == 'true':
-            for marker in ('CASINO_WALLET_CONSERVATION_PASSED', 'CASINO_RECOVERY_PASSED', 'CASINO_NOTIFICATIONS_PASSED', 'CASINO_ARCADE_NATIVE_PASSED'):
+            for marker in ('CASINO_WALLET_CONSERVATION_PASSED', 'CASINO_RECOVERY_PASSED', 'CASINO_NOTIFICATIONS_PASSED', 'CASINO_ARCADE_NATIVE_PASSED', 'CASINO_MULTIPLAYER_NATIVE_PASSED', 'CASINO_TAX_INTEGRATION_PASSED'):
                 assert marker in log, filename + ': missing actual monetary assertions ' + marker
     client = json.loads((base / 'qa-results/casino-client/result.json').read_text())
     assert client.get('success') is True, 'Actual Minecraft casino client failed'
@@ -233,18 +248,27 @@ def validate():
     assert client.get('world_animation_changing_pixels', 0) > 24, 'Actual world animation did not change the captured surface'
     assert client.get('fortune_world_animation_changing_pixels', 0) > 24, 'Actual new fortune wheel animation did not change the captured surface'
     images = client.get('screenshots')
-    assert isinstance(images, list) and len(images) >= 28 and len(images) == len(set(images)), 'Missing actual casino screenshots'
-    for game in ('plinko', 'wheel', 'chicken_settled'):
+    assert isinstance(images, list) and len(images) >= 55 and len(images) == len(set(images)), 'Missing actual casino screenshots'
+    for game in ('plinko','wheel','chicken_settled','slots_five','horses','poker','blackjack_pvp','dice','coin'):
         assert game in client.get('real_server_rounds', {}), 'New authoritative game missing: ' + game
     operations = {entry.get('operation') for entry in client.get('actual_c2s_requests', [])}
-    assert {'advance', 'cashout', 'claim'} <= operations, 'Missing real crossing/collection actions'
-    assert client.get('server_result_block_entity_updates', 0) >= 6, 'Six native game displays were not checked'
+    assert {'advance','cashout','claim','table_join','table_start','table_allin','table_call'} <= operations, 'Missing real crossing/collection actions'
+    assert client.get('server_result_block_entity_updates', 0) >= 8, 'Eight native house game displays were not checked'
     for name in images:
         assert isinstance(name, str) and re.fullmatch(r'[a-z0-9-]+\.png', name), 'Unsafe screenshot name'
         path = base / 'qa-results/casino-client' / name
         assert path.stat().st_size > 1024 and path.read_bytes()[:8] == b'\x89PNG\r\n\x1a\n', name
         import struct
         assert struct.unpack('>II', path.read_bytes()[16:24]) == (1600, 900), name + ': wrong capture resolution'
+    assert client.get('physical_game_blocks') == 12 and client.get('private_hole_cards') is True
+    assert set(client.get('multiplayer_ui_games',[])) == {'poker','blackjack_pvp','dice','coin'}
+    assert client.get('server_peer_fixture') is True and client.get('authenticated_two_clients') is False
+    crown=json.loads((ROOT/'crown-ledger/qa-results/crown-client/result.json').read_text())
+    assert crown.get('success') is True, 'Crown native menu rendering failed'
+    assert any('Casino profit taxation' in check for check in crown.get('currencyInteractionChecks',[])), 'Crown casino tax controls were not exercised'
+    crownlog=(ROOT/'crown-ledger/visual-client.log').read_text(errors='replace')
+    assert 'BUILD SUCCESSFUL' in crownlog and 'BUILD FAILED' not in crownlog
+    results['crown-ledger']['actual_client_validation']=True
     results['realm-casino']['actual_client_validation'] = True
     return data, results, client, runtime_dependencies()
 
@@ -280,10 +304,17 @@ def package():
                      jar_sha256=digest(jar), zip_sha256=digest(archive), project_versions={p: item['version'] for p, item in data['production_jars'].items()},
                      runtime_dependency_checksums=dependencies)
         proof['companions'] = json.loads((STATE / 'companions.json').read_text())[project]
-        proof['native_markers'] = ['CASINO_NATIVE_PASSED', 'CASINO_WALLET_CONSERVATION_PASSED', 'CASINO_RECOVERY_PASSED', 'CASINO_NOTIFICATIONS_PASSED', 'CASINO_ARCADE_NATIVE_PASSED']
-        proof['screenshots'] = {name: digest(ROOT / project / 'qa-results/casino-client' / name) for name in client['screenshots']}
-        proof['release_phase'] = '2: six games, adding Plinko, Fortune Wheel and Royal Crossing with durable funded payouts'
-        proof['currency'] = 'Chronicles RP virtual wallet only; bets disabled without a created character and wallet'
+        if project=='realm-casino':
+            proof['native_markers']=['CASINO_NATIVE_PASSED','CASINO_WALLET_CONSERVATION_PASSED','CASINO_RECOVERY_PASSED','CASINO_NOTIFICATIONS_PASSED','CASINO_ARCADE_NATIVE_PASSED','CASINO_MULTIPLAYER_NATIVE_PASSED','CASINO_TAX_INTEGRATION_PASSED']
+            proof['screenshots']={name:digest(ROOT/project/'qa-results/casino-client'/name) for name in client['screenshots']}
+            proof['authenticated_two_clients']=False
+            proof['release_phase']='3: twelve physical games, funded multiplayer tables and owner realized-profit taxation'
+            proof['currency']='Chronicles RP virtual wallet; bets disabled without a created character'
+        else:
+            crown=json.loads((ROOT/project/'qa-results/crown-client/result.json').read_text())
+            proof['screenshots']={name:digest(ROOT/project/'qa-results/crown-client'/name) for name in crown['screenshots']}
+            proof['currency']='Treasury currencies remain separate; Casino integration uses funded Chronicle cents'
+            proof['casino_chronicles_runtime_tested_by']='realm-casino integrated native suite and host client'
         checksum = jar.with_suffix('.sha256')
         write_fresh(checksum, ''.join(f'{digest(path)}  {path.name}\n' for path in (jar, archive)).encode())
         provenance = jar.with_suffix('.build.json')
@@ -301,18 +332,28 @@ def package():
     for name in client['screenshots']:
         shutil.copyfile(visual / name, media / name)
     shutil.copyfile(visual / 'result.json', media / 'validation.json')
-    (media / 'README.md').write_text('# Realm Casino\n\nActual Minecraft 1.21.1 NeoForge integrated-client captures of six physical casino blocks, authoritative games and owner/rules menus. Characters and funds are test fixtures; no real money is involved. Server suites verify monetary conservation, liabilities, journals and replay rejection. These captures do not establish an authenticated two-client session.\n\n' + ''.join(f'![Realm Casino]({name})\n\n' for name in client['screenshots']))
+    (media / 'README.md').write_text('# Realm Casino\n\nActual Minecraft 1.21.1 NeoForge integrated-client captures of twelve physical casino blocks, authoritative games and owner/rules menus. Characters and funds are test fixtures; no real money is involved. Server suites verify monetary conservation, liabilities, journals and replay rejection. These captures do not establish an authenticated two-client session.\n\n' + ''.join(f'![Realm Casino]({name})\n\n' for name in client['screenshots']))
     with zipfile.ZipFile(media / f'realm-casino-{release}-media.zip', 'w', zipfile.ZIP_DEFLATED) as zipped:
         for name in client['screenshots'] + ['README.md']:
             zipped.write(media / name, name)
     files.append(str(media.relative_to(ROOT)))
+    crown_version=version('crown-ledger'); crown_media=ROOT/'media/crown-ledger'/crown_version
+    assert not crown_media.exists(), 'Refusing to replace existing Crown media'
+    crown_media.mkdir(parents=True)
+    crown_visual=ROOT/'crown-ledger/qa-results/crown-client'; crown_report=json.loads((crown_visual/'result.json').read_text())
+    for name in crown_report['screenshots']:shutil.copyfile(crown_visual/name,crown_media/name)
+    shutil.copyfile(crown_visual/'result.json',crown_media/'validation.json')
+    (crown_media/'README.md').write_text('# Crown Ledger '+crown_version+'\n\nActual Minecraft rendering of the packaged chest and production policy menu, including casino profit tax. Menu balances are demonstration data; actual transfer and permissions are checked by native server suites.\n\n'+''.join('![Crown Ledger]('+name+')\n\n' for name in crown_report['screenshots']))
+    with zipfile.ZipFile(crown_media/f'crown-ledger-{crown_version}-media.zip','w',zipfile.ZIP_DEFLATED) as zipped:
+        for name in crown_report['screenshots']+['README.md']:zipped.write(crown_media/name,name)
+    files.append(str(crown_media.relative_to(ROOT)))
     (STATE / 'publish-paths.json').write_text(json.dumps(files, indent=2) + '\n')
 
 
 def stage():
     # Argument array avoids shell interpolation of repository paths.
     paths = json.loads((STATE / 'publish-paths.json').read_text())
-    assert len(paths) == 4 * len(PROJECTS) + 1
+    assert len(paths) == 5 * len(PROJECTS)
     subprocess.run(['git', 'add', '--', *paths], cwd=ROOT, check=True)
 
 

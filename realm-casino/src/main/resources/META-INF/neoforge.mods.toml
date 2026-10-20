@@ -3,11 +3,11 @@ loaderVersion="[4,)"
 license="All Rights Reserved"
 [[mods]]
 modId="realmcasino"
-version="0.2.0"
+version="0.3.0"
 displayName="Realm Casino"
 authors="ROCKABITS"
 logoFile="assets/realmcasino/icon.png"
-description='''Player-owned fantasy casino furniture: three-reel slots, European roulette, blackjack, Plinko, a fortune wheel and Royal Crossing. Fixed published rules, server-controlled results and fully reserved virtual Chronicles RP wagers. No real-money deposits, withdrawals or conversion.'''
+description='''Player-owned fantasy casino furniture: three- and five-reel slots, roulette, blackjack, Plinko, a fortune wheel, Royal Crossing, miniature horse racing, multiplayer poker, twenty-one, dice and coin toss. Fixed published rules, server-controlled results and fully reserved virtual Chronicles RP wagers. No real-money deposits, withdrawals or conversion.'''
 [[dependencies.realmcasino]]
 modId="neoforge"
 type="required"
@@ -30,5 +30,12 @@ side="BOTH"
 modId="realmnotifications"
 type="optional"
 versionRange="[0.1.0,)"
+ordering="AFTER"
+side="BOTH"
+
+[[dependencies.realmcasino]]
+modId="kingdomtreasury"
+type="optional"
+versionRange="[0.2.0,)"
 ordering="AFTER"
 side="BOTH"

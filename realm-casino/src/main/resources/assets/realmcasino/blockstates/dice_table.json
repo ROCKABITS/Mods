@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "realmcasino:block/dice_table"
+    },
+    "facing=east": {
+      "model": "realmcasino:block/dice_table",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "realmcasino:block/dice_table",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "realmcasino:block/dice_table",
+      "y": 270
+    }
+  }
+}

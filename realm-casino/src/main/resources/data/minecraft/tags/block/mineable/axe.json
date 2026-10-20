@@ -6,6 +6,12 @@
     "realmcasino:blackjack_table",
     "realmcasino:plinko_board",
     "realmcasino:fortune_wheel",
-    "realmcasino:chicken_road_table"
+    "realmcasino:chicken_road_table",
+    "realmcasino:five_slot_machine",
+    "realmcasino:horse_race_table",
+    "realmcasino:poker_table",
+    "realmcasino:multiplayer_blackjack_table",
+    "realmcasino:dice_table",
+    "realmcasino:coin_table"
   ]
 }

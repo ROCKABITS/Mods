@@ -35,7 +35,7 @@
   "gui.kingdomtreasury.participation_page": "Activity / reputation →",
   "gui.kingdomtreasury.economy_page": "← Tax / salaries",
   "gui.kingdomtreasury.save_policy": "Save kingdom rules",
-  "gui.kingdomtreasury.policy_hint": "Contract percentage and fixed periodic tax remain alternative modes. Market sales tax is independent and applies only to new purchases, never to earnings claims. Salaries use treasury funds. Existing contract terms stay unchanged.",
+  "gui.kingdomtreasury.policy_hint": "Choose contract percentage or fixed tax per cycle. Market sales tax and casino profit tax are independent. Casino tax applies to owner profit withdrawals in Chronicle coins, after returning deposited capital. Salaries spend existing treasury funds. Existing contracts keep their terms.",
   "gui.kingdomtreasury.invalid_policy": "Check the rules: both taxes 0–100%, cycle 1–720 hours, activity 1–1440 minutes, reputation 0–100. Amounts must be nonnegative.",
   "gui.kingdomtreasury.contract_title": "Contract title",
   "gui.kingdomtreasury.contract_item": "Material identifier",
@@ -139,5 +139,8 @@
   "message.kingdomtreasury.fixed_tax_paid": "Paid %s in fixed kingdom tax.",
   "message.kingdomtreasury.contract_income": "The treasury received %s in contract tax or refunds.",
   "message.kingdomtreasury.market_income": "The treasury received %s in market sales tax.",
-  "gui.kingdomtreasury.justice_income": "Judicial payment received"
+  "gui.kingdomtreasury.justice_income": "Judicial payment received",
+  "gui.kingdomtreasury.casino_tax_percent": "Casino profit tax (%)",
+  "gui.kingdomtreasury.casino_tax_income": "Casino profit tax",
+  "gui.kingdomtreasury.casino_tax_rate": "Casino profit tax: %s%%"
 }

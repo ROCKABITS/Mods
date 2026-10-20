@@ -3,7 +3,7 @@ loaderVersion="[4,)"
 license="All Rights Reserved"
 [[mods]]
 modId="kingdomtreasury"
-version="0.2.2"
+version="0.2.3"
 displayName="Crown Ledger"
 authors="ROCKABITS"
 description='''A physical crown treasury with public accounts, elected ruler controls, configurable taxes, funded salaries and optional public contracts.'''

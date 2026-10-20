@@ -200,7 +200,7 @@ public final class TreasuryScreen extends Screen {
         editingCurrency = str(policy, "currency", currency());
         taxMode = str(policy, "taxMode", "PERCENTAGE");
         value("taxPercent", percent(number(policy, "taxBasisPoints")));
-        value("marketTaxPercent", percent(number(policy, "marketTaxBasisPoints")));
+        value("marketTaxPercent", percent(number(policy, "marketTaxBasisPoints")));value("casinoTaxPercent",percent(number(policy,"casinoTaxBasisPoints")));
         for (String key : new String[]{"fixedTax", "salary"}) value(key, plainMoney(number(policy, key), editingCurrency));
         for (String key : new String[]{"periodHours", "activeMinutes", "minimumReputation", "reputationReward", "dailyReputationLimit"})
             value(key, Long.toString(number(policy, key)));
@@ -216,7 +216,7 @@ public final class TreasuryScreen extends Screen {
             field("taxPercent", right, top + 11, half, "tax_percent", "0", false).active = "PERCENTAGE".equals(taxMode);
             field("fixedTax", x + 12, top + 43, half, "fixed_tax", "0", false).active = "FIXED".equals(taxMode);
             field("salary", right, top + 43, half, "salary", "0", false);
-            field("marketTaxPercent", x + 12, top + 75, half, "market_tax_percent", "0", false);
+            field("marketTaxPercent", x + 12, top + 75, half, "market_tax_percent", "0", false);field("casinoTaxPercent",right,top+75,half,"casino_tax_percent","0",false);
         } else {
             field("periodHours", x + 12, top + 11, half, "period_hours", "168", true);
             field("activeMinutes", right, top + 11, half, "active_minutes", "30", true);
@@ -251,6 +251,7 @@ public final class TreasuryScreen extends Screen {
                     .setScale(0, RoundingMode.UNNECESSARY).longValueExact();
             if (marketBps < 0 || marketBps > 10_000) throw new IllegalArgumentException();
             data.addProperty("marketTaxBasisPoints", marketBps);
+            long casinoBps=new BigDecimal(values.get("casinoTaxPercent").replace(',','.')).movePointRight(2).setScale(0,RoundingMode.UNNECESSARY).longValueExact();if(casinoBps<0||casinoBps>10000)throw new IllegalArgumentException();data.addProperty("casinoTaxBasisPoints",casinoBps);
             data.addProperty("taxMode", taxMode); data.addProperty("taxBasisPoints", bps); data.addProperty("currency", editingCurrency);
             data.addProperty("fixedTax", nonnegativeAmount("fixedTax")); data.addProperty("salary", nonnegativeAmount("salary"));
             addRange(data, "periodHours", 1, 720); addRange(data, "activeMinutes", 1, 1440);
@@ -371,6 +372,7 @@ public final class TreasuryScreen extends Screen {
         String[] info = {
                 "PERCENTAGE".equals(mode) ? text("tax_rate", percent(number(policy, "taxBasisPoints"))) : text("fixed_tax_summary", money(number(policy, "fixedTax"))),
                 text("market_tax_rate", percent(number(policy, "marketTaxBasisPoints"))),
+                text("casino_tax_rate",percent(number(policy,"casinoTaxBasisPoints"))),
                 text("minimum_summary", number(policy, "minimumReputation")),
                 text("salary_summary", money(number(policy, "salary")), number(policy, "periodHours")),
                 text("next_cycle", date(number(state, "salaryNext"))),
@@ -406,7 +408,7 @@ public final class TreasuryScreen extends Screen {
             line(g, text("fixed_tax"), x + 12, top + 32, half, INK);
             line(g, text("salary"), right, top + 32, half, INK);
             line(g, text("market_tax_percent"), x + 12, top + 64, half, INK);
-            line(g, text(bool(state, "marketsAvailable") ? "markets_connected" : "markets_not_connected"), right, top + 80, half, MUTED);
+            line(g,text("casino_tax_percent"),right,top+64,half,INK);
             if (h > 300) {
                 frame(g, x + 10, top + 116, w - 20, 83, LIGHT, GOLD);
                 wrapped(g, text("policy_hint"), x + 17, top + 124, w - 34, 6, MUTED);

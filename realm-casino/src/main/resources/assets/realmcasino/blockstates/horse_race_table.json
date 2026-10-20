@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "realmcasino:block/horse_race_table"
+    },
+    "facing=east": {
+      "model": "realmcasino:block/horse_race_table",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "realmcasino:block/horse_race_table",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "realmcasino:block/horse_race_table",
+      "y": 270
+    }
+  }
+}

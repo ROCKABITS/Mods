@@ -47,10 +47,10 @@ class CasinoLedgerTest {
         assertEquals(0, reserved.machine(MACHINE).orElseThrow().available());
     }
     @Test void eachGameReservesItsActualPublishedWorstCaseGrossReturn() {
-        for (CasinoLedger.Kind kind : CasinoLedger.Kind.values()) {
+        for (CasinoLedger.Kind kind : java.util.Arrays.stream(CasinoLedger.Kind.values()).filter(k->!TableGame.shared(k)).toList()) {
             CasinoLedger ledger = empty(kind).deposit(MACHINE, OWNER, 100_000);
             CasinoLedger active = start(ledger, 100);
-            long expected = switch (kind) { case SLOTS -> 10_000; case ROULETTE -> 3600; case BLACKJACK -> 250; case PLINKO -> 3200; case WHEEL -> 500; case CHICKEN -> 884; };
+            long expected = switch (kind) { case SLOTS -> 10_000; case ROULETTE -> 3600; case BLACKJACK -> 250; case PLINKO -> 3200; case WHEEL -> 500; case CHICKEN -> 884; case SLOTS_FIVE -> 100000; case HORSES -> 380; default -> throw new AssertionError(); };
             assertEquals(expected, active.rounds().get(ROUND).maxPayout());
             assertEquals(expected, active.machine(MACHINE).orElseThrow().reserved());
         }

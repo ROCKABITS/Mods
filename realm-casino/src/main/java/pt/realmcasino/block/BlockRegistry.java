@@ -28,6 +28,19 @@ public final class BlockRegistry {
     public static final DeferredBlock<ChickenRoadTableBlock> CHICKEN_ROAD_TABLE=BLOCKS.register("chicken_road_table",()->new ChickenRoadTableBlock(properties()));
     public static final DeferredItem<CasinoMachineBlock.MachineItem> CHICKEN_ROAD_TABLE_ITEM=ITEMS.register("chicken_road_table",()->new CasinoMachineBlock.MachineItem(CHICKEN_ROAD_TABLE.get(),new Item.Properties()));
 
+    public static final DeferredBlock<FiveSlotMachineBlock> FIVE_SLOT_MACHINE=BLOCKS.register("five_slot_machine",()->new FiveSlotMachineBlock(properties()));
+    public static final DeferredItem<CasinoMachineBlock.MachineItem> FIVE_SLOT_MACHINE_ITEM=ITEMS.register("five_slot_machine",()->new CasinoMachineBlock.MachineItem(FIVE_SLOT_MACHINE.get(),new Item.Properties()));
+    public static final DeferredBlock<HorseRaceTableBlock> HORSE_RACE_TABLE=BLOCKS.register("horse_race_table",()->new HorseRaceTableBlock(properties()));
+    public static final DeferredItem<CasinoMachineBlock.MachineItem> HORSE_RACE_TABLE_ITEM=ITEMS.register("horse_race_table",()->new CasinoMachineBlock.MachineItem(HORSE_RACE_TABLE.get(),new Item.Properties()));
+    public static final DeferredBlock<PokerTableBlock> POKER_TABLE=BLOCKS.register("poker_table",()->new PokerTableBlock(properties()));
+    public static final DeferredItem<CasinoMachineBlock.MachineItem> POKER_TABLE_ITEM=ITEMS.register("poker_table",()->new CasinoMachineBlock.MachineItem(POKER_TABLE.get(),new Item.Properties()));
+    public static final DeferredBlock<MultiplayerBlackjackBlock> MULTIPLAYER_BLACKJACK=BLOCKS.register("multiplayer_blackjack_table",()->new MultiplayerBlackjackBlock(properties()));
+    public static final DeferredItem<CasinoMachineBlock.MachineItem> MULTIPLAYER_BLACKJACK_ITEM=ITEMS.register("multiplayer_blackjack_table",()->new CasinoMachineBlock.MachineItem(MULTIPLAYER_BLACKJACK.get(),new Item.Properties()));
+    public static final DeferredBlock<DiceTableBlock> DICE_TABLE=BLOCKS.register("dice_table",()->new DiceTableBlock(properties()));
+    public static final DeferredItem<CasinoMachineBlock.MachineItem> DICE_TABLE_ITEM=ITEMS.register("dice_table",()->new CasinoMachineBlock.MachineItem(DICE_TABLE.get(),new Item.Properties()));
+    public static final DeferredBlock<CoinTableBlock> COIN_TABLE=BLOCKS.register("coin_table",()->new CoinTableBlock(properties()));
+    public static final DeferredItem<CasinoMachineBlock.MachineItem> COIN_TABLE_ITEM=ITEMS.register("coin_table",()->new CasinoMachineBlock.MachineItem(COIN_TABLE.get(),new Item.Properties()));
+
     private static BlockBehaviour.Properties properties() {
         return BlockBehaviour.Properties.of().strength(2.5F, 3_600_000F).sound(SoundType.WOOD)
                 .noOcclusion().pushReaction(PushReaction.BLOCK);

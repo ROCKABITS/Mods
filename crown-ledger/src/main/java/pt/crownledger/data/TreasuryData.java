@@ -41,7 +41,7 @@ public final class TreasuryData extends SavedData {
     public static TreasuryData load(CompoundTag tag, HolderLookup.Provider lookup) {
         type(tag, "version", Tag.TAG_INT);
         int version = tag.getInt("version");
-        if (version != 1 && version != 2 && version != 3) throw new IllegalStateException("Unsupported Crown Ledger storage version");
+        if (version != 1 && version != 2 && version != 3 && version != 4) throw new IllegalStateException("Unsupported Crown Ledger storage version");
         type(tag, "policy", Tag.TAG_COMPOUND);
         type(tag, "periodStartedAt", Tag.TAG_LONG);
         type(tag, "nextCycleAt", Tag.TAG_LONG);
@@ -102,13 +102,13 @@ public final class TreasuryData extends SavedData {
             }
             result.income=new IncomeLedger(receipts);
         }else if(tag.contains("incomeReceipts"))throw new IllegalStateException("Income receipts cannot be loaded as an older treasury format");
-        if (version < 3) result.setDirty();
+        if (version < 4) result.setDirty();
         return result;
     }
 
     @Override public CompoundTag save(CompoundTag tag, HolderLookup.Provider lookup) {
         Treasury.Snapshot saved = treasury.snapshot();
-        tag.putInt("version", 3);
+        tag.putInt("version", 4);
         ListTag receipts=new ListTag();
         income.receipts().values().forEach(receipt->{CompoundTag entry=new CompoundTag();entry.putUUID("id",receipt.id());entry.putString("currency",receipt.currency().name());entry.putLong("amount",receipt.amount());entry.putUUID("payer",receipt.payer());entry.putString("memo",receipt.memo());receipts.add(entry);});
         tag.put("incomeReceipts",receipts);
@@ -149,15 +149,17 @@ public final class TreasuryData extends SavedData {
     }
 
     private static Policy readPolicy(CompoundTag tag, int version) {
+        if(version<4&&tag.contains("casinoTaxBasisPoints")){type(tag,"casinoTaxBasisPoints",Tag.TAG_INT);if(tag.getInt("casinoTaxBasisPoints")!=0)throw new IllegalStateException("Casino taxation cannot be loaded as an older policy format");}
         for (String key : List.of("minimumReputation", "taxBasisPoints", "periodHours", "activeMinutes", "reputationPerPublicContract", "dailyReputationLimit")) type(tag, key, Tag.TAG_INT);
         for (String key : List.of("fixedTax", "salary")) type(tag, key, Tag.TAG_LONG);
         for (String key : List.of("taxMode", "currency")) type(tag, key, Tag.TAG_STRING);
         if (version >= 2) type(tag, "marketTaxBasisPoints", Tag.TAG_INT);
+        if(version>=4)type(tag,"casinoTaxBasisPoints",Tag.TAG_INT);
         return new Policy(tag.getInt("minimumReputation"), Policy.TaxMode.valueOf(tag.getString("taxMode")),
                 tag.getInt("taxBasisPoints"), tag.getLong("fixedTax"), tag.getLong("salary"), tag.getInt("periodHours"),
                 tag.getInt("activeMinutes"), Currency.valueOf(tag.getString("currency")),
                 tag.getInt("reputationPerPublicContract"), tag.getInt("dailyReputationLimit"),
-                version >= 2 ? tag.getInt("marketTaxBasisPoints") : 0);
+                version >= 2 ? tag.getInt("marketTaxBasisPoints") : 0, version>=4?tag.getInt("casinoTaxBasisPoints"):0);
     }
 
     private static CompoundTag writePolicy(Policy policy) {
@@ -166,7 +168,7 @@ public final class TreasuryData extends SavedData {
         tag.putInt("taxBasisPoints", policy.taxBasisPoints()); tag.putLong("fixedTax", policy.fixedTax()); tag.putLong("salary", policy.salary());
         tag.putInt("periodHours", policy.periodHours()); tag.putInt("activeMinutes", policy.activeMinutes()); tag.putString("currency", policy.currency().name());
         tag.putInt("reputationPerPublicContract", policy.reputationPerPublicContract()); tag.putInt("dailyReputationLimit", policy.dailyReputationLimit());
-        tag.putInt("marketTaxBasisPoints", policy.marketTaxBasisPoints());
+        tag.putInt("marketTaxBasisPoints", policy.marketTaxBasisPoints());tag.putInt("casinoTaxBasisPoints",policy.casinoTaxBasisPoints());
         return tag;
     }
 

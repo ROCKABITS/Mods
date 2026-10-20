@@ -24,17 +24,20 @@ public final class CasinoRenderer implements BlockEntityRenderer<CasinoBlockEnti
         int[] result=machine.result();long local=System.nanoTime()/1_000_000;Display display=DISPLAYS.get(machine);int hash=java.util.Arrays.hashCode(result);
         if(display==null){long age=Math.clamp(System.currentTimeMillis()-machine.startedAt(),0,10_000);display=new Display(machine.animationId(),hash,local-age,Math.max(0,result.length-1),result.length);DISPLAYS.put(machine,display);}
         else if(!display.id().equals(machine.animationId())||display.resultHash()!=hash){display=new Display(machine.animationId(),hash,local,display.id().equals(machine.animationId())?display.steps():0,result.length);DISPLAYS.put(machine,display);}
-        if(result.length==0&&!java.util.List.of("roulette","wheel","chicken").contains(machine.game()))return;
+        if(result.length==0&&!java.util.List.of("roulette","wheel","chicken","horses","dice","coin").contains(machine.game()))return;
         pose.pushPose();pose.translate(.5,0,.5);
         float angle=switch(machine.getBlockState().getValue(BlockStateProperties.HORIZONTAL_FACING)){case EAST->-90;case SOUTH->180;case WEST->90;default->0;};
         pose.mulPose(Axis.YP.rotationDegrees(angle));pose.translate(-.5,0,-.5);
         double elapsed=Math.max(0,local-display.receivedAt());
-        if(machine.game().equals("slots")&&result.length==3)slots(result,elapsed,pose,buffers,light,overlay);
+        if((machine.game().equals("slots")&&result.length==3)||(machine.game().equals("slots_five")&&result.length==5))slots(result,elapsed,pose,buffers,light,overlay);
         else if(machine.game().equals("roulette"))roulette(result.length==1?result[0]:0,result.length==1?elapsed:10_000,pose,buffers,light,overlay);
-        else if(machine.game().equals("blackjack"))cards(result,elapsed,pose,buffers,light);
+        else if(java.util.List.of("blackjack","blackjack_pvp","poker").contains(machine.game()))cards(result,elapsed,pose,buffers,light);
         else if(machine.game().equals("plinko"))plinko(result,elapsed,pose,buffers,light,overlay);
         else if(machine.game().equals("wheel"))fortune(result,elapsed,pose,buffers,light,overlay);
         else if(machine.game().equals("chicken"))chicken(result,display.fromStep(),elapsed,pose,buffers,light,overlay);
+        else if(machine.game().equals("horses"))horses(result,elapsed,pose,buffers,light,overlay);
+        else if(machine.game().equals("dice"))dice(result,elapsed,pose,buffers,light,overlay);
+        else if(machine.game().equals("coin"))coin(result,elapsed,pose,buffers,light,overlay);
         pose.popPose();
     }
     private static void vertex(VertexConsumer v,PoseStack.Pose pose,float x,float y,float z,float u,float vv,int light,int overlay){v.addVertex(pose.pose(),x,y,z).setColor(255,255,255,255).setUv(u,vv).setOverlay(overlay).setLight(light).setNormal(0,1,0);}
@@ -43,10 +46,10 @@ public final class CasinoRenderer implements BlockEntityRenderer<CasinoBlockEnti
     }
     private static void slots(int[] result,double elapsed,PoseStack pose,MultiBufferSource buffers,int light,int overlay){
         VertexConsumer v=buffers.getBuffer(RenderType.entityCutoutNoCull(SYMBOLS));
-        for(int reel=0;reel<3;reel++){
-            double p=CasinoPreferences.get().motion?Math.clamp(elapsed/(reel==0?1768:reel==1?2184:2600),0,1):1,ease=1-Math.pow(1-p,3);
+        int count=result.length;for(int reel=0;reel<count;reel++){
+            double p=CasinoPreferences.get().motion?Math.clamp(elapsed/(count==5?3400*(.55+reel*.1125):reel==0?1768:reel==1?2184:2600),0,1):1,ease=1-Math.pow(1-p,3);
             double offset=result[reel]+(1-ease)*8*(3+reel),fraction=offset-Math.floor(offset);int base=(int)Math.floor(offset);
-            float left=(float)((3.5+reel*2.72)/16),right=left+2.25f/16;
+            float left=(float)(((count==5?3.45:3.5)+reel*(count==5?1.63:2.72))/16),right=left+(count==5?1.3f:2.25f)/16;
             for(int row=-2;row<=2;row++){
                 int symbol=Math.floorMod(base+row,8);float top=(float)(19.75/16.0+(row-fraction)*.155+.0703),bottom=top-.1406f;
                 float min=Math.max(17.05f/16,bottom),max=Math.min(22.45f/16,top);if(min>=max)continue;
@@ -110,6 +113,35 @@ public final class CasinoRenderer implements BlockEntityRenderer<CasinoBlockEnti
         mini(pose,buffers,light,overlay,net.minecraft.world.level.block.Blocks.RED_TERRACOTTA,.20,.88,-.25,.16,.17,.2);
         mini(pose,buffers,light,overlay,net.minecraft.world.level.block.Blocks.BLACK_WOOL,.40,.72,-.335,.08,.08,.03);
         pose.popPose();
+    }
+    private static void horses(int[] order,double elapsed,PoseStack pose,MultiBufferSource buffers,int light,int overlay){
+        double p=CasinoPreferences.get().motion?Math.clamp(elapsed/5500,0,1):1;
+        var coats=new net.minecraft.world.level.block.Block[]{net.minecraft.world.level.block.Blocks.SMOOTH_SANDSTONE,net.minecraft.world.level.block.Blocks.BROWN_TERRACOTTA,net.minecraft.world.level.block.Blocks.BLACK_TERRACOTTA,net.minecraft.world.level.block.Blocks.LIGHT_GRAY_TERRACOTTA};
+        var silks=new net.minecraft.world.level.block.Block[]{net.minecraft.world.level.block.Blocks.RED_WOOL,net.minecraft.world.level.block.Blocks.GREEN_WOOL,net.minecraft.world.level.block.Blocks.BLUE_WOOL,net.minecraft.world.level.block.Blocks.YELLOW_WOOL};
+        for(int i=0;i<4;i++){
+            int rank=i;if(order.length==4)for(int r=0;r<4;r++)if(order[r]==i)rank=r;double travel=order.length==4?Math.min(1,Math.pow(p/(.86+rank*.04),1.2)):0;
+            pose.pushPose();pose.translate((2.4+travel*10.2)/16,(13.0+(p<1?Math.sin(elapsed/55+i)*.10:0))/16,(3.0+i*3.1)/16);
+            mini(pose,buffers,light,overlay,coats[i],-.55,.35,-.27,1.1,.55,.55);mini(pose,buffers,light,overlay,coats[i],.3,.75,-.22,.32,.55,.44);mini(pose,buffers,light,overlay,coats[i],.42,1.15,-.22,.55,.28,.4);
+            for(double x:new double[]{-.4,.3})for(double z:new double[]{-.2,.1})mini(pose,buffers,light,overlay,coats[i],x,0,z,.15,.4,.15);
+            mini(pose,buffers,light,overlay,silks[i],-.25,.9,-.30,.5,.17,.60);mini(pose,buffers,light,overlay,net.minecraft.world.level.block.Blocks.BROWN_WOOL,-.75,.48,-.1,.25,.4,.18);
+            mini(pose,buffers,light,overlay,net.minecraft.world.level.block.Blocks.BLACK_WOOL,.73,1.3,-.24,.07,.07,.02);pose.popPose();
+        }
+    }
+    private static void dice(int[] result,double elapsed,PoseStack pose,MultiBufferSource buffers,int light,int overlay){
+        double p=CasinoPreferences.get().motion&&result.length>0?Math.clamp(elapsed/2100,0,1):1;
+        for(int n=0;n<2;n++){
+            int value=result.length>n?result[n]:n==0?3:5;if(p<1)value=1+Math.floorMod((int)(elapsed/90)+n*3,6);
+            pose.pushPose();pose.translate((6.5+n*3)/16,(13.0+Math.sin(p*Math.PI)*(1-p)*2)/16,(7.0+n*1.4)/16);pose.mulPose(Axis.YP.rotationDegrees((float)((1-p)*720+n*18)));
+            mini(pose,buffers,light,overlay,net.minecraft.world.level.block.Blocks.SMOOTH_SANDSTONE,-.8,0,-.8,1.6,1.6,1.6);
+            if(value%2==1)diePip(pose,buffers,light,overlay,0,0);if(value>=2){diePip(pose,buffers,light,overlay,-.43,-.43);diePip(pose,buffers,light,overlay,.43,.43);}if(value>=4){diePip(pose,buffers,light,overlay,.43,-.43);diePip(pose,buffers,light,overlay,-.43,.43);}if(value==6){diePip(pose,buffers,light,overlay,-.43,0);diePip(pose,buffers,light,overlay,.43,0);}pose.popPose();
+        }
+    }
+    private static void diePip(PoseStack p,MultiBufferSource b,int light,int overlay,double x,double z){mini(p,b,light,overlay,net.minecraft.world.level.block.Blocks.BLACK_WOOL,x-.1,1.60,z-.1,.2,.03,.2);}
+    private static void coin(int[] result,double elapsed,PoseStack pose,MultiBufferSource buffers,int light,int overlay){
+        double p=CasinoPreferences.get().motion&&result.length==1?Math.clamp(elapsed/2600,0,1):1;double angle=(1-p)*Math.PI*12;int side=p>=1?(result.length==1?result[0]:0):Math.cos(angle)>=0?0:1;
+        var texture=ResourceLocation.fromNamespaceAndPath("realmcasino","textures/block/coin_"+(side==0?"heads":"tails")+".png");
+        pose.pushPose();pose.translate(.5,(13.5+Math.sin(p*Math.PI)*4)/16,.5);pose.mulPose(Axis.XP.rotation((float)angle));float radius=1.5f/16;var v=buffers.getBuffer(RenderType.entityCutoutNoCull(texture));var m=pose.last();
+        vertex(v,m,-radius,0,-radius,0,0,light,overlay);vertex(v,m,-radius,0,radius,0,1,light,overlay);vertex(v,m,radius,0,radius,1,1,light,overlay);vertex(v,m,radius,0,-radius,1,0,light,overlay);pose.popPose();
     }
     @Override public int getViewDistance(){return 48;}
 }

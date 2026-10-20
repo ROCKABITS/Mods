@@ -9,7 +9,7 @@ import pt.realmcasino.service.CasinoService;
 public final class CasinoNetwork {
     private CasinoNetwork() {}
     public static void register(RegisterPayloadHandlersEvent event) {
-        var registrar = event.registrar("2");
+        var registrar = event.registrar("3");
         registrar.playToServer(CasinoPackets.Action.TYPE, CasinoPackets.Action.CODEC, (packet, context) -> {
             if (context.player() instanceof ServerPlayer player)
                 context.enqueueWork(() -> CasinoService.action(player, packet.operation(), packet.json()));

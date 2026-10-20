@@ -141,7 +141,7 @@ public final class CasinoArcadeGameTests {
         var ledger=new CasinoLedger().register(machine,owner,CasinoLedger.Kind.SLOTS,"minecraft:overworld",1,"Existing bank",1,100).deposit(machine,owner,10000).withdraw(machine,owner,100);
         CasinoFixture.field(data,"ledger",ledger);var raw=data.save(new net.minecraft.nbt.CompoundTag(),h.getLevel().registryAccess());raw.putInt("version",1);
         var restored=CasinoData.load(raw,h.getLevel().registryAccess());
-        h.assertTrue(restored.ledger().machine(machine).orElseThrow().bank()==9900&&restored.ledger().credit(owner)==100&&restored.save(new net.minecraft.nbt.CompoundTag(),h.getLevel().registryAccess()).getInt("version")==2,"Existing world format did not migrate to version two");
+        h.assertTrue(restored.ledger().machine(machine).orElseThrow().bank()==9900&&restored.ledger().credit(owner)==100&&restored.save(new net.minecraft.nbt.CompoundTag(),h.getLevel().registryAccess()).getInt("version")==3,"Existing world format did not migrate to version two");
         System.out.println("CASINO_ARCADE_NATIVE_PASSED");h.succeed();
     }
 }

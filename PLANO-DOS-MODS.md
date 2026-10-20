@@ -34,7 +34,7 @@ O quadro abaixo distingue as funcionalidades já implementadas das ideias ainda 
 | Realm Rewards | Recompensar conquistas Vanilla e de outros mods com dinheiro do Chronicles RP. | Implementado e atualizado para 0.1.2; [guia](realm-rewards/README.md). |
 | Realm Notifications | Notificações no ecrã e API comum para os mods de RP. | Implementado na 0.1.0; [guia](realm-notifications/README.md). |
 | Realm Titles | Títulos de personagem atribuídos pelo governante eleito. | Implementado na 0.1.0 Beta; [guia](realm-titles/README.md). |
-| Realm Casino | Casino medieval com máquinas e mesas, banca própria de cada proprietário e dinheiro virtual do Chronicles RP. | Atualizado para 0.2.0 Beta, com seis jogos e três novos blocos. [Guia](realm-casino/README.md). |
+| Realm Casino | Casino medieval com máquinas e mesas, banca própria de cada proprietário e dinheiro virtual do Chronicles RP. | Atualizado para 0.3.0 Beta, com doze jogos físicos, mesas multiplayer e imposto do lucro. [Guia](realm-casino/README.md). |
 | Laws & Justice | Prisões construídas pelos jogadores, justiça pelo Presidente, mandados, trabalho comunitário e economia judicial, por fases. | 0.1.0 Beta em validação final: prisões/celas, penas online, libertação e administração física. Publicação pendente. [Guia](laws-justice/README.md) · [plano completo](laws-justice/PLANO-COMPLETO.md). |
 | Chronicles RP — Nomes RP | Mostrar o nome da personagem acima da cabeça, no TAB e no chat. | Implementado na 0.5.3; [guia e downloads](chronicles-rp/README.md). |
 | Xaero Map Regions + Xaero's World Map | Desenhar e consultar territórios no mapa. | Solução externa indicada pelo utilizador; não desenvolver um mod próprio. |
@@ -78,14 +78,9 @@ A **0.1.0 Beta está publicada**, com [ZIP](https://github.com/ROCKABITS/Mods/ra
 
 Publicados na **0.2.0 Beta** ([JAR](https://github.com/ROCKABITS/Mods/raw/refs/heads/main/mod-pronto/realm-casino-0.2.0.jar) · [ZIP](https://github.com/ROCKABITS/Mods/raw/refs/heads/main/mod-pronto/realm-casino-0.2.0.zip)): Plinko, Roda da Fortuna e Travessia Real (galinha), com três blocos próprios, interfaces, animações, integração com a carteira, reservas e recolha automática da travessia.
 
-#### Realm Casino — próximas atualizações
+#### Realm Casino — atualização 0.3.0
 
-Sem ordem nem versões definidas:
-
-- Slots de cinco rolos.
-- Poker e jogos entre jogadores, dados e cara ou coroa.
-- Corridas de cavalos com apostas.
-- Integração de impostos com o Crown Ledger.
+O guião completo está implementado: slots de cinco rolos, poker Texas Hold’em, vinte e um entre jogadores, dados, cara ou coroa e corridas em miniatura, com seis blocos adicionais. Crown Ledger 0.2.3 acrescenta imposto sobre o lucro levantado pelo proprietário, preservando o capital depositado. Regras e limites no [guia](realm-casino/README.md) e [âmbito](realm-casino/PLANO-COMPLETO.md). Lutas entre mobs foram retiradas do âmbito pelo utilizador.
 
 ### Laws & Justice — desenvolvimento por versões
 

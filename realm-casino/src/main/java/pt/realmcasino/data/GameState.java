@@ -8,6 +8,8 @@ import pt.realmcasino.domain.CasinoLedger.Kind;
 import pt.realmcasino.domain.Roulette;
 import pt.realmcasino.domain.Slots;
 import pt.realmcasino.domain.Plinko;
+import pt.realmcasino.domain.FiveReelSlots;
+import pt.realmcasino.domain.HorseRace;
 import pt.realmcasino.domain.FortuneWheel;
 import pt.realmcasino.domain.ChickenRoad;
 
@@ -20,6 +22,9 @@ public record GameState(UUID id, UUID machine, UUID player, Kind kind, long stak
         reels = List.copyOf(Objects.requireNonNull(reels)); Objects.requireNonNull(betType);
         if (stake <= 0 || startedAt < 0 || deadline < startedAt || revision < 1 || payout < 0) throw new IllegalArgumentException("Invalid game state.");
         switch (kind) {
+            case POKER,BLACKJACK_PVP,DICE,COIN -> throw new IllegalArgumentException("Shared games have their own authoritative table state.");
+            case SLOTS_FIVE -> {if(!finished||blackjack!=null||!betType.isEmpty()||rouletteNumber!=-1||betNumber!=-1||FiveReelSlots.payout(stake,reels)!=payout)throw new IllegalArgumentException("Invalid five-reel state.");}
+            case HORSES -> {if(!finished||blackjack!=null||!betType.isEmpty()||rouletteNumber!=-1||HorseRace.payout(stake,betNumber,reels)!=payout)throw new IllegalArgumentException("Invalid horse race.");}
             case PLINKO, WHEEL, CHICKEN -> {
                 if(blackjack!=null||!betType.isEmpty()||rouletteNumber!=-1||betNumber!=-1)throw new IllegalArgumentException("Invalid arcade state.");
                 long expected;
@@ -65,6 +70,8 @@ public record GameState(UUID id, UUID machine, UUID player, Kind kind, long stak
         long value=end&&!ChickenRoad.crashed(path)?ChickenRoad.payout(stake,path.size()):0;
         return new GameState(id,machine,player,kind,stake,startedAt,deadline,Math.addExact(revision,1),null,path,-1,"",-1,value,end);
     }
+    public static GameState fiveReels(UUID id,UUID machine,UUID player,long stake,long now,List<Integer> reels){return new GameState(id,machine,player,Kind.SLOTS_FIVE,stake,now,now,1,null,reels,-1,"",-1,FiveReelSlots.payout(stake,reels),true);}
+    public static GameState horses(UUID id,UUID machine,UUID player,long stake,long now,int selected,List<Integer> order){return new GameState(id,machine,player,Kind.HORSES,stake,now,now,1,null,order,-1,"",selected,HorseRace.payout(stake,selected,order),true);}
     public GameState update(Blackjack.State state) {
         if (kind != Kind.BLACKJACK || finished) throw new IllegalStateException("No active hand.");
         return new GameState(id,machine,player,kind,stake,startedAt,deadline,Math.addExact(revision,1),state,reels,rouletteNumber,betType,betNumber,state.finished()?state.payout(stake):0,state.finished());

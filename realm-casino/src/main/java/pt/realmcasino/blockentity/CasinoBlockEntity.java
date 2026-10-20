@@ -48,6 +48,12 @@ public final class CasinoBlockEntity extends BlockEntity {
     private static boolean validResults(String game, int[] values) {
         if (values == null) return false;
         return switch (game) {
+            case "slots_five" -> values.length==5&&validRange(values,0,7);
+            case "horses" -> values.length==4&&validRange(values,0,3);
+            case "poker" -> values.length<=5&&validRange(values,0,51);
+            case "blackjack_pvp" -> values.length<=16&&validRange(values,0,51);
+            case "dice" -> values.length<=12&&validRange(values,1,6);
+            case "coin" -> values.length<=1&&validRange(values,0,1);
             case "slots" -> values.length == 3 && validRange(values, 0, 7);
             case "roulette" -> values.length == 1 && validRange(values, 0, 36);
             case "blackjack" -> values.length <= 24 && validRange(values, -1, 51);

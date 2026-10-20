@@ -14,7 +14,7 @@ public final class Treasury {
     public static final int MAX_HISTORY = 256;
     public enum Currency { EMERALD, CHRONICLES }
     public enum Kind { DEPOSIT, CONTRACT_FUNDING, CONTRACT_RETURN, TAX_COLLECTED, PAYROLL_ALLOCATED,
-        SALARY_CLAIM, PAYROLL_CANCELLED, POLICY_CHANGED, MANAGER_CHANGED, MARKET_TAX, JUSTICE_INCOME }
+        SALARY_CLAIM, PAYROLL_CANCELLED, POLICY_CHANGED, MANAGER_CHANGED, MARKET_TAX, JUSTICE_INCOME, CASINO_TAX }
 
     public record Activity(String name, int minutes) {
         public Activity {

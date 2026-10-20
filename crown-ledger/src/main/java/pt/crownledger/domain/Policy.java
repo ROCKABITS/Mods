@@ -4,7 +4,8 @@ package pt.crownledger.domain;
 public record Policy(int minimumReputation, TaxMode taxMode, int taxBasisPoints,
                      long fixedTax, long salary, int periodHours, int activeMinutes,
                      Treasury.Currency currency, int reputationPerPublicContract,
-                     int dailyReputationLimit, int marketTaxBasisPoints) {
+                     int dailyReputationLimit, int marketTaxBasisPoints, int casinoTaxBasisPoints) {
+    public Policy(int minimumReputation,TaxMode taxMode,int taxBasisPoints,long fixedTax,long salary,int periodHours,int activeMinutes,Treasury.Currency currency,int reputationPerPublicContract,int dailyReputationLimit,int marketTaxBasisPoints){this(minimumReputation,taxMode,taxBasisPoints,fixedTax,salary,periodHours,activeMinutes,currency,reputationPerPublicContract,dailyReputationLimit,marketTaxBasisPoints,0);}
     public enum TaxMode { PERCENTAGE, FIXED }
     public static final Policy DEFAULT = new Policy(0, TaxMode.PERCENTAGE, 0, 0, 0, 168, 10,
             Treasury.Currency.EMERALD, 1, 3, 0);
@@ -21,7 +22,7 @@ public record Policy(int minimumReputation, TaxMode taxMode, int taxBasisPoints,
     public Policy {
         if (minimumReputation < 0 || minimumReputation > 100 || taxMode == null || currency == null
                 || taxBasisPoints < 0 || taxBasisPoints > 10_000 || fixedTax < 0 || salary < 0
-                || marketTaxBasisPoints < 0 || marketTaxBasisPoints > 10_000
+                || marketTaxBasisPoints < 0 || marketTaxBasisPoints > 10_000 || casinoTaxBasisPoints<0 || casinoTaxBasisPoints>10000
                 || periodHours < 1 || periodHours > 720 || activeMinutes < 1
                 || reputationPerPublicContract < 0 || reputationPerPublicContract > 100
                 || dailyReputationLimit < 0 || dailyReputationLimit > 100)

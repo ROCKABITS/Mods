@@ -22,7 +22,7 @@ import pt.crownledger.domain.IncomeLedger;
 import pt.crownledger.domain.IncomeLedger.Receipt;
 import pt.crownledger.domain.Treasury;
 
-/** Server-only transfer of already-funded justice escrow, with durable single-use receipts. */
+/** Server-only transfer of already-funded escrow, with durable single-use receipts. */
 public final class CrownIncomeApi {
     public static final int VERSION=1;
     private CrownIncomeApi(){}
@@ -68,7 +68,7 @@ public final class CrownIncomeApi {
     }
     private static Treasury candidate(TreasuryData data,Receipt receipt){
         Treasury next=data.treasury.copy();long at=Math.max(0,System.currentTimeMillis());
-        next.addFunds(receipt.currency(),receipt.amount(),Treasury.Kind.JUSTICE_INCOME,receipt.payer(),receipt.memo(),at);next.settlePending(at);return next;
+        next.addFunds(receipt.currency(),receipt.amount(),receipt.memo().equals("realmcasino.profit-tax")?Treasury.Kind.CASINO_TAX:Treasury.Kind.JUSTICE_INCOME,receipt.payer(),receipt.memo(),at);next.settlePending(at);return next;
     }
     private static void write(Path file,CompoundTag root,AtomicBoolean moved)throws IOException {
         Files.createDirectories(file.getParent());Path temporary=Files.createTempFile(file.getParent(),"crown-income-",".tmp");

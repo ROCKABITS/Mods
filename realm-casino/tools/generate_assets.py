@@ -310,6 +310,45 @@ im=Image.new("RGBA",(16,16));d=ImageDraw.Draw(im)
 d.ellipse((1,1,14,14),fill=GOLD);d.ellipse((2,2,12,12),fill=CREAM);d.rectangle((4,3,7,5),fill=(255,250,213,255));save("ivory_ball",im)
 RNG.setstate(_rng_state)
 
+# Final casino furniture: original table cloths, miniature racetrack and coin faces.
+_rng_state=RNG.getstate()
+for name,base,title in (("poker_felt",(19,65,49),"TEXAS HOLD'EM"),("blackjack_pvp_felt",(21,52,65),"ROYAL XXI"),("dice_felt",(77,28,39),"DICE"),("coin_felt",(31,55,43),"CROWN & MOON")):
+    im=noise((128,128),base,2);d=ImageDraw.Draw(im)
+    d.rounded_rectangle((2,2,125,125),radius=16,outline=GOLD,width=2)
+    d.rounded_rectangle((6,6,121,121),radius=13,outline=tint(base,30))
+    d.text((64-len(title)*3,17),title,fill=CREAM)
+    for i in range(6):
+        a=math.pi*2*i/6;x=64+math.sin(a)*48;y=67+math.cos(a)*42
+        d.ellipse((x-7,y-7,x+7,y+7),outline=GOLD,width=1)
+        d.ellipse((x-3,y-3,x+3,y+3),outline=tint(base,55))
+    if name=="poker_felt":
+        for x in (24,41,58,75,92):d.rounded_rectangle((x,49,x+13,70),radius=2,outline=(148,159,103,255))
+    elif name=="blackjack_pvp_felt":
+        d.arc((25,39,102,110),180,360,fill=GOLD,width=2);crown(d,53,48,2)
+    elif name=="dice_felt":
+        for x,y,n in ((38,50,5),(70,62,3)):
+            d.rounded_rectangle((x,y,x+21,y+21),radius=3,fill=CREAM,outline=GOLD)
+            for dx,dy in ((5,5),(15,15),(5,15),(15,5),(10,10))[:n]:d.ellipse((x+dx-1,y+dy-1,x+dx+1,y+dy+1),fill=INK)
+    else:crown(d,33,50,2);d.ellipse((79,50,100,71),fill=LIGHT);d.ellipse((87,47,105,65),fill=base)
+    save(name,im)
+im=noise((128,128),(40,79,43),2);d=ImageDraw.Draw(im)
+d.rectangle((1,1,126,126),outline=GOLD,width=2)
+for lane in range(4):
+    top=12+lane*25;d.rectangle((9,top,119,top+20),fill=(111,76,43,255));d.line((9,top,119,top),fill=CREAM)
+    for x in range(12,120,10):d.line((x,top+10,x+4,top+10),fill=(177,139,83,255))
+    for y in range(top+1,top+20,4):d.rectangle((110,y,114,y+2),fill=CREAM if (y-top)//4%2==0 else INK)
+    digits(d,13,top+7,lane+1)
+save("horse_track",im)
+for name,face in (("coin_heads","heads"),("coin_tails","tails")):
+    im=Image.new("RGBA",(64,64));d=ImageDraw.Draw(im);d.ellipse((1,1,62,62),fill=DEEP,outline=LIGHT,width=2);d.ellipse((4,4,59,59),fill=GOLD,outline=CREAM,width=1);d.ellipse((8,8,55,55),fill=(137,91,39,255),outline=LIGHT,width=2)
+    for a in range(0,360,30):
+        a=math.radians(a);x=round(32+math.cos(a)*25);y=round(32+math.sin(a)*25);d.rectangle((x-1,y-1,x+1,y+1),fill=CREAM)
+    if face=="heads":crown(d,16,19,3,CREAM)
+    else:
+        d.ellipse((17,16,47,47),fill=CREAM);d.ellipse((29,12,53,36),fill=(137,91,39,255));star(d,44,41,4,LIGHT)
+    save(name,im)
+RNG.setstate(_rng_state)
+
 TEXTURES={p.stem:"realmcasino:block/"+p.stem for p in sorted(TEX.glob("*.png"))}
 TEXTURES["particle"]="realmcasino:block/walnut"
 ELEMENTS=[]
@@ -511,6 +550,7 @@ box([14.15,18.1,7.7],[14.9,19.3,9.1],"walnut_dark","lever_axle")
 box([14.55,19.0,8.1],[15.0,23.3,8.55],"brass","lever_stem")
 box([14.17,23.1,7.73],[15.38,24.25,8.94],"ruby","ruby_lever_knob",full=True)
 box([14.38,24.25,7.94],[15.17,24.55,8.73],"ruby","lever_knob_bevel",full=True)
+THREE_SLOT_ELEMENTS=deepcopy(ELEMENTS)
 publish("slot_machine",ELEMENTS,True)
 
 # Roulette combines a physically sculpted octagonal wheel with an ivory ball,
@@ -559,6 +599,7 @@ for y in (13.37,13.55,13.73):box([9.78,y,4.08],[12.42,y+.05,4.12],"walnut_top","
 box([3.4,12.76,3.0],[7.7,12.94,4.1],"brass","dealer_chip_rack_base")
 for x in (3.7,4.75,5.8,6.85):
     box([x,12.94,3.15],[x+.7,13.3,3.95],"chip_red" if x<5 else "chip_green","dealer_chip_rack_tokens",up="chip_red" if x<5 else "chip_green")
+BLACKJACK_ELEMENTS=deepcopy(ELEMENTS)
 publish("blackjack_table",ELEMENTS)
 
 # Plinko is a two-cell mechanical cabinet with 78 protruding brass pins,
@@ -633,20 +674,109 @@ for z in (5.8,9.8):box([13.6,12.74,z],[14,14.55,z+.4],"brass","finish_gate_pilla
 box([13.5,14.55,5.8],[14.1,14.9,10.2],"marquee","finish_gate_banner",up="marquee")
 publish("chicken_road_table",ELEMENTS)
 
+# A distinct five-reel royal cabinet keeps the original carved walnut joinery,
+# but has five separate mechanical windows and five small jewel indicators.
+ELEMENTS=[deepcopy(e) for e in THREE_SLOT_ELEMENTS if not (e["name"].startswith("ivory_mechanical_") or e["name"].startswith("reel_individual_") or e["name"]=="amber_indicator")]
+for i in range(5):
+    x=3.45+i*1.63
+    box([x,17.05,2.1],[x+1.3,22.45,2.28],"card_ace","five_reel_ivory_band")
+    box([x,18.6,2.02],[x+1.3,20.9,2.1],"symbols","five_reel_static_glyph")
+    ELEMENTS[-1]["faces"]["north"]["uv"]=[i*2,0,(i+1)*2,16]
+    for y in (17.05,22.22):box([x-.05,y,1.98],[x+1.35,y+.18,2.2],"brass","five_reel_window_bezel")
+    for edge in (x-.1,x+1.32):box([edge,17.25,1.98],[edge+.08,22.2,2.2],"brass","five_reel_mullion")
+    box([x+.45,23.5,2.2],[x+.75,23.85,2.5],"ruby" if i%2 else "emerald","five_cabinet_indicator",full=True)
+publish("five_slot_machine",ELEMENTS,True)
+
+# The race is a physical four-lane diorama with starting gates and a finish arch.
+ELEMENTS=[];table_base()
+box([1.1,12.52,1.1],[14.9,12.7,14.9],"horse_track","four_lane_miniature_racecourse",up="horse_track")
+border(1.1,12.71,1.1,14.9,14.9,.13)
+for z in (1.6,4.75,7.9,11.05,14.1):
+    box([1.6,12.71,z],[14.4,13.05,z+.12],"brass","miniature_lane_rail")
+    for x in (2,6,10,14):box([x,12.71,z-.07],[x+.18,13.5,z+.19],"walnut_top","miniature_fence_post")
+for i in range(4):
+    z=2.4+i*3.15;box([1.7,12.74,z],[2.2,14.1,z+1.25],"ruby" if i%2 else "emerald","individual_starting_gate",full=True)
+for z in (1.65,13.5):box([13.65,12.72,z],[14.1,15.45,z+.5],"brass","finish_arch_pillar")
+box([13.55,15.45,1.65],[14.2,15.8,14],"marquee","race_finish_banner",up="marquee")
+box([1.8,13.1,14.5],[5.2,13.3,15.1],"walnut","race_owner_scoreboard")
+publish("horse_race_table",ELEMENTS)
+
+# Six-place octagonal poker furniture with community-card wells and chip racks.
+ELEMENTS=[];table_base()
+box([1.3,12.52,1.3],[14.7,12.7,14.7],"poker_felt","poker_embroidered_playing_cloth",up="poker_felt")
+for x0,x1,z0,z1 in ((2.4,13.6,.8,1.7),(2.4,13.6,14.3,15.2),(.8,1.7,2.4,13.6),(14.3,15.2,2.4,13.6)):
+    box([x0,12.7,z0],[x1,13.3,z1],"wine","octagonal_padded_poker_rail")
+    box([x0,12.62,z0],[x1,12.77,z1],"brass","poker_rail_gilt_binding")
+for x,z in ((1.3,1.3),(13.3,1.3),(1.3,13.3),(13.3,13.3)):
+    box([x,12.7,z],[x+1.4,13.2,z+1.4],"wine","poker_corner_cushion")
+    box([x+.48,13.2,z+.48],[x+.92,13.4,z+.92],"amber","poker_corner_rivet",full=True)
+for i in range(5):
+    x=3.2+i*1.85;box([x,12.72,6.6],[x+1.6,12.79,9.2],"walnut_dark","community_card_inset")
+    border(x,12.8,6.6,x+1.6,9.2,.07)
+for x,z,color in ((2.2,3.4,"chip_red"),(7.1,2.3,"chip_green"),(12,3.4,"chip_blue"),(2.2,11,"chip_blue"),(7.1,12,"chip_red"),(12,11,"chip_black")):
+    chip_stack(x,12.76,z,color,3)
+box([6.7,12.76,10.1],[8.5,12.98,11.5],"chip_black","dealer_button",up="chip_black")
+publish("poker_table",ELEMENTS)
+
+# Multiplayer twenty-one has its own blue cloth, six distinct card positions
+# and an open shared centre, instead of a dealer shoe.
+ELEMENTS=[];table_base()
+box([1.3,12.52,1.3],[14.7,12.7,14.7],"blackjack_pvp_felt","six_player_twentyone_cloth",up="blackjack_pvp_felt")
+border(1.3,12.72,1.3,14.7,14.7,.16)
+for x0,x1,z0,z1 in ((1,15,14,15),(1,2,2,14),(14,15,2,14),(2,14,1,2)):
+    box([x0,12.75,z0],[x1,13.2,z1],"wine","multiplayer_blackjack_padded_rail")
+for x,z,c in ((2.6,3.2,"chip_red"),(7.0,2.3,"chip_green"),(11.2,3.2,"chip_blue"),(2.6,10.6,"chip_blue"),(7.0,12,"chip_red"),(11.2,10.6,"chip_black")):
+    chip_stack(x,12.76,z,c,2)
+box([5.0,12.75,5.4],[7.3,12.88,8.9],"card_back","communal_card_back",up="card_back",full=True)
+box([8.2,12.75,5.4],[10.5,12.88,8.9],"card_back","communal_second_card_back",up="card_back",full=True)
+publish("multiplayer_blackjack_table",ELEMENTS)
+
+# Recessed dice tray, padded lip and a sculpted leather cup.
+ELEMENTS=[];table_base()
+box([1.3,12.52,1.3],[14.7,12.7,14.7],"dice_felt","burgundy_dice_betting_cloth",up="dice_felt")
+box([3.6,12.7,3.5],[12.5,12.85,12.2],"walnut_dark","recessed_dice_tray")
+box([3.95,12.85,3.85],[12.15,12.94,11.85],"wine","dice_tray_velvet")
+for a,b,c,d in ((3.5,12.6,3.4,3.9),(3.5,12.6,11.8,12.3),(3.5,4,3.9,11.8),(12.1,12.6,3.9,11.8)):
+    box([a,12.85,c],[b,13.45,d],"walnut_top","raised_dice_tray_rail")
+    box([a,13.45,c],[b,13.6,d],"brass","polished_dice_tray_binding")
+box([1.8,12.74,5.5],[3.15,14.8,7.1],"wine","leather_dice_cup")
+box([1.65,14.75,5.35],[3.3,15.05,7.25],"brass","dice_cup_rim")
+box([1.9,15.05,5.6],[3.05,15.12,7.0],"black","dice_cup_opening")
+for x,z,c in ((2,2,"chip_red"),(11.8,1.8,"chip_green"),(2,12.7,"chip_blue"),(11.8,12.7,"chip_black")):chip_stack(x,12.75,z,c,2)
+publish("dice_table",ELEMENTS)
+
+# A two-sided crown-and-moon tossing table, with a gilt central coin dais.
+ELEMENTS=[];table_base()
+box([1.3,12.52,1.3],[14.7,12.7,14.7],"coin_felt","crown_and_moon_table_cloth",up="coin_felt")
+border(1.3,12.72,1.3,14.7,14.7,.16)
+box([5.5,12.75,5.5],[10.5,13.0,10.5],"walnut_dark","coin_dais_base")
+box([5.9,13.0,5.9],[10.1,13.2,10.1],"brass","coin_dais_gilt_bevel")
+box([6.2,13.2,6.2],[9.8,13.3,9.8],"wine","coin_dais_velvet_top")
+for x,z,texture in ((2.4,2.4,"coin_heads"),(10.2,10.2,"coin_tails")):
+    box([x,12.75,z],[x+3.2,12.95,z+3.2],texture,"player_side_coin_inlay",up=texture,full=True)
+chip_stack(11.2,12.75,2.5,"chip_red",3);chip_stack(2.6,12.75,11.1,"chip_green",3)
+publish("coin_table",ELEMENTS)
+
 for name,pattern,keys in (
     ("slot_machine",["GAG","RER","WWW"],{"G":"gold_ingot","A":"amethyst_shard","R":"redstone","E":"emerald","W":"dark_oak_planks"}),
     ("roulette_table",["GCG","WEW","WWW"],{"G":"gold_ingot","C":"compass","W":"dark_oak_planks","E":"green_wool"}),
     ("blackjack_table",["PGP","WEW","WWW"],{"P":"paper","G":"gold_ingot","W":"dark_oak_planks","E":"green_wool"}),
     ("plinko_board",["GIG","IRI","WWW"],{"G":"gold_ingot","I":"iron_nugget","R":"redstone","W":"dark_oak_planks"}),
     ("fortune_wheel",["GAG","GRG","WWW"],{"G":"gold_ingot","A":"amethyst_shard","R":"redstone","W":"dark_oak_planks"}),
-    ("chicken_road_table",["FGF","WEW","WWW"],{"F":"feather","G":"gold_ingot","E":"egg","W":"dark_oak_planks"})):
+    ("chicken_road_table",["FGF","WEW","WWW"],{"F":"feather","G":"gold_ingot","E":"egg","W":"dark_oak_planks"}),
+    ("five_slot_machine",["GAG","RER","WGW"],{"G":"gold_ingot","A":"amethyst_block","R":"redstone","E":"emerald","W":"dark_oak_planks"}),
+    ("horse_race_table",["SGS","WHW","WWW"],{"S":"saddle","G":"gold_ingot","H":"hay_block","W":"dark_oak_planks"}),
+    ("poker_table",["PGP","WEW","WWW"],{"P":"paper","G":"gold_ingot","E":"emerald","W":"dark_oak_planks"}),
+    ("multiplayer_blackjack_table",["PGP","WBW","WWW"],{"P":"paper","G":"gold_ingot","B":"blue_wool","W":"dark_oak_planks"}),
+    ("dice_table",["BGB","WRW","WWW"],{"B":"bone_block","G":"gold_ingot","R":"red_wool","W":"dark_oak_planks"}),
+    ("coin_table",["GGG","WEW","WWW"],{"G":"gold_ingot","E":"emerald","W":"dark_oak_planks"})):
     write(RES/f"data/realmcasino/recipe/{name}.json",{"type":"minecraft:crafting_shaped","category":"misc","pattern":pattern,"key":{k:{"item":"minecraft:"+v} for k,v in keys.items()},"result":{"id":"realmcasino:"+name,"count":1}})
     write(RES/f"data/realmcasino/advancement/recipes/decorations/{name}.json",{
         "parent":"minecraft:recipes/root","criteria":{
             "has_gold":{"trigger":"minecraft:inventory_changed","conditions":{"items":[{"items":["minecraft:gold_ingot"]}]}},
             "has_the_recipe":{"trigger":"minecraft:recipe_unlocked","conditions":{"recipe":"realmcasino:"+name}}},
         "requirements":[["has_gold","has_the_recipe"]],"rewards":{"recipes":["realmcasino:"+name]}})
-write(RES/"data/minecraft/tags/block/mineable/axe.json",{"replace":False,"values":["realmcasino:"+n for n in ("slot_machine","roulette_table","blackjack_table","plinko_board","fortune_wheel","chicken_road_table")]})
+write(RES/"data/minecraft/tags/block/mineable/axe.json",{"replace":False,"values":["realmcasino:"+n for n in ("slot_machine","roulette_table","blackjack_table","plinko_board","fortune_wheel","chicken_road_table","five_slot_machine","horse_race_table","poker_table","multiplayer_blackjack_table","dice_table","coin_table")]})
 write(RES/"pack.mcmeta",{"pack":{"pack_format":34,"description":"Realm Casino — original walnut, brass, velvet and jewel artwork"}})
 
 # A crisp 256px list icon: embroidered emerald frame, crowned velvet cabinet,
@@ -675,4 +805,4 @@ for x,y,base in ((86,105,(39,108,78,255)),(99,109,RED),(77,114,(43,70,112,255)))
     d.ellipse((x-9,y-4,x+9,y+4),fill=base,outline=CREAM)
     d.ellipse((x-6,y-3,x+6,y+3),outline=GOLD)
 icon.resize((256,256),Image.Resampling.NEAREST).save(ASSETS/"icon.png")
-print(len(TEXTURES)-1,"original material textures, 6 craftable models and 256px icon")
+print(len(TEXTURES)-1,"original material textures, 12 craftable models and 256px icon")

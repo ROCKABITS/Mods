@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.3.0 — Beta, the royal tables
+
+- Added an original five-reel slot cabinet, published left-to-right three/four/five-match payouts and a 94.9951171875% theoretical gross return.
+- Added four-lane miniature horse races, craftable diorama furniture, animated horses, fair finishing permutations and 3.8× gross winning payouts.
+- Added Texas Hold’em for 2–6 players with private hole cards, rotating blinds, check/call/fold/raise/all-in, unequal buy-ins, side pots, hand evaluation and exact split-pot cents.
+- Added separate multiplayer twenty-one and dice tables for 2–6 players, plus a two-player crown-or-moon coin table.
+- Added fully funded multiplayer escrow, persistent hands, turn deadlines, lobby refunds, departure handling and one-time pending-credit settlements using the existing durable Chronicles wallet journal.
+- Added six original medieval blocks with carved wood, gold inlay, colored cloth, cards, chip racks, dice, a coin pedestal, recipes, creative search and matching English/Portuguese interfaces.
+- Added optional Crown Ledger 0.2.3+ taxation of owner profit withdrawals after recovering deposited capital, loss carry-forward and a durable receipt outbox. Deposits, returned principal and PvP player prizes are not taxed.
+- Added casino data format 3, automatic reading of formats 1/2 and network protocol 3. Update every client and server together; preserve a pre-update world backup for rollback.
+- Extended actual-client and native tests for all twelve blocks, private multiplayer menus, wallets, restart persistence, replay protection and treasury receipts.
+
 ## 0.2.0 — Beta, fortune and crossings
 
 - Added Plinko with twelve independent rows, thirteen payout bins, a published 92.1142578125% theoretical gross return, an animated ivory ball and a two-block cabinet with 78 protruding brass pins.

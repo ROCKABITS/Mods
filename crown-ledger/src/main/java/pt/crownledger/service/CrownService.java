@@ -73,7 +73,7 @@ public final class CrownService {
             if (previous.currency() != currency) next.setPolicy(new Policy(previous.minimumReputation(), previous.taxMode(),
                     previous.taxBasisPoints(), previous.fixedTax(), previous.salary(), previous.periodHours(),
                     previous.activeMinutes(), currency, previous.reputationPerPublicContract(), previous.dailyReputationLimit(),
-                    previous.marketTaxBasisPoints()),
+                    previous.marketTaxBasisPoints(),previous.casinoTaxBasisPoints()),
                     null, System.currentTimeMillis());
             next.cycle(System.currentTimeMillis());
             commit(server, data, next);
@@ -237,7 +237,7 @@ public final class CrownService {
                             integer(request, "activeMinutes", old.activeMinutes()), currency(request, "currency", old.currency()),
                             integer(request, "reputationReward", old.reputationPerPublicContract()),
                             integer(request, "dailyReputationLimit", old.dailyReputationLimit()),
-                            numericInteger(request, "marketTaxBasisPoints", old.marketTaxBasisPoints())));
+                            numericInteger(request, "marketTaxBasisPoints", old.marketTaxBasisPoints()),numericInteger(request,"casinoTaxBasisPoints",old.casinoTaxBasisPoints())));
                     message = "gui.kingdomtreasury.policy_saved";
                 }
                 case "publish" -> {
@@ -496,7 +496,7 @@ public final class CrownService {
                 Currency.CHRONICLES.name(), treasury.claims(player.getUUID(), Currency.CHRONICLES)));
         Map<String, Object> rules = new LinkedHashMap<>();
         rules.put("taxMode", policy.taxMode()); rules.put("taxBasisPoints", policy.taxBasisPoints());
-        rules.put("marketTaxBasisPoints", policy.marketTaxBasisPoints());
+        rules.put("marketTaxBasisPoints", policy.marketTaxBasisPoints());rules.put("casinoTaxBasisPoints",policy.casinoTaxBasisPoints());
         rules.put("fixedTax", policy.fixedTax()); rules.put("salary", policy.salary());
         rules.put("periodHours", policy.periodHours()); rules.put("activeMinutes", policy.activeMinutes());
         rules.put("minimumReputation", policy.minimumReputation()); rules.put("currency", policy.currency());
@@ -516,7 +516,7 @@ public final class CrownService {
         view.put("contracts", contracts);
         view.put("history", treasury.history().stream().map(entry -> {
             Map<String, Object> record = new LinkedHashMap<>();
-            record.put("description", entry.kind()==Kind.JUSTICE_INCOME?"gui.kingdomtreasury.justice_income":entry.details()); record.put("kind", entry.kind());
+            record.put("description", entry.kind()==Kind.JUSTICE_INCOME?"gui.kingdomtreasury.justice_income":entry.kind()==Kind.CASINO_TAX?"gui.kingdomtreasury.casino_tax_income":entry.details()); record.put("kind", entry.kind());
             record.put("amount", entry.amount()); record.put("currency", entry.currency()); record.put("at", entry.time());
             return record;
         }).toList());

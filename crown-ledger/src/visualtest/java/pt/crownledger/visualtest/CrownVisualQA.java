@@ -144,18 +144,19 @@ public final class CrownVisualQA {
         JsonObject policy = currencyDemo("EMERALD", "CHRONICLES", true);
         screen = openDemo(mc, policy); click(screen, "policy");
         expectField(screen, "fixedTax", "1.25"); expectField(screen, "salary", "2.50");
-        expectField(screen, "marketTaxPercent", "5");
+        expectField(screen, "marketTaxPercent", "5"); expectField(screen,"casinoTaxPercent","7.25");
         click(screen, "participation_page"); selector(screen, "CHRONICLES", true);
         click(screen, "currency_chronicles"); selector(screen, "EMERALD", true);
         click(screen, "economy_page"); expectField(screen, "fixedTax", "0"); expectField(screen, "salary", "0");
-        expectField(screen, "marketTaxPercent", "5");
+        expectField(screen, "marketTaxPercent", "5"); expectField(screen,"casinoTaxPercent","7.25");
         setField(screen, "fixedTax", "9"); setField(screen, "salary", "12");
         click(screen, "participation_page"); click(screen, "currency_emerald"); selector(screen, "CHRONICLES", true);
         click(screen, "economy_page"); expectField(screen, "fixedTax", "0"); expectField(screen, "salary", "0");
-        expectField(screen, "marketTaxPercent", "5");
+        expectField(screen, "marketTaxPercent", "5"); expectField(screen,"casinoTaxPercent","7.25");
         setField(screen, "fixedTax", "1.25"); setField(screen, "salary", "2.50");
         JsonObject saved = request(screen, "save_policy", "policy");
         assertMoney(saved, "CHRONICLES", "fixedTax", 125); assertMoney(saved, "CHRONICLES", "salary", 250);
+        check(saved.get("casinoTaxBasisPoints").getAsInt()==725,"Casino profit tax changed while editing other policy values");
         check(saved.get("marketTaxBasisPoints").getAsInt() == 500, "Market sales tax must retain 500 basis points across both currency changes");
         acknowledge(mc, screen, policy);
         click(screen, "contribute");
@@ -165,19 +166,25 @@ public final class CrownVisualQA {
 
         screen = openDemo(mc, policy); click(screen, "policy");
         click(screen, "mode_percentage"); // mode remains independent of the market sales tax
-        setField(screen, "marketTaxPercent", "5.25");
+        setField(screen, "marketTaxPercent", "5.25");setField(screen,"casinoTaxPercent","12.34");
         saved = request(screen, "save_policy", "policy");
+        check(saved.get("casinoTaxBasisPoints").getAsInt()==1234,"Casino profit tax did not save exact basis points");
         check(saved.get("marketTaxBasisPoints").getAsInt() == 525 && "FIXED".equals(saved.get("taxMode").getAsString()), "Market tax must parse exact basis points independently of fixed periodic mode");
         acknowledge(mc, screen, policy); setField(screen, "marketTaxPercent", "100.01");
         before = UI_REQUESTS.size(); click(screen, "save_policy");
         check(UI_REQUESTS.size() == before, "Out-of-range market tax must not send a request");
         setField(screen, "marketTaxPercent", "5");
         screen.init(mc, 320, 240);
-        expectField(screen, "marketTaxPercent", "5");
+        expectField(screen, "marketTaxPercent", "5"); expectField(screen,"casinoTaxPercent","7.25");
         for (var child : screen.children()) if (child instanceof AbstractWidget widget && widget.visible)
             check(widget.getX() >= 0 && widget.getY() >= 0 && widget.getX() + widget.getWidth() <= 320 && widget.getY() + widget.getHeight() <= 240, "Market tax controls exceed the 320x240 viewport");
         screen.init(mc, mc.getWindow().getGuiScaledWidth(), mc.getWindow().getGuiScaledHeight());
         CURRENCY_CHECKS.add("The governor edits market tax independently of the periodic/contract mode, saves exact basis points, rejects rates above 100%, and retains visible controls at 320x240.");
+
+        screen=openDemo(mc,policy);click(screen,"policy");setField(screen,"casinoTaxPercent","100.01");
+        before=UI_REQUESTS.size();click(screen,"save_policy");check(UI_REQUESTS.size()==before,"Casino tax over 100% was submitted");
+        field(screen,"casinoTaxPercent").setValue("-1");check(!field(screen,"casinoTaxPercent").getValue().equals("-1"),"Negative casino tax bypassed the numeric input filter");
+        CURRENCY_CHECKS.add("Casino profit taxation retains its independent rate across currencies, parses 12.34% as 1234 basis points and rejects negative and above-100% values.");
 
         JsonObject unavailable = currencyDemo("CHRONICLES", "CHRONICLES", false);
         screen = openDemo(mc, unavailable); click(screen, "contribute"); selector(screen, "EMERALD", false);
@@ -194,7 +201,7 @@ public final class CrownVisualQA {
         click(screen, "participation_page"); selector(screen, "CHRONICLES", true);
         click(screen, "currency_chronicles"); selector(screen, "EMERALD", false);
         click(screen, "economy_page"); expectField(screen, "fixedTax", "0"); expectField(screen, "salary", "0");
-        expectField(screen, "marketTaxPercent", "5");
+        expectField(screen, "marketTaxPercent", "5"); expectField(screen,"casinoTaxPercent","7.25");
         setField(screen, "fixedTax", "4"); setField(screen, "salary", "8");
         saved = request(screen, "save_policy", "policy");
         assertMoney(saved, "EMERALD", "fixedTax", 4); assertMoney(saved, "EMERALD", "salary", 8);
@@ -292,7 +299,7 @@ public final class CrownVisualQA {
         var balances = new JsonObject(); balances.addProperty("EMERALD", 960); balances.addProperty("CHRONICLES", 12_500); data.add("balances", balances);
         var credits = new JsonObject(); credits.addProperty("EMERALD", 15); credits.addProperty("CHRONICLES", 0); data.add("credits", credits);
         var policy = new JsonObject();
-        policy.addProperty("currency", "EMERALD"); policy.addProperty("taxMode", "PERCENTAGE"); policy.addProperty("taxBasisPoints", 500); policy.addProperty("marketTaxBasisPoints", 500);
+        policy.addProperty("currency", "EMERALD"); policy.addProperty("taxMode", "PERCENTAGE"); policy.addProperty("taxBasisPoints", 500); policy.addProperty("marketTaxBasisPoints", 500); policy.addProperty("casinoTaxBasisPoints", 725);
         policy.addProperty("fixedTax", 10); policy.addProperty("salary", 15); policy.addProperty("periodHours", 168); policy.addProperty("activeMinutes", 30);
         policy.addProperty("minimumReputation", 20); policy.addProperty("reputationReward", 1); policy.addProperty("dailyReputationLimit", 3); data.add("policy", policy);
         data.add("contracts", new com.google.gson.JsonArray()); data.add("history", new com.google.gson.JsonArray());
@@ -336,7 +343,7 @@ public final class CrownVisualQA {
             report.put("screenshot", FILENAMES[0]); report.put("screenshots", List.copyOf(CAPTURED)); report.put("images", List.copyOf(CAPTURED));
             report.put("interfaceData", "Demonstration data in the actual production TreasuryScreen");
             report.put("currencyInteractionChecks", List.copyOf(CURRENCY_CHECKS)); report.put("recordedUiRequests", List.copyOf(UI_REQUESTS));
-            report.put("requestTransport", "Recorded locally; no game-server network requests"); report.put("policyScreenshotPage", "economy: independent market sales tax at 5%, contract mode and salaries");
+            report.put("requestTransport", "Recorded locally; no game-server network requests"); report.put("policyScreenshotPage", "economy: independent market sales tax at 5%, casino profit tax at 7.25%, contract mode and salaries");
             report.put("bakedQuadCounts", Map.of("kingdomtreasury:crown_chest", itemQuads)); report.put("validatedBlockStates", states);
             report.put("windowWidth", Minecraft.getInstance().getWindow().getWidth()); report.put("windowHeight", Minecraft.getInstance().getWindow().getHeight());
             Files.writeString(OUT.resolve("result.json"), new GsonBuilder().setPrettyPrinting().create().toJson(report));

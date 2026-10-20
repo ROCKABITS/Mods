@@ -31,6 +31,7 @@ import pt.realmcasino.domain.CasinoLedger.Kind;
 import pt.realmcasino.domain.CasinoLedger.Machine;
 import pt.realmcasino.domain.CasinoLedger.Round;
 import pt.realmcasino.domain.Money;
+import pt.realmcasino.domain.TableGame;
 
 /**
  * Casino-only world ledger with an explicit durable journal. SavedData's regular save path logs
@@ -123,14 +124,14 @@ public final class CasinoData extends SavedData {
     public static CasinoData load(CompoundTag root, HolderLookup.Provider lookup) {
         try {
             keys(root,Set.of("version","ledger","states","journal"),Set.of("version","ledger","states"));
-            type(root,"version",Tag.TAG_INT); if(root.getInt("version")!=1&&root.getInt("version")!=2)throw corrupt(null);
+            type(root,"version",Tag.TAG_INT); if(root.getInt("version")!=1&&root.getInt("version")!=2&&root.getInt("version")!=3)throw corrupt(null);
             CasinoData data=new CasinoData();
-            data.ledger=readLedger(compound(root,"ledger")); data.states=readStates(list(root,"states",MAX_STATES));
+            data.ledger=readLedger(compound(root,"ledger"),root.getInt("version")); data.states=readStates(list(root,"states",MAX_STATES));
             validate(data.ledger,data.states);
             if(root.contains("journal")) {
                 CompoundTag j=compound(root,"journal"); exact(j,Set.of("id","player","before","after","kind","ledger","states"));
                 data.journal=new Journal(uuid(j,"id"),uuid(j,"player"),number(j,"before"),number(j,"after"),string(j,"kind",16),
-                        readLedger(compound(j,"ledger")),readStates(list(j,"states",MAX_STATES)));
+                        readLedger(compound(j,"ledger"),root.getInt("version")),readStates(list(j,"states",MAX_STATES)));
             }
             if(data.journal!=null) validateIntent(data.ledger,data.journal);
             return data;
@@ -138,7 +139,7 @@ public final class CasinoData extends SavedData {
     }
     private static CompoundTag encode(CasinoLedger ledger,Map<UUID,GameState> states,Journal journal) {
         validate(ledger,states);
-        CompoundTag root=new CompoundTag(); root.putInt("version",2); root.put("ledger",writeLedger(ledger)); root.put("states",writeStates(states));
+        CompoundTag root=new CompoundTag(); root.putInt("version",3); root.put("ledger",writeLedger(ledger)); root.put("states",writeStates(states));
         if(journal!=null) {
             CompoundTag j=new CompoundTag(); j.putUUID("id",journal.id());j.putUUID("player",journal.player());j.putLong("before",journal.before());j.putLong("after",journal.after());j.putString("kind",journal.kind());
             j.put("ledger",writeLedger(journal.ledger()));j.put("states",writeStates(journal.states()));root.put("journal",j);
@@ -149,7 +150,7 @@ public final class CasinoData extends SavedData {
         CompoundTag result=new CompoundTag();ListTag machines=new ListTag(),rounds=new ListTag(),credits=new ListTag(),history=new ListTag();
         for(Machine row:ledger.machines().values()) {
             CompoundTag t=new CompoundTag();t.putUUID("id",row.id());t.putUUID("owner",row.owner());t.putString("kind",row.kind().name());t.putString("dimension",row.dimension());t.putLong("position",row.position());t.putString("name",row.name());
-            t.putLong("min",row.minBet());t.putLong("max",row.maxBet());t.putLong("bank",row.bank());t.putLong("reserved",row.reserved());t.putLong("version",row.version());machines.add(t);
+            t.putLong("min",row.minBet());t.putLong("max",row.maxBet());t.putLong("bank",row.bank());t.putLong("reserved",row.reserved());t.putLong("version",row.version());t.putLong("capital",row.capital());machines.add(t);
         }
         for(Round row:ledger.rounds().values()) {
             CompoundTag t=new CompoundTag();t.putUUID("id",row.id());t.putUUID("machine",row.machineId());t.putUUID("player",row.player());t.putLong("stake",row.stake());t.putLong("maximum",row.maxPayout());t.putLong("started",row.startedAt());rounds.add(t);
@@ -158,14 +159,17 @@ public final class CasinoData extends SavedData {
         for(History row:ledger.history()) {
             CompoundTag t=new CompoundTag();t.putUUID("id",row.id());t.putUUID("machine",row.machineId());t.putUUID("player",row.player());t.putLong("stake",row.stake());t.putLong("payout",row.payout());t.putLong("settled",row.settledAt());history.add(t);
         }
-        result.put("machines",machines);result.put("rounds",rounds);result.put("credits",credits);result.put("history",history);return result;
+        result.put("machines",machines);result.put("rounds",rounds);result.put("credits",credits);result.put("history",history);
+        ListTag tables=new ListTag();ledger.tables().values().forEach(t->tables.add(writeTable(t)));result.put("tables",tables);
+        ListTag taxes=new ListTag();ledger.taxes().values().forEach(t->{CompoundTag entry=new CompoundTag();entry.putUUID("id",t.id());entry.putUUID("payer",t.payer());entry.putLong("amount",t.amount());taxes.add(entry);});result.put("taxes",taxes);return result;
     }
-    private static CasinoLedger readLedger(CompoundTag tag) {
-        exact(tag,Set.of("machines","rounds","credits","history"));
+    private static CasinoLedger readLedger(CompoundTag tag,int version) {
+        if(version<3&&((tag.contains("tables")&&!list(tag,"tables",CasinoLedger.MAX_MACHINES).isEmpty())||(tag.contains("taxes")&&!list(tag,"taxes",CasinoLedger.MAX_MACHINES).isEmpty())))throw corrupt(null);
+        keys(tag,Set.of("machines","rounds","credits","history","tables","taxes"),version>=3?Set.of("machines","rounds","credits","history","tables","taxes"):Set.of("machines","rounds","credits","history"));
         List<Machine> machines=new ArrayList<>();List<Round> rounds=new ArrayList<>();Map<UUID,Long> credits=new LinkedHashMap<>();List<History> history=new ArrayList<>();
         for(Tag raw:list(tag,"machines",100_000)) {
-            CompoundTag t=(CompoundTag)raw;exact(t,Set.of("id","owner","kind","dimension","position","name","min","max","bank","reserved","version"));
-            machines.add(new Machine(uuid(t,"id"),uuid(t,"owner"),Kind.valueOf(string(t,"kind",16)),string(t,"dimension",256),number(t,"position"),string(t,"name",64),number(t,"min"),number(t,"max"),number(t,"bank"),number(t,"reserved"),number(t,"version")));
+            CompoundTag t=(CompoundTag)raw;keys(t,Set.of("id","owner","kind","dimension","position","name","min","max","bank","reserved","version","capital"),version>=3?Set.of("id","owner","kind","dimension","position","name","min","max","bank","reserved","version","capital"):Set.of("id","owner","kind","dimension","position","name","min","max","bank","reserved","version"));
+            machines.add(new Machine(uuid(t,"id"),uuid(t,"owner"),Kind.valueOf(string(t,"kind",16)),string(t,"dimension",256),number(t,"position"),string(t,"name",64),number(t,"min"),number(t,"max"),number(t,"bank"),number(t,"reserved"),number(t,"version"),version>=3?number(t,"capital"):number(t,"bank")));
         }
         for(Tag raw:list(tag,"rounds",100_000)) {
             CompoundTag t=(CompoundTag)raw;exact(t,Set.of("id","machine","player","stake","maximum","started"));
@@ -179,7 +183,12 @@ public final class CasinoData extends SavedData {
             CompoundTag t=(CompoundTag)raw;exact(t,Set.of("id","machine","player","stake","payout","settled"));
             history.add(new History(uuid(t,"id"),uuid(t,"machine"),uuid(t,"player"),number(t,"stake"),number(t,"payout"),number(t,"settled")));
         }
-        return new CasinoLedger(machines,rounds,credits,history);
+        Map<UUID,TableGame> tables=new LinkedHashMap<>();Map<UUID,CasinoLedger.TaxTransfer> taxes=new LinkedHashMap<>();
+        if(version>=3){
+            for(Tag raw:list(tag,"tables",CasinoLedger.MAX_MACHINES)){TableGame table=readTable((CompoundTag)raw);if(tables.putIfAbsent(table.machine(),table)!=null)throw corrupt(null);}
+            for(Tag raw:list(tag,"taxes",CasinoLedger.MAX_MACHINES)){CompoundTag t=(CompoundTag)raw;exact(t,Set.of("id","payer","amount"));var due=new CasinoLedger.TaxTransfer(uuid(t,"id"),uuid(t,"payer"),number(t,"amount"));if(taxes.putIfAbsent(due.id(),due)!=null)throw corrupt(null);}
+        }
+        return new CasinoLedger(machines,rounds,credits,history,tables,taxes);
     }
     private static ListTag writeStates(Map<UUID,GameState> states) {
         ListTag list=new ListTag();
@@ -234,12 +243,21 @@ public final class CasinoData extends SavedData {
         if(!target.subtract(base).equals(java.math.BigInteger.valueOf(intent.before()).subtract(java.math.BigInteger.valueOf(intent.after()))))throw corrupt(null);
         if((intent.kind().equals("claim")) != (intent.after()>intent.before()))throw corrupt(null);
     }
-    private static java.math.BigInteger total(CasinoLedger ledger) {
-        java.math.BigInteger value=java.math.BigInteger.ZERO;
-        for(Machine machine:ledger.machines().values())value=value.add(java.math.BigInteger.valueOf(machine.bank()));
-        for(long credit:ledger.credits().values())value=value.add(java.math.BigInteger.valueOf(credit));
-        return value;
+    private static java.math.BigInteger total(CasinoLedger ledger){return ledger.total();}
+    private static CompoundTag writeTable(TableGame table){
+        CompoundTag t=new CompoundTag();t.putUUID("id",table.id());t.putUUID("machine",table.machine());t.putString("kind",table.kind().name());t.putLong("stake",table.stake());t.putLong("created",table.createdAt());t.putLong("deadline",table.deadline());t.putLong("revision",table.revision());t.putString("phase",table.phase().name());t.putInt("dealer",table.dealer());t.putInt("actor",table.actor());t.putInt("street",table.street());t.putLong("currentBet",table.currentBet());t.putLong("minimumRaise",table.minimumRaise());t.putInt("coinChoice",table.coinChoice());
+        ListTag seats=new ListTag();for(var s:table.seats()){CompoundTag seat=new CompoundTag();seat.putUUID("player",s.player());seat.putLong("stack",s.stack());seat.putLong("committed",s.committed());seat.putLong("streetBet",s.streetBet());seat.putBoolean("folded",s.folded());seat.putBoolean("stood",s.stood());seat.putIntArray("cards",s.cards());seats.add(seat);}t.put("seats",seats);
+        t.putIntArray("deck",table.deck());t.putIntArray("board",table.board());t.putIntArray("results",table.results());
+        ListTag pending=new ListTag(),rights=new ListTag(),payouts=new ListTag();for(UUID id:table.pending()){CompoundTag e=new CompoundTag();e.putUUID("id",id);pending.add(e);}for(UUID id:table.raiseRights()){CompoundTag e=new CompoundTag();e.putUUID("id",id);rights.add(e);}table.payouts().forEach((id,amount)->{CompoundTag e=new CompoundTag();e.putUUID("player",id);e.putLong("amount",amount);payouts.add(e);});t.put("pending",pending);t.put("rights",rights);t.put("payouts",payouts);return t;
     }
+    private static TableGame readTable(CompoundTag t){
+        exact(t,Set.of("id","machine","kind","stake","created","deadline","revision","phase","dealer","actor","street","currentBet","minimumRaise","coinChoice","seats","deck","board","results","pending","rights","payouts"));
+        var seats=new ArrayList<TableGame.Seat>();for(Tag raw:list(t,"seats",6)){CompoundTag e=(CompoundTag)raw;exact(e,Set.of("player","stack","committed","streetBet","folded","stood","cards"));seats.add(new TableGame.Seat(uuid(e,"player"),number(e,"stack"),number(e,"committed"),number(e,"streetBet"),bool(e,"folded"),bool(e,"stood"),ints(e,"cards",16)));}
+        var pending=new ArrayList<UUID>();var rights=new ArrayList<UUID>();for(Tag raw:list(t,"pending",6)){CompoundTag e=(CompoundTag)raw;exact(e,Set.of("id"));pending.add(uuid(e,"id"));}for(Tag raw:list(t,"rights",6)){CompoundTag e=(CompoundTag)raw;exact(e,Set.of("id"));rights.add(uuid(e,"id"));}
+        Map<UUID,Long> payouts=new LinkedHashMap<>();for(Tag raw:list(t,"payouts",6)){CompoundTag e=(CompoundTag)raw;exact(e,Set.of("player","amount"));if(payouts.putIfAbsent(uuid(e,"player"),number(e,"amount"))!=null)throw corrupt(null);}
+        return new TableGame(uuid(t,"id"),uuid(t,"machine"),Kind.valueOf(string(t,"kind",16)),number(t,"stake"),number(t,"created"),number(t,"deadline"),number(t,"revision"),TableGame.Phase.valueOf(string(t,"phase",16)),integer(t,"dealer"),integer(t,"actor"),integer(t,"street"),number(t,"currentBet"),number(t,"minimumRaise"),integer(t,"coinChoice"),seats,ints(t,"deck",52),ints(t,"board",5),pending,rights,ints(t,"results",12),payouts);
+    }
+    private static boolean bool(CompoundTag t,String key){type(t,key,Tag.TAG_BYTE);if(t.getByte(key)!=0&&t.getByte(key)!=1)throw corrupt(null);return t.getBoolean(key);}
     private static CompoundTag compound(CompoundTag t,String key){type(t,key,Tag.TAG_COMPOUND);return t.getCompound(key);}
     private static ListTag list(CompoundTag t,String key,int max){if(!(t.get(key)instanceof ListTag list)||list.size()>max||(list.getElementType()!=Tag.TAG_COMPOUND&&!(list.isEmpty()&&list.getElementType()==Tag.TAG_END)))throw corrupt(null);return list;}
     private static List<Integer> ints(CompoundTag t,String key,int max){type(t,key,Tag.TAG_INT_ARRAY);int[] a=t.getIntArray(key);if(a.length>max)throw corrupt(null);return java.util.Arrays.stream(a).boxed().toList();}
