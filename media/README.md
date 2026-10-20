@@ -2,7 +2,7 @@
 
 **Laws & Justice 0.3.0 Beta — publicação aprovada:** [Seleção visual](laws-justice/README.md) · [Download dos 37 PNGs](laws-justice/0.3.0/laws-justice-0.3.0-media.zip). Capturas reais de prisões, tribunal, mandados, sete blocos de trabalho e seis tarefas completas com produção temporizada e entregas seladas. A prisão e as regras de uma unidade por tarefa são demonstrações; não são geradas construções ou recursos. Multas e fianças seguem na fase 0.4.
 
-**Realm Casino 0.2.0 Beta:** [Seleção visual](realm-casino/README.md) · [Download dos 31 PNGs](realm-casino/0.2.0/realm-casino-0.2.0-media.zip). Capturas reais dos seis blocos medievais, slots, roleta, blackjack, Plinko, Roda da Fortuna, Travessia Real e menus de regras e proprietário, com personagens e fundos virtuais de demonstração.
+**Realm Casino 0.3.0 Beta:** [Seleção visual](realm-casino/README.md) · [Download dos 63 PNGs](realm-casino/0.3.0/realm-casino-0.3.0-media.zip). Doze blocos, slots de cinco rolos, corridas em miniatura, poker e mesas multiplayer com cartas privadas, menus e fundos virtuais de demonstração.
 
 **Realm Titles 0.1.0:** [Seleção visual](realm-titles/README.md) · [Download PNG](realm-titles/0.1.0/realm-titles-0.1.0-media.zip). Capturas reais da Mesa do Selo Real nas quatro direções, registo público, menus do governante e títulos atuais num documento autêntico do Identity; personagens e nomeações de demonstração.
 
@@ -20,7 +20,7 @@
 
 **Crown Ledger logo:** [Download PNG](../mod-pronto/crown-ledger-icon.png). Original illustrated square project icon for CurseForge; separate from the in-game screenshots.
 
-**Crown Ledger:** [Screenshots](crown-ledger/0.2.0/README.md) · [Download PNG gallery](crown-ledger/0.2.0/crown-ledger-0.2.0-media.zip). Actual Minecraft chest and menus; menu balances are demonstration data.
+**Crown Ledger:** [Screenshots](crown-ledger/0.2.3/README.md) · [Download PNG gallery](crown-ledger/0.2.3/crown-ledger-0.2.3-media.zip). Actual Minecraft chest and menus; menu balances are demonstration data.
 
 ## Contracts & Bounties
 

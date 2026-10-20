@@ -90,8 +90,8 @@ O ficheiro `data/crown_ledger.dat` guarda regras, saldo disponível, salários r
 ./gradlew build
 ./gradlew -PcrownGameTests runGameTestServer
 mkdir -p compat-libs
-# Copiar o JAR Laws & Justice 0.4.0 compilado a partir do mesmo commit,
-# mais os companheiros publicados definidos em .github/scripts/justice_release.py.
+# Copiar o JAR Realm Casino 0.3.0 compilado a partir do mesmo commit,
+# mais os companheiros publicados definidos em .github/scripts/casino_release.py.
 # A suíte nativa própria Crown usa estes companheiros sem Chronicles;
 # o runtime completo da carteira é verificado pela suíte Laws & Justice.
 ./gradlew -PcrownGameTests -PintegrationTests runGameTestServer

@@ -1,35 +1,37 @@
-# Realm Casino 0.2.0 Beta
+# Realm Casino 0.3.0 — Galeria
 
-Capturas reais de Minecraft 1.21.1/NeoForge, com os seis jogos, blocos e menus medievais. As personagens, o cenário e os fundos são de demonstração.
+Capturas reais do Minecraft 1.21.1/NeoForge, com modelos e menus do mod. Personagens, construção e dinheiro virtual são de demonstração. O servidor escolheu os resultados normalmente, sem substituir o sorteio ou os dados financeiros dos menus. As mesas usam um anfitrião real e uma contraparte de teste do servidor; não são dois clientes autenticados.
 
-[Galeria completa](0.2.0/README.md) · [Download dos PNGs](0.2.0/realm-casino-0.2.0-media.zip) · [Validação](../../realm-casino/VALIDACAO.md).
+[Todos os 63 PNGs](0.3.0/realm-casino-0.3.0-media.zip) · [Galeria completa](0.3.0/README.md) · [Validação](https://github.com/ROCKABITS/Mods/actions/runs/39347074971)
 
-## Plinko
+**Mobiliário medieval e mesas do casino**
 
-Painel de dois blocos, pinos de latão, caixas individuais e bola animada.
+![Mobiliário medieval e mesas do casino](0.3.0/realm-casino-coin-detail.png)
 
-![Painel de Plinko](0.2.0/realm-casino-plinko-detail.png)
+**Slots de cinco rolos**
 
-![Interface de Plinko](0.2.0/realm-casino-plinko-result.png)
+![Slots de cinco rolos](0.3.0/realm-casino-slots-five-result.png)
 
-## Roda da Fortuna
+**Pista com cavalos em miniatura**
 
-Pedestal de madeira, coroa, aro dourado, ponteiro de rubi e vinte setores.
+![Pista com cavalos em miniatura](0.3.0/realm-casino-horses-world-racing.png)
 
-![Roda da Fortuna](0.2.0/realm-casino-wheel-detail.png)
+**Corridas Reais**
 
-![Interface da roda](0.2.0/realm-casino-wheel-result.png)
+![Corridas Reais](0.3.0/realm-casino-horses-racing.png)
 
-## Travessia Real
+**Poker com cartas privadas e comunitárias**
 
-Mesa com estrada em miniatura, carroças, sebes, arco e galinha. O menu permite avançar ou recolher o prémio atingido.
+![Poker com cartas privadas e comunitárias](0.3.0/realm-casino-poker-flop.png)
 
-![Mesa da Travessia Real](0.2.0/realm-casino-chicken-detail.png)
+**Vinte e um entre jogadores**
 
-![Travessia da galinha](0.2.0/realm-casino-chicken-crossing.png)
+![Vinte e um entre jogadores](0.3.0/realm-casino-blackjack-pvp-playing.png)
 
-![Prémio recolhido](0.2.0/realm-casino-chicken-collected.png)
+**Dados multiplayer**
 
-Os jogos usam carteira real do Chronicles, pedidos C2S e respostas S2C nativos, com resultados do servidor. A prova utiliza um servidor integrado; não representa uma ligação autenticada com dois clientes.
+![Dados multiplayer](0.3.0/realm-casino-dice-result.png)
 
-[Galeria anterior — 0.1.0](0.1.0/README.md).
+**Coroa ou lua**
+
+![Coroa ou lua](0.3.0/realm-casino-coin-result.png)
