@@ -68,7 +68,8 @@ public final class CrownIncomeApi {
     }
     private static Treasury candidate(TreasuryData data,Receipt receipt){
         Treasury next=data.treasury.copy();long at=Math.max(0,System.currentTimeMillis());
-        next.addFunds(receipt.currency(),receipt.amount(),receipt.memo().equals("realmcasino.profit-tax")?Treasury.Kind.CASINO_TAX:Treasury.Kind.JUSTICE_INCOME,receipt.payer(),receipt.memo(),at);next.settlePending(at);return next;
+        if(IncomeLedger.validPolicy(receipt.memo())&&receipt.amount()==0){String[] pieces=receipt.memo().split(":");next.recordVillagerPolicy(receipt.payer(),Integer.parseInt(pieces[1]),Long.parseLong(pieces[2]));}
+        else {Treasury.Kind kind=receipt.memo().equals("realmcasino.profit-tax")?Treasury.Kind.CASINO_TAX:receipt.memo().equals("realmvillagereconomy.purchase-tax")?Treasury.Kind.VILLAGER_TAX:Treasury.Kind.JUSTICE_INCOME;next.addFunds(receipt.currency(),receipt.amount(),kind,receipt.payer(),receipt.memo(),at);next.settlePending(at);}return next;
     }
     private static void write(Path file,CompoundTag root,AtomicBoolean moved)throws IOException {
         Files.createDirectories(file.getParent());Path temporary=Files.createTempFile(file.getParent(),"crown-income-",".tmp");

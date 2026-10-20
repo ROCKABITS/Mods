@@ -14,7 +14,7 @@ public final class Treasury {
     public static final int MAX_HISTORY = 256;
     public enum Currency { EMERALD, CHRONICLES }
     public enum Kind { DEPOSIT, CONTRACT_FUNDING, CONTRACT_RETURN, TAX_COLLECTED, PAYROLL_ALLOCATED,
-        SALARY_CLAIM, PAYROLL_CANCELLED, POLICY_CHANGED, MANAGER_CHANGED, MARKET_TAX, JUSTICE_INCOME, CASINO_TAX }
+        SALARY_CLAIM, PAYROLL_CANCELLED, POLICY_CHANGED, MANAGER_CHANGED, MARKET_TAX, JUSTICE_INCOME, CASINO_TAX, VILLAGER_TAX, VILLAGER_POLICY }
 
     public record Activity(String name, int minutes) {
         public Activity {
@@ -144,6 +144,12 @@ public final class Treasury {
         if (amount == 0) return;
         setBalance(currency, next);
         append(entry);
+    }
+
+    /** Zero-value fiscal approval: audited without creating or spending treasury money. */
+    public synchronized void recordVillagerPolicy(UUID actor,int basisPoints,long approvedAt){
+        Objects.requireNonNull(actor);if(basisPoints<0||basisPoints>10000)throw new IllegalArgumentException("Invalid villager tax");
+        append(new History(approvedAt,Kind.VILLAGER_POLICY,actor,java.math.BigDecimal.valueOf(basisPoints,2).stripTrailingZeros().toPlainString()+"%",Currency.CHRONICLES,0));
     }
 
     public synchronized void removeFunds(Currency currency, long amount, Kind kind, UUID actor, String details, long now) {

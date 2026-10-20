@@ -176,3 +176,7 @@ Cartas e encomendas entre jogadores, incluindo pagamentos. Prever destinatários
 - Cada JAR publicado deve identificar claramente as funcionalidades disponíveis e as integrações efetivamente testadas.
 
 [Voltar ao repositório](README.md) · [Contratos](contracts-bounties/README.md) · [Galeria](media/README.md)
+
+### Realm Villager Economy — 0.1.0
+
+Compras com a carteira Chronicles, conversão inicial de uma esmeralda para 5 €, descontos e ofertas Vanilla preservados. Vendas continuam a dar esmeraldas físicas. Imposto público adicional, inicialmente 0%, com limite administrativo inicial de 25%, aprovado pelo Presidente empossado ou administrador em emergência e entregue ao Crown Ledger 0.2.4. O menu mostra base, imposto e total antes da confirmação. [Guia](realm-villager-economy/README.md).

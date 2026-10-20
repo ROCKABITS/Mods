@@ -432,7 +432,8 @@ public final class TreasuryScreen extends Screen {
             JsonObject entry = history.get(page * count + i).getAsJsonObject(); int rowY = top + i * 30;
             frame(g, x + 10, rowY, w - 20, 28, i % 2 == 0 ? LIGHT : 0xFFE0CAA2, 0xFFC0A87E);
             String description = str(entry, "description", str(entry, "kind", ""));
-            line(g, Component.translatable(description).getString(), x + 15, rowY + 3, w - 30, INK);
+            String label=Component.translatable(description).getString();if("gui.kingdomtreasury.villager_policy_changed".equals(description))label+=" "+str(entry,"details","")+" · "+str(entry,"actorName","");
+            line(g,label,x+15,rowY+3,w-30,INK);
             line(g, date(number(entry, "at")) + " · " + money(number(entry, "amount"), str(entry, "currency", currency())),
                     x + 15, rowY + 16, w - 30, MUTED);
         }

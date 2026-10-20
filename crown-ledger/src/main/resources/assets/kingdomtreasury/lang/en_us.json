@@ -142,5 +142,7 @@
   "gui.kingdomtreasury.justice_income": "Judicial payment received",
   "gui.kingdomtreasury.casino_tax_percent": "Casino profit tax (%)",
   "gui.kingdomtreasury.casino_tax_income": "Casino profit tax",
-  "gui.kingdomtreasury.casino_tax_rate": "Casino profit tax: %s%%"
+  "gui.kingdomtreasury.casino_tax_rate": "Casino profit tax: %s%%",
+  "gui.kingdomtreasury.villager_tax_income": "Villager purchase tax",
+  "gui.kingdomtreasury.villager_policy_changed": "Villager purchase tax changed to"
 }

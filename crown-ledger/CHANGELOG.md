@@ -1,3 +1,12 @@
+# Crown Ledger 0.2.4 — Beta
+
+- Added CrownVillagerApi v1 for already-funded public tax from Realm Villager Economy purchases.
+- Added zero-value, idempotent fiscal approval receipts carrying the approving player's UUID, percentage and original approval date.
+- Added distinct public history categories for Villager purchase-tax income and policy approvals, including the author's RP name while online.
+- Preserved CrownIncomeApi v1 and CrownCasinoApi v1 compatibility, existing market/contract rules, salaries and judicial income.
+- Added treasury format 5, reading formats 1–4 and preserving all balances and previous receipts.
+- Extended receipt validation and actual cross-mod purchase, interrupted-write, replay, inventory and integrated-host tests.
+
 # Crown Ledger 0.2.3 — Beta
 
 - Added an independent governor-configured casino profit tax (0–100%, default 0%) for Realm Casino 0.3.0.

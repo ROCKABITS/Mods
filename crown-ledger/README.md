@@ -1,13 +1,13 @@
 # Crown Ledger — Tesouro da Coroa
 
-A versão **0.2.3** acrescenta um imposto independente sobre o lucro levantado pelos donos dos casinos do **Realm Casino 0.3.0**. Mantém pagamentos judiciais, impostos de mercado, contratos e salários. O formato 4 conserva as contas e regras anteriores, iniciando o novo imposto em 0%.
+A versão **0.2.4** recebe impostos de compras do **Realm Villager Economy 0.1.0** e regista as aprovações fiscais com autor, data e percentagem. Mantém o imposto do Casino, pagamentos judiciais, vendas de mercado, contratos e salários. O formato 5 conserva as contas e recibos anteriores.
 
 Tesouro público para Minecraft **1.21.1**, **NeoForge 21.1.256+** e **Java 21**. Instala o mesmo JAR no servidor e nos clientes. O identificador técnico é `kingdomtreasury`.
 
 ## Instalação e primeiro uso
 
-1. Antes de atualizar um mundo existente, faz uma cópia de segurança do mundo completo e dos perfis do Chronicles. Esta versão migra o registo do tesouro para o formato 4; voltar ao JAR antigo exige restaurar a cópia anterior à atualização.
-2. Coloca `crown-ledger-0.2.3.jar` na pasta `mods` de cada cliente e do servidor. Se usas Realm Markets, atualiza também para **Realm Markets 0.2.1+** em todos eles; substitui os JARs antigos e não deixes duas versões do mesmo mod.
+1. Antes de atualizar um mundo existente, faz uma cópia de segurança do mundo completo e dos perfis do Chronicles. Esta versão migra o registo do tesouro para o formato 5; voltar ao JAR antigo exige restaurar a cópia anterior à atualização.
+2. Coloca `crown-ledger-0.2.4.jar` na pasta `mods` de cada cliente e do servidor. Se usas Realm Markets, atualiza também para **Realm Markets 0.2.1+** em todos eles; substitui os JARs antigos e não deixes duas versões do mesmo mod.
 3. Para integrar os restantes sistemas, usa **Contracts & Bounties 0.3.2+**, **Realm Council 0.2.2+** e, opcionalmente, **Chronicles RP 0.5.4** com as suas dependências.
 4. Fabrica o **Cofre da Coroa** e clica nele com o botão direito. Também aparece na aba criativa **Crown Ledger** e na pesquisa.
 
@@ -68,6 +68,14 @@ O Casino guarda a reserva e um recibo; a tesouraria grava receita e recibo em co
 
 Atualiza Casino e Crown no servidor e em todos os clientes. Sem a API desta versão, o Casino continua a operar com taxa zero.
 
+## Compras aos aldeões — 0.2.4
+
+Com Realm Villager Economy 0.1.0, o Presidente empossado define o imposto no menu físico de um aldeão, sujeito ao teto do administrador (25% por defeito). Administradores mantêm acesso de emergência. A taxa inicial é 0% e conserva-se após o mandato.
+
+Numa compra com base de 100 € e imposto de 10%, o jogador paga 110 €: 100 € saem da economia e 10 € entram no tesouro público. Vender materiais por esmeraldas não paga este imposto. O imposto é adicional à base e aparece antes da confirmação. Não é pago ao Presidente nem depende da moeda fiscal dos salários.
+
+A carteira, os itens e o stock são confirmados pelo registo durável do Villager Economy. O imposto fica reservado até Crown guardar saldo e recibo em conjunto. Uma repetição confirma o recibo sem voltar a creditar. As aprovações fiscais têm recibos sem valor monetário e aparecem no histórico com a data de aprovação, autor e percentagem. Sem Crown, o Villager Economy cobra apenas a base e conserva as aprovações para futura integração.
+
 ## Contratos e reputação
 
 O separador do governante publica contratos pagos pelo tesouro. A recompensa fica reservada no Contracts, onde os trabalhadores fazem a entrega pelo mural. Os materiais pertencem ao reino e são recolhidos no cofre pelo governante atual. Cancelar devolve a recompensa total ao reino, incluindo após mudança de governante.
@@ -80,9 +88,9 @@ O governante define a reputação necessária para publicar contratos particular
 
 Sem Chronicles, a moeda normal é a esmeralda inteira. Com Chronicles, os valores digitais usam cêntimos e o perfil original do jogador. Cada moeda tem saldo e créditos separados; não existe conversão automática. O separador de donativos permite escolher a moeda. Nas regras, o governante pode escolher a moeda fiscal; mudar essa escolha repõe os campos de salário e imposto fixo em zero, sem converter saldos nem créditos anteriores. Os pagamentos de personagens offline ficam pendentes, sem editar os seus ficheiros de perfil.
 
-O ficheiro `data/crown_ledger.dat` guarda regras, saldo disponível, salários reservados, atividade, ciclo pendente e os últimos 256 movimentos, incluindo receitas de imposto de mercado. Os contratos usam também `data/contracts_ledger.dat`; as bancas e os impostos ainda reservados usam `data/realm_markets.dat`. Os recibos judiciais são guardados no mesmo ficheiro que o saldo da tesouraria e não dependem da rotação dos últimos movimentos. O formato 4 migra automaticamente os formatos 1, 2 e 3, conservando valores, regras e recibos, com taxa inicial do casino a zero. As cópias de segurança devem incluir o mundo completo e os perfis do Chronicles. As transferências entre mods são verificadas no mesmo thread do servidor. Os pagamentos judiciais usam gravações confirmadas e recibos únicos para conciliar ficheiros separados; as restantes operações mantêm os mecanismos existentes.
+O ficheiro `data/crown_ledger.dat` guarda regras, saldo disponível, salários reservados, atividade, ciclo pendente e os últimos 256 movimentos, incluindo receitas de imposto de mercado. Os contratos usam também `data/contracts_ledger.dat`; as bancas e os impostos ainda reservados usam `data/realm_markets.dat`. Os recibos judiciais são guardados no mesmo ficheiro que o saldo da tesouraria e não dependem da rotação dos últimos movimentos. O formato 5 migra automaticamente os formatos 1, 2, 3 e 4, conservando valores, regras e recibos; mundos anteriores ao formato 4 iniciam a taxa do casino a zero. As cópias de segurança devem incluir o mundo completo e os perfis do Chronicles. As transferências entre mods são verificadas no mesmo thread do servidor. Os pagamentos judiciais usam gravações confirmadas e recibos únicos para conciliar ficheiros separados; as restantes operações mantêm os mecanismos existentes.
 
-[Changelog](CHANGELOG.md) · [Resultados e limites da validação](VALIDACAO.md) · [JAR](../mod-pronto/crown-ledger-0.2.3.jar) · [ZIP](../mod-pronto/crown-ledger-0.2.3.zip) · [Imagens](../media/crown-ledger/0.2.3/README.md).
+[Changelog](CHANGELOG.md) · [Resultados e limites da validação](VALIDACAO.md) · [JAR](../mod-pronto/crown-ledger-0.2.4.jar) · [ZIP](../mod-pronto/crown-ledger-0.2.4.zip) · [Imagens](../media/crown-ledger/0.2.4/README.md).
 
 ## Desenvolvimento e validação
 
@@ -108,4 +116,4 @@ A suíte completa do Laws & Justice comprovou os débitos na carteira real do Ch
 
 Laws & Justice 0.4.0 envia multas e fianças já pagas para a tesouraria na moeda original. Cada transferência guarda um recibo único no mesmo ficheiro que o saldo. Repetir o recibo, incluindo após reiniciar um mundo LAN, não cria outra entrada de dinheiro. Se a gravação ou o limite de saldo impedir a transferência, o tribunal conserva os fundos até poder entregá-los.
 
-A atualização migra automaticamente o formato 1 ou 2 para o formato 4, conservando as contas, os impostos e os salários. Usa Crown Ledger 0.2.2 no servidor e em todos os clientes. Realm Markets 0.2.1 continua compatível. A API é exclusiva do servidor e não dá aos clientes uma forma de criar dinheiro.
+A atualização migra automaticamente o formato 1 ou 2 para o formato 5, conservando as contas, os impostos e os salários. Usa Crown Ledger 0.2.4 no servidor e em todos os clientes. Realm Markets 0.2.1 continua compatível. A API é exclusiva do servidor e não dá aos clientes uma forma de criar dinheiro.

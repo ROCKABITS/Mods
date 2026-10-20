@@ -516,7 +516,8 @@ public final class CrownService {
         view.put("contracts", contracts);
         view.put("history", treasury.history().stream().map(entry -> {
             Map<String, Object> record = new LinkedHashMap<>();
-            record.put("description", entry.kind()==Kind.JUSTICE_INCOME?"gui.kingdomtreasury.justice_income":entry.kind()==Kind.CASINO_TAX?"gui.kingdomtreasury.casino_tax_income":entry.details()); record.put("kind", entry.kind());
+            record.put("description", entry.kind()==Kind.JUSTICE_INCOME?"gui.kingdomtreasury.justice_income":entry.kind()==Kind.CASINO_TAX?"gui.kingdomtreasury.casino_tax_income":entry.kind()==Kind.VILLAGER_TAX?"gui.kingdomtreasury.villager_tax_income":entry.kind()==Kind.VILLAGER_POLICY?"gui.kingdomtreasury.villager_policy_changed":entry.details()); record.put("kind", entry.kind());
+            record.put("actor",entry.actor()==null?"":entry.actor().toString());record.put("details",entry.details());record.put("actorName",entry.actor()==null?"":player.getServer().getPlayerList().getPlayer(entry.actor())!=null?pt.crownledger.compat.ChroniclesBridge.publicName(player.getServer().getPlayerList().getPlayer(entry.actor())):entry.actor().toString().substring(0,8));
             record.put("amount", entry.amount()); record.put("currency", entry.currency()); record.put("at", entry.time());
             return record;
         }).toList());

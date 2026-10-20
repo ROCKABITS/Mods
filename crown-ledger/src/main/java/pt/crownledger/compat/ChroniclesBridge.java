@@ -38,6 +38,12 @@ public final class ChroniclesBridge {
         return created(api, player.getData(api.attachment()));
     }
 
+    public static String publicName(ServerPlayer player){
+        if(!available(player))return player.getGameProfile().getName();
+        try{Object value=api().profileClass().getMethod("name").invoke(profile(api(),player));return value instanceof String name&&!name.isBlank()?name:player.getGameProfile().getName();}
+        catch(ReflectiveOperationException error){return player.getGameProfile().getName();}
+    }
+
     public static long balance(ServerPlayer player) {
         requireServerThread(player);
         Api api = api();

@@ -41,7 +41,7 @@ public final class TreasuryData extends SavedData {
     public static TreasuryData load(CompoundTag tag, HolderLookup.Provider lookup) {
         type(tag, "version", Tag.TAG_INT);
         int version = tag.getInt("version");
-        if (version != 1 && version != 2 && version != 3 && version != 4) throw new IllegalStateException("Unsupported Crown Ledger storage version");
+        if (version != 1 && version != 2 && version != 3 && version != 4 && version != 5) throw new IllegalStateException("Unsupported Crown Ledger storage version");
         type(tag, "policy", Tag.TAG_COMPOUND);
         type(tag, "periodStartedAt", Tag.TAG_LONG);
         type(tag, "nextCycleAt", Tag.TAG_LONG);
@@ -97,18 +97,19 @@ public final class TreasuryData extends SavedData {
                 CompoundTag entry=(CompoundTag)raw;
                 if(!entry.getAllKeys().equals(java.util.Set.of("id","currency","amount","payer","memo")))throw new IllegalStateException("Unknown income receipt field");
                 uuid(entry,"id");uuid(entry,"payer");type(entry,"currency",Tag.TAG_STRING);type(entry,"amount",Tag.TAG_LONG);type(entry,"memo",Tag.TAG_STRING);
+                if(version<5&&entry.getLong("amount")==0)throw new IllegalStateException("Fiscal audit receipts require treasury format 5");
                 var receipt=new IncomeLedger.Receipt(entry.getUUID("id"),Currency.valueOf(entry.getString("currency")),entry.getLong("amount"),entry.getUUID("payer"),entry.getString("memo"));
                 if(receipts.putIfAbsent(receipt.id(),receipt)!=null||receipts.size()>IncomeLedger.MAX_RECEIPTS)throw new IllegalStateException("Duplicate or excessive income receipts");
             }
             result.income=new IncomeLedger(receipts);
         }else if(tag.contains("incomeReceipts"))throw new IllegalStateException("Income receipts cannot be loaded as an older treasury format");
-        if (version < 4) result.setDirty();
+        if (version < 5) result.setDirty();
         return result;
     }
 
     @Override public CompoundTag save(CompoundTag tag, HolderLookup.Provider lookup) {
         Treasury.Snapshot saved = treasury.snapshot();
-        tag.putInt("version", 4);
+        tag.putInt("version", 5);
         ListTag receipts=new ListTag();
         income.receipts().values().forEach(receipt->{CompoundTag entry=new CompoundTag();entry.putUUID("id",receipt.id());entry.putString("currency",receipt.currency().name());entry.putLong("amount",receipt.amount());entry.putUUID("payer",receipt.payer());entry.putString("memo",receipt.memo());receipts.add(entry);});
         tag.put("incomeReceipts",receipts);

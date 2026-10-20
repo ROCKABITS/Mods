@@ -13,9 +13,14 @@ public final class IncomeLedger {
     public record Receipt(UUID id,Treasury.Currency currency,long amount,UUID payer,String memo) {
         public Receipt {
             Objects.requireNonNull(id,"Receipt ID");Objects.requireNonNull(currency,"Currency");Objects.requireNonNull(payer,"Payer");
-            if(amount<1||amount>MAX_AMOUNT)throw new IllegalArgumentException("Invalid funded income amount");
+            if(amount<0||amount>MAX_AMOUNT||amount==0&&!validPolicy(memo))throw new IllegalArgumentException("Invalid funded income amount");
+            if(validPolicy(memo)&&(amount!=0||currency!=Treasury.Currency.CHRONICLES))throw new IllegalArgumentException("Fiscal approvals carry no money and use the Chronicle audit currency");
             if(memo==null||memo.isBlank()||memo.length()>256||memo.codePoints().anyMatch(Character::isISOControl))throw new IllegalArgumentException("Invalid income description");
         }
+    }
+    public static boolean validPolicy(String memo){
+        if(memo==null||!memo.startsWith("realmvillagereconomy.policy:")||!memo.substring("realmvillagereconomy.policy:".length()).matches("[0-9]{1,5}:[0-9]{1,16}"))return false;
+        String[] parts=memo.split(":");try{return Integer.parseInt(parts[1])<=10000&&Long.parseLong(parts[2])>=0;}catch(NumberFormatException invalid){return false;}
     }
     private final Map<UUID,Receipt> receipts;
     public IncomeLedger(){this(Map.of());}
