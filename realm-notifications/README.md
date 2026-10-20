@@ -55,3 +55,5 @@ A [API pública](API.md) permite enviar avisos a partir de outros mods sem depen
 [Descarregar JAR](https://github.com/ROCKABITS/Mods/raw/refs/heads/main/mod-pronto/realm-notifications-0.1.1.jar) · [ZIP do mod](https://github.com/ROCKABITS/Mods/raw/refs/heads/main/mod-pronto/realm-notifications-0.1.1.zip) · [Capturas do jogo](../media/realm-notifications/0.1.1/README.md).
 
 A atualização 0.1.1 mantém o protocolo e as integrações da 0.1.0. Basta substituir o JAR antigo e reiniciar o jogo/servidor. O guia de validação documenta os testes desta correção.
+
+A [execução de validação da 0.1.1](https://github.com/ROCKABITS/Mods/actions/runs/39436047070) passou 18 testes unitários, 15 GameTests em cada modo e a rajada de 200 avisos no cliente Minecraft real. O modpack completo do utilizador não foi testado.
