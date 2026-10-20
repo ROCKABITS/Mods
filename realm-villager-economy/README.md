@@ -85,4 +85,4 @@ python3 tools/cloud_gradle.py -PvillagerGameTests runGameTestServer --console=pl
 
 A suíte integrada adiciona `-PintegrationTests` e os JARs verificados definidos em `.github/scripts/villager_release.py`. `-PvillagerVisualTests -PintegrationTests runClient` abre o cliente real de demonstração. Os fixtures são excluídos dos JARs publicados.
 
-[Changelog](CHANGELOG.md) · [Validação](VALIDACAO.md).
+[Changelog](CHANGELOG.md) · [Validação](VALIDACAO.md) · [JAR](../mod-pronto/realm-villager-economy-0.1.0.jar) · [ZIP](../mod-pronto/realm-villager-economy-0.1.0.zip) · [Imagens](../media/realm-villager-economy/README.md).
