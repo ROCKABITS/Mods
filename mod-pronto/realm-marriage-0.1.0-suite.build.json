@@ -1,0 +1,10 @@
+{
+  "source_commit": "26ac0103890ab6db62f314ff3ea4ef06cd032ec0",
+  "tested_run": "https://github.com/ROCKABITS/Mods/actions/runs/39488185732",
+  "zip_sha256": "9f592acf0d0077b4dea9f6cf8e90e377734e445354da11670f03812402c5c9a5",
+  "jars": {
+    "realm-marriage-0.1.0.jar": "c2d2471029a006843c542622a1e1e0543a20492ea22a5999de02dd423d2390ca",
+    "crown-ledger-0.2.7.jar": "f377666807e0a31760fbd1bd209238a31a50db1903d50e5e1d7f1caf5ed44fce",
+    "realm-identity-0.1.2.jar": "4bb9ef1d4df009fe1061c5daeaa76e95fb9ce355c72f00a83b31dffe0b36f016"
+  }
+}
