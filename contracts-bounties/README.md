@@ -2,7 +2,7 @@
 
 Mod para Minecraft **1.21.1**, **NeoForge 21.1.256** e **Java 21**, instalado no cliente e no servidor.
 
-[Descarregar JAR](https://github.com/ROCKABITS/Mods/raw/refs/heads/main/mod-pronto/contracts-bounties-0.4.0.jar) · [ZIP](https://github.com/ROCKABITS/Mods/raw/refs/heads/main/mod-pronto/contracts-bounties-0.4.0.zip) · [Changelog em inglês](CHANGELOG.md) · [Validação](VALIDACAO.md).
+[Descarregar JAR](https://github.com/ROCKABITS/Mods/raw/refs/heads/main/mod-pronto/contracts-bounties-0.4.0.jar) · [ZIP](https://github.com/ROCKABITS/Mods/raw/refs/heads/main/mod-pronto/contracts-bounties-0.4.0.zip) · [Changelog em inglês](CHANGELOG.md) · [Validação](VALIDACAO.md) · [Capturas reais](../media/contracts-bounties/0.4.0/README.md).
 
 A **0.4.0** acrescenta **cinco quests RNG diárias por jogador**, atividades de sobrevivência, pagamentos automáticos e **celebrações RPG com pergaminhos, selos, partículas e sons originais**. Mantém os três murais, contratos particulares/públicos, dinheiro reservado, impostos e reputação.
 

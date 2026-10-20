@@ -1,6 +1,8 @@
 # Validação — Contracts & Bounties 0.4.0
 
-Os testes locais executados nesta atualização aprovaram **82 JUnit**, os **38 GameTests existentes**, **29 novos GameTests diários independentes** e **29 com integrações**. O Crown Ledger mantém **59 JUnit** e **29 testes nativos próprios**. A publicação é bloqueada pelo workflow até executar novamente as verificações sobre os JARs do commit publicado.
+[Execução aprovada 39458831632](https://github.com/ROCKABITS/Mods/actions/runs/39458831632), código [`e67578e`](https://github.com/ROCKABITS/Mods/commit/e67578e5d38f8e450023f3f91b839b7de916aaf0). **Publicação concluída; downloads públicos verificados por SHA-256.**
+
+Os testes locais executados nesta atualização aprovaram **82 JUnit**, os **38 GameTests existentes**, **29 novos GameTests diários independentes** e **29 com integrações**. O Crown Ledger mantém **59 JUnit** e **29 testes nativos próprios**. A mesma bateria foi novamente aprovada no GitHub, incluindo o cliente real, antes da publicação dos JARs de produção.
 
 A suíte diária verifica geração e distribuição, renovação UTC e relógio recuado, expiração, recompensas congeladas, teto com incentivos e bónus, pagamentos únicos, créditos pendentes, reputação partilhada com contratos públicos, entregas consumidas, armazenamento, exploração real, eventos de sobrevivência, modos de jogo, sessões físicas, sucessão/posse do Presidente, administração e falha real de escrita do tesouro com recuperação sem repetir a carteira.
 
@@ -10,7 +12,10 @@ Foram verificados os menus de governo, limites administrativos e modelos RNG, a 
 
 O contrato da integração Realm Admin foi testado através de um fornecedor de teste; não existe um Realm Admin executável disponível. Não se realizou uma sessão com dois clientes autenticados. Os limites de origem de blocos/mobs, exploração anterior à instalação, culturas personalizadas e conteúdo registado mas inacessível estão documentados em [DAILY_QUESTS.md](DAILY_QUESTS.md).
 
-O workflow [Build daily quests and Crown Ledger](../.github/workflows/build-daily-quests.yml) fixa checksums dos companheiros, guarda o JAR de produção antes das fixtures e impede testes/fixtures/dependências empacotados no JAR. A publicação acrescenta os hashes, contagens e execução em [contracts-bounties-0.4.0.build.json](../mod-pronto/contracts-bounties-0.4.0.build.json), sem substituir versões antigas. A galeria validada fica em [media/contracts-bounties/0.4.0](../media/contracts-bounties/0.4.0/README.md).
+O workflow [Build daily quests and Crown Ledger](../.github/workflows/build-daily-quests.yml) fixa checksums dos companheiros, guarda o JAR de produção antes das fixtures e impede testes/fixtures/dependências empacotados no JAR. Os hashes, contagens e execução estão em [contracts-bounties-0.4.0.build.json](../mod-pronto/contracts-bounties-0.4.0.build.json), sem substituir versões antigas. A galeria validada fica em [media/contracts-bounties/0.4.0](../media/contracts-bounties/0.4.0/README.md).
+
+- `contracts-bounties-0.4.0.jar`: 430714 bytes; SHA-256 `d1bd4726ac210e6d5904829bf9185efef76920aa8070ffb292d6e479689ee07e`.
+- `contracts-bounties-0.4.0.zip`: 408085 bytes; SHA-256 `c2d3d20bb7cbb8e0ed44bfabd218d4749936650ac2c9f35f77d3d7ff6eb214cc`.
 
 ---
 

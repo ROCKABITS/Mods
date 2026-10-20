@@ -1,10 +1,15 @@
 # Validação — Crown Ledger 0.2.6
 
+[Execução aprovada 39458831632](https://github.com/ROCKABITS/Mods/actions/runs/39458831632), código [`e67578e`](https://github.com/ROCKABITS/Mods/commit/e67578e5d38f8e450023f3f91b839b7de916aaf0). **Publicação concluída; downloads públicos verificados por SHA-256.**
+
 A compilação local aprovou **59 testes JUnit** e **29 GameTests próprios**. A suíte integrada de 29 testes diários do Contracts & Bounties verifica a nova CrownDailyApi v1 com o tesouro real: conservação bruto = carteira + imposto, classificação fiscal, recibo repetido e falha de escrita provocada no ficheiro do Crown, seguida de recuperação sem voltar a pagar à carteira.
 
 O cliente Minecraft real concluiu cinco quests e confirmou a carteira Chronicles, o tesouro e os recibos dos dois ficheiros do anfitrião. O servidor integrado foi realmente aberto à LAN e o mundo fechado/reaberto. Não é uma validação com dois clientes autenticados nem uma nova inspeção gráfica de todas as interfaces do Crown. O formato 6 e as restantes APIs foram preservados.
 
-A publicação conjunta exige nova execução destes testes no commit publicado. As contagens, hashes e execução ficam em [crown-ledger-0.2.6.build.json](../mod-pronto/crown-ledger-0.2.6.build.json). Os testes do novo imposto estão em `contracts-bounties/src/dailygametest/` e o workflow em [build-daily-quests.yml](../.github/workflows/build-daily-quests.yml).
+A publicação conjunta voltou a executar e aprovou estes testes no commit publicado. As contagens, hashes e execução estão em [crown-ledger-0.2.6.build.json](../mod-pronto/crown-ledger-0.2.6.build.json). Os testes do novo imposto estão em `contracts-bounties/src/dailygametest/` e o workflow em [build-daily-quests.yml](../.github/workflows/build-daily-quests.yml).
+
+- `crown-ledger-0.2.6.jar`: 148687 bytes; SHA-256 `966f67d556a9911127fd8aa271e20debe1166370c5d0ea33aabd66bbc1106daf`.
+- `crown-ledger-0.2.6.zip`: 147470 bytes; SHA-256 `9d225338510a974857668e5c2206019de24c53cdf6dbe5280b085385301e4bf1`.
 
 ---
 
