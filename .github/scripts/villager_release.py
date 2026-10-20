@@ -276,7 +276,7 @@ def summary():
         for name in ('build.log','gametests.log','integration.log','visual-client.log'):
             path=ROOT/project/name
             if not path.exists():continue
-            text=path.read_text(errors='replace');lines=text.splitlines()
+            text=path.read_text(errors='replace');lines=[line for line in text.splitlines() if len(line)<1600]
             if 'BUILD FAILED' in text or 'CLIENT_FAILED' in text:
                 selected=set()
                 for i,line in enumerate(lines):
