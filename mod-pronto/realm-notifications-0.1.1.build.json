@@ -1,0 +1,37 @@
+{
+  "source_commit": "a64cd023f02d8e35ebb80fe786ec05c341da3f5a",
+  "jar_sha256": "2fb85c87eb296e49f3f68c0d7defd709ceca8913fa5a3f6ef9442d9b9548c99e",
+  "version": "0.1.1",
+  "tested_run": "https://github.com/ROCKABITS/Mods/actions/runs/39436047070",
+  "unit_tests": 18,
+  "standalone_native_tests": 15,
+  "integrated_native_tests": 15,
+  "actual_client_validation": true,
+  "real_s2c_flood_messages": 200,
+  "authenticated_two_clients": false,
+  "companions": {
+    "cronicasrp-0.5.4.jar": "197c2fac53f97eb59159c9a0c26b3065362bdc18c8de1a1c0e61ece4360ba1f5",
+    "contracts-bounties-0.3.2.jar": "2ecf125a188f042f8d6c5011af5e1ff2cc5974925835bcd2cc0180f75d07ff15",
+    "realmcouncil-0.2.2.jar": "0a77af87a5c4e36f55ad12578662834886a7986864896a908a3dc4217e2c19cb",
+    "crown-ledger-0.2.5.jar": "661825b0a006066dc53a93ed90ef402b6cd25c678a038f3e5d7411c5e2d24afa",
+    "realm-markets-0.2.1.jar": "bfb1e73186015ab94a86c841abba1df02bf1b5851a65771e622234624b806bb1",
+    "realm-rewards-0.1.2.jar": "ab8efe3bd9a7b24a4f725bf6dfe1f07dec0b88ecfaac91533b57c45b11cb7bcb",
+    "realm-identity-0.1.1.jar": "4096147ac74847d31ee733291ad85d8d154ff7340e8d6f0874dd7cb7364823b0",
+    "realm-titles-0.1.0.jar": "65d854ffd92805f6e8cb0891454f80ba5a6f33394cc0375cf23f64098af2bd16",
+    "laws-justice-0.4.0.jar": "78c32b0c3acc8930ffd508c9bb44cc98b794a4b87900438b19ab812c21d36f7b",
+    "realm-casino-0.3.0.jar": "99c6c457d26be354f6cddddc4c865fe444f765b8d359004de12921aa0fad9117",
+    "realm-economy-0.4.0.jar": "eb7b25c11b64e842297d5ed174c067749989b6d5440fbc858834bd0922f55ddf"
+  },
+  "runtime_dependency_checksums": {
+    "origins-neoforge-1375372-8758523.jar": "93383233a047a9838af067b64452964183cc4fe9f2d9c269ffb253141136caf6",
+    "jupiter-1072905-7738312.jar": "95af332af250f97fe2d9d288fe6b2057c266673a388348bf33756b0b693ace15"
+  },
+  "zip_sha256": "eda059630dd2e7ee1f6764468881348baea0a64ba4b1a5a045a0a88caacf84b4",
+  "screenshots": {
+    "realm-notifications-hud.png": "d4112c9d3c6b48b1028a1ce70163a9c6f0a524ad262cd86a14352b5fe3bf021b",
+    "realm-notifications-center.png": "965b2a71aef8ffbf309ae1c7d5c4527a7c30ef0828611b69a093185c999047ac",
+    "realm-notifications-preferences.png": "064fbe0ce2595decf5faf2e85bee0d750284844a5cd731f8ae608f5f60150df3",
+    "realm-notifications-journal.png": "1837e36bc9c0e880314ef00d7f378226fa96e1a4d8098b0e06c79b9bf38a0852",
+    "realm-notifications-burst.png": "335ad3e49c0cb2d9bf07b625ca88b5b6186bb206df4215e6eb1ded9dfe10f10d"
+  }
+}
