@@ -39,5 +39,8 @@
   "notification.realmnotifications.kind.info": "Notícias do reino",
   "notification.realmnotifications.kind.warning": "Um aviso importante",
   "gui.realmnotifications.preview_title": "Notificação de exemplo",
-  "gui.realmnotifications.preview_body": "Isto é apenas um exemplo visual. O teu saldo continua igual."
+  "gui.realmnotifications.preview_body": "Isto é apenas um exemplo visual. O teu saldo continua igual.",
+  "notification.realmnotifications.burst.title": "%s avisos agrupados",
+  "notification.realmnotifications.burst.body": "Vários avisos chegaram juntos. Veja os detalhes com %s.",
+  "notification.realmnotifications.burst.no_history": "Vários avisos chegaram ao mesmo tempo."
 }

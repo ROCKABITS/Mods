@@ -13,21 +13,29 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.ClientPlayerNetworkEvent;
 import net.neoforged.neoforge.client.event.ClientTickEvent;
+import pt.realmnotifications.domain.NotificationBurst;
 
 @EventBusSubscriber(modid="realmnotifications",value=Dist.CLIENT)
 public final class NotificationsClient {
     public record Entry(String kind,Component title,Component body,String time) {}
     private static final class Card {
-        final Entry entry;double age;int count=1;
-        Card(Entry entry) {this.entry=entry;}
+        Entry entry;double age;int count=1;
+        final long group,receivedAt;
+        final boolean summary;
+        Card(Entry entry,long group,long receivedAt,boolean summary) {
+            this.entry=entry;this.group=group;this.receivedAt=receivedAt;this.summary=summary;
+        }
     }
     private static NotificationPreferences preferences;
     private static final ArrayDeque<Entry> HISTORY=new ArrayDeque<>();
     private static final ArrayDeque<Card> PENDING=new ArrayDeque<>();
     private static final List<Card> VISIBLE=new ArrayList<>();
+    private static final NotificationBurst BURST=new NotificationBurst();
+    private static final int MAX_PENDING=3;
     private static final DateTimeFormatter TIME=DateTimeFormatter.ofPattern("HH:mm");
     private static long lastFrame,lastSound;
     private static int soundsPlayed;
+    private static boolean burstWarning;
     private NotificationsClient() {}
     public static NotificationPreferences preferences() {
         if(preferences==null)preferences=NotificationPreferences.load();return preferences;
@@ -37,7 +45,7 @@ public final class NotificationsClient {
     public static int visibleCount() {return VISIBLE.size();}
     public static int soundsPlayed() {return soundsPlayed;}
     public static void clearHistory() {HISTORY.clear();}
-    public static void clearCards() {PENDING.clear();VISIBLE.clear();lastFrame=0;}
+    public static void clearCards() {PENDING.clear();VISIBLE.clear();BURST.clear();burstWarning=false;lastFrame=0;}
     public static void resetSession() {clearCards();clearHistory();lastSound=0;soundsPlayed=0;}
     @SubscribeEvent public static void disconnected(ClientPlayerNetworkEvent.LoggingOut event) {resetSession();}
     @SubscribeEvent public static void tick(ClientTickEvent.Post event) {
@@ -54,9 +62,36 @@ public final class NotificationsClient {
         Entry e=new Entry(kind,title.copy(),body.copy(),LocalTime.now().format(TIME));
         if(preferences().history) {HISTORY.addFirst(e);while(HISTORY.size()>100)HISTORY.removeLast();}
         if(!preferences().enabled)return;
-        for(Card c:VISIBLE)if(c.age<1500 && same(c.entry,e)) {c.count=Math.min(99,c.count+1);return;}
-        if(!PENDING.isEmpty() && same(PENDING.getLast().entry,e)) {Card c=PENDING.getLast();c.count=Math.min(99,c.count+1);return;}
-        if(PENDING.size()>=32)PENDING.removeFirst();PENDING.addLast(new Card(e));
+        long now=System.nanoTime()/1_000_000;
+        discardStaleCards(now);
+        for(Card c:VISIBLE)if(!c.summary && same(c.entry,e)) {c.count=Math.min(99,c.count+1);return;}
+        for(Card c:PENDING)if(!c.summary && same(c.entry,e)) {c.count=Math.min(99,c.count+1);return;}
+        var decision=BURST.receive(now);
+        if(decision.total()==1)burstWarning=false;
+        burstWarning|="warning".equals(kind);
+        if(decision.action()==NotificationBurst.Action.INDIVIDUAL) {
+            if(PENDING.size()>=MAX_PENDING)PENDING.removeFirst();
+            PENDING.addLast(new Card(e,decision.group(),now,false));
+        } else if(decision.action()==NotificationBurst.Action.SUMMARIZE) {
+            PENDING.removeIf(c->c.group==decision.group());
+            VISIBLE.removeIf(c->c.group==decision.group());
+            if(PENDING.size()>=MAX_PENDING)PENDING.removeFirst();
+            PENDING.addLast(new Card(summary(e,decision.total()),decision.group(),now,true));
+        } else {
+            // Do not extend its lifetime or create another card after it expires.
+            for(Card c:VISIBLE)if(c.summary && c.group==decision.group())c.entry=summary(e,decision.total());
+            for(Card c:PENDING)if(c.summary && c.group==decision.group())c.entry=summary(e,decision.total());
+        }
+    }
+    private static Entry summary(Entry latest,int total) {
+        Component body=preferences().history
+                ? Component.translatable("notification.realmnotifications.burst.body",NotificationClientEvents.HISTORY_KEY.getTranslatedKeyMessage())
+                : Component.translatable("notification.realmnotifications.burst.no_history");
+        return new Entry(burstWarning?"warning":"info",Component.translatable("notification.realmnotifications.burst.title",total),body,latest.time());
+    }
+    private static void discardStaleCards(long now) {
+        PENDING.removeIf(c->NotificationBurst.stale(c.receivedAt,now));
+        VISIBLE.removeIf(c->NotificationBurst.stale(c.receivedAt,now));
     }
     private static boolean same(Entry a,Entry b) {return a.kind.equals(b.kind)&&a.title.getString().equals(b.title.getString())&&a.body.getString().equals(b.body.getString());}
     private static void sound() {
@@ -68,11 +103,12 @@ public final class NotificationsClient {
     public static void render(GuiGraphics g,int screenWidth,int screenHeight) {
         var mc=Minecraft.getInstance();
         long now=System.nanoTime();
+        discardStaleCards(now/1_000_000);
         if(mc.player==null || mc.level==null || mc.screen!=null || mc.options.hideGui || !preferences().enabled) {lastFrame=now;return;}
         double elapsed=lastFrame==0?0:Math.clamp((now-lastFrame)/1_000_000.0,0,100);lastFrame=now;
         if(mc.isPaused())elapsed=0;
         int slots=CardLayout.visible(screenHeight);
-        while(VISIBLE.size()>slots) {Card c=VISIBLE.removeLast();c.age=0;while(PENDING.size()>=32)PENDING.removeLast();PENDING.addFirst(c);}
+        while(VISIBLE.size()>slots) {Card c=VISIBLE.removeLast();c.age=0;while(PENDING.size()>=MAX_PENDING)PENDING.removeLast();PENDING.addFirst(c);}
         while(VISIBLE.size()<slots&&!PENDING.isEmpty()) {VISIBLE.add(PENDING.removeFirst());sound();}
         double duration=preferences().seconds*1000.0;
         for(Card c:VISIBLE)c.age+=elapsed;

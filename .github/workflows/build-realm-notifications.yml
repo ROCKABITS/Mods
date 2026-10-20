@@ -1,29 +1,22 @@
-name: Build Realm Notifications suite
+name: Build Realm Notifications
 on:
   push:
     branches: [main]
     paths:
       - 'realm-notifications/**'
-      - 'chronicles-rp/**'
-      - 'contracts-bounties/**'
-      - 'realm-council/**'
-      - 'crown-ledger/**'
-      - 'realm-markets/**'
-      - 'realm-rewards/**'
       - '.github/workflows/build-realm-notifications.yml'
-      - '.github/scripts/notifications_suite.py'
+      - '.github/scripts/notifications_release.py'
   workflow_dispatch:
 permissions:
   contents: write
 concurrency:
-  group: notifications-suite-${{ github.ref }}
+  group: notifications-release-${{ github.ref }}
   cancel-in-progress: true
 jobs:
   build:
-    # Other releases retain their existing workflows; this marker selects one atomic suite publisher.
-    if: ${{ github.event_name == 'workflow_dispatch' || contains(github.event.head_commit.message, '[notifications-suite]') }}
+    if: ${{ github.event_name == 'workflow_dispatch' || contains(github.event.head_commit.message, '[notifications-release]') }}
     runs-on: ubuntu-latest
-    timeout-minutes: 45
+    timeout-minutes: 30
     defaults:
       run:
         shell: bash
@@ -36,18 +29,25 @@ jobs:
           distribution: temurin
           java-version: '21'
           cache: gradle
-      - name: Build seven production JARs and full unit suites
-        run: python3 .github/scripts/notifications_suite.py build
-      - name: Snapshot fixture-free production JARs from this commit
-        run: python3 .github/scripts/notifications_suite.py snapshot
-      - name: Native regression suites for all seven mods
-        run: python3 .github/scripts/notifications_suite.py native
-      - name: Install fresh suite and verified Identity companion
-        run: python3 .github/scripts/notifications_suite.py install
-      - name: Native notifications with actual fresh companion mods and Origins
+      - name: Verify Gradle wrapper
+        working-directory: realm-notifications
+        run: |
+          echo '423cb469ccc0ecc31f0e4e1c309976198ccb734cdcbb7029d4bda0f18f57e8d9  gradle/wrapper/gradle-wrapper.jar' | sha256sum --check --strict
+          python3 -c "from pathlib import Path; assert 'distributionSha256Sum=72f44c9f8ebcb1af43838f45ee5c4aa9c5444898b3468ab3f4af7b6076c5bc3f' in Path('gradle/wrapper/gradle-wrapper.properties').read_text()"
+      - name: Production build and full unit suite
+        working-directory: realm-notifications
+        run: ./gradlew --no-daemon --console=plain build 2>&1 | tee build.log
+      - name: Snapshot fixture-free production JAR
+        run: python3 .github/scripts/notifications_release.py snapshot
+      - name: Native regression suite without companions
+        working-directory: realm-notifications
+        run: ./gradlew --no-daemon --console=plain -PnotificationsGameTests runGameTestServer 2>&1 | tee gametests.log
+      - name: Install eleven checksum-verified companion releases
+        run: python3 .github/scripts/notifications_release.py install
+      - name: Native payments and notifications with actual companion mods
         working-directory: realm-notifications
         run: ./gradlew --no-daemon --console=plain -PnotificationsGameTests -PintegrationTests runGameTestServer 2>&1 | tee integration.log
-      - name: Actual Minecraft HUD, settings and history
+      - name: Actual Minecraft HUD and 200-message login flood
         working-directory: realm-notifications
         env:
           LIBGL_ALWAYS_SOFTWARE: '1'
@@ -59,21 +59,21 @@ jobs:
           fi
           timeout 420s xvfb-run -a -s '-screen 0 1600x900x24' ./gradlew --no-daemon --console=plain -PnotificationsVisualTests -PintegrationTests runClient 2>&1 | tee visual-client.log
           python3 -c "import json; r=json.load(open('qa-results/notifications-client/result.json')); assert r.get('success') is True, r"
-      - name: Validation summary and bounded failure diagnostics
+      - name: Validation summary
         if: always()
-        run: python3 .github/scripts/notifications_suite.py summary
-      - name: Gate and package all tested releases
-        run: python3 .github/scripts/notifications_suite.py package
-      - name: Downloadable tested suite
+        run: python3 .github/scripts/notifications_release.py summary
+      - name: Package validated JAR and ZIP
+        run: python3 .github/scripts/notifications_release.py package
+      - name: Downloadable tested release
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
-          name: notifications-suite-${{ github.run_id }}
+          name: notifications-${{ github.run_id }}
           path: |
-            realm-notifications/build/notifications-suite/downloads/
-            media/realm-notifications/
+            mod-pronto/realm-notifications-0.1.1.*
+            media/realm-notifications/0.1.1/
           if-no-files-found: error
           retention-days: 30
-      - name: Publish tested suite in one commit
+      - name: Publish tested release
         if: github.ref == 'refs/heads/main'
         run: |
           git fetch --no-tags origin main
@@ -81,9 +81,9 @@ jobs:
             echo '::error::Main changed during validation. Build the latest source.'
             exit 1
           fi
-          python3 .github/scripts/notifications_suite.py stage
+          python3 .github/scripts/notifications_release.py stage
           if git diff --cached --quiet; then exit 0; fi
-          git -c user.name='github-actions[bot]' -c user.email='41898282+github-actions[bot]@users.noreply.github.com' commit -m 'Publish tested Realm Notifications and companion updates [skip ci]'
+          git -c user.name='github-actions[bot]' -c user.email='41898282+github-actions[bot]@users.noreply.github.com' commit -m 'Publish tested Realm Notifications 0.1.1 [skip ci]'
           git push origin HEAD:refs/heads/main
       - name: Full validation evidence
         if: always()
@@ -91,13 +91,12 @@ jobs:
         with:
           name: notifications-validation-${{ github.run_id }}
           path: |
-            */build.log
-            */gametests.log
+            realm-notifications/build.log
+            realm-notifications/gametests.log
             realm-notifications/integration.log
             realm-notifications/visual-client.log
-            */build/test-results/test/
-            realm-notifications/build/notifications-suite/manifest.json
-            realm-notifications/build/notifications-suite/companions.json
+            realm-notifications/build/test-results/test/
+            realm-notifications/build/notifications-release/manifest.json
             realm-notifications/qa-results/
             realm-notifications/run/logs/latest.log
           if-no-files-found: warn

@@ -39,5 +39,8 @@
   "notification.realmnotifications.kind.info": "News from the realm",
   "notification.realmnotifications.kind.warning": "A word of caution",
   "gui.realmnotifications.preview_title": "Preview notification",
-  "gui.realmnotifications.preview_body": "This is a visual preview. Your balance has not changed."
+  "gui.realmnotifications.preview_body": "This is a visual preview. Your balance has not changed.",
+  "notification.realmnotifications.burst.title": "%s notices grouped",
+  "notification.realmnotifications.burst.body": "Several notices arrived together. Press %s to see the details.",
+  "notification.realmnotifications.burst.no_history": "Several notices arrived at the same time."
 }

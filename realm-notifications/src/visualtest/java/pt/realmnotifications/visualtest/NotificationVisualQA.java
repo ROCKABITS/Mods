@@ -124,20 +124,51 @@ public final class NotificationVisualQA {
     private static void stressAndRestore() {
         var mc=Minecraft.getInstance();NotificationsClient.resetSession();
         for(int i=0;i<140;i++)NotificationsClient.receive("info",Component.literal("Realm dispatch "+i),Component.literal("A journal entry from the realm. ".repeat(13)));
-        check(NotificationsClient.pendingCount()==32&&NotificationsClient.history().size()==100,"Queue/history limits failed");
-        // Production render drains to3, then shrinks to1 with the queue filled again.
+        check(NotificationsClient.pendingCount()==1&&NotificationsClient.history().size()==100,"Flood did not collapse into one card with bounded history");
+        // The production renderer must retain just one summary through viewport changes.
         var target=mc.getMainRenderTarget();var graphics=new net.minecraft.client.gui.GuiGraphics(mc,mc.renderBuffers().bufferSource());
         NotificationsClient.render(graphics,800,450);
         for(int i=0;i<32;i++)NotificationsClient.receive("info",Component.literal("Queued dispatch "+i),Component.literal("Queued"));
         NotificationsClient.render(graphics,320,180);graphics.flush();
-        check(NotificationsClient.visibleCount()==1&&NotificationsClient.pendingCount()<=32,"Shrinking viewport broke queue limit");
+        check(NotificationsClient.visibleCount()==1&&NotificationsClient.pendingCount()<=3,"Shrinking viewport broke queue limit");
         check(NotificationsClient.soundsPlayed()==0,"Sound played with disabled preference");
         var history=new NotificationScreen(null,true);mc.setScreen(history);history.resize(mc,320,240);bounds(history);
         history.mouseScrolled(50,120,0,-1000);history.render(graphics,0,0,0);graphics.flush();
         CHECKS.add("Compact native journal rendered and scrolled all100 entries, including long wrapped bodies.");
         mc.setScreen(null);
         NotificationsClient.resetSession();sendDemo();
-        CHECKS.add("Native production renderer enforced visible/32pending/100history limits, including3-to1 resize with fullqueue; muted mode played no sound.");
+        CHECKS.add("A 172-message native client flood collapsed to one summary, retained the latest100 detailed entries, survived viewport shrink and played no sound when muted.");
+    }
+    private static void sendLoginFlood() {
+        var mc=Minecraft.getInstance();mc.setScreen(null);NotificationsClient.resetSession();
+        NotificationsClient.preferences().sound=true;NotificationsClient.preferences().position=NotificationPreferences.Position.TOP_LEFT;
+        sent=false;UUID id=mc.player.getUUID();
+        server(()->{
+            var player=Minecraft.getInstance().getSingleplayerServer().getPlayerList().getPlayer(id);
+            for(int i=0;i<200;i++)check(NotificationsApi.send(player,"info",Component.literal("Modpack login "+i),
+                    Component.literal("Login event "+i+" — original notice retained in the journal.")),"Flood S2C transport failed");
+            sent=true;
+        });
+    }
+    private static void verifyFlood() throws Exception {
+        check(NotificationsClient.visibleCount()==1&&NotificationsClient.pendingCount()==0,"Login flood left a backlog of popup cards");
+        check(NotificationsClient.history().size()==100,"Login flood lost the bounded journal");
+        check(NotificationsClient.history().getFirst().body().getString().contains("event 199"),"Latest flood detail missing");
+        check(NotificationsClient.history().getLast().body().getString().contains("event 100"),"Journal did not retain the latest100 notices");
+        check(NotificationsClient.soundsPlayed()<=1,"Login flood played repeated sounds");
+        capture("realm-notifications-burst.png");
+        // Exercise the production wall-clock expiry without a thirty-second blocking wait.
+        var expire=NotificationsClient.class.getDeclaredMethod("discardStaleCards",long.class);expire.setAccessible(true);
+        expire.invoke(null,System.nanoTime()/1_000_000+30_000);
+        check(NotificationsClient.visibleCount()==0&&NotificationsClient.pendingCount()==0&&NotificationsClient.history().size()==100,"Stale popups replayed or erased journal details");
+        NotificationsClient.resetSession();
+        Component a=Component.literal("A"),b=Component.literal("B"),body=Component.literal("Duplicate test");
+        NotificationsClient.receive("info",a,body);NotificationsClient.receive("info",b,body);NotificationsClient.receive("info",a,body);
+        check(NotificationsClient.pendingCount()==2,"Interleaved identical pending notices were not coalesced");
+        NotificationsClient.resetSession();NotificationsClient.receive("reward",Component.literal("A new journey"),Component.literal("Normal notices still work after changing worlds."));
+        check(NotificationsClient.pendingCount()==1&&NotificationsClient.history().size()==1,"Changing worlds retained burst suppression or previous private notices");
+        NotificationsClient.resetSession();
+        CHECKS.add("200 actual server API calls traversed S2C, produced one popup and at most one sound, retained the latest100 details, expired stale cards and reset cleanly between worlds. Interleaved duplicates coalesced.");
     }
     private static void capture(String name)throws Exception {
         Files.createDirectories(OUT);
@@ -176,7 +207,8 @@ public final class NotificationVisualQA {
                 case 6->{if(!sent)return;capture("realm-notifications-center.png");stressAndRestore();next=now+1200;step++;}
                 case 7->{if(!sent)return;mc.setScreen(new NotificationScreen(null,false));next=now+1000;step++;}
                 case 8->{capture("realm-notifications-preferences.png");check(click("gui.realmnotifications.history"),"Missing history tab");next=now+1000;step++;}
-                case 9->{capture("realm-notifications-journal.png");complete(true,"Actual integrated-world HUD, realS2C, original pixel artwork, native preferences/journal and compactqueue/sound/session checks passed.");}
+                case 9->{capture("realm-notifications-journal.png");sendLoginFlood();next=now+1500;step++;}
+                case 10->{if(!sent||NotificationsClient.history().size()<100)return;verifyFlood();complete(true,"Actual integrated-world HUD, realS2C, 200-message modpack-login flood, expiry, deduplication, sound, journal and session checks passed.");}
                 default->throw new IllegalStateException("Unexpected stage");
             }
         }catch(Throwable failure){failure.printStackTrace();complete(false,failure.toString());}

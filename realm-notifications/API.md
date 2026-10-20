@@ -38,3 +38,5 @@ if (!sent) player.sendSystemMessage(message);
 Não alteres o saldo com base no resultado desta chamada. Não repitas uma operação financeira quando uma notificação falhar.
 
 O protocolo só permite avisos do servidor para o cliente. Não existe um pedido do cliente para fabricar avisos ou receber dinheiro. A fila e o histórico são limitados e não se guardam em disco; não constituem um registo financeiro nem uma caixa de correio offline.
+
+Desde a 0.1.1, o cliente pode agrupar rajadas num resumo e descartar cartões antigos, mantendo os detalhes recentes no histórico se estiver ativo. O retorno `true` continua a confirmar apenas o envio do pacote. Não uses o HUD como comprovativo de entrega individual, nem como histórico financeiro.

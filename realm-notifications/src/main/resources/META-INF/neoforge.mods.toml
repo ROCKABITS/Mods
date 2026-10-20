@@ -3,7 +3,7 @@ loaderVersion="[4,)"
 license="All Rights Reserved"
 [[mods]]
 modId="realmnotifications"
-version="0.1.0"
+version="0.1.1"
 displayName="Realm Notifications"
 logoFile="assets/realmnotifications/icon.png"
 authors="ROCKABITS"
