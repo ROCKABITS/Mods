@@ -115,3 +115,5 @@ python3 tools/cloud_gradle.py -PeconomyGameTests runGameTestServer --console=pla
 A integração utiliza `-PintegrationTests`, os JARs verificados em `.github/scripts/economy_release.py` e as dependências reais de Origins. `-PeconomyVisualTests -PintegrationTests runClient` executa a demonstração no cliente Minecraft. Os fixtures são excluídos do JAR.
 
 [Changelog](CHANGELOG.md) · [Validação](VALIDACAO.md) · [Plano original](PLANO-REALM-ECONOMY.md).
+
+[Download JAR](../mod-pronto/realm-economy-0.4.0.jar) · [Download ZIP](../mod-pronto/realm-economy-0.4.0.zip) · [Galeria](../media/realm-economy/README.md).

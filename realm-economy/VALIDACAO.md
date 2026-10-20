@@ -1,5 +1,12 @@
 # Validação — Realm Economy 0.4.0 Beta
 
+[Execução aprovada](https://github.com/ROCKABITS/Mods/actions/runs/39410537589), código `e70c29deb9c661dceff2ebdbdc3ee44c90b714dc`. Passaram **21 testes JUnit**, **62 testes nativos independentes**, **62 com integrações** e o cliente Minecraft real.
+
+- `realm-economy-0.4.0.jar`: 155833 bytes; SHA-256 `eb7b25c11b64e842297d5ed174c067749989b6d5440fbc858834bd0922f55ddf`.
+- `realm-economy-0.4.0.zip`: 150200 bytes; SHA-256 `223ae7fe3702eb379c4d457c517398e413b70d98693e7a2cc403b5ae675d8edb`.
+
+[Proveniência](../mod-pronto/realm-economy-0.4.0.build.json).
+
 A publicação conjunta com Crown Ledger 0.2.5 exige os JARs de produção, 21 testes JUnit do Economy e 59 do Crown, 62 testes nativos do Economy e 29 do Crown em modo independente e com os companheiros verificados, e o cliente Minecraft real no mesmo commit.
 
 Os testes cobrem os pagamentos reais, receita de impostos, papéis do Presidente, limites, autorização delegada sem OP, pedidos repetidos, preços alterados, materiais, componentes, espaço, stock, semente, migração e falhas reais de gravação. Interrompem também um início de produção de poções e verificam um único débito, lote e consumo de combustível.

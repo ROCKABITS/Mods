@@ -1,5 +1,7 @@
 # Mod galleries
 
+**Realm Economy 0.4.0 Beta:** [Galeria](realm-economy/README.md) · [27 PNGs](realm-economy/0.4.0/realm-economy-0.4.0-media.zip). Mesa da Economia original, preços do Presidente, limites, cinco serviços pagos, preparação de poções e expiração real de um beacon. Construção, fundos e materiais de demonstração; operações realizadas pelas interfaces e canais reais.
+
 **Realm Villager Economy 0.1.0 Beta:** [Galeria](realm-villager-economy/README.md) · [Download dos 11 PNGs](realm-villager-economy/0.1.0/realm-villager-economy-0.1.0-media.zip). Menu real dos aldeões, preço base, imposto público, vendas por esmeraldas, descontos e histórico Crown. As ofertas e personagens são de demonstração; as compras e transferências usam a carteira e tesouraria reais.
 
 **Laws & Justice 0.3.0 Beta — publicação aprovada:** [Seleção visual](laws-justice/README.md) · [Download dos 37 PNGs](laws-justice/0.3.0/laws-justice-0.3.0-media.zip). Capturas reais de prisões, tribunal, mandados, sete blocos de trabalho e seis tarefas completas com produção temporizada e entregas seladas. A prisão e as regras de uma unidade por tarefa são demonstrações; não são geradas construções ou recursos. Multas e fianças seguem na fase 0.4.
@@ -22,7 +24,7 @@
 
 **Crown Ledger logo:** [Download PNG](../mod-pronto/crown-ledger-icon.png). Original illustrated square project icon for CurseForge; separate from the in-game screenshots.
 
-**Crown Ledger 0.2.4:** [Histórico fiscal](crown-ledger/0.2.4/README.md) · [Download PNG](crown-ledger/0.2.4/crown-ledger-0.2.4-media.zip). Captura real dos impostos e aprovação do Villager Economy. [Cofre e menus anteriores](crown-ledger/0.2.3/README.md).
+**Crown Ledger 0.2.5:** [Histórico económico](crown-ledger/0.2.5/README.md) · [Download PNG](crown-ledger/0.2.5/crown-ledger-0.2.5-media.zip). Captura real dos impostos e aprovações do Realm Economy. [Cofre e menus anteriores](crown-ledger/0.2.3/README.md).
 
 ## Contracts & Bounties
 
