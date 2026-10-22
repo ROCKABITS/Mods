@@ -143,7 +143,7 @@ python3 tools/treasury_release.py install
 
 Na máquina cloud, usa `python3 tools/cloud_gradle.py` em vez de `./gradlew`; mantém o proxy e a verificação TLS configurados. Os testes e os automatismos de cliente são excluídos do JAR de produção.
 
-A versão 0.3.0 foi validada com **80 testes unitários**, **40 GameTests independentes**, **40 GameTests com os companheiros publicados**, a regressão visual do cofre e das interfaces anteriores e **dois clientes Minecraft reais ligados por TCP LAN**. A sequência LAN confirmou votos alteráveis, aprovação de um benefício financiado, rejeição de uma consulta empatada e reabertura efetiva do mundo com o saldo e decisões conservados. As capturas dos novos menus usam esses dados reais; as três capturas anteriores de contas e impostos usam dados de demonstração.
+A versão 0.3.1 foi validada com **80 testes unitários**, **40 GameTests independentes**, **40 GameTests com os companheiros publicados**, a regressão visual do cofre e das interfaces anteriores e **dois clientes Minecraft reais ligados por TCP LAN**. A sequência LAN confirmou votos alteráveis, aprovação de um benefício financiado, rejeição de uma consulta empatada e reabertura efetiva do mundo com o saldo e decisões conservados. As capturas dos novos menus usam esses dados reais; as três capturas anteriores de contas e impostos usam dados de demonstração.
 
 [Resultados, reprodução e limites](VALIDACAO-0.3.1.md). A publicação automática volta a executar os testes antes de guardar o JAR, o ZIP, os hashes, os relatórios e a galeria. O histórico das validações anteriores continua em [VALIDACAO.md](VALIDACAO.md).
 

@@ -1,5 +1,7 @@
 # Realm Treasury 0.3.1 — Validation scope
 
+[Successful GitHub Actions run](https://github.com/ROCKABITS/Mods/actions/runs/39856588511): **80 unit tests, 40 standalone native tests, 40 native integration tests**, both actual-client validations and the two-player LAN/world-reopening sequence passed. Production source: `c3eb8d8da29c3e1181e4b71fa2b7017d9ef9990a`.
+
 This release adds free-form titles and multiline descriptions, makes free votes the default form, and preserves optional funded benefits. The release gate requires 80 successful unit tests, 40 standalone GameTests, 40 integration GameTests, the legacy client regression and the actual two-client LAN sequence. Published results are recorded in [the build report](../mod-pronto/realm-treasury-0.3.1.build.json).
 
 New tests exercise description validation and lifecycle, compressed-file persistence through external income and final history, actual format-seven ballots without descriptions, and the complete 64-result history through the production packet codecs. The LAN harness enters both fields in the real form, verifies their server echo and the second client's read-only ballot, reads the archived description, checks compact widget bounds and retains the text after closing and reopening the world. New screenshots show the actual free-vote form, ballot and archived reader.
