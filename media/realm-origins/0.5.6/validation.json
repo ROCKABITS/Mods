@@ -1,0 +1,24 @@
+{
+  "checks": [
+    "Production server NameFormat and S2C UUID/name packet reached actual client entities; uncreated account falls back.",
+    "Vanilla PlayerInfo/TAB display components use RP names while both server and client GameProfiles stay authentic.",
+    "Normal client sendChat travelled through integrated-server player chat and returned decorated with RP name, without chat cancellation/rebroadcast.",
+    "An authoritative RP-name edit invalidated an already cached client entity display name.",
+    "An authoritative empty-name update removed the old alias and restored username fallback.",
+    "The real Reset payload clears public aliases and existing display-name caches without altering the private profile.",
+    "A fresh server roster restored online aliases after reset; real account UUID and username remain unchanged."
+  ],
+  "success": true,
+  "demonstration_remote_entities": true,
+  "captures": [
+    "chronicles-rp-names-world.png",
+    "chronicles-rp-names-tab.png",
+    "chronicles-rp-names-chat.png",
+    "chronicles-rp-names-profile.png"
+  ],
+  "step": 12,
+  "actual_integrated_server": true,
+  "real_chat_transport": true,
+  "actual_minecraft_client": true,
+  "message": "Actual Minecraft rendering, remote name tags, TAB, normal player chat, own journal, name edits/clears and network reset/roster passed."
+}
