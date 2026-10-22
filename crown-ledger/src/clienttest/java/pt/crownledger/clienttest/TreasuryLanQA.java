@@ -46,6 +46,7 @@ public final class TreasuryLanQA {
     private static Process child;
     private static volatile Throwable failure;private static volatile boolean ready;
     private static String folder;private static int stage,lastStage=-1,guestStep;private static long next,stageAt;private static boolean booted,done;
+    private static boolean freeBallotReady,freeHistoryReady;
     private static UUID guest,firstProposal;private static String seen="";private static Vec3 movedFrom;
     private static Minecraft mc(){return Minecraft.getInstance();}
     private static void check(boolean okay,String text){if(!okay)throw new IllegalStateException(text);}
@@ -126,11 +127,11 @@ public final class TreasuryLanQA {
             case 17->{shot("treasury-free-proposal.png");check(click("announce"),"Cannot announce general consultation");stage++;}
             case 18->{if(poll()!=null&&!poll().has("offer")){
                 check(poll().get("question").getAsString().equals(FREE_TITLE)&&poll().get("description").getAsString().equals(FREE_DESCRIPTION),"Title and description did not round-trip through the server");
-                check(click("tab.vote"),"Ballot tab missing");check(mc().screen.children().stream().anyMatch(c->c instanceof DescriptionBox box&&box.getValue().equals(FREE_DESCRIPTION)),"Full description missing from ballot");
+                if(!freeBallotReady){check(click("tab.vote"),"Ballot tab missing");freeBallotReady=true;next=now+500;return;}check(mc().screen.children().stream().anyMatch(c->c instanceof DescriptionBox box&&box.getValue().equals(FREE_DESCRIPTION)),"Full description missing from ballot");
                 shot("treasury-free-ballot.png");compact();check(click("vote.no"),"No vote missing");stage++;
             }}
             case 19->{if(poll()==null&&GovernanceClient.state.getAsJsonArray("history").size()==2){check(Files.exists(OUT.resolve("guest-advisory-voted.json")),"Guest did not vote in consultation");server(()->{var r=data().governance.history().getFirst();check(r.outcome()==Governance.Outcome.REJECTED&&r.yes()==1&&r.no()==1&&r.question().equals(FREE_TITLE)&&r.description().equals(FREE_DESCRIPTION)&&data().treasury.balance(Treasury.Currency.EMERALD)==600,"General tied poll spent money or passed");});stage++;}}
-            case 20->{if(ready){check(click("tab.history"),"History unavailable");check(click("read"),"Archived poll reader unavailable");
+            case 20->{if(ready){if(!freeHistoryReady){check(click("tab.history"),"History unavailable");check(click("read"),"Archived poll reader unavailable");freeHistoryReady=true;next=now+500;return;}
                 check(mc().screen.children().stream().anyMatch(c->c instanceof DescriptionBox box&&box.getValue().equals(FREE_DESCRIPTION)),"Archived description is missing");
                 shot("treasury-free-history.png");CHECKS.add("Free poll title, multiline description, ballot and archived reader round-trip over actual LAN");CHECKS.add("Two real LAN voters, secret mutable ballots, exact reservation, majority benefit, tied free consultation");child.destroy();child.waitFor(3,java.util.concurrent.TimeUnit.SECONDS);mc().level.disconnect();mc().disconnect(new TitleScreen());stage++;}}
             case 21->{if(mc().level==null&&mc().getSingleplayerServer()==null){mc().createWorldOpenFlows().openWorld(folder,()->mc().setScreen(new TitleScreen()));stage++;}}
