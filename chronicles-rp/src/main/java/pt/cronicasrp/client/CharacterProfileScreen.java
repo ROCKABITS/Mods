@@ -28,7 +28,7 @@ public final class CharacterProfileScreen extends BookScreen {
         String[] labels = {UiText.s("gui.cronicasrp.tab.profile"), UiText.s("gui.cronicasrp.tab.deeds"), bookHeight < 270 ? UiText.s("gui.cronicasrp.tab.story_short") : UiText.s("gui.cronicasrp.tab.story"), UiText.s("gui.cronicasrp.tab.wallet")};
         for (int i = 0; i < tabs.length; i++) {
             final int target = i;
-            tabs[i] = button(x + i * (tw + 2), top + 45, tw, labels[i], false, () -> {
+            tabs[i] = button(x + i * (tw + 2), top + 59, tw, labels[i], false, () -> {
                 page = target; storyScroll = 0; updateTabs();
             }).fitLabel();
         }
@@ -49,7 +49,7 @@ public final class CharacterProfileScreen extends BookScreen {
         for (int i = 0; i < tabs.length; i++) if (tabs[i] != null) tabs[i].selected(i == page);
         if (cashButton != null) cashButton.visible = page == 3;
     }
-    private int storyHeight() { return Math.max(18, footerY() - (top + 94) - 18); }
+    private int storyHeight() { return Math.max(18, footerY() - (top + 107) - 18); }
     @Override public boolean mouseScrolled(double mx, double my, double sx, double sy) {
         if (page == 2 && mx >= pageRight() && mx <= pageRight() + pageWidth()) {
             int lines = font.split(Component.literal(ClientState.profile().description()), pageWidth()).size();
@@ -60,14 +60,13 @@ public final class CharacterProfileScreen extends BookScreen {
     }
     @Override protected void renderBook(GuiGraphics g, int mouseX, int mouseY, float partialTick) {
         var p = ClientState.profile(); int lx = pageLeft(), rx = pageRight(), w = pageWidth();
-        boolean compact = bookHeight < 270;
-        heading(g, UiText.s("gui.cronicasrp.heading.traveler"), lx, top + 27, w, INK);
-        heading(g, p.name(), lx, top + 47, w, INK);
-        RpgTheme.rule(g, lx, top + 66, w, 0x668B724A);
+        boolean compact = bookHeight < 300;
+        heading(g, p.name(), lx, top + 42, w, INK);
+        if (!compact) text(g, UiText.s("gui.cronicasrp.heading.traveler"), lx, top + 59, w, MUTED);
         int rowsY = footerY() - (compact ? 86 : 117), rowH = compact ? 11 : 15;
-        int portraitY = top + 76;
+        int portraitY = top + (compact ? 61 : 79);
         if (compact) {
-            RpgTheme.frame(g, lx, portraitY, w, 20, 0x18755831, 0x778D734A);
+            RpgTheme.frame(g, lx, portraitY, w, 20, RpgTheme.PANEL, RpgTheme.BORDER);
             if (minecraft.player != null) {
                 var texture = minecraft.player.getSkin().texture();
                 RenderSystem.enableBlend();
@@ -83,12 +82,12 @@ public final class CharacterProfileScreen extends BookScreen {
         row(g, UiText.s("gui.cronicasrp.label.lineage"), UiText.selectedRace() + " · " + p.age() + UiText.s("gui.cronicasrp.label.years_suffix"), lx, rowsY, w, INK, mouseX, mouseY);
         row(g, UiText.s("gui.cronicasrp.origins.class"), UiText.playerClass(), lx, rowsY + rowH, w, INK, mouseX, mouseY);
         row(g, UiText.s("gui.cronicasrp.label.occupation"), UiText.occupation(p.progress().occupation()), lx, rowsY + 2 * rowH, w, INK, mouseX, mouseY);
-        row(g, UiText.s("gui.cronicasrp.label.rank"), UiText.rank(p.progress().classification()), lx, rowsY + 3 * rowH, w, 0xFF9A742A, mouseX, mouseY);
+        row(g, UiText.s("gui.cronicasrp.label.rank"), UiText.rank(p.progress().classification()), lx, rowsY + 3 * rowH, w, GOLD, mouseX, mouseY);
         row(g, UiText.s("gui.cronicasrp.label.position"), position, lx, rowsY + 4 * rowH, w, INK, mouseX, mouseY);
         row(g, UiText.s("gui.cronicasrp.label.playtime"), ClientState.statistics().playTime(), lx, rowsY + 5 * rowH, w, INK, mouseX, mouseY);
         row(g, UiText.s("gui.cronicasrp.label.digital"), RpgTheme.money(p.balance()), lx, rowsY + 6 * rowH, w, RpgTheme.originColor(p.origin()), mouseX, mouseY);
-        heading(g, switch (page) { case 1 -> UiText.s("gui.cronicasrp.heading.achievements"); case 2 -> UiText.s("gui.cronicasrp.heading.memories"); case 3 -> UiText.s("gui.cronicasrp.heading.wallet"); default -> UiText.s("gui.cronicasrp.heading.attributes"); }, rx, top + 27, w, INK);
-        int y = top + 77;
+        heading(g, switch (page) { case 1 -> UiText.s("gui.cronicasrp.heading.achievements"); case 2 -> UiText.s("gui.cronicasrp.heading.memories"); case 3 -> UiText.s("gui.cronicasrp.heading.wallet"); default -> UiText.s("gui.cronicasrp.heading.attributes"); }, rx, top + 42, w, INK);
+        int y = top + 90;
         if (page == 0) attributes(g, rx, y, w, compact);
         else if (page == 1) accomplishments(g, rx, y, w, compact, mouseX, mouseY);
         else if (page == 2) story(g, rx, y, w);
@@ -103,7 +102,7 @@ public final class CharacterProfileScreen extends BookScreen {
             g.renderTooltip(font, Component.literal(label + ": " + value), mx, my);
     }
     private void attributes(GuiGraphics g, int x, int y, int w, boolean compact) {
-        var p = ClientState.profile(); int step = compact ? 18 : 26;
+        var p = ClientState.profile(); int step = compact ? 16 : 26;
         g.pose().pushPose(); g.pose().translate(x, y - 1, 0); g.pose().scale(0.625F, 0.625F, 1);
         g.renderItem(new ItemStack(Items.EMERALD), 0, 0); g.pose().popPose();
         meter(g, UiText.s("gui.cronicasrp.label.reputation"), p.progress().reputation(), 100, x, y, w, 0xFF537C67);
@@ -115,9 +114,9 @@ public final class CharacterProfileScreen extends BookScreen {
             text(g, UiText.s("gui.cronicasrp.label.experience_prefix") + minecraft.player.experienceLevel, x, y + step * 3, w, INK);
             if (!compact) segments(g, x, y + step * 3 + 13, w, minecraft.player.experienceProgress, 0xFF59704A);
         }
-        int sh = compact ? 32 : 68, sy = footerY() - sh - 8;
+        int sh = compact ? 22 : 68, sy = footerY() - sh - 8;
         if (!compact) text(g, UiText.s("gui.cronicasrp.signature.title"), x, sy - 12, w, MUTED);
-        RpgTheme.frame(g, x, sy, w, sh, 0x309A7946, 0x66886E43);
+        RpgTheme.frame(g, x, sy, w, sh, RpgTheme.PANEL, RpgTheme.BORDER);
         if (!p.signatureDrawing().equals(cachedDrawing)) {
             cachedDrawing = p.signatureDrawing(); cachedInk = cachedDrawing.isEmpty() ? null : SignatureDrawing.decode(cachedDrawing);
         }
@@ -136,7 +135,7 @@ public final class CharacterProfileScreen extends BookScreen {
         float filled = Math.clamp(fraction, 0F, 1F) * 10;
         for (int i = 0; i < 10; i++) {
             int sx = x + i * w / 10, ex = x + (i + 1) * w / 10 - 1;
-            g.fill(sx, y, ex, y + 4, 0x40866B43);
+            g.fill(sx, y, ex, y + 4, 0xFF292431);
             int fw = (int) ((ex - sx) * Math.clamp(filled - i, 0F, 1F));
             if (fw > 0) g.fill(sx, y, sx + fw, y + 4, color);
         }
@@ -149,7 +148,7 @@ public final class CharacterProfileScreen extends BookScreen {
         row(g, UiText.s("gui.cronicasrp.label.bosses"), RpgTheme.number(stats.bossesDefeated()), x, y + step * 2, w, INK, mx, my);
         row(g, UiText.s("gui.cronicasrp.label.creatures"), RpgTheme.number(stats.creaturesDefeated()), x, y + step * 3, w, INK, mx, my);
         int cy = y + step * 4 + 7, h = footerY() - cy - 7;
-        RpgTheme.frame(g, x, cy, w, h, 0x18755831, 0x668D734A);
+        RpgTheme.frame(g, x, cy, w, h, RpgTheme.PANEL, RpgTheme.BORDER);
         if (compact) {
             medal(g, x + 12, cy + h / 2, 6, progress.bestMedal());
             text(g, UiText.s("gui.cronicasrp.label.best_prefix") + UiText.medal(progress.bestMedal()), x + 26, cy + (h - 9) / 2, w - 30, INK);
@@ -184,12 +183,12 @@ public final class CharacterProfileScreen extends BookScreen {
         List<FormattedCharSequence> lines = font.split(Component.literal(story), w - 6);
         int visible = Math.max(1, storyHeight() / font.lineHeight), start = Math.min(storyScroll, Math.max(0, lines.size() - visible));
         for (int i = start; i < Math.min(lines.size(), start + visible); i++)
-            g.drawString(font, lines.get(i), x, top + 94 + (i - start) * font.lineHeight, INK, false);
+            g.drawString(font, lines.get(i), x, top + 107 + (i - start) * font.lineHeight, INK, false);
         if (lines.size() > visible) {
             int track = storyHeight(), thumb = Math.max(8, track * visible / lines.size());
             int offset = (track - thumb) * start / Math.max(1, lines.size() - visible);
-            g.fill(x + w - 2, top + 94, x + w, top + 94 + track, 0x44836A43);
-            g.fill(x + w - 2, top + 94 + offset, x + w, top + 94 + offset + thumb, 0xFF967447);
+            g.fill(x + w - 2, top + 107, x + w, top + 107 + track, RpgTheme.BORDER);
+            g.fill(x + w - 2, top + 107 + offset, x + w, top + 107 + offset + thumb, GOLD);
             text(g, UiText.s("gui.cronicasrp.story.scroll"), x, footerY() - 13, w, MUTED);
         }
     }

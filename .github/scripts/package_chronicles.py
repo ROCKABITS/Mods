@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Publish Chronicles only after real Origins runtime and RP-name client checks."""
+"""Publish Realm Origins only after real Origins runtime and RP-name client checks."""
 from pathlib import Path
 import importlib.util
 import json
@@ -42,6 +42,9 @@ for folder, logfile, marker in (
         ('rp-names-client', 'visual-client.log', 'CRP_NAMES_CLIENT_QA_PASSED')):
     report = json.loads((project / 'qa-results' / folder / 'result.json').read_text())
     assert report.get('success') is True, (folder, report)
+    if folder != 'rp-names-client':
+        assert report.get('visual_rework') is True and report.get('step') == 23, 'Missing actual rework flow'
+        assert report.get('with_classes') == (folder == 'client'), 'Wrong Origins Classes client mode'
     log = (project / logfile).read_text(errors='replace')
     assert marker in log and 'BUILD SUCCESSFUL' in log and 'BUILD FAILED' not in log, logfile
     clients[folder] = report
@@ -57,26 +60,42 @@ out = repo / 'mod-pronto'
 out.mkdir(exist_ok=True)
 jar = out / source.name
 shutil.copyfile(source, jar)
-archive = out / f'cronicasrp-{version}.zip'
+archive = out / f'realm-origins-{version}.zip'
 with zipfile.ZipFile(archive, 'w', zipfile.ZIP_DEFLATED) as z:
     z.write(jar, jar.name)
     for name in ('README.md', 'CHANGELOG.md'):
         z.write(project / name, name)
 
-media = repo / 'media/chronicles-rp' / version
+media = repo / 'media/realm-origins' / version
 media.mkdir(parents=True, exist_ok=True)
 for name in images:
     shutil.copyfile(visual / name, media / name)
 shutil.copyfile(visual / 'result.json', media / 'validation.json')
-(media / 'README.md').write_text('''# Chronicles RP — RP names\n\nActual Minecraft 1.21.1 NeoForge screenshots, captured with real Origins, Jupiter and Origins: Classes plus the released roleplay companion mods. Demonstration characters are used for the gallery.\n\n- chronicles-rp-names-world.png: RP names above characters and the username fallback.\n- chronicles-rp-names-tab.png: RP names in the vanilla player list.\n- chronicles-rp-names-chat.png: normal player chat decorated with the RP name.\n- chronicles-rp-names-profile.png: character profile used in the demonstration.\n\nThe underlying Minecraft account names and UUIDs remain unchanged. Other mods can implement their own player-name interfaces.\n''')
-with zipfile.ZipFile(media / f'chronicles-rp-{version}-media.zip', 'w', zipfile.ZIP_DEFLATED) as z:
+# Screenshots from the real creation/profile/exchange client, never rendered mockups.
+rework_names = ['03-creation-en', '14-story-en', '05-signature-en', '06-oath-en',
+                '13-welcome-en', '07-profile-en', '15-deeds-en', '16-profile-story-en',
+                '17-wallet-en', '18-exchange-en', '11-profile-compact', '12-creation-compact',
+                '19-exchange-compact', '20-edit-story-compact', '21-edit-signature-compact',
+                '22-edit-review-compact', '23-welcome-compact']
+for name in rework_names:
+    target = 'realm-origins-' + name + '.png'
+    source_image = project / 'qa-results/client' / (name + '.png')
+    assert source_image.stat().st_size > 1024 and source_image.read_bytes()[:8] == b'\x89PNG\r\n\x1a\n', name
+    shutil.copyfile(source_image, media / target)
+    images.append(target)
+shutil.copyfile(project / 'src/main/resources/realm-origins.png', media / 'icon.png')
+images.append('icon.png')
+shutil.copyfile(project / 'qa-results/client/result.json', media / 'rework-validation.json')
+(media / 'README.md').write_text('# Realm Origins 0.5.5\n\nActual Minecraft 1.21.1 / NeoForge screenshots: four creation chapters, a new chapter welcome, character profile, deeds, story, wallet and exchange, with compact layouts. Origins powers remain in the external Origins native interface. The RP-name gallery also checks the world, TAB and normal chat with all twelve released companion mods. Test accounts use demonstration data.\n\nOriginal portal/book icon: icon.png. No screenshot is a generated mockup. Internal namespace remains cronicasrp; replace the old Chronicles RP JAR and keep the external Origins/Jupiter dependencies.\n')
+with zipfile.ZipFile(media / f'realm-origins-{version}-media.zip', 'w', zipfile.ZIP_DEFLATED) as z:
     for name in images + ['README.md']:
         z.write(media / name, name)
 
-(out / f'cronicasrp-{version}.sha256').write_text(''.join(
+(out / f'realm-origins-{version}.sha256').write_text(''.join(
     f'{checks.digest(path)}  {path.name}\n' for path in (jar, archive)))
 provenance = {
-    'version': version, 'source_commit': snapshot['source_commit'],
+    'version': version, 'display_name': 'Realm Origins', 'internal_mod_id': 'cronicasrp',
+    'visual_rework_verified': True, 'personality_or_attributes_added': False, 'source_commit': snapshot['source_commit'],
     'tested_run': f"https://github.com/{os.environ['GITHUB_REPOSITORY']}/actions/runs/{os.environ['GITHUB_RUN_ID']}",
     'jar_sha256': checks.digest(jar), 'zip_sha256': checks.digest(archive),
     'unit_tests': unit, 'native_tests_with_classes': native['gametests.log'],
@@ -90,5 +109,5 @@ provenance = {
     'companion_jars': {f'{name}.jar': digest for name, digest in checks.COMPANIONS.items()},
     'screenshots': {name: checks.digest(media / name) for name in images},
 }
-(out / f'cronicasrp-{version}.build.json').write_text(json.dumps(provenance, indent=2) + '\n')
-print(f'::notice title=Tested Chronicles RP::{jar.name}: {jar.stat().st_size} bytes; unit={unit}; native={native}; real Origins and client passed; SHA256 {checks.digest(jar)}')
+(out / f'realm-origins-{version}.build.json').write_text(json.dumps(provenance, indent=2) + '\n')
+print(f'::notice title=Tested Realm Origins::{jar.name}: {jar.stat().st_size} bytes; unit={unit}; native={native}; real Origins and client passed; SHA256 {checks.digest(jar)}')

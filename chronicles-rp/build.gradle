@@ -35,7 +35,8 @@ repositories {
 }
 
 base {
-    archivesName = mod_id
+    // Keep the registry namespace for existing worlds and integrations.
+    archivesName = 'realm-origins'
 }
 
 // Mojang ships Java 21 to end users in 1.21.1, so mods should target Java 21.
@@ -65,7 +66,7 @@ neoForge {
             } else if (providers.gradleProperty('rpClientTests').isPresent()) {
                 gameDirectory = project.file(providers.gradleProperty('rpWithoutClasses').isPresent() ? 'run-origins-qa-without-classes' : 'run-origins-qa')
                 systemProperty 'cronicasrp.qaOutput', providers.gradleProperty('rpQaOutput').getOrElse(project.file('qa-results/client').absolutePath)
-                programArguments.addAll '--width', '1100', '--height', '700'
+                programArguments.addAll '--width', '1600', '--height', '900'
             }
             // Comma-separated list of namespaces to load gametests from. Empty = all namespaces.
             systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id

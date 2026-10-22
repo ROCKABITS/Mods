@@ -16,7 +16,7 @@ def annotation(kind, title, value):
     print(f'::{kind} title={title}::{escaped}')
 
 
-parts = ['# Chronicles RP validation\n']
+parts = ['# Realm Origins validation\n']
 for path in sorted((project / 'build/test-results/test').glob('TEST-*.xml')):
     report = ET.parse(path).getroot()
     result = f"JUnit {report.get('name')}: tests={report.get('tests')}, failures={report.get('failures')}, errors={report.get('errors')}, skipped={report.get('skipped')}"

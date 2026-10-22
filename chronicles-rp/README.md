@@ -1,12 +1,14 @@
-# Chronicles RP — 0.5.4
+# Realm Origins — 0.5.5
 
-A versão **0.5.4** integra opcionalmente o **Realm Notifications 0.1.0+**. Transferências e pagamentos da administração mostram o valor e o motivo; depósitos e levantamentos são identificados como câmbio. Sem o canal de notificações, mantém-se a mensagem habitual. O protocolo continua a ser **7**, e os dados de RP e de dinheiro mantêm o seu formato.
+**Realm Origins** é o novo nome do Chronicles RP. Esta atualização redesenha a criação e a ficha de personagem com fundo escuro, estrelas discretas, detalhes lilás, botões com foco visível e a skin real em 3D sobre anéis de luz. Os quatro capítulos continuam a ser identidade, história, assinatura e confirmação; não foram acrescentados sliders de personalidade nem atributos fictícios. A confirmação abre um ecrã de boas-vindas com os fundos iniciais já guardados, sem voltar a sortear ou pagar dinheiro.
+
+O identificador interno continua a ser `cronicasrp`, tal como os itens, dados, configuração, pacote Java e protocolo **7**. Isto preserva os perfis, carteiras e integrações existentes. A pasta do projeto mantém o nome `chronicles-rp/`. O novo JAR **substitui** o Chronicles RP; não é um segundo mod para instalar ao lado dele.
 
 Personagens de fantasia e economia para Minecraft Java 1.21.1, NeoForge 21.1.256+ na série 21.1 e Java 21.
 
 ## Instalar
 
-Faz uma cópia de segurança do mundo e coloca `cronicasrp-0.5.4.jar` em `mods`, substituindo o JAR anterior do Chronicles RP. Instala a versão 0.5.4 no servidor e em todos os clientes; não deixes dois JARs do Chronicles RP na mesma pasta.
+Faz uma cópia de segurança do mundo e coloca `realm-origins-0.5.5.jar` em `mods`, substituindo o JAR anterior do Chronicles RP. Instala a versão 0.5.5 no servidor e em todos os clientes; não deixes o JAR antigo e o novo Realm Origins na mesma pasta.
 
 | Mod | Versão usada nesta atualização | Necessário? |
 | --- | --- | --- |
@@ -20,7 +22,7 @@ A [validação da versão 0.5.3 passou](https://github.com/ROCKABITS/Mods/action
 
 ## Nomes de personagem no mundo
 
-Depois de criares a personagem, o nome RP substitui o username acima da cabeça, na lista TAB, no nome do autor das mensagens do chat normal e na identificação apresentada pelo livro do Chronicles RP. Por exemplo, uma personagem chamada **Aetherion** é apresentada como **Aetherion**, mesmo que a conta Minecraft se chame **Ricardo123**. Sem personagem criada, ou se um perfil antigo tiver um nome inválido, aparece o username habitual.
+Depois de criares a personagem, o nome RP substitui o username acima da cabeça, na lista TAB, no nome do autor das mensagens do chat normal e na identificação apresentada pelo diário do Realm Origins. Por exemplo, uma personagem chamada **Aetherion** é apresentada como **Aetherion**, mesmo que a conta Minecraft se chame **Ricardo123**. Sem personagem criada, ou se um perfil antigo tiver um nome inválido, aparece o username habitual.
 
 A sincronização usa apenas o UUID e o nome público da personagem; não transmite histórias, assinaturas, saldo ou os restantes dados privados aos outros jogadores. O nome é atualizado quando o perfil muda e é enviado a quem entra ou começa a acompanhar o jogador. As regras de visibilidade das equipas e a formatação das equipas continuam a aplicar-se. No chat, a identificação ao passar o rato e o texto inserido com Shift+clique usam também o nome RP; o clique para enviar uma mensagem privada conserva o alvo real da conta.
 
@@ -32,7 +34,7 @@ Mantém-se a correção da definição de claustrofobia do Elytrian fornecida pe
 
 ## Criar e consultar uma personagem
 
-1. Na primeira entrada, abre primeiro o pergaminho de RP. Podes começar pelo nome e pela idade.
+1. Na primeira entrada, abre primeiro a criação por capítulos. Podes começar pelo nome e pela idade.
 2. Carrega no botão **Linhagem**: abre a escolha de raça do Origins.
 3. Depois da raça, escolhe a classe se Origins: Classes estiver instalado. Sem o add-on, este passo é dispensado.
 4. Regressas automaticamente ao mesmo formulário, com nome e idade conservados. Completa profissão, história e assinatura desenhada e confirma o juramento. O primeiro passo só avança depois de terminares as escolhas do Origins.
@@ -49,13 +51,13 @@ Sem Origins: Classes, o mod continua a funcionar com Origins; a ficha mostra que
 
 Ao atualizar de 0.4.1, preserva a pasta do mundo e troca os JARs. Nome, idade, história, desenho da assinatura, profissão, reputação, missões, medalhas, fortuna inicial e saldo são mantidos. A raça passa a acompanhar a origem que escolheres no Origins. Escolher uma origem ou classe não volta a sortear nem atribui dinheiro.
 
-O protocolo do Chronicles RP mantém a versão **7** desde a versão 0.5.3. Recomenda-se atualizar o servidor e todos os clientes para a versão 0.5.4; as versões 0.5.2 e 0.5.3+ usam protocolos diferentes. O formato do perfil de RP mantém os campos anteriores; a linhagem guarda o identificador da origem. A escolha da classe fica nos dados do próprio Origins. Esta atualização não reinicia as personagens, não volta a sortear a fortuna e não converte o dinheiro.
+O protocolo do Realm Origins mantém a versão **7** desde a versão 0.5.3. Recomenda-se atualizar o servidor e todos os clientes para a versão 0.5.5; as versões 0.5.2 e 0.5.3+ usam protocolos diferentes. O formato do perfil de RP mantém os campos anteriores; a linhagem guarda o identificador da origem. A escolha da classe fica nos dados do próprio Origins. Esta atualização não reinicia as personagens, não volta a sortear a fortuna e não converte o dinheiro.
 
 ## Livro e economia
 
 O livro mantém as páginas Ficha, Feitos, História e Bolsa, o retrato com a skin atual, as estatísticas reais do Minecraft e a assinatura desenhada. Nome e idade são definidos na criação; história, profissão e assinatura podem ser editadas. A raça segue o Origins.
 
-Vida, armadura, experiência, coordenadas, tempo de jogo e abates vêm do Minecraft. Reputação, missões e medalhas são dados de RP atribuídos por operadores. A reputação determina a classificação, de Carvão a Netherite. Ainda não existe um sistema automático de quests.
+Vida, armadura, experiência, coordenadas, tempo de jogo e abates vêm do Minecraft. Reputação, missões e medalhas são dados de RP atribuídos por operadores. A reputação determina a classificação, de Carvão a Netherite. O Contracts & Bounties pode atribuir progresso e recompensas através das suas quests.
 
 Em **P → Bolsa → Moedas, notas e câmbio**, converte saldo digital em dinheiro físico ou deposita-o de volta com troco exato.
 

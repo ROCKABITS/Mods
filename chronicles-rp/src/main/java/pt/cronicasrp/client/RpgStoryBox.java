@@ -10,7 +10,7 @@ final class RpgStoryBox extends MultiLineEditBox {
         super(font, x, y, w, h, UiText.c("gui.cronicasrp.story.prompt"), UiText.c("gui.cronicasrp.story.narration"));
     }
     @Override protected void renderBackground(GuiGraphics g) {
-        RpgTheme.frame(g, getX(), getY(), width, height, 0xA00B1423, isFocused() ? RpgTheme.GOLD : 0xFF60616B);
+        RpgTheme.frame(g, getX(), getY(), width, height, RpgTheme.PANEL, isFocused() ? RpgTheme.GOLD : RpgTheme.BORDER);
     }
     @Override protected void renderDecorations(GuiGraphics g) {
         if (scrollbarVisible()) {

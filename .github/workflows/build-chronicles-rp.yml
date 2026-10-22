@@ -1,4 +1,4 @@
-name: Build Chronicles RP
+name: Build Realm Origins
 on:
   push:
     branches: [main]
@@ -87,15 +87,15 @@ jobs:
       - name: Gate and package tested release and actual Minecraft media
         working-directory: .
         run: python3 .github/scripts/package_chronicles.py
-      - name: Downloadable Chronicles release
+      - name: Downloadable Realm Origins release
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
-          name: cronicasrp-${{ steps.mod.outputs.version }}
+          name: realm-origins-${{ steps.mod.outputs.version }}
           path: |
-            mod-pronto/cronicasrp-${{ steps.mod.outputs.version }}.jar
-            mod-pronto/cronicasrp-${{ steps.mod.outputs.version }}.zip
-            mod-pronto/cronicasrp-${{ steps.mod.outputs.version }}.sha256
-            mod-pronto/cronicasrp-${{ steps.mod.outputs.version }}.build.json
+            mod-pronto/realm-origins-${{ steps.mod.outputs.version }}.jar
+            mod-pronto/realm-origins-${{ steps.mod.outputs.version }}.zip
+            mod-pronto/realm-origins-${{ steps.mod.outputs.version }}.sha256
+            mod-pronto/realm-origins-${{ steps.mod.outputs.version }}.build.json
           if-no-files-found: error
           retention-days: 30
       - name: Publish tested release in one commit
@@ -109,9 +109,9 @@ jobs:
             echo '::error::Main changed during the build. Run against latest main.'
             exit 1
           fi
-          git add -- "mod-pronto/cronicasrp-$MOD_VERSION.jar" "mod-pronto/cronicasrp-$MOD_VERSION.zip" "mod-pronto/cronicasrp-$MOD_VERSION.sha256" "mod-pronto/cronicasrp-$MOD_VERSION.build.json" "media/chronicles-rp/$MOD_VERSION/"
+          git add -- "mod-pronto/realm-origins-$MOD_VERSION.jar" "mod-pronto/realm-origins-$MOD_VERSION.zip" "mod-pronto/realm-origins-$MOD_VERSION.sha256" "mod-pronto/realm-origins-$MOD_VERSION.build.json" "media/realm-origins/$MOD_VERSION/"
           if git diff --cached --quiet; then exit 0; fi
-          git -c user.name='github-actions[bot]' -c user.email='41898282+github-actions[bot]@users.noreply.github.com' commit -m "Publish tested Chronicles RP $MOD_VERSION [skip ci]"
+          git -c user.name='github-actions[bot]' -c user.email='41898282+github-actions[bot]@users.noreply.github.com' commit -m "Publish tested Realm Origins $MOD_VERSION [skip ci]"
           git push origin HEAD:refs/heads/main
       - name: Test evidence
         if: always()

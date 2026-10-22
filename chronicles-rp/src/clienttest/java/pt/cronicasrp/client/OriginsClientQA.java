@@ -36,7 +36,9 @@ public final class OriginsClientQA {
     private static CharacterProfile saved;
     private static boolean done, raceButtonClicked, raceSelected;
     private static CharacterCreationScreen draft;
-    private static long firstCreationAt;
+    private static long firstCreationAt, welcomeAt;
+    private static boolean storyWritten, signed;
+    private static int profileStage;
     private static int lastStep = -1;
     private static long stepStarted;
     private static void check(boolean value, String message) {
@@ -54,6 +56,18 @@ public final class OriginsClientQA {
         return false;
     }
     private static void capture(String name) throws Exception {
+        var screen = Minecraft.getInstance().screen;
+        if (screen instanceof BookScreen) {
+            var widgets = screen.children().stream().filter(c -> c instanceof net.minecraft.client.gui.components.AbstractWidget)
+                    .map(c -> (net.minecraft.client.gui.components.AbstractWidget)c).filter(w -> w.visible).toList();
+            for (var w : widgets) {
+                check(w.getX() >= 0 && w.getY() >= 0 && w.getX() + w.getWidth() <= screen.width && w.getY() + w.getHeight() <= screen.height,
+                        "Widget outside " + name + ": " + w.getMessage().getString());
+                for (var other : widgets) if (other != w) check(w.getX() >= other.getX() + other.getWidth() || other.getX() >= w.getX() + w.getWidth()
+                                || w.getY() >= other.getY() + other.getHeight() || other.getY() >= w.getY() + w.getHeight(),
+                        "Overlapping controls on " + name + ": " + w.getMessage().getString() + " / " + other.getMessage().getString());
+            }
+        }
         Files.createDirectories(OUT);
         try (var image = Screenshot.takeScreenshot(Minecraft.getInstance().getMainRenderTarget())) {
             image.writeToFile(OUT.resolve(name + ".png"));
@@ -66,6 +80,8 @@ public final class OriginsClientQA {
             Files.createDirectories(OUT);
             Files.writeString(OUT.resolve("result.json"), new com.google.gson.Gson().toJson(java.util.Map.of(
                     "success", success, "step", step, "message", message,
+                    "with_classes", net.neoforged.fml.ModList.get().isLoaded("origins_classes"),
+                    "visual_rework", success && step == 23,
                     "race", saved == null ? "" : saved.race(),
                     "balance", saved == null ? 0 : saved.balance())));
         } catch (Exception ignored) {}
@@ -89,6 +105,7 @@ public final class OriginsClientQA {
             switch (step) {
                 case 0 -> {
                     if (mc.screen instanceof TitleScreen) {
+                        mc.options.guiScale().set(2); mc.options.tutorialStep = net.minecraft.client.tutorial.TutorialSteps.NONE; mc.resizeDisplay();
                         CreateWorldScreen.openFresh(mc, mc.screen); step++;
                     } else if (mc.screen != null && mc.screen.getClass().getSimpleName().contains("Accessibility"))
                         click("gui.continue");
@@ -171,19 +188,28 @@ public final class OriginsClientQA {
                     }
                 }
                 case 7 -> {
-                    if (mc.screen instanceof CharacterCreationScreen) {
+                    if (mc.screen instanceof CharacterCreationScreen screen) {
+                        if (!storyWritten) {
+                            screen.children().stream().filter(c -> c instanceof RpgStoryBox).map(c -> (RpgStoryBox)c).findFirst().orElseThrow()
+                                    .setValue("Born beneath a violet sky, Ari set out to write a new chapter among the kingdoms of this world.");
+                            storyWritten = true; return;
+                        }
+                        capture("14-story-en");
                         check(click(UiText.s("gui.cronicasrp.button.continue")), "Story did not advance"); step++;
                     }
                 }
                 case 8 -> {
                     if (mc.screen instanceof CharacterCreationScreen screen) {
                         var pad = screen.children().stream().filter(c -> c instanceof SignaturePad).map(c -> (SignaturePad)c).findFirst().orElseThrow();
+                        if (signed) {
+                            capture("05-signature-en");
+                            check(click(UiText.s("gui.cronicasrp.button.continue")), "Signature did not advance"); step++; return;
+                        }
                         double x = pad.getX()+pad.getWidth()*0.2, y = pad.getY()+pad.getHeight()*0.5;
                         pad.mouseClicked(x,y,0);
                         for (int i=1;i<20;i++) pad.mouseDragged(x+i*2,y+Math.sin(i*0.6)*6,0,2,0);
                         pad.mouseReleased(x+38,y,0);
-                        capture("05-signature-en");
-                        check(click(UiText.s("gui.cronicasrp.button.continue")), "Signature did not advance"); step++;
+                        signed = true;
                     }
                 }
                 case 9 -> {
@@ -196,15 +222,35 @@ public final class OriginsClientQA {
                     if (mc.screen instanceof DestinyRevealScreen) {
                         saved = ClientState.profile();
                         check(saved.created() && saved.name().equals("Ari Moonborn") && saved.age() == 128 && saved.race().equals("origins:avian"), "Actual server created incorrect RP identity");
-                        if (!click(UiText.s("gui.cronicasrp.button.reveal")))
-                            check(click(UiText.s("gui.cronicasrp.button.open_journal")), "No reveal/journal action");
+                        if (welcomeAt == 0) welcomeAt = now;
+                        if (now - welcomeAt < 5200) return;
+                        capture("13-welcome-en");
+                        check(click(UiText.s("gui.cronicasrp.button.open_journal")), "No journal action after welcome");
                         if (mc.screen instanceof CharacterProfileScreen) step++;
                     }
                 }
                 case 11 -> {
-                    if (mc.screen instanceof CharacterProfileScreen) {
+                    if (profileStage == 0 && mc.screen instanceof CharacterProfileScreen) {
                         check(ClientState.profile().equals(saved), "Wealth reveal altered saved data");
-                        capture("07-profile-en");
+                        capture("07-profile-en"); check(click(UiText.s("gui.cronicasrp.tab.deeds")), "No deeds tab"); profileStage++;
+                    } else if (profileStage == 1) {
+                        capture("15-deeds-en"); check(click(UiText.s("gui.cronicasrp.tab.story")), "No story tab"); profileStage++;
+                    } else if (profileStage == 2) {
+                        capture("16-profile-story-en"); check(click(UiText.s("gui.cronicasrp.tab.wallet")), "No wallet tab"); profileStage++;
+                    } else if (profileStage == 3) {
+                        capture("17-wallet-en"); check(click(UiText.s("gui.cronicasrp.button.exchange")), "No exchange action"); profileStage++;
+                    } else if (profileStage == 4 && mc.screen instanceof CurrencyExchangeScreen screen) {
+                        capture("18-exchange-en");
+                        screen.children().stream().filter(c -> c instanceof RpgEditBox b && b.getMessage().getString().equals(UiText.s("gui.cronicasrp.cash.amount")))
+                                .map(c -> (RpgEditBox)c).findFirst().orElseThrow().setValue("0.01");
+                        check(saved.balance() > 0, "Fixture needs one cent for exchange");
+                        check(click(UiText.s("gui.cronicasrp.button.withdraw_amount")), "Withdraw action missing"); profileStage++;
+                    } else if (profileStage == 5 && ClientState.profile().balance() == saved.balance() - 1) {
+                        check(click(UiText.s("gui.cronicasrp.button.deposit")), "No deposit tab");
+                        check(click(UiText.s("gui.cronicasrp.button.deposit_amount")), "No deposit action"); profileStage++;
+                    } else if (profileStage == 6 && ClientState.profile().balance() == saved.balance()) {
+                        check(ClientState.profile().equals(saved), "Exchange changed character data");
+                        mc.setScreen(new CharacterProfileScreen());
                         mc.getLanguageManager().setSelected("pt_pt"); mc.options.languageCode="pt_pt";
                         mc.reloadResourcePacks(); step++;
                     }
@@ -267,7 +313,48 @@ public final class OriginsClientQA {
                 }
                 case 18 -> {
                     if (mc.screen instanceof CharacterCreationScreen) {
-                        complete(true, "RP creator first; Origins opened only from the lineage button; race then optional class; same name/age draft restored; creation/signature/wealth, profile, translations and origin change passed.");
+                        var server = mc.getSingleplayerServer(); var uuid = mc.player.getUUID();
+                        mc.setScreen(null);
+                        server.execute(() -> {
+                            var player = server.getPlayerList().getPlayer(uuid);
+                            player.setData(ModAttachments.PROFILE, saved);
+                            pt.cronicasrp.network.ProfileNetwork.send(player, pt.cronicasrp.network.ProfilePackets.SYNC, "");
+                        }); step++;
+                    }
+                }
+                case 19 -> {
+                    if (mc.screen == null && ClientState.profile().created()) { mc.setScreen(new CurrencyExchangeScreen()); return; }
+                    if (mc.screen instanceof CurrencyExchangeScreen) {
+                        capture("19-exchange-compact");
+                        mc.setScreen(new CharacterCreationScreen(true)); step++;
+                    }
+                }
+                case 20 -> {
+                    if (mc.screen instanceof CharacterCreationScreen) {
+                        capture("20-edit-story-compact");
+                        check(click(UiText.s("gui.cronicasrp.button.continue")), "Compact story did not advance"); step++;
+                    }
+                }
+                case 21 -> {
+                    if (mc.screen instanceof CharacterCreationScreen) {
+                        capture("21-edit-signature-compact");
+                        check(click(UiText.s("gui.cronicasrp.button.continue")), "Compact signature did not advance"); step++;
+                    }
+                }
+                case 22 -> {
+                    if (mc.screen instanceof CharacterCreationScreen) {
+                        capture("22-edit-review-compact");
+                        mc.setScreen(new DestinyRevealScreen(ClientState.profile(), true)); step++;
+                    }
+                }
+                case 23 -> {
+                    if (mc.screen instanceof DestinyRevealScreen screen) {
+                        if (now - stepStarted < 5200) return;
+                        capture("23-welcome-compact");
+                        var before = ClientState.profile();
+                        check(screen.keyPressed(257, 0, 0) && mc.screen == null, "Enter world did not return to gameplay");
+                        check(ClientState.profile().equals(before), "Replaying welcome changed saved identity or funds");
+                        complete(true, "Realm Origins: native Origins and optional Classes, preserved draft, four chapters, drawn signature, saved welcome, four profile tabs, actual one-cent withdraw/deposit round-trip, EN/PT, compact controls and Enter world without another payment passed.");
                     }
                 }
                 default -> throw new IllegalStateException("Unknown QA step");

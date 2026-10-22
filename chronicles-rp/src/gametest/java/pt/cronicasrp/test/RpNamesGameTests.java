@@ -174,7 +174,8 @@ public final class RpNamesGameTests {
         boolean expectedCompanions = Boolean.getBoolean("cronicasrp.qaExpectedCompanions");
         helper.assertTrue(mods.isLoaded("origins_classes") == expectedClasses,
                 "Origins: Classes runtime did not match the requested test configuration.");
-        for (String id : List.of("contracts", "realmcouncil", "kingdomtreasury", "realmidentity", "realmmarkets"))
+        for (String id : List.of("contracts", "realmcouncil", "kingdomtreasury", "realmidentity", "realmmarkets",
+                "realmnotifications", "realmrewards", "realmtitles", "realmcasino", "lawsjustice", "realmeconomy", "realmmarriage"))
             helper.assertTrue(mods.isLoaded(id) == expectedCompanions,
                     "Companion runtime did not match the requested test configuration: " + id);
         CronicasRP.LOGGER.info("CRP_NAMES_RUNTIME_DEPENDENCIES_PASSED classes={} companions={}",

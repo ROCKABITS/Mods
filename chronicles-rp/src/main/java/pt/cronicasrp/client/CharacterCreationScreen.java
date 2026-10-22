@@ -34,7 +34,7 @@ public final class CharacterCreationScreen extends BookScreen {
         }
     }
     public boolean isEditing() { return editing; }
-    private int bodyY() { return top + 70; }
+    private int bodyY() { return top + (bookHeight < 280 ? 68 : 86); }
     private void capture() {
         if (name != null) nameValue = name.getValue();
         if (age != null) ageValue = age.getValue();
@@ -44,8 +44,8 @@ public final class CharacterCreationScreen extends BookScreen {
     private void rebuild() { capture(); clearWidgets(); init(); }
     @Override protected void init() {
         capture(); measure(); name = null; age = null; description = null; pad = null; submit = null;
-        portraitX = left + 26; portraitWidth = Math.clamp(bookWidth * 27 / 100, 78, 150);
-        formX = portraitX + portraitWidth + 22; formWidth = left + bookWidth - 26 - formX;
+        portraitX = left + Math.max(16, bookWidth / 15); portraitWidth = bookWidth * 39 / 100;
+        formX = left + bookWidth * 55 / 100; formWidth = left + bookWidth - Math.max(16, bookWidth / 15) - formX;
         if (!editing) raceValue = OriginsBridge.race(minecraft.player).map(c -> c.id().toString()).orElse(OriginsBridge.NO_ORIGIN);
         int y = bodyY();
         if (stage == 0) {
@@ -73,14 +73,15 @@ public final class CharacterCreationScreen extends BookScreen {
             button(pad.getX(), toolY, toolW, UiText.s("gui.cronicasrp.button.undo"), false, () -> pad.undo());
             button(pad.getX() + pw - toolW, toolY, toolW, UiText.s("gui.cronicasrp.button.clear"), false, () -> pad.clear());
         }
-        button(formX, footerY(), 68, stage == 0 || editing && stage == 1 ? UiText.s("gui.cronicasrp.button.back") : UiText.s("gui.cronicasrp.button.previous"), false, () -> {
+        int backWidth = Math.min(68, (formWidth - 8) / 2);
+        button(formX, footerY(), backWidth, stage == 0 || editing && stage == 1 ? UiText.s("gui.cronicasrp.button.back") : UiText.s("gui.cronicasrp.button.previous"), false, () -> {
             if (stage == 0 || editing && stage == 1) onClose();
             else { capture(); stage--; error = ""; rebuild(); }
         });
         String label = stage == 3 ? (editing ? UiText.s("gui.cronicasrp.button.save_record") : UiText.s("gui.cronicasrp.button.seal_destiny")) : UiText.s("gui.cronicasrp.button.continue");
-        int actionWidth = Math.min(122, formWidth - 75);
+        int actionWidth = formWidth - backWidth - 8;
         submit = button(formX + formWidth - actionWidth, footerY(), actionWidth,
-                waiting ? UiText.s("gui.cronicasrp.status.saving") : label, true, () -> { if (stage == 3) send(); else next(); });
+                waiting ? UiText.s("gui.cronicasrp.status.saving") : label, true, () -> { if (stage == 3) send(); else next(); }).fitLabel();
         if (!editing && (stage == 0 || stage == 3) && !OriginsBridge.ready(minecraft.player)) submit.active = false;
         if (waiting) for (var child : children()) if (child instanceof net.minecraft.client.gui.components.AbstractWidget widget) widget.active = false;
     }
@@ -127,6 +128,13 @@ public final class CharacterCreationScreen extends BookScreen {
     @Override public boolean isPauseScreen() { return !waiting && minecraft != null && OriginsBridge.ready(minecraft.player); }
     @Override public boolean shouldCloseOnEsc() { return !waiting; }
     @Override public void onClose() { if (!waiting) minecraft.setScreen(editing ? new CharacterProfileScreen() : null); }
+    @Override public boolean keyPressed(int key, int scan, int modifiers) {
+        // Keep Enter as a newline in the history editor and preserve focused button actions.
+        if ((key == 257 || key == 335) && !(getFocused() instanceof RpgStoryBox)
+                && !(getFocused() instanceof net.minecraft.client.gui.components.AbstractButton)
+                && submit != null && submit.active) { submit.onPress(); return true; }
+        return super.keyPressed(key, scan, modifiers);
+    }
     @Override public boolean mouseDragged(double x, double y, int button, double dx, double dy) {
         if (pad != null && pad.drawing()) return pad.mouseDragged(x, y, button, dx, dy);
         return super.mouseDragged(x, y, button, dx, dy);
@@ -136,12 +144,18 @@ public final class CharacterCreationScreen extends BookScreen {
         return super.mouseReleased(x, y, button);
     }
     @Override protected void renderBook(GuiGraphics g, int mouseX, int mouseY, float partialTick) {
-        RpgTheme.centered(g, RpgTheme.heading(editing ? UiText.s("gui.cronicasrp.title.memories") : UiText.s("gui.cronicasrp.title.pact")), width / 2, top + 25, GOLD, bookWidth - 60);
         String[] stages = {UiText.s("gui.cronicasrp.stage.name"), UiText.s("gui.cronicasrp.stage.story"), UiText.s("gui.cronicasrp.stage.signature"), UiText.s("gui.cronicasrp.stage.oath")};
-        RpgTheme.centered(g, Component.literal(stages[stage]), width / 2, top + 46, RpgTheme.ASH, bookWidth - 50);
+        RpgTheme.centered(g, Component.literal(UiText.s("gui.cronicasrp.realm.chapter") + " " + (stage + 1) + " / " + stages[stage]),
+                width / 2, top + 39, GOLD, bookWidth - 44);
+        String[] subtitles = {"gui.cronicasrp.realm.chapter_0", "gui.cronicasrp.realm.chapter_1", "gui.cronicasrp.realm.chapter_2", "gui.cronicasrp.realm.chapter_3"};
+        if (bookHeight >= 280) RpgTheme.centered(g, UiText.c(subtitles[stage]), width / 2, top + 57, RpgTheme.LIGHT, bookWidth - 44);
         int y = bodyY();
-        portrait(g, portraitX, y - 2, portraitWidth, footerY() - y + 20, mouseX, mouseY, true);
-        RpgTheme.rule(g, formX, top + 61, formWidth, 0x997B704F);
+        portrait(g, portraitX, y - 6, portraitWidth, footerY() - y + 26, mouseX, mouseY, true);
+        RpgTheme.frame(g, formX - 10, y - 8, formWidth + 20, footerY() - y - 3, RpgTheme.PANEL, 0x203D3548);
+        for (int i = 0; i < 4; i++) {
+            int dx = width / 2 - 21 + i * 14;
+            g.fill(dx, footerY() + 21, dx + 5, footerY() + 26, i == stage ? RpgTheme.LIGHT : i < stage ? GOLD : 0xFF40374E);
+        }
         if (stage == 0) {
             text(g, UiText.s("gui.cronicasrp.field.rp_name"), formX, y, formWidth - 56, RpgTheme.LIGHT);
             text(g, UiText.s("gui.cronicasrp.label.age"), formX + formWidth - 48, y, 48, RpgTheme.LIGHT);
@@ -166,7 +180,7 @@ public final class CharacterCreationScreen extends BookScreen {
             int signatureW = Math.min(formWidth, (signatureH - 8) * SignatureDrawing.WIDTH / SignatureDrawing.HEIGHT + 8);
             int sx = formX + formWidth - signatureW, sy = footerY() - signatureH - 20;
             if (!drawingValue.isEmpty()) {
-                RpgTheme.frame(g, sx, sy, signatureW, signatureH, 0xFFE6D8B5, 0xFF9B8052);
+                RpgTheme.frame(g, sx, sy, signatureW, signatureH, RpgTheme.PANEL, RpgTheme.BORDER);
                 SignaturePad.renderInk(g, SignatureDrawing.decode(drawingValue), sx + 4, sy + 4, signatureW - 8, signatureH - 8, INK);
             } else text(g, signatureValue, formX, sy + 10, formWidth, GOLD);
             text(g, editing ? UiText.s("gui.cronicasrp.story.continue") : UiText.s("gui.cronicasrp.story.origin_pending"), formX, footerY() - 14, formWidth, RpgTheme.ASH);

@@ -1,3 +1,16 @@
+# Changelog
+
+## 0.5.5 — Realm Origins
+
+- Chronicles RP passa a chamar-se **Realm Origins**; o JAR é `realm-origins-0.5.5.jar`.
+- Novo visual escuro e lilás para criação, perfil, história, assinatura, carteira e câmbio.
+- Quatro capítulos de criação com progresso visual, skin real em 3D, pedestal de luz e fundo estrelado discreto.
+- Ecrã final «Um novo capítulo», com contagem visual dos fundos já atribuídos e botão para entrar no mundo.
+- Botões, campos e assinatura com contraste e foco visíveis; adaptação a janelas pequenas.
+- Mantidos os campos atuais, o dinheiro físico/digital, nomes RP, profissões, reputação, Origins e integrações.
+- Não adiciona personalidade, atributos, novo sorteio de fortuna ou migração financeira.
+- `cronicasrp`, os dados, os IDs e o protocolo 7 permanecem para compatibilidade. Retira o JAR antigo antes de instalar este.
+
 # Chronicles RP — changelog
 
 ## 0.5.4 — Realm Notifications integration

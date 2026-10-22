@@ -19,12 +19,14 @@ final class RpgButton extends AbstractButton {
     @Override public void onPress() { action.run(); }
     @Override protected void renderWidget(GuiGraphics g, int mouseX, int mouseY, float partialTick) {
         boolean hover = active && isHoveredOrFocused();
-        int edge = !active ? 0xFF5C5D59 : hover || selected ? RpgTheme.GOLD : dark ? 0xFF655C4B : 0xFFAF9462;
-        int background = dark ? (primary || selected ? 0xF03B3340 : 0xB0101B2C) : selected ? 0xAA9F814B : 0x667C5B32;
-        if (hover) background = dark ? 0xF0504340 : 0xAAA98A58;
+        int edge = !active ? 0xFF393440 : hover || selected ? RpgTheme.GOLD : RpgTheme.BORDER;
+        int background = primary || selected ? 0xFF3B304B : 0xCC100E19;
+        if (hover) background = primary ? 0xFF534263 : 0xFF282131;
         RpgTheme.frame(g, getX(), getY(), width, height, background, edge);
+        if (primary || selected) g.fillGradient(getX() + 2, getY() + 2, getX() + width - 2, getY() + height - 2,
+                hover ? 0xFF51435F : 0xFF3E344D, 0xFF211C2C);
         g.fill(getX() + 5, getY() + 2, getX() + width - 5, getY() + 3, (edge & 0xFFFFFF) | 0x30000000);
-        int color = !active ? 0xFF8A8272 : dark ? (primary || hover ? RpgTheme.GOLD : RpgTheme.LIGHT) : RpgTheme.INK;
+        int color = !active ? 0xFF777080 : primary || hover || selected ? RpgTheme.LIGHT : RpgTheme.ASH;
         var font = Minecraft.getInstance().font;
         if (fitLabel) {
             float scale = Math.min(1F, (width - 8F) / Math.max(1, font.width(getMessage())));

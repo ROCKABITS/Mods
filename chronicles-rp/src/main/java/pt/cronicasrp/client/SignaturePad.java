@@ -22,12 +22,12 @@ final class SignaturePad extends AbstractWidget {
     boolean drawing() { return draggingButton >= 0; }
     private void remember() { if (undo.size() >= 20) undo.removeFirst(); undo.addLast(ink.clone()); }
     @Override protected void renderWidget(GuiGraphics g, int mouseX, int mouseY, float partialTick) {
-        RpgTheme.frame(g, getX(), getY(), width, height, 0xFFF0E4C8, isHovered ? RpgTheme.GOLD : 0xFFAA8D5A);
-        g.fill(getX() + 7, getY() + height * 3 / 4, getX() + width - 7, getY() + height * 3 / 4 + 1, 0x449A7950);
+        RpgTheme.frame(g, getX(), getY(), width, height, RpgTheme.PANEL, isHovered ? RpgTheme.GOLD : RpgTheme.BORDER);
+        g.fill(getX() + 7, getY() + height * 3 / 4, getX() + width - 7, getY() + height * 3 / 4 + 1, 0x446E607E);
         renderInk(g, ink, getX() + 4, getY() + 4, width - 8, height - 8, RpgTheme.INK);
         if (isHovered) {
-            g.fill(mouseX - 2, mouseY, mouseX + 3, mouseY + 1, 0xB0392C20);
-            g.fill(mouseX, mouseY - 2, mouseX + 1, mouseY + 3, 0xB0392C20);
+            g.fill(mouseX - 2, mouseY, mouseX + 3, mouseY + 1, RpgTheme.GOLD);
+            g.fill(mouseX, mouseY - 2, mouseX + 1, mouseY + 3, RpgTheme.GOLD);
         }
     }
     @Override public boolean mouseClicked(double mouseX, double mouseY, int button) {

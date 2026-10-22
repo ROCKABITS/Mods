@@ -32,6 +32,7 @@ public final class ClientState {
         OriginsCreationFlow.reset();
     }
     public static void accept(ProfilePackets.State packet) {
+        boolean firstRegistration = !profile.created() && packet.profile().created();
         profile = packet.profile();
         statistics = packet.statistics();
         Minecraft minecraft = Minecraft.getInstance();
@@ -47,7 +48,7 @@ public final class ClientState {
             minecraft.setScreen(new CharacterCreationScreen(true));
         } else if (packet.mode() == ProfilePackets.REVEAL && profile.created()) {
             pending = ProfilePackets.SYNC;
-            minecraft.setScreen(new DestinyRevealScreen(profile));
+            minecraft.setScreen(new DestinyRevealScreen(profile, firstRegistration));
         } else if (packet.mode() == ProfilePackets.CASH && profile.created()) {
             minecraft.setScreen(new CurrencyExchangeScreen()); pending = ProfilePackets.SYNC;
         }

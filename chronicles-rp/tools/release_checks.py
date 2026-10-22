@@ -23,11 +23,18 @@ PINS = {
     'origins-classes-neoforge-1536425': ('8758587', 'origins_classes', '0.3'),
 }
 COMPANIONS = {
-    'contracts-bounties-0.3.1': '9746951762a6762b2cb466ca695b7d43f8669c9dc1d55c12cae1b4bd17953f0c',
-    'realmcouncil-0.2.1': '3e407c391f5e2f919e246d1d889323c57ea40b30e0387e9614ae32e0e9251a0a',
-    'crown-ledger-0.2.0': '278826d3ed182e7ea33bcb57cbd8358cd9d39b5f5fb582b7029923f3fdd3ee77',
-    'realm-identity-0.1.0': '9332d133320066d42bedb08fe129dee3da0de41f261f459140dea2a12ebf1606',
-    'realm-markets-0.2.0': 'b57021c9efa3c7a6bd017d9b53d552963d10270da70bde5dfacad68a5f2e6866',
+    'contracts-bounties-0.4.0': 'd1bd4726ac210e6d5904829bf9185efef76920aa8070ffb292d6e479689ee07e',
+    'realmcouncil-0.2.2': '0a77af87a5c4e36f55ad12578662834886a7986864896a908a3dc4217e2c19cb',
+    'crown-ledger-0.2.7': 'f377666807e0a31760fbd1bd209238a31a50db1903d50e5e1d7f1caf5ed44fce',
+    'realm-identity-0.1.2': '4bb9ef1d4df009fe1061c5daeaa76e95fb9ce355c72f00a83b31dffe0b36f016',
+    'realm-markets-0.2.1': 'bfb1e73186015ab94a86c841abba1df02bf1b5851a65771e622234624b806bb1',
+    'realm-notifications-0.1.1': '2fb85c87eb296e49f3f68c0d7defd709ceca8913fa5a3f6ef9442d9b9548c99e',
+    'realm-rewards-0.1.2': 'ab8efe3bd9a7b24a4f725bf6dfe1f07dec0b88ecfaac91533b57c45b11cb7bcb',
+    'realm-titles-0.1.0': '65d854ffd92805f6e8cb0891454f80ba5a6f33394cc0375cf23f64098af2bd16',
+    'realm-casino-0.3.0': '99c6c457d26be354f6cddddc4c865fe444f765b8d359004de12921aa0fad9117',
+    'laws-justice-0.4.0': '78c32b0c3acc8930ffd508c9bb44cc98b794a4b87900438b19ab812c21d36f7b',
+    'realm-economy-0.4.0': 'eb7b25c11b64e842297d5ed174c067749989b6d5440fbc858834bd0922f55ddf',
+    'realm-marriage-0.1.0': 'c2d2471029a006843c542622a1e1e0543a20492ea22a5999de02dd423d2390ca'
 }
 
 
@@ -45,7 +52,10 @@ def validate_jar(path):
         assert jar.testzip() is None, 'Corrupt release JAR'
         names = jar.namelist()
         meta = tomllib.loads(jar.read('META-INF/neoforge.mods.toml').decode())
-        assert next(m for m in meta['mods'] if m['modId'] == 'cronicasrp')['version'] == properties()['mod_version']
+        mod = next(m for m in meta['mods'] if m['modId'] == 'cronicasrp')
+        assert mod['version'] == properties()['mod_version']
+        assert mod['displayName'] == 'Realm Origins' and mod['logoFile'] == 'realm-origins.png'
+        assert jar.read('realm-origins.png')[:8] == b'\x89PNG\r\n\x1a\n'
         for prefix in ('pt/cronicasrp/test/', 'data/rp_fixture/', 'META-INF/jarjar/',
                        'com/iafenvoy/', 'net/neoforged/neoforge/'):
             assert not any(n.startswith(prefix) for n in names), 'Fixture or dependency bundled: ' + prefix
@@ -65,7 +75,7 @@ def validate_jar(path):
 
 def snapshot():
     STATE.mkdir(parents=True, exist_ok=True)
-    jar = PROJECT / 'build/libs' / f"cronicasrp-{properties()['mod_version']}.jar"
+    jar = PROJECT / 'build/libs' / f"realm-origins-{properties()['mod_version']}.jar"
     validate_jar(jar)
     target = STATE / jar.name
     shutil.copyfile(jar, target)

@@ -65,3 +65,7 @@ The images are real Minecraft client captures of the mod's models and interface.
 ## Realm Notifications
 
 [Galeria 0.1.0](realm-notifications/0.1.0/README.md): HUD real dentro do mundo, posição central, preferências e diário. O conteúdo dos avisos nas imagens é demonstrativo; as capturas usam o cliente Minecraft e o transporte S2C reais.
+
+## Realm Origins 0.5.5
+
+[Galeria do rework visual](realm-origins/0.5.5/README.md): capítulos da criação, boas-vindas, perfil, carteira e câmbio em capturas reais do Minecraft; inclui ícone e ZIP para a galeria. Realm Origins substitui Chronicles RP, mantendo os dados.

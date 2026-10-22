@@ -1,4 +1,16 @@
-# Validação atual — Chronicles RP 0.5.4
+# Validação atual — Realm Origins 0.5.5
+
+Rework visual do Chronicles RP. Minecraft 1.21.1 / NeoForge 21.1.256 / Java 21, Origins (NeoForge) 0.3.2 e Jupiter 2.3.7; Origins: Classes 0.3 é opcional. Identificador interno `cronicasrp`, armazenamento e protocolo 7 mantidos.
+
+O desenvolvimento executou os 66 testes unitários e o cliente real com a nova criação, Origins/Classes, assinatura, confirmação, boas-vindas, quatro separadores do perfil e troca efetiva de 1 cêntimo entre carteira e inventário, voltando ao mesmo saldo e perfil. As capturas a 1600×900 e 854×480 são imagens do Minecraft, com verificação adicional de limites e sobreposição de controlos. As inspeções visuais corrigiram também o espaço entre textos e campos no modo compacto.
+
+A publicação fica condicionada à execução completa e aos relatórios do workflow `build-chronicles-rp.yml`: produção sem fixtures, 66 JUnit, GameTests com Classes, sem Classes e com os doze companheiros publicados, nomes RP no cliente integrado e criação gráfica nos dois modos de Classes. O manifesto `realm-origins-0.5.5.build.json` regista o commit, execução, hashes e contagens efetivamente aprovadas. Os resultados desta publicação serão acrescentados após a execução; os resultados históricos abaixo não os substituem.
+
+Âmbito: servidor integrado real para as interfaces, servidor nativo para GameTests; não é um ensaio manual de vários clientes autenticados. A presença dos doze companheiros verifica carregamento e os fluxos de RP exercitados, não todas as funcionalidades de cada mod. O chat da sessão de desenvolvimento não dispõe de certificado autenticado. A renderização usa software e não certifica todas as GPUs, escalas de interface, resource packs ou mods gráficos. As interfaces nativas de poderes e seleção pertencem ao mod externo Origins e são preservadas.
+
+Atualização: retirar o JAR antigo do Chronicles RP, instalar `realm-origins-0.5.5.jar` no servidor e nos clientes e manter Origins/Jupiter. Não apagar o mundo, perfis ou configurações. Não instalar os dois JARs lado a lado. Não foram acrescentados campos de personalidade nem atributos, e a animação mostra fundos previamente gravados sem gerar outro pagamento.
+
+## Histórico — Chronicles RP 0.5.4
 
 **Aprovada.** A [execução conjunta 39009308013](https://github.com/ROCKABITS/Mods/actions/runs/39009308013), sobre o código [`0d9e459`](https://github.com/ROCKABITS/Mods/commit/0d9e45962ae298e4fac98f46c6c9b5823e0ffc8d), compilou o JAR de produção e aprovou **66 testes unitários** e **37 GameTests nativos em modo independente**, com Minecraft 1.21.1, NeoForge 21.1.256 e Java 21. Os [metadados desta compilação](../mod-pronto/cronicasrp-0.5.4.build.json) registam as contagens, versões e hashes.
 

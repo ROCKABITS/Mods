@@ -12,7 +12,7 @@ final class RpgEditBox extends EditBox {
     }
     @Override public int getInnerWidth() { return width - 10; }
     @Override public void renderWidget(GuiGraphics g, int mouseX, int mouseY, float partialTick) {
-        RpgTheme.frame(g, getX(), getY(), width, height, 0xB00B1526, isFocused() ? RpgTheme.GOLD : 0xFF64616A);
+        RpgTheme.frame(g, getX(), getY(), width, height, RpgTheme.PANEL, isFocused() ? RpgTheme.GOLD : RpgTheme.BORDER);
         g.pose().pushPose(); g.pose().translate(5, 6, 0);
         super.renderWidget(g, mouseX, mouseY, partialTick); g.pose().popPose();
     }
