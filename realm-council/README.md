@@ -4,7 +4,7 @@ Mod separado de eleições para Minecraft Java 1.21.1, NeoForge 21.1.256 ou supe
 
 [Descarregar JAR 0.2.2](https://github.com/ROCKABITS/Mods/raw/refs/heads/main/mod-pronto/realmcouncil-0.2.2.jar) · [ZIP](https://github.com/ROCKABITS/Mods/raw/refs/heads/main/mod-pronto/realmcouncil-0.2.2.zip) · [Resultados e limites da validação](VALIDACAO.md).
 
-Funciona sozinho. Se Crónicas RP 0.4.0+ também estiver instalado, lê o nome, raça e idade da personagem para as candidaturas. Usa o nome Minecraft quando não há personagem criada. Não altera o perfil, a assinatura nem o dinheiro do Crónicas RP. Os nomes e propostas são guardados nas candidaturas e continuam disponíveis se a integração deixar de ser usada.
+Funciona sozinho. Se Realm Origins 0.4.0+ também estiver instalado, lê o nome, raça e idade da personagem para as candidaturas. Usa o nome Minecraft quando não há personagem criada. Não altera o perfil, a assinatura nem o dinheiro do Realm Origins. Os nomes e propostas são guardados nas candidaturas e continuam disponíveis se a integração deixar de ser usada.
 
 Com o **[Realm Notifications](../realm-notifications/README.md) 0.1.0+** no servidor e no cliente, os avisos aparecem no HUD medieval. Sem o canal opcional, continuam a ser apresentados no chat. A integração apenas apresenta acontecimentos confirmados; não modifica saldos, regras ou permissões.
 
@@ -75,7 +75,7 @@ Os votos são secretos para os outros jogadores e não aparecem nos menus de adm
 
 Português e inglês seguem a opção Language do Minecraft. English (US) ativa inglês. O título do cargo, os nomes, lemas e propostas escritos pelos jogadores mantêm o texto original.
 
-Os dados eleitorais ficam em `world/data/realmcouncil_elections.dat`, separados dos dados do Crónicas RP. Os votos são guardados após cada ação confirmada. O histórico mantém vinte eleições anteriores e o livro mostra as dez mais recentes, além da eleição atual.
+Os dados eleitorais ficam em `world/data/realmcouncil_elections.dat`, separados dos dados do Realm Origins. Os votos são guardados após cada ação confirmada. O histórico mantém vinte eleições anteriores e o livro mostra as dez mais recentes, além da eleição atual.
 
 ## Desenvolvimento
 
@@ -87,6 +87,6 @@ No Windows, usa Java 21 e `gradlew.bat runClient`; em Linux/macOS, `./gradlew ru
 .\gradlew.bat clean build
 ```
 
-Para testar a integração, coloca apenas o JAR do Crónicas RP em `run/mods` e repete os GameTests. O teste do adaptador cobre tanto a ausência do mod como um perfil RP real quando presente.
+Para testar a integração, coloca apenas o JAR do Realm Origins em `run/mods` e repete os GameTests. O teste do adaptador cobre tanto a ausência do mod como um perfil RP real quando presente.
 
 A prévia nativa opcional é `runClient -PrpClientPreview`: abre interfaces com dados de teste, guarda capturas e termina. Esta prévia não faz parte do JAR de distribuição. Compila a versão final sem propriedades de teste e com `clean`.

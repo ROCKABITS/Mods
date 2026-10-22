@@ -26,9 +26,9 @@ Instala o JAR no servidor e em todos os clientes. O funcionamento normal usa exc
 
 ## Economia e propriedade
 
-As apostas utilizam apenas o **dinheiro virtual da carteira do Chronicles RP**, em cêntimos. Não existe outra moeda, nem conversão para dinheiro real. As fichas visuais são decoração.
+As apostas utilizam apenas o **dinheiro virtual da carteira do Realm Origins**, em cêntimos. Não existe outra moeda, nem conversão para dinheiro real. As fichas visuais são decoração.
 
-Sem Chronicles RP, os modelos e as regras continuam disponíveis, mas as operações económicas ficam desativadas. Com Chronicles, é necessário ter uma personagem criada e uma carteira disponível. A integração modifica apenas o saldo; mantém os restantes dados da personagem.
+Sem Realm Origins, os modelos e as regras continuam disponíveis, mas as operações económicas ficam desativadas. Com Realm Origins, é necessário ter uma personagem criada e uma carteira disponível. A integração modifica apenas o saldo; mantém os restantes dados da personagem.
 
 O administrador define os limites globais em `config/realmcasino-server.json`, em cêntimos: por defeito, `minBet: 1` e `maxBet: 100000` (0,01 € a 1000 €). Reinicia o servidor após editar o ficheiro. Cada máquina ou mesa tem proprietário, nome e limites de aposta próprios. Os oito jogos contra a casa usam banca; as quatro mesas multiplayer reservam apenas as entradas dos participantes. O dono pode abastecer a banca, escolher apostas mínimas/máximas dentro dos limites do servidor e consultar os resultados. Não pode escolher vencedores, cartas ou probabilidades.
 

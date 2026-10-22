@@ -14,18 +14,18 @@ Para ativar as integrações, atualiza também os JARs usados no servidor e nos 
 
 | Mod | Versão com integração |
 | --- | --- |
-| Chronicles RP | 0.5.4 |
+| Realm Origins | 0.5.4 |
 | Realm Rewards | 0.1.2 |
 | Contracts & Bounties | 0.3.2 |
 | Realm Council | 0.2.2 |
 | Crown Ledger | 0.2.1 |
 | Realm Markets | 0.2.1 |
 
-Cada integração é opcional. Não é necessário instalar toda a coleção. O Chronicles continua a exigir Origins e Jupiter.
+Cada integração é opcional. Não é necessário instalar toda a coleção. O Realm Origins continua a exigir Origins e Jupiter.
 
 ## Avisos
 
-- Transferências e dinheiro atribuído no Chronicles, com o motivo.
+- Transferências e dinheiro atribuído no Realm Origins, com o motivo.
 - Recompensas por conquistas e pagamentos pendentes do Realm Rewards.
 - Publicação, entrega e recolha de recompensas dos contratos.
 - Vendas e recolhas de ganhos das bancas.

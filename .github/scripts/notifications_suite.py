@@ -22,7 +22,7 @@ ROOT = Path(__file__).resolve().parents[2]
 STATE = ROOT / 'realm-notifications/build/notifications-suite'
 # project: mod ID, artifact basename, native property, minimum existing JUnit count
 PROJECTS = {
-    'chronicles-rp': ('cronicasrp', 'cronicasrp', 'rpGameTests', 66),
+    'realm-origins': ('cronicasrp', 'realm-origins', 'rpGameTests', 70),
     'contracts-bounties': ('contracts', 'contracts-bounties', 'contractGameTests', 46),
     'realm-council': ('realmcouncil', 'realmcouncil', 'rpGameTests', 49),
     'crown-ledger': ('kingdomtreasury', 'crown-ledger', 'crownGameTests', 46),
@@ -255,8 +255,8 @@ def package():
                                             'NOTIFICATIONS_MONEY_HOOKS_PASSED',
                                             'NOTIFICATIONS_ACTIVITY_HOOKS_PASSED']
             proof['screenshots'] = {name: digest(ROOT / project / 'qa-results/notifications-client' / name) for name in client['screenshots']}
-        if project == 'chronicles-rp':
-            proof['network_protocol'] = '7'
+        if project == 'realm-origins':
+            proof['network_protocol'] = '8'
         checksum = jar.with_suffix('.sha256')
         write_fresh(checksum, ''.join(f'{digest(path)}  {path.name}\n' for path in (jar, archive)).encode())
         provenance = jar.with_suffix('.build.json')
@@ -290,7 +290,7 @@ Companion mods are optional. Update only the companion mods you already use,
 removing their older JARs first. All seven included JARs were built from the same
 source commit and passed unit tests and their native Minecraft server suites.
 
-Chronicles RP still requires the actual Origins (NeoForge) and Jupiter mods.
+Realm Origins still requires the actual Origins (NeoForge) and Jupiter mods.
 These third-party dependencies are not included. Realm Identity is unchanged
 and is not included. Back up your world before replacing server mods.
 

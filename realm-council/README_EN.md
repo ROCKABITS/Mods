@@ -1,6 +1,6 @@
 # Realm Council — 0.2.1
 
-Fantasy elections for Minecraft Java 1.21.1, NeoForge 21.1.256+ (21.1 series) and Java 21. Install the JAR on the server and every client. Crónicas RP 0.4.0+ is optional; it supplies character names, races and ages when available. Minecraft identities are used otherwise. The adapter does not modify RP profiles or balances.
+Fantasy elections for Minecraft Java 1.21.1, NeoForge 21.1.256+ (21.1 series) and Java 21. Install the JAR on the server and every client. Realm Origins 0.4.0+ is optional; it supplies character names, races and ages when available. Minecraft identities are used otherwise. The adapter does not modify RP profiles or balances.
 
 Place a Notice Board, Ballot Box and Oath Desk using the creative tab or their crafting recipes. Interact with a Notice Board to read the ledger. There is no O key binding or public opening through `/council` or `/eleicoes`. Voting requires a nearby ballot box; taking office requires an oath desk.
 
@@ -20,4 +20,4 @@ Default durations: nominations one real day, campaign two days, voting two days,
 
 English and Portuguese follow Minecraft’s language settings. Player-authored text stays unchanged. Election data is stored separately in `world/data/realmcouncil_elections.dat`. Ballots are hidden from other players and normal admin menus; the world-file owner can inspect stored data. UUID voting cannot eliminate alternate accounts.
 
-Use Java 21. Development commands: `gradlew.bat runClient`, `test`, `runGameTestServer -PrpGameTests`, then `clean build` without test properties. Linux/macOS uses `./gradlew`. Put only Crónicas RP in `run/mods` to test optional integration. `runClient -PrpClientPreview` runs a temporary native screenshot preview. Test classes are excluded from the release JAR.
+Use Java 21. Development commands: `gradlew.bat runClient`, `test`, `runGameTestServer -PrpGameTests`, then `clean build` without test properties. Linux/macOS uses `./gradlew`. Put only Realm Origins in `run/mods` to test optional integration. `runClient -PrpClientPreview` runs a temporary native screenshot preview. Test classes are excluded from the release JAR.

@@ -2,7 +2,7 @@
 
 Bancas físicas para **Minecraft 1.21.1**, **NeoForge 21.1.256+** e **Java 21**. Instala o mesmo `realm-markets-0.2.1.jar` no servidor e em todos os clientes. Identificador técnico: `realmmarkets`.
 
-A versão **0.2.1 Beta** mantém imposto sobre vendas configurado pelo governante no Crown Ledger. Antes de atualizar, faz uma cópia de segurança do mundo completo e dos perfis do Chronicles: o registo do mercado migra para o formato 2 e voltar ao JAR antigo exige restaurar a cópia anterior. Se usas Crown Ledger, atualiza também para **0.2.0+** no servidor e em todos os clientes; remove os JARs antigos. Consulta o estado, os resultados e os limites das verificações em [VALIDACAO.md](VALIDACAO.md).
+A versão **0.2.1 Beta** mantém imposto sobre vendas configurado pelo governante no Crown Ledger. Antes de atualizar, faz uma cópia de segurança do mundo completo e dos perfis do Realm Origins: o registo do mercado migra para o formato 2 e voltar ao JAR antigo exige restaurar a cópia anterior. Se usas Crown Ledger, atualiza também para **0.2.0+** no servidor e em todos os clientes; remove os JARs antigos. Consulta o estado, os resultados e os limites das verificações em [VALIDACAO.md](VALIDACAO.md).
 
 Com o **[Realm Notifications](../realm-notifications/README.md) 0.1.0+** no servidor e no cliente, os avisos aparecem no HUD medieval. Sem o canal opcional, continuam a ser apresentados no chat. A integração apenas apresenta acontecimentos confirmados; não modifica saldos, regras ou permissões.
 
@@ -45,11 +45,11 @@ O imposto fica reservado no registo global do mercado, separado dos ganhos do ve
 
 ## Moeda e pagamentos
 
-**Sem Chronicles RP**, cada preço é um número inteiro de esmeraldas. O comprador entrega esmeraldas reais e o proprietário recolhe esmeraldas; se o inventário só permitir receber uma parte dos ganhos, o restante fica guardado.
+**Sem Realm Origins**, cada preço é um número inteiro de esmeraldas. O comprador entrega esmeraldas reais e o proprietário recolhe esmeraldas; se o inventário só permitir receber uma parte dos ganhos, o restante fica guardado.
 
-**Com Chronicles RP 0.5.2**, as novas bancas usam a moeda digital do Chronicles. Os preços são guardados em cêntimos: por exemplo, `2,50 €` corresponde a 250 cêntimos. Os débitos e créditos exigem uma personagem criada e válida. Se o Chronicles estiver instalado mas o perfil ou a integração não estiver disponível, a transação é recusada; não muda silenciosamente para esmeraldas.
+**Com Realm Origins 0.5.7**, as novas bancas usam a moeda digital do Realm Origins. Os preços são guardados em cêntimos: por exemplo, `2,50 €` corresponde a 250 cêntimos. Os débitos e créditos exigem uma personagem criada e válida. Se o Realm Origins estiver instalado mas o perfil ou a integração não estiver disponível, a transação é recusada; não muda silenciosamente para esmeraldas.
 
-A moeda fica definida quando a banca é colocada. Adicionar ou remover Chronicles não converte stock, preços ou ganhos de bancas existentes. Recolhe os ganhos antes de mudar o conjunto de mods do servidor. Cada compra verifica o saldo, o stock, o espaço do comprador e o limite dos ganhos antes de efetuar a transferência. Uma compra recusada não cobra dinheiro nem retira stock.
+A moeda fica definida quando a banca é colocada. Adicionar ou remover Realm Origins não converte stock, preços ou ganhos de bancas existentes. Recolhe os ganhos antes de mudar o conjunto de mods do servidor. Cada compra verifica o saldo, o stock, o espaço do comprador e o limite dos ganhos antes de efetuar a transferência. Uma compra recusada não cobra dinheiro nem retira stock.
 
 ## Proteção e persistência
 
@@ -57,14 +57,14 @@ Só o proprietário pode configurar, abastecer, retirar stock ou recolher os gan
 
 Para desmontar a banca, retira primeiro todo o stock e todos os ganhos. A destruição normal é recusada a outros jogadores e a bancas com valores guardados, incluindo em criativo. Pistões e explosões não podem deslocá-las nem destruir o conteúdo. Uma banca vazia desmontada devolve um único item, sem duplicar as quatro partes.
 
-O ficheiro global `data/realm_markets.dat` guarda proprietário, posição, moeda, ofertas, stock e ganhos de cada banca, em todas as dimensões, mais os impostos reservados para o reino. O formato 1 migra para o 2, conservando lojas, artigos e ganhos anteriores com uma reserva inicial de imposto vazia. Inclui-o nas cópias de segurança do mundo, juntamente com `data/crown_ledger.dat` se usas o tesouro. A verificação decorre no thread do servidor e a gravação usa a persistência normal do Minecraft; não existe uma transação de disco única entre o inventário, os registos dos dois mods e os perfis do Chronicles durante uma falha abrupta do processo. Um registo existente inválido não é substituído silenciosamente por uma loja vazia.
+O ficheiro global `data/realm_markets.dat` guarda proprietário, posição, moeda, ofertas, stock e ganhos de cada banca, em todas as dimensões, mais os impostos reservados para o reino. O formato 1 migra para o 2, conservando lojas, artigos e ganhos anteriores com uma reserva inicial de imposto vazia. Inclui-o nas cópias de segurança do mundo, juntamente com `data/crown_ledger.dat` se usas o tesouro. A verificação decorre no thread do servidor e a gravação usa a persistência normal do Minecraft; não existe uma transação de disco única entre o inventário, os registos dos dois mods e os perfis do Realm Origins durante uma falha abrupta do processo. Um registo existente inválido não é substituído silenciosamente por uma loja vazia.
 
 ## Comandos e compatibilidade
 
 - `/markets stall`: dá os dois modelos de banca a um operador; não abre menus nem altera o proprietário de bancas existentes.
 - Os jogadores normais podem fabricar, colocar e gerir as suas bancas sem serem administradores.
 
-Chronicles RP é opcional; o intervalo declarado é **`>=0.5.2 e <0.6`**. Se instalado, requer também as dependências do próprio Chronicles. Contracts & Bounties, Realm Council, Crown Ledger e Realm Identity não são necessários para usar Realm Markets. Quando Crown Ledger está instalado, requer **0.2.0+** para o imposto de mercado. O comércio não exige um nível de reputação.
+Realm Origins é opcional; o intervalo declarado é **`>=0.5.2 e <0.6`**. Se instalado, requer também as dependências do próprio Realm Origins. Contracts & Bounties, Realm Council, Crown Ledger e Realm Identity não são necessários para usar Realm Markets. Quando Crown Ledger está instalado, requer **0.2.0+** para o imposto de mercado. O comércio não exige um nível de reputação.
 
 [Changelog](CHANGELOG.md) · [Resultados e limites da validação](VALIDACAO.md) · [JAR](../mod-pronto/realm-markets-0.2.1.jar) · [ZIP](../mod-pronto/realm-markets-0.2.1.zip) · [Imagens](../media/realm-markets/0.2.0/README.md).
 
@@ -86,4 +86,4 @@ O workflow conjunto compila primeiro os JARs de produção dos dois mods e execu
 
 A [execução conjunta aprovada da versão 0.2.0](https://github.com/ROCKABITS/Mods/actions/runs/38924972884), sobre `1a6825f00d37ec07c194e96a4b05c003f892d8d1`, passou **45 testes unitários Realm Markets, 45 testes nativos independente e 45 com os companheiros reais**. O Crown Ledger 0.2.0 compilado no mesmo commit passou 46 unitários e 19 nativos em cada modo. A integração verificou vendas com imposto, entrada exata na tesouraria, ausência de dupla tributação e recuperação do imposto reservado após o tesouro cheio. Os dois clientes Minecraft passaram, incluindo o total/imposto/ganho líquido da compra e a taxa do governante. A [proveniência](../mod-pronto/realm-markets-0.2.0.build.json) identifica os hashes e os resultados.
 
-Os testes e as estruturas de teste ficam fora do JAR de produção. As capturas da interface usam artigos e saldos de demonstração; os pedidos dos botões foram registados localmente no teste visual, enquanto as transferências reais de itens e esmeraldas foram verificadas nos testes nativos do servidor. A integração completa com o runtime de Chronicles/Origins/Jupiter necessita de validação separada; os seus JARs originais não são redistribuídos.
+Os testes e as estruturas de teste ficam fora do JAR de produção. As capturas da interface usam artigos e saldos de demonstração; os pedidos dos botões foram registados localmente no teste visual, enquanto as transferências reais de itens e esmeraldas foram verificadas nos testes nativos do servidor. A integração completa com o runtime de Realm Origins/Origins/Jupiter necessita de validação separada; os seus JARs originais não são redistribuídos.

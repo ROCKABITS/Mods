@@ -8,9 +8,9 @@ Tesouro público para Minecraft **1.21.1**, **NeoForge 21.1.256+** e **Java 21**
 
 ## Instalação e primeiro uso
 
-1. Antes de atualizar um mundo existente, faz uma cópia de segurança do mundo completo e dos perfis do Chronicles. Esta versão migra o registo do tesouro para o formato 6; voltar ao JAR antigo exige restaurar a cópia anterior à atualização.
+1. Antes de atualizar um mundo existente, faz uma cópia de segurança do mundo completo e dos perfis do Realm Origins. Esta versão migra o registo do tesouro para o formato 6; voltar ao JAR antigo exige restaurar a cópia anterior à atualização.
 2. Coloca `crown-ledger-0.2.6.jar` na pasta `mods` de cada cliente e do servidor. Se usas Realm Markets, atualiza também para **Realm Markets 0.2.1+** em todos eles; substitui os JARs antigos e não deixes duas versões do mesmo mod.
-3. Para integrar os restantes sistemas, usa **Contracts & Bounties 0.4.0+**, **Realm Council 0.2.2+** e, opcionalmente, **Chronicles RP 0.5.4** com as suas dependências.
+3. Para integrar os restantes sistemas, usa **Contracts & Bounties 0.4.0+**, **Realm Council 0.2.2+** e, opcionalmente, **Realm Origins 0.5.7** com as suas dependências.
 4. Fabrica o **Cofre da Coroa** e clica nele com o botão direito. Também aparece na aba criativa **Crown Ledger** e na pesquisa.
 
 Receita, de cima para baixo:
@@ -40,7 +40,7 @@ O governante escolhe entre dois sistemas de imposto:
 
 O salário sai dos fundos existentes. Exemplo: salário de 20 € e imposto fixo de 5 € reservam 15 € para cada jogador elegível; os outros 5 € ficam no tesouro. O jogador recebe o crédito ao abrir o cofre e carregar em **Receber dinheiro**. Jogadores offline mantêm o seu crédito guardado. Um inventário cheio permite receber apenas a parte que couber.
 
-O ciclo inicial dura **168 horas**, com **10 minutos online** de atividade mínima. O governante pode alterar a duração entre 1 e 720 horas e configurar os restantes valores. A atividade conta minutos completos de presença online fora do modo espectador; não tenta detetar AFK. O tempo offline não conta, e frações inferiores a um minuto são descartadas ao terminar sessão. Se Chronicles estiver instalado, exige também uma personagem criada.
+O ciclo inicial dura **168 horas**, com **10 minutos online** de atividade mínima. O governante pode alterar a duração entre 1 e 720 horas e configurar os restantes valores. A atividade conta minutos completos de presença online fora do modo espectador; não tenta detetar AFK. O tempo offline não conta, e frações inferiores a um minuto são descartadas ao terminar sessão. Se Realm Origins estiver instalado, exige também uma personagem criada.
 
 No fecho do ciclo, os participantes e os valores são fixados. Se faltar dinheiro para pagar a **todos**, o ciclo inteiro aguarda financiamento; não há prioridade para quem chegar primeiro. Um donativo ou rendimento dos contratos pode desbloqueá-lo. O governante pode cancelar explicitamente esse ciclo pendente, deixando registo. Só depois começa o ciclo seguinte. O tempo com o servidor desligado não cria vários salários retroativos.
 
@@ -52,7 +52,7 @@ Por defeito, imposto e salário começam em **zero**. O reino precisa de donativ
 
 Com **Realm Markets 0.2.1+**, o governante pode definir no Cofre da Coroa uma percentagem de imposto sobre as vendas entre **0% e 100%**, inicialmente **0%**. Esta regra é independente da percentagem dos contratos e do imposto fixo por ciclo: pode haver imposto de mercado mesmo com o sistema fiscal dos contratos em modo fixo.
 
-Numa compra de **20 € a 5%**, o comprador paga **20 €**, o vendedor ganha **19 €** e o tesouro recebe **1 €**. O imposto sai do valor da venda, sem acrescentar uma cobrança ao comprador. O cálculo usa o total da compra e arredonda para baixo à unidade mínima da moeda: cêntimos no Chronicles e esmeraldas inteiras no modo independente. Por exemplo, uma compra de uma esmeralda a 5% gera imposto zero; uma compra de 20 esmeraldas gera uma. A 100%, o vendedor recebe zero, com o valor indicado antes da compra.
+Numa compra de **20 € a 5%**, o comprador paga **20 €**, o vendedor ganha **19 €** e o tesouro recebe **1 €**. O imposto sai do valor da venda, sem acrescentar uma cobrança ao comprador. O cálculo usa o total da compra e arredonda para baixo à unidade mínima da moeda: cêntimos no Realm Origins e esmeraldas inteiras no modo independente. Por exemplo, uma compra de uma esmeralda a 5% gera imposto zero; uma compra de 20 esmeraldas gera uma. A 100%, o vendedor recebe zero, com o valor indicado antes da compra.
 
 A regra atual é verificada pelo servidor ao concluir cada compra. Se o governante alterar a taxa depois da consulta do comprador, o pedido antigo é recusado sem cobrança e o menu é atualizado. Os menus mostram o total, o imposto e o valor líquido para o vendedor.
 
@@ -64,7 +64,7 @@ Só uma venda paga gera imposto. Abastecer, retirar artigos, recolher ganhos ou 
 
 Com **Realm Casino 0.3.0+**, o governante escolhe no Cofre da Coroa a percentagem **Imposto do lucro do casino**, entre 0% e 100%, com até duas casas decimais. A taxa inicial é 0% e é independente de contratos, imposto fixo por ciclo, vendas e moeda fiscal.
 
-Apenas o lucro levantado pelo proprietário de uma banca é tributado, em cêntimos Chronicles. Primeiro recupera o capital que depositou. Exemplo: depósito de 100 €, banca final de 120 €, levantamento total e imposto de 5% resultam em 119 € para o dono e 1 € para o tesouro. Depósitos, capital devolvido, prémios dos jogadores e potes entre jogadores não voltam a pagar imposto. Os valores anteriores à atualização contam como capital.
+Apenas o lucro levantado pelo proprietário de uma banca é tributado, em cêntimos Realm Origins. Primeiro recupera o capital que depositou. Exemplo: depósito de 100 €, banca final de 120 €, levantamento total e imposto de 5% resultam em 119 € para o dono e 1 € para o tesouro. Depósitos, capital devolvido, prémios dos jogadores e potes entre jogadores não voltam a pagar imposto. Os valores anteriores à atualização contam como capital.
 
 O Casino guarda a reserva e um recibo; a tesouraria grava receita e recibo em conjunto. Se a confirmação falhar, a mesma transferência pode ser repetida sem duplicação. A reserva mantém-se até à confirmação, também após reinício. As receitas aparecem no histórico público e podem financiar salários pendentes. A API judicial anterior continua disponível com o mesmo contrato.
 
@@ -74,7 +74,7 @@ Atualiza Casino e Crown no servidor e em todos os clientes. Sem a API desta vers
 
 Realm Economy 0.4.0 substitui Realm Villager Economy. A Mesa da Economia reúne preços de referência, reparações, combinações, nomes, encantamentos, ferraria, poções e períodos de beacon. O Presidente aprova preços e taxas e a administração define limites e ativação.
 
-Cada pagamento envia apenas o imposto público ao Crown, com moeda Chronicles e recibo ligado ao serviço. O preço base é retirado da economia. As decisões económicas têm recibos sem dinheiro, com os valores anteriores e novos; não criam fundos nem pagam salários. As APIs de Villagers, casino e justiça permanecem compatíveis. O formato 6 lê os formatos 1–5 e conserva os recibos antigos.
+Cada pagamento envia apenas o imposto público ao Crown, com moeda Realm Origins e recibo ligado ao serviço. O preço base é retirado da economia. As decisões económicas têm recibos sem dinheiro, com os valores anteriores e novos; não criam fundos nem pagam salários. As APIs de Villagers, casino e justiça permanecem compatíveis. O formato 6 lê os formatos 1–5 e conserva os recibos antigos.
 
 ## Compras aos aldeões — 0.2.4
 
@@ -90,13 +90,13 @@ O separador do governante publica contratos pagos pelo tesouro. A recompensa fic
 
 Impostos e reembolsos entram no tesouro ao atualizar/abrir o cofre ou no processamento periódico do servidor. O dinheiro reservado para contratos abertos continua no Contracts e não pode financiar salários ao mesmo tempo.
 
-O governante define a reputação necessária para publicar contratos particulares, a reputação ganha nos contratos públicos e o limite diário. Os valores iniciais são **0** de requisito, **+1** por contrato público e **3** por dia UTC. A reputação exige Chronicles RP. Quem está abaixo do requisito pode cumprir contratos, receber recompensas e gerir os seus contratos já publicados. Concluir contratos públicos publicados pelo próprio não atribui reputação nem missões.
+O governante define a reputação necessária para publicar contratos particulares, a reputação ganha nos contratos públicos e o limite diário. Os valores iniciais são **0** de requisito, **+1** por contrato público e **3** por dia UTC. A reputação exige Realm Origins. Quem está abaixo do requisito pode cumprir contratos, receber recompensas e gerir os seus contratos já publicados. Concluir contratos públicos publicados pelo próprio não atribui reputação nem missões.
 
 ## Moedas e persistência
 
-Sem Chronicles, a moeda normal é a esmeralda inteira. Com Chronicles, os valores digitais usam cêntimos e o perfil original do jogador. Cada moeda tem saldo e créditos separados; não existe conversão automática. O separador de donativos permite escolher a moeda. Nas regras, o governante pode escolher a moeda fiscal; mudar essa escolha repõe os campos de salário e imposto fixo em zero, sem converter saldos nem créditos anteriores. Os pagamentos de personagens offline ficam pendentes, sem editar os seus ficheiros de perfil.
+Sem Realm Origins, a moeda normal é a esmeralda inteira. Com Realm Origins, os valores digitais usam cêntimos e o perfil original do jogador. Cada moeda tem saldo e créditos separados; não existe conversão automática. O separador de donativos permite escolher a moeda. Nas regras, o governante pode escolher a moeda fiscal; mudar essa escolha repõe os campos de salário e imposto fixo em zero, sem converter saldos nem créditos anteriores. Os pagamentos de personagens offline ficam pendentes, sem editar os seus ficheiros de perfil.
 
-O ficheiro `data/crown_ledger.dat` guarda regras, saldo disponível, salários reservados, atividade, ciclo pendente e os últimos 256 movimentos, incluindo receitas de imposto de mercado. Os contratos usam também `data/contracts_ledger.dat`; as bancas e os impostos ainda reservados usam `data/realm_markets.dat`. Os recibos judiciais são guardados no mesmo ficheiro que o saldo da tesouraria e não dependem da rotação dos últimos movimentos. O formato 6 migra automaticamente os formatos 1, 2, 3, 4 e 5, conservando valores, regras e recibos; mundos anteriores ao formato 4 iniciam a taxa do casino a zero. As cópias de segurança devem incluir o mundo completo e os perfis do Chronicles. As transferências entre mods são verificadas no mesmo thread do servidor. Os pagamentos judiciais usam gravações confirmadas e recibos únicos para conciliar ficheiros separados; as restantes operações mantêm os mecanismos existentes.
+O ficheiro `data/crown_ledger.dat` guarda regras, saldo disponível, salários reservados, atividade, ciclo pendente e os últimos 256 movimentos, incluindo receitas de imposto de mercado. Os contratos usam também `data/contracts_ledger.dat`; as bancas e os impostos ainda reservados usam `data/realm_markets.dat`. Os recibos judiciais são guardados no mesmo ficheiro que o saldo da tesouraria e não dependem da rotação dos últimos movimentos. O formato 6 migra automaticamente os formatos 1, 2, 3, 4 e 5, conservando valores, regras e recibos; mundos anteriores ao formato 4 iniciam a taxa do casino a zero. As cópias de segurança devem incluir o mundo completo e os perfis do Realm Origins. As transferências entre mods são verificadas no mesmo thread do servidor. Os pagamentos judiciais usam gravações confirmadas e recibos únicos para conciliar ficheiros separados; as restantes operações mantêm os mecanismos existentes.
 
 [Changelog](CHANGELOG.md) · [Resultados e limites da validação](VALIDACAO.md) · [JAR](../mod-pronto/crown-ledger-0.2.5.jar) · [ZIP](../mod-pronto/crown-ledger-0.2.5.zip) · [Imagens](../media/crown-ledger/0.2.5/README.md).
 
@@ -108,7 +108,7 @@ O ficheiro `data/crown_ledger.dat` guarda regras, saldo disponível, salários r
 mkdir -p compat-libs
 # Copiar o JAR Realm Casino 0.3.0 compilado a partir do mesmo commit,
 # mais os companheiros publicados definidos em .github/scripts/casino_release.py.
-# A suíte nativa própria Crown usa estes companheiros sem Chronicles;
+# A suíte nativa própria Crown usa estes companheiros sem Realm Origins;
 # o runtime completo da carteira é verificado pela suíte Laws & Justice.
 ./gradlew -PcrownGameTests -PintegrationTests runGameTestServer
 ./gradlew -PcrownVisualTests runClient
@@ -118,7 +118,7 @@ Na máquina cloud, usa `python3 tools/cloud_gradle.py` em vez de `./gradlew`; ma
 
 O [workflow conjunto aprovado](https://github.com/ROCKABITS/Mods/actions/runs/39253815267) compilou Laws & Justice 0.4.0 e Crown Ledger 0.2.2 a partir da mesma revisão, guardou os JARs de produção antes dos testes e utilizou as contrapartes novas nas integrações. O Crown passou **52 testes unitários, 25 GameTests independente e 25 com os companheiros**, além das três capturas do modelo e das interfaces no cliente real.
 
-A suíte completa do Laws & Justice comprovou os débitos na carteira real do Chronicles e os créditos únicos na tesouraria, incluindo a reabertura efetiva de um mundo LAN. As imagens próprias do Crown usam dados de demonstração; a prova financeira vem dessa sequência integrada. [Resultados, hashes e limites da evidência](VALIDACAO.md).
+A suíte completa do Laws & Justice comprovou os débitos na carteira real do Realm Origins e os créditos únicos na tesouraria, incluindo a reabertura efetiva de um mundo LAN. As imagens próprias do Crown usam dados de demonstração; a prova financeira vem dessa sequência integrada. [Resultados, hashes e limites da evidência](VALIDACAO.md).
 
 ## Pagamentos judiciais — 0.2.2
 

@@ -2,14 +2,14 @@
 
 **Minecraft 1.21.1 · NeoForge 21.1.256+ · Java 21 · 0.4.0 Beta**
 
-Realm Economy dá utilidade à carteira do **Chronicles RP 0.5.4** durante a sobrevivência: compras aos aldeões, bigorna, encantamentos, melhorias, poções e ativações temporárias de beacons. A **Mesa da Economia** permite ao Presidente empossado governar os preços e impostos, respeitando os limites administrativos.
+Realm Economy dá utilidade à carteira do **Realm Origins 0.5.7** durante a sobrevivência: compras aos aldeões, bigorna, encantamentos, melhorias, poções e ativações temporárias de beacons. A **Mesa da Economia** permite ao Presidente empossado governar os preços e impostos, respeitando os limites administrativos.
 
 ## Instalação e atualização
 
 1. Guarda uma cópia conjunta do mundo, perfis e tesouraria.
 2. **Retira `realm-villager-economy-0.1.0.jar`. Realm Economy substitui esse mod.** Os dois não devem estar instalados juntos.
 3. Instala `realm-economy-0.4.0.jar` nos clientes e servidor. Se usas impostos, substitui Crown Ledger pela **0.2.5** em todos eles.
-4. Usa Chronicles RP 0.5.4 e as suas dependências. Realm Council 0.2.2+ identifica o Presidente. Realm Notifications 0.1.0 é opcional.
+4. Usa Realm Origins 0.5.7 e as suas dependências. Realm Council 0.2.2+ identifica o Presidente. Realm Notifications 0.1.0 é opcional.
 
 Foi desenvolvido para servidor integrado, LAN e servidor dedicado; consulta os testes efetivos em [VALIDACAO.md](VALIDACAO.md).
 
@@ -54,7 +54,7 @@ Os sistemas pagos começam ativos. O imposto inicial é **0%**, com teto adminis
 
 O preço base sai da economia. Apenas o imposto entra no **tesouro público**, nunca na carteira do Presidente. Exemplo: 100 € de base e 10% de imposto custam 110 €; o Crown recebe 10 €. O imposto é calculado em cêntimos e arredondado para baixo uma vez por operação. O menu apresenta base, percentagem, imposto, total e saldo antes da confirmação.
 
-Sem Crown Ledger, o imposto efetivo é zero. As aprovações continuam guardadas. Se a API instalada falhar, os pagamentos fiscais pendentes conservam o seu recibo para nova tentativa. Sem Chronicles ou personagem criada, os serviços em euros ficam indisponíveis. Desativar administrativamente um sistema pago repõe o funcionamento Vanilla desse sistema, incluindo os seus custos normais.
+Sem Crown Ledger, o imposto efetivo é zero. As aprovações continuam guardadas. Se a API instalada falhar, os pagamentos fiscais pendentes conservam o seu recibo para nova tentativa. Sem Realm Origins ou personagem criada, os serviços em euros ficam indisponíveis. Desativar administrativamente um sistema pago repõe o funcionamento Vanilla desse sistema, incluindo os seus custos normais.
 
 ## Aldeões
 

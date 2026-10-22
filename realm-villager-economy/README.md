@@ -4,7 +4,7 @@ Este projeto foi integrado no [Realm Economy 0.4.0](../realm-economy/README.md).
 
 **Minecraft 1.21.1 · NeoForge 21.1.256+ · Java 21 · 0.1.0 Beta**
 
-As compras aos aldeões utilizam a carteira digital do **Chronicles RP 0.5.4**. As vendas de materiais continuam a pagar **esmeraldas físicas**. O Presidente empossado pode acrescentar um imposto público, recebido pelo **Crown Ledger 0.2.4+**.
+As compras aos aldeões utilizam a carteira digital do **Realm Origins 0.5.7**. As vendas de materiais continuam a pagar **esmeraldas físicas**. O Presidente empossado pode acrescentar um imposto público, recebido pelo **Crown Ledger 0.2.4+**.
 
 Instala o mesmo JAR nos clientes e no servidor, incluindo mundos abertos por LAN. Substitui versões antigas do mesmo mod. Para usar impostos, atualiza também Crown Ledger para 0.2.4. Realm Council 0.2.2+ é opcional para identificar o Presidente.
 
@@ -21,7 +21,7 @@ Nas compras, o menu apresenta separadamente:
 
 A conversão inicial é **1 esmeralda = 5 €**. Uma compra de 20 esmeraldas custa 100 € de base. Com imposto de 10%, pagas 110 €: 100 € saem da economia e 10 € ficam no tesouro público. O Presidente não recebe esse dinheiro na carteira.
 
-As esmeraldas físicas do inventário não substituem a carteira nas compras. Sem Chronicles ou personagem criada, as compras digitais ficam indisponíveis; as vendas por esmeraldas e as trocas de materiais continuam disponíveis.
+As esmeraldas físicas do inventário não substituem a carteira nas compras. Sem Realm Origins ou personagem criada, as compras digitais ficam indisponíveis; as vendas por esmeraldas e as trocas de materiais continuam disponíveis.
 
 Se a oferta, os descontos, a conversão ou a taxa mudar após a consulta, o pedido antigo é recusado sem cobrança. O menu apresenta os valores novos e pede nova confirmação. Se faltar saldo, materiais, espaço ou stock, a operação não começa.
 

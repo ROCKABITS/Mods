@@ -34,7 +34,7 @@ As ações exigem uma mesa inteira na mesma dimensão, a uma distância máxima 
 
 ## Integrações opcionais
 
-**Chronicles RP:** utiliza o nome público e verifica que a personagem foi criada. Sem Chronicles, utiliza o nome Minecraft. Só são guardados UUID, nome público e elegibilidade; não são lidos saldos, assinaturas ou biografias. Habitantes conhecidos podem receber títulos enquanto estão offline. Com o formato atual do Chronicles, a associação usa o UUID da conta, pois não existe um identificador independente de personagem.
+**Realm Origins:** utiliza o nome público e verifica que a personagem foi criada. Sem Realm Origins, utiliza o nome Minecraft. Só são guardados UUID, nome público e elegibilidade; não são lidos saldos, assinaturas ou biografias. Habitantes conhecidos podem receber títulos enquanto estão offline. Com o formato atual do Realm Origins, a associação usa o UUID da conta, pois não existe um identificador independente de personagem.
 
 **Realm Identity 0.1.1+:** a consulta de um documento autêntico mostra os títulos atuais. Não é necessário emitir outro documento. Uma nova consulta reflete alterações, revogações e expirações; o perfil emitido e o número de série mantêm-se. Atualiza o Identity no servidor e em todos os clientes: esta versão usa protocolo 2.
 

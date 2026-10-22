@@ -3,14 +3,14 @@ on:
   push:
     branches: [main]
     paths:
-      - 'chronicles-rp/**'
-      - '.github/workflows/build-chronicles-rp.yml'
-      - '.github/scripts/package_chronicles.py'
+      - 'realm-origins/**'
+      - '.github/workflows/build-realm-origins.yml'
+      - '.github/scripts/package_realm_origins.py'
   workflow_dispatch:
 permissions:
   contents: write
 concurrency:
-  group: chronicles-build-${{ github.ref }}
+  group: realm-origins-build-${{ github.ref }}
   cancel-in-progress: true
 jobs:
   build:
@@ -20,7 +20,7 @@ jobs:
     timeout-minutes: 50
     defaults:
       run:
-        working-directory: chronicles-rp
+        working-directory: realm-origins
         shell: bash
     steps:
       - name: Checkout
@@ -86,7 +86,7 @@ jobs:
         run: python3 tools/ci_summary.py
       - name: Gate and package tested release and actual Minecraft media
         working-directory: .
-        run: python3 .github/scripts/package_chronicles.py
+        run: python3 .github/scripts/package_realm_origins.py
       - name: Downloadable Realm Origins release
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
@@ -117,20 +117,20 @@ jobs:
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
-          name: chronicles-validation-${{ github.run_id }}
+          name: realm-origins-validation-${{ github.run_id }}
           path: |
-            chronicles-rp/build.log
-            chronicles-rp/gametests.log
-            chronicles-rp/gametests-without-classes.log
-            chronicles-rp/integration.log
-            chronicles-rp/visual-client.log
-            chronicles-rp/visual-origins-client.log
-            chronicles-rp/visual-origins-without-classes.log
-            chronicles-rp/build/test-results/test/
-            chronicles-rp/build/release-validation/
-            chronicles-rp/qa-results/
-            chronicles-rp/run/logs/latest.log
-            chronicles-rp/run-rp-names-qa/logs/latest.log
-            chronicles-rp/run-origins-qa/logs/latest.log
-            chronicles-rp/run-origins-qa-without-classes/logs/latest.log
+            realm-origins/build.log
+            realm-origins/gametests.log
+            realm-origins/gametests-without-classes.log
+            realm-origins/integration.log
+            realm-origins/visual-client.log
+            realm-origins/visual-origins-client.log
+            realm-origins/visual-origins-without-classes.log
+            realm-origins/build/test-results/test/
+            realm-origins/build/release-validation/
+            realm-origins/qa-results/
+            realm-origins/run/logs/latest.log
+            realm-origins/run-rp-names-qa/logs/latest.log
+            realm-origins/run-origins-qa/logs/latest.log
+            realm-origins/run-origins-qa-without-classes/logs/latest.log
           retention-days: 14

@@ -16,7 +16,7 @@
 
 **Realm Rewards:** [Administration screenshots](realm-rewards/0.1.1/README.md) · [Download PNG gallery](realm-rewards/0.1.1/realm-rewards-0.1.1-media.zip). Actual production administration screens rendered by Minecraft, using demonstration advancement data.
 
-**Chronicles RP:** [RP names screenshots](chronicles-rp/0.5.3/README.md) · [Download PNG gallery](chronicles-rp/0.5.3/chronicles-rp-0.5.3-media.zip). Actual Minecraft name tags, TAB, player chat and character profile; gallery characters are demonstration fixtures.
+**Realm Origins 0.5.7:** [Galeria completa com fotos](realm-origins/README.md) · [23 imagens e ícone em ZIP](realm-origins/0.5.7/realm-origins-0.5.7-media.zip). Criação cinematográfica, ocupação personalizada, assinatura, boas-vindas, livro de pergaminho, carteira, câmbio e nomes RP. Capturas reais do Minecraft.
 
 **Realm Markets logo:** [Download PNG](../mod-pronto/realm-markets-icon.png). Original illustrated square project icon for CurseForge; separate from the in-game screenshots.
 
@@ -74,8 +74,8 @@ The images are real Minecraft client captures of the mod's models and interface.
 
 ## Realm Origins 0.5.6
 
-[Galeria atual](realm-origins/0.5.6/README.md): criação cinematográfica e livro original de pergaminho aberto pela tecla P, com páginas de perfil, feitos, história, bolsa e câmbio.
+[Galeria da versão 0.5.6](realm-origins/0.5.6/README.md): criação cinematográfica e livro original de pergaminho aberto pela tecla P, com páginas de perfil, feitos, história, bolsa e câmbio.
 
 ## Realm Origins 0.5.7
 
-[Galeria atual](realm-origins/0.5.7/README.md): ocupação escrita numa palavra, sugestões rápidas, criação cinematográfica e livrinho de pergaminho no P.
+[Galeria atual com fotos](realm-origins/README.md): ocupação escrita numa palavra, sugestões rápidas, criação cinematográfica e livrinho de pergaminho no P.

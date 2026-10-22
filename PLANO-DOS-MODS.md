@@ -8,7 +8,7 @@ Plataforma: **Minecraft 1.21.1, NeoForge e Java 21**. Os mods mantêm responsabi
 
 | Mod | Responsabilidade | Situação neste repositório |
 | --- | --- | --- |
-| Crónicas RP / Chronicles RP | Personagens, profissões, reputação, dinheiro e progressão | Projeto importado em `chronicles-rp/` para a atualização de nomes RP autorizada pelo utilizador. O JAR original 0.5.2 continua apenas como referência local. |
+| Realm Origins | Personagens, profissões, reputação, dinheiro e progressão | Projeto importado em `realm-origins/` para a atualização de nomes RP autorizada pelo utilizador. O JAR original 0.5.2 continua apenas como referência local. |
 | Realm Council 0.2.1 | Eleições, mandatos, governantes e decisões públicas | Projeto incluído para a atualização de acesso através dos blocos. |
 | Contracts & Bounties 0.3.1 | Pedidos de materiais, reserva de recompensas, entregas e recolhas | JAR disponível, integrado com as políticas do Crown Ledger. |
 
@@ -31,12 +31,12 @@ O quadro abaixo distingue as funcionalidades já implementadas das ideias ainda 
 
 | Projeto | Objetivo | Estado |
 | --- | --- | --- |
-| Realm Rewards | Recompensar conquistas Vanilla e de outros mods com dinheiro do Chronicles RP. | Implementado e atualizado para 0.1.2; [guia](realm-rewards/README.md). |
+| Realm Rewards | Recompensar conquistas Vanilla e de outros mods com dinheiro do Realm Origins. | Implementado e atualizado para 0.1.2; [guia](realm-rewards/README.md). |
 | Realm Notifications | Notificações no ecrã e API comum para os mods de RP. | Implementado na 0.1.0; [guia](realm-notifications/README.md). |
 | Realm Titles | Títulos de personagem atribuídos pelo governante eleito. | Implementado na 0.1.0 Beta; [guia](realm-titles/README.md). |
-| Realm Casino | Casino medieval com máquinas e mesas, banca própria de cada proprietário e dinheiro virtual do Chronicles RP. | Atualizado para 0.3.0 Beta, com doze jogos físicos, mesas multiplayer e imposto do lucro. [Guia](realm-casino/README.md). |
+| Realm Casino | Casino medieval com máquinas e mesas, banca própria de cada proprietário e dinheiro virtual do Realm Origins. | Atualizado para 0.3.0 Beta, com doze jogos físicos, mesas multiplayer e imposto do lucro. [Guia](realm-casino/README.md). |
 | Laws & Justice | Prisões construídas pelos jogadores, justiça pelo Presidente, mandados, trabalho comunitário e economia judicial, por fases. | 0.1.0 Beta em validação final: prisões/celas, penas online, libertação e administração física. Publicação pendente. [Guia](laws-justice/README.md) · [plano completo](laws-justice/PLANO-COMPLETO.md). |
-| Chronicles RP — Nomes RP | Mostrar o nome da personagem acima da cabeça, no TAB e no chat. | Implementado na 0.5.3; [guia e downloads](chronicles-rp/README.md). |
+| Realm Origins — Nomes RP | Mostrar o nome da personagem acima da cabeça, no TAB e no chat. | Implementado na 0.5.3; [guia e downloads](realm-origins/README.md). |
 | Xaero Map Regions + Xaero's World Map | Desenhar e consultar territórios no mapa. | Solução externa indicada pelo utilizador; não desenvolver um mod próprio. |
 
 O imposto de vendas foi implementado no Crown Ledger e Realm Markets 0.2.0; os resultados de execução ficam nos guias e ficheiros de validação dos dois projetos. A atualização dos nomes RP foi concluída no Chronicles 0.5.3. O utilizador escolheu desenvolver Realm Rewards primeiro, seguido de Realm Notifications e Realm Titles. O Rewards está implementado e atualizado para 0.1.2. O Realm Notifications está implementado na 0.1.0, com integração nos seis mods existentes. O Realm Titles está implementado na 0.1.0 Beta, acompanhado pelo Realm Identity 0.1.1 para mostrar os títulos atuais nos documentos.
@@ -45,7 +45,7 @@ O imposto de vendas foi implementado no Crown Ledger e Realm Markets 0.2.0; os r
 
 - Detetar a conclusão de Advancements normais do Minecraft Vanilla e dos outros mods.
 - Configurar o valor de cada recompensa num menu de administração.
-- Reutilizar a carteira do Chronicles RP e atribuir dinheiro por conquista concluída.
+- Reutilizar a carteira do Realm Origins e atribuir dinheiro por conquista concluída.
 - Guardar o pagamento de cada conquista por jogador para impedir recompensas repetidas.
 - Reconhecer conquistas de novos mods que utilizem o sistema normal de Advancements.
 
@@ -68,7 +68,7 @@ O imposto de vendas foi implementado no Crown Ledger e Realm Markets 0.2.0; os r
 
 - Slots de três rolos, roleta europeia e blackjack contra a banca, cada um com bloco, modelos, animações, sons e interface próprios.
 - Proprietário, nome, banca e limites de aposta independentes por máquina ou mesa. Os menus abrem pela interação com os blocos.
-- Usar apenas a carteira virtual do Chronicles RP; sem ela, permitir consultar modelos e regras, mantendo as operações económicas desativadas.
+- Usar apenas a carteira virtual do Realm Origins; sem ela, permitir consultar modelos e regras, mantendo as operações económicas desativadas.
 - Confirmar os resultados no servidor, reservar o maior prémio possível antes da aposta e guardar os prémios como quantias por receber, recolhidas presencialmente.
 - Realm Notifications opcional. Impostos do Crown Ledger e os restantes jogos do guião ficam para fases futuras; esta versão não inclui poker nem jogos entre jogadores.
 
@@ -93,12 +93,12 @@ A fase **0.3.0 Beta está publicada**, incluindo a base das prisões, o Presiden
 
 **A prisão é sempre construída pelos jogadores.** O mod fornece blocos, seleção de áreas e gestão, sem gerar edifícios. Penas e dados persistem em mundos dedicados e LAN; não há contagem offline. O [plano completo das 13 secções](laws-justice/PLANO-COMPLETO.md) conserva os requisitos do utilizador, incluindo as seis tarefas de exemplo, as zonas, os mandados, as permissões e as integrações futuras.
 
-### Chronicles RP — Nomes RP
+### Realm Origins — Nomes RP
 
 - Substituir visualmente o username pelo nome da personagem acima da cabeça, no TAB e no chat.
 - Sem personagem criada, manter o username habitual.
 - Preservar o username real e o UUID usados internamente pelo Minecraft.
-- Manter esta funcionalidade no Chronicles RP, separada dos títulos.
+- Manter esta funcionalidade no Realm Origins, separada dos títulos.
 - Verificar a compatibilidade das interfaces de outros mods; a alteração visual não garante que todas usem automaticamente o nome RP.
 
 ## 1. Contratos: entrega atual e diferenças face ao guião

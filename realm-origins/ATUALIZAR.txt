@@ -1,0 +1,13 @@
+Realm Origins 0.5.7 — atualização e novo nome
+
+1. Fecha o servidor e o Minecraft e conserva uma cópia do mundo e das configurações.
+2. Substitui o JAR anterior por realm-origins-0.5.7.jar no servidor e em todos os clientes. Realm Origins substitui Chronicles RP: mantém apenas um dos JARs em cada pasta mods.
+3. Mantém Origins (NeoForge) 0.3.2 e Jupiter 2.3.7 para Minecraft 1.21.1. Origins: Classes (NeoForge) 0.3 é opcional; usa a mesma combinação nos clientes e no servidor.
+4. Reinicia o jogo. A criação usa o visual escuro por capítulos; depois de criar a personagem, P abre o livro original de pergaminho.
+5. A ocupação pode ser escrita numa palavra de até 24 caracteres, com acentos e hífen interno, ou preenchida através de sugestões rápidas.
+
+O protocolo é 8. Clientes 0.5.6 e anteriores não reconhecem ocupações fora da lista antiga: atualiza o servidor e todos os clientes juntos.
+O identificador cronicasrp, os ficheiros de configuração, os dados de personagem, a assinatura, a profissão, a reputação, o inventário e o dinheiro são preservados. O nome RP continua a aparecer no mundo, TAB e chat; a identidade interna da conta não muda.
+A confirmação e as boas-vindas mostram a fortuna já guardada, sem sortear ou pagar dinheiro novamente.
+
+O projeto no GitHub está agora em realm-origins/. Consulta README.md, CHANGELOG.md, CURSEFORGE.md e VALIDACAO.md. A galeria completa está em media/realm-origins/README.md na raiz do repositório.

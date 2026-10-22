@@ -17,6 +17,14 @@ O [relatório gráfico](../media/realm-origins/0.5.7/rework-validation.json) con
 
 Âmbito: servidor integrado/cliente reais para as interfaces e GameTests nativos para handlers e regras. Não é um novo ensaio manual com vários clientes autenticados, nem certifica todas as GPUs/resource packs ou funcionalidades de cada companheiro. A sessão de desenvolvimento não dispõe de certificado autenticado de chat assinado. Atualiza servidor e todos os clientes para 0.5.7; os dados antigos mantêm-se, mas as versões anteriores não descodificam ocupações fora da lista fixa.
 
+## Organização do GitHub
+
+O projeto está em `realm-origins/`, com workflow e empacotamento renomeados e galeria em `media/realm-origins/README.md`. O arquivo de imagens 0.5.3 foi reunido na mesma pasta de galerias. Guias, descrição para CurseForge e instruções de instalação usam o nome Realm Origins.
+
+A compilação na nova pasta passou e os **70 testes JUnit foram executados novamente, sem falhas nem testes ignorados**. As 121 entradas do JAR recompilado são idênticas às do JAR publicado: SHA-256 `0b90c49b9e3c49d2f0343301ac3662b21d6ce5551ea343fb7fc8ebdab9e09684`. Os 23 PNGs mantêm os hashes publicados. Foram verificados os links locais, imagens, paths do workflow e correspondência dos nomes de futuras capturas com o empacotamento.
+
+Esta reorganização não publica uma versão nova do mod nem substitui os JARs, ZIPs ou relatórios de lançamento existentes. O namespace `cronicasrp`, os dados, os pacotes e o protocolo 8 são os mesmos. Não foram repetidos os clientes Minecraft ou as suítes nativas nesta mudança de paths; os resultados de jogo continuam documentados na validação 0.5.7 acima.
+
 ## Histórico — Realm Origins 0.5.6
 
 Atualização visual: criação e boas-vindas cinematográficas; P abre novamente o livro original de pergaminho. Ficha, Feitos, História, Bolsa e câmbio usam a aparência anterior. Dados, economia e protocolo 7 mantidos.
@@ -115,7 +123,7 @@ A execução gráfica utiliza o cliente Minecraft e um servidor integrado reais.
 
 A mensagem de chat foi enviada pelo caminho normal `sendChat` do cliente, processada pelo servidor integrado e recebida com a identidade RP. O mod não cancela essa mensagem para a reenviar como mensagem de sistema. A sessão de desenvolvimento não possui um certificado autenticado de chat assinado: este teste confirma o transporte e a apresentação do chat, não a validação criptográfica de uma sessão autenticada.
 
-As quatro [capturas desta versão](../media/chronicles-rp/0.5.3/README.md) e o [resultado da verificação gráfica](../media/chronicles-rp/0.5.3/validation.json) foram publicados juntamente com o JAR:
+As quatro [capturas desta versão](../media/realm-origins/0.5.3/README.md) e o [resultado da verificação gráfica](../media/realm-origins/0.5.3/validation.json) foram publicados juntamente com o JAR:
 
 - `chronicles-rp-names-world.png` — nomes acima das personagens e fallback para username.
 - `chronicles-rp-names-tab.png` — nomes na lista vanilla de jogadores.

@@ -30,7 +30,7 @@ O ZIP é uma alternativa ao download direto do JAR. Extrai-o antes de instalar. 
 - [Guia do Realm Titles](realm-titles/README.md): mesa, títulos, governante, validade e integração no documento.
 - [Guia do Realm Notifications](realm-notifications/README.md): avisos no ecrã, tecla N, preferências, diário e API opcional.
 - [Guia do Realm Rewards](realm-rewards/README.md): pagamentos por conquistas, valores padrão, administração e dinheiro pendente.
-- [Guia do Realm Origins](chronicles-rp/README.md): personagens, nomes RP, dependências e economia.
+- [Guia do Realm Origins](realm-origins/README.md): personagens, nomes RP, dependências e economia.
 - [Guia do Realm Markets](realm-markets/README.md): receitas, abastecimento, preços por unidade e recolha dos ganhos.
 - [Guia do Realm Identity](realm-identity/README.md): emissão, segunda via, autenticidade e apresentação entre jogadores.
 - [Guia do Crown Ledger](crown-ledger/README.md): receita do cofre, permissões, impostos, salários e ciclos.
@@ -40,17 +40,23 @@ O ZIP é uma alternativa ao download direto do JAR. Extrai-o antes de instalar. 
 - [Plano dos próximos mods](PLANO-DOS-MODS.md).
 - [Galerias para CurseForge](media/README.md).
 
-Cada mod funciona independentemente nas suas funcionalidades base. O Crown Ledger usa esmeraldas sem Chronicles RP. Com **Realm Origins 0.5.7**, pode usar a carteira digital e a reputação existentes. Com Realm Council, só o governante de um mandato ativo e jurado pode gerir o tesouro; sem ele, um operador designa um responsável. Com Contracts, o governante publica contratos pagos pelo reino.
+Cada mod funciona independentemente nas suas funcionalidades base. O Crown Ledger usa esmeraldas sem Realm Origins. Com **Realm Origins 0.5.7**, pode usar a carteira digital e a reputação existentes. Com Realm Council, só o governante de um mandato ativo e jurado pode gerir o tesouro; sem ele, um operador designa um responsável. Com Contracts, o governante publica contratos pagos pelo reino.
 
 O **Laws & Justice 0.4.0 Beta** está publicado, com [galeria real](media/laws-justice/README.md) e [validação aprovada](laws-justice/VALIDACAO-0.4.0.md). Inclui prisões construídas pelos jogadores, penas online, libertação automática e tribunal físico: o Presidente eleito e empossado analisa acusações e provas, abre audiências, absolve ou condena, emite mandados e perde os poderes imediatamente ao terminar o mandato. Algemas exigem um mandado válido para uma única detenção temporária. As intervenções administrativas de emergência são identificadas no histórico. Os seis trabalhos prisionais já estão disponíveis, com zonas, recursos finitos, produção temporizada, sacos selados e limite padrão de 50% de redução. As multas, fianças, registos públicos e integrações financeiras completam as quatro fases do [plano aprovado](laws-justice/PLANO-COMPLETO.md). O Livro de Registos permite consultar decisões finais; os pagamentos usam recibos persistentes e são entregues ao Crown Ledger 0.2.2 quando instalado. Não são geradas prisões automaticamente.
 
 O **Realm Casino 0.3.0 Beta** reúne os doze jogos do guião, com seis novos blocos medievais, interfaces, cartas privadas e mesas multiplayer financiadas. Inclui slots de cinco rolos, corridas de cavalos em miniatura, Texas Hold’em, vinte e um PvP, dados e cara ou coroa. O **Crown Ledger 0.2.5** recebe imposto sobre o lucro levantado pelo dono, após recuperar o capital depositado. [Guia](realm-casino/README.md) · [galeria](media/realm-casino/README.md) · [validação](realm-casino/VALIDACAO.md). A carteira Chronicles é necessária para apostar. Atualiza servidor e clientes em conjunto; Casino usa formato de dados 3 e Crown formato 6, com leitura dos mundos anteriores.
 
-O [Realm Origins 0.5.7](chronicles-rp/README.md), anteriormente Chronicles RP, mantém a criação escura e lilás, com capítulos, personagem 3D e boas-vindas. A tecla P abre o livro original de pergaminho, incluindo a bolsa e o câmbio. A ocupação pode ser escrita numa palavra, com sugestões rápidas e validação no servidor. Preserva os perfis, o dinheiro, os nomes RP e as integrações, sem acrescentar personalidade ou atributos. Substitui o JAR anterior no servidor e em todos os clientes; o protocolo passa a 8 e exige 0.5.7 no servidor e em todos os clientes. Origins 0.3.2 e Jupiter 2.3.7 são necessários; Origins: Classes 0.3 é opcional.
+O [Realm Origins 0.5.7](realm-origins/README.md), anteriormente Chronicles RP, mantém a criação escura e lilás, com capítulos, personagem 3D e boas-vindas. A tecla P abre o livro original de pergaminho, incluindo a bolsa e o câmbio. A ocupação pode ser escrita numa palavra, com sugestões rápidas e validação no servidor. Preserva os perfis, o dinheiro, os nomes RP e as integrações, sem acrescentar personalidade ou atributos. Substitui o JAR anterior no servidor e em todos os clientes; o protocolo passa a 8 e exige 0.5.7 no servidor e em todos os clientes. Origins 0.3.2 e Jupiter 2.3.7 são necessários; Origins: Classes 0.3 é opcional.
+
+[Galeria do Realm Origins: 23 imagens e ícone](media/realm-origins/README.md).
+
+![Criação de personagem do Realm Origins](media/realm-origins/0.5.7/realm-origins-03-creation-en.png)
+
+![Livro de personagem do Realm Origins — tecla P](media/realm-origins/0.5.7/realm-origins-07-profile-en.png)
 
 O [pacote Realm Titles + Realm Identity](https://github.com/ROCKABITS/Mods/raw/refs/heads/main/mod-pronto/realm-titles-0.1.0-suite.zip) contém os dois JARs desta atualização. Instala o Titles no servidor e em todos os clientes. Se usas Identity, substitui a versão anterior pela 0.1.1 em todos os lados: o protocolo passou para 2. Os documentos existentes mantêm-se válidos.
 
-A **Mesa do Selo Real** abre o registo público de títulos. Com Realm Council, só o governante do mandato ativo e jurado pode gerir nomeações; sem Council, um operador designa um responsável. Os títulos podem ser permanentes ou durar 1–365 dias reais, mantêm-se quando muda o governante e aparecem numa nova consulta do documento do Identity, sem segunda via. Chronicles fornece os nomes públicos e Notifications apresenta os avisos opcionais.
+A **Mesa do Selo Real** abre o registo público de títulos. Com Realm Council, só o governante do mandato ativo e jurado pode gerir nomeações; sem Council, um operador designa um responsável. Os títulos podem ser permanentes ou durar 1–365 dias reais, mantêm-se quando muda o governante e aparecem numa nova consulta do documento do Identity, sem segunda via. Realm Origins fornece os nomes públicos e Notifications apresenta os avisos opcionais.
 
 O Realm Notifications mostra os eventos dos seis mods atualizados e deixa o chat como alternativa para clientes sem o canal opcional. A tecla **N** abre o diário e as preferências; os menus de contratos, lojas e governação continuam a usar os seus blocos. O histórico é privado e pertence à sessão.
 

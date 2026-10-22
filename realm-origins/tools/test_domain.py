@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Run the pure Chronicles domain tests without Minecraft/DFU downloads (JDK 21)."""
+"""Run the pure Realm Origins domain tests without Minecraft/DFU downloads (JDK 21)."""
 from pathlib import Path
 import hashlib
 import os
@@ -39,7 +39,7 @@ def executable(name):
     found = shutil.which(name)
     if found:
         return found
-    raise SystemExit('JDK 21 required. Run chronicles-rp/tools/bootstrap_cloud.py in this cloud environment.')
+    raise SystemExit('JDK 21 required. Run realm-origins/tools/bootstrap_cloud.py in this cloud environment.')
 
 
 output = project / 'build' / 'domain-check'

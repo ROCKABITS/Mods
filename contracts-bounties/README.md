@@ -8,7 +8,7 @@ A **0.4.0** acrescenta **cinco quests RNG diárias por jogador**, atividades de 
 
 Abre **Quests Diárias** em qualquer mural. São duas fáceis, duas médias e uma difícil, com renovação às 00:00 UTC e limite inicial de 300 € brutos. O progresso começa depois de aceitar. [Regras, configuração, datapacks, administração, animações e limitações](DAILY_QUESTS.md). Para o imposto destas quests, atualiza também o **Crown Ledger para 0.2.6+**.
 
-**A tesouraria está disponível no mod separado [Crown Ledger](../crown-ledger/README.md).** As suas regras ficam ativas quando esse mod está instalado. Sem integração, os contratos particulares continuam disponíveis com **0% de imposto e reputação mínima 0**. O Chronicles RP 0.5.4 fornece dinheiro e reputação. Os contratos mantêm o seu fallback em esmeraldas; nas quests diárias esse modo é uma opção administrativa, desligada por defeito.
+**A tesouraria está disponível no mod separado [Crown Ledger](../crown-ledger/README.md).** As suas regras ficam ativas quando esse mod está instalado. Sem integração, os contratos particulares continuam disponíveis com **0% de imposto e reputação mínima 0**. O Realm Origins 0.5.7 fornece dinheiro e reputação. Os contratos mantêm o seu fallback em esmeraldas; nas quests diárias esse modo é uma opção administrativa, desligada por defeito.
 
 Com o **[Realm Notifications](../realm-notifications/README.md) 0.1.0+** no servidor e no cliente, os avisos aparecem no HUD medieval. Sem o canal opcional, continuam a ser apresentados no chat. A integração apenas apresenta acontecimentos confirmados; não modifica saldos, regras ou permissões.
 
@@ -36,17 +36,17 @@ O autor publica um pedido por identificador de item, quantidade e recompensa. A 
 
 Quando a Tesouraria fornecer uma taxa, esta fica guardada na publicação. Exemplo: **20 € com imposto de 5% = 19 € de crédito do trabalhador e 1 € de crédito do reino**. O menu mostra recompensa total, imposto e valor líquido antes da entrega. Levantar o crédito não cobra novo imposto.
 
-A taxa é calculada em unidades inteiras, arredondada por defeito: cêntimos no Crónicas RP e esmeraldas inteiras no modo independente. Cancelar um contrato aberto devolve o valor total reservado, sem imposto.
+A taxa é calculada em unidades inteiras, arredondada por defeito: cêntimos no Realm Origins e esmeraldas inteiras no modo independente. Cancelar um contrato aberto devolve o valor total reservado, sem imposto.
 
 A migração conserva os contratos antigos com imposto zero e sem atribuição retroativa de reputação. Uma nova regra de reputação só afeta novas publicações; concluir, cancelar contratos próprios e recolher continuam disponíveis.
 
 São aceites itens comuns por ID, como `minecraft:oak_log`, sem nomes, encantamentos ou outros componentes personalizados. Usam-se os 36 espaços principais do inventário, sem consumir equipamento ou a mão secundária. Recolhas parciais preservam o que não couber. Limites atuais: 16 contratos abertos por autor, 1–4096 materiais por contrato e 2048 entradas no arquivo; a rotação do histórico preserva entregas e créditos pendentes.
 
-## Reputação e missões do Crónicas RP
+## Reputação e missões do Realm Origins
 
-A regra de publicação é fornecida pelo Crown Ledger, de 0 a 100 de reputação. Quando for positiva, exige um perfil Crónicas RP válido; uma integração em falta ou incompatível não autoriza a publicação por engano. O menu apresenta a reputação atual, o mínimo e o motivo de um bloqueio, mantendo disponíveis as entregas e recolhas.
+A regra de publicação é fornecida pelo Crown Ledger, de 0 a 100 de reputação. Quando for positiva, exige um perfil Realm Origins válido; uma integração em falta ou incompatível não autoriza a publicação por engano. O menu apresenta a reputação atual, o mínimo e o motivo de um bloqueio, mantendo disponíveis as entregas e recolhas.
 
-Contratos públicos podem atribuir reputação e aumentar o contador de missões do Chronicles. Os valores ficam guardados no contrato; a política inicial da API usa **+1 de reputação e limite de 3 pontos por dia UTC**. O contador de missões continua a aumentar quando o limite diário de reputação já foi atingido. Os limites do perfil são 100 de reputação e um milhão de missões.
+Contratos públicos podem atribuir reputação e aumentar o contador de missões do Realm Origins. Os valores ficam guardados no contrato; a política inicial da API usa **+1 de reputação e limite de 3 pontos por dia UTC**. O contador de missões continua a aumentar quando o limite diário de reputação já foi atingido. Os limites do perfil são 100 de reputação e um milhão de missões.
 
 Contratos particulares e trabalhos públicos concluídos pelo próprio emissor não atribuem este progresso. Cada conclusão só é processada uma vez. O limite diário persiste após reiniciar e usa o dia real UTC, independente do comando `/time`.
 

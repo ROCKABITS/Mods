@@ -23,26 +23,26 @@ Os valores novos aplicam-se às próximas conclusões. Uma recompensa já reserv
 
 ## Carteira e pagamentos pendentes
 
-A integração económica usa a carteira do **Chronicles RP 0.5.2–0.5.x**, com os mesmos cêntimos inteiros. Para servidores atualizados, recomenda-se **Chronicles RP 0.5.4**, **Origins (NeoForge) 0.3.2** e **Jupiter 2.3.7**. As dependências do Chronicles são instaladas separadamente.
+A integração económica usa a carteira do **Realm Origins** (API `cronicasrp` 0.5.2–0.5.x), com os mesmos cêntimos inteiros. Para servidores atualizados, recomenda-se **Realm Origins 0.5.7**, **Origins (NeoForge) 0.3.2** e **Jupiter 2.3.7**. As dependências do Realm Origins são instaladas separadamente.
 
-Sem Chronicles, sem personagem criada ou com a integração indisponível, a quantia fica pendente no registo do Rewards. Quando a carteira fica disponível, o servidor tenta pagar automaticamente a cada cinco segundos e na entrada. Se atingir o limite de saldo, paga apenas o que couber e conserva o restante. Não edita perfis offline nem cria uma moeda alternativa. Com Realm Notifications 0.1.0+ no servidor e no cliente, os pagamentos mostram um aviso no ecrã. Sem esse canal opcional, aparece uma mensagem no chat.
+Sem Realm Origins, sem personagem criada ou com a integração indisponível, a quantia fica pendente no registo do Rewards. Quando a carteira fica disponível, o servidor tenta pagar automaticamente a cada cinco segundos e na entrada. Se atingir o limite de saldo, paga apenas o que couber e conserva o restante. Não edita perfis offline nem cria uma moeda alternativa. Com Realm Notifications 0.1.0+ no servidor e no cliente, os pagamentos mostram um aviso no ecrã. Sem esse canal opcional, aparece uma mensagem no chat.
 
 Estas recompensas introduzem dinheiro novo na economia; não saem da tesouraria do reino e não são tributadas como vendas ou contratos.
 
 ## Persistência e compatibilidade
 
-O ficheiro global **`data/realm_rewards.dat`** guarda regras, conclusões e quantias pendentes, por UUID e ID da conquista, em todas as dimensões. Não o apagues para atualizar: isso perde a proteção contra repetições. Faz cópias do mundo completo, incluindo os avanços Vanilla e os perfis do Chronicles. Um registo inválido é recusado, sem ser substituído por um registo vazio.
+O ficheiro global **`data/realm_rewards.dat`** guarda regras, conclusões e quantias pendentes, por UUID e ID da conquista, em todas as dimensões. Não o apagues para atualizar: isso perde a proteção contra repetições. Faz cópias do mundo completo, incluindo os avanços Vanilla e os perfis do Realm Origins. Um registo inválido é recusado, sem ser substituído por um registo vazio.
 
 A alteração da carteira e do registo ocorre no thread do servidor, com validação prévia e reposição do perfil se falhar a sincronização. A gravação continua a usar a persistência normal do Minecraft; não existe uma transação de disco única entre ficheiros durante uma falha abrupta. Plugins que alterem progressos diretamente sem os eventos normais podem exigir adaptação.
 
-Chronicles é opcional para carregar/configurar o mod, mas é necessário para receber as recompensas na carteira. Os restantes mods do reino são opcionais. O mod não substitui o menu de conquistas e não adiciona títulos ou reputação.
+Realm Origins é opcional para carregar/configurar o mod, mas é necessário para receber as recompensas na carteira. Os restantes mods do reino são opcionais. O mod não substitui o menu de conquistas e não adiciona títulos ou reputação.
 
 ## Desenvolvimento
 
-`./gradlew build` executa os testes unitários. `./gradlew -PrewardsGameTests runGameTestServer` verifica conquistas nativas sem Chronicles. A opção `-PintegrationTests` carrega os JARs de `compat-libs/` e as dependências reais Origins/Jupiter. `-PrewardsVisualTests runClient` verifica o menu no cliente real. Classes de teste e dependências externas são excluídas do JAR.
+`./gradlew build` executa os testes unitários. `./gradlew -PrewardsGameTests runGameTestServer` verifica conquistas nativas sem Realm Origins. A opção `-PintegrationTests` carrega os JARs de `compat-libs/` e as dependências reais Origins/Jupiter. `-PrewardsVisualTests runClient` verifica o menu no cliente real. Classes de teste e dependências externas são excluídas do JAR.
 
 No ambiente cloud usa `python3 tools/cloud_gradle.py` para preservar proxy e TLS. Os testes de domínio independentes correm com `python3 tools/test_domain.py`. A compilação local pode continuar bloqueada pela política de rede; o GitHub Actions executa a validação Minecraft.
 
 [JAR 0.1.2](../mod-pronto/realm-rewards-0.1.2.jar) · [ZIP 0.1.2](../mod-pronto/realm-rewards-0.1.2.zip) · [Imagens](../media/realm-rewards/0.1.1/README.md) · [Changelog](CHANGELOG.md) · [Validação](VALIDACAO.md).
 
-A [execução aprovada da 0.1.1](https://github.com/ROCKABITS/Mods/actions/runs/38989952338) passou 12 testes unitários, 15 GameTests sem Chronicles, os mesmos 15 com a carteira real e os restantes mods, e a verificação do menu no cliente Minecraft. Os limites e os hashes estão no guia de validação.
+A [execução aprovada da 0.1.1](https://github.com/ROCKABITS/Mods/actions/runs/38989952338) passou 12 testes unitários, 15 GameTests sem Realm Origins, os mesmos 15 com a carteira real e os restantes mods, e a verificação do menu no cliente Minecraft. Os limites e os hashes estão no guia de validação.

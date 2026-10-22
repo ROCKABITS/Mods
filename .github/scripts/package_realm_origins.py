@@ -12,8 +12,8 @@ import xml.etree.ElementTree as ET
 import zipfile
 
 repo = Path(__file__).resolve().parents[2]
-project = repo / 'chronicles-rp'
-spec = importlib.util.spec_from_file_location('chronicles_release_checks', project / 'tools/release_checks.py')
+project = repo / 'realm-origins'
+spec = importlib.util.spec_from_file_location('realm_origins_release_checks', project / 'tools/release_checks.py')
 checks = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(checks)
 source, snapshot, dependencies = checks.check_snapshot()
@@ -53,8 +53,8 @@ for folder, logfile, marker in (
     assert marker in log and 'BUILD SUCCESSFUL' in log and 'BUILD FAILED' not in log, logfile
     clients[folder] = report
 
-images = ['chronicles-rp-names-world.png', 'chronicles-rp-names-tab.png',
-          'chronicles-rp-names-chat.png', 'chronicles-rp-names-profile.png']
+images = ['realm-origins-names-world.png', 'realm-origins-names-tab.png',
+          'realm-origins-names-chat.png', 'realm-origins-names-profile.png']
 visual = project / 'qa-results/rp-names-client'
 for name in images:
     path = visual / name

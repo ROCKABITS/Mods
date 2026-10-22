@@ -247,11 +247,11 @@ public final class NamesClientQA {
                 }
                 case 4 -> {
                     assertWorldNames();
-                    capture("chronicles-rp-names-world.png");
+                    capture("realm-origins-names-world.png");
                     mc.options.keyPlayerList.setDown(true); nextAction = now + 2_000; step++;
                 }
                 case 5 -> {
-                    assertTabNames(); capture("chronicles-rp-names-tab.png");
+                    assertTabNames(); capture("realm-origins-names-tab.png");
                     mc.options.keyPlayerList.setDown(false);
                     mc.player.connection.sendChat(CHAT_TEXT); step++;
                 }
@@ -261,11 +261,11 @@ public final class NamesClientQA {
                     mc.setScreen(new ChatScreen("")); nextAction = now + 2_000; step++;
                 }
                 case 7 -> {
-                    capture("chronicles-rp-names-chat.png");
+                    capture("realm-origins-names-chat.png");
                     mc.setScreen(new CharacterProfileScreen()); nextAction = now + 2_000; step++;
                 }
                 case 8 -> {
-                    capture("chronicles-rp-names-profile.png"); mc.setScreen(null);
+                    capture("realm-origins-names-profile.png"); mc.setScreen(null);
                     serverAction(() -> {
                         named.setData(ModAttachments.PROFILE, profile("Aetherion da Lua"));
                         RpNames.synchronize(named);

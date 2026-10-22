@@ -2,7 +2,7 @@
 
 Casamentos medievais para **Minecraft 1.21.1, NeoForge 21.1.256+ e Java 21**. Instala o mesmo JAR no servidor e em todos os clientes. O altar, os anéis, as texturas, as interfaces e os quatro sons foram criados para este projeto.
 
-[Descarregar o pacote com Marriage 0.1.0, Crown Ledger 0.2.7 e Realm Identity 0.1.2](https://github.com/ROCKABITS/Mods/raw/refs/heads/main/mod-pronto/realm-marriage-0.1.0-suite.zip). Extrai o ZIP e substitui as versões anteriores nos clientes e no servidor. O Chronicles e as suas dependências não estão incluídos.
+[Descarregar o pacote com Marriage 0.1.0, Crown Ledger 0.2.7 e Realm Identity 0.1.2](https://github.com/ROCKABITS/Mods/raw/refs/heads/main/mod-pronto/realm-marriage-0.1.0-suite.zip). Extrai o ZIP e substitui as versões anteriores nos clientes e no servidor. O Realm Origins e as suas dependências não estão incluídos.
 
 ## Preparar o casamento
 
@@ -33,7 +33,7 @@ Altar: `GRG` / `WBW` / `P P`, com ouro G, roseira R, lã branca W, livro B e tá
 | Dinheiro separado | Mantém as carteiras individuais; cobra apenas a taxa acordada, se existir. | Cada jogador paga as suas despesas. Não existe saldo comum. |
 | Conta conjunta | Mantém as carteiras individuais; a conta comum começa vazia. | Ambos podem depositar e levantar quantias da conta comum. |
 
-Os regimes financeiros usam euros da **carteira real do Chronicles RP**. Sem Chronicles, é possível casar gratuitamente com dinheiro separado; não é criada outra moeda ou carteira pessoal.
+Os regimes financeiros usam euros da **carteira real do Realm Origins**. Sem Realm Origins, é possível casar gratuitamente com dinheiro separado; não é criada outra moeda ou carteira pessoal.
 
 **Compatibilidade de compras:** os mods existentes continuam a usar as suas carteiras pessoais. Para gastar nelas, levanta dinheiro no altar. Os rendimentos futuros não são desviados automaticamente: em Dinheiro conjunto usa «Consolidar» para os juntar. Outros mods podem aderir explicitamente à [API de pagamentos](API.md). Esta versão não intercepta silenciosamente lojas, casino, recompensas ou salários.
 
@@ -43,7 +43,7 @@ Qualquer cônjuge pode divorciar-se, mesmo com o outro offline. O saldo comum é
 
 | Mod | Utilização |
 | --- | --- |
-| Chronicles RP 0.5.4 | Nomes RP e carteira digital, com os requisitos Origins/Jupiter desse mod. |
+| Realm Origins 0.5.7 | Nomes RP e carteira digital, com os requisitos Origins/Jupiter desse mod. |
 | Crown Ledger **0.2.7+** | Recebe a taxa de casamento por operação idempotente. Nunca é paga à carteira do Presidente. |
 | Realm Council | Apenas o Presidente com mandato ativo e juramento concluído altera a taxa, dentro do limite administrativo. Sem Council, fica reservada aos administradores. |
 | Realm Identity **0.1.2+** | Estado civil e cônjuge, respeitando a privacidade. Usa a certidão com Shift para abrir a validação no Identity. Documentos anteriores de identidade continuam válidos. |

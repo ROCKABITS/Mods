@@ -16,9 +16,9 @@ Tábuas      Tábuas      Tábuas
 
 Clica na escrivaninha com o botão direito. A interface mostra os dados e permite emitir o documento por **1 papel + 1 saco de tinta**, retirados do inventário principal. É preciso espaço para o documento; se não couber ou faltarem materiais, nada é consumido e o documento anterior mantém-se válido.
 
-Com **Chronicles RP / Crónicas RP 0.5.2**, lê a personagem já criada: nome, idade, raça, profissão, assinatura escrita e desenho da assinatura. O adaptador é apenas de leitura e não altera a personagem, o dinheiro, a reputação ou o progresso. Se o Chronicles estiver instalado e não houver personagem válida, a emissão fica bloqueada.
+Com **Realm Origins 0.5.7**, lê a personagem já criada: nome, idade, raça, profissão, assinatura escrita e desenho da assinatura. O adaptador é apenas de leitura e não altera a personagem, o dinheiro, a reputação ou o progresso. Se o Realm Origins estiver instalado e não houver personagem válida, a emissão fica bloqueada.
 
-Sem Chronicles, funciona com o nome e UUID reais da conta Minecraft. Os dados de RP e a assinatura ficam por preencher; não inventa uma personagem nem permite editar esses campos no menu.
+Sem Realm Origins, funciona com o nome e UUID reais da conta Minecraft. Os dados de RP e a assinatura ficam por preencher; não inventa uma personagem nem permite editar esses campos no menu.
 
 ## Consultar e mostrar
 
@@ -41,7 +41,7 @@ O adaptador opcional usa apenas `pt.realmtitles.api.TitlesApi.VERSION = 1` e `ac
 
 ## Segunda via e autenticidade
 
-Cada jogador tem **um documento ativo por mundo**, com identificador aleatório e número de série. Pedir uma segunda via na escrivaninha custa novamente papel e tinta e invalida o documento anterior e todas as suas cópias. Serve também para atualizar os dados depois de alterar a personagem no Chronicles.
+Cada jogador tem **um documento ativo por mundo**, com identificador aleatório e número de série. Pedir uma segunda via na escrivaninha custa novamente papel e tinta e invalida o documento anterior e todas as suas cópias. Serve também para atualizar os dados depois de alterar a personagem no Realm Origins.
 
 O servidor verifica o documento no seu registo. Alterar o nome, a descrição ou dados personalizados do item não altera a identidade que o menu apresenta. Um documento sem registo, de outro mundo ou substituído por uma segunda via aparece como inválido.
 
@@ -58,7 +58,7 @@ Os jogadores comuns podem fabricar a escrivaninha, emitir os seus documentos, co
 
 **Atualização 0.1.1:** instala a mesma versão do Realm Identity no servidor e em todos os clientes. O protocolo de rede passou para a versão 2; clientes 0.1.0 têm de ser atualizados. Documentos já emitidos continuam válidos e os dados do mundo não precisam de migração. Realm Titles é opcional e não é necessário para emitir ou ler documentos.
 
-Chronicles RP 0.5.2 é opcional; o intervalo declarado é `>=0.5.2 e <0.6`. Se instalado, requer também as dependências do próprio Chronicles. Contracts, Realm Council e Crown Ledger não são necessários para usar o Realm Identity.
+Realm Origins 0.5.7 é opcional; o intervalo declarado é `>=0.5.2 e <0.6`. Se instalado, requer também as dependências do próprio Realm Origins. Contracts, Realm Council e Crown Ledger não são necessários para usar o Realm Identity.
 
 Todas as escrivaninhas e dimensões usam `data/realm_identity.dat`, que guarda o selo do mundo, o próximo número de série e um documento atual por jogador. Inclui este ficheiro nas cópias de segurança do mundo. Se o registo estiver corrompido, o mod recusa substituí-lo silenciosamente por um registo vazio. A emissão verifica inventário e registo no thread do servidor e usa o mecanismo normal de persistência do Minecraft; não oferece uma transação de disco única durante uma falha abrupta do processo.
 
@@ -76,4 +76,4 @@ Todas as escrivaninhas e dimensões usam `data/realm_identity.dat`, que guarda o
 
 Na máquina cloud usa `python3 tools/cloud_gradle.py` em vez de `./gradlew`, mantendo o proxy e a verificação TLS. O domínio e o leitor de perfis podem ser testados sem Minecraft com `python3 tools/test_domain.py`.
 
-Os testes nativos e visuais são excluídos do JAR de produção. A publicação automatizada exige compilação, testes unitários, servidor independente, compatibilidade com os JARs publicados de Contracts/Realm Council/Crown Ledger e cliente visual aprovados. As capturas da interface usam dados de demonstração e uma assinatura de exemplo. A verificação isolada dos records do JAR original de Chronicles não equivale a iniciar o conjunto completo de Chronicles/Origins/Jupiter dentro do Minecraft.
+Os testes nativos e visuais são excluídos do JAR de produção. A publicação automatizada exige compilação, testes unitários, servidor independente, compatibilidade com os JARs publicados de Contracts/Realm Council/Crown Ledger e cliente visual aprovados. As capturas da interface usam dados de demonstração e uma assinatura de exemplo. A verificação isolada dos records do JAR original de Realm Origins não equivale a iniciar o conjunto completo de Realm Origins/Origins/Jupiter dentro do Minecraft.

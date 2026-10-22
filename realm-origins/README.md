@@ -1,12 +1,16 @@
 # Realm Origins — 0.5.7
 
+[English](README_EN.md) · [Descarregar JAR](../mod-pronto/realm-origins-0.5.7.jar) · [Descarregar ZIP](../mod-pronto/realm-origins-0.5.7.zip) · [Todas as imagens](../media/realm-origins/README.md)
+
+![Criação de personagem do Realm Origins](../media/realm-origins/0.5.7/realm-origins-03-creation-en.png)
+
 **Realm Origins** é o novo nome do Chronicles RP. A criação mantém o visual cinematográfico escuro e lilás, com quatro capítulos, skin em 3D, assinatura e boas-vindas. Depois de criar a personagem, **P abre novamente o livro original de pergaminho**, com Ficha, Feitos, História e Bolsa. O câmbio usa também o livro. A criação e as boas-vindas conservam o visual novo.
 
 A ocupação passa a ser escrita livremente: usa uma palavra de até 24 caracteres, com acentos e hífen permitidos, como Alquimista ou Guarda-real. Os botões Ferreiro, Mercador e Bardo são sugestões que preenchem o campo. A regra é validada no servidor, tanto na criação como na edição. As profissões antigas mantêm-se.
 
 Os restantes dados e regras mantêm-se. A confirmação mostra os fundos já guardados, sem sortear ou pagar dinheiro novamente.
 
-O identificador interno continua a ser `cronicasrp`, tal como os itens, dados, configuração e pacote Java. O protocolo passa a **8**, porque clientes antigos só reconheciam a lista fixa de ocupações. Atualiza servidor e todos os clientes para 0.5.7. Isto preserva os perfis, carteiras e integrações existentes. A pasta do projeto mantém o nome `chronicles-rp/`. O novo JAR **substitui** o Chronicles RP; não é um segundo mod para instalar ao lado dele.
+O identificador interno continua a ser `cronicasrp`, tal como os itens, dados, configuração e pacote Java. O protocolo passa a **8**, porque clientes antigos só reconheciam a lista fixa de ocupações. Atualiza servidor e todos os clientes para 0.5.7. Isto preserva os perfis, carteiras e integrações existentes. A pasta do projeto no GitHub é `realm-origins/`. O novo JAR **substitui** o Chronicles RP; não é um segundo mod para instalar ao lado dele.
 
 Personagens de fantasia e economia para Minecraft Java 1.21.1, NeoForge 21.1.256+ na série 21.1 e Java 21.
 
@@ -22,7 +26,7 @@ Faz uma cópia de segurança do mundo e coloca `realm-origins-0.5.7.jar` em `mod
 
 Esta integração usa a API da versão NeoForge de IAFEnvoy. O JAR declara Origins 0.3.2 como obrigatório e Origins: Classes 0.3 como opcional. Os downloads acima correspondem à combinação de referência; o estado das verificações desta versão está em `VALIDACAO.md`. Não precisas de instalar os JARs externos dentro do projeto IntelliJ: o Gradle carrega-os nas execuções de desenvolvimento.
 
-A [validação da versão 0.5.3 passou](https://github.com/ROCKABITS/Mods/actions/runs/38936862628): 66 testes unitários, 36 GameTests em cada uma de três combinações de mods e verificações no cliente real. Consulta [VALIDACAO.md](VALIDACAO.md) para os artefactos, o âmbito e os limites destes testes.
+A [validação da versão 0.5.7](https://github.com/ROCKABITS/Mods/actions/runs/39794991947) inclui 70 testes unitários, 38 GameTests em cada uma de três combinações e três execuções do cliente Minecraft real. Consulta [VALIDACAO.md](VALIDACAO.md) para os resultados, artefactos e limites.
 
 ## Nomes de personagem no mundo
 
@@ -45,9 +49,9 @@ Mantém-se a correção da definição de claustrofobia do Elytrian fornecida pe
 5. O servidor atribui a fortuna inicial uma única vez. A animação mostra esse resultado já guardado.
 6. Carrega em **P** para consultar a ficha. **Origins** abre a consulta de linhagem, classe e poderes. **Voltar** regressa ao livro ou ao rascunho. Depois das escolhas, o botão da linhagem também permite consultar esses dados.
 
-A linhagem já não é uma lista fixa de Humano, Elfo, Anão e Orc. Vem da origem selecionada no Origins e acompanha mudanças feitas pelo Orb of Origin ou pela administração. As origens personalizadas do servidor também aparecem; não é necessário alterar o código do Chronicles RP para cada raça. Os datapacks têm de ser compatíveis com este port do Origins: o formato é diferente do port Fabric.
+A linhagem já não é uma lista fixa de Humano, Elfo, Anão e Orc. Vem da origem selecionada no Origins e acompanha mudanças feitas pelo Orb of Origin ou pela administração. As origens personalizadas do servidor também aparecem; não é necessário alterar o código do Realm Origins para cada raça. Os datapacks têm de ser compatíveis com este port do Origins: o formato é diferente do port Fabric.
 
-A classe do Origins e a profissão de RP são campos separados. Por exemplo, podes ter a classe Warrior e ser Ferreiro no RP. A classe e os poderes são geridos pelo Origins. A profissão continua a ser escolhida no pergaminho e em Editar memórias. A origem económica — Humilde, Nobre, etc. — também permanece independente.
+A classe do Origins e a profissão de RP são campos separados. Por exemplo, podes ter a classe Warrior e ser Ferreiro no RP. A classe e os poderes são geridos pelo Origins. A ocupação pode ser escrita na criação e em Editar memórias. A origem económica — Humilde, Nobre, etc. — também permanece independente.
 
 Sem Origins: Classes, o mod continua a funcionar com Origins; a ficha mostra que o add-on de classes está ausente. Se o servidor tiver Classes, instala-o também nos clientes.
 
@@ -65,6 +69,10 @@ Vida, armadura, experiência, coordenadas, tempo de jogo e abates vêm do Minecr
 
 Em **P → Bolsa → Moedas, notas e câmbio**, converte saldo digital em dinheiro físico ou deposita-o de volta com troco exato.
 
+![Livro de personagem aberto pela tecla P](../media/realm-origins/0.5.7/realm-origins-07-profile-en.png)
+
+![Bolsa e saldo da personagem](../media/realm-origins/0.5.7/realm-origins-17-wallet-en.png)
+
 | Peças | Valores |
 | --- | --- |
 | Moedas de cêntimos | 1, 2, 5, 10, 20 e 50 |
@@ -75,11 +83,11 @@ Os valores usam cêntimos inteiros. Não há taxas nem receitas de sobrevivênci
 
 Comandos principais: `/rp ficha`, `/rp saldo`, `/rp destino`, `/rp cambio`, `/rp levantar 12,50`, `/rp depositar 7,25`, `/rp depositar tudo`, `/rp pagar Jogador 12,50`. Os aliases ingleses continuam disponíveis. Administração, com nível de operador 2: `/rp admin dar`, `reputacao`, `missao` e `medalha`.
 
-Menus, moedas e mensagens do Chronicles RP seguem o idioma do Minecraft: inglês, português de Portugal e português do Brasil. Os nomes das origens/classes usam as traduções fornecidas pelo Origins, pelos add-ons e pelos resource packs. Nomes, histórias e assinaturas escritos pelo jogador permanecem como foram escritos.
+Menus, moedas e mensagens do Realm Origins seguem o idioma do Minecraft: inglês, português de Portugal e português do Brasil. Os nomes das origens/classes usam as traduções fornecidas pelo Origins, pelos add-ons e pelos resource packs. Nomes, histórias e assinaturas escritos pelo jogador permanecem como foram escritos.
 
 ## Desenvolvimento
 
-Abre no IntelliJ a pasta `chronicles-rp`, que contém `build.gradle` e `gradlew.bat`. Usa JDK 21 tanto no projeto como no Gradle JVM. A primeira execução necessita de internet.
+Abre no IntelliJ a pasta `realm-origins`, que contém `build.gradle` e `gradlew.bat`. Usa JDK 21 tanto no projeto como no Gradle JVM. A primeira execução necessita de internet.
 
 ```powershell
 .\gradlew.bat runClient
@@ -88,9 +96,9 @@ Abre no IntelliJ a pasta `chronicles-rp`, que contém `build.gradle` e `gradlew.
 .\gradlew.bat clean build
 ```
 
-Para testar apenas com Origins, sem Classes, acrescenta `-PrpWithoutClasses` às execuções. O JAR final está em `build/libs/cronicasrp-0.5.4.jar`. Os GameTests e as suas origens de teste são excluídos do JAR, incluindo após uma compilação incremental.
+Para testar apenas com Origins, sem Classes, acrescenta `-PrpWithoutClasses` às execuções. O JAR final está em `build/libs/realm-origins-0.5.7.jar`. Os GameTests e as suas origens de teste são excluídos do JAR, incluindo após uma compilação incremental.
 
-Se já tens um projeto IntelliJ, substitui `build.gradle`, `gradle.properties` e a pasta `src` pelos desta versão. Mantém a tua pasta `run`, que contém mundos e configurações. No repositório, o projeto está em `chronicles-rp`; os ZIPs de instalação contêm o JAR pronto e não são necessários para importar o projeto.
+Se já tens um projeto IntelliJ, substitui `build.gradle`, `gradle.properties` e a pasta `src` pelos desta versão. Mantém a tua pasta `run`, que contém mundos e configurações. No repositório, o projeto está em `realm-origins`; os ZIPs de instalação contêm o JAR pronto e não são necessários para importar o projeto.
 
 As configurações de fortuna inicial continuam em `cronicasrp-server.toml`. Os dados de moedas, saldos e RP das versões anteriores mantêm a migração existente. Mundos convertidos de 0.3.0 ou anterior devem usar uma cópia anterior do mundo para regressar a essas versões.
 
