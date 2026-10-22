@@ -2,9 +2,28 @@
 
 Rework visual do Chronicles RP. Minecraft 1.21.1 / NeoForge 21.1.256 / Java 21, Origins (NeoForge) 0.3.2 e Jupiter 2.3.7; Origins: Classes 0.3 é opcional. Identificador interno `cronicasrp`, armazenamento e protocolo 7 mantidos.
 
-O desenvolvimento executou os 66 testes unitários e o cliente real com a nova criação, Origins/Classes, assinatura, confirmação, boas-vindas, quatro separadores do perfil e troca efetiva de 1 cêntimo entre carteira e inventário, voltando ao mesmo saldo e perfil. As capturas a 1600×900 e 854×480 são imagens do Minecraft, com verificação adicional de limites e sobreposição de controlos. As inspeções visuais corrigiram também o espaço entre textos e campos no modo compacto.
+**Aprovada.** A [execução 39703773699](https://github.com/ROCKABITS/Mods/actions/runs/39703773699), sobre o código [`4e7b298`](https://github.com/ROCKABITS/Mods/commit/4e7b2980796e7b467421f63a8a3316155096fffd), concluiu a compilação, testes e publicação. O commit de artefactos é [`4599cf5`](https://github.com/ROCKABITS/Mods/commit/4599cf5). O [manifesto de proveniência](../mod-pronto/realm-origins-0.5.5.build.json) regista as dependências reais, hashes e resultados.
 
-A publicação fica condicionada à execução completa e aos relatórios do workflow `build-chronicles-rp.yml`: produção sem fixtures, 66 JUnit, GameTests com Classes, sem Classes e com os doze companheiros publicados, nomes RP no cliente integrado e criação gráfica nos dois modos de Classes. O manifesto `realm-origins-0.5.5.build.json` regista o commit, execução, hashes e contagens efetivamente aprovadas. Os resultados desta publicação serão acrescentados após a execução; os resultados históricos abaixo não os substituem.
+| Verificação executada | Resultado |
+| --- | --- |
+| JUnit | 66 aprovados, sem falhas nem testes ignorados |
+| GameTests com Origins, Jupiter e Classes | 37 aprovados |
+| GameTests com Origins e Jupiter, sem Classes | 37 aprovados |
+| GameTests com os doze companheiros publicados | 37 aprovados |
+| Cliente real com companheiros | Nomes RP acima da cabeça, TAB, chat normal e perfil aprovados |
+| Cliente real de criação com Classes | Fluxo gráfico completo aprovado |
+| Cliente real de criação sem Classes | Mesmo fluxo aprovado, com ausência do add-on verificada |
+
+São 37 casos nativos em três combinações, totalizando 111 execuções. Os clientes verificaram Origins a partir do botão da linhagem, regresso ao mesmo rascunho, quatro capítulos, assinatura desenhada, confirmação, boas-vindas, quatro separadores do perfil, traduções EN/PT e janelas de 1600×900 e 854×480. O teste efetua um levantamento e depósito de 1 cêntimo, confirmando o mesmo saldo e perfil no final. Os controlos são verificados quanto a limites e sobreposições; as capturas foram também inspecionadas visualmente. A repetição das boas-vindas e o botão/Enter para entrar no mundo não alteram os fundos nem a identidade.
+
+A [galeria](../media/realm-origins/0.5.5/README.md) contém 21 capturas reais e o novo ícone. Os dois resultados gráficos da criação, com e sem Classes, constam da proveniência/artefacto de validação. As 36 classes comparadas de dados de domínio, carteiras, attachments e pacotes no JAR publicado são byte a byte iguais às de `cronicasrp-0.5.4.jar`. O identificador interno e o protocolo 7 permanecem.
+
+Os downloads públicos foram obtidos novamente e os respetivos hashes, conteúdo do ZIP, metadados do JAR e todas as 22 imagens foram confirmados após a publicação. A distribuição exclui fixtures, GameTests e automatismos gráficos; mantém os avisos de licença dos recursos.
+
+| Artefacto publicado | Bytes | SHA-256 |
+| --- | --- | --- |
+| [realm-origins-0.5.5.jar](https://github.com/ROCKABITS/Mods/raw/refs/heads/main/mod-pronto/realm-origins-0.5.5.jar) | 6 437 734 | `f83029a3a2d966de8c11e2a2673751d709b942f25b074baadb75b4f9f3536dc0` |
+| [realm-origins-0.5.5.zip](https://github.com/ROCKABITS/Mods/raw/refs/heads/main/mod-pronto/realm-origins-0.5.5.zip) | 6 425 445 | `c2efdcfc37d37dfafe98ee3e42a037ddf6fa3912150279dc5494c14ae91cddb7` |
 
 Âmbito: servidor integrado real para as interfaces, servidor nativo para GameTests; não é um ensaio manual de vários clientes autenticados. A presença dos doze companheiros verifica carregamento e os fluxos de RP exercitados, não todas as funcionalidades de cada mod. O chat da sessão de desenvolvimento não dispõe de certificado autenticado. A renderização usa software e não certifica todas as GPUs, escalas de interface, resource packs ou mods gráficos. As interfaces nativas de poderes e seleção pertencem ao mod externo Origins e são preservadas.
 
