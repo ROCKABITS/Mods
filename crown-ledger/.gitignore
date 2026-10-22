@@ -12,3 +12,5 @@ runs/
 compat-libs/
 
 *.log
+
+run-treasury-qa/

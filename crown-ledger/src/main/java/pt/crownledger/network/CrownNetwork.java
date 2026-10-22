@@ -8,7 +8,11 @@ import pt.crownledger.service.CrownService;
 public final class CrownNetwork {
     private CrownNetwork() {}
     public static void register(RegisterPayloadHandlersEvent event) {
-        var registrar = event.registrar("3");
+        var registrar = event.registrar("4");
+        registrar.playToServer(GovernancePackets.Request.TYPE,GovernancePackets.Request.CODEC,(packet,context)->
+                context.enqueueWork(()->{if(context.player() instanceof ServerPlayer player)pt.crownledger.service.GovernanceService.request(player,packet.operation(),packet.json());}));
+        registrar.playToClient(GovernancePackets.State.TYPE,GovernancePackets.State.CODEC,(packet,context)->
+                context.enqueueWork(()->pt.crownledger.client.GovernanceClient.receive(packet.json())));
         registrar.playToServer(CrownPackets.Action.TYPE, CrownPackets.Action.CODEC, (packet, context) -> {
             if (context.player() instanceof ServerPlayer player)
                 CrownService.action(player, packet.operation(), packet.json());

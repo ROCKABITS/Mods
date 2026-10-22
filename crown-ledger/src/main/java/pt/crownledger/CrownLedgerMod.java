@@ -25,12 +25,13 @@ public final class CrownLedgerMod {
     private static final DeferredRegister<CreativeModeTab> TABS = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, ID);
     static {
         TABS.register("crown_ledger", () -> CreativeModeTab.builder()
-                .title(Component.literal("Crown Ledger"))
+                .title(Component.literal("Realm Treasury"))
                 .icon(() -> new ItemStack(BlockRegistry.CROWN_CHEST_ITEM.get()))
                 .displayItems((parameters, output) -> output.accept(BlockRegistry.CROWN_CHEST_ITEM.get()))
                 .build());
     }
-    public CrownLedgerMod(IEventBus bus) {
+    public CrownLedgerMod(IEventBus bus, net.neoforged.fml.ModContainer container) {
+        container.registerConfig(net.neoforged.fml.config.ModConfig.Type.SERVER,GovernanceConfig.SPEC);
         BlockRegistry.register(bus);
         TABS.register(bus);
         bus.addListener(CrownNetwork::register);
@@ -53,15 +54,15 @@ public final class CrownLedgerMod {
                         .executes(context -> {
                             var target = EntityArgument.getPlayer(context, "player");
                             CrownService.appoint(context.getSource(), target);
-                            context.getSource().sendSuccess(() -> Component.literal("Crown Ledger: " + target.getGameProfile().getName()), true);
+                            context.getSource().sendSuccess(() -> Component.literal("Realm Treasury: " + target.getGameProfile().getName()), true);
                             return 1;
                         }))));
     }
     private static void started(ServerStartedEvent event) { CrownService.start(event.getServer()); }
-    private static void stopped(ServerStoppedEvent event) { CrownService.stop(event.getServer()); }
-    private static void tick(ServerTickEvent.Post event) { CrownService.tick(event.getServer()); }
+    private static void stopped(ServerStoppedEvent event) { CrownService.stop(event.getServer());pt.crownledger.service.GovernanceService.stop(event.getServer()); }
+    private static void tick(ServerTickEvent.Post event) { CrownService.tick(event.getServer());pt.crownledger.service.GovernanceService.tick(event.getServer()); }
     private static void login(PlayerEvent.PlayerLoggedInEvent event) {
-        if (event.getEntity() instanceof net.minecraft.server.level.ServerPlayer player) CrownService.login(player);
+        if (event.getEntity() instanceof net.minecraft.server.level.ServerPlayer player) {CrownService.login(player);pt.crownledger.service.GovernanceService.login(player);}
     }
-    private static void logout(PlayerEvent.PlayerLoggedOutEvent event) { CrownService.logout(event.getEntity().getUUID()); }
+    private static void logout(PlayerEvent.PlayerLoggedOutEvent event) { CrownService.logout(event.getEntity().getUUID());pt.crownledger.service.GovernanceService.logout(event.getEntity().getUUID()); }
 }

@@ -1,3 +1,7 @@
+# Realm Treasury 0.3.0
+
+See [current validation scope and reproduction](VALIDACAO-0.3.0.md). The material below records earlier Crown Ledger releases.
+
 # Validação — Crown Ledger 0.2.6
 
 [Execução aprovada 39458831632](https://github.com/ROCKABITS/Mods/actions/runs/39458831632), código [`e67578e`](https://github.com/ROCKABITS/Mods/commit/e67578e5d38f8e450023f3f91b839b7de916aaf0). **Publicação concluída; downloads públicos verificados por SHA-256.**

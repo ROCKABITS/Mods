@@ -354,7 +354,7 @@ public final class CrownVisualQA {
 
     private static final class ChestPreview extends Screen {
         int frames;
-        ChestPreview() { super(Component.literal("Crown Ledger")); }
+        ChestPreview() { super(Component.literal("Realm Treasury")); }
         @Override public void renderBackground(GuiGraphics g, int mx, int my, float tick) {}
         @Override public void render(GuiGraphics g, int mx, int my, float tick) {
             g.fill(0, 0, width, height, 0xFF1D2822); g.fill(36, 24, width - 36, 25, 0xFF8C7549); g.fill(36, height - 25, width - 36, height - 24, 0xFF8C7549);

@@ -40,7 +40,7 @@ public final class CrownIncomeApi {
         thread(server);Receipt receipt=receipt(id,currency,amount,payer,memo);TreasuryData data=TreasuryData.get(server);
         if(data.income.contains(receipt)){verifyDurable(server,receipt);return false;}
         IncomeLedger nextIncome=data.income.add(receipt);Treasury next=candidate(data,receipt);
-        TreasuryData staged=new TreasuryData();staged.treasury=next;staged.income=nextIncome;
+        TreasuryData staged=new TreasuryData();staged.treasury=next;staged.income=nextIncome;staged.governance=data.governance.copy();
         CompoundTag root=new CompoundTag();root.put("data",staged.save(new CompoundTag(),server.registryAccess()));NbtUtils.addCurrentDataVersion(root);
         Path file=server.getWorldPath(LevelResource.ROOT).resolve("data/"+TreasuryData.STORAGE_KEY+".dat");
         AtomicBoolean moved=new AtomicBoolean();AtomicReference<Throwable> failure=new AtomicReference<>();

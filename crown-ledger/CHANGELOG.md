@@ -1,3 +1,14 @@
+# Realm Treasury 0.3.0 — Public Votes and Kingdom Benefits
+
+- Renamed Crown Ledger to Realm Treasury, preserving the kingdomtreasury mod ID, existing blocks, accounts, policies, contracts and public APIs.
+- Added President-announced secret yes/no votes, opened from the physical treasury chest, with a non-blocking HUD and rebindable F8 ballot shortcut.
+- Added one mutable vote per eligible online citizen, participation quorum, strict-majority approval, tie rejection, cooldown and public aggregate decision history.
+- Added treasury-funded Harvest, Public Works, Feast and Knowledge benefits, with administrator-defined prices, duration, strengths and concurrency limits.
+- Reserved costs before announcement; rejected, inquorate or emergency-cancelled proposals return their reserved funds exactly once.
+- Added durable atomic ballots and financial state, real-time expiry, restart recovery and preservation of votes during external tax receipts.
+- Added medieval parchment interfaces and English/Portuguese translations.
+- Migrated treasury storage to format 7 and network protocol to 4. Update both clients and server; replace the old Crown Ledger JAR.
+
 # Crown Ledger 0.2.7 — Wedding Fees
 
 - Added CrownMarriageApi v1 for wedding fees already reserved by Realm Marriage.

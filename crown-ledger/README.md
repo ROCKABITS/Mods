@@ -1,17 +1,42 @@
-> **0.2.7:** acrescenta a receção idempotente da taxa de casamento do Realm Marriage. O dinheiro já foi reservado pelos noivos; entra apenas uma vez no tesouro e aparece no histórico como taxa de casamento. Mantém o formato de dados 6 e as integrações anteriores.
+# Realm Treasury 0.3.0 — Tesouro e votações do reino
 
-# Crown Ledger — Tesouro da Coroa
+O **Crown Ledger passa a chamar-se Realm Treasury**. Mantém saldos, impostos, salários, contratos públicos e recibos existentes e acrescenta votações secretas no ecrã e benefícios financiados pelo tesouro.
 
-A versão **0.2.6** recebe o imposto das **quests diárias do Contracts & Bounties 0.4.0**, com recibos idempotentes e categoria fiscal no histórico. Mantém as integrações de serviços, Villagers, Casino, justiça, mercados, contratos e salários. O formato 6 preserva as contas e recibos existentes. A política das quests é gerida no mural, por um Presidente empossado ou administrador, dentro dos limites configurados.
+Minecraft **1.21.1**, **NeoForge 21.1.256+**, **Java 21**. O mesmo JAR é necessário nos clientes e no servidor, incluindo LAN. Substitui o Crown Ledger anterior; ambos usam o identificador `kingdomtreasury` e não podem coexistir. A pasta de código `crown-ledger/`, os pacotes Java e as APIs antigas conservam os nomes para compatibilidade.
 
-Tesouro público para Minecraft **1.21.1**, **NeoForge 21.1.256+** e **Java 21**. Instala o mesmo JAR no servidor e nos clientes. O identificador técnico é `kingdomtreasury`.
+[Download JAR](https://github.com/ROCKABITS/Mods/raw/refs/heads/main/mod-pronto/realm-treasury-0.3.0.jar) · [ZIP](https://github.com/ROCKABITS/Mods/raw/refs/heads/main/mod-pronto/realm-treasury-0.3.0.zip) · [Galeria](../media/realm-treasury/README.md) · [Validação](VALIDACAO-0.3.0.md) · [CurseForge](CURSEFORGE.md)
+
+## Votações e benefícios
+
+No **Cofre da Coroa**, o Presidente empossado abre **Votações públicas → Propor**. Pode anunciar uma consulta Sim/Não, sem despesa, ou propor um benefício para todos os jogadores em sobrevivência. Não existem novos cargos nem outro bloco.
+
+A proposta aparece num aviso discreto no topo do ecrã. **F8**, configurável nos controlos, abre o boletim. Não abre menus automaticamente nem bloqueia movimentos. O aviso grande recolhe após 12 segundos; fechar o boletim dispensa o aviso nessa ligação. O dinheiro e os resultados são sempre decididos no servidor.
+
+Cada jogador online e fora de espectador no momento do anúncio tem um voto secreto e pode mudá-lo até ao prazo. Quem entrar depois espera pela próxima votação; quem voltar a entrar com o mesmo UUID conserva o voto. Não aparecem escolhas individuais nem resultados parciais. A participação é pública e os totais Sim/Não são publicados no fim.
+
+Por defeito, a votação dura **3 minutos**, exige **50% de participação**, arredondada para cima, e aprova com mais Sim do que Não. Empates rejeitam. Há **10 minutos de intervalo após o prazo** e uma votação em curso de cada vez.
+
+| Benefício | Efeito inicial |
+| --- | --- |
+| Colheita Próspera | Mais 20% de oportunidade de crescimento nos eventos elegíveis de culturas. |
+| Obras do Reino | Mineração em sobrevivência 20% mais rápida, sem substituir poções. |
+| Mesa Farta | Menos 20% de desgaste da fome nas atividades de sobrevivência. |
+| Saber do Reino | Mais 20% de XP recebida; frações são distribuídas probabilisticamente. |
+
+O custo inicial é **2 000 €** com a moeda Chronicles ou **400 esmeraldas** no modo independente, por benefício. Os valores são alternativas conforme a moeda fiscal. O custo é retirado do saldo disponível e reservado ao anunciar: não pode pagar salários ou contratos ao mesmo tempo. Se for rejeitado ou não tiver participação suficiente, volta ao tesouro. Ao aprovar, é consumido como despesa pública, sem pagamento à carteira do Presidente. Consultas gerais nunca consomem dinheiro.
+
+Os benefícios duram **24 horas reais**, contam a partir do prazo da votação e continuam a expirar com o mundo fechado. Até **dois benefícios diferentes** podem coexistir. Não se acumula nem renova o mesmo benefício enquanto estiver ativo. Preço, duração, potência, quórum, eleitores e prazo ficam fixados ao anunciar. Alterar as configurações não muda propostas existentes.
+
+O administrador configura estes valores em `serverconfig/kingdomtreasury-server.toml`, dentro do mundo, e pode desativar categorias. Tem acesso de emergência para propor e anular através do cofre, com histórico; a anulação devolve a reserva. O Presidente não altera preços nem limites. A mudança de mandato não apaga votos existentes; só o Presidente atual pode criar novas propostas.
+
+O menu permite consultar benefícios ativos, tempo restante e as últimas 64 decisões. As configurações iniciais não criam dinheiro: o reino precisa de receitas para financiar os benefícios.
 
 ## Instalação e primeiro uso
 
-1. Antes de atualizar um mundo existente, faz uma cópia de segurança do mundo completo e dos perfis do Realm Origins. Esta versão migra o registo do tesouro para o formato 6; voltar ao JAR antigo exige restaurar a cópia anterior à atualização.
-2. Coloca `crown-ledger-0.2.6.jar` na pasta `mods` de cada cliente e do servidor. Se usas Realm Markets, atualiza também para **Realm Markets 0.2.1+** em todos eles; substitui os JARs antigos e não deixes duas versões do mesmo mod.
+1. Antes de atualizar um mundo existente, faz uma cópia de segurança do mundo completo e dos perfis do Realm Origins. Esta versão migra o registo do tesouro para o formato 7; voltar ao JAR antigo exige restaurar a cópia anterior à atualização.
+2. Coloca `realm-treasury-0.3.0.jar` na pasta `mods` de cada cliente e do servidor. Se usas Realm Markets, atualiza também para **Realm Markets 0.2.1+** em todos eles; substitui os JARs antigos e não deixes duas versões do mesmo mod.
 3. Para integrar os restantes sistemas, usa **Contracts & Bounties 0.4.0+**, **Realm Council 0.2.2+** e, opcionalmente, **Realm Origins 0.5.7** com as suas dependências.
-4. Fabrica o **Cofre da Coroa** e clica nele com o botão direito. Também aparece na aba criativa **Crown Ledger** e na pesquisa.
+4. Fabrica o **Cofre da Coroa** e clica nele com o botão direito. Também aparece na aba criativa **Realm Treasury** e na pesquisa.
 
 Receita, de cima para baixo:
 
@@ -21,7 +46,7 @@ Ouro        Baú         Ouro
 Tábuas      Tábuas      Tábuas
 ```
 
-Todos os cofres e dimensões consultam o mesmo tesouro do servidor. Partir um cofre devolve o bloco; o saldo, os salários e o histórico pertencem ao reino e permanecem guardados. Não existem atalhos de teclado nem comandos para abrir o menu à distância.
+Todos os cofres e dimensões consultam o mesmo tesouro do servidor. Partir um cofre devolve o bloco; o saldo, os salários e o histórico pertencem ao reino e permanecem guardados. A gestão financeira e a criação de propostas exigem o cofre. **F8** abre apenas o boletim público de voto e os benefícios, sem permitir gastar à distância.
 
 ## Quem pode fazer o quê
 
@@ -58,7 +83,7 @@ A regra atual é verificada pelo servidor ao concluir cada compra. Se o governan
 
 O imposto fica reservado no registo do mercado até ser recolhido automaticamente para o tesouro, normalmente em até um segundo de servidor ativo ou ao atualizar o cofre. Se a transferência estiver temporariamente indisponível ou o tesouro atingir o limite de saldo, a quantia permanece no mercado e volta a ser tentada; não é criada moeda nem perdida a reserva. As moedas mantêm-se separadas. O recebimento de impostos pode financiar salários pendentes.
 
-Só uma venda paga gera imposto. Abastecer, retirar artigos, recolher ganhos ou transferir o imposto para o tesouro não volta a tributar esse dinheiro. Os ganhos existentes antes da atualização permanecem intactos. Sem Crown Ledger, Realm Markets continua a funcionar sem imposto; se ambos estiverem instalados mas a integração não estiver disponível, novas compras são suspensas até ser recuperada, mantendo disponíveis as operações de gestão e recolha.
+Só uma venda paga gera imposto. Abastecer, retirar artigos, recolher ganhos ou transferir o imposto para o tesouro não volta a tributar esse dinheiro. Os ganhos existentes antes da atualização permanecem intactos. Sem Realm Treasury, Realm Markets continua a funcionar sem imposto; se ambos estiverem instalados mas a integração não estiver disponível, novas compras são suspensas até ser recuperada, mantendo disponíveis as operações de gestão e recolha.
 
 ## Imposto do casino — 0.2.3
 
@@ -74,7 +99,7 @@ Atualiza Casino e Crown no servidor e em todos os clientes. Sem a API desta vers
 
 Realm Economy 0.4.0 substitui Realm Villager Economy. A Mesa da Economia reúne preços de referência, reparações, combinações, nomes, encantamentos, ferraria, poções e períodos de beacon. O Presidente aprova preços e taxas e a administração define limites e ativação.
 
-Cada pagamento envia apenas o imposto público ao Crown, com moeda Realm Origins e recibo ligado ao serviço. O preço base é retirado da economia. As decisões económicas têm recibos sem dinheiro, com os valores anteriores e novos; não criam fundos nem pagam salários. As APIs de Villagers, casino e justiça permanecem compatíveis. O formato 6 lê os formatos 1–5 e conserva os recibos antigos.
+Cada pagamento envia apenas o imposto público ao Crown, com moeda Realm Origins e recibo ligado ao serviço. O preço base é retirado da economia. As decisões económicas têm recibos sem dinheiro, com os valores anteriores e novos; não criam fundos nem pagam salários. As APIs de Villagers, casino e justiça permanecem compatíveis. O formato 7 lê os formatos 1–5 e conserva os recibos antigos.
 
 ## Compras aos aldeões — 0.2.4
 
@@ -96,7 +121,7 @@ O governante define a reputação necessária para publicar contratos particular
 
 Sem Realm Origins, a moeda normal é a esmeralda inteira. Com Realm Origins, os valores digitais usam cêntimos e o perfil original do jogador. Cada moeda tem saldo e créditos separados; não existe conversão automática. O separador de donativos permite escolher a moeda. Nas regras, o governante pode escolher a moeda fiscal; mudar essa escolha repõe os campos de salário e imposto fixo em zero, sem converter saldos nem créditos anteriores. Os pagamentos de personagens offline ficam pendentes, sem editar os seus ficheiros de perfil.
 
-O ficheiro `data/crown_ledger.dat` guarda regras, saldo disponível, salários reservados, atividade, ciclo pendente e os últimos 256 movimentos, incluindo receitas de imposto de mercado. Os contratos usam também `data/contracts_ledger.dat`; as bancas e os impostos ainda reservados usam `data/realm_markets.dat`. Os recibos judiciais são guardados no mesmo ficheiro que o saldo da tesouraria e não dependem da rotação dos últimos movimentos. O formato 6 migra automaticamente os formatos 1, 2, 3, 4 e 5, conservando valores, regras e recibos; mundos anteriores ao formato 4 iniciam a taxa do casino a zero. As cópias de segurança devem incluir o mundo completo e os perfis do Realm Origins. As transferências entre mods são verificadas no mesmo thread do servidor. Os pagamentos judiciais usam gravações confirmadas e recibos únicos para conciliar ficheiros separados; as restantes operações mantêm os mecanismos existentes.
+O ficheiro `data/crown_ledger.dat` guarda regras, saldo disponível, salários reservados, atividade, ciclo pendente e os últimos 256 movimentos, incluindo receitas de imposto de mercado. Os contratos usam também `data/contracts_ledger.dat`; as bancas e os impostos ainda reservados usam `data/realm_markets.dat`. Os recibos judiciais são guardados no mesmo ficheiro que o saldo da tesouraria e não dependem da rotação dos últimos movimentos. O formato 7 migra automaticamente os formatos 1, 2, 3, 4 e 5, conservando valores, regras e recibos; mundos anteriores ao formato 4 iniciam a taxa do casino a zero. As cópias de segurança devem incluir o mundo completo e os perfis do Realm Origins. As transferências entre mods são verificadas no mesmo thread do servidor. Os pagamentos judiciais usam gravações confirmadas e recibos únicos para conciliar ficheiros separados; as restantes operações mantêm os mecanismos existentes.
 
 [Changelog](CHANGELOG.md) · [Resultados e limites da validação](VALIDACAO.md) · [JAR](../mod-pronto/crown-ledger-0.2.5.jar) · [ZIP](../mod-pronto/crown-ledger-0.2.5.zip) · [Imagens](../media/crown-ledger/0.2.5/README.md).
 
@@ -124,4 +149,4 @@ A suíte completa do Laws & Justice comprovou os débitos na carteira real do Re
 
 Laws & Justice 0.4.0 envia multas e fianças já pagas para a tesouraria na moeda original. Cada transferência guarda um recibo único no mesmo ficheiro que o saldo. Repetir o recibo, incluindo após reiniciar um mundo LAN, não cria outra entrada de dinheiro. Se a gravação ou o limite de saldo impedir a transferência, o tribunal conserva os fundos até poder entregá-los.
 
-A atualização migra automaticamente o formato 1 ou 2 para o formato 6, conservando as contas, os impostos e os salários. Usa Crown Ledger 0.2.5 no servidor e em todos os clientes. Realm Markets 0.2.1 continua compatível. A API é exclusiva do servidor e não dá aos clientes uma forma de criar dinheiro.
+A atualização migra automaticamente o formato 1 ou 2 para o formato 7, conservando as contas, os impostos e os salários. Usa Crown Ledger 0.2.5 no servidor e em todos os clientes. Realm Markets 0.2.1 continua compatível. A API é exclusiva do servidor e não dá aos clientes uma forma de criar dinheiro.

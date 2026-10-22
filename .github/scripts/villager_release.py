@@ -16,7 +16,7 @@ ROOT = Path(__file__).resolve().parents[2]
 STATE = ROOT / 'realm-villager-economy/build/villager-release'
 # project: mod ID, artifact basename, native property, minimum existing JUnit count
 PROJECTS = {'realm-villager-economy': ('realmvillagereconomy','realm-villager-economy','villagerGameTests',9),
-            'crown-ledger': ('kingdomtreasury','crown-ledger','crownGameTests',54)}
+            'crown-ledger': ('kingdomtreasury','realm-treasury','crownGameTests',54)}
 WRAPPER_SHA = '423cb469ccc0ecc31f0e4e1c309976198ccb734cdcbb7029d4bda0f18f57e8d9'
 DISTRIBUTION_SHA = '72f44c9f8ebcb1af43838f45ee5c4aa9c5444898b3468ab3f4af7b6076c5bc3f'
 COMPANION_PINS = {

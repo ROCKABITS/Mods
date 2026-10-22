@@ -15,7 +15,7 @@ import economy_release as common
 ROOT=common.ROOT
 STATE=ROOT/'contracts-bounties/build/daily-release'
 PROJECTS={'contracts-bounties':('contracts','contracts-bounties','contractGameTests',82),
-          'crown-ledger':('kingdomtreasury','crown-ledger','crownGameTests',59)}
+          'crown-ledger':('kingdomtreasury','realm-treasury','crownGameTests',59)}
 COMPANIONS={k:v for k,v in common.COMPANION_PINS.items()
             if not k.startswith(('contracts-bounties-','realm-notifications-'))}
 COMPANIONS.update({

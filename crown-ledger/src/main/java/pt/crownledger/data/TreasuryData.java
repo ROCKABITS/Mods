@@ -28,6 +28,7 @@ public final class TreasuryData extends SavedData {
     public static final String STORAGE_KEY = "crown_ledger";
     public Treasury treasury = new Treasury();
     public IncomeLedger income = new IncomeLedger();
+    public pt.crownledger.domain.Governance governance = new pt.crownledger.domain.Governance();
 
     public static TreasuryData get(MinecraftServer server) {
         return server.overworld().getDataStorage().computeIfAbsent(new SavedData.Factory<>(() -> {
@@ -41,7 +42,7 @@ public final class TreasuryData extends SavedData {
     public static TreasuryData load(CompoundTag tag, HolderLookup.Provider lookup) {
         type(tag, "version", Tag.TAG_INT);
         int version = tag.getInt("version");
-        if (version != 1 && version != 2 && version != 3 && version != 4 && version != 5 && version != 6) throw new IllegalStateException("Unsupported Crown Ledger storage version");
+        if (version < 1 || version > 7) throw new IllegalStateException("Unsupported Realm Treasury storage version");
         type(tag, "policy", Tag.TAG_COMPOUND);
         type(tag, "periodStartedAt", Tag.TAG_LONG);
         type(tag, "nextCycleAt", Tag.TAG_LONG);
@@ -104,13 +105,26 @@ public final class TreasuryData extends SavedData {
             }
             result.income=new IncomeLedger(receipts);
         }else if(tag.contains("incomeReceipts"))throw new IllegalStateException("Income receipts cannot be loaded as an older treasury format");
-        if (version < 6) result.setDirty();
+        if(version>=7 || tag.contains("governance")) {
+            type(tag,"governance",Tag.TAG_BYTE_ARRAY);
+            byte[] bytes=tag.getByteArray("governance");
+            if(bytes.length<2 || bytes.length>2_000_000)throw new IllegalStateException("Invalid governance data size");
+            try {
+                String json=java.nio.charset.StandardCharsets.UTF_8.newDecoder().decode(java.nio.ByteBuffer.wrap(bytes)).toString();
+                var snapshot=new com.google.gson.Gson().fromJson(json,pt.crownledger.domain.Governance.Snapshot.class);
+                result.governance=new pt.crownledger.domain.Governance(java.util.Objects.requireNonNull(snapshot));
+                if(version<7 && !result.governance.snapshot().equals(new pt.crownledger.domain.Governance().snapshot()))
+                    throw new IllegalStateException("Funded votes require treasury format 7");
+            } catch(java.nio.charset.CharacterCodingException|RuntimeException error){throw new IllegalStateException("Cannot recover governance data",error);}
+        }
+        if (version < 7) result.setDirty();
         return result;
     }
 
     @Override public CompoundTag save(CompoundTag tag, HolderLookup.Provider lookup) {
         Treasury.Snapshot saved = treasury.snapshot();
-        tag.putInt("version", 6);
+        tag.putInt("version", 7);
+        tag.putByteArray("governance",new com.google.gson.Gson().toJson(governance.snapshot()).getBytes(java.nio.charset.StandardCharsets.UTF_8));
         ListTag receipts=new ListTag();
         income.receipts().values().forEach(receipt->{CompoundTag entry=new CompoundTag();entry.putUUID("id",receipt.id());entry.putString("currency",receipt.currency().name());entry.putLong("amount",receipt.amount());entry.putUUID("payer",receipt.payer());entry.putString("memo",receipt.memo());receipts.add(entry);});
         tag.put("incomeReceipts",receipts);
@@ -204,5 +218,28 @@ public final class TreasuryData extends SavedData {
     }
     private static void uuid(CompoundTag tag, String key) {
         if (!tag.hasUUID(key)) throw new IllegalStateException("Invalid treasury UUID: " + key);
+    }
+
+    /** Ballots, escrow, public balances and prior income receipts reach disk as a single ordered atomic replacement. */
+    public void commitGovernance(MinecraftServer server,Treasury next,pt.crownledger.domain.Governance nextGovernance) {
+        if(server==null || !server.isSameThread())throw new IllegalStateException("Treasury mutation requires server thread");
+        TreasuryData staged=new TreasuryData();staged.treasury=next;staged.income=income;staged.governance=nextGovernance;
+        CompoundTag root=new CompoundTag();root.put("data",staged.save(new CompoundTag(),server.registryAccess()));net.minecraft.nbt.NbtUtils.addCurrentDataVersion(root);
+        var file=server.getWorldPath(LevelResource.ROOT).resolve("data/"+STORAGE_KEY+".dat");
+        var moved=new java.util.concurrent.atomic.AtomicBoolean();var failure=new java.util.concurrent.atomic.AtomicReference<Throwable>();
+        net.neoforged.neoforge.common.IOUtilities.withIOWorker(()->{
+            java.nio.file.Path temporary=null;
+            try {
+                Files.createDirectories(file.getParent());temporary=Files.createTempFile(file.getParent(),"realm-vote-",".tmp");
+                net.minecraft.nbt.NbtIo.writeCompressed(root,temporary);
+                try(var channel=java.nio.channels.FileChannel.open(temporary,java.nio.file.StandardOpenOption.WRITE)){channel.force(true);}
+                Files.move(temporary,file,java.nio.file.StandardCopyOption.ATOMIC_MOVE,java.nio.file.StandardCopyOption.REPLACE_EXISTING);moved.set(true);
+                if(!System.getProperty("os.name","").toLowerCase(java.util.Locale.ROOT).contains("win"))
+                    try(var directory=java.nio.channels.FileChannel.open(file.getParent(),java.nio.file.StandardOpenOption.READ)){directory.force(true);}
+            }catch(Throwable error){failure.set(error);}finally{if(temporary!=null)try{Files.deleteIfExists(temporary);}catch(java.io.IOException ignored){}}
+        });
+        net.neoforged.neoforge.common.IOUtilities.waitUntilIOWorkerComplete();
+        if(moved.get()){treasury=next;governance=nextGovernance;setDirty(false);}
+        if(failure.get()!=null||!moved.get())throw new IllegalStateException("realm.treasury.error.persistence",failure.get());
     }
 }

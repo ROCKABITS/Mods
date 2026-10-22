@@ -25,7 +25,7 @@ PROJECTS = {
     'realm-origins': ('cronicasrp', 'realm-origins', 'rpGameTests', 70),
     'contracts-bounties': ('contracts', 'contracts-bounties', 'contractGameTests', 46),
     'realm-council': ('realmcouncil', 'realmcouncil', 'rpGameTests', 49),
-    'crown-ledger': ('kingdomtreasury', 'crown-ledger', 'crownGameTests', 46),
+    'crown-ledger': ('kingdomtreasury', 'realm-treasury', 'crownGameTests', 46),
     'realm-markets': ('realmmarkets', 'realm-markets', 'marketGameTests', 45),
     'realm-rewards': ('realmrewards', 'realm-rewards', 'rewardsGameTests', 12),
     'realm-notifications': ('realmnotifications', 'realm-notifications', 'notificationsGameTests', 8),

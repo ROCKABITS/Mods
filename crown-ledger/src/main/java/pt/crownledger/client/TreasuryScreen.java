@@ -154,6 +154,7 @@ public final class TreasuryScreen extends Screen {
 
     private void initOverview() {
         button(x + 12, y + h - 35, 83, "refresh", () -> send("snapshot", new JsonObject()));
+        button(x + 100, y + h - 35, manager() && bool(state, "pendingPayroll") ? Math.max(36, Math.min(112, w - 261)) : Math.min(112, w - 110), "public_votes", GovernanceClient::open);
         if (manager() && bool(state, "pendingPayroll")) {
             var cancel = button(x + w - 157, y + h - 35, 145, "cancel_payroll", () -> send("cancelPayroll", new JsonObject()));
             cancel.active = !waiting;

@@ -3,10 +3,13 @@ loaderVersion="[4,)"
 license="All Rights Reserved"
 [[mods]]
 modId="kingdomtreasury"
-version="0.2.7"
-displayName="Crown Ledger"
+version="0.3.0"
+displayName="Realm Treasury"
 authors="ROCKABITS"
-description='''A physical crown treasury with public accounts, elected ruler controls, configurable taxes, funded salaries and optional public contracts.'''
+logoFile="realm-treasury.png"
+description='''A physical realm treasury with taxes, funded salaries, public contracts, secret public votes and treasury-funded benefits. Replaces Crown Ledger while preserving its accounts and integrations.'''
+[[mixins]]
+config="realm-treasury.mixins.json"
 [[dependencies.kingdomtreasury]]
 modId="neoforge"
 type="required"

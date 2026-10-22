@@ -14,7 +14,8 @@ public final class Treasury {
     public static final int MAX_HISTORY = 256;
     public enum Currency { EMERALD, CHRONICLES }
     public enum Kind { DEPOSIT, CONTRACT_FUNDING, CONTRACT_RETURN, TAX_COLLECTED, PAYROLL_ALLOCATED,
-        SALARY_CLAIM, PAYROLL_CANCELLED, POLICY_CHANGED, MANAGER_CHANGED, MARKET_TAX, JUSTICE_INCOME, CASINO_TAX, VILLAGER_TAX, VILLAGER_POLICY, ECONOMY_TAX, ECONOMY_POLICY }
+        SALARY_CLAIM, PAYROLL_CANCELLED, POLICY_CHANGED, MANAGER_CHANGED, MARKET_TAX, JUSTICE_INCOME, CASINO_TAX, VILLAGER_TAX, VILLAGER_POLICY, ECONOMY_TAX, ECONOMY_POLICY,
+        VOTE_RESERVED, VOTE_RETURNED, VOTE_APPROVED, VOTE_REJECTED }
 
     public record Activity(String name, int minutes) {
         public Activity {
@@ -122,6 +123,11 @@ public final class Treasury {
                 pending, periodStartedAt, nextCycleAt, standaloneManager);
     }
     public synchronized Treasury copy() { return new Treasury(snapshot()); }
+
+    public synchronized void recordGovernance(Kind kind, UUID actor, String details, long now) {
+        if(kind!=Kind.VOTE_APPROVED && kind!=Kind.VOTE_REJECTED)throw new IllegalArgumentException("Invalid governance audit");
+        append(new History(now,kind,actor,details,policy.currency(),0));
+    }
 
     public synchronized void setPolicy(Policy next, UUID actor, long now) {
         Objects.requireNonNull(next, "Policy");

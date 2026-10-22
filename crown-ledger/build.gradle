@@ -5,7 +5,7 @@ plugins {
 }
 version = mod_version
 group = mod_group_id
-base { archivesName = 'crown-ledger' }
+base { archivesName = 'realm-treasury' }
 java.toolchain.languageVersion = JavaLanguageVersion.of(21)
 repositories { mavenCentral() }
 neoForge {
@@ -50,3 +50,12 @@ tasks.withType(JavaCompile).configureEach {
     options.release = 21
 }
 tasks.withType(ProcessResources).configureEach { filteringCharset = 'UTF-8' }
+if (providers.gradleProperty('treasuryClientTests').isPresent()) {
+    sourceSets.main.java.srcDir('src/clienttest/java')
+    neoForge.runs.client {
+        gameDirectory = file('run-treasury-qa')
+        systemProperty 'treasury.qaOutput', file('qa-results/treasury-lan').absolutePath
+        programArguments.addAll '--width', '1600', '--height', '900'
+    }
+}
+tasks.named('jar', Jar) { exclude('pt/crownledger/clienttest/**') }

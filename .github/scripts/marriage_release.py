@@ -16,7 +16,7 @@ ROOT = common.ROOT
 STATE = ROOT / 'realm-marriage/build/marriage-release'
 PROJECTS = {
     'realm-marriage': ('realmmarriage', 'realm-marriage', 'marriageGameTests', 45),
-    'crown-ledger': ('kingdomtreasury', 'crown-ledger', 'crownGameTests', 59),
+    'crown-ledger': ('kingdomtreasury', 'realm-treasury', 'crownGameTests', 59),
     'realm-identity': ('realmidentity', 'realm-identity', 'identityGameTests', 35),
 }
 COMPANIONS = {k: v for k, v in common.COMPANION_PINS.items()
