@@ -2,7 +2,20 @@
 
 Campo de ocupação livre, com uma palavra até 24 caracteres, acentos/hífen e sugestões rápidas. A regra é validada no servidor antes de criar a personagem ou guardar alterações. O livro de pergaminho no P mantém-se. O formato dos dados mantém os campos anteriores; o protocolo passa a 8 para impedir que clientes da lista fixa recebam uma ocupação que não sabem descodificar. Atualizar servidor e clientes.
 
-Os 70 testes JUnit passaram localmente, incluindo palavras Unicode, normalização, rejeição de frases/controlos, limites, armazenamento e pacotes. O cliente real exerceu escrita de Alquimista, rejeição de uma frase, sugestão de Bardo, regresso ao mesmo rascunho depois de Origins, gravação no servidor, consulta pelo P e ecrãs compactos. Os resultados da publicação serão acrescentados após o workflow completo; os resultados históricos abaixo não os substituem.
+**Testes e publicação aprovados.** Os passos da [execução 39794991947](https://github.com/ROCKABITS/Mods/actions/runs/39794991947) aprovaram o código [`e407cd6`](https://github.com/ROCKABITS/Mods/commit/e407cd69444e6b97472760ac8bed66d20908864d), publicado em [`cf81db8`](https://github.com/ROCKABITS/Mods/commit/cf81db8). O [manifesto](../mod-pronto/realm-origins-0.5.7.build.json) regista versões, hashes, protocolo 8 e `custom_occupations_verified: true`.
+
+- 70 testes JUnit aprovados, sem falhas nem testes ignorados: Unicode/NFC, acentos, hífen, limites, rejeição de frases/controlos, criação antes de sortear dinheiro, edição, armazenamento e pacotes.
+- 38 GameTests aprovados em cada combinação: Origins/Jupiter/Classes, Origins/Jupiter sem Classes, e os doze companheiros publicados. São 38 casos em três combinações, 114 execuções. O novo teste invoca os handlers reais: frases são rejeitadas sem criar perfil ou alterar dinheiro; Alquimista e Cartógrafo são aceites e devolvidos ao cliente.
+- Três clientes reais aprovados: nomes RP/TAB/chat com companheiros; criação com Classes; criação sem Classes. A criação escreve Alquimista, confirma o rascunho ao regressar de Origins, rejeita uma frase, usa a sugestão de Bardo e confirma a palavra guardada pelo servidor e apresentada no livro aberto por P. Inclui assinatura, boas-vindas, quatro páginas, levantamento/depósito de 1 cêntimo e janelas de 1600×900 e 854×480.
+
+O [relatório gráfico](../media/realm-origins/0.5.7/rework-validation.json) confirma `custom_occupation: true` e `journal_key: true`. A [galeria](../media/realm-origins/0.5.7/README.md) inclui o campo e os atalhos. Os downloads públicos de JAR, ZIP e 23 imagens foram obtidos novamente e comparados com os hashes; o ZIP contém o mesmo JAR. A distribuição exclui fixtures.
+
+| Artefacto | Bytes | SHA-256 |
+| --- | --- | --- |
+| [realm-origins-0.5.7.jar](https://github.com/ROCKABITS/Mods/raw/refs/heads/main/mod-pronto/realm-origins-0.5.7.jar) | 6,444,120 | `0b90c49b9e3c49d2f0343301ac3662b21d6ce5551ea343fb7fc8ebdab9e09684` |
+| [realm-origins-0.5.7.zip](https://github.com/ROCKABITS/Mods/raw/refs/heads/main/mod-pronto/realm-origins-0.5.7.zip) | 6,432,780 | `4bf4b71361a3a1157e8ea2371cd9b06e2198911b4511a9b2466d9454932600e8` |
+
+Âmbito: servidor integrado/cliente reais para as interfaces e GameTests nativos para handlers e regras. Não é um novo ensaio manual com vários clientes autenticados, nem certifica todas as GPUs/resource packs ou funcionalidades de cada companheiro. A sessão de desenvolvimento não dispõe de certificado autenticado de chat assinado. Atualiza servidor e todos os clientes para 0.5.7; os dados antigos mantêm-se, mas as versões anteriores não descodificam ocupações fora da lista fixa.
 
 ## Histórico — Realm Origins 0.5.6
 
