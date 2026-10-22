@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.5.6 — O livrinho no P
+
+- P volta a abrir o livro original de pergaminho depois da criação da personagem.
+- Restabelecidos o layout, as cores, a fonte e os botões das páginas Ficha, Feitos, História, Bolsa e câmbio.
+- A criação por capítulos e as boas-vindas mantêm o novo visual escuro e lilás.
+- Mantidos nome Realm Origins, perfis, carteira, dados, integrações e protocolo 7.
+
 ## 0.5.5 — Realm Origins
 
 - Chronicles RP passa a chamar-se **Realm Origins**; o JAR é `realm-origins-0.5.5.jar`.

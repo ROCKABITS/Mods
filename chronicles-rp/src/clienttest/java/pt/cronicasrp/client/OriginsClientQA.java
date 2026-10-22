@@ -38,7 +38,7 @@ public final class OriginsClientQA {
     private static boolean done, raceButtonClicked, raceSelected;
     private static CharacterCreationScreen draft;
     private static long firstCreationAt, welcomeAt;
-    private static boolean storyWritten, signed;
+    private static boolean storyWritten, signed, journalKeyVerified;
     private static int profileStage;
     private static int lastStep = -1;
     private static net.minecraft.client.gui.screens.Screen lastRenderedScreen;
@@ -63,7 +63,9 @@ public final class OriginsClientQA {
     }
     private static void capture(String name) throws Exception {
         var screen = Minecraft.getInstance().screen;
-        if (screen instanceof BookScreen) {
+        if (screen instanceof BookScreen book) {
+            check(book.isJournal() == (screen instanceof CharacterProfileScreen || screen instanceof CurrencyExchangeScreen),
+                    "Wrong book/cinematic appearance on " + name);
             var widgets = screen.children().stream().filter(c -> c instanceof net.minecraft.client.gui.components.AbstractWidget)
                     .map(c -> (net.minecraft.client.gui.components.AbstractWidget)c).filter(w -> w.visible).toList();
             for (var w : widgets) {
@@ -88,6 +90,7 @@ public final class OriginsClientQA {
                     "success", success, "step", step, "message", message,
                     "with_classes", net.neoforged.fml.ModList.get().isLoaded("origins_classes"),
                     "visual_rework", success && step == 23,
+                    "journal_key", success && journalKeyVerified,
                     "race", saved == null ? "" : saved.race(),
                     "balance", saved == null ? 0 : saved.balance())));
         } catch (Exception ignored) {}
@@ -235,13 +238,16 @@ public final class OriginsClientQA {
                         if (welcomeAt == 0) welcomeAt = now;
                         if (now - welcomeAt < 5200) return;
                         capture("13-welcome-en");
-                        check(click(UiText.s("gui.cronicasrp.button.open_journal")), "No journal action after welcome");
-                        if (mc.screen instanceof CharacterProfileScreen) step++;
+                        check(click(UiText.s("gui.cronicasrp.realm.enter_world")) && mc.screen == null, "Welcome did not enter the world");
+                        net.minecraft.client.KeyMapping.click(ClientModEvents.PROFILE_KEY.getKey());
+                        step++;
                     }
                 }
                 case 11 -> {
                     if (profileStage == 0 && mc.screen instanceof CharacterProfileScreen) {
                         check(ClientState.profile().equals(saved), "Wealth reveal altered saved data");
+                        check(((CharacterProfileScreen)mc.screen).isJournal(), "P did not open the parchment book after creation");
+                        journalKeyVerified = true;
                         capture("07-profile-en"); check(click(UiText.s("gui.cronicasrp.tab.deeds")), "No deeds tab"); profileStage++;
                     } else if (profileStage == 1) {
                         capture("15-deeds-en"); check(click(UiText.s("gui.cronicasrp.tab.story")), "No story tab"); profileStage++;
@@ -260,7 +266,8 @@ public final class OriginsClientQA {
                         check(click(UiText.s("gui.cronicasrp.button.deposit_amount")), "No deposit action"); profileStage++;
                     } else if (profileStage == 6 && ClientState.profile().balance() == saved.balance()) {
                         check(ClientState.profile().equals(saved), "Exchange changed character data");
-                        mc.setScreen(new CharacterProfileScreen());
+                        mc.setScreen(null);
+                        net.minecraft.client.KeyMapping.click(ClientModEvents.PROFILE_KEY.getKey());
                         mc.getLanguageManager().setSelected("pt_pt"); mc.options.languageCode="pt_pt";
                         mc.reloadResourcePacks(); step++;
                     }
@@ -364,7 +371,7 @@ public final class OriginsClientQA {
                         var before = ClientState.profile();
                         check(screen.keyPressed(257, 0, 0) && mc.screen == null, "Enter world did not return to gameplay");
                         check(ClientState.profile().equals(before), "Replaying welcome changed saved identity or funds");
-                        complete(true, "Realm Origins: native Origins and optional Classes, preserved draft, four chapters, drawn signature, saved welcome, four profile tabs, actual one-cent withdraw/deposit round-trip, EN/PT, compact controls and Enter world without another payment passed.");
+                        complete(true, "Realm Origins: native Origins and optional Classes, preserved draft, four chapters, drawn signature, saved welcome, P opens the parchment book after creation, four book tabs, actual one-cent withdraw/deposit round-trip, EN/PT, compact controls and Enter world without another payment passed.");
                     }
                 }
                 default -> throw new IllegalStateException("Unknown QA step");

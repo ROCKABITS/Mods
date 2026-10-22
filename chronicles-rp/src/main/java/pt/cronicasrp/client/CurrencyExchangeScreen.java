@@ -27,20 +27,20 @@ public final class CurrencyExchangeScreen extends BookScreen {
         String previousQuantity = quantity == null ? "1" : quantity.getValue();
         measure(); transactionButtons.clear();
         int lx = pageLeft(), rx = pageRight(), w = pageWidth();
-        int cw = (w - 4) / 3, ch = Math.max(18, (footerY() - (top + 82) - 5) / 5);
+        int cw = (w - 4) / 3, ch = Math.max(18, (footerY() - (top + 73) - 5) / 5);
         for (int i = 0; i < CurrencyDenomination.values().length; i++) {
             var denomination = CurrencyDenomination.values()[i];
-            addRenderableWidget(new CashButton(lx + i % 3 * (cw + 2), top + 82 + i / 3 * ch, cw, ch - 2, denomination));
+            addRenderableWidget(new CashButton(lx + i % 3 * (cw + 2), top + 73 + i / 3 * ch, cw, ch - 2, denomination));
         }
-        withdrawTab = button(rx, top + 55, (w - 2) / 2, UiText.s("gui.cronicasrp.button.withdraw"), false, () -> { depositing = false; updateControls(); });
-        depositTab = button(rx + (w + 2) / 2, top + 55, (w - 2) / 2, UiText.s("gui.cronicasrp.button.deposit"), false, () -> { depositing = true; updateControls(); });
-        amount = addRenderableWidget(new RpgEditBox(font, rx, top + (compact() ? 97 : 111), w, UiText.s("gui.cronicasrp.cash.amount")));
+        withdrawTab = button(rx, top + 45, (w - 2) / 2, UiText.s("gui.cronicasrp.button.withdraw"), false, () -> { depositing = false; updateControls(); });
+        depositTab = button(rx + (w + 2) / 2, top + 45, (w - 2) / 2, UiText.s("gui.cronicasrp.button.deposit"), false, () -> { depositing = true; updateControls(); });
+        amount = addRenderableWidget(new RpgEditBox(font, rx, top + (compact() ? 90 : 111), w, UiText.s("gui.cronicasrp.cash.amount")).parchment());
         if (compact()) amount.setHeight(18);
         amount.setMaxLength(24); amount.setValue(previousAmount);
         amount.setTooltip(Tooltip.create(UiText.c("gui.cronicasrp.tooltip.amount")));
-        valueButton = button(rx, top + (compact() ? 116 : 134), w, UiText.s("gui.cronicasrp.button.withdraw_amount"), true, this::sendValue);
-        int quantityY = top + (compact() ? 151 : 176);
-        quantity = addRenderableWidget(new RpgEditBox(font, rx, quantityY, Math.max(33, w / 4), UiText.s("gui.cronicasrp.cash.quantity")));
+        valueButton = button(rx, top + (compact() ? 110 : 134), w, UiText.s("gui.cronicasrp.button.withdraw_amount"), true, this::sendValue);
+        int quantityY = top + (compact() ? 148 : 176);
+        quantity = addRenderableWidget(new RpgEditBox(font, rx, quantityY, Math.max(33, w / 4), UiText.s("gui.cronicasrp.cash.quantity")).parchment());
         if (compact()) quantity.setHeight(18);
         quantity.setMaxLength(7); quantity.setValue(previousQuantity);
         quantity.setTooltip(Tooltip.create(UiText.c("gui.cronicasrp.tooltip.quantity")));
@@ -51,7 +51,6 @@ public final class CurrencyExchangeScreen extends BookScreen {
         allButton.setTooltip(Tooltip.create(UiText.c("gui.cronicasrp.tooltip.deposit_all")));
         button(lx, footerY(), w, UiText.s("gui.cronicasrp.button.back_profile"), false, this::onClose);
         transactionButtons.add(valueButton); transactionButtons.add(piecesButton); transactionButtons.add(allButton);
-        if (compact()) { withdrawTab.setHeight(18); depositTab.setHeight(18); valueButton.setHeight(18); piecesButton.setHeight(18); }
         updateControls();
     }
     private boolean compact() { return bookHeight < 320; }
@@ -101,17 +100,17 @@ public final class CurrencyExchangeScreen extends BookScreen {
     }
     @Override protected void renderBook(GuiGraphics g, int mx, int my, float partialTick) {
         int lx = pageLeft(), rx = pageRight(), w = pageWidth();
-        heading(g, UiText.s("gui.cronicasrp.cash.in_hand"), lx, top + 42, w, INK);
-        var cash = RpgTheme.heading(RpgTheme.money(physical()));
+        heading(g, UiText.s("gui.cronicasrp.cash.in_hand"), lx, top + 27, w, INK);
+        var cash = JournalTheme.heading(JournalTheme.money(physical()));
         float scale = Math.min(1.25F, (w - 2F) / Math.max(1, font.width(cash)));
-        g.pose().pushPose(); g.pose().translate(lx, top + 56, 0); g.pose().scale(scale, scale, 1);
+        g.pose().pushPose(); g.pose().translate(lx, top + 46, 0); g.pose().scale(scale, scale, 1);
         g.drawString(font, cash, 0, 0, INK, false); g.pose().popPose();
-        text(g, UiText.s("gui.cronicasrp.cash.inventory"), lx, top + 70, w, MUTED);
-        heading(g, UiText.s("gui.cronicasrp.cash.heading"), rx, top + 42, w, INK);
-        text(g, UiText.s("gui.cronicasrp.cash.digital_prefix") + RpgTheme.money(ClientState.profile().balance()), rx, top + (compact() ? 77 : 80), w, INK);
-        text(g, UiText.s("gui.cronicasrp.cash.amount"), rx, top + (compact() ? 87 : 100), w, MUTED);
-        RpgTheme.rule(g, rx, top + (compact() ? 136 : 157), w, RpgTheme.BORDER);
-        text(g, UiText.s("gui.cronicasrp.cash.item_prefix") + UiText.denomination(selected).getString(), rx, top + (compact() ? 141 : 164), w, INK);
+        text(g, UiText.s("gui.cronicasrp.cash.inventory"), lx, top + 61, w, MUTED);
+        heading(g, UiText.s("gui.cronicasrp.cash.heading"), rx, top + 27, w, INK);
+        text(g, UiText.s("gui.cronicasrp.cash.digital_prefix") + JournalTheme.money(ClientState.profile().balance()), rx, top + 70, w, INK);
+        text(g, UiText.s("gui.cronicasrp.cash.amount"), rx, top + (compact() ? 80 : 100), w, MUTED);
+        JournalTheme.rule(g, rx, top + (compact() ? 131 : 157), w, 0x668B724A);
+        text(g, UiText.s("gui.cronicasrp.cash.item_prefix") + UiText.denomination(selected).getString(), rx, top + (compact() ? 136 : 164), w, INK);
         if (!compact()) {
             paragraph(g, depositing
                     ? UiText.s("gui.cronicasrp.cash.deposit_hint")
@@ -121,8 +120,8 @@ public final class CurrencyExchangeScreen extends BookScreen {
     }
     @Override public void render(GuiGraphics g, int mx, int my, float partialTick) {
         super.render(g, mx, my, partialTick);
-        int x = pageRight(), y = footerY() - (compact() ? 9 : 48), w = pageWidth();
-        int color = success ? 0xFFA6C8AC : error ? 0xFFF0A399 : MUTED;
+        int x = pageRight(), y = footerY() - (compact() ? 13 : 48), w = pageWidth();
+        int color = success ? 0xFF466F52 : error ? 0xFF864C39 : MUTED;
         if (compact()) text(g, message, x, y, w, color);
         else paragraph(g, message, x, y, w, 32, color);
         boolean clipped = compact() ? font.width(message) > w : font.split(Component.literal(message), w).size() * font.lineHeight > 32;
@@ -142,8 +141,8 @@ public final class CurrencyExchangeScreen extends BookScreen {
         @Override public void onPress() { selected = denomination; }
         @Override protected void renderWidget(GuiGraphics g, int mx, int my, float partialTick) {
             boolean chosen = selected == denomination;
-            RpgTheme.frame(g, getX(), getY(), width, height, chosen ? 0xFF30273E : isHoveredOrFocused() ? 0xFF211B2C : RpgTheme.PANEL,
-                    chosen ? RpgTheme.GOLD : RpgTheme.BORDER);
+            JournalTheme.frame(g, getX(), getY(), width, height, chosen ? 0x779F814B : isHoveredOrFocused() ? 0x559D814B : 0x18755831,
+                    chosen ? 0xFF9A742A : 0x558D734A);
             int icon = height < 23 ? 13 : 16;
             g.pose().pushPose(); g.pose().translate(getX() + 2, getY() + (height - icon) / 2F, 0); g.pose().scale(icon / 16F, icon / 16F, 1);
             g.renderItem(CurrencyItems.stack(denomination, 1), 0, 0); g.pose().popPose();

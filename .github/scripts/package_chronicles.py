@@ -45,6 +45,7 @@ for folder, logfile, marker in (
     report = json.loads((project / 'qa-results' / folder / 'result.json').read_text())
     assert report.get('success') is True, (folder, report)
     if folder != 'rp-names-client':
+        assert report.get('journal_key') is True, 'P did not open the parchment journal'
         assert report.get('visual_rework') is True and report.get('step') == 23, 'Missing actual rework flow'
         assert report.get('with_classes') == (folder == 'client'), 'Wrong Origins Classes client mode'
     log = (project / logfile).read_text(errors='replace')
@@ -73,7 +74,7 @@ media.mkdir(parents=True, exist_ok=True)
 for name in images:
     shutil.copyfile(visual / name, media / name)
 shutil.copyfile(visual / 'result.json', media / 'validation.json')
-def assert_rework_frame(path):
+def assert_rework_frame(path, journal=False):
     # The first pixel is independent of PNG row predictors. A transition can leave
     # the previous world frame in the framebuffer even though the screen changed.
     data = path.read_bytes()
@@ -87,7 +88,9 @@ def assert_rework_frame(path):
             compressed.extend(data[offset + 8:offset + 8 + length])
         offset += length + 12
     first = zlib.decompressobj().decompress(bytes(compressed), 4)
-    assert first[0] in range(5) and tuple(first[1:4]) == (6, 7, 13), 'Stale transition frame: ' + path.name
+    assert first[0] in range(5), 'Invalid screenshot row filter'
+    if not journal:
+        assert tuple(first[1:4]) == (6, 7, 13), 'Stale transition frame: ' + path.name
 
 
 # Screenshots from the real creation/profile/exchange client, never rendered mockups.
@@ -100,13 +103,14 @@ for name in rework_names:
     target = 'realm-origins-' + name + '.png'
     source_image = project / 'qa-results/client' / (name + '.png')
     assert source_image.stat().st_size > 1024 and source_image.read_bytes()[:8] == b'\x89PNG\r\n\x1a\n', name
-    assert_rework_frame(source_image)
+    assert_rework_frame(source_image, journal=name in ('07-profile-en', '15-deeds-en', '16-profile-story-en',
+                                                     '17-wallet-en', '18-exchange-en', '11-profile-compact', '19-exchange-compact'))
     shutil.copyfile(source_image, media / target)
     images.append(target)
 shutil.copyfile(project / 'src/main/resources/realm-origins.png', media / 'icon.png')
 images.append('icon.png')
 shutil.copyfile(project / 'qa-results/client/result.json', media / 'rework-validation.json')
-(media / 'README.md').write_text('# Realm Origins 0.5.5\n\nActual Minecraft 1.21.1 / NeoForge screenshots: four creation chapters, a new chapter welcome, character profile, deeds, story, wallet and exchange, with compact layouts. Origins powers remain in the external Origins native interface. The RP-name gallery also checks the world, TAB and normal chat with all twelve released companion mods. Test accounts use demonstration data.\n\nOriginal portal/book icon: icon.png. No screenshot is a generated mockup. Internal namespace remains cronicasrp; replace the old Chronicles RP JAR and keep the external Origins/Jupiter dependencies.\n')
+(media / 'README.md').write_text(f'# Realm Origins {version}\n\nActual Minecraft 1.21.1 / NeoForge screenshots: cinematic creation and welcome, plus P opening the original parchment book for profile, deeds, story, wallet and exchange, with compact layouts. Origins powers remain in the external Origins native interface. The RP-name gallery also checks the world, TAB and normal chat with all twelve released companion mods. Test accounts use demonstration data.\n\nOriginal portal/book icon: icon.png. No screenshot is a generated mockup. Internal namespace remains cronicasrp; replace the old Chronicles RP JAR and keep the external Origins/Jupiter dependencies.\n')
 with zipfile.ZipFile(media / f'realm-origins-{version}-media.zip', 'w', zipfile.ZIP_DEFLATED) as z:
     for name in images + ['README.md']:
         z.write(media / name, name)
@@ -115,7 +119,7 @@ with zipfile.ZipFile(media / f'realm-origins-{version}-media.zip', 'w', zipfile.
     f'{checks.digest(path)}  {path.name}\n' for path in (jar, archive)))
 provenance = {
     'version': version, 'display_name': 'Realm Origins', 'internal_mod_id': 'cronicasrp',
-    'visual_rework_verified': True, 'personality_or_attributes_added': False, 'source_commit': snapshot['source_commit'],
+    'visual_rework_verified': True, 'parchment_journal_on_p_verified': True, 'personality_or_attributes_added': False, 'source_commit': snapshot['source_commit'],
     'tested_run': f"https://github.com/{os.environ['GITHUB_REPOSITORY']}/actions/runs/{os.environ['GITHUB_RUN_ID']}",
     'jar_sha256': checks.digest(jar), 'zip_sha256': checks.digest(archive),
     'unit_tests': unit, 'native_tests_with_classes': native['gametests.log'],

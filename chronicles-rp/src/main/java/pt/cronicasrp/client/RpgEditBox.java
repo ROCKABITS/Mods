@@ -6,13 +6,16 @@ import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.network.chat.Component;
 
 final class RpgEditBox extends EditBox {
+    private boolean parchment;
     RpgEditBox(Font font, int x, int y, int w, String label) {
         super(font, x, y, w, 20, Component.literal(label));
         setBordered(false); setTextColor(RpgTheme.LIGHT); setTextShadow(false);
     }
+    RpgEditBox parchment() { parchment = true; setTextColor(JournalTheme.LIGHT); return this; }
     @Override public int getInnerWidth() { return width - 10; }
     @Override public void renderWidget(GuiGraphics g, int mouseX, int mouseY, float partialTick) {
-        RpgTheme.frame(g, getX(), getY(), width, height, RpgTheme.PANEL, isFocused() ? RpgTheme.GOLD : RpgTheme.BORDER);
+        RpgTheme.frame(g, getX(), getY(), width, height, parchment ? 0xB00B1526 : RpgTheme.PANEL,
+                isFocused() ? (parchment ? JournalTheme.GOLD : RpgTheme.GOLD) : 0xFF64616A);
         g.pose().pushPose(); g.pose().translate(5, 6, 0);
         super.renderWidget(g, mouseX, mouseY, partialTick); g.pose().popPose();
     }

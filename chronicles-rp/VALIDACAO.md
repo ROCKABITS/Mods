@@ -1,4 +1,10 @@
-# Validação atual — Realm Origins 0.5.5
+# Validação atual — Realm Origins 0.5.6
+
+Atualização visual: criação e boas-vindas cinematográficas; P abre novamente o livro original de pergaminho. Ficha, Feitos, História, Bolsa e câmbio usam a aparência anterior. Dados, economia e protocolo 7 mantidos.
+
+A compilação e os 66 testes JUnit passaram localmente. O cliente real é exercitado através da tecla P depois da primeira criação, com as quatro páginas, câmbio, assinatura, Origins e janela compacta. A publicação fica condicionada ao workflow completo, com GameTests nas três combinações e clientes com e sem Classes. Os resultados efetivos da publicação serão acrescentados após a execução.
+
+## Histórico — Realm Origins 0.5.5
 
 Rework visual do Chronicles RP. Minecraft 1.21.1 / NeoForge 21.1.256 / Java 21, Origins (NeoForge) 0.3.2 e Jupiter 2.3.7; Origins: Classes 0.3 é opcional. Identificador interno `cronicasrp`, armazenamento e protocolo 7 mantidos.
 

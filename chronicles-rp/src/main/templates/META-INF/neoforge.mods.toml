@@ -46,7 +46,7 @@ logoFile="realm-origins.png" #optional
 
 # The description text for the mod (multi line!) (#mandatory)
 description='''
-Fantasy character creation with Origins lineages, a cinematic character journal, drawn
+Fantasy character creation with Origins lineages, a parchment character journal, drawn
 signatures and a digital/physical euro economy. Requires Origins (NeoForge) by
 IAFEnvoy; supports optional Origins: Classes. English and Portuguese follow the
 Minecraft language setting.

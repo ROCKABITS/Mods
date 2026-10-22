@@ -22,11 +22,16 @@ final class RpgButton extends AbstractButton {
         int edge = !active ? 0xFF393440 : hover || selected ? RpgTheme.GOLD : RpgTheme.BORDER;
         int background = primary || selected ? 0xFF3B304B : 0xCC100E19;
         if (hover) background = primary ? 0xFF534263 : 0xFF282131;
-        RpgTheme.frame(g, getX(), getY(), width, height, background, edge);
-        if (primary || selected) g.fillGradient(getX() + 2, getY() + 2, getX() + width - 2, getY() + height - 2,
+        if (!dark) {
+            edge = !active ? 0xFF5C5D59 : hover || selected ? JournalTheme.GOLD : 0xFFAF9462;
+            background = hover ? 0xAAA98A58 : selected ? 0xAA9F814B : 0x667C5B32;
+            JournalTheme.frame(g, getX(), getY(), width, height, background, edge);
+        } else RpgTheme.frame(g, getX(), getY(), width, height, background, edge);
+        if (dark && (primary || selected)) g.fillGradient(getX() + 2, getY() + 2, getX() + width - 2, getY() + height - 2,
                 hover ? 0xFF51435F : 0xFF3E344D, 0xFF211C2C);
         g.fill(getX() + 5, getY() + 2, getX() + width - 5, getY() + 3, (edge & 0xFFFFFF) | 0x30000000);
         int color = !active ? 0xFF777080 : primary || hover || selected ? RpgTheme.LIGHT : RpgTheme.ASH;
+        if (!dark) color = !active ? 0xFF8A8272 : JournalTheme.INK;
         var font = Minecraft.getInstance().font;
         if (fitLabel) {
             float scale = Math.min(1F, (width - 8F) / Math.max(1, font.width(getMessage())));

@@ -69,3 +69,7 @@ The images are real Minecraft client captures of the mod's models and interface.
 ## Realm Origins 0.5.5
 
 [Galeria do rework visual](realm-origins/0.5.5/README.md): capítulos da criação, boas-vindas, perfil, carteira e câmbio em capturas reais do Minecraft; inclui ícone e ZIP para a galeria. Realm Origins substitui Chronicles RP, mantendo os dados.
+
+## Realm Origins 0.5.6
+
+[Galeria atual](realm-origins/0.5.6/README.md): criação cinematográfica e livro original de pergaminho aberto pela tecla P, com páginas de perfil, feitos, história, bolsa e câmbio.
