@@ -40,6 +40,8 @@ public final class TreasuryLanQA {
     private static final Gson JSON=new GsonBuilder().setPrettyPrinting().create();
     private static final List<String> SHOTS=new ArrayList<>(),CHECKS=new ArrayList<>();
     private static final BlockPos CHEST=new BlockPos(0,161,0);
+    private static final String FREE_TITLE="New bridge by the village";
+    private static final String FREE_DESCRIPTION="Build a public bridge across the river near the village.\nUse stone pillars, wooden railings and lighting. Keep the passage open to everyone.\nThe vote asks for citizens' approval; it does not spend treasury funds.";
     private static final long START=System.currentTimeMillis();
     private static Process child;
     private static volatile Throwable failure;private static volatile boolean ready;
@@ -88,7 +90,10 @@ public final class TreasuryLanQA {
         if(guestStep==0){shot("guest-vote-hud.png");key();guestStep++;return;}
         if(!(mc().screen instanceof GovernanceScreen))return;
         boolean benefit=p.has("offer");
-        if(guestStep==1){check(click(benefit?"vote.no":"vote.yes"),"Guest vote button missing");guestStep++;return;}
+        if(guestStep==1){
+            if(!benefit){check(p.get("question").getAsString().equals(FREE_TITLE)&&p.get("description").getAsString().equals(FREE_DESCRIPTION),"Guest received altered proposal text");
+                check(mc().screen.children().stream().anyMatch(c->c instanceof DescriptionBox box&&box.getValue().equals(FREE_DESCRIPTION)),"Guest cannot read the full description");}
+            check(click(benefit?"vote.no":"vote.yes"),"Guest vote button missing");guestStep++;return;}
         if(guestStep==2&&p.has("ownVote")){
             if(benefit){check(!p.get("ownVote").getAsBoolean(),"First guest vote did not reach server");check(click("vote.yes"),"Guest could not change vote");guestStep++;}
             else{write("guest-advisory-voted.json",Map.of("id",id));mc().screen.onClose();guestStep=4;}
@@ -108,7 +113,7 @@ public final class TreasuryLanQA {
             case 4->{if(Files.exists(OUT.resolve("guest-connected.json"))){guest=UUID.fromString(JsonParser.parseString(Files.readString(OUT.resolve("guest-connected.json"))).getAsJsonObject().get("id").getAsString());server(()->{var g=mc().getSingleplayerServer().getPlayerList().getPlayer(guest);check(g!=null&&!g.hasPermissions(2),"Guest must be an ordinary non-admin");g.teleportTo(g.serverLevel(),3.5,161,-3,0,0);});stage++;}}
             case 5->{if(ready){openChest();stage++;}}
             case 6->{if(mc().screen instanceof TreasuryScreen){check(press("gui.kingdomtreasury.public_votes"),"Chest has no public votes button");stage++;}}
-            case 7->{if(mc().screen instanceof GovernanceScreen){check(click("tab.propose"),"President cannot propose at chest");stage++;}}
+            case 7->{if(mc().screen instanceof GovernanceScreen){check(click("tab.propose"),"President cannot propose at chest");check(mc().screen.children().stream().anyMatch(c->c instanceof MultiLineEditBox),"Free vote is not the default proposal form");check(click("type.benefit"),"Benefit option missing");stage++;}}
             case 8->{shot("treasury-proposal.png");check(click("announce"),"Cannot announce quoted benefit");stage++;}
             case 9->{if(poll()!=null){firstProposal=UUID.fromString(poll().get("id").getAsString());server(()->check(data().treasury.balance(Treasury.Currency.EMERALD)==600&&data().governance.current().eligible().size()==2,"Announcement did not reserve exact funds and freeze two citizens"));mc().setScreen(null);stage++;}}
             case 10->{if(!ready)return;check(mc().screen==null,"Announcement blocked controls");movedFrom=mc().player.position();mc().options.keyUp.setDown(true);next=now+1500;stage++;}
@@ -116,14 +121,20 @@ public final class TreasuryLanQA {
             case 12->{if(mc().screen instanceof GovernanceScreen){check(click("vote.yes"),"F8 ballot cannot submit vote");stage++;}}
             case 13->{if(poll()!=null&&!poll().has("ownVote")&&GovernanceClient.state.has("message")&&GovernanceClient.state.get("message").getAsString().equals("realm.treasury.error.rate")){click("vote.yes");return;}if(poll()!=null&&poll().has("ownVote")&&poll().get("ownVote").getAsBoolean()&&Files.exists(OUT.resolve("guest-benefit-voted.json"))){shot("treasury-ballot.png");compact();server(()->{var g=data().governance;check(g.current().yes()==2&&g.current().ballots().size()==2,"Changed guest vote counted twice");try{var tag=NbtIo.readCompressed(mc().getSingleplayerServer().getWorldPath(LevelResource.ROOT).resolve("data/crown_ledger.dat"),NbtAccounter.create(32000000));var restored=TreasuryData.load(tag.getCompound("data"),mc().getSingleplayerServer().registryAccess());check(restored.governance.current().yes()==2&&restored.treasury.balance(Treasury.Currency.EMERALD)==600,"Durable ballots and reservation mismatch");}catch(Exception e){throw new IllegalStateException(e);}});stage++;}}
             case 14->{if(ready&&poll()==null&&GovernanceClient.state.has("active")&&!GovernanceClient.state.getAsJsonArray("active").isEmpty()){check(click("tab.benefits"),"Benefits menu missing");stage++;}}
-            case 15->{shot("treasury-benefits.png");check(click("tab.history"),"History menu missing");server(()->{check(data().governance.history().getFirst().yes()==2&&data().treasury.balance(Treasury.Currency.EMERALD)==600,"Approved benefit cost or tally incorrect");GovernanceConfig.VOTING_SECONDS.set(15);});stage++;}
-            case 16->{if(ready){shot("treasury-decisions.png");check(click("tab.propose"),"Next proposal menu missing");check(click("type.benefit"),"Advisory toggle missing");for(var c:mc().screen.children())if(c instanceof EditBox field)field.setValue("Shall we hold a kingdom festival?");stage++;}}
-            case 17->{check(click("announce"),"Cannot announce general consultation");stage++;}
-            case 18->{if(poll()!=null&&!poll().has("offer")){check(click("tab.vote"),"Ballot tab missing");check(click("vote.no"),"No vote missing");stage++;}}
-            case 19->{if(poll()==null&&GovernanceClient.state.getAsJsonArray("history").size()==2){check(Files.exists(OUT.resolve("guest-advisory-voted.json")),"Guest did not vote in consultation");server(()->{var r=data().governance.history().getFirst();check(r.outcome()==Governance.Outcome.REJECTED&&r.yes()==1&&r.no()==1&&data().treasury.balance(Treasury.Currency.EMERALD)==600,"General tied poll spent money or passed");});stage++;}}
-            case 20->{if(ready){CHECKS.add("Two real LAN voters, secret mutable ballots, exact reservation, majority benefit, tied free consultation");child.destroy();child.waitFor(3,java.util.concurrent.TimeUnit.SECONDS);mc().level.disconnect();mc().disconnect(new TitleScreen());stage++;}}
+            case 15->{shot("treasury-benefits.png");check(click("tab.history"),"History menu missing");server(()->{check(data().governance.history().getFirst().yes()==2&&data().treasury.balance(Treasury.Currency.EMERALD)==600,"Approved benefit cost or tally incorrect");GovernanceConfig.VOTING_SECONDS.set(30);});stage++;}
+            case 16->{if(ready){shot("treasury-decisions.png");check(click("tab.propose"),"Next proposal menu missing");if(mc().screen.children().stream().noneMatch(c->c instanceof MultiLineEditBox))check(click("type.general"),"Free vote option missing");for(var c:mc().screen.children()){if(c instanceof EditBox field)field.setValue(FREE_TITLE);else if(c instanceof MultiLineEditBox field)field.setValue(FREE_DESCRIPTION);}stage++;}}
+            case 17->{shot("treasury-free-proposal.png");check(click("announce"),"Cannot announce general consultation");stage++;}
+            case 18->{if(poll()!=null&&!poll().has("offer")){
+                check(poll().get("question").getAsString().equals(FREE_TITLE)&&poll().get("description").getAsString().equals(FREE_DESCRIPTION),"Title and description did not round-trip through the server");
+                check(click("tab.vote"),"Ballot tab missing");check(mc().screen.children().stream().anyMatch(c->c instanceof DescriptionBox box&&box.getValue().equals(FREE_DESCRIPTION)),"Full description missing from ballot");
+                shot("treasury-free-ballot.png");compact();check(click("vote.no"),"No vote missing");stage++;
+            }}
+            case 19->{if(poll()==null&&GovernanceClient.state.getAsJsonArray("history").size()==2){check(Files.exists(OUT.resolve("guest-advisory-voted.json")),"Guest did not vote in consultation");server(()->{var r=data().governance.history().getFirst();check(r.outcome()==Governance.Outcome.REJECTED&&r.yes()==1&&r.no()==1&&r.question().equals(FREE_TITLE)&&r.description().equals(FREE_DESCRIPTION)&&data().treasury.balance(Treasury.Currency.EMERALD)==600,"General tied poll spent money or passed");});stage++;}}
+            case 20->{if(ready){check(click("tab.history"),"History unavailable");check(click("read"),"Archived poll reader unavailable");
+                check(mc().screen.children().stream().anyMatch(c->c instanceof DescriptionBox box&&box.getValue().equals(FREE_DESCRIPTION)),"Archived description is missing");
+                shot("treasury-free-history.png");CHECKS.add("Free poll title, multiline description, ballot and archived reader round-trip over actual LAN");CHECKS.add("Two real LAN voters, secret mutable ballots, exact reservation, majority benefit, tied free consultation");child.destroy();child.waitFor(3,java.util.concurrent.TimeUnit.SECONDS);mc().level.disconnect();mc().disconnect(new TitleScreen());stage++;}}
             case 21->{if(mc().level==null&&mc().getSingleplayerServer()==null){mc().createWorldOpenFlows().openWorld(folder,()->mc().setScreen(new TitleScreen()));stage++;}}
-            case 22->{if(mc().player!=null&&mc().getSingleplayerServer()!=null){server(()->check(data().treasury.balance(Treasury.Currency.EMERALD)==600&&data().governance.history().size()==2&&data().governance.active().size()==1&&data().governance.active().getFirst().proposalId().equals(firstProposal),"World reopening lost or charged a decision again"));stage++;}}
+            case 22->{if(mc().player!=null&&mc().getSingleplayerServer()!=null){server(()->check(data().treasury.balance(Treasury.Currency.EMERALD)==600&&data().governance.history().size()==2&&data().governance.active().size()==1&&data().governance.active().getFirst().proposalId().equals(firstProposal)&&data().governance.history().getFirst().description().equals(FREE_DESCRIPTION),"World reopening lost or charged a decision again"));stage++;}}
             case 23->{if(ready){CHECKS.add("Actual LAN world closed and reopened; benefits, tally history and balance retained");finish(true,"Actual menus, packets, two-player LAN, persistence and compact controls passed");}}
         }
     }catch(Throwable t){t.printStackTrace();finish(false,t.toString());}}

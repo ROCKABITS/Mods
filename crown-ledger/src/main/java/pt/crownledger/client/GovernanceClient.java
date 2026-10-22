@@ -44,7 +44,7 @@ public final class GovernanceClient {
     public static void dismiss(){hideBanner=true;}
     public static Component tr(String key,Object...args){return Component.translatable("realm.treasury."+key,args);}
     public static String question(JsonObject poll){
-        String q=poll.get("question").getAsString();return q.startsWith("realm.treasury.benefit.")?Component.translatable(q).getString():q;
+        String q=poll.get("question").getAsString();return poll.has("offer")&&!poll.get("offer").isJsonNull()&&q.startsWith("realm.treasury.benefit.")?Component.translatable(q).getString():q;
     }
     public static String duration(long millis){long seconds=Math.max(0,millis/1000);return seconds>=3600?(seconds/3600)+" h":String.format(java.util.Locale.ROOT,"%d:%02d",seconds/60,seconds%60);}
     private static void render(GuiGraphics g){
@@ -62,6 +62,8 @@ public final class GovernanceClient {
         if(expanded){
             var lines=mc.font.split(Component.literal(question(poll)),w-28);
             for(int i=0;i<Math.min(2,lines.size());i++)g.drawString(mc.font,lines.get(i),x+14,y+29+i*11,0xFFECE3CB,false);
+            if(poll.has("description")&&!poll.get("description").getAsString().isBlank())
+                g.drawString(mc.font,mc.font.plainSubstrByWidth(poll.get("description").getAsString().replace('\n',' '),w-28),x+14,y+51,0xFFD2C9B5,false);
             g.drawCenteredString(mc.font,tr("vote.key_hint",VOTE.getTranslatedKeyMessage()),x+w/2,y+64,0xFFD2BD8D);
         }
     }

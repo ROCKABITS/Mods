@@ -1,3 +1,7 @@
+# Realm Treasury 0.3.1
+
+[Current validation scope](VALIDACAO-0.3.1.md).
+
 # Realm Treasury 0.3.0
 
 See [current validation scope and reproduction](VALIDACAO-0.3.0.md). The material below records earlier Crown Ledger releases.

@@ -59,7 +59,7 @@ def package():
     reports = [ET.parse(p).getroot() for p in (PROJECT/'build/test-results/test').glob('TEST-*.xml')]
     unit = sum(int(r.get('tests', 0)) for r in reports)
     expected_unit = sum(len(re.findall(r'@Test\b', p.read_text())) for p in (PROJECT/'src/test/java').rglob('*.java'))
-    assert unit == expected_unit and unit >= 77
+    assert unit == expected_unit and unit >= 80
     assert not any(int(r.get(k, 0)) for r in reports for k in ['failures', 'errors', 'skipped'])
     expected_native = sum(len(re.findall(r'@GameTest\s*\(', p.read_text())) for p in (PROJECT/'src/gametest/java').rglob('*.java'))
     native = {}
@@ -75,7 +75,7 @@ def package():
     legacy = json.loads((PROJECT/'qa-results/crown-client/result.json').read_text())
     lan = json.loads((PROJECT/'qa-results/treasury-lan/result.json').read_text())
     assert legacy['success'] and lan['success'] and lan['stage'] == 23 and lan['actualMinecraftClients'] == 2 and lan['actualTcpLan']
-    assert len(lan['checks']) >= 4 and len(lan['screenshots']) >= 5
+    assert len(lan['checks']) >= 5 and len(lan['screenshots']) >= 8
     out = ROOT/'mod-pronto';out.mkdir(exist_ok=True)
     target = out/JAR.name
     if target.exists():
@@ -84,7 +84,7 @@ def package():
     archive = out/f'{NAME}.zip'
     with zipfile.ZipFile(archive, 'w', zipfile.ZIP_DEFLATED) as z:
         z.write(target, target.name)
-        z.writestr('INSTALL.txt', 'Realm Treasury '+VERSION+'\nMinecraft 1.21.1 / NeoForge 21.1.256+ / Java 21\nReplace Crown Ledger in both clients and server; keep only one kingdomtreasury JAR.\nPreserves crown_ledger.dat, accounts, receipts and public contracts. Back up the world before migrating to format 7.\nRight-click the existing treasury chest to propose; F8 opens voting only.\n')
+        z.writestr('INSTALL.txt', 'Realm Treasury '+VERSION+'\nMinecraft 1.21.1 / NeoForge 21.1.256+ / Java 21\nReplace Crown Ledger in both clients and server; keep only one kingdomtreasury JAR.\nPreserves crown_ledger.dat, accounts, receipts and public contracts. Back up the world before migrating to format 8.\nRight-click the existing treasury chest to propose; F8 opens voting only.\n')
         z.write(PROJECT/'CHANGELOG.md', 'CHANGELOG.md')
     media = ROOT/'media/realm-treasury'/VERSION;media.mkdir(parents=True, exist_ok=True)
     images = []

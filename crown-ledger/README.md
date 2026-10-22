@@ -1,14 +1,18 @@
-# Realm Treasury 0.3.0 — Tesouro e votações do reino
+# Realm Treasury 0.3.1 — Tesouro e votações do reino
 
 O **Crown Ledger passa a chamar-se Realm Treasury**. Mantém saldos, impostos, salários, contratos públicos e recibos existentes e acrescenta votações secretas no ecrã e benefícios financiados pelo tesouro.
 
 Minecraft **1.21.1**, **NeoForge 21.1.256+**, **Java 21**. O mesmo JAR é necessário nos clientes e no servidor, incluindo LAN. Substitui o Crown Ledger anterior; ambos usam o identificador `kingdomtreasury` e não podem coexistir. A pasta de código `crown-ledger/`, os pacotes Java e as APIs antigas conservam os nomes para compatibilidade.
 
-[Download JAR](https://github.com/ROCKABITS/Mods/raw/refs/heads/main/mod-pronto/realm-treasury-0.3.0.jar) · [ZIP](https://github.com/ROCKABITS/Mods/raw/refs/heads/main/mod-pronto/realm-treasury-0.3.0.zip) · [Galeria](../media/realm-treasury/README.md) · [Validação](VALIDACAO-0.3.0.md) · [CurseForge](CURSEFORGE.md)
+[Download JAR](https://github.com/ROCKABITS/Mods/raw/refs/heads/main/mod-pronto/realm-treasury-0.3.1.jar) · [ZIP](https://github.com/ROCKABITS/Mods/raw/refs/heads/main/mod-pronto/realm-treasury-0.3.1.zip) · [Galeria](../media/realm-treasury/README.md) · [Validação](VALIDACAO-0.3.1.md) · [CurseForge](CURSEFORGE.md)
 
 ## Votações e benefícios
 
-No **Cofre da Coroa**, o Presidente empossado abre **Votações públicas → Propor**. Pode anunciar uma consulta Sim/Não, sem despesa, ou propor um benefício para todos os jogadores em sobrevivência. Não existem novos cargos nem outro bloco.
+No **Cofre da Coroa**, o Presidente empossado abre **Votações públicas → Propor**. A opção principal é **Votação livre**, para qualquer assunto do reino: escrever um **título até 120 caracteres** e uma **descrição até 1000 caracteres**, com várias linhas. Por exemplo, um título «Nova ponte da vila» e uma descrição com o local, os materiais e as condições de acesso. Os jogadores leem o texto completo e votam **A favor / Contra**.
+
+O aviso no ecrã mostra o título e uma pré-visualização da descrição; **F8** abre o boletim completo, com deslocamento para textos longos. No histórico, **Ler** mostra a descrição original e o resultado. O texto fica fixado ao anunciar e é guardado mesmo após reiniciar o mundo. A votação livre é consultiva: não cobra dinheiro nem aplica alterações automáticas ao mundo.
+
+**Benefício do reino** é uma opção adicional no mesmo menu. Não existem novos cargos nem outro bloco.
 
 A proposta aparece num aviso discreto no topo do ecrã. **F8**, configurável nos controlos, abre o boletim. Não abre menus automaticamente nem bloqueia movimentos. O aviso grande recolhe após 12 segundos; fechar o boletim dispensa o aviso nessa ligação. O dinheiro e os resultados são sempre decididos no servidor.
 
@@ -33,8 +37,8 @@ O menu permite consultar benefícios ativos, tempo restante e as últimas 64 dec
 
 ## Instalação e primeiro uso
 
-1. Antes de atualizar um mundo existente, faz uma cópia de segurança do mundo completo e dos perfis do Realm Origins. Esta versão migra o registo do tesouro para o formato 7; voltar ao JAR antigo exige restaurar a cópia anterior à atualização.
-2. Coloca `realm-treasury-0.3.0.jar` na pasta `mods` de cada cliente e do servidor. Se usas Realm Markets, atualiza também para **Realm Markets 0.2.1+** em todos eles; substitui os JARs antigos e não deixes duas versões do mesmo mod.
+1. Antes de atualizar um mundo existente, faz uma cópia de segurança do mundo completo e dos perfis do Realm Origins. Esta versão migra o registo do tesouro para o formato 8; voltar ao JAR antigo exige restaurar a cópia anterior à atualização.
+2. Coloca `realm-treasury-0.3.1.jar` na pasta `mods` de cada cliente e do servidor. Se usas Realm Markets, atualiza também para **Realm Markets 0.2.1+** em todos eles; substitui os JARs antigos e não deixes duas versões do mesmo mod.
 3. Para integrar os restantes sistemas, usa **Contracts & Bounties 0.4.0+**, **Realm Council 0.2.2+** e, opcionalmente, **Realm Origins 0.5.7** com as suas dependências.
 4. Fabrica o **Cofre da Coroa** e clica nele com o botão direito. Também aparece na aba criativa **Realm Treasury** e na pesquisa.
 
@@ -99,7 +103,7 @@ Atualiza Casino e Crown no servidor e em todos os clientes. Sem a API desta vers
 
 Realm Economy 0.4.0 substitui Realm Villager Economy. A Mesa da Economia reúne preços de referência, reparações, combinações, nomes, encantamentos, ferraria, poções e períodos de beacon. O Presidente aprova preços e taxas e a administração define limites e ativação.
 
-Cada pagamento envia apenas o imposto público ao Crown, com moeda Realm Origins e recibo ligado ao serviço. O preço base é retirado da economia. As decisões económicas têm recibos sem dinheiro, com os valores anteriores e novos; não criam fundos nem pagam salários. As APIs de Villagers, casino e justiça permanecem compatíveis. O formato 7 lê os formatos 1–5 e conserva os recibos antigos.
+Cada pagamento envia apenas o imposto público ao Crown, com moeda Realm Origins e recibo ligado ao serviço. O preço base é retirado da economia. As decisões económicas têm recibos sem dinheiro, com os valores anteriores e novos; não criam fundos nem pagam salários. As APIs de Villagers, casino e justiça permanecem compatíveis. O formato 8 lê os formatos 1–5 e conserva os recibos antigos.
 
 ## Compras aos aldeões — 0.2.4
 
@@ -121,7 +125,7 @@ O governante define a reputação necessária para publicar contratos particular
 
 Sem Realm Origins, a moeda normal é a esmeralda inteira. Com Realm Origins, os valores digitais usam cêntimos e o perfil original do jogador. Cada moeda tem saldo e créditos separados; não existe conversão automática. O separador de donativos permite escolher a moeda. Nas regras, o governante pode escolher a moeda fiscal; mudar essa escolha repõe os campos de salário e imposto fixo em zero, sem converter saldos nem créditos anteriores. Os pagamentos de personagens offline ficam pendentes, sem editar os seus ficheiros de perfil.
 
-O ficheiro `data/crown_ledger.dat` guarda regras, saldo disponível, salários reservados, atividade, ciclo pendente e os últimos 256 movimentos, incluindo receitas de imposto de mercado. Os contratos usam também `data/contracts_ledger.dat`; as bancas e os impostos ainda reservados usam `data/realm_markets.dat`. Os recibos judiciais são guardados no mesmo ficheiro que o saldo da tesouraria e não dependem da rotação dos últimos movimentos. O formato 7 migra automaticamente os formatos 1, 2, 3, 4 e 5, conservando valores, regras e recibos; mundos anteriores ao formato 4 iniciam a taxa do casino a zero. As cópias de segurança devem incluir o mundo completo e os perfis do Realm Origins. As transferências entre mods são verificadas no mesmo thread do servidor. Os pagamentos judiciais usam gravações confirmadas e recibos únicos para conciliar ficheiros separados; as restantes operações mantêm os mecanismos existentes.
+O ficheiro `data/crown_ledger.dat` guarda regras, saldo disponível, salários reservados, atividade, ciclo pendente e os últimos 256 movimentos, incluindo receitas de imposto de mercado. Os contratos usam também `data/contracts_ledger.dat`; as bancas e os impostos ainda reservados usam `data/realm_markets.dat`. Os recibos judiciais são guardados no mesmo ficheiro que o saldo da tesouraria e não dependem da rotação dos últimos movimentos. O formato 8 migra automaticamente os formatos 1, 2, 3, 4 e 5, conservando valores, regras e recibos; mundos anteriores ao formato 4 iniciam a taxa do casino a zero. As cópias de segurança devem incluir o mundo completo e os perfis do Realm Origins. As transferências entre mods são verificadas no mesmo thread do servidor. Os pagamentos judiciais usam gravações confirmadas e recibos únicos para conciliar ficheiros separados; as restantes operações mantêm os mecanismos existentes.
 
 [Changelog](CHANGELOG.md) · [Resultados e limites da validação](VALIDACAO.md) · [JAR](../mod-pronto/crown-ledger-0.2.5.jar) · [ZIP](../mod-pronto/crown-ledger-0.2.5.zip) · [Imagens](../media/crown-ledger/0.2.5/README.md).
 
@@ -139,12 +143,12 @@ python3 tools/treasury_release.py install
 
 Na máquina cloud, usa `python3 tools/cloud_gradle.py` em vez de `./gradlew`; mantém o proxy e a verificação TLS configurados. Os testes e os automatismos de cliente são excluídos do JAR de produção.
 
-A versão 0.3.0 foi validada com **77 testes unitários**, **37 GameTests independentes**, **37 GameTests com os companheiros publicados**, a regressão visual do cofre e das interfaces anteriores e **dois clientes Minecraft reais ligados por TCP LAN**. A sequência LAN confirmou votos alteráveis, aprovação de um benefício financiado, rejeição de uma consulta empatada e reabertura efetiva do mundo com o saldo e decisões conservados. As capturas dos novos menus usam esses dados reais; as três capturas anteriores de contas e impostos usam dados de demonstração.
+A versão 0.3.0 foi validada com **80 testes unitários**, **40 GameTests independentes**, **40 GameTests com os companheiros publicados**, a regressão visual do cofre e das interfaces anteriores e **dois clientes Minecraft reais ligados por TCP LAN**. A sequência LAN confirmou votos alteráveis, aprovação de um benefício financiado, rejeição de uma consulta empatada e reabertura efetiva do mundo com o saldo e decisões conservados. As capturas dos novos menus usam esses dados reais; as três capturas anteriores de contas e impostos usam dados de demonstração.
 
-[Resultados, reprodução e limites](VALIDACAO-0.3.0.md). A publicação automática volta a executar os testes antes de guardar o JAR, o ZIP, os hashes, os relatórios e a galeria. O histórico das validações anteriores continua em [VALIDACAO.md](VALIDACAO.md).
+[Resultados, reprodução e limites](VALIDACAO-0.3.1.md). A publicação automática volta a executar os testes antes de guardar o JAR, o ZIP, os hashes, os relatórios e a galeria. O histórico das validações anteriores continua em [VALIDACAO.md](VALIDACAO.md).
 
 ## Pagamentos judiciais — 0.2.2
 
 Laws & Justice 0.4.0 envia multas e fianças já pagas para a tesouraria na moeda original. Cada transferência guarda um recibo único no mesmo ficheiro que o saldo. Repetir o recibo, incluindo após reiniciar um mundo LAN, não cria outra entrada de dinheiro. Se a gravação ou o limite de saldo impedir a transferência, o tribunal conserva os fundos até poder entregá-los.
 
-A atualização migra automaticamente o formato 1 ou 2 para o formato 7, conservando as contas, os impostos e os salários. Usa Realm Treasury 0.3.0 no servidor e em todos os clientes. Realm Markets 0.2.1 continua compatível. A API é exclusiva do servidor e não dá aos clientes uma forma de criar dinheiro.
+A atualização migra automaticamente o formato 1 ou 2 para o formato 8, conservando as contas, os impostos e os salários. Usa Realm Treasury 0.3.1 no servidor e em todos os clientes. Realm Markets 0.2.1 continua compatível. A API é exclusiva do servidor e não dá aos clientes uma forma de criar dinheiro.

@@ -42,7 +42,7 @@ public final class TreasuryData extends SavedData {
     public static TreasuryData load(CompoundTag tag, HolderLookup.Provider lookup) {
         type(tag, "version", Tag.TAG_INT);
         int version = tag.getInt("version");
-        if (version < 1 || version > 7) throw new IllegalStateException("Unsupported Realm Treasury storage version");
+        if (version < 1 || version > 8) throw new IllegalStateException("Unsupported Realm Treasury storage version");
         type(tag, "policy", Tag.TAG_COMPOUND);
         type(tag, "periodStartedAt", Tag.TAG_LONG);
         type(tag, "nextCycleAt", Tag.TAG_LONG);
@@ -113,17 +113,19 @@ public final class TreasuryData extends SavedData {
                 String json=java.nio.charset.StandardCharsets.UTF_8.newDecoder().decode(java.nio.ByteBuffer.wrap(bytes)).toString();
                 var snapshot=new com.google.gson.Gson().fromJson(json,pt.crownledger.domain.Governance.Snapshot.class);
                 result.governance=new pt.crownledger.domain.Governance(java.util.Objects.requireNonNull(snapshot));
+                if(version<8 && (result.governance.current()!=null&&!result.governance.current().description().isEmpty()||result.governance.history().stream().anyMatch(r->!r.description().isEmpty())))
+                    throw new IllegalStateException("Described polls require treasury format 8");
                 if(version<7 && !result.governance.snapshot().equals(new pt.crownledger.domain.Governance().snapshot()))
                     throw new IllegalStateException("Funded votes require treasury format 7");
             } catch(java.nio.charset.CharacterCodingException|RuntimeException error){throw new IllegalStateException("Cannot recover governance data",error);}
         }
-        if (version < 7) result.setDirty();
+        if (version < 8) result.setDirty();
         return result;
     }
 
     @Override public CompoundTag save(CompoundTag tag, HolderLookup.Provider lookup) {
         Treasury.Snapshot saved = treasury.snapshot();
-        tag.putInt("version", 7);
+        tag.putInt("version", 8);
         tag.putByteArray("governance",new com.google.gson.Gson().toJson(governance.snapshot()).getBytes(java.nio.charset.StandardCharsets.UTF_8));
         ListTag receipts=new ListTag();
         income.receipts().values().forEach(receipt->{CompoundTag entry=new CompoundTag();entry.putUUID("id",receipt.id());entry.putString("currency",receipt.currency().name());entry.putLong("amount",receipt.amount());entry.putUUID("payer",receipt.payer());entry.putString("memo",receipt.memo());receipts.add(entry);});

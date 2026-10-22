@@ -31,4 +31,28 @@ class GovernanceTest {
     @Test void ballotAtDeadlineAndRewoundClockIsRejected(){var id=open(null);assertThrows(IllegalStateException.class,()->votes.vote(id,a,true,11000));votes.vote(id,a,true,9000);assertThrows(IllegalStateException.class,()->votes.vote(id,b,true,8000));assertEquals(1,votes.current().yes());}
     @Test void highQuorumRoundsUpAndServerSnapshotIsImmutable(){votes.propose(treasury,king,"K","Q",null,Set.of(a,b,c),50,2,10000,0,1000);assertEquals(2,votes.current().minimumVotes());var snapshot=votes.snapshot();assertThrows(UnsupportedOperationException.class,()->snapshot.active().clear());assertThrows(RuntimeException.class,()->new Snapshot(snapshot.current(),List.of(),List.of(),new Refund(UUID.randomUUID(),EMERALD,1),11000,1000));}
     @Test void chronologicalHistoryIsBoundedAndRetainsNoBallotMap(){for(int i=0;i<70;i++){long now=1000+i*2000L;var id=votes.propose(treasury,king,"K","Q"+i,null,people,50,2,1000,0,now);votes.vote(id,a,true,now+1);votes.vote(id,b,true,now+2);votes.advance(treasury,now+1000);}assertEquals(64,votes.history().size());assertEquals("Q69",votes.history().getFirst().question());assertNull(votes.current());assertTrue(Arrays.stream(Result.class.getRecordComponents()).noneMatch(r->r.getType()==Map.class));}
+
+    @Test void generalTitleAndMultilineDescriptionRemainFrozenThroughVotingAndHistory(){
+        String description="Construir uma ponte junto à vila.\nUsar pedra e madeira, com acesso público.";
+        var id=votes.propose(treasury,king,"Aetherion","Nova ponte",description,null,people,50,2,10000,0,1000);
+        votes.vote(id,a,true,2000);votes.vote(id,b,true,2001);
+        assertEquals(description,votes.current().description());
+        var restored=votes.copy();restored.advance(treasury,11000);
+        assertEquals("Nova ponte",restored.history().getFirst().question());
+        assertEquals(description,restored.history().getFirst().description());
+        assertEquals(Outcome.APPROVED,restored.history().getFirst().outcome());
+        assertEquals(0,treasury.balance(EMERALD));assertTrue(restored.active().isEmpty());
+    }
+    @Test void oversizedOrFormattedDescriptionsCannotReserveMoney(){
+        funds();
+        for(String invalid:List.of("x".repeat(1001),"§aForged","hidden\u0000text"))
+            assertThrows(RuntimeException.class,()->votes.propose(treasury,king,"King","Title",invalid,offer,people,50,2,10000,0,1000));
+        assertNull(votes.current());assertEquals(1000,treasury.balance(EMERALD));
+    }
+    @Test void descriptionNormalizesLineEndingsAndLegacyRecordsHaveAnEmptyDescription(){
+        votes.propose(treasury,king,"King","Title","First\r\nSecond\rThird",null,people,50,2,10000,0,1000);
+        assertEquals("First\nSecond\nThird",votes.current().description());
+        var legacy=new Proposal(UUID.randomUUID(),king,"K","Previous vote",null,1000,11000,11000,1,Set.of(a),Map.of());
+        assertEquals("",legacy.description());
+    }
 }

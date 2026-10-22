@@ -1,3 +1,12 @@
+# Realm Treasury 0.3.1 — Free Public Votes
+
+- Made free public voting the default proposal option, with separate custom title and multiline description fields.
+- Added full, scrollable proposal descriptions to ballots and archived decision readers, plus description previews in the on-screen notice.
+- Preserved title and description through votes, external income receipts, final results and world reopening.
+- Kept kingdom benefits as an additional option; general votes remain advisory and never charge treasury funds.
+- Added title/description validation, larger bounded packet codecs and migration tests for 0.3.0 ballots without descriptions.
+- Updated treasury storage to format 8 and network protocol to 5. Update both clients and server to 0.3.1.
+
 # Realm Treasury 0.3.0 — Public Votes and Kingdom Benefits
 
 - Renamed Crown Ledger to Realm Treasury, preserving the kingdomtreasury mod ID, existing blocks, accounts, policies, contracts and public APIs.

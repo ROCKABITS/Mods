@@ -15,7 +15,7 @@ import net.neoforged.neoforge.network.PacketDistributor;
 
 /** The remote endpoint exposes only public voting. Spending authority still requires a live physical chest session. */
 public final class GovernanceService {
-    private static final Gson JSON=new Gson();
+    private static final Gson JSON=new GsonBuilder().disableHtmlEscaping().create();
     private record Clock(long millis,long nanos){}
     private static final Map<MinecraftServer,Clock> CLOCKS=new WeakHashMap<>();
     private static final Map<UUID,Long> RATE=new HashMap<>(),QUERIES=new HashMap<>();
@@ -33,7 +33,7 @@ public final class GovernanceService {
             long nano=System.nanoTime();
             if(operation.equals("query")){Long last=QUERIES.put(player.getUUID(),nano);if(last!=null&&nano-last<500_000_000L)return;}
             else {Long last=RATE.put(player.getUUID(),nano);if(last!=null&&nano-last<150_000_000L)throw error("rate");}
-            if(payload==null||payload.length()>2048)throw error("invalid");
+            if(payload==null||payload.length()>8192)throw error("invalid");
             JsonObject input=JsonParser.parseString(payload).getAsJsonObject();
             var server=player.getServer();var data=TreasuryData.get(server);long time=now(server);
             var next=data.governance.copy();var treasury=data.treasury.copy();
@@ -44,16 +44,19 @@ public final class GovernanceService {
                 case "propose" -> {
                     requireProposer(player);
                     if(!GovernanceConfig.ENABLED.get())throw error("disabled");
-                    Governance.Offer offer=null;String question;
+                    Governance.Offer offer=null;String question,description="";
                     if(input.has("benefit")){
                         offer=GovernanceConfig.offer(Governance.Benefit.valueOf(input.get("benefit").getAsString()),treasury.policy().currency());
                         if(!input.has("cost")||input.get("cost").getAsLong()!=offer.cost()||input.get("duration").getAsLong()!=offer.durationMillis()||
                                 input.get("strength").getAsInt()!=offer.strength()||!input.get("currency").getAsString().equals(offer.currency().name()))throw error("quote");
                         question="realm.treasury.benefit."+offer.benefit().name().toLowerCase(Locale.ROOT);
-                    }else question=input.get("question").getAsString();
+                    }else {
+                        question=strictText(input,"title");description=strictText(input,"description");
+                        if(description.isBlank())throw error("description_required");
+                    }
                     Set<UUID> eligible=new LinkedHashSet<>();
                     for(var citizen:server.getPlayerList().getPlayers())if(!citizen.isSpectator()&&!(citizen instanceof FakePlayer))eligible.add(citizen.getUUID());
-                    next.propose(treasury,player.getUUID(),ChroniclesBridge.publicName(player),question,offer,eligible,
+                    next.propose(treasury,player.getUUID(),ChroniclesBridge.publicName(player),question,description,offer,eligible,
                             GovernanceConfig.QUORUM.get(),GovernanceConfig.MAX_ACTIVE.get(),GovernanceConfig.VOTING_SECONDS.get()*1000L,
                             GovernanceConfig.COOLDOWN_SECONDS.get()*1000L,time);
                 }
@@ -73,6 +76,11 @@ public final class GovernanceService {
             if(key==null||!key.startsWith("realm.treasury.")&&!key.startsWith("gui.kingdomtreasury."))key="realm.treasury.error.invalid";
             send(player,false,key);
         }
+    }
+    private static String strictText(JsonObject input,String key){
+        var value=input.get(key);
+        if(value==null||!value.isJsonPrimitive()||!value.getAsJsonPrimitive().isString())throw error("invalid");
+        return value.getAsString();
     }
     private static boolean strictBoolean(JsonObject input,String key){
         var v=input.get(key);if(v==null||!v.isJsonPrimitive()||!v.getAsJsonPrimitive().isBoolean())throw error("invalid");return v.getAsBoolean();
@@ -108,7 +116,7 @@ public final class GovernanceService {
         view.put("currency",data.treasury.policy().currency().name());view.put("balance",data.treasury.balance(data.treasury.policy().currency()));
         var p=g.current();
         if(p!=null){
-            Map<String,Object> poll=new LinkedHashMap<>();poll.put("id",p.id());poll.put("author",p.authorName());poll.put("question",p.question());
+            Map<String,Object> poll=new LinkedHashMap<>();poll.put("id",p.id());poll.put("author",p.authorName());poll.put("question",p.question());poll.put("description",p.description());
             poll.put("offer",p.offer());poll.put("deadline",p.deadline());poll.put("electorate",p.eligible().size());poll.put("minimumVotes",p.minimumVotes());
             poll.put("participation",p.ballots().size());poll.put("ownVote",p.ballots().get(player.getUUID()));
             poll.put("canVote",p.eligible().contains(player.getUUID())&&!player.isSpectator()&&time<p.deadline());view.put("poll",poll);
