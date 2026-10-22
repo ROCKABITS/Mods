@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.5.7 — Ocupação personalizada
+
+- Campo de texto para escrever a ocupação na criação e em Editar memórias.
+- Indicação visível: uma palavra, não uma frase ou texto; limite de 24 caracteres.
+- Sugestões rápidas de Ferreiro, Mercador e Bardo, preenchidas com um clique.
+- Suporte para acentos e hífen; validação no servidor e preservação das ocupações antigas.
+- Ocupações personalizadas mantêm-se entre capítulos, após escolher Origins e ao guardar o perfil.
+- O livrinho no P e os restantes dados e regras mantêm-se.
+- Protocolo 8: atualizar servidor e todos os clientes para 0.5.7.
+
 ## 0.5.6 — O livrinho no P
 
 - P volta a abrir o livro original de pergaminho depois da criação da personagem.

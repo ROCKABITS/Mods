@@ -543,6 +543,41 @@ public final class RpNamesGameTests {
         });
     }
 
+    @GameTest(template = "cash_empty", timeoutTicks = 100)
+    public static void customOccupationPacketsAreValidatedWithoutChangingMoney(GameTestHelper helper) {
+        var player = new RecordedPlayer(helper, "WordQA"); selectOrigins(player);
+        byte[] ink = new byte[SignatureDrawing.BYTES]; SignatureDrawing.pixel(ink, 40, 20, true);
+        String drawing = SignatureDrawing.encode(ink);
+        try (var online = new OnlinePlayers(helper, player)) {
+            invokeCreate(player, new CharacterDraft("Ari", 29, "origins:human", "Lua", "Ari", drawing, "Guarda do Reino"));
+            helper.assertTrue(!player.getData(ModAttachments.PROFILE).created(), "A forged phrase created a profile.");
+            invokeCreate(player, new CharacterDraft("Ari", 29, "origins:human", "Lua", "Ari", drawing, "Alquimista"));
+            var saved = player.getData(ModAttachments.PROFILE);
+            helper.assertTrue(saved.created() && saved.progress().occupation().equals("Alquimista"), "Server rejected a custom word.");
+            invokeOccupationEdit(player, saved, "Guarda do Reino");
+            helper.assertTrue(player.getData(ModAttachments.PROFILE).equals(saved), "Rejected edit changed player data or funds.");
+            invokeOccupationEdit(player, saved, "Cartógrafo");
+            helper.assertTrue(player.getData(ModAttachments.PROFILE).equals(saved.withProgress(saved.progress().withOccupation("Cartógrafo"))),
+                    "Custom occupation edit changed money or unrelated data.");
+            helper.assertTrue(player.payloads().stream().filter(ProfilePackets.State.class::isInstance).map(ProfilePackets.State.class::cast)
+                    .anyMatch(packet -> packet.profile().created() && packet.profile().progress().occupation().equals("Cartógrafo")),
+                    "Custom occupation was not sent back to the actual client channel.");
+        }
+        helper.succeed();
+    }
+    private static void invokeOccupationEdit(ServerPlayer player, CharacterProfile saved, String occupation) {
+        try {
+            IPayloadContext context = (IPayloadContext) Proxy.newProxyInstance(IPayloadContext.class.getClassLoader(),
+                    new Class<?>[] {IPayloadContext.class}, (proxy, method, args) -> {
+                        if (method.getName().equals("player")) return player;
+                        throw new UnsupportedOperationException(method.getName());
+                    });
+            var method = ProfileNetwork.class.getDeclaredMethod("edit", ProfilePackets.Edit.class, IPayloadContext.class);
+            method.setAccessible(true);
+            method.invoke(null, new ProfilePackets.Edit(saved.description(), saved.signature(), saved.signatureDrawing(), occupation), context);
+        } catch (ReflectiveOperationException ex) { throw new IllegalStateException(ex); }
+    }
+
     private static void invokeCreate(ServerPlayer player, CharacterDraft draft) {
         try {
             IPayloadContext context = (IPayloadContext) Proxy.newProxyInstance(IPayloadContext.class.getClassLoader(),

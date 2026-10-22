@@ -38,7 +38,7 @@ public final class OriginsClientQA {
     private static boolean done, raceButtonClicked, raceSelected;
     private static CharacterCreationScreen draft;
     private static long firstCreationAt, welcomeAt;
-    private static boolean storyWritten, signed, journalKeyVerified;
+    private static boolean storyWritten, signed, journalKeyVerified, occupationChoicesVerified;
     private static int profileStage;
     private static int lastStep = -1;
     private static net.minecraft.client.gui.screens.Screen lastRenderedScreen;
@@ -60,6 +60,11 @@ public final class OriginsClientQA {
                 button.onPress(); return true;
             }
         return false;
+    }
+    private static RpgEditBox occupationField(net.minecraft.client.gui.screens.Screen screen) {
+        return screen.children().stream().filter(c -> c instanceof RpgEditBox b
+                        && b.getMessage().getString().equals(UiText.s("gui.cronicasrp.label.occupation")))
+                .map(c -> (RpgEditBox)c).findFirst().orElseThrow();
     }
     private static void capture(String name) throws Exception {
         var screen = Minecraft.getInstance().screen;
@@ -91,6 +96,7 @@ public final class OriginsClientQA {
                     "with_classes", net.neoforged.fml.ModList.get().isLoaded("origins_classes"),
                     "visual_rework", success && step == 23,
                     "journal_key", success && journalKeyVerified,
+                    "custom_occupation", success && occupationChoicesVerified,
                     "race", saved == null ? "" : saved.race(),
                     "balance", saved == null ? 0 : saved.balance())));
         } catch (Exception ignored) {}
@@ -145,6 +151,7 @@ public final class OriginsClientQA {
                         check(screen.children().stream().anyMatch(c -> c instanceof AbstractButton b &&
                                 b.getMessage().getString().equals(UiText.s("gui.cronicasrp.button.continue")) && !b.active),
                                 "Creation advanced before Origins choices");
+                        occupationField(screen).setValue("Alquimista");
                         capture("00-rp-before-origins");
                         raceButtonClicked = true;
                         check(click(UiText.s("gui.cronicasrp.label.lineage_prefix") + UiText.selectedRace()), "No lineage selector");
@@ -183,6 +190,7 @@ public final class OriginsClientQA {
                         if (net.neoforged.fml.ModList.get().isLoaded("origins_classes"))
                             check(OriginsBridge.playerClass(mc.player).orElseThrow().id().toString().equals("origins_classes:warrior"), "Incorrect native class");
                         else check(OriginsBridge.playerClass(mc.player).isEmpty(), "Optional class was fabricated");
+                        check(occupationField(screen).getValue().equals("Alquimista"), "Origins lost the custom occupation draft");
                         capture("03-creation-en");
                         check(click(UiText.s("gui.cronicasrp.label.lineage_prefix") + UiText.selectedRace()), "No Origins link"); step++;
                     }
@@ -197,12 +205,22 @@ public final class OriginsClientQA {
                     if (mc.screen instanceof CharacterCreationScreen screen) {
                         check(screen.children().stream().anyMatch(c -> c instanceof EditBox box && box.getValue().equals("Ari Moonborn")),
                                 "Returning from Origins lost the character draft");
+                        if (!occupationChoicesVerified) {
+                            occupationField(screen).setValue("Guarda do Reino");
+                            check(click(UiText.s("gui.cronicasrp.button.continue")), "No continue action");
+                            check(screen.children().stream().noneMatch(c -> c instanceof RpgStoryBox), "A phrase advanced the identity stage");
+                            check(click(UiText.occupation("Bardo")), "Quick occupation choice is missing");
+                            check(occupationField(screen).getValue().equals(UiText.occupation("Bardo")), "Quick choice did not fill the editor");
+                            occupationField(screen).setValue("Alquimista"); occupationChoicesVerified = true; return;
+                        }
+                        capture("24-occupation-en");
                         check(click(UiText.s("gui.cronicasrp.button.continue")), "Identity step did not advance"); step++;
                     }
                 }
                 case 7 -> {
                     if (mc.screen instanceof CharacterCreationScreen screen) {
                         if (!storyWritten) {
+                            check(occupationField(screen).getValue().equals("Alquimista"), "Stage navigation lost the custom occupation");
                             screen.children().stream().filter(c -> c instanceof RpgStoryBox).map(c -> (RpgStoryBox)c).findFirst().orElseThrow()
                                     .setValue("Born beneath a violet sky, Ari set out to write a new chapter among the kingdoms of this world.");
                             storyWritten = true; return;
@@ -235,6 +253,7 @@ public final class OriginsClientQA {
                     if (mc.screen instanceof DestinyRevealScreen) {
                         saved = ClientState.profile();
                         check(saved.created() && saved.name().equals("Ari Moonborn") && saved.age() == 128 && saved.race().equals("origins:avian"), "Actual server created incorrect RP identity");
+                        check(saved.progress().occupation().equals("Alquimista"), "The actual server did not save the custom occupation");
                         if (welcomeAt == 0) welcomeAt = now;
                         if (now - welcomeAt < 5200) return;
                         capture("13-welcome-en");
@@ -371,7 +390,7 @@ public final class OriginsClientQA {
                         var before = ClientState.profile();
                         check(screen.keyPressed(257, 0, 0) && mc.screen == null, "Enter world did not return to gameplay");
                         check(ClientState.profile().equals(before), "Replaying welcome changed saved identity or funds");
-                        complete(true, "Realm Origins: native Origins and optional Classes, preserved draft, four chapters, drawn signature, saved welcome, P opens the parchment book after creation, four book tabs, actual one-cent withdraw/deposit round-trip, EN/PT, compact controls and Enter world without another payment passed.");
+                        complete(true, "Realm Origins: native Origins and optional Classes, preserved draft, four chapters, custom one-word occupation, rejected phrases, quick suggestions, drawn signature, saved welcome, P opens the parchment book after creation, four book tabs, actual one-cent withdraw/deposit round-trip, EN/PT, compact controls and Enter world without another payment passed.");
                     }
                 }
                 default -> throw new IllegalStateException("Unknown QA step");

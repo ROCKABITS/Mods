@@ -46,6 +46,7 @@ for folder, logfile, marker in (
     assert report.get('success') is True, (folder, report)
     if folder != 'rp-names-client':
         assert report.get('journal_key') is True, 'P did not open the parchment journal'
+        assert report.get('custom_occupation') is True, 'Custom occupation, validation and quick choices were not exercised'
         assert report.get('visual_rework') is True and report.get('step') == 23, 'Missing actual rework flow'
         assert report.get('with_classes') == (folder == 'client'), 'Wrong Origins Classes client mode'
     log = (project / logfile).read_text(errors='replace')
@@ -98,7 +99,7 @@ rework_names = ['03-creation-en', '14-story-en', '05-signature-en', '06-oath-en'
                 '13-welcome-en', '07-profile-en', '15-deeds-en', '16-profile-story-en',
                 '17-wallet-en', '18-exchange-en', '11-profile-compact', '12-creation-compact',
                 '19-exchange-compact', '20-edit-story-compact', '21-edit-signature-compact',
-                '22-edit-review-compact', '23-welcome-compact']
+                '22-edit-review-compact', '23-welcome-compact', '24-occupation-en']
 for name in rework_names:
     target = 'realm-origins-' + name + '.png'
     source_image = project / 'qa-results/client' / (name + '.png')
@@ -126,7 +127,7 @@ provenance = {
     'native_tests_without_classes': native['gametests-without-classes.log'],
     'native_tests_with_released_companions': native['integration.log'],
     'actual_client_validation': True, 'origins_client_with_and_without_classes': True,
-    'chronicles_runtime_tested': True, 'network_protocol': '7',
+    'chronicles_runtime_tested': True, 'network_protocol': '8', 'custom_occupations_verified': True,
     'client_chat_scope': 'Real integrated-server player chat transport; the development session has no authenticated signed-chat certificate.',
     'runtime_dependencies': dependencies,
     'dependency_checksum_scope': 'Observed SHA256 of the exact pinned CurseForge file IDs, fetched by Gradle over verified HTTPS; CurseMaven provides no publisher checksum files.',

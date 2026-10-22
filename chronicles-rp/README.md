@@ -1,16 +1,18 @@
-# Realm Origins — 0.5.6
+# Realm Origins — 0.5.7
 
 **Realm Origins** é o novo nome do Chronicles RP. A criação mantém o visual cinematográfico escuro e lilás, com quatro capítulos, skin em 3D, assinatura e boas-vindas. Depois de criar a personagem, **P abre novamente o livro original de pergaminho**, com Ficha, Feitos, História e Bolsa. O câmbio usa também o livro. A criação e as boas-vindas conservam o visual novo.
 
-Os dados, campos e regras mantêm-se. A confirmação mostra os fundos já guardados, sem sortear ou pagar dinheiro novamente.
+A ocupação passa a ser escrita livremente: usa uma palavra de até 24 caracteres, com acentos e hífen permitidos, como Alquimista ou Guarda-real. Os botões Ferreiro, Mercador e Bardo são sugestões que preenchem o campo. A regra é validada no servidor, tanto na criação como na edição. As profissões antigas mantêm-se.
 
-O identificador interno continua a ser `cronicasrp`, tal como os itens, dados, configuração, pacote Java e protocolo **7**. Isto preserva os perfis, carteiras e integrações existentes. A pasta do projeto mantém o nome `chronicles-rp/`. O novo JAR **substitui** o Chronicles RP; não é um segundo mod para instalar ao lado dele.
+Os restantes dados e regras mantêm-se. A confirmação mostra os fundos já guardados, sem sortear ou pagar dinheiro novamente.
+
+O identificador interno continua a ser `cronicasrp`, tal como os itens, dados, configuração e pacote Java. O protocolo passa a **8**, porque clientes antigos só reconheciam a lista fixa de ocupações. Atualiza servidor e todos os clientes para 0.5.7. Isto preserva os perfis, carteiras e integrações existentes. A pasta do projeto mantém o nome `chronicles-rp/`. O novo JAR **substitui** o Chronicles RP; não é um segundo mod para instalar ao lado dele.
 
 Personagens de fantasia e economia para Minecraft Java 1.21.1, NeoForge 21.1.256+ na série 21.1 e Java 21.
 
 ## Instalar
 
-Faz uma cópia de segurança do mundo e coloca `realm-origins-0.5.6.jar` em `mods`, substituindo o JAR anterior do Chronicles RP. Instala a versão 0.5.6 no servidor e em todos os clientes; não deixes o JAR antigo e o novo Realm Origins na mesma pasta.
+Faz uma cópia de segurança do mundo e coloca `realm-origins-0.5.7.jar` em `mods`, substituindo o JAR anterior do Chronicles RP. Instala a versão 0.5.7 no servidor e em todos os clientes; não deixes o JAR antigo e o novo Realm Origins na mesma pasta.
 
 | Mod | Versão usada nesta atualização | Necessário? |
 | --- | --- | --- |
@@ -53,7 +55,7 @@ Sem Origins: Classes, o mod continua a funcionar com Origins; a ficha mostra que
 
 Ao atualizar de 0.4.1, preserva a pasta do mundo e troca os JARs. Nome, idade, história, desenho da assinatura, profissão, reputação, missões, medalhas, fortuna inicial e saldo são mantidos. A raça passa a acompanhar a origem que escolheres no Origins. Escolher uma origem ou classe não volta a sortear nem atribui dinheiro.
 
-O protocolo do Realm Origins mantém a versão **7** desde a versão 0.5.3. Recomenda-se atualizar o servidor e todos os clientes para a versão 0.5.6; as versões 0.5.2 e 0.5.3+ usam protocolos diferentes. O formato do perfil de RP mantém os campos anteriores; a linhagem guarda o identificador da origem. A escolha da classe fica nos dados do próprio Origins. Esta atualização não reinicia as personagens, não volta a sortear a fortuna e não converte o dinheiro.
+O protocolo do Realm Origins passa a **8** na versão 0.5.7. Atualiza o servidor e todos os clientes; as versões 0.5.6 e anteriores não são compatíveis com este canal. O formato do perfil de RP mantém os campos anteriores; a linhagem guarda o identificador da origem. A escolha da classe fica nos dados do próprio Origins. Esta atualização não reinicia as personagens, não volta a sortear a fortuna e não converte o dinheiro.
 
 ## Livro e economia
 

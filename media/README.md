@@ -73,3 +73,7 @@ The images are real Minecraft client captures of the mod's models and interface.
 ## Realm Origins 0.5.6
 
 [Galeria atual](realm-origins/0.5.6/README.md): criação cinematográfica e livro original de pergaminho aberto pela tecla P, com páginas de perfil, feitos, história, bolsa e câmbio.
+
+## Realm Origins 0.5.7
+
+[Galeria atual](realm-origins/0.5.7/README.md): ocupação escrita numa palavra, sugestões rápidas, criação cinematográfica e livrinho de pergaminho no P.

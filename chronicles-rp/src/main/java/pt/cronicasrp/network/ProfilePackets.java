@@ -31,8 +31,8 @@ public final class ProfilePackets {
             buf.writeUtf(d.name(), 40); buf.writeVarInt(d.age()); buf.writeUtf(d.race(), pt.cronicasrp.domain.CharacterRules.RACE_LIMIT);
             buf.writeUtf(d.description(), 600); buf.writeUtf(d.signature(), 60);
             buf.writeUtf(d.signatureDrawing(), SignatureDrawing.MAX_LENGTH);
-            buf.writeUtf(d.occupation(), 24);
-        }, buf -> new Create(new CharacterDraft(buf.readUtf(40), buf.readVarInt(), buf.readUtf(pt.cronicasrp.domain.CharacterRules.RACE_LIMIT), buf.readUtf(600), buf.readUtf(60), buf.readUtf(SignatureDrawing.MAX_LENGTH), buf.readUtf(24))));
+            buf.writeUtf(d.occupation(), RpProgress.OCCUPATION_LIMIT);
+        }, buf -> new Create(new CharacterDraft(buf.readUtf(40), buf.readVarInt(), buf.readUtf(pt.cronicasrp.domain.CharacterRules.RACE_LIMIT), buf.readUtf(600), buf.readUtf(60), buf.readUtf(SignatureDrawing.MAX_LENGTH), buf.readUtf(RpProgress.OCCUPATION_LIMIT))));
         @Override public Type<Create> type() { return TYPE; }
     }
     public record Edit(String description, String signature, String signatureDrawing, String occupation) implements CustomPacketPayload {
@@ -40,8 +40,8 @@ public final class ProfilePackets {
         public static final StreamCodec<RegistryFriendlyByteBuf, Edit> CODEC = StreamCodec.of((buf, packet) -> {
             buf.writeUtf(packet.description(), 600); buf.writeUtf(packet.signature(), 60);
             buf.writeUtf(packet.signatureDrawing(), SignatureDrawing.MAX_LENGTH);
-            buf.writeUtf(packet.occupation(), 24);
-        }, buf -> new Edit(buf.readUtf(600), buf.readUtf(60), buf.readUtf(SignatureDrawing.MAX_LENGTH), buf.readUtf(24)));
+            buf.writeUtf(packet.occupation(), RpProgress.OCCUPATION_LIMIT);
+        }, buf -> new Edit(buf.readUtf(600), buf.readUtf(60), buf.readUtf(SignatureDrawing.MAX_LENGTH), buf.readUtf(RpProgress.OCCUPATION_LIMIT)));
         @Override public Type<Edit> type() { return TYPE; }
     }
     public record State(CharacterProfile profile, PlayerStatistics statistics, int mode, Component error) implements CustomPacketPayload {
@@ -53,14 +53,14 @@ public final class ProfilePackets {
             buf.writeUtf(p.origin(), 64); buf.writeLong(p.initialBalance()); buf.writeLong(p.balance());
             buf.writeUtf(p.signatureDrawing(), SignatureDrawing.MAX_LENGTH);
             RpProgress rp = p.progress();
-            buf.writeUtf(rp.occupation(), 24); buf.writeVarInt(rp.reputation()); buf.writeVarInt(rp.missions());
+            buf.writeUtf(rp.occupation(), RpProgress.OCCUPATION_LIMIT); buf.writeVarInt(rp.reputation()); buf.writeVarInt(rp.missions());
             buf.writeVarInt(rp.medals()); buf.writeUtf(rp.bestMedal().id(), 16);
             PlayerStatistics stats = packet.statistics();
             buf.writeVarLong(stats.playTicks()); buf.writeVarInt(stats.creaturesDefeated()); buf.writeVarInt(stats.bossesDefeated());
             buf.writeVarInt(packet.mode()); MessageCodec.write(buf, packet.error());
         }, buf -> new State(new CharacterProfile(buf.readBoolean(), buf.readUtf(40), buf.readVarInt(),
                 buf.readUtf(pt.cronicasrp.domain.CharacterRules.RACE_LIMIT), buf.readUtf(600), buf.readUtf(60), buf.readUtf(64), buf.readLong(), buf.readLong(), buf.readUtf(SignatureDrawing.MAX_LENGTH),
-                new RpProgress(buf.readUtf(24), buf.readVarInt(), buf.readVarInt(), buf.readVarInt(), RpProgress.Medal.fromId(buf.readUtf(16)))),
+                new RpProgress(buf.readUtf(RpProgress.OCCUPATION_LIMIT), buf.readVarInt(), buf.readVarInt(), buf.readVarInt(), RpProgress.Medal.fromId(buf.readUtf(16)))),
                 new PlayerStatistics(buf.readVarLong(), buf.readVarInt(), buf.readVarInt()),
                 buf.readVarInt(), MessageCodec.read(buf)));
         @Override public Type<State> type() { return TYPE; }

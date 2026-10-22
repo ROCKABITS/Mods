@@ -1,4 +1,10 @@
-# Validação atual — Realm Origins 0.5.6
+# Validação atual — Realm Origins 0.5.7
+
+Campo de ocupação livre, com uma palavra até 24 caracteres, acentos/hífen e sugestões rápidas. A regra é validada no servidor antes de criar a personagem ou guardar alterações. O livro de pergaminho no P mantém-se. O formato dos dados mantém os campos anteriores; o protocolo passa a 8 para impedir que clientes da lista fixa recebam uma ocupação que não sabem descodificar. Atualizar servidor e clientes.
+
+Os 70 testes JUnit passaram localmente, incluindo palavras Unicode, normalização, rejeição de frases/controlos, limites, armazenamento e pacotes. O cliente real exerceu escrita de Alquimista, rejeição de uma frase, sugestão de Bardo, regresso ao mesmo rascunho depois de Origins, gravação no servidor, consulta pelo P e ecrãs compactos. Os resultados da publicação serão acrescentados após o workflow completo; os resultados históricos abaixo não os substituem.
+
+## Histórico — Realm Origins 0.5.6
 
 Atualização visual: criação e boas-vindas cinematográficas; P abre novamente o livro original de pergaminho. Ficha, Feitos, História, Bolsa e câmbio usam a aparência anterior. Dados, economia e protocolo 7 mantidos.
 

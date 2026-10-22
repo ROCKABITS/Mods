@@ -18,7 +18,7 @@ public final class CharacterCreationScreen extends BookScreen {
     private String error = "";
     private String occupationValue = "Aventureiro";
     private boolean waiting;
-    private RpgEditBox name, age;
+    private RpgEditBox name, age, occupation;
     private RpgStoryBox description;
     private SignaturePad pad;
     private RpgButton submit;
@@ -34,35 +34,46 @@ public final class CharacterCreationScreen extends BookScreen {
         }
     }
     public boolean isEditing() { return editing; }
-    private int bodyY() { return top + (bookHeight < 280 ? 68 : 86); }
+    private int bodyY() { return top + (bookHeight < 280 ? (stage == 0 ? 58 : 68) : 86); }
+    private boolean compact() { return bookHeight < 280; }
+    private int occupationY() { return stage == 0 ? bodyY() + (compact() ? 63 : 99) : bodyY(); }
+    private int storyLabelY() { return bodyY() + (compact() ? 67 : 82); }
     private void capture() {
         if (name != null) nameValue = name.getValue();
         if (age != null) ageValue = age.getValue();
+        if (occupation != null) {
+            occupationValue = occupation.getValue();
+            for (String suggestion : RpProgress.OCCUPATIONS)
+                if (UiText.occupation(suggestion).equals(occupationValue)) { occupationValue = suggestion; break; }
+        }
         if (description != null) descriptionValue = description.getValue();
         if (pad != null) drawingValue = pad.value();
     }
     private void rebuild() { capture(); clearWidgets(); init(); }
     @Override protected void init() {
-        capture(); measure(); name = null; age = null; description = null; pad = null; submit = null;
+        capture(); measure(); name = null; age = null; occupation = null; description = null; pad = null; submit = null;
         portraitX = left + Math.max(16, bookWidth / 15); portraitWidth = bookWidth * 39 / 100;
         formX = left + bookWidth * 55 / 100; formWidth = left + bookWidth - Math.max(16, bookWidth / 15) - formX;
         if (!editing) raceValue = OriginsBridge.race(minecraft.player).map(c -> c.id().toString()).orElse(OriginsBridge.NO_ORIGIN);
         int y = bodyY();
         if (stage == 0) {
-            name = addRenderableWidget(new RpgEditBox(font, formX, y + 13, formWidth - 56, UiText.s("gui.cronicasrp.field.rp_name")));
+            name = addRenderableWidget(new RpgEditBox(font, formX, y + (compact() ? 11 : 13), formWidth - 56, UiText.s("gui.cronicasrp.field.rp_name")));
             name.setMaxLength(CharacterRules.NAME_LIMIT); name.setValue(nameValue); name.setHint(UiText.c("gui.cronicasrp.field.name_hint"));
-            age = addRenderableWidget(new RpgEditBox(font, formX + formWidth - 48, y + 13, 48, UiText.s("gui.cronicasrp.field.rp_age")));
+            age = addRenderableWidget(new RpgEditBox(font, formX + formWidth - 48, y + (compact() ? 11 : 13), 48, UiText.s("gui.cronicasrp.field.rp_age")));
+            if (compact()) { name.setHeight(18); age.setHeight(18); }
             age.setMaxLength(3); age.setFilter(s -> s.isEmpty() || s.matches("[0-9]{1,3}")); age.setValue(ageValue);
-            var originInfo = button(formX, y + 49, formWidth,
+            var originInfo = button(formX, y + (compact() ? 32 : 49), formWidth,
                     UiText.s("gui.cronicasrp.label.lineage_prefix") + UiText.selectedRace(), false, this::showOrigins).fitLabel();
+            if (compact()) originInfo.setHeight(18);
             originInfo.setTooltip(Tooltip.create(OriginsBridge.race(minecraft.player).map(c -> c.description().copy()
                     .append("\n\n").append(UiText.c("gui.cronicasrp.origins.choose_help")))
                     .orElseGet(() -> UiText.c("gui.cronicasrp.origins.choose_help").copy())));
-            occupationButton(y + (bookHeight < 270 ? 88 : 99));
+            occupationFields(occupationY());
             setInitialFocus(name);
         } else if (stage == 1) {
-            occupationButton(y);
-            description = addRenderableWidget(new RpgStoryBox(font, formX, y + 40, formWidth - 5, Math.max(30, footerY() - y - 59)));
+            occupationFields(occupationY());
+            int descriptionY = storyLabelY() + (compact() ? 11 : 15);
+            description = addRenderableWidget(new RpgStoryBox(font, formX, descriptionY, formWidth - 5, Math.max(20, footerY() - descriptionY - 13)));
             description.setCharacterLimit(CharacterRules.DESCRIPTION_LIMIT); description.setValue(descriptionValue);
             setInitialFocus(description);
         } else if (stage == 2) {
@@ -91,16 +102,47 @@ public final class CharacterCreationScreen extends BookScreen {
         if (submit != null && !waiting && !editing && (stage == 0 || stage == 3))
             submit.active = OriginsBridge.ready(minecraft.player);
     }
-    private void occupationButton(int y) {
-        var b = button(formX, y, formWidth, UiText.s("gui.cronicasrp.label.occupation_prefix") + UiText.occupation(occupationValue), false, () -> {
-            occupationValue = RpProgress.OCCUPATIONS.get((RpProgress.OCCUPATIONS.indexOf(occupationValue) + 1) % RpProgress.OCCUPATIONS.size());
-            rebuild();
+    private void occupationFields(int y) {
+        occupation = addRenderableWidget(new RpgEditBox(font, formX, y + (compact() ? 11 : 13), formWidth,
+                UiText.s("gui.cronicasrp.label.occupation")));
+        if (compact()) occupation.setHeight(18);
+        occupation.setMaxLength(RpProgress.OCCUPATION_LIMIT);
+        occupation.setValue(UiText.occupation(occupationValue));
+        occupation.setHint(UiText.c("gui.cronicasrp.occupation.placeholder"));
+        occupation.setResponder(value -> {
+            if (error.equals(UiText.s("error.cronicasrp.occupation"))) {
+                try { RpProgress.checkedOccupation(value); error = ""; }
+                catch (IllegalArgumentException ignored) { /* Keep the explanation while the word is invalid. */ }
+            }
         });
-        b.setTooltip(Tooltip.create(UiText.c("gui.cronicasrp.tooltip.occupation")));
+        occupation.setTooltip(Tooltip.create(UiText.c("gui.cronicasrp.tooltip.occupation")));
+        String[] suggestions = {"Ferreiro", "Mercador", "Bardo"};
+        int gap = 4, buttonWidth = (formWidth - gap * 2) / 3;
+        for (int i = 0; i < suggestions.length; i++) {
+            String value = suggestions[i];
+            var choice = button(formX + i * (buttonWidth + gap), y + (compact() ? 42 : 49), buttonWidth,
+                    UiText.occupation(value), false, () -> {
+                        occupation.setValue(UiText.occupation(value)); setFocused(occupation);
+                    }).fitLabel();
+            choice.setHeight(compact() ? 16 : 18);
+            choice.setTooltip(Tooltip.create(UiText.c("gui.cronicasrp.occupation.quick", UiText.occupation(value))));
+        }
+    }
+    private boolean validateOccupation() {
+        try {
+            occupationValue = RpProgress.checkedOccupation(occupationValue);
+            if (occupation != null) occupation.setValue(UiText.occupation(occupationValue));
+            return true;
+        } catch (IllegalArgumentException ex) {
+            error = UiText.error(ex.getMessage());
+            if (occupation != null) setFocused(occupation);
+            return false;
+        }
     }
     private void next() {
         if (waiting) return;
         capture(); error = "";
+        if ((stage == 0 || stage == 1) && !validateOccupation()) return;
         if (stage == 0) {
             if (nameValue.strip().length() < 2) { error = UiText.s("error.cronicasrp.name_letters"); return; }
             try { int age = Integer.parseInt(ageValue); if (age < 1 || age > 999) throw new NumberFormatException(); }
@@ -119,7 +161,9 @@ public final class CharacterCreationScreen extends BookScreen {
         if (!editing && !OriginsBridge.ready(minecraft.player)) {
             error = UiText.s("error.cronicasrp.origins_required"); return;
         }
-        capture(); error = ""; waiting = true; rebuild();
+        capture(); error = "";
+        if (!validateOccupation()) return;
+        waiting = true; rebuild();
         if (editing) PacketDistributor.sendToServer(new ProfilePackets.Edit(descriptionValue, signatureValue, drawingValue, occupationValue));
         else PacketDistributor.sendToServer(new ProfilePackets.Create(new CharacterDraft(nameValue, Integer.parseInt(ageValue),
                 raceValue, descriptionValue, signatureValue, drawingValue, occupationValue)));
@@ -159,14 +203,14 @@ public final class CharacterCreationScreen extends BookScreen {
         if (stage == 0) {
             text(g, UiText.s("gui.cronicasrp.field.rp_name"), formX, y, formWidth - 56, RpgTheme.LIGHT);
             text(g, UiText.s("gui.cronicasrp.label.age"), formX + formWidth - 48, y, 48, RpgTheme.LIGHT);
-            text(g, UiText.s("gui.cronicasrp.label.lineage"), formX, y + 38, formWidth, GOLD);
-            text(g, UiText.s("gui.cronicasrp.origins.class_prefix") + UiText.playerClass(), formX, y + 73, formWidth, RpgTheme.LIGHT);
-            if (bookHeight >= 270) paragraph(g, UiText.s("gui.cronicasrp.origins.creation_help"), formX, y + 125,
-                    formWidth, footerY() - y - 139, RpgTheme.ASH);
+            if (!compact()) text(g, UiText.s("gui.cronicasrp.label.lineage"), formX, y + 38, formWidth, GOLD);
+            text(g, UiText.s("gui.cronicasrp.origins.class_prefix") + UiText.playerClass(), formX, y + (compact() ? 52 : 73), formWidth, RpgTheme.LIGHT);
+            if (!compact()) paragraph(g, UiText.s("gui.cronicasrp.origins.creation_help"), formX, y + 181,
+                    formWidth, footerY() - y - 197, RpgTheme.ASH);
         } else if (stage == 1) {
-            text(g, UiText.s("gui.cronicasrp.label.your_story"), formX, y + 25, formWidth - 63, GOLD);
+            text(g, UiText.s("gui.cronicasrp.label.your_story"), formX, storyLabelY(), formWidth - 63, GOLD);
             String count = (description == null ? descriptionValue.length() : description.getValue().length()) + " / 600";
-            text(g, count, formX + formWidth - font.width(count), y + 25, 63, RpgTheme.ASH);
+            text(g, count, formX + formWidth - font.width(count), storyLabelY(), 63, RpgTheme.ASH);
         } else if (stage == 2) {
             text(g, UiText.s("gui.cronicasrp.signature.controls"), formX, y, formWidth, RpgTheme.ASH);
             if (editing && drawingValue.isEmpty()) text(g, UiText.s("gui.cronicasrp.signature.keep_old"), formX, footerY() - 14, formWidth, RpgTheme.ASH);
@@ -185,9 +229,15 @@ public final class CharacterCreationScreen extends BookScreen {
             } else text(g, signatureValue, formX, sy + 10, formWidth, GOLD);
             text(g, editing ? UiText.s("gui.cronicasrp.story.continue") : UiText.s("gui.cronicasrp.story.origin_pending"), formX, footerY() - 14, formWidth, RpgTheme.ASH);
         }
+        if (stage == 0 || stage == 1) {
+            text(g, UiText.s("gui.cronicasrp.label.occupation"), formX, occupationY(), formWidth, RpgTheme.LIGHT);
+            if (error.isEmpty()) text(g, UiText.s(compact() ? "gui.cronicasrp.occupation.one_word_short" : "gui.cronicasrp.occupation.one_word"),
+                    formX, occupationY() + (compact() ? 31 : 36), formWidth, RpgTheme.ASH);
+        }
         if (!error.isEmpty()) {
-            g.fill(formX - 2, footerY() - 15, formX + formWidth + 2, footerY() - 3, 0xFF251622);
-            text(g, error, formX, footerY() - 13, formWidth, 0xFFF0A399);
+            int errorY = stage <= 1 ? occupationY() + (compact() ? 31 : 36) : footerY() - 13;
+            g.fill(formX - 2, errorY - 2, formX + formWidth + 2, errorY + 10, 0xFF251622);
+            text(g, error, formX, errorY, formWidth, 0xFFF0A399);
         }
     }
 }

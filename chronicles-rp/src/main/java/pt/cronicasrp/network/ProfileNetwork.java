@@ -23,7 +23,8 @@ import pt.cronicasrp.compat.NotificationsBridge;
 public final class ProfileNetwork {
     private ProfileNetwork() {}
     public static void register(RegisterPayloadHandlersEvent event) {
-        var registrar = event.registrar("7");
+        // Older clients decode occupation as a closed list and cannot receive custom words.
+        var registrar = event.registrar("8");
         registrar.playToClient(RpNamePackets.Update.TYPE, RpNamePackets.Update.CODEC,
                 (packet, context) -> context.enqueueWork(() -> RpNamesClient.accept(packet)));
         registrar.playToClient(RpNamePackets.Reset.TYPE, RpNamePackets.Reset.CODEC,

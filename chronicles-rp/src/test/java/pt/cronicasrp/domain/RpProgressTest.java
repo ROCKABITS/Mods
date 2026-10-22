@@ -18,14 +18,14 @@ class RpProgressTest {
     }
     @Test void editingOccupationAndStoryPreservesIdentityMoneyAndAccomplishments() {
         var original = profile();
-        var edited = CharacterRules.editStory(original, "Novo capítulo.", "Ari", original.signatureDrawing(), "Bardo");
+        var edited = CharacterRules.editStory(original, "Novo capítulo.", "Ari", original.signatureDrawing(), "Alquimista");
         assertEquals(original.name(), edited.name()); assertEquals(original.age(), edited.age());
         assertEquals(original.race(), edited.race()); assertEquals(original.origin(), edited.origin());
         assertEquals(original.initialBalance(), edited.initialBalance()); assertEquals(original.balance(), edited.balance());
         assertEquals(original.signatureDrawing(), edited.signatureDrawing());
-        assertEquals(original.progress().withOccupation("Bardo"), edited.progress());
+        assertEquals(original.progress().withOccupation("Alquimista"), edited.progress());
         assertEquals("Novo capítulo.", edited.description());
-        assertThrows(IllegalArgumentException.class, () -> CharacterRules.editStory(original, "", "Ari", ink(), "Imperador"));
+        assertThrows(IllegalArgumentException.class, () -> CharacterRules.editStory(original, "", "Ari", ink(), "Guarda do Reino"));
     }
     @Test void olderEditOverloadsKeepOccupationAndAwards() {
         var original = profile();
@@ -57,11 +57,33 @@ class RpProgressTest {
         Random forbidden = new Random() {
             @Override public int nextInt(int bound) { fail("Não pode sortear com uma ocupação inválida."); return 0; }
         };
-        var draft = new CharacterDraft("Ari", 128, "Elfo", "", "Ari", ink(), "Imperador");
+        var draft = new CharacterDraft("Ari", 128, "Elfo", "", "Ari", ink(), "Guarda do Reino");
         assertThrows(IllegalArgumentException.class, () -> CharacterRules.create(CharacterProfile.empty(), draft, EconomySettings.defaults(), forbidden));
         var valid = CharacterRules.create(CharacterProfile.empty(), new CharacterDraft("Ari", 128, "Elfo", "", "Ari", ink(), "Mago"),
                 EconomySettings.defaults(), new Random(42));
         assertEquals(RpProgress.EMPTY.withOccupation("Mago"), valid.progress());
+    }
+    @Test void customUnicodeWordsAndExistingSuggestionsAreAcceptedAndNormalized() {
+        for (String word : RpProgress.OCCUPATIONS) assertEquals(word, RpProgress.EMPTY.withOccupation(word).occupation());
+        for (String word : java.util.List.of("Alquimista", "Cartógrafo", "Guarda-real", "錬金術師", "Kräuterkundler", "A".repeat(24)))
+            assertEquals(word, RpProgress.EMPTY.withOccupation(word).occupation());
+        assertEquals("Caçador", RpProgress.EMPTY.withOccupation("  Cac\u0327ador  ").occupation());
+        assertEquals("Aventureiro", RpProgress.EMPTY.occupation());
+    }
+    @Test void phrasesFormattingControlsAndOversizedOccupationsAreRejected() {
+        assertThrows(IllegalArgumentException.class, () -> RpProgress.EMPTY.withOccupation(null));
+        for (String bad : java.util.List.of("", " ", "Guarda Real", "Mago\nReal", "Mago\tReal", "§aMago", "Mago!", "R2D2", "-Mago", "Mago-", "Guarda--real", "Mago\u200B", "A".repeat(25)))
+            assertThrows(IllegalArgumentException.class, () -> RpProgress.EMPTY.withOccupation(bad), bad);
+    }
+    @Test void customOccupationPersistsWithTheExistingStorageShapeAndPreservesTheWallet() {
+        var before = profile();
+        var custom = CharacterRules.editStory(before, before.description(), before.signature(), before.signatureDrawing(), "Alquimista");
+        var json = ProfileStorage.CODEC.encodeStart(JsonOps.INSTANCE, custom).getOrThrow();
+        assertEquals(custom, ProfileStorage.CODEC.parse(JsonOps.INSTANCE, json).getOrThrow());
+        assertEquals("Alquimista", json.getAsJsonObject().getAsJsonObject("progress").get("occupation").getAsString());
+        assertEquals(before.balance(), custom.balance());
+        assertEquals(before.initialBalance(), custom.initialBalance());
+        assertEquals(before.progress().withOccupation("Alquimista"), custom.progress());
     }
     @Test void boundedCountersRanksAndWorldTimeCannotWrapOrBecomeInvalid() {
         int[] boundaries = {0, 19, 20, 39, 40, 59, 60, 79, 80, 99, 100};

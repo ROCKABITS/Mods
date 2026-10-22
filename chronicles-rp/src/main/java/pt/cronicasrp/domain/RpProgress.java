@@ -2,21 +2,31 @@ package pt.cronicasrp.domain;
 
 import java.util.List;
 import java.util.Objects;
+import java.text.Normalizer;
 
 /** RP accomplishments are awarded by the server, independently of money. */
 public record RpProgress(String occupation, int reputation, int missions, int medals, Medal bestMedal) {
     public static final int MAX_COUNTER = 1_000_000;
+    public static final int OCCUPATION_LIMIT = 24;
+    /** Suggestions only: players may write their own one-word occupation. */
     public static final List<String> OCCUPATIONS = List.of("Aventureiro", "Estudioso", "Guerreiro", "Mago",
             "Guardião", "Caçador", "Ferreiro", "Mercador", "Curandeiro", "Bardo");
     public static final RpProgress EMPTY = new RpProgress("Aventureiro", 0, 0, 0, Medal.NONE);
 
     public RpProgress {
-        if (!OCCUPATIONS.contains(occupation)) throw new IllegalArgumentException("Escolhe uma ocupação válida.");
+        occupation = checkedOccupation(occupation);
         if (reputation < 0 || reputation > 100) throw new IllegalArgumentException("A reputação deve estar entre 0 e 100.");
         if (missions < 0 || missions > MAX_COUNTER || medals < 0 || medals > MAX_COUNTER)
             throw new IllegalArgumentException("O número de conquistas ultrapassa o limite permitido.");
         Objects.requireNonNull(bestMedal);
         if ((medals == 0) != (bestMedal == Medal.NONE)) throw new IllegalArgumentException("A melhor medalha não corresponde ao registo.");
+    }
+    public static String checkedOccupation(String value) {
+        if (value == null) throw new IllegalArgumentException("Escolhe uma ocupação válida.");
+        String word = Normalizer.normalize(value.strip(), Normalizer.Form.NFC);
+        if (word.length() > OCCUPATION_LIMIT || !word.matches("\\p{L}[\\p{L}\\p{M}]*(?:-\\p{L}[\\p{L}\\p{M}]*)*"))
+            throw new IllegalArgumentException("Escolhe uma ocupação válida.");
+        return word;
     }
     public RpProgress withOccupation(String value) { return new RpProgress(value, reputation, missions, medals, bestMedal); }
     public RpProgress withReputation(int value) { return new RpProgress(occupation, value, missions, medals, bestMedal); }

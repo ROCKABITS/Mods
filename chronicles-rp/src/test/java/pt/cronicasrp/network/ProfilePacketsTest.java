@@ -56,4 +56,19 @@ class ProfilePacketsTest {
             assertFalse(ProfilePackets.Request.CODEC.decode(buf).open()); assertEquals(0, buf.readableBytes());
         } finally { buf.release(); }
     }
+    @Test void customOccupationSurvivesCreateEditAndPrivateStatePackets() {
+        var create = new ProfilePackets.Create(new CharacterDraft("Ari", 24, "Elfo", "História.", "Ari", ink(), "Alquimista"));
+        var edit = new ProfilePackets.Edit("História.", "Ari", ink(), "Cartógrafo");
+        var profile = new CharacterProfile(true, "Ari", 24, "Elfo", "História.", "Ari", "Comum", 11000, 1700, ink(),
+                RpProgress.EMPTY.withOccupation("Alquimista"));
+        var state = new ProfilePackets.State(profile, PlayerStatistics.EMPTY, ProfilePackets.SYNC, Component.empty());
+        var buf = buffer();
+        try {
+            ProfilePackets.Create.CODEC.encode(buf, create); assertEquals(create, ProfilePackets.Create.CODEC.decode(buf));
+            ProfilePackets.Edit.CODEC.encode(buf, edit); assertEquals(edit, ProfilePackets.Edit.CODEC.decode(buf));
+            ProfilePackets.State.CODEC.encode(buf, state); assertEquals(state, ProfilePackets.State.CODEC.decode(buf));
+            assertEquals(0, buf.readableBytes());
+        } finally { buf.release(); }
+    }
+
 }

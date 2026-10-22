@@ -36,7 +36,7 @@
   "gui.cronicasrp.button.continue": "Continuar",
   "gui.cronicasrp.status.saving": "A guardar...",
   "gui.cronicasrp.label.occupation_prefix": "Ocupação: ",
-  "gui.cronicasrp.tooltip.occupation": "Clica para escolher a tua ocupação. É uma informação de RP; não altera o saldo nem os atributos.",
+  "gui.cronicasrp.tooltip.occupation": "Escreve a tua ocupação numa palavra (até 24 caracteres) ou escolhe uma sugestão em baixo. É um detalhe de RP.",
   "gui.cronicasrp.stage.name": "IDENTIDADE",
   "gui.cronicasrp.stage.story": "HISTÓRIA",
   "gui.cronicasrp.stage.signature": "ASSINATURA",
@@ -176,7 +176,7 @@
   "error.cronicasrp.stack_changed": "Essa pilha já não tem a quantidade pedida.",
   "error.cronicasrp.deposit_limit": "Esse depósito ultrapassa o limite de saldo.",
   "error.cronicasrp.inventory_space": "Não há espaço no inventário para o dinheiro ou troco. Liberta algumas posições.",
-  "error.cronicasrp.occupation": "Escolhe uma ocupação válida.",
+  "error.cronicasrp.occupation": "Usa uma palavra (máx. 24 caracteres).",
   "error.cronicasrp.reputation_range": "A reputação deve estar entre 0 e 100.",
   "error.cronicasrp.achievement_limit": "O número de conquistas ultrapassa o limite permitido.",
   "error.cronicasrp.medal_record": "A melhor medalha não corresponde ao registo.",
@@ -261,5 +261,9 @@
   "gui.cronicasrp.realm.chapter_3": "Esta é a tua história.",
   "gui.cronicasrp.realm.new_chapter": "UM NOVO CAPÍTULO",
   "gui.cronicasrp.realm.welcome": "%s, a tua história pertence agora a este mundo.",
-  "gui.cronicasrp.realm.enter_world": "Entrar no mundo"
+  "gui.cronicasrp.realm.enter_world": "Entrar no mundo",
+  "gui.cronicasrp.occupation.one_word": "Uma palavra, não uma frase ou texto.",
+  "gui.cronicasrp.occupation.one_word_short": "1 palavra, sem frases.",
+  "gui.cronicasrp.occupation.placeholder": "Ex.: Alquimista",
+  "gui.cronicasrp.occupation.quick": "Usar %s"
 }
