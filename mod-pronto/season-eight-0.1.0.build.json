@@ -1,0 +1,128 @@
+{
+  "version": "0.1.0",
+  "source_commit": "d2d4054b8f24d75109dc641a778eb4f1df20e39f",
+  "minecraft": "1.21.1",
+  "neoforge": "21.1.256",
+  "java": 21,
+  "client_only": true,
+  "unit_tests": 2,
+  "layout_dimensions_checked": 3700,
+  "clients": {
+    "standalone": {
+      "resource_loading": true,
+      "integration": false,
+      "message": "Both real loading paths, nine preserved actions, six navigation targets, account-aware multiplayer, EN/PT, three dimensions, reduced motion and vanilla fallback verified",
+      "startup_loading": true,
+      "success": true,
+      "compact_loading": true,
+      "loading_frames": 323,
+      "native_icon": true,
+      "step": 18
+    },
+    "integration": {
+      "integration": true,
+      "message": "Both real loading paths, nine preserved actions, six navigation targets, account-aware multiplayer, EN/PT, three dimensions, reduced motion and vanilla fallback verified",
+      "startup_loading": true,
+      "success": true,
+      "compact_loading": true,
+      "loading_frames": 386,
+      "native_icon": true,
+      "step": 18,
+      "resource_loading": true
+    }
+  },
+  "companions": [
+    {
+      "file": "realm-origins-0.5.7.jar",
+      "sha256": "0b90c49b9e3c49d2f0343301ac3662b21d6ce5551ea343fb7fc8ebdab9e09684"
+    },
+    {
+      "file": "contracts-bounties-0.4.0.jar",
+      "sha256": "d1bd4726ac210e6d5904829bf9185efef76920aa8070ffb292d6e479689ee07e"
+    },
+    {
+      "file": "realmcouncil-0.2.2.jar",
+      "sha256": "0a77af87a5c4e36f55ad12578662834886a7986864896a908a3dc4217e2c19cb"
+    },
+    {
+      "file": "crown-ledger-0.2.7.jar",
+      "sha256": "f377666807e0a31760fbd1bd209238a31a50db1903d50e5e1d7f1caf5ed44fce"
+    },
+    {
+      "file": "realm-identity-0.1.2.jar",
+      "sha256": "4bb9ef1d4df009fe1061c5daeaa76e95fb9ce355c72f00a83b31dffe0b36f016"
+    },
+    {
+      "file": "realm-markets-0.2.1.jar",
+      "sha256": "bfb1e73186015ab94a86c841abba1df02bf1b5851a65771e622234624b806bb1"
+    },
+    {
+      "file": "realm-notifications-0.1.1.jar",
+      "sha256": "2fb85c87eb296e49f3f68c0d7defd709ceca8913fa5a3f6ef9442d9b9548c99e"
+    },
+    {
+      "file": "realm-rewards-0.1.2.jar",
+      "sha256": "ab8efe3bd9a7b24a4f725bf6dfe1f07dec0b88ecfaac91533b57c45b11cb7bcb"
+    },
+    {
+      "file": "realm-titles-0.1.0.jar",
+      "sha256": "65d854ffd92805f6e8cb0891454f80ba5a6f33394cc0375cf23f64098af2bd16"
+    },
+    {
+      "file": "realm-casino-0.3.0.jar",
+      "sha256": "99c6c457d26be354f6cddddc4c865fe444f765b8d359004de12921aa0fad9117"
+    },
+    {
+      "file": "laws-justice-0.4.0.jar",
+      "sha256": "78c32b0c3acc8930ffd508c9bb44cc98b794a4b87900438b19ab812c21d36f7b"
+    },
+    {
+      "file": "realm-economy-0.4.0.jar",
+      "sha256": "eb7b25c11b64e842297d5ed174c067749989b6d5440fbc858834bd0922f55ddf"
+    },
+    {
+      "file": "realm-marriage-0.1.0.jar",
+      "sha256": "c2d2471029a006843c542622a1e1e0543a20492ea22a5999de02dd423d2390ca"
+    }
+  ],
+  "images": {
+    "01-startup-loading": {
+      "width": 1600,
+      "height": 900,
+      "sha256": "2d9caeaf673e9c461a068a85007212bc75ed13d59e3d943d3c5e4a1193785681"
+    },
+    "02-main-menu-en": {
+      "width": 1600,
+      "height": 900,
+      "sha256": "7cfd7ee53f745b552709548657c52c6367d9cb0e49eaf894ab7f2edbebdd74b0"
+    },
+    "03-main-menu-pt": {
+      "width": 1600,
+      "height": 900,
+      "sha256": "f5c0966874b1cd8fdd3fb3603d94c63d41bb1ff7640a591c4d79549f170e594a"
+    },
+    "04-resource-loading-pt": {
+      "width": 1600,
+      "height": 900,
+      "sha256": "312bb2efac72e44e1cb8a09d1900f7161029bfad4f7b7289bf1b637e33428bfb"
+    },
+    "05-main-menu-compact": {
+      "width": 854,
+      "height": 480,
+      "sha256": "28f030dfaaa960790240456323631ce15b29ee2afa1500fdd81ae37cb6c5a570"
+    },
+    "06-main-menu-small-reduced-motion": {
+      "width": 640,
+      "height": 360,
+      "sha256": "9b7056967b759921b12497626b7d56e59b99de16763628005a95fef2d1c8ce33"
+    },
+    "07-resource-loading-compact": {
+      "width": 854,
+      "height": 480,
+      "sha256": "5c6105d9d89f4055e8b7dc64a5e3acab6d2058bb49f6ef5a340b87e245471d87"
+    }
+  },
+  "jar_sha256": "ad7408e3c89eeef0b73212fb6129179062cb8ad69e91e42860b61d4746a356c5",
+  "zip_sha256": "2d6c71fe7e92199d75e456f0ccee758ac5f5dd1d9d1961d57bea749ad2584c2d",
+  "scope": "Main menu, Minecraft/NeoForge resource-loading overlays, title and X11 window icons. Pre-Minecraft bootstrap and world-generation screens remain original."
+}
