@@ -1,0 +1,157 @@
+{
+  "lan": {
+    "success": true,
+    "actualTcpLan": true,
+    "message": "Actual menus, packets, two-player LAN, persistence and compact controls passed",
+    "actualMinecraftClients": 2,
+    "authenticatedClients": false,
+    "checks": [
+      "Unforced HUD leaves movement active",
+      "Compact controls at 320x240, 480x270 and 800x450",
+      "Two real LAN voters, secret mutable ballots, exact reservation, majority benefit, tied free consultation",
+      "Actual LAN world closed and reopened; benefits, tally history and balance retained"
+    ],
+    "screenshots": [
+      "treasury-proposal.png",
+      "treasury-vote-hud.png",
+      "treasury-ballot.png",
+      "treasury-benefits.png",
+      "treasury-decisions.png"
+    ],
+    "stage": 23
+  },
+  "legacy": {
+    "success": true,
+    "message": "Registered treasury chest, all placed states and production public/governor menus render with valid models and textures; native currency controls and their request payloads passed.",
+    "screenshot": "crown-chest-minecraft.png",
+    "screenshots": [
+      "crown-chest-minecraft.png",
+      "crown-ledger-overview.png",
+      "crown-ledger-policy.png"
+    ],
+    "images": [
+      "crown-chest-minecraft.png",
+      "crown-ledger-overview.png",
+      "crown-ledger-policy.png"
+    ],
+    "interfaceData": "Demonstration data in the actual production TreasuryScreen",
+    "currencyInteractionChecks": [
+      "Donation defaults to the active available currency, switches both ways, clears amounts, parses Chronicle cents, rejects fractional emeralds, and preserves both credit claims.",
+      "Policy currency clears fixed tax and salary, preserves independent market tax at 500 basis points and historical credits, and saves Chronicle amounts as cents.",
+      "The governor edits market tax independently of the periodic/contract mode, saves exact basis points, rejects rates above 100%, and retains visible controls at 320x240.",
+      "Casino profit taxation retains its independent rate across currencies, parses 12.34% as 1234 basis points and rejects negative and above-100% values.",
+      "Without Chronicles, donations fall back to emeralds, Chronicle selection and claims are disabled, emerald claims remain available, and a saved Chronicle policy can recover to emeralds.",
+      "Public contract reward parsing and the published currency use the contract currency independently of the active policy currency."
+    ],
+    "recordedUiRequests": [
+      {
+        "action": "donate",
+        "payload": {
+          "amount": 125,
+          "currency": "CHRONICLES"
+        }
+      },
+      {
+        "action": "donate",
+        "payload": {
+          "amount": 7,
+          "currency": "EMERALD"
+        }
+      },
+      {
+        "action": "claim",
+        "payload": {
+          "currency": "EMERALD"
+        }
+      },
+      {
+        "action": "claim",
+        "payload": {
+          "currency": "CHRONICLES"
+        }
+      },
+      {
+        "action": "policy",
+        "payload": {
+          "marketTaxBasisPoints": 500,
+          "casinoTaxBasisPoints": 725,
+          "taxMode": "PERCENTAGE",
+          "taxBasisPoints": 500,
+          "currency": "CHRONICLES",
+          "fixedTax": 125,
+          "salary": 250,
+          "periodHours": 168,
+          "activeMinutes": 30,
+          "minimumReputation": 20,
+          "reputationReward": 1,
+          "dailyReputationLimit": 3
+        }
+      },
+      {
+        "action": "policy",
+        "payload": {
+          "marketTaxBasisPoints": 525,
+          "casinoTaxBasisPoints": 1234,
+          "taxMode": "FIXED",
+          "taxBasisPoints": 500,
+          "currency": "CHRONICLES",
+          "fixedTax": 125,
+          "salary": 250,
+          "periodHours": 168,
+          "activeMinutes": 30,
+          "minimumReputation": 20,
+          "reputationReward": 1,
+          "dailyReputationLimit": 3
+        }
+      },
+      {
+        "action": "donate",
+        "payload": {
+          "amount": 13,
+          "currency": "EMERALD"
+        }
+      },
+      {
+        "action": "claim",
+        "payload": {
+          "currency": "EMERALD"
+        }
+      },
+      {
+        "action": "policy",
+        "payload": {
+          "marketTaxBasisPoints": 500,
+          "casinoTaxBasisPoints": 725,
+          "taxMode": "PERCENTAGE",
+          "taxBasisPoints": 500,
+          "currency": "EMERALD",
+          "fixedTax": 4,
+          "salary": 8,
+          "periodHours": 168,
+          "activeMinutes": 30,
+          "minimumReputation": 20,
+          "reputationReward": 1,
+          "dailyReputationLimit": 3
+        }
+      },
+      {
+        "action": "publish",
+        "payload": {
+          "title": "Demonstration supply order",
+          "item": "minecraft:oak_log",
+          "quantity": 64,
+          "reward": 345,
+          "currency": "CHRONICLES"
+        }
+      }
+    ],
+    "requestTransport": "Recorded locally; no game-server network requests",
+    "policyScreenshotPage": "economy: independent market sales tax at 5%, casino profit tax at 7.25%, contract mode and salaries",
+    "bakedQuadCounts": {
+      "kingdomtreasury:crown_chest": 264
+    },
+    "validatedBlockStates": 4,
+    "windowWidth": 1600,
+    "windowHeight": 900
+  }
+}
