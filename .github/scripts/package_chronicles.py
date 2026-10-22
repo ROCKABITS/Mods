@@ -6,6 +6,8 @@ import json
 import os
 import re
 import shutil
+import struct
+import zlib
 import xml.etree.ElementTree as ET
 import zipfile
 
@@ -71,6 +73,23 @@ media.mkdir(parents=True, exist_ok=True)
 for name in images:
     shutil.copyfile(visual / name, media / name)
 shutil.copyfile(visual / 'result.json', media / 'validation.json')
+def assert_rework_frame(path):
+    # The first pixel is independent of PNG row predictors. A transition can leave
+    # the previous world frame in the framebuffer even though the screen changed.
+    data = path.read_bytes()
+    width, height, depth, color = struct.unpack('>IIBB', data[16:26])
+    assert depth == 8 and color in (2, 6), 'Expected an actual RGB/RGBA screenshot'
+    assert (width, height) in ((1600, 900), (854, 480)), (path.name, width, height)
+    offset, compressed = 8, bytearray()
+    while offset < len(data):
+        length = struct.unpack('>I', data[offset:offset + 4])[0]
+        if data[offset + 4:offset + 8] == b'IDAT':
+            compressed.extend(data[offset + 8:offset + 8 + length])
+        offset += length + 12
+    first = zlib.decompressobj().decompress(bytes(compressed), 4)
+    assert first[0] in range(5) and tuple(first[1:4]) == (6, 7, 13), 'Stale transition frame: ' + path.name
+
+
 # Screenshots from the real creation/profile/exchange client, never rendered mockups.
 rework_names = ['03-creation-en', '14-story-en', '05-signature-en', '06-oath-en',
                 '13-welcome-en', '07-profile-en', '15-deeds-en', '16-profile-story-en',
@@ -81,6 +100,7 @@ for name in rework_names:
     target = 'realm-origins-' + name + '.png'
     source_image = project / 'qa-results/client' / (name + '.png')
     assert source_image.stat().st_size > 1024 and source_image.read_bytes()[:8] == b'\x89PNG\r\n\x1a\n', name
+    assert_rework_frame(source_image)
     shutil.copyfile(source_image, media / target)
     images.append(target)
 shutil.copyfile(project / 'src/main/resources/realm-origins.png', media / 'icon.png')

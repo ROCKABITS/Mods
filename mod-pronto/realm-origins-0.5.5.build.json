@@ -63,7 +63,7 @@
     "chronicles-rp-names-tab.png": "152c0603a122dd6d319cdba001be430fb645c8115e65ee8494e1042ef9c043d5",
     "chronicles-rp-names-chat.png": "4b73a6b7779dfbb7f83befc4220a8a0acaf84872f58b492e08568d3d33d940b3",
     "chronicles-rp-names-profile.png": "f46d260a2d8c6dac7d41bbd3625e6b2c810628639a855512316b733c63da546d",
-    "realm-origins-03-creation-en.png": "9812e1bf649ef9f57974d4b3d5edf3fc58ded48af2170c48e66ddd5f6e994524",
+    "realm-origins-03-creation-en.png": "28194897d2fff10eaa17b5c93c5682b4b8d9e05160f624d75a505078d6082ad0",
     "realm-origins-14-story-en.png": "fa071f60823a76cd81d7a3894d800a7ff77833ae92432c403565f0a6eeba0d4f",
     "realm-origins-05-signature-en.png": "b1779996ace5acbae9a0bdc289e75a91f18d8bb0460c16cdb9c4d9acc5b53a99",
     "realm-origins-06-oath-en.png": "beca13d07480a574b8745bbd79e92b8a098fbb0674f145c62030099ee13da430",
@@ -81,5 +81,14 @@
     "realm-origins-22-edit-review-compact.png": "9aeeffcfaa6432ed56a0a297d27ae97a6aa2d6cf0ff400e3ad707b06bd0145d6",
     "realm-origins-23-welcome-compact.png": "aa885104301ab22b5451bd39388e5a46d2adfba58ab8f66b61a8e307817ea589",
     "icon.png": "e481c16647614e03a4181ce10b345d491192dd4149af68540ceb3bf76c63b680"
+  },
+  "media_corrections": {
+    "realm-origins-03-creation-en.png": {
+      "reason": "Retaken after an actual rendered creator frame, replacing a transition frame.",
+      "capture": "Local actual Minecraft client, same release classes and pinned Origins/Classes runtime.",
+      "production_classes_verified_byte_identical": 71,
+      "runtime_jar_sha256": "f83029a3a2d966de8c11e2a2673751d709b942f25b074baadb75b4f9f3536dc0",
+      "report": "media/realm-origins/0.5.5/media-correction-validation.json"
+    }
   }
 }

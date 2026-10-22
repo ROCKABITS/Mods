@@ -18,6 +18,7 @@ import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.ClientTickEvent;
+import net.neoforged.neoforge.client.event.ScreenEvent;
 import com.iafenvoy.origins.screen.ChooseOriginScreen;
 import com.iafenvoy.origins.attachment.OriginDataHolder;
 import com.iafenvoy.origins.data.layer.LayerRegistries;
@@ -40,6 +41,11 @@ public final class OriginsClientQA {
     private static boolean storyWritten, signed;
     private static int profileStage;
     private static int lastStep = -1;
+    private static net.minecraft.client.gui.screens.Screen lastRenderedScreen;
+    private static long renderedFrames, lastActionFrame = -1;
+    @SubscribeEvent public static void rendered(ScreenEvent.Render.Post event) {
+        lastRenderedScreen = event.getScreen(); renderedFrames++;
+    }
     private static long stepStarted;
     private static void check(boolean value, String message) {
         if (!value) throw new IllegalStateException(message);
@@ -95,6 +101,10 @@ public final class OriginsClientQA {
         long now = System.currentTimeMillis();
         if (now - started > 360000) { complete(false, "Timeout at " + (mc.screen == null ? "world" : mc.screen.getClass().getSimpleName())); return; }
         if (now < nextAction || mc.getOverlay() != null) return;
+        // Catch-up ticks can run after changing screens but before the first rendered frame.
+        // Capture the current screen only after it has actually reached the framebuffer.
+        if (mc.screen != null && (mc.screen != lastRenderedScreen || renderedFrames <= lastActionFrame)) return;
+        lastActionFrame = renderedFrames;
         nextAction = now + 700;
         if (lastStep != step) { lastStep = step; stepStarted = now; }
         else if (now - stepStarted > 60000 && step >= 2) {
