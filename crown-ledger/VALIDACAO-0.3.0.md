@@ -1,5 +1,7 @@
 # Realm Treasury 0.3.0 — Validation scope
 
+[Successful GitHub Actions run](https://github.com/ROCKABITS/Mods/actions/runs/39845922185): **77 unit tests, 37 standalone native tests, 37 native integration tests**, the legacy visual regression and the actual two-client LAN/world-reopening sequence all passed. Production source: `8249a06fcac49345ccf2b6057db56b3e3c22bb7f`. [Published hashes and test evidence](../mod-pronto/realm-treasury-0.3.0.build.json).
+
 The production JAR is built before any QA-only source sets and saved with a SHA-256 hash. The release gate verifies that the saved bytes remain unchanged and exclude all GameTest, visual-test and LAN-client fixtures. Its mod ID remains `kingdomtreasury` and its public compatibility classes remain in `pt.crownledger.api`.
 
 ## Automated coverage

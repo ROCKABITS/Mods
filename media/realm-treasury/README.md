@@ -14,4 +14,4 @@ Realm Treasury is the new name of Crown Ledger. The existing treasury chest is p
 
 ![Public aggregate decisions](0.3.0/treasury-decisions.png)
 
-[Previous Crown Ledger galleries](../crown-ledger/README.md).
+[Previous Crown Ledger gallery](../crown-ledger/0.2.5/README.md).

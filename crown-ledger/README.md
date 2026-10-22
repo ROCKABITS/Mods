@@ -129,24 +129,22 @@ O ficheiro `data/crown_ledger.dat` guarda regras, saldo disponível, salários r
 
 ```bash
 ./gradlew build
+GITHUB_SHA=$(git rev-parse HEAD) python3 tools/treasury_release.py snapshot
 ./gradlew -PcrownGameTests runGameTestServer
-mkdir -p compat-libs
-# Copiar o JAR Realm Casino 0.3.0 compilado a partir do mesmo commit,
-# mais os companheiros publicados definidos em .github/scripts/casino_release.py.
-# A suíte nativa própria Crown usa estes companheiros sem Realm Origins;
-# o runtime completo da carteira é verificado pela suíte Laws & Justice.
+python3 tools/treasury_release.py install
 ./gradlew -PcrownGameTests -PintegrationTests runGameTestServer
 ./gradlew -PcrownVisualTests runClient
+./gradlew -PtreasuryClientTests runClient
 ```
 
-Na máquina cloud, usa `python3 tools/cloud_gradle.py` em vez de `./gradlew`; mantém o proxy e a verificação TLS configurados. O domínio independente corre com `python3 tools/test_domain.py` sem descarregar o Minecraft. Os testes nativos e visuais são opcionais no desenvolvimento e excluídos do JAR distribuído. A publicação automatizada exige que todos passem.
+Na máquina cloud, usa `python3 tools/cloud_gradle.py` em vez de `./gradlew`; mantém o proxy e a verificação TLS configurados. Os testes e os automatismos de cliente são excluídos do JAR de produção.
 
-O [workflow conjunto aprovado](https://github.com/ROCKABITS/Mods/actions/runs/39253815267) compilou Laws & Justice 0.4.0 e Crown Ledger 0.2.2 a partir da mesma revisão, guardou os JARs de produção antes dos testes e utilizou as contrapartes novas nas integrações. O Crown passou **52 testes unitários, 25 GameTests independente e 25 com os companheiros**, além das três capturas do modelo e das interfaces no cliente real.
+A versão 0.3.0 foi validada com **77 testes unitários**, **37 GameTests independentes**, **37 GameTests com os companheiros publicados**, a regressão visual do cofre e das interfaces anteriores e **dois clientes Minecraft reais ligados por TCP LAN**. A sequência LAN confirmou votos alteráveis, aprovação de um benefício financiado, rejeição de uma consulta empatada e reabertura efetiva do mundo com o saldo e decisões conservados. As capturas dos novos menus usam esses dados reais; as três capturas anteriores de contas e impostos usam dados de demonstração.
 
-A suíte completa do Laws & Justice comprovou os débitos na carteira real do Realm Origins e os créditos únicos na tesouraria, incluindo a reabertura efetiva de um mundo LAN. As imagens próprias do Crown usam dados de demonstração; a prova financeira vem dessa sequência integrada. [Resultados, hashes e limites da evidência](VALIDACAO.md).
+[Resultados, reprodução e limites](VALIDACAO-0.3.0.md). A publicação automática volta a executar os testes antes de guardar o JAR, o ZIP, os hashes, os relatórios e a galeria. O histórico das validações anteriores continua em [VALIDACAO.md](VALIDACAO.md).
 
 ## Pagamentos judiciais — 0.2.2
 
 Laws & Justice 0.4.0 envia multas e fianças já pagas para a tesouraria na moeda original. Cada transferência guarda um recibo único no mesmo ficheiro que o saldo. Repetir o recibo, incluindo após reiniciar um mundo LAN, não cria outra entrada de dinheiro. Se a gravação ou o limite de saldo impedir a transferência, o tribunal conserva os fundos até poder entregá-los.
 
-A atualização migra automaticamente o formato 1 ou 2 para o formato 7, conservando as contas, os impostos e os salários. Usa Crown Ledger 0.2.5 no servidor e em todos os clientes. Realm Markets 0.2.1 continua compatível. A API é exclusiva do servidor e não dá aos clientes uma forma de criar dinheiro.
+A atualização migra automaticamente o formato 1 ou 2 para o formato 7, conservando as contas, os impostos e os salários. Usa Realm Treasury 0.3.0 no servidor e em todos os clientes. Realm Markets 0.2.1 continua compatível. A API é exclusiva do servidor e não dá aos clientes uma forma de criar dinheiro.
