@@ -2,7 +2,21 @@
 
 Atualização visual: criação e boas-vindas cinematográficas; P abre novamente o livro original de pergaminho. Ficha, Feitos, História, Bolsa e câmbio usam a aparência anterior. Dados, economia e protocolo 7 mantidos.
 
-A compilação e os 66 testes JUnit passaram localmente. O cliente real é exercitado através da tecla P depois da primeira criação, com as quatro páginas, câmbio, assinatura, Origins e janela compacta. A publicação fica condicionada ao workflow completo, com GameTests nas três combinações e clientes com e sem Classes. Os resultados efetivos da publicação serão acrescentados após a execução.
+**Publicado e verificado.** O [job de validação 119847161109](https://github.com/ROCKABITS/Mods/actions/runs/39785384916/job/119847161109) terminou com `conclusion: success`: compilação, 66 testes JUnit, 37 GameTests em cada uma das três combinações e três clientes reais. O código testado é [`3a1b441`](https://github.com/ROCKABITS/Mods/commit/3a1b441095370a961a83c6b7c74dc8d37eaeea03) e o commit de publicação é [`3fb8b1e`](https://github.com/ROCKABITS/Mods/commit/3fb8b1e). O [manifesto](../mod-pronto/realm-origins-0.5.6.build.json) conserva o source commit, hashes, dependências e resultados. A conclusão global da execução aparece como `cancelled` após o cancelamento de uma execução duplicada; todos os passos do job indicado, incluindo testes e publicação, constam como `success`.
+
+- O cliente termina a primeira criação, entra no mundo e usa a keybinding P através do caminho normal de pedido ao servidor. O ecrã recebido é o livro de pergaminho.
+- São exercitadas as páginas Ficha, Feitos, História e Bolsa, seguidas de um levantamento e depósito de 1 cêntimo, confirmando o mesmo saldo e perfil no final.
+- O mesmo fluxo passou com Origins: Classes e sem esse complemento, em inglês e português, incluindo janelas de 1600×900 e 854×480. A criação e as boas-vindas conservam o estilo cinematográfico.
+- O cliente com os doze mods companheiros verifica nomes RP, TAB, chat normal e perfil. Os GameTests usam Origins/Classes, Origins sem Classes e a combinação com todos os companheiros; são 37 casos em três combinações, 111 execuções.
+- Foram inspecionadas as capturas reais do livro e do câmbio. A [galeria](../media/realm-origins/0.5.6/README.md) e o [relatório do cliente](../media/realm-origins/0.5.6/rework-validation.json) registam a aparência e `journal_key: true`.
+- Os downloads públicos de JAR/ZIP e as 22 imagens foram obtidos novamente e comparados com os hashes publicados. As 36 classes comparadas de domínio, attachments, carteira e pacotes são idênticas às de Chronicles RP 0.5.4. O ZIP contém o mesmo JAR validado e a distribuição exclui fixtures.
+
+| Artefacto | Bytes | SHA-256 |
+| --- | --- | --- |
+| [realm-origins-0.5.6.jar](https://github.com/ROCKABITS/Mods/raw/refs/heads/main/mod-pronto/realm-origins-0.5.6.jar) | 6 442 292 | `3a47eff8af6ff159c946765e491d7e9ea4f5a5bfd6bfdec02c92d591b4a3adb5` |
+| [realm-origins-0.5.6.zip](https://github.com/ROCKABITS/Mods/raw/refs/heads/main/mod-pronto/realm-origins-0.5.6.zip) | 6 430 121 | `36e3573fb458f30148c4d776c7e61f563ce236aef5acd6a7472b1f8d649a7fc3` |
+
+Âmbito: clientes e servidor integrado reais para as interfaces; GameTests nativos para regras e integrações. Não é um novo ensaio manual de vários clientes autenticados, nem certifica todas as GPUs, resource packs ou funcionalidades de cada companheiro. A sessão de desenvolvimento não dispõe de certificado autenticado de chat assinado. Mantém-se a instalação de Origins/Jupiter e a substituição do JAR anterior no servidor e nos clientes.
 
 ## Histórico — Realm Origins 0.5.5
 
