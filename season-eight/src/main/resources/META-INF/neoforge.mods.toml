@@ -1,0 +1,22 @@
+modLoader="javafml"
+loaderVersion="[4,)"
+license="All Rights Reserved"
+[[mods]]
+modId="seasoneight"
+version="${version}"
+displayName="Season 8"
+authors="ROCKABITS"
+logoFile="assets/seasoneight/art/icon.png"
+description='''A bespoke Season 8 title menu, resource loading screen and desktop window branding. Client only. No gameplay changes or server installation required.'''
+[[mixins]]
+config="seasoneight.mixins.json"
+[[dependencies.seasoneight]]
+modId="neoforge"
+type="required"
+versionRange="[21.1.256,)"
+side="CLIENT"
+[[dependencies.seasoneight]]
+modId="minecraft"
+type="required"
+versionRange="[1.21.1]"
+side="CLIENT"

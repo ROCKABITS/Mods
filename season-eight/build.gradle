@@ -1,0 +1,50 @@
+plugins {
+    id 'java-library'
+    id 'net.neoforged.moddev' version '2.0.148'
+}
+version = mod_version
+group = 'pt.seasoneight'
+base { archivesName = 'season-eight' }
+java.toolchain.languageVersion = JavaLanguageVersion.of(21)
+repositories {
+    mavenCentral()
+    maven { url = 'https://cursemaven.com'; content { includeGroup 'curse.maven' } }
+}
+neoForge {
+    version = project.neo_version
+    runs {
+        client {
+            client()
+            if (providers.gradleProperty('seasonQa').isPresent()) {
+                gameDirectory = file('run-qa')
+                systemProperty 'seasoneight.qaOutput', file('qa-results/client').absolutePath
+                programArguments.addAll '--width', '1600', '--height', '900'
+            }
+        }
+        server { server(); programArgument '--nogui' }
+    }
+    mods { seasoneight { sourceSet(sourceSets.main) } }
+}
+configurations { runtimeClasspath.extendsFrom localRuntime }
+dependencies {
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.11.4'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+    if (providers.gradleProperty('seasonIntegration').isPresent()) {
+        localRuntime fileTree(dir: 'compat-libs', include: ['*.jar'])
+        localRuntime 'curse.maven:origins-neoforge-1375372:8758523'
+        localRuntime 'curse.maven:jupiter-1072905:7738312'
+        localRuntime 'curse.maven:origins-classes-neoforge-1536425:8758587'
+    }
+}
+tasks.named('test', Test) { useJUnitPlatform() }
+if (providers.gradleProperty('seasonQa').isPresent()) sourceSets.main.java.srcDir('src/clienttest/java')
+tasks.named('jar', Jar) {
+    exclude('pt/seasoneight/qa/**')
+    from('LICENSE') { into('META-INF') }
+}
+tasks.withType(JavaCompile).configureEach { options.encoding = 'UTF-8'; options.release = 21 }
+def releaseVersion = project.version.toString()
+tasks.named('processResources', ProcessResources) {
+    inputs.property('version', releaseVersion)
+    filesMatching('META-INF/neoforge.mods.toml') { expand(version: releaseVersion) }
+}

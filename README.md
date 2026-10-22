@@ -1,9 +1,10 @@
 # Mods de Minecraft
 
-Projetos de ROCKABITS para **Minecraft 1.21.1**, **NeoForge 21.1.256+** e **Java 21**. Instala a mesma versão de cada mod no servidor e nos clientes; substitui os JARs antigos.
+Projetos de ROCKABITS para **Minecraft 1.21.1**, **NeoForge 21.1.256+** e **Java 21**. Nos mods de jogo, instala a mesma versão no servidor e nos clientes; substitui os JARs antigos. O **Season 8** é exclusivamente de cliente.
 
 | Mod | Download | Funcionalidades |
 | --- | --- | --- |
+| **Season 8 0.1.0** | [JAR](https://github.com/ROCKABITS/Mods/raw/refs/heads/main/mod-pronto/season-eight-0.1.0.jar) · [ZIP](https://github.com/ROCKABITS/Mods/raw/refs/heads/main/mod-pronto/season-eight-0.1.0.zip) | Menu principal, carregamento de recursos, brasão, título e ícone da janela. Apenas nos clientes, sem dependências adicionais. |
 | **Realm Marriage 0.1.0 Beta** | [JAR](https://github.com/ROCKABITS/Mods/raw/refs/heads/main/mod-pronto/realm-marriage-0.1.0.jar) · [ZIP](https://github.com/ROCKABITS/Mods/raw/refs/heads/main/mod-pronto/realm-marriage-0.1.0.zip) | Altar medieval, celebrante escolhido pelo casal, objeções com G, votos, testemunhas, três regimes financeiros e divórcio. |
 | **Laws & Justice 0.4.0 Beta** | [JAR](https://github.com/ROCKABITS/Mods/raw/refs/heads/main/mod-pronto/laws-justice-0.4.0.jar) · [ZIP](https://github.com/ROCKABITS/Mods/raw/refs/heads/main/mod-pronto/laws-justice-0.4.0.zip) | Prisões, tribunal do Presidente, mandados, algemas, seis trabalhos, multas, fianças, Livro de Registos e pagamentos com recibos persistentes. |
 | **Realm Economy 0.4.0 Beta** | [JAR](https://github.com/ROCKABITS/Mods/raw/refs/heads/main/mod-pronto/realm-economy-0.4.0.jar) · [ZIP](https://github.com/ROCKABITS/Mods/raw/refs/heads/main/mod-pronto/realm-economy-0.4.0.zip) | Mesa da Economia, preços do Presidente, comércio, XP substituído por euros, ferraria, lotes de poções e beacons pagos. |
@@ -35,6 +36,7 @@ O ZIP é uma alternativa ao download direto do JAR. Extrai-o antes de instalar. 
 - [Guia do Crown Ledger](crown-ledger/README.md): receita do cofre, permissões, impostos, salários e ciclos.
 - [Guia do Contracts](contracts-bounties/README.md) e [API de integração](contracts-bounties/TREASURY_API.md).
 - [Guia do Realm Council](realm-council/README.md).
+- [Guia do Season 8](season-eight/README.md): menu, carregamento, título e ícone da janela, exclusivamente nos clientes.
 - [Plano dos próximos mods](PLANO-DOS-MODS.md).
 - [Galerias para CurseForge](media/README.md).
 

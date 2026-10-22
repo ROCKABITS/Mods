@@ -1,0 +1,54 @@
+[
+  {
+    "file": "realm-origins-0.5.7.jar",
+    "sha256": "0b90c49b9e3c49d2f0343301ac3662b21d6ce5551ea343fb7fc8ebdab9e09684"
+  },
+  {
+    "file": "contracts-bounties-0.4.0.jar",
+    "sha256": "d1bd4726ac210e6d5904829bf9185efef76920aa8070ffb292d6e479689ee07e"
+  },
+  {
+    "file": "realmcouncil-0.2.2.jar",
+    "sha256": "0a77af87a5c4e36f55ad12578662834886a7986864896a908a3dc4217e2c19cb"
+  },
+  {
+    "file": "crown-ledger-0.2.7.jar",
+    "sha256": "f377666807e0a31760fbd1bd209238a31a50db1903d50e5e1d7f1caf5ed44fce"
+  },
+  {
+    "file": "realm-identity-0.1.2.jar",
+    "sha256": "4bb9ef1d4df009fe1061c5daeaa76e95fb9ce355c72f00a83b31dffe0b36f016"
+  },
+  {
+    "file": "realm-markets-0.2.1.jar",
+    "sha256": "bfb1e73186015ab94a86c841abba1df02bf1b5851a65771e622234624b806bb1"
+  },
+  {
+    "file": "realm-notifications-0.1.1.jar",
+    "sha256": "2fb85c87eb296e49f3f68c0d7defd709ceca8913fa5a3f6ef9442d9b9548c99e"
+  },
+  {
+    "file": "realm-rewards-0.1.2.jar",
+    "sha256": "ab8efe3bd9a7b24a4f725bf6dfe1f07dec0b88ecfaac91533b57c45b11cb7bcb"
+  },
+  {
+    "file": "realm-titles-0.1.0.jar",
+    "sha256": "65d854ffd92805f6e8cb0891454f80ba5a6f33394cc0375cf23f64098af2bd16"
+  },
+  {
+    "file": "realm-casino-0.3.0.jar",
+    "sha256": "99c6c457d26be354f6cddddc4c865fe444f765b8d359004de12921aa0fad9117"
+  },
+  {
+    "file": "laws-justice-0.4.0.jar",
+    "sha256": "78c32b0c3acc8930ffd508c9bb44cc98b794a4b87900438b19ab812c21d36f7b"
+  },
+  {
+    "file": "realm-economy-0.4.0.jar",
+    "sha256": "eb7b25c11b64e842297d5ed174c067749989b6d5440fbc858834bd0922f55ddf"
+  },
+  {
+    "file": "realm-marriage-0.1.0.jar",
+    "sha256": "c2d2471029a006843c542622a1e1e0543a20492ea22a5999de02dd423d2390ca"
+  }
+]
