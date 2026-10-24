@@ -1,5 +1,7 @@
 # Validação — Realm Economy 0.4.1 Beta
 
+[Execução aprovada no GitHub](https://github.com/ROCKABITS/Mods/actions/runs/40098516877), código `ffaecad5d142b7315c95496e46078c9ccca69005`. Passaram 21 testes JUnit, 62 testes nativos independentes, 62 com integrações e o cliente Minecraft real. O JAR publicado tem 156 897 bytes e SHA-256 `505412288af4ec079a47a87350a019aaa1b348052037796b3831c8d992f4cff3`, igual ao JAR de produção validado localmente.
+
 Correção da pré-visualização dos livros encantados no menu de aldeões. Os componentes já eram enviados e entregues pelo servidor; o cliente mostrava apenas `getHoverName()` e um tooltip com esse nome genérico. A 0.4.1 apresenta os encantamentos guardados no resumo e usa o tooltip nativo do `ItemStack` completo.
 
 ## Verificações locais executadas
