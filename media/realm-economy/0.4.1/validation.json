@@ -1,0 +1,338 @@
+{
+  "compact_enchanted_book_preview": true,
+  "actual_enchanted_book_previews": true,
+  "actual_native_item_tooltips": true,
+  "purchased_enchantments_preserved": true,
+  "actual_brewing_escrow": true,
+  "actual_anvil_xp_substitution": true,
+  "actual_enchantment_xp_substitution": true,
+  "actual_smithing_recipe": true,
+  "actual_paid_beacon": true,
+  "actual_beacon_expiry": true,
+  "actual_brewing_timing_and_claim": true,
+  "actual_economic_policy_and_bounds": true,
+  "all_services_host_dual_save": true,
+  "actual_realm_admin": false,
+  "realm_admin_provider_contract_tested_natively": true,
+  "success": true,
+  "message": "Native Villager trading and all five economic services passed with real wallets, treasury, materials, timers and host persistence.",
+  "step": 24,
+  "screenshots": [
+    "realm-villager-market.png",
+    "realm-villager-base-price.png",
+    "realm-villager-tax-policy.png",
+    "realm-villager-tax-breakdown.png",
+    "realm-villager-purchase-receipt.png",
+    "realm-villager-emerald-sale.png",
+    "realm-villager-sale-receipt.png",
+    "realm-villager-extra-material.png",
+    "realm-villager-mending-tooltip.png",
+    "realm-villager-sharpness-tooltip.png",
+    "realm-villager-multiple-enchantments.png",
+    "realm-villager-compact-book-tooltip.png",
+    "realm-villager-hero-discount.png",
+    "realm-villager-librarian.png",
+    "realm-villager-crown-history.png",
+    "realm-economy-desks.png",
+    "realm-economy-desk-close.png",
+    "realm-economy-prices.png",
+    "realm-economy-governor.png",
+    "realm-economy-admin-bounds.png",
+    "realm-economy-admin-options.png",
+    "realm-economy-brewing.png",
+    "realm-economy-batch-progress.png",
+    "realm-economy-anvil.png",
+    "realm-economy-enchanting.png",
+    "realm-economy-smithing.png",
+    "realm-economy-beacon.png",
+    "realm-economy-beacon-world.png",
+    "realm-economy-batch-ready.png",
+    "realm-economy-audit.png",
+    "realm-economy-crown-history.png"
+  ],
+  "checks": [
+    "Native visible trading controls fit 320x240.",
+    "Real server snapshots distinguish Mending, Sharpness V and a three-enchantment book, including a curse. Row and detail native tooltips preserve all levels and lore, including the compact client layout.",
+    "Native visible trading controls fit 320x240.",
+    "Actual native UI confirmed a 100 euro base plus 10 euro public tax; the real Chronicles wallet paid 110 euros and Crown received 10 euros.",
+    "Material sales preserved physical emeralds, digital balance, and complete native host restart files. An extra book was consumed, Vanilla hero discount and native librarian offers rendered.",
+    "The native Crown Chest displayed the actual purchase-tax payments and the dated approval, including author and rate. Any independent Realm Rewards advancement income is separate from the receipted 110 euro debit.",
+    "Visible service controls fit 320x240.",
+    "Visible service controls fit 320x240.",
+    "Visible service controls fit 320x240.",
+    "Visible service controls fit 320x240.",
+    "Visible service controls fit 320x240.",
+    "Visible service controls fit 320x240.",
+    "Visible service controls fit 320x240.",
+    "Visible service controls fit 320x240.",
+    "Visible service controls fit 320x240.",
+    "Visible service controls fit 320x240.",
+    "Visible service controls fit 320x240.",
+    "Visible service controls fit 320x240.",
+    "Visible service controls fit 320x240.",
+    "Visible service controls fit 320x240.",
+    "Visible service controls fit 320x240.",
+    "Visible service controls fit 320x240.",
+    "Visible service controls fit 320x240.",
+    "Visible service controls fit 320x240.",
+    "Native Economy Desk, rules, bounds, service confirmations, lapis, smithing inputs, 20-second brewing claims and real timed beacon expiry passed; every service receipt reached both host restart files without charging XP."
+  ],
+  "actual_minecraft_client": true,
+  "actual_integrated_server": true,
+  "real_c2s_requests": [
+    {
+      "rate": 1000,
+      "nonce": "0617a552-7ab8-46cf-ae77-58f9db09889b",
+      "quote": "226e9e211a10d4fa7c99f79e40eca93a6156a4eddf2ff387bed41f42fd81ded9",
+      "operation": "policy"
+    },
+    {
+      "offer": 0,
+      "nonce": "2fd03170-c269-42b4-bada-f5cab00dd74f",
+      "quote": "dc1b5c7b2875637223cae090bc74409fc5149e6ade48f4b88a9d4651247e01ef",
+      "operation": "trade"
+    },
+    {
+      "operation": "refresh"
+    },
+    {
+      "offer": 1,
+      "nonce": "ab415f32-a4c4-47c4-943e-e2f41c668f83",
+      "quote": "13fc23ed1ab71d26afafc77131fa190b1fbb2a94db224f28bd8d44e366bc897b",
+      "operation": "trade"
+    },
+    {
+      "operation": "refresh"
+    },
+    {
+      "offer": 2,
+      "nonce": "6521b5b7-35cc-4f91-b7d9-1a0061c16b2b",
+      "quote": "0a14e97e48b2039236aac3802a30d60eb82c9ebd22d3344c11837235d17e5ba0",
+      "operation": "trade"
+    },
+    {
+      "service": "ANVIL_RENAME",
+      "value": 200,
+      "tax": 1000,
+      "nonce": "2f857b04-d488-40e9-9ffe-f86fed6ff792",
+      "quote": "899ced2a4324841b9b315ba94a27303321a81bdd9a62bd8ad30b052526e7ec61",
+      "operation": "svcPolicy"
+    },
+    {
+      "operation": "svcRefresh"
+    },
+    {
+      "service": "ANVIL_RENAME",
+      "minimum": 100,
+      "maximum": 500,
+      "cap": 2500,
+      "enabled": true,
+      "nonce": "3956152a-85a6-4114-87ba-613379e0743f",
+      "quote": "800c9a0b9821d018bcb23af5f8c58b18bedfb8b28c354b9e85fb3df2cc2cf1f4",
+      "operation": "svcAdmin"
+    },
+    {
+      "seconds": 10,
+      "nonce": "c2f3545c-596c-4383-b443-2ca876f85958",
+      "quote": "4a7818bc440d12824a545734ed51504a907869f57074fdc2fc1f76396ad1f0df",
+      "operation": "svcPeriod"
+    },
+    {
+      "operation": "svcRefresh"
+    },
+    {
+      "slots": [
+        0,
+        -1,
+        -1,
+        -1
+      ],
+      "name": "",
+      "rename": false,
+      "choice": 0,
+      "secondary": 0,
+      "nonce": "d2f1bc43-f29b-45b3-ac7d-6e8e92248cb9",
+      "quote": "87d7e11d40f84074abf1cfb189be2b4ed858dd94a3fa8a5ed80425a74c646920",
+      "operation": "svcPreview"
+    },
+    {
+      "slots": [
+        0,
+        1,
+        -1,
+        -1
+      ],
+      "name": "",
+      "rename": false,
+      "choice": 0,
+      "secondary": 0,
+      "nonce": "06cdbc16-0d11-44de-8a47-5a0a2d07f2ac",
+      "quote": "99d062b8680ca994f3f9a129d4d596f3f674fa7e67e3abd0fbfac51a53dc6ea0",
+      "operation": "svcPreview"
+    },
+    {
+      "slots": [
+        0,
+        1,
+        -1,
+        2
+      ],
+      "name": "",
+      "rename": false,
+      "choice": 0,
+      "secondary": 0,
+      "nonce": "9d9ffb7b-936d-46d1-8c8d-2e3b3cb6355f",
+      "quote": "2e418915485bdb4ed6584630b0b9a5fe065476706c04858e59ef6d8ce82fd170",
+      "operation": "svcPreview"
+    },
+    {
+      "operation": "svcRefresh"
+    },
+    {
+      "nonce": "56c79af5-0be1-45fa-84ac-be2e0f3f9ab9",
+      "quote": "c1887e01bf1ba870e283711c05fd705a309a8768782a24b2401dbfc4770cc4e1",
+      "operation": "svcConfirm"
+    },
+    {
+      "operation": "svcRefresh"
+    },
+    {
+      "slots": [
+        0,
+        -1,
+        -1,
+        -1
+      ],
+      "name": "",
+      "rename": false,
+      "choice": 0,
+      "secondary": 0,
+      "nonce": "41fc36a6-c323-47c8-89bf-d3c78e017627",
+      "quote": "d23ba4c0215d977acb9d544a95463bc905c175c66e5ec03bafecfcf96d6b47c4",
+      "operation": "svcPreview"
+    },
+    {
+      "slots": [
+        0,
+        -1,
+        -1,
+        -1
+      ],
+      "name": "Royal Promise",
+      "rename": true,
+      "choice": 0,
+      "secondary": 0,
+      "nonce": "35286981-5e55-49d9-8b4d-2dd689f5d34d",
+      "quote": "450facee156f45af3ed2f1b06810b982bce5f35b937ede3fd27a1aaeadecaa75",
+      "operation": "svcPreview"
+    },
+    {
+      "nonce": "940cdfba-3c87-4f4a-85ed-2e0670185e77",
+      "quote": "e0f3a31b4128a8ff8a6971fbc5e41f245fcbb8061a66dd388ecfae76d4ac81aa",
+      "operation": "svcConfirm"
+    },
+    {
+      "slots": [
+        0,
+        -1,
+        -1,
+        -1
+      ],
+      "name": "",
+      "rename": false,
+      "choice": 0,
+      "secondary": 0,
+      "nonce": "e270230b-43a0-4563-b3d1-b9418e1e767a",
+      "quote": "5ceff72b08ab7abf47a83c5b0065c264a41b7ea51fb01752f8b254e9d53d48b7",
+      "operation": "svcPreview"
+    },
+    {
+      "nonce": "1ff4f41c-b027-4121-b2c2-784164b6469b",
+      "quote": "3f6da53a074dfa5c26ac5566c29fcf4339a9030f7982de5ae944b3cf13e472a9",
+      "operation": "svcConfirm"
+    },
+    {
+      "operation": "svcRefresh"
+    },
+    {
+      "slots": [
+        0,
+        -1,
+        -1,
+        -1
+      ],
+      "name": "",
+      "rename": false,
+      "choice": 0,
+      "secondary": 0,
+      "nonce": "f3e2cd3d-f875-415b-812c-bfef39df94a2",
+      "quote": "5eb3443a958b6b89b26570a160e51753c73bbfd1a2fdb84206a0c7425e32932f",
+      "operation": "svcPreview"
+    },
+    {
+      "slots": [
+        0,
+        1,
+        -1,
+        -1
+      ],
+      "name": "",
+      "rename": false,
+      "choice": 0,
+      "secondary": 0,
+      "nonce": "0052b8be-3939-48c8-9f60-8f6b16970bc8",
+      "quote": "485f89535d2cc917208c1fed5e606743f670328ef936cbd0f6c36b73f2a75135",
+      "operation": "svcPreview"
+    },
+    {
+      "slots": [
+        0,
+        1,
+        2,
+        -1
+      ],
+      "name": "",
+      "rename": false,
+      "choice": 0,
+      "secondary": 0,
+      "nonce": "b8a92c4f-cd72-4435-91c5-f858532d0a9a",
+      "quote": "38bd83ea1437faa89b56e7fec00620b0bd3334b8a3437a6d0c0fd2a7ee11d76e",
+      "operation": "svcPreview"
+    },
+    {
+      "operation": "svcRefresh"
+    },
+    {
+      "nonce": "0e0ea777-71d0-45e1-b26f-7ae196286497",
+      "quote": "403373280263f73f2027d41f5360e4c15f1414889c765afba09c00277d548de8",
+      "operation": "svcConfirm"
+    },
+    {
+      "nonce": "ffaaac2f-e479-4c7d-a0df-1321bce2719f",
+      "quote": "cf4ece28473743225c5ad590f3b247e330104dd2e4331591e04ae58b99a8ba0e",
+      "operation": "svcConfirm"
+    },
+    {
+      "operation": "svcRefresh"
+    },
+    {
+      "operation": "svcRefresh"
+    },
+    {
+      "job": "3299348a-1d54-43d2-98d6-a45995219009",
+      "nonce": "b5464c30-8bc5-4e07-8f82-b892ec4f0778",
+      "quote": "96a07487aeff9713999a209ac269b867a42936ff9199a9786e790d9b4636a571",
+      "operation": "svcClaim"
+    },
+    {
+      "operation": "svcRefresh"
+    }
+  ],
+  "real_chronicles_wallet": true,
+  "lan_host_dual_save": true,
+  "real_crown_tax": true,
+  "external_reward_after_first_purchase": 200,
+  "authenticated_two_clients": false,
+  "synthetic_financial_snapshots": false,
+  "demonstration_money_and_offers": true
+}
