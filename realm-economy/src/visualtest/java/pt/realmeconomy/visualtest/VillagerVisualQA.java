@@ -21,6 +21,12 @@ import net.minecraft.client.gui.screens.TitleScreen;
 import net.minecraft.client.gui.screens.worldselection.CreateWorldScreen;
 import net.minecraft.client.gui.screens.worldselection.WorldCreationUiState;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.enchantment.Enchantments;
+import net.minecraft.world.item.enchantment.ItemEnchantments;
+import net.neoforged.neoforge.client.event.RenderTooltipEvent;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtAccounter;
 import net.minecraft.nbt.NbtIo;
@@ -57,6 +63,35 @@ public final class VillagerVisualQA {
     private static final long STARTED=System.currentTimeMillis();
     private static int step,ticks;private static long next;private static boolean language,done;private static volatile boolean prepared,opened,verified;private static volatile Throwable failure;
     private static Villager merchant,librarian;private static long savedWallet;private static boolean dualSave,realTreasury;
+    private static ItemStack mendingBook,lastTooltip=ItemStack.EMPTY,renderedTooltip=ItemStack.EMPTY;
+    private static List<String> tooltipLines=List.of();
+    @SubscribeEvent public static void tooltip(RenderTooltipEvent.GatherComponents event){
+        if(Minecraft.getInstance().screen instanceof TradingScreen&&event.getItemStack().is(Items.ENCHANTED_BOOK)){
+            lastTooltip=event.getItemStack().copy();
+            tooltipLines=event.getTooltipElements().stream().flatMap(e->e.left().stream()).map(net.minecraft.network.chat.FormattedText::getString).toList();
+        }
+    }
+    @SubscribeEvent public static void tooltipRendered(RenderTooltipEvent.Pre event){
+        if(Minecraft.getInstance().screen instanceof TradingScreen&&event.getItemStack().is(Items.ENCHANTED_BOOK)&&!event.getComponents().isEmpty())renderedTooltip=event.getItemStack().copy();
+    }
+    private static ItemStack book(int index){return ItemStack.OPTIONAL_CODEC.parse(Minecraft.getInstance().level.registryAccess().createSerializationContext(com.mojang.serialization.JsonOps.INSTANCE),data().getAsJsonArray("offers").get(index).getAsJsonObject().get("result")).getOrThrow();}
+    private static void hoverBook(int index,boolean detail){
+        offer(index);var screen=Minecraft.getInstance().screen;int x=(Integer)field(screen,"x"),top=(Integer)field(screen,"top"),left=(Integer)field(screen,"left");
+        int mx=detail?x+left+40:x+35,my=detail?top+28:top+index*42+16;
+        var mc=Minecraft.getInstance();double px=mx*(double)mc.getWindow().getScreenWidth()/mc.getWindow().getGuiScaledWidth(),py=my*(double)mc.getWindow().getScreenHeight()/mc.getWindow().getGuiScaledHeight();
+        org.lwjgl.glfw.GLFW.glfwSetCursorPos(mc.getWindow().getWindow(),px,py);
+        try{for(String name:List.of("xpos","ypos")){Field f=mc.mouseHandler.getClass().getDeclaredField(name);f.setAccessible(true);f.setDouble(mc.mouseHandler,name.equals("xpos")?px:py);}}catch(Exception e){throw new IllegalStateException(e);}
+        lastTooltip=ItemStack.EMPTY;renderedTooltip=ItemStack.EMPTY;tooltipLines=List.of();pause();
+    }
+    private static void verifyBookTooltip(int index){
+        var stack=book(index);check(ItemStack.isSameItemSameComponents(stack,lastTooltip)&&ItemStack.isSameItemSameComponents(stack,renderedTooltip),"The actual native tooltip did not render the hovered offer's full ItemStack");
+        try{var method=TradingScreen.class.getDeclaredMethod("enchantmentSummary",ItemStack.class);method.setAccessible(true);String summary=((Component)method.invoke(Minecraft.getInstance().screen,stack)).getString();
+            for(var entry:stack.getOrDefault(DataComponents.STORED_ENCHANTMENTS,ItemEnchantments.EMPTY).entrySet()){
+                String name=Enchantment.getFullname(entry.getKey(),entry.getIntValue()).getString();check(summary.contains(name)&&tooltipLines.stream().anyMatch(line->line.contains(name)),"An enchantment or its level is missing: "+name);
+            }
+        }catch(ReflectiveOperationException e){throw new IllegalStateException(e);}
+        if(index==2)check(tooltipLines.stream().anyMatch(line->line.contains("Archivist's verified edition")),"Native book lore was stripped from its tooltip");
+    }
     private static void check(boolean pass,String why){if(!pass)throw new IllegalStateException(why);}
     private static ServerPlayer player(){var mc=Minecraft.getInstance();return mc.getSingleplayerServer().getPlayerList().getPlayer(mc.player.getUUID());}
     static void server(Runnable action){Minecraft.getInstance().getSingleplayerServer().execute(()->{try{action.run();}catch(Throwable error){failure=error;}});}
@@ -74,6 +109,11 @@ public final class VillagerVisualQA {
         for(int x=-12;x<=12;x++)for(int z=-12;z<=10;z++){level.setBlock(new BlockPos(x,160,z),(Math.abs(x)<5?Blocks.STONE_BRICKS:Blocks.OAK_PLANKS).defaultBlockState(),2);for(int y=161;y<=169;y++)level.setBlock(new BlockPos(x,y,z),Blocks.AIR.defaultBlockState(),2);}
         for(int cx:new int[]{-4,4}){for(int x=cx-2;x<=cx+2;x++){level.setBlock(new BlockPos(x,162,2),Blocks.SPRUCE_SLAB.defaultBlockState(),2);level.setBlock(new BlockPos(x,165,1),(x%2==0?Blocks.GREEN_WOOL:Blocks.WHITE_WOOL).defaultBlockState(),2);level.setBlock(new BlockPos(x,165,2),(x%2==0?Blocks.GREEN_WOOL:Blocks.WHITE_WOOL).defaultBlockState(),2);}for(int x:new int[]{cx-2,cx+2}){for(int y=161;y<=164;y++)level.setBlock(new BlockPos(x,y,3),Blocks.OAK_FENCE.defaultBlockState(),2);level.setBlock(new BlockPos(x,164,0),Blocks.LANTERN.defaultBlockState(),2);}level.setBlock(new BlockPos(cx-1,161,4),Blocks.BARREL.defaultBlockState(),2);level.setBlock(new BlockPos(cx+1,161,4),Blocks.HAY_BLOCK.defaultBlockState(),2);}
         merchant=EntityType.VILLAGER.create(level);merchant.setPos(-3.5,161,3.5);merchant.setNoAi(true);merchant.setInvulnerable(true);merchant.setPersistenceRequired();merchant.setVillagerData(merchant.getVillagerData().setProfession(VillagerProfession.FARMER));check(level.addFreshEntity(merchant),"Demonstration farmer did not spawn in the loaded market");merchant.getOffers().clear();merchant.getOffers().add(new MerchantOffer(new ItemCost(Items.EMERALD,20),new ItemStack(Items.BREAD,3),12,4,.05F));merchant.getOffers().add(new MerchantOffer(new ItemCost(Items.WHEAT,20),new ItemStack(Items.EMERALD),12,2,.05F));merchant.getOffers().add(new MerchantOffer(new ItemCost(Items.EMERALD,2),java.util.Optional.of(new ItemCost(Items.BOOK)),new ItemStack(Items.ENCHANTED_BOOK),8,4,.05F));
+        var enchantments=level.registryAccess().registryOrThrow(Registries.ENCHANTMENT);
+        mendingBook=new ItemStack(Items.ENCHANTED_BOOK);mendingBook.enchant(enchantments.getHolderOrThrow(Enchantments.MENDING),1);mendingBook.set(DataComponents.LORE,new net.minecraft.world.item.component.ItemLore(List.of(Component.literal("Archivist's verified edition"))));
+        merchant.getOffers().set(2,new MerchantOffer(new ItemCost(Items.EMERALD,2),java.util.Optional.of(new ItemCost(Items.BOOK)),mendingBook.copy(),8,4,.05F));
+        var sharpness=new ItemStack(Items.ENCHANTED_BOOK);sharpness.enchant(enchantments.getHolderOrThrow(Enchantments.SHARPNESS),5);merchant.getOffers().add(new MerchantOffer(new ItemCost(Items.EMERALD,3),sharpness,8,4,.05F));
+        var multiple=new ItemStack(Items.ENCHANTED_BOOK);multiple.enchant(enchantments.getHolderOrThrow(Enchantments.UNBREAKING),3);multiple.enchant(enchantments.getHolderOrThrow(Enchantments.MENDING),1);multiple.enchant(enchantments.getHolderOrThrow(Enchantments.VANISHING_CURSE),1);merchant.getOffers().add(new MerchantOffer(new ItemCost(Items.EMERALD,4),multiple,8,4,.05F));
         librarian=EntityType.VILLAGER.create(level);librarian.setPos(4.5,161,3.5);librarian.setNoAi(true);librarian.setInvulnerable(true);librarian.setPersistenceRequired();librarian.setVillagerData(librarian.getVillagerData().setProfession(VillagerProfession.LIBRARIAN));check(level.addFreshEntity(librarian),"Demonstration librarian did not spawn in the loaded market");
         profile(p);p.getInventory().setItem(0,new ItemStack(Items.WHEAT,40));p.getInventory().setItem(1,new ItemStack(Items.BOOK));p.getAbilities().flying=true;p.onUpdateAbilities();p.connection.teleport(0,162,-5,0,12);prepared=true;
     });}
@@ -102,8 +142,13 @@ public final class VillagerVisualQA {
             case 12->{screenshot("realm-villager-emerald-sale.png");check(click("gui.realmeconomy.confirm_sell"),"Native material sale unavailable");step++;}
             case 13->{if(!ready()||data().getAsJsonArray("offers").get(1).getAsJsonObject().get("stock").getAsInt()!=11)return;check(data().get("balance").getAsLong()==savedWallet,"Selling materials debited digital money");server(()->check(player().getInventory().countItem(Items.EMERALD)==1&&player().getInventory().countItem(Items.WHEAT)==20,"Sale did not retain physical emeralds"));verifyHost(savedWallet);pause();step++;}
             case 14->{if(!verified)return;screenshot("realm-villager-sale-receipt.png");offer(2);pause();step++;}
-            case 15->{screenshot("realm-villager-extra-material.png");check(click("gui.realmeconomy.confirm_buy"),"Book purchase confirmation missing");step++;}
-            case 16->{if(!ready()||data().get("balance").getAsLong()!=savedWallet-1100)return;verifyHost(savedWallet-1100);step++;}
+            case 15->{screenshot("realm-villager-extra-material.png");hoverBook(2,false);step=150;}
+            case 150->{verifyBookTooltip(2);screenshot("realm-villager-mending-tooltip.png");hoverBook(3,true);step=151;}
+            case 151->{verifyBookTooltip(3);screenshot("realm-villager-sharpness-tooltip.png");hoverBook(4,true);step=152;}
+            case 152->{verifyBookTooltip(4);screenshot("realm-villager-multiple-enchantments.png");mc.options.guiScale().set(3);mc.resizeDisplay();hoverBook(2,true);step=153;}
+            case 153->{verifyBookTooltip(2);check((Integer)field(mc.screen,"w")<550,"The actual client did not enter its compact trading layout");screenshot("realm-villager-compact-book-tooltip.png");EconomyVisualQA.proof().put("compact_enchanted_book_preview",true);mc.options.guiScale().set(2);mc.resizeDisplay();offer(2);pause();step=154;}
+            case 154->{EconomyVisualQA.proof().put("actual_enchanted_book_previews",true);EconomyVisualQA.proof().put("actual_native_item_tooltips",true);CHECKS.add("Real server snapshots distinguish Mending, Sharpness V and a three-enchantment book, including a curse. Row and detail native tooltips preserve all levels and lore, including the compact client layout.");check(click("gui.realmeconomy.confirm_buy"),"Book purchase confirmation missing");step=16;}
+            case 16->{if(!ready()||data().get("balance").getAsLong()!=savedWallet-1100)return;verifyHost(savedWallet-1100);server(()->{check(player().getInventory().items.stream().anyMatch(stack->ItemStack.isSameItemSameComponents(stack,mendingBook)),"The purchased book lost its previewed enchantment or lore");check(player().getInventory().countItem(Items.BOOK)==0,"The book purchase did not consume its required material");EconomyVisualQA.proof().put("purchased_enchantments_preserved",true);});step++;}
             case 17->{if(!verified)return;check(click("gui.realmeconomy.close"),"Native close unavailable");server(()->{player().addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.HERO_OF_THE_VILLAGE,1000,0));});next=System.currentTimeMillis()+700;step++;}
             case 18->{open(merchant);step++;}
             case 19->{if(!ready())return;check(data().getAsJsonArray("offers").get(0).getAsJsonObject().get("base").getAsLong()<10000,"Actual Vanilla hero discount was not preserved");pause();step++;}

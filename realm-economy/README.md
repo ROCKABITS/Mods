@@ -1,6 +1,6 @@
 # Realm Economy
 
-**Minecraft 1.21.1 · NeoForge 21.1.256+ · Java 21 · 0.4.0 Beta**
+**Minecraft 1.21.1 · NeoForge 21.1.256+ · Java 21 · 0.4.1 Beta**
 
 Realm Economy dá utilidade à carteira do **Realm Origins 0.5.7** durante a sobrevivência: compras aos aldeões, bigorna, encantamentos, melhorias, poções e ativações temporárias de beacons. A **Mesa da Economia** permite ao Presidente empossado governar os preços e impostos, respeitando os limites administrativos.
 
@@ -8,12 +8,12 @@ Realm Economy dá utilidade à carteira do **Realm Origins 0.5.7** durante a sob
 
 1. Guarda uma cópia conjunta do mundo, perfis e tesouraria.
 2. **Retira `realm-villager-economy-0.1.0.jar`. Realm Economy substitui esse mod.** Os dois não devem estar instalados juntos.
-3. Instala `realm-economy-0.4.0.jar` nos clientes e servidor. Se usas impostos, substitui Crown Ledger pela **0.2.5** em todos eles.
-4. Usa Realm Origins 0.5.7 e as suas dependências. Realm Council 0.2.2+ identifica o Presidente. Realm Notifications 0.1.0 é opcional.
+3. Instala `realm-economy-0.4.1.jar` nos clientes e servidor. Para impostos, utiliza **Realm Treasury 0.3.1** ou Crown Ledger 0.2.5+. Instala a mesma versão da tesouraria nos clientes e servidor.
+4. Usa Realm Origins 0.5.7 e as suas dependências. Realm Council 0.2.2+ identifica o Presidente. Realm Notifications 0.1.1 é opcional.
 
-Foi desenvolvido para servidor integrado, LAN e servidor dedicado; consulta os testes efetivos em [VALIDACAO.md](VALIDACAO.md).
+Foi desenvolvido para servidor integrado, LAN e servidor dedicado; consulta os testes efetivos em [VALIDACAO-0.4.1.md](VALIDACAO-0.4.1.md).
 
-A migração lê `data/realm_villager_economy.dat` quando ainda não existe `data/realm_economy.dat`. Conserva taxa, stock, transferências pendentes e intenções interrompidas. Lê também a conversão inicial de `config/realmvillagereconomy-server.json`, se existir. O ficheiro anterior permanece intacto como referência. Depois da migração, os registos ativos usam o formato 2 do Realm Economy e o formato 6 do Crown. Regressar aos mods antigos exige restaurar a cópia anterior completa.
+A migração lê `data/realm_villager_economy.dat` quando ainda não existe `data/realm_economy.dat`. Conserva taxa, stock, transferências pendentes e intenções interrompidas. Lê também a conversão inicial de `config/realmvillagereconomy-server.json`, se existir. O ficheiro anterior permanece intacto como referência. Depois da migração, os registos ativos usam o formato 2 do Realm Economy; a tesouraria conserva o formato da sua própria versão. Regressar aos mods antigos exige restaurar a cópia anterior completa.
 
 ## Mesa da Economia
 
@@ -59,6 +59,8 @@ Sem Crown Ledger, o imposto efetivo é zero. As aprovações continuam guardadas
 ## Aldeões
 
 As compras usam o custo atual da oferta × valor de referência da esmeralda. Conservam quantidades, materiais adicionais, descontos, procura, profissão, níveis e reposições Vanilla. Os materiais adicionais continuam necessários, como um livro para comprar um livro encantado.
+
+Desde a 0.4.1, os livros encantados mostram os nomes e níveis dos encantamentos na lista e na pré-visualização. Passa o rato sobre qualquer oferta ou sobre o resultado selecionado para consultar a descrição nativa completa: todos os encantamentos, maldições, nome personalizado, lore e extensões de outros mods. A informação usa os componentes reais enviados pelo servidor. O menu compacto conserva a identificação do livro; resumos longos aparecem completos na descrição ao passar o rato.
 
 Vender materiais continua a dar **esmeraldas físicas**, sem imposto nem euros. A referência de 5 € não oferece conversão direta de esmeraldas em dinheiro. O imposto dos aldeões também pode ser alterado no separador fiscal do seu menu, com as mesmas permissões e limites.
 
@@ -116,4 +118,4 @@ A integração utiliza `-PintegrationTests`, os JARs verificados em `.github/scr
 
 [Changelog](CHANGELOG.md) · [Validação](VALIDACAO.md) · [Plano original](PLANO-REALM-ECONOMY.md).
 
-[Download JAR](../mod-pronto/realm-economy-0.4.0.jar) · [Download ZIP](../mod-pronto/realm-economy-0.4.0.zip) · [Galeria](../media/realm-economy/README.md).
+[Download JAR](../mod-pronto/realm-economy-0.4.1.jar) · [Download ZIP](../mod-pronto/realm-economy-0.4.1.zip) · [Galeria](../media/realm-economy/README.md).

@@ -13,9 +13,12 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.enchantment.ItemEnchantments;
 import pt.realmeconomy.menu.EconomyMenu;
 import pt.realmeconomy.network.TradeNetwork;
 
@@ -38,6 +41,28 @@ public final class TradingScreen extends AbstractContainerScreen<EconomyMenu> {
     private int visibleRows(){return Math.max(1,(bottom-top-30)/42);}
     private void rebuild(){if(minecraft!=null)init(minecraft,width,height);}
     private ItemStack item(JsonObject row,String field){try{return ItemStack.OPTIONAL_CODEC.parse(minecraft.level.registryAccess().createSerializationContext(JsonOps.INSTANCE),row.get(field)).getOrThrow();}catch(RuntimeException missing){return ItemStack.EMPTY;}}
+    /** Registry-backed names retain translated enchantments, levels and curse formatting. */
+    private Component enchantmentSummary(ItemStack stack){
+        var stored=stack.getOrDefault(DataComponents.STORED_ENCHANTMENTS,ItemEnchantments.EMPTY);
+        var text=Component.empty();
+        for(var entry:stored.entrySet()){
+            if(!text.getSiblings().isEmpty())text.append(Component.literal(", "));
+            text.append(Enchantment.getFullname(entry.getKey(),entry.getIntValue()));
+        }
+        return text;
+    }
+    private ItemStack hoveredItem(double mx,double my){
+        if(fiscal)return ItemStack.EMPTY;
+        if(mx>=x+14&&mx<x+left-4){
+            for(int i=0;i<visibleRows()&&page*visibleRows()+i<offers().size();i++){
+                int yy=top+i*42;
+                if(my>=yy&&my<yy+38)return item(offers().get(page*visibleRows()+i).getAsJsonObject(),"result");
+            }
+        }
+        int xx=x+left+20,yy=top+12,ww=w-left-46;
+        if(mx>=xx&&mx<xx+ww&&my>=yy&&my<yy+(compact()?22:76))return item(offer(),"result");
+        return ItemStack.EMPTY;
+    }
     @Override protected void init(){
         w=Math.min(760,width-16);h=Math.min(424,height-16);x=(width-w)/2;y=(height-h)/2;top=y+(compact()?55:72);bottom=y+h-28;left=compact()?Math.max(100,w/3):Math.max(220,(int)(w*.38));
         clearWidgets();int tabW=Math.min(140,(w-40)/3);addRenderableWidget(Button.builder(tr("offers"),b->{fiscal=false;rebuild();}).bounds(x+14,y+(compact()?29:43),tabW,18).build(LedgerButton::new));
@@ -47,7 +72,7 @@ public final class TradingScreen extends AbstractContainerScreen<EconomyMenu> {
         page=Math.clamp(page,0,Math.max(0,(offers().size()-1)/visibleRows()));selected=Math.clamp(selected,0,Math.max(0,offers().size()-1));
         for(int i=0;i<visibleRows()&&page*visibleRows()+i<offers().size();i++){
             int index=page*visibleRows()+i;var row=offers().get(index).getAsJsonObject();int yy=top+i*42;
-            var b=Button.builder(Component.empty(),button->{selected=index;rebuild();}).bounds(x+14,yy,left-18,38).build(LedgerButton::new);b.setTooltip(net.minecraft.client.gui.components.Tooltip.create(item(row,"result").getHoverName()));addRenderableWidget(b);
+            var b=Button.builder(Component.empty(),button->{selected=index;rebuild();}).bounds(x+14,yy,left-18,38).build(LedgerButton::new);addRenderableWidget(b);
         }
         addRenderableWidget(Button.builder(Component.literal("‹"),b->{page--;rebuild();}).bounds(x+14,bottom-22,28,18).build(LedgerButton::new)).active=page>0;
         addRenderableWidget(Button.builder(Component.literal("›"),b->{page++;rebuild();}).bounds(x+left-32,bottom-22,28,18).build(LedgerButton::new)).active=(page+1)*visibleRows()<offers().size();
@@ -73,17 +98,21 @@ public final class TradingScreen extends AbstractContainerScreen<EconomyMenu> {
             if(index==selected)TradeTheme.border(g,x+13,yy-1,left-16,40,TradeTheme.GOLD);
             g.renderItem(result,x+20,yy+8);g.renderItemDecorations(font,result,x+20,yy+8);
             line(g,result.getHoverName(),x+42,yy+7,left-48,TradeTheme.LIGHT);
-            line(g,flag(row,"purchase")?money(num(row,"total")):tr(flag(row,"sale")?"emerald_sale":"barter").getString(),x+42,yy+21,left-48,num(row,"stock")==0?0xFFC17E72:TradeTheme.MUTED);
+            Component enchantments=enchantmentSummary(result);boolean enchanted=!enchantments.getString().isEmpty();
+            if(enchanted)line(g,enchantments,x+42,yy+17,left-48,TradeTheme.GOLD);
+            line(g,flag(row,"purchase")?money(num(row,"total")):tr(flag(row,"sale")?"emerald_sale":"barter").getString(),x+42,yy+(enchanted?28:21),left-48,num(row,"stock")==0?0xFFC17E72:TradeTheme.MUTED);
         }
         line(g,tr("offer_count",Math.min(offers().size(),selected+1),offers().size()),x+48,bottom-17,left-90,TradeTheme.MUTED);
         renderQuote(g);
     }
     private void renderQuote(GuiGraphics g){
         JsonObject row=offer();if(row.size()==0){line(g,tr("loading"),x+left+20,top+15,w-left-40,TradeTheme.LIGHT);return;}
-        int xx=x+left+20,ww=w-left-46,yy=top+12;ItemStack result=item(row,"result");
+        int xx=x+left+20,ww=w-left-46,yy=top+12;ItemStack result=item(row,"result");Component enchantments=enchantmentSummary(result);boolean enchanted=!enchantments.getString().isEmpty();
         if(!compact()){
-            TradeTheme.plaque(g,xx,yy,ww,76);g.pose().pushPose();g.pose().translate(xx+12,yy+13,0);g.pose().scale(2.4F,2.4F,1);g.renderItem(result,0,0);g.pose().popPose();line(g,result.getHoverName(),xx+66,yy+13,ww-76,TradeTheme.LIGHT);line(g,tr("quantity",result.getCount()),xx+66,yy+31,ww-76,TradeTheme.MUTED);line(g,tr("stock",num(row,"stock")),xx+66,yy+48,ww-76,TradeTheme.MUTED);yy+=89;
-        }else{g.renderItem(result,xx,yy);line(g,result.getHoverName(),xx+23,yy+3,ww-23,TradeTheme.LIGHT);yy+=26;}
+            TradeTheme.plaque(g,xx,yy,ww,76);g.pose().pushPose();g.pose().translate(xx+12,yy+13,0);g.pose().scale(2.4F,2.4F,1);g.renderItem(result,0,0);g.pose().popPose();line(g,result.getHoverName(),xx+66,yy+13,ww-76,TradeTheme.LIGHT);
+            if(enchanted)line(g,enchantments,xx+66,yy+28,ww-76,TradeTheme.GOLD);
+            line(g,tr("quantity",result.getCount()),xx+66,yy+(enchanted?44:31),ww-76,TradeTheme.MUTED);line(g,tr("stock",num(row,"stock")),xx+66,yy+(enchanted?59:48),ww-76,TradeTheme.MUTED);yy+=89;
+        }else{g.renderItem(result,xx,yy);line(g,enchanted?enchantments:result.getHoverName(),xx+23,yy+3,ww-23,TradeTheme.LIGHT);yy+=26;}
         if(flag(row,"purchase")){
             line(g,tr("base",money(num(row,"base"))),xx,yy,ww,TradeTheme.LIGHT);yy+=compact()?13:22;
             line(g,tr("tax",percent(num(data,"rate")),money(num(row,"tax"))),xx,yy,ww,TradeTheme.MUTED);yy+=compact()?16:28;
@@ -105,7 +134,7 @@ public final class TradingScreen extends AbstractContainerScreen<EconomyMenu> {
         if(!compact()&&data.has("history")){line(g,tr("history"),x+20,yy,w-40,TradeTheme.GOLD);yy+=18;for(var element:data.getAsJsonArray("history")){var e=element.getAsJsonObject();if(yy>bottom-14)break;String date=java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm").withZone(java.time.ZoneId.systemDefault()).format(java.time.Instant.ofEpochMilli(num(e,"at")));line(g,date+" · "+str(e,"name")+" · "+percent(num(e,"rate")),x+20,yy,w-40,TradeTheme.LIGHT);yy+=17;}}
     }
     @Override protected void renderLabels(GuiGraphics g,int mx,int my){}
-    @Override public void render(GuiGraphics g,int mx,int my,float partial){super.render(g,mx,my,partial);String error=str(data,"error");Component status=waiting?tr("waiting"):error.isEmpty()?tr("server_quote"):Component.translatable(error);line(g,status,x+15,y+h-19,w-100,error.isEmpty()?TradeTheme.MUTED:0xFFF3AD96);}
+    @Override public void render(GuiGraphics g,int mx,int my,float partial){super.render(g,mx,my,partial);String error=str(data,"error");Component status=waiting?tr("waiting"):error.isEmpty()?tr("server_quote"):Component.translatable(error);line(g,status,x+15,y+h-19,w-100,error.isEmpty()?TradeTheme.MUTED:0xFFF3AD96);var hovered=hoveredItem(mx,my);if(!hovered.isEmpty())g.renderTooltip(font,hovered,mx,my);}
     @Override protected void containerTick(){if(++ticks%120==0&&!waiting&&(rateInput==null||!rateInput.isFocused()))requestSender.accept("refresh",new JsonObject());if(waiting&&ticks%200==0){waiting=false;requestSender.accept("refresh",new JsonObject());}super.containerTick();}
     @Override public boolean mouseScrolled(double mx,double my,double horizontal,double vertical){if(!fiscal&&mx<x+left){page=Math.max(0,page+(vertical<0?1:-1));rebuild();return true;}return super.mouseScrolled(mx,my,horizontal,vertical);}
     @Override public boolean isPauseScreen(){return false;}

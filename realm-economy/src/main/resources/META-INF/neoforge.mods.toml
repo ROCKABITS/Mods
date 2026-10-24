@@ -3,7 +3,7 @@ loaderVersion="[4,)"
 license="All Rights Reserved"
 [[mods]]
 modId="realmeconomy"
-version="0.4.0"
+version="0.4.1"
 displayName="Realm Economy"
 authors="ROCKABITS"
 description='''Govern kingdom prices and taxes at the Economy Desk. Wallet-funded Villager trades, anvil work, enchanting, smithing, potion batches and timed beacons, with durable server receipts.'''

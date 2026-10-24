@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.4.1 — Enchanted book previews
+
+- Shows stored enchantment names and levels directly in Villager trade offers and the selected preview.
+- Restores full native item tooltips when hovering an offer or its result preview, including multiple enchantments, curses, custom names, lore and mod-provided tooltip extensions.
+- Keeps enchanted books identifiable in the compact trading layout. Long summaries remain available in full through the native tooltip.
+- Preserves the server's original item components when previewing and buying books; prices, materials, taxes and stock are unchanged.
+- Validates against the published Realm Origins 0.5.7, Realm Treasury 0.3.1 and current roleplay companions.
+
 ## 0.4.0 — First Realm Economy release
 
 - Replaces Realm Villager Economy 0.1.0 while migrating its approved tax, merchant stock, pending treasury transfers and interrupted trade receipts.

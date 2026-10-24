@@ -15,21 +15,23 @@ import zipfile
 ROOT = Path(__file__).resolve().parents[2]
 STATE = ROOT / 'realm-economy/build/economy-release'
 # project: mod ID, artifact basename, native property, minimum existing JUnit count
-PROJECTS = {'realm-economy': ('realmeconomy','realm-economy','economyGameTests',21),
-            'crown-ledger': ('kingdomtreasury','realm-treasury','crownGameTests',59)}
+# Treasury is now released independently; use its verified production JAR as a companion.
+PROJECTS = {'realm-economy': ('realmeconomy','realm-economy','economyGameTests',21)}
 WRAPPER_SHA = '423cb469ccc0ecc31f0e4e1c309976198ccb734cdcbb7029d4bda0f18f57e8d9'
 DISTRIBUTION_SHA = '72f44c9f8ebcb1af43838f45ee5c4aa9c5444898b3468ab3f4af7b6076c5bc3f'
 COMPANION_PINS = {
     'realm-casino-0.3.0.jar': '99c6c457d26be354f6cddddc4c865fe444f765b8d359004de12921aa0fad9117',
     'laws-justice-0.4.0.jar': '78c32b0c3acc8930ffd508c9bb44cc98b794a4b87900438b19ab812c21d36f7b',
-    'cronicasrp-0.5.4.jar': '197c2fac53f97eb59159c9a0c26b3065362bdc18c8de1a1c0e61ece4360ba1f5',
-    'contracts-bounties-0.3.2.jar': '2ecf125a188f042f8d6c5011af5e1ff2cc5974925835bcd2cc0180f75d07ff15',
+    'realm-origins-0.5.7.jar': '0b90c49b9e3c49d2f0343301ac3662b21d6ce5551ea343fb7fc8ebdab9e09684',
+    'realm-treasury-0.3.1.jar': '14b3019b3eea3a81eb6da12f2a8c66f24cac9c2013c27982513444a69bbf02a7',
+    'contracts-bounties-0.4.0.jar': 'd1bd4726ac210e6d5904829bf9185efef76920aa8070ffb292d6e479689ee07e',
     'realmcouncil-0.2.2.jar': '0a77af87a5c4e36f55ad12578662834886a7986864896a908a3dc4217e2c19cb',
     'realm-markets-0.2.1.jar': 'bfb1e73186015ab94a86c841abba1df02bf1b5851a65771e622234624b806bb1',
     'realm-rewards-0.1.2.jar': 'ab8efe3bd9a7b24a4f725bf6dfe1f07dec0b88ecfaac91533b57c45b11cb7bcb',
-    'realm-notifications-0.1.0.jar': '5aa70ac5a7696ce626ffa40e2e530038e90c06819dbeea6f43be70d42310822a',
+    'realm-notifications-0.1.1.jar': '2fb85c87eb296e49f3f68c0d7defd709ceca8913fa5a3f6ef9442d9b9548c99e',
     'realm-titles-0.1.0.jar': '65d854ffd92805f6e8cb0891454f80ba5a6f33394cc0375cf23f64098af2bd16',
-    'realm-identity-0.1.1.jar': '4096147ac74847d31ee733291ad85d8d154ff7340e8d6f0874dd7cb7364823b0',
+    'realm-identity-0.1.2.jar': '4bb9ef1d4df009fe1061c5daeaa76e95fb9ce355c72f00a83b31dffe0b36f016',
+    'realm-marriage-0.1.0.jar': 'c2d2471029a006843c542622a1e1e0543a20492ea22a5999de02dd423d2390ca',
 }
 RUNTIME_PINS = {
     'origins-neoforge-1375372-8758523.jar': '93383233a047a9838af067b64452964183cc4fe9f2d9c269ffb253141136caf6',
@@ -214,12 +216,12 @@ def validate():
     base=ROOT/'realm-economy';log=(base/'integration.log').read_text(errors='replace')
     for marker in ('VILLAGER_TAX_INTEGRATION_PASSED','VILLAGER_RECOVERY_PASSED','VILLAGER_NATIVE_PASSED','ECONOMY_TAX_INTEGRATION_PASSED','ECONOMY_RECOVERY_PASSED','ECONOMY_ENCHANTMENT_PASSED','ECONOMY_BREWING_PASSED','ECONOMY_BEACON_PASSED','ECONOMY_PERMISSIONS_PASSED'):assert marker in log,marker
     client=json.loads((base/'qa-results/economy-client/result.json').read_text())
-    for flag in ('success','actual_minecraft_client','actual_integrated_server','real_chronicles_wallet','lan_host_dual_save','real_crown_tax','actual_brewing_escrow','actual_anvil_xp_substitution','actual_enchantment_xp_substitution','actual_smithing_recipe','actual_paid_beacon','actual_beacon_expiry','actual_brewing_timing_and_claim','actual_economic_policy_and_bounds','all_services_host_dual_save'):assert client.get(flag) is True,flag
+    for flag in ('success','actual_minecraft_client','actual_integrated_server','real_chronicles_wallet','lan_host_dual_save','real_crown_tax','actual_brewing_escrow','actual_anvil_xp_substitution','actual_enchantment_xp_substitution','actual_smithing_recipe','actual_paid_beacon','actual_beacon_expiry','actual_brewing_timing_and_claim','actual_economic_policy_and_bounds','all_services_host_dual_save','actual_enchanted_book_previews','actual_native_item_tooltips','compact_enchanted_book_preview','purchased_enchantments_preserved'):assert client.get(flag) is True,flag
     assert client.get('synthetic_financial_snapshots') is False
     assert client.get('authenticated_two_clients') is False
     log=(base/'visual-client.log').read_text(errors='replace');assert 'ECONOMY_CLIENT_PASSED' in log and 'VILLAGER_CLIENT_PASSED' in log and 'BUILD SUCCESSFUL' in log and 'BUILD FAILED' not in log
-    screenshots=client.get('screenshots',[]);assert len(screenshots)>=26 and len(screenshots)==len(set(screenshots))
-    assert {'realm-economy-desk-close.png','realm-economy-anvil.png','realm-economy-enchanting.png','realm-economy-smithing.png','realm-economy-brewing.png','realm-economy-beacon.png','realm-economy-crown-history.png'}<=set(screenshots)
+    screenshots=client.get('screenshots',[]);assert len(screenshots)>=30 and len(screenshots)==len(set(screenshots))
+    assert {'realm-economy-desk-close.png','realm-economy-anvil.png','realm-economy-enchanting.png','realm-economy-smithing.png','realm-economy-brewing.png','realm-economy-beacon.png','realm-economy-crown-history.png','realm-villager-mending-tooltip.png','realm-villager-sharpness-tooltip.png','realm-villager-multiple-enchantments.png','realm-villager-compact-book-tooltip.png'}<=set(screenshots)
     for name in screenshots:
         assert re.fullmatch(r'[a-z0-9-]+\.png',name);p=base/'qa-results/economy-client'/name
         import struct
@@ -256,7 +258,7 @@ def package():
         images=client['screenshots'] if project=='realm-economy' else ['realm-economy-crown-history.png']
         proof=dict(results[project],version=saved['version'],source_commit=data['source_commit'],tested_run=tested_run,jar_sha256=digest(jar),zip_sha256=digest(archive),project_versions={p:v['version'] for p,v in data['production_jars'].items()},companions=json.loads((STATE/'companions.json').read_text())[project],runtime_dependency_checksums=dependencies,authenticated_two_clients=False)
         proof['screenshots']={name:digest(ROOT/'realm-economy/qa-results/economy-client'/name) for name in images}
-        proof['scope']='Wallet-funded Villager purchases, governed prices and bounds, XP substitution, smithing, funded brewing escrow, timed beacons, public service tax and durable host receipts'
+        proof['scope']='Enchanted-book names, levels, native item tooltips and delivered components; wallet-funded Villager purchases, governed prices and bounds, XP substitution, smithing, funded brewing escrow, timed beacons, public service tax and durable host receipts'
         checksum=jar.with_suffix('.sha256');write_fresh(checksum,''.join(f'{digest(p)}  {p.name}\n' for p in (jar,archive)).encode())
         metadata=jar.with_suffix('.build.json');write_fresh(metadata,(json.dumps(proof,indent=2)+'\n').encode())
         for p in (jar,archive,checksum,metadata):shutil.copyfile(p,downloads/p.name);paths.append(str(p.relative_to(ROOT)))

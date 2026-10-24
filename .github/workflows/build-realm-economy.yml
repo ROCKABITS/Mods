@@ -1,10 +1,9 @@
-name: Build Realm Economy and Crown Ledger
+name: Build Realm Economy
 on:
   push:
     branches: [main]
     paths:
       - 'realm-economy/**'
-      - 'crown-ledger/**'
       - '.github/workflows/build-realm-economy.yml'
       - '.github/scripts/economy_release.py'
   workflow_dispatch:
@@ -31,13 +30,13 @@ jobs:
           distribution: temurin
           java-version: '21'
           cache: gradle
-      - name: Build Economy and Crown production JARs and unit suites
+      - name: Build Economy production JAR and unit suite
         run: python3 .github/scripts/economy_release.py build
       - name: Snapshot fixture-free production JARs from this commit
         run: python3 .github/scripts/economy_release.py snapshot
-      - name: Native independent Economy and Crown suites
+      - name: Native independent Economy suite
         run: python3 .github/scripts/economy_release.py native
-      - name: Install fresh counterparts and verified roleplay companions
+      - name: Install verified Realm Treasury, Realm Origins and roleplay companions
         run: python3 .github/scripts/economy_release.py install
       - name: Native monetary, persistence and recovery integration
         working-directory: realm-economy
@@ -66,7 +65,6 @@ jobs:
           path: |
             realm-economy/build/economy-release/downloads/
             media/realm-economy/
-            media/crown-ledger/
           if-no-files-found: error
           retention-days: 30
       - name: Publish tested suite in one commit
@@ -79,7 +77,8 @@ jobs:
           fi
           python3 .github/scripts/economy_release.py stage
           if git diff --cached --quiet; then exit 0; fi
-          git -c user.name='github-actions[bot]' -c user.email='41898282+github-actions[bot]@users.noreply.github.com' commit -m 'Publish tested Realm Economy 0.4.0 and Crown Ledger 0.2.5 [skip ci]'
+          version=$(sed -n 's/^mod_version=//p' realm-economy/gradle.properties)
+          git -c user.name='github-actions[bot]' -c user.email='41898282+github-actions[bot]@users.noreply.github.com' commit -m "Publish tested Realm Economy $version [skip ci]"
           git push origin HEAD:refs/heads/main
       - name: Full validation evidence
         if: always()
