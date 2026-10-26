@@ -159,7 +159,7 @@ Atualiza Casino e Crown no servidor e em todos os clientes. Sem a API desta vers
 
 Realm Economy 0.4.0 substitui Realm Villager Economy. A Mesa da Economia reúne preços de referência, reparações, combinações, nomes, encantamentos, ferraria, poções e períodos de beacon. O Presidente aprova preços e taxas e a administração define limites e ativação.
 
-Cada pagamento envia apenas o imposto público ao Crown, com moeda Realm Origins e recibo ligado ao serviço. O preço base é retirado da economia. As decisões económicas têm recibos sem dinheiro, com os valores anteriores e novos; não criam fundos nem pagam salários. As APIs de Villagers, casino e justiça permanecem compatíveis. O formato 8 lê os formatos 1–5 e conserva os recibos antigos.
+Cada pagamento envia apenas o imposto público ao Crown, com moeda Realm Origins e recibo ligado ao serviço. O preço base é retirado da economia. As decisões económicas têm recibos sem dinheiro, com os valores anteriores e novos; não criam fundos nem pagam salários. As APIs de Villagers, casino e justiça permanecem compatíveis. O formato 9 lê os formatos 1–8 e conserva os recibos antigos.
 
 ## Compras aos aldeões — 0.2.4
 
@@ -181,7 +181,7 @@ O governante define a reputação necessária para publicar contratos particular
 
 Sem Realm Origins, a moeda normal é a esmeralda inteira. Com Realm Origins, os valores digitais usam cêntimos e o perfil original do jogador. Cada moeda tem saldo e créditos separados; não existe conversão automática. O separador de donativos permite escolher a moeda. Nas regras, o governante pode escolher a moeda fiscal; mudar essa escolha repõe os campos de salário e imposto fixo em zero, sem converter saldos nem créditos anteriores. Os pagamentos de personagens offline ficam pendentes, sem editar os seus ficheiros de perfil.
 
-O ficheiro `data/crown_ledger.dat` guarda regras, saldo disponível, salários reservados, atividade, ciclo pendente e os últimos 256 movimentos, incluindo receitas de imposto de mercado. Os contratos usam também `data/contracts_ledger.dat`; as bancas e os impostos ainda reservados usam `data/realm_markets.dat`. Os recibos judiciais são guardados no mesmo ficheiro que o saldo da tesouraria e não dependem da rotação dos últimos movimentos. O formato 8 migra automaticamente os formatos 1, 2, 3, 4 e 5, conservando valores, regras e recibos; mundos anteriores ao formato 4 iniciam a taxa do casino a zero. As cópias de segurança devem incluir o mundo completo e os perfis do Realm Origins. As transferências entre mods são verificadas no mesmo thread do servidor. Os pagamentos judiciais usam gravações confirmadas e recibos únicos para conciliar ficheiros separados; as restantes operações mantêm os mecanismos existentes.
+O ficheiro `data/crown_ledger.dat` guarda regras, saldo disponível, salários reservados, atividade, ciclo pendente e os últimos 256 movimentos, incluindo receitas de imposto de mercado. Os contratos usam também `data/contracts_ledger.dat`; as bancas e os impostos ainda reservados usam `data/realm_markets.dat`. Os recibos judiciais são guardados no mesmo ficheiro que o saldo da tesouraria e não dependem da rotação dos últimos movimentos. O formato 9 migra automaticamente os formatos 1–8, conservando valores, regras e recibos; mundos anteriores ao formato 4 iniciam a taxa do casino a zero. As cópias de segurança devem incluir o mundo completo e os perfis do Realm Origins. As transferências entre mods são verificadas no mesmo thread do servidor. Os pagamentos judiciais usam gravações confirmadas e recibos únicos para conciliar ficheiros separados; as restantes operações mantêm os mecanismos existentes.
 
 [Changelog](CHANGELOG.md) · [Resultados e limites da validação](VALIDACAO.md) · [JAR](../mod-pronto/crown-ledger-0.2.5.jar) · [ZIP](../mod-pronto/crown-ledger-0.2.5.zip) · [Imagens](../media/crown-ledger/0.2.5/README.md).
 
@@ -199,6 +199,8 @@ python3 tools/treasury_release.py install
 
 Na máquina cloud, usa `python3 tools/cloud_gradle.py` em vez de `./gradlew`; mantém o proxy e a verificação TLS configurados. Os testes e os automatismos de cliente são excluídos do JAR de produção.
 
+A versão **0.4.0** passou **210 execuções de testes** (102 JUnit, 40 + 40 testes nativos anteriores e 14 + 14 testes de crédito), a regressão visual e os cenários reais de votações e empréstimos com dois clientes TCP LAN. Foram confirmados carteira Realm Origins, Presidente Realm Council, reservas, prestações, falhas de gravação, ficheiros nativos do anfitrião e reabertura do mundo. [Execução aprovada](https://github.com/ROCKABITS/Mods/actions/runs/40333786847) · [Validação e limites](VALIDACAO-0.4.0.md).
+
 A versão 0.3.1 foi validada com **80 testes unitários**, **40 GameTests independentes**, **40 GameTests com os companheiros publicados**, a regressão visual do cofre e das interfaces anteriores e **dois clientes Minecraft reais ligados por TCP LAN**. A sequência LAN confirmou votos alteráveis, aprovação de um benefício financiado, rejeição de uma consulta empatada e reabertura efetiva do mundo com o saldo e decisões conservados. As capturas dos novos menus usam esses dados reais; as três capturas anteriores de contas e impostos usam dados de demonstração.
 
 [Resultados, reprodução e limites](VALIDACAO-0.4.0.md). A publicação automática volta a executar os testes antes de guardar o JAR, o ZIP, os hashes, os relatórios e a galeria. O histórico das validações anteriores continua em [VALIDACAO.md](VALIDACAO.md).
@@ -207,4 +209,4 @@ A versão 0.3.1 foi validada com **80 testes unitários**, **40 GameTests indepe
 
 Laws & Justice 0.4.0 envia multas e fianças já pagas para a tesouraria na moeda original. Cada transferência guarda um recibo único no mesmo ficheiro que o saldo. Repetir o recibo, incluindo após reiniciar um mundo LAN, não cria outra entrada de dinheiro. Se a gravação ou o limite de saldo impedir a transferência, o tribunal conserva os fundos até poder entregá-los.
 
-A atualização migra automaticamente o formato 1 ou 2 para o formato 9, conservando as contas, os impostos e os salários. Usa Realm Treasury 0.3.1 no servidor e em todos os clientes. Realm Markets 0.2.1 continua compatível. A API é exclusiva do servidor e não dá aos clientes uma forma de criar dinheiro.
+A atualização migra automaticamente o formato 1 ou 2 para o formato 9, conservando as contas, os impostos e os salários. Usa Realm Treasury 0.4.0 no servidor e em todos os clientes. Realm Markets 0.2.1 continua compatível. A API é exclusiva do servidor e não dá aos clientes uma forma de criar dinheiro.

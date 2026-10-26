@@ -1,5 +1,7 @@
 # Validação — Realm Treasury 0.4.0
 
+[Execução aprovada no GitHub](https://github.com/ROCKABITS/Mods/actions/runs/40333786847), código `f3b0e3a7365092603e04e95bd7d9024b6728d090`. JAR de produção: 2 115 918 bytes; SHA-256 `fb22b77ae2ab11ecfc4b81701c67d22a4618198f3b04d97922625491f5f32f39`, igual ao artefacto validado localmente. Publicados JAR, ZIP, proveniência e 24 capturas reais.
+
 A atualização acrescenta o Balcão de Empréstimos ao mod existente, com crédito financiado pelo tesouro, aprovação presencial, assinatura pessoal e pagamentos manuais. Mantém os identificadores públicos, as APIs e o cofre anterior. O formato de dados passa de 8 para 9 e o protocolo de rede de 5 para 6.
 
 ## Verificações
