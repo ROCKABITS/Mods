@@ -1,0 +1,229 @@
+{
+  "source_commit": "f3b0e3a7365092603e04e95bd7d9024b6728d090",
+  "jar_sha256": "fb22b77ae2ab11ecfc4b81701c67d22a4618198f3b04d97922625491f5f32f39",
+  "version": "0.4.0",
+  "mod_id": "kingdomtreasury",
+  "display_name": "Realm Treasury",
+  "unit_tests": 102,
+  "native_tests": {
+    "gametests.log": 40,
+    "integration.log": 40,
+    "loans-native.log": 14,
+    "loans-integration.log": 14
+  },
+  "actual_loan_validation": {
+    "message": "Two native LAN clients, real wallets, live Council authority, loan escrow, installment payments, world reopening and both host restart files passed.",
+    "stage": 28,
+    "checks": [
+      "Ordinary borrower, real sworn President, exact 100 euro escrow, fixed 10 percent interest, 22 euro installment and early 88 euro settlement conserved every cent.",
+      "Authority changed with the Council mandate; the new non-admin President approved the old President's request. Both native host restart files contain the identical wallet and receipt.",
+      "The actual LAN world closed and reopened, retained both agreements and their escrow, and settled the host debt through a different physical desk after removing the original.",
+      "Native controls and contract scrolling fit 320x240, 480x270 and 800x450; digital credit uses the existing Realm Origins wallet and native C2S/S2C packets."
+    ],
+    "actualTcpLan": true,
+    "actualCouncilPresident": true,
+    "actualMinecraftClients": 2,
+    "screenshots": [
+      "loans-royal-counters.png",
+      "loans-counter-closeup.png",
+      "loans-president-review.png",
+      "loans-reserved-offer.png",
+      "loans-host-agreement.png",
+      "loans-after-world-reopen.png",
+      "loans-host-paid-in-full.png",
+      "loans-new-request.png",
+      "loans-unsigned-contract.png",
+      "loans-compact-contract.png",
+      "loans-signed-contract.png",
+      "loans-first-installment.png",
+      "loans-paid-in-full.png"
+    ],
+    "actualChroniclesWallet": true,
+    "success": true,
+    "authenticatedClients": false
+  },
+  "actual_client_validation": {
+    "actualMinecraftClients": 2,
+    "message": "Actual menus, packets, two-player LAN, persistence and compact controls passed",
+    "actualTcpLan": true,
+    "success": true,
+    "stage": 23,
+    "screenshots": [
+      "treasury-proposal.png",
+      "treasury-vote-hud.png",
+      "treasury-ballot.png",
+      "treasury-benefits.png",
+      "treasury-decisions.png",
+      "treasury-free-proposal.png",
+      "treasury-free-ballot.png",
+      "treasury-free-history.png"
+    ],
+    "checks": [
+      "Unforced HUD leaves movement active",
+      "Compact controls at 320x240, 480x270 and 800x450",
+      "Compact controls at 320x240, 480x270 and 800x450",
+      "Free poll title, multiline description, ballot and archived reader round-trip over actual LAN",
+      "Two real LAN voters, secret mutable ballots, exact reservation, majority benefit, tied free consultation",
+      "Actual LAN world closed and reopened; benefits, tally history and balance retained"
+    ],
+    "authenticatedClients": false
+  },
+  "legacy_client_validation": {
+    "success": true,
+    "message": "Registered treasury chest, all placed states and production public/governor menus render with valid models and textures; native currency controls and their request payloads passed.",
+    "screenshot": "crown-chest-minecraft.png",
+    "screenshots": [
+      "crown-chest-minecraft.png",
+      "crown-ledger-overview.png",
+      "crown-ledger-policy.png"
+    ],
+    "images": [
+      "crown-chest-minecraft.png",
+      "crown-ledger-overview.png",
+      "crown-ledger-policy.png"
+    ],
+    "interfaceData": "Demonstration data in the actual production TreasuryScreen",
+    "currencyInteractionChecks": [
+      "Donation defaults to the active available currency, switches both ways, clears amounts, parses Chronicle cents, rejects fractional emeralds, and preserves both credit claims.",
+      "Policy currency clears fixed tax and salary, preserves independent market tax at 500 basis points and historical credits, and saves Chronicle amounts as cents.",
+      "The governor edits market tax independently of the periodic/contract mode, saves exact basis points, rejects rates above 100%, and retains visible controls at 320x240.",
+      "Casino profit taxation retains its independent rate across currencies, parses 12.34% as 1234 basis points and rejects negative and above-100% values.",
+      "Without Chronicles, donations fall back to emeralds, Chronicle selection and claims are disabled, emerald claims remain available, and a saved Chronicle policy can recover to emeralds.",
+      "Public contract reward parsing and the published currency use the contract currency independently of the active policy currency."
+    ],
+    "recordedUiRequests": [
+      {
+        "action": "donate",
+        "payload": {
+          "amount": 125,
+          "currency": "CHRONICLES"
+        }
+      },
+      {
+        "action": "donate",
+        "payload": {
+          "amount": 7,
+          "currency": "EMERALD"
+        }
+      },
+      {
+        "action": "claim",
+        "payload": {
+          "currency": "EMERALD"
+        }
+      },
+      {
+        "action": "claim",
+        "payload": {
+          "currency": "CHRONICLES"
+        }
+      },
+      {
+        "action": "policy",
+        "payload": {
+          "marketTaxBasisPoints": 500,
+          "casinoTaxBasisPoints": 725,
+          "taxMode": "PERCENTAGE",
+          "taxBasisPoints": 500,
+          "currency": "CHRONICLES",
+          "fixedTax": 125,
+          "salary": 250,
+          "periodHours": 168,
+          "activeMinutes": 30,
+          "minimumReputation": 20,
+          "reputationReward": 1,
+          "dailyReputationLimit": 3
+        }
+      },
+      {
+        "action": "policy",
+        "payload": {
+          "marketTaxBasisPoints": 525,
+          "casinoTaxBasisPoints": 1234,
+          "taxMode": "FIXED",
+          "taxBasisPoints": 500,
+          "currency": "CHRONICLES",
+          "fixedTax": 125,
+          "salary": 250,
+          "periodHours": 168,
+          "activeMinutes": 30,
+          "minimumReputation": 20,
+          "reputationReward": 1,
+          "dailyReputationLimit": 3
+        }
+      },
+      {
+        "action": "donate",
+        "payload": {
+          "amount": 13,
+          "currency": "EMERALD"
+        }
+      },
+      {
+        "action": "claim",
+        "payload": {
+          "currency": "EMERALD"
+        }
+      },
+      {
+        "action": "policy",
+        "payload": {
+          "marketTaxBasisPoints": 500,
+          "casinoTaxBasisPoints": 725,
+          "taxMode": "PERCENTAGE",
+          "taxBasisPoints": 500,
+          "currency": "EMERALD",
+          "fixedTax": 4,
+          "salary": 8,
+          "periodHours": 168,
+          "activeMinutes": 30,
+          "minimumReputation": 20,
+          "reputationReward": 1,
+          "dailyReputationLimit": 3
+        }
+      },
+      {
+        "action": "publish",
+        "payload": {
+          "title": "Demonstration supply order",
+          "item": "minecraft:oak_log",
+          "quantity": 64,
+          "reward": 345,
+          "currency": "CHRONICLES"
+        }
+      }
+    ],
+    "requestTransport": "Recorded locally; no game-server network requests",
+    "policyScreenshotPage": "economy: independent market sales tax at 5%, casino profit tax at 7.25%, contract mode and salaries",
+    "bakedQuadCounts": {
+      "kingdomtreasury:crown_chest": 264
+    },
+    "validatedBlockStates": 4,
+    "windowWidth": 1600,
+    "windowHeight": 900
+  },
+  "companions": {
+    "contracts-bounties-0.4.0.jar": "d1bd4726ac210e6d5904829bf9185efef76920aa8070ffb292d6e479689ee07e",
+    "realmcouncil-0.2.2.jar": "0a77af87a5c4e36f55ad12578662834886a7986864896a908a3dc4217e2c19cb",
+    "realm-identity-0.1.2.jar": "4bb9ef1d4df009fe1061c5daeaa76e95fb9ce355c72f00a83b31dffe0b36f016",
+    "realm-markets-0.2.1.jar": "bfb1e73186015ab94a86c841abba1df02bf1b5851a65771e622234624b806bb1",
+    "realm-notifications-0.1.1.jar": "2fb85c87eb296e49f3f68c0d7defd709ceca8913fa5a3f6ef9442d9b9548c99e",
+    "realm-rewards-0.1.2.jar": "ab8efe3bd9a7b24a4f725bf6dfe1f07dec0b88ecfaac91533b57c45b11cb7bcb",
+    "realm-titles-0.1.0.jar": "65d854ffd92805f6e8cb0891454f80ba5a6f33394cc0375cf23f64098af2bd16",
+    "realm-casino-0.3.0.jar": "99c6c457d26be354f6cddddc4c865fe444f765b8d359004de12921aa0fad9117",
+    "laws-justice-0.4.0.jar": "78c32b0c3acc8930ffd508c9bb44cc98b794a4b87900438b19ab812c21d36f7b",
+    "realm-economy-0.4.1.jar": "505412288af4ec079a47a87350a019aaa1b348052037796b3831c8d992f4cff3",
+    "realm-marriage-0.1.0.jar": "c2d2471029a006843c542622a1e1e0543a20492ea22a5999de02dd423d2390ca"
+  },
+  "wallet_mod": {
+    "realm-origins-0.5.7.jar": "0b90c49b9e3c49d2f0343301ac3662b21d6ce5551ea343fb7fc8ebdab9e09684"
+  },
+  "wallet_dependencies": {
+    "origins-neoforge-1375372-8758523.jar": "93383233a047a9838af067b64452964183cc4fe9f2d9c269ffb253141136caf6",
+    "jupiter-1072905-7738312.jar": "95af332af250f97fe2d9d288fe6b2057c266673a388348bf33756b0b693ace15",
+    "origins-classes-neoforge-1536425-8758587.jar": "14fcc794ae3fc66f752961f7df480356bb5b7cb01d78a2670e9f1e9d18bafb67"
+  },
+  "jar_bytes": 2115918,
+  "zip_sha256": "445195d5a42ac086deade29499b16ae9a021c96fb824b33a2e83c9d73920decd",
+  "github_run_id": "40333786847"
+}
