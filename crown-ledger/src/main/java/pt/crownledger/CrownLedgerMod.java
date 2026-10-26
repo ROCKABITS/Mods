@@ -27,7 +27,7 @@ public final class CrownLedgerMod {
         TABS.register("crown_ledger", () -> CreativeModeTab.builder()
                 .title(Component.literal("Realm Treasury"))
                 .icon(() -> new ItemStack(BlockRegistry.CROWN_CHEST_ITEM.get()))
-                .displayItems((parameters, output) -> output.accept(BlockRegistry.CROWN_CHEST_ITEM.get()))
+                .displayItems((parameters, output) -> {output.accept(BlockRegistry.CROWN_CHEST_ITEM.get());output.accept(BlockRegistry.LOAN_DESK_ITEM.get());})
                 .build());
     }
     public CrownLedgerMod(IEventBus bus, net.neoforged.fml.ModContainer container) {
@@ -59,10 +59,10 @@ public final class CrownLedgerMod {
                         }))));
     }
     private static void started(ServerStartedEvent event) { CrownService.start(event.getServer()); }
-    private static void stopped(ServerStoppedEvent event) { CrownService.stop(event.getServer());pt.crownledger.service.GovernanceService.stop(event.getServer()); }
-    private static void tick(ServerTickEvent.Post event) { CrownService.tick(event.getServer());pt.crownledger.service.GovernanceService.tick(event.getServer()); }
+    private static void stopped(ServerStoppedEvent event) { CrownService.stop(event.getServer());pt.crownledger.service.GovernanceService.stop(event.getServer());pt.crownledger.service.LoanService.stop(event.getServer()); }
+    private static void tick(ServerTickEvent.Post event) { CrownService.tick(event.getServer());pt.crownledger.service.GovernanceService.tick(event.getServer());pt.crownledger.service.LoanService.tick(event.getServer()); }
     private static void login(PlayerEvent.PlayerLoggedInEvent event) {
-        if (event.getEntity() instanceof net.minecraft.server.level.ServerPlayer player) {CrownService.login(player);pt.crownledger.service.GovernanceService.login(player);}
+        if (event.getEntity() instanceof net.minecraft.server.level.ServerPlayer player) {pt.crownledger.service.LoanService.login(player);CrownService.login(player);pt.crownledger.service.GovernanceService.login(player);}
     }
-    private static void logout(PlayerEvent.PlayerLoggedOutEvent event) { CrownService.logout(event.getEntity().getUUID());pt.crownledger.service.GovernanceService.logout(event.getEntity().getUUID()); }
+    private static void logout(PlayerEvent.PlayerLoggedOutEvent event) { CrownService.logout(event.getEntity().getUUID());pt.crownledger.service.GovernanceService.logout(event.getEntity().getUUID());pt.crownledger.service.LoanService.logout(event.getEntity().getUUID()); }
 }

@@ -1,3 +1,14 @@
+# Realm Treasury 0.4.0 — Royal Credit Counter
+
+- Adds an original craftable 3D credit counter with 66 model elements, custom walnut, brass, green leather, ledger, parchment, quill, inkwell, coin and wax artwork.
+- Adds public loan applications, sworn-President approval, fixed interest, administrator bounds and explicit borrower signatures in a parchment interface with an animated royal seal.
+- Reserves existing public funds when an offer is approved; the principal reaches the existing Realm Origins wallet only after signing. Supports physical emeralds without that wallet.
+- Adds exact installment schedules, manual payments, early full settlement, overdue indicators, contract history and automatic return of unsigned expired or cancelled reservations.
+- Enforces one open application or debt per player, current Council authority, personal signing/payment, physical desk sessions and one-use action nonces. Existing terms and currencies remain frozen.
+- Adds durable starting-wallet saves, treasury intents and wallet receipts in both native integrated-host restart files. Interrupted principal transfers and repayments recover without a second debit or credit; ambiguous state retains the receipt and pauses public financial operations.
+- Preserves loans through public tax receipts, votes, treasury saves, broken desks and world reopening. Adds English, European Portuguese and Brazilian Portuguese text.
+- Migrates treasury data to format 9 while reading formats 1–8. Network protocol is now 6; update the server and all clients together and retain a complete pre-upgrade world backup.
+
 # Realm Treasury 0.3.1 — Free Public Votes
 
 - Made free public voting the default proposal option, with separate custom title and multiline description fields.

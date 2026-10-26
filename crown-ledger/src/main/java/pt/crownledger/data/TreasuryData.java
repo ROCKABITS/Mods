@@ -29,6 +29,10 @@ public final class TreasuryData extends SavedData {
     public Treasury treasury = new Treasury();
     public IncomeLedger income = new IncomeLedger();
     public pt.crownledger.domain.Governance governance = new pt.crownledger.domain.Governance();
+    public pt.crownledger.domain.Loans loans = new pt.crownledger.domain.Loans();
+    private CompoundTag loanJournal;
+    public CompoundTag loanJournal(){return loanJournal==null?null:loanJournal.copy();}
+    public void requireBankAvailable(){if(loanJournal!=null)throw new IllegalStateException("realm.treasury.loan.error.recovery");}
 
     public static TreasuryData get(MinecraftServer server) {
         return server.overworld().getDataStorage().computeIfAbsent(new SavedData.Factory<>(() -> {
@@ -42,7 +46,7 @@ public final class TreasuryData extends SavedData {
     public static TreasuryData load(CompoundTag tag, HolderLookup.Provider lookup) {
         type(tag, "version", Tag.TAG_INT);
         int version = tag.getInt("version");
-        if (version < 1 || version > 8) throw new IllegalStateException("Unsupported Realm Treasury storage version");
+        if (version < 1 || version > 9) throw new IllegalStateException("Unsupported Realm Treasury storage version");
         type(tag, "policy", Tag.TAG_COMPOUND);
         type(tag, "periodStartedAt", Tag.TAG_LONG);
         type(tag, "nextCycleAt", Tag.TAG_LONG);
@@ -119,13 +123,23 @@ public final class TreasuryData extends SavedData {
                     throw new IllegalStateException("Funded votes require treasury format 7");
             } catch(java.nio.charset.CharacterCodingException|RuntimeException error){throw new IllegalStateException("Cannot recover governance data",error);}
         }
-        if (version < 8) result.setDirty();
+        if(version>=9||tag.contains("loans")){
+            type(tag,"loans",Tag.TAG_BYTE_ARRAY);result.loans=LoanCodec.loans(tag.getByteArray("loans"));
+            if(version<9&&!result.loans.snapshot().equals(new pt.crownledger.domain.Loans().snapshot()))throw new IllegalStateException("Public loans require treasury format 9");
+        }
+        if(tag.contains("loanJournal")){
+            if(version<9)throw new IllegalStateException("Loan receipts require treasury format 9");
+            type(tag,"loanJournal",Tag.TAG_COMPOUND);result.loanJournal=tag.getCompound("loanJournal").copy();LoanCodec.validateIntent(result,result.loanJournal,lookup);
+        }
+        if (version < 9) result.setDirty();
         return result;
     }
 
     @Override public CompoundTag save(CompoundTag tag, HolderLookup.Provider lookup) {
         Treasury.Snapshot saved = treasury.snapshot();
-        tag.putInt("version", 8);
+        tag.putInt("version", 9);
+        tag.putByteArray("loans",LoanCodec.encode(loans.snapshot()));
+        if(loanJournal==null)tag.remove("loanJournal");else tag.put("loanJournal",loanJournal.copy());
         tag.putByteArray("governance",new com.google.gson.Gson().toJson(governance.snapshot()).getBytes(java.nio.charset.StandardCharsets.UTF_8));
         ListTag receipts=new ListTag();
         income.receipts().values().forEach(receipt->{CompoundTag entry=new CompoundTag();entry.putUUID("id",receipt.id());entry.putString("currency",receipt.currency().name());entry.putLong("amount",receipt.amount());entry.putUUID("payer",receipt.payer());entry.putString("memo",receipt.memo());receipts.add(entry);});
@@ -224,8 +238,21 @@ public final class TreasuryData extends SavedData {
 
     /** Ballots, escrow, public balances and prior income receipts reach disk as a single ordered atomic replacement. */
     public void commitGovernance(MinecraftServer server,Treasury next,pt.crownledger.domain.Governance nextGovernance) {
+        requireBankAvailable();durable(server,next,nextGovernance,loans.copy(),null);
+    }
+    public void commitLoans(MinecraftServer server,Treasury next,pt.crownledger.domain.Loans nextLoans){
+        requireBankAvailable();durable(server,next,governance.copy(),nextLoans,null);
+    }
+    public void prepareLoan(MinecraftServer server,CompoundTag intent){
+        requireBankAvailable();LoanCodec.validateIntent(this,intent,server.registryAccess());durable(server,treasury.copy(),governance.copy(),loans.copy(),intent.copy());
+    }
+    public void completeLoan(MinecraftServer server,UUID id){
+        if(loanJournal==null||!loanJournal.getUUID("id").equals(id))throw new IllegalStateException("realm.treasury.loan.error.recovery");
+        durable(server,LoanCodec.treasury(loanJournal.getByteArray("treasuryAfter")),governance.copy(),LoanCodec.loans(loanJournal.getByteArray("loansAfter")),null);
+    }
+    private void durable(MinecraftServer server,Treasury next,pt.crownledger.domain.Governance nextGovernance,pt.crownledger.domain.Loans nextLoans,CompoundTag journal) {
         if(server==null || !server.isSameThread())throw new IllegalStateException("Treasury mutation requires server thread");
-        TreasuryData staged=new TreasuryData();staged.treasury=next;staged.income=income;staged.governance=nextGovernance;
+        TreasuryData staged=new TreasuryData();staged.treasury=next;staged.income=income;staged.governance=nextGovernance;staged.loans=nextLoans;staged.loanJournal=journal;
         CompoundTag root=new CompoundTag();root.put("data",staged.save(new CompoundTag(),server.registryAccess()));net.minecraft.nbt.NbtUtils.addCurrentDataVersion(root);
         var file=server.getWorldPath(LevelResource.ROOT).resolve("data/"+STORAGE_KEY+".dat");
         var moved=new java.util.concurrent.atomic.AtomicBoolean();var failure=new java.util.concurrent.atomic.AtomicReference<Throwable>();
@@ -241,7 +268,7 @@ public final class TreasuryData extends SavedData {
             }catch(Throwable error){failure.set(error);}finally{if(temporary!=null)try{Files.deleteIfExists(temporary);}catch(java.io.IOException ignored){}}
         });
         net.neoforged.neoforge.common.IOUtilities.waitUntilIOWorkerComplete();
-        if(moved.get()){treasury=next;governance=nextGovernance;setDirty(false);}
+        if(moved.get()){treasury=next;governance=nextGovernance;loans=nextLoans;loanJournal=journal;setDirty(false);}
         if(failure.get()!=null||!moved.get())throw new IllegalStateException("realm.treasury.error.persistence",failure.get());
     }
 }

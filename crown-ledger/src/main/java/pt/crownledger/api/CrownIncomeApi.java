@@ -32,15 +32,15 @@ public final class CrownIncomeApi {
     /** Validate the complete destination without taking ownership of a caller's escrow. */
     public static void preflight(MinecraftServer server,UUID id,String currency,long amount,UUID payer,String memo){
         thread(server);Receipt receipt=receipt(id,currency,amount,payer,memo);TreasuryData data=TreasuryData.get(server);
-        if(data.income.contains(receipt))return;data.income.add(receipt);candidate(data,receipt);
+        if(data.income.contains(receipt))return;data.requireBankAvailable();data.income.add(receipt);candidate(data,receipt);
     }
 
     /** True for a newly committed income; false for an identical, previously committed receipt. */
     public static boolean credit(MinecraftServer server,UUID id,String currency,long amount,UUID payer,String memo){
         thread(server);Receipt receipt=receipt(id,currency,amount,payer,memo);TreasuryData data=TreasuryData.get(server);
         if(data.income.contains(receipt)){verifyDurable(server,receipt);return false;}
-        IncomeLedger nextIncome=data.income.add(receipt);Treasury next=candidate(data,receipt);
-        TreasuryData staged=new TreasuryData();staged.treasury=next;staged.income=nextIncome;staged.governance=data.governance.copy();
+        data.requireBankAvailable();IncomeLedger nextIncome=data.income.add(receipt);Treasury next=candidate(data,receipt);
+        TreasuryData staged=new TreasuryData();staged.treasury=next;staged.income=nextIncome;staged.governance=data.governance.copy();staged.loans=data.loans.copy();
         CompoundTag root=new CompoundTag();root.put("data",staged.save(new CompoundTag(),server.registryAccess()));NbtUtils.addCurrentDataVersion(root);
         Path file=server.getWorldPath(LevelResource.ROOT).resolve("data/"+TreasuryData.STORAGE_KEY+".dat");
         AtomicBoolean moved=new AtomicBoolean();AtomicReference<Throwable> failure=new AtomicReference<>();

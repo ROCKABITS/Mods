@@ -1,6 +1,6 @@
 # Realm Treasury
 
-**Summary:** A medieval public treasury with taxes, salaries, secret public votes and kingdom-wide benefits funded by your realm.
+**Summary:** A medieval public treasury with fixed-interest loans, taxes, salaries, secret votes and kingdom-wide benefits.
 
 **Class:** Mods
 
@@ -18,11 +18,16 @@
 
 **Release type:** Beta
 
-**File:** realm-treasury-0.3.1.jar
+**File:** realm-treasury-0.4.0.jar
 
-**Display name:** Realm Treasury 0.3.1 — Free Public Votes
+**Display name:** Realm Treasury 0.4.0 — Royal Credit Counter
 
 ## Description
+
+Borrow from the kingdom through the new **Royal Credit Counter**: an original medieval block with a ledger, parchment, quill, coins and wax seal. Apply for a loan, review the President's fixed-interest offer and sign to receive the principal in your existing wallet. Pay manual installments or settle the full agreed balance early at any counter. Each agreement shows its complete repayment schedule and recorded decisions.
+
+Public money is reserved before an offer can be signed. Loan payments return to the treasury, and interest stays fixed even when an installment is overdue. The current sworn President approves applications within administrator limits. Emerald credit is supported without Realm Origins. Breaking a counter preserves the world's contracts.
+
 
 Give your kingdom a shared treasury and let its citizens take part in public decisions.
 
@@ -36,8 +41,8 @@ Optional integrations include Realm Council, Realm Origins / Chronicles RP, Cont
 
 Works in singleplayer, LAN worlds and dedicated servers. Install the same version on the server and every client.
 
-Updating from Crown Ledger: replace its JAR with Realm Treasury. Existing treasury accounts and integrations are preserved. Both use the same internal mod ID, so install only one of them. Back up your world before the format 8 migration.
+Updating from Crown Ledger: replace its JAR with Realm Treasury. Existing treasury accounts and integrations are preserved. Both use the same internal mod ID, so install only one of them. Back up your world before the format 9 migration.
 
 ## Changelog
 
-Use the 0.3.1 entry in [CHANGELOG.md](CHANGELOG.md).
+Use the 0.4.0 entry in [CHANGELOG.md](CHANGELOG.md).

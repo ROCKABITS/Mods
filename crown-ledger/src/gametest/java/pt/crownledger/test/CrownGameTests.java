@@ -626,7 +626,7 @@ public final class CrownGameTests {
         data.treasury.setPolicy(marketPolicy(policy, 500), citizen.getUUID(), System.currentTimeMillis());
         var saved = data.save(new CompoundTag(), helper.getLevel().registryAccess());
         var restored = TreasuryData.load(saved, helper.getLevel().registryAccess());
-        helper.assertTrue(saved.getInt("version") == 8 && restored.treasury.policy().marketTaxBasisPoints() == 500
+        helper.assertTrue(saved.getInt("version") == 9 && restored.treasury.policy().marketTaxBasisPoints() == 500
                         && restored.treasury.snapshot().equals(data.treasury.snapshot()),
                 "Version2 native Crown records lost the independently configured sales-tax rule");
         var legacy = saved.copy();
@@ -792,7 +792,7 @@ public final class CrownGameTests {
             var initial=new Policy(12,Policy.TaxMode.FIXED,700,3,10,168,10,EMERALD,2,4,300,0);CrownService.setPolicy(governor,initial);var chest=openChest(helper,governor);
             for(String value:new String[]{"-1","10001","500.5","\"500\"","null","true"}){CrownService.openBoard(governor,chest);CrownService.action(governor,"policy","{\"casinoTaxBasisPoints\":"+value+"}");helper.assertTrue(data.treasury.policy().equals(initial),"Invalid casino tax changed policy");}
             CrownService.openBoard(governor,chest);CrownService.action(governor,"policy","{\"casinoTaxBasisPoints\":500}");var policy=data.treasury.policy();helper.assertTrue(policy.casinoTaxBasisPoints()==500&&policy.marketTaxBasisPoints()==300&&policy.fixedTax()==3&&policy.salary()==10,"Casino tax reset an independent policy");
-            var saved=data.save(new net.minecraft.nbt.CompoundTag(),helper.getLevel().registryAccess());var restored=TreasuryData.load(saved,helper.getLevel().registryAccess());helper.assertTrue(restored.treasury.policy().casinoTaxBasisPoints()==500&&saved.getInt("version")==8,"Casino policy was not persisted in format eight");
+            var saved=data.save(new net.minecraft.nbt.CompoundTag(),helper.getLevel().registryAccess());var restored=TreasuryData.load(saved,helper.getLevel().registryAccess());helper.assertTrue(restored.treasury.policy().casinoTaxBasisPoints()==500&&saved.getInt("version")==9,"Casino policy was not persisted in format eight");
             authority.change(successor);CrownService.openBoard(governor,chest);CrownService.action(governor,"policy","{\"casinoTaxBasisPoints\":1000}");helper.assertTrue(data.treasury.policy().casinoTaxBasisPoints()==500,"Former governor retained casino tax authority");
             openChest(helper,successor);CrownService.action(successor,"policy","{\"casinoTaxBasisPoints\":1000}");helper.assertTrue(data.treasury.policy().casinoTaxBasisPoints()==1000,"Current governor cannot set casino taxation");
         }finally{CrownService.logout(governor.getUUID());CrownService.logout(successor.getUUID());}helper.succeed();

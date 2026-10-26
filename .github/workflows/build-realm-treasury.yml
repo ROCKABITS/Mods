@@ -38,6 +38,10 @@ jobs:
         run: python3 tools/treasury_release.py install
       - name: Native integration with released mods
         run: ./gradlew --no-daemon --console=plain -PcrownGameTests -PintegrationTests runGameTestServer 2>&1 | tee integration.log
+      - name: Native credit, escrow and interrupted-receipt recovery with emeralds
+        run: ./gradlew --no-daemon --console=plain -PloanGameTests runGameTestServer 2>&1 | tee loans-native.log
+      - name: Native credit with the actual Realm Origins wallet and Council
+        run: ./gradlew --no-daemon --console=plain -PloanGameTests -PloanWalletTests -PintegrationTests runGameTestServer 2>&1 | tee loans-integration.log
       - name: Install virtual display
         run: |
           sudo apt-get update
@@ -56,6 +60,13 @@ jobs:
         run: |
           timeout 600s xvfb-run -a -s '-screen 0 1600x900x24' ./gradlew --no-daemon --console=plain -PtreasuryClientTests runClient 2>&1 | tee lan-client.log
           python3 -c "import json; r=json.load(open('qa-results/treasury-lan/result.json')); assert r['success'],r"
+      - name: Real credit applications, signatures, installments and host recovery over LAN
+        env:
+          LIBGL_ALWAYS_SOFTWARE: '1'
+          ALSOFT_DRIVERS: 'null'
+        run: |
+          timeout 600s xvfb-run -a -s '-screen 0 1600x900x24' ./gradlew --no-daemon --console=plain -PloanClientTests -PloanWalletTests -PintegrationTests runClient 2>&1 | tee loans-client.log
+          python3 -c "import json; r=json.load(open('qa-results/loans-client/result.json')); assert r['success'],r"
       - name: Gate and package tested production JAR
         run: python3 tools/treasury_release.py package
       - name: Publish JAR, ZIP, evidence and real gameplay media
@@ -81,4 +92,5 @@ jobs:
             crown-ledger/qa-results/
             crown-ledger/run/logs/latest.log
             crown-ledger/run-treasury-qa/logs/latest.log
+            crown-ledger/run-loan-qa/logs/latest.log
           retention-days: 14

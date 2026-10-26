@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "kingdomtreasury:block/loan_desk"
+    },
+    "facing=east": {
+      "model": "kingdomtreasury:block/loan_desk",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "kingdomtreasury:block/loan_desk",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "kingdomtreasury:block/loan_desk",
+      "y": 270
+    }
+  }
+}

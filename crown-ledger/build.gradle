@@ -7,7 +7,7 @@ version = mod_version
 group = mod_group_id
 base { archivesName = 'realm-treasury' }
 java.toolchain.languageVersion = JavaLanguageVersion.of(21)
-repositories { mavenCentral() }
+repositories { mavenCentral(); maven { url='https://cursemaven.com'; content { includeGroup 'curse.maven' } } }
 neoForge {
     version = project.neo_version
     runs {
@@ -27,6 +27,12 @@ dependencies {
     if (providers.gradleProperty('integrationTests').isPresent()) {
         localRuntime fileTree(dir: 'compat-libs', include: ['*.jar'])
     }
+    if(providers.gradleProperty('loanWalletTests').isPresent()) {
+        localRuntime files('../mod-pronto/realm-origins-0.5.7.jar')
+        localRuntime 'curse.maven:origins-neoforge-1375372:8758523'
+        localRuntime 'curse.maven:jupiter-1072905:7738312'
+        localRuntime 'curse.maven:origins-classes-neoforge-1536425:8758587'
+    }
 }
 sourceSets.test.compileClasspath += sourceSets.main.compileClasspath
 sourceSets.test.runtimeClasspath += sourceSets.main.runtimeClasspath
@@ -34,6 +40,19 @@ tasks.named('test', Test) { useJUnitPlatform() }
 if (providers.gradleProperty('crownGameTests').isPresent()) {
     sourceSets.main.java.srcDir('src/gametest/java')
     sourceSets.main.resources.srcDir('src/gametest/resources')
+}
+if(providers.gradleProperty('loanGameTests').isPresent()) {
+    sourceSets.main.java.srcDirs('src/gametest/java','src/loantest/java')
+    sourceSets.main.resources.srcDir('src/gametest/resources')
+    neoForge.runs.gameTestServer.systemProperty 'neoforge.enabledGameTestNamespaces','treasuryloans'
+}
+if(providers.gradleProperty('loanClientTests').isPresent()) {
+    sourceSets.main.java.srcDir('src/loanclienttest/java')
+    neoForge.runs.client {
+        gameDirectory=file('run-loan-qa')
+        systemProperty 'loans.qaOutput',file('qa-results/loans-client').absolutePath
+        programArguments.addAll '--width','1600','--height','900'
+    }
 }
 if (providers.gradleProperty('crownVisualTests').isPresent()) {
     sourceSets.main.java.srcDir('src/visualtest/java')
@@ -58,4 +77,4 @@ if (providers.gradleProperty('treasuryClientTests').isPresent()) {
         programArguments.addAll '--width', '1600', '--height', '900'
     }
 }
-tasks.named('jar', Jar) { exclude('pt/crownledger/clienttest/**') }
+tasks.named('jar', Jar) { exclude('pt/crownledger/clienttest/**','pt/crownledger/loanclienttest/**','data/treasuryloans/structure/**') }

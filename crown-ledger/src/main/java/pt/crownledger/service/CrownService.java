@@ -125,6 +125,7 @@ public final class CrownService {
 
     public static void tick(MinecraftServer server) {
         requireThread(server);
+        if(TreasuryData.get(server).loanJournal()!=null)return;
         long nowNanos = System.nanoTime();
         int tick = server.getTickCount();
         flushGovernorIncome(server, tick);
@@ -358,6 +359,7 @@ public final class CrownService {
     /** Preflight the destination before transferring any tax/refund from Contracts escrow. */
     public static void sweep(MinecraftServer server) {
         requireThread(server);
+        TreasuryData.get(server).requireBankAvailable();
         sweepMarketsSafely(server);
         if (!ContractsBridge.available()) return;
         for (Currency currency : Currency.values()) {
@@ -378,6 +380,7 @@ public final class CrownService {
     /** Debit only funded Markets escrow after the complete destination mutation has been validated. */
     public static void sweepMarkets(MinecraftServer server) {
         requireThread(server);
+        TreasuryData.get(server).requireBankAvailable();
         if (!MarketsBridge.available()) return;
         Throwable failure = null;
         for (Currency currency : Currency.values()) {
@@ -516,7 +519,7 @@ public final class CrownService {
         view.put("contracts", contracts);
         view.put("history", treasury.history().stream().map(entry -> {
             Map<String, Object> record = new LinkedHashMap<>();
-            record.put("description", entry.kind().name().startsWith("VOTE_")?"gui.kingdomtreasury.kind_"+entry.kind().name().toLowerCase(java.util.Locale.ROOT):entry.kind()==Kind.ECONOMY_TAX?"gui.kingdomtreasury.economy_tax_income":entry.kind()==Kind.ECONOMY_POLICY?"gui.kingdomtreasury.economy_policy_changed":entry.kind()==Kind.JUSTICE_INCOME?"gui.kingdomtreasury.justice_income":entry.kind()==Kind.CASINO_TAX?"gui.kingdomtreasury.casino_tax_income":entry.kind()==Kind.VILLAGER_TAX?"gui.kingdomtreasury.villager_tax_income":entry.kind()==Kind.VILLAGER_POLICY?"gui.kingdomtreasury.villager_policy_changed":entry.details()); record.put("kind", entry.kind());
+            record.put("description", (entry.kind().name().startsWith("VOTE_")||entry.kind().name().startsWith("LOAN_"))?"gui.kingdomtreasury.kind_"+entry.kind().name().toLowerCase(java.util.Locale.ROOT):entry.kind()==Kind.ECONOMY_TAX?"gui.kingdomtreasury.economy_tax_income":entry.kind()==Kind.ECONOMY_POLICY?"gui.kingdomtreasury.economy_policy_changed":entry.kind()==Kind.JUSTICE_INCOME?"gui.kingdomtreasury.justice_income":entry.kind()==Kind.CASINO_TAX?"gui.kingdomtreasury.casino_tax_income":entry.kind()==Kind.VILLAGER_TAX?"gui.kingdomtreasury.villager_tax_income":entry.kind()==Kind.VILLAGER_POLICY?"gui.kingdomtreasury.villager_policy_changed":entry.details()); record.put("kind", entry.kind());
             record.put("actor",entry.actor()==null?"":entry.actor().toString());record.put("details",entry.details());record.put("actorName",entry.actor()==null?"":player.getServer().getPlayerList().getPlayer(entry.actor())!=null?pt.crownledger.compat.ChroniclesBridge.publicName(player.getServer().getPlayerList().getPlayer(entry.actor())):entry.actor().toString().substring(0,8));
             record.put("amount", entry.amount()); record.put("currency", entry.currency()); record.put("at", entry.time());
             return record;
@@ -525,6 +528,7 @@ public final class CrownService {
     }
 
     private static void commit(MinecraftServer server, TreasuryData data, Treasury next) {
+        data.requireBankAvailable();
         Treasury previous = data.treasury;
         data.treasury = next;
         data.setDirty();
@@ -626,5 +630,6 @@ public final class CrownService {
         if (player == null || player.getServer() == null || player.isSpectator())
             throw new IllegalStateException("gui.kingdomtreasury.invalid_request");
         requireThread(player.getServer());
+        TreasuryData.get(player.getServer()).requireBankAvailable();
     }
 }

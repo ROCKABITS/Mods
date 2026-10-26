@@ -36,6 +36,7 @@ public final class GovernanceService {
             if(payload==null||payload.length()>8192)throw error("invalid");
             JsonObject input=JsonParser.parseString(payload).getAsJsonObject();
             var server=player.getServer();var data=TreasuryData.get(server);long time=now(server);
+            if(!operation.equals("query"))data.requireBankAvailable();
             var next=data.governance.copy();var treasury=data.treasury.copy();
             next.advance(treasury,time);
             switch(operation){
@@ -91,6 +92,7 @@ public final class GovernanceService {
     }
     public static void tick(MinecraftServer server){
         if(server.getTickCount()%20!=0)return;
+        if(TreasuryData.get(server).loanJournal()!=null)return;
         var data=TreasuryData.get(server);long time=now(server);var next=data.governance.copy();var treasury=data.treasury.copy();
         try {
             boolean changed=next.advance(treasury,time);

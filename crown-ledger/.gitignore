@@ -14,3 +14,4 @@ compat-libs/
 *.log
 
 run-treasury-qa/
+run-loan-qa/

@@ -58,6 +58,16 @@ public final class ChroniclesBridge {
         change(player, cents, true);
     }
 
+    /** Receipt transactions persist the profile before any client/advancement notifications. */
+    public static void setBalanceForReceipt(ServerPlayer player,long expected,long next){
+        requireServerThread(player);Api api=api();Object before=profile(api,player);
+        if(readBalance(api,before)!=expected||next<0||next>MAX_CENTS)throw new IllegalStateException("realm.treasury.loan.error.recovery");
+        Object after=invoke(api.withBalance(),before,next);
+        if(!api.profileClass().isInstance(after)||readBalance(api,after)!=next)throw new IllegalStateException("realm.treasury.loan.error.recovery");
+        player.setData(api.attachment(),after);
+    }
+    public static void syncReceipt(ServerPlayer player){requireServerThread(player);Api api=api();invoke(api.send(),null,player,api.sync(),"");}
+
     /** Current RP reputation; a created character and the supported progress API are required. */
     public static int reputation(ServerPlayer player) {
         requireServerThread(player);

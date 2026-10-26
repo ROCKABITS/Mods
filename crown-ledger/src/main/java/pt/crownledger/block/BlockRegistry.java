@@ -15,6 +15,8 @@ public final class BlockRegistry {
     public static final DeferredBlock<CrownChestBlock> CROWN_CHEST = BLOCKS.register("crown_chest",
             () -> new CrownChestBlock(BlockBehaviour.Properties.of().strength(3.5F).sound(SoundType.WOOD).noOcclusion()));
     public static final DeferredItem<BlockItem> CROWN_CHEST_ITEM = ITEMS.registerSimpleBlockItem(CROWN_CHEST);
+    public static final DeferredBlock<LoanDeskBlock> LOAN_DESK=BLOCKS.register("loan_desk",()->new LoanDeskBlock(BlockBehaviour.Properties.of().strength(3.5F).sound(SoundType.WOOD).noOcclusion()));
+    public static final DeferredItem<BlockItem> LOAN_DESK_ITEM=ITEMS.registerSimpleBlockItem(LOAN_DESK);
 
     private BlockRegistry() {}
 

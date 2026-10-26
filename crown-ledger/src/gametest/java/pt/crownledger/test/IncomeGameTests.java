@@ -74,7 +74,7 @@ public final class IncomeGameTests {
             var receipt=new IncomeLedger.Receipt(UUID.randomUUID(),Treasury.Currency.EMERALD,5,PAYER,"Native receipt");f.data.income=f.data.income.add(receipt);var saved=f.data.save(new CompoundTag(),h.getLevel().registryAccess());var duplicate=saved.copy();duplicate.getList("incomeReceipts",10).add(duplicate.getList("incomeReceipts",10).getCompound(0).copy());rejected(h,()->TreasuryData.load(duplicate,h.getLevel().registryAccess()));
             var negative=saved.copy();negative.getList("incomeReceipts",10).getCompound(0).putLong("amount",-1);rejected(h,()->TreasuryData.load(negative,h.getLevel().registryAccess()));
             var downgraded=saved.copy();downgraded.putInt("version",2);rejected(h,()->TreasuryData.load(downgraded,h.getLevel().registryAccess()));
-            var legacy=saved.copy();legacy.remove("incomeReceipts");legacy.putInt("version",2);var migrated=TreasuryData.load(legacy,h.getLevel().registryAccess());h.assertTrue(migrated.income.receipts().isEmpty()&&migrated.treasury.snapshot().equals(f.data.treasury.snapshot()),"Legacy migration reset public funds or invented a receipt");h.assertTrue(migrated.save(new CompoundTag(),h.getLevel().registryAccess()).getInt("version")==8,"Legacy treasury did not migrate to receipt-aware storage");
+            var legacy=saved.copy();legacy.remove("incomeReceipts");legacy.putInt("version",2);var migrated=TreasuryData.load(legacy,h.getLevel().registryAccess());h.assertTrue(migrated.income.receipts().isEmpty()&&migrated.treasury.snapshot().equals(f.data.treasury.snapshot()),"Legacy migration reset public funds or invented a receipt");h.assertTrue(migrated.save(new CompoundTag(),h.getLevel().registryAccess()).getInt("version")==9,"Legacy treasury did not migrate to receipt-aware storage");
         }h.succeed();
     }
 
@@ -88,6 +88,6 @@ public final class IncomeGameTests {
     }
     @GameTest(template="crown_empty",timeoutTicks=100)
     public static void formatFiveVillagerAuditsRemainValidAndMigrateToFormatSix(GameTestHelper h){
-        try(var f=new Fixture(h)){UUID id=UUID.randomUUID();pt.crownledger.api.CrownVillagerApi.policy(h.getLevel().getServer(),id,PAYER,1000,1234);var data=f.data.save(new CompoundTag(),h.getLevel().registryAccess());data.putInt("version",5);var migrated=TreasuryData.load(data,h.getLevel().registryAccess());h.assertTrue(migrated.income.receipts().containsKey(id)&&migrated.treasury.balance(Treasury.Currency.CHRONICLES)==0&&migrated.save(new CompoundTag(),h.getLevel().registryAccess()).getInt("version")==8,"Legacy zero-value Villager audit could not migrate");}h.succeed();
+        try(var f=new Fixture(h)){UUID id=UUID.randomUUID();pt.crownledger.api.CrownVillagerApi.policy(h.getLevel().getServer(),id,PAYER,1000,1234);var data=f.data.save(new CompoundTag(),h.getLevel().registryAccess());data.putInt("version",5);var migrated=TreasuryData.load(data,h.getLevel().registryAccess());h.assertTrue(migrated.income.receipts().containsKey(id)&&migrated.treasury.balance(Treasury.Currency.CHRONICLES)==0&&migrated.save(new CompoundTag(),h.getLevel().registryAccess()).getInt("version")==9,"Legacy zero-value Villager audit could not migrate");}h.succeed();
     }
 }

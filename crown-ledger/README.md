@@ -1,10 +1,66 @@
-# Realm Treasury 0.3.1 — Tesouro e votações do reino
+# Realm Treasury 0.4.0 — Tesouro, votações e empréstimos
 
 O **Crown Ledger passa a chamar-se Realm Treasury**. Mantém saldos, impostos, salários, contratos públicos e recibos existentes e acrescenta votações secretas no ecrã e benefícios financiados pelo tesouro.
 
 Minecraft **1.21.1**, **NeoForge 21.1.256+**, **Java 21**. O mesmo JAR é necessário nos clientes e no servidor, incluindo LAN. Substitui o Crown Ledger anterior; ambos usam o identificador `kingdomtreasury` e não podem coexistir. A pasta de código `crown-ledger/`, os pacotes Java e as APIs antigas conservam os nomes para compatibilidade.
 
-[Download JAR](https://github.com/ROCKABITS/Mods/raw/refs/heads/main/mod-pronto/realm-treasury-0.3.1.jar) · [ZIP](https://github.com/ROCKABITS/Mods/raw/refs/heads/main/mod-pronto/realm-treasury-0.3.1.zip) · [Galeria](../media/realm-treasury/README.md) · [Validação](VALIDACAO-0.3.1.md) · [CurseForge](CURSEFORGE.md)
+[Download JAR](https://github.com/ROCKABITS/Mods/raw/refs/heads/main/mod-pronto/realm-treasury-0.4.0.jar) · [ZIP](https://github.com/ROCKABITS/Mods/raw/refs/heads/main/mod-pronto/realm-treasury-0.4.0.zip) · [Galeria](../media/realm-treasury/README.md) · [Validação](VALIDACAO-0.4.0.md) · [CurseForge](CURSEFORGE.md)
+
+## Balcão de Empréstimos
+
+A 0.4.0 acrescenta um bloco físico ao **mesmo mod e tesouro público**. O balcão tem modelo original de 66 elementos, madeira escura, ferragens de latão, superfície verde, livro aberto, contrato, pena, tinteiro, moedas e selo real. Tem receita, loot, orientação horizontal e entrada na aba criativa/pesquisa.
+
+```text
+Livro e pena    Papel          Ouro
+Carvalho escuro Baú            Carvalho escuro
+Carvalho escuro Carvalho escuro Carvalho escuro
+```
+
+### Pedir, aprovar e assinar
+
+1. O jogador abre qualquer balcão e escolhe **Novo pedido**, indicando o valor e a finalidade.
+2. O Presidente atual, com mandato ativo e juramento concluído, abre **Analisar pedidos**, escolhe juros fixos, número de prestações e intervalo em dias reais, dentro dos limites administrativos.
+3. **Reservar e propor** retira exatamente o capital do saldo disponível do tesouro. O jogador ainda não recebe dinheiro; essa reserva já não pode financiar salários, contratos ou benefícios.
+4. O requerente lê o contrato e confirma **Assinar e receber**. Recebe o capital na carteira do Realm Origins; o calendário começa na assinatura. A primeira prestação vence um intervalo depois.
+5. **Pagar prestação** devolve a próxima prestação ao tesouro. **Liquidar tudo** paga o montante restante, incluindo os juros fixos acordados. Os pagamentos são manuais, através de qualquer balcão.
+
+Exemplo: 100 € com juros fixos de 10%, em cinco prestações, originam 110 € de dívida e prestações de 22 €. O tesouro empresta 100 € e recebe 110 € se o jogador pagar tudo. O dinheiro dos juros sai da carteira do jogador, nunca de uma emissão de moeda nem de uma carteira pessoal do Presidente.
+
+O menu mostra capital, total, juros, valores pagos e em falta, datas em UTC, plano completo e histórico. O contrato tem pergaminho próprio, selo de cera animado e confirmação sonora. O texto permanece acessível com deslocamento em interfaces pequenas. Os montantes usam cêntimos; os juros são arredondados uma única vez, para a unidade mínima, com metade arredondada para cima. Cêntimos/esmeraldas que sobrem são distribuídos pelas primeiras prestações: a soma é sempre exatamente o total.
+
+### Regras do crédito
+
+- Um pedido aberto ou empréstimo ativo por UUID, incluindo contratos em moedas diferentes. Só o próprio requerente assina e paga.
+- O Presidente não aprova o seu próprio pedido. Um administrador OP 2+ pode aprovar em emergência, presencialmente e com registo. A autorização do Presidente é consultada em cada decisão; o sucessor herda a análise dos pedidos existentes.
+- Sem Realm Council, o responsável nomeado por `/crown steward` e os administradores fazem a análise. Sem Realm Origins, os novos pedidos usam esmeraldas físicas. Dívidas antigas mantêm a moeda original; desinstalar o mod da carteira não converte dívidas digitais em esmeraldas.
+- Os juros e as condições ficam fixos na proposta aprovada. Alterar limites, mandato ou relógio não reescreve contratos existentes. Um atraso é sinalizado; o valor acordado mantém-se fixo, sem juros compostos, saldo negativo automático ou outra pena.
+- Recusar ou cancelar antes da assinatura devolve a reserva, quando exista, uma única vez. Pedidos expiram após sete dias reais e propostas após 48 horas, por defeito. A expiração é verificada ao reabrir um mundo LAN que tenha estado fechado. Não existe anulação administrativa de dívidas já assinadas.
+- Pagar adiantado mantém o total de juros acordado. O calendário continua em tempo real, incluindo tempo offline; os pagamentos continuam manuais. O estado por pagar e as datas sobrevivem a reinícios.
+- Partir, substituir ou colocar vários balcões mantém os contratos no registo do mundo. Não há dinheiro, inventário financeiro ou dívidas dentro do bloco. Todos consultam a mesma tesouraria, incluindo noutras dimensões.
+
+### Limites administrativos
+
+Secção `[loans]` no `serverconfig/kingdomtreasury-server.toml` do mundo:
+
+| Configuração | Valor inicial |
+| --- | --- |
+| `enabled` | `true` |
+| `maximumPrincipalCents` | `100000` — 1 000 € |
+| `maximumPrincipalEmeralds` | `256` |
+| `maximumInterestBasisPoints` | `2500` — 25% |
+| `maximumInstallments` | `12` |
+| `maximumIntervalDays` | `30` |
+| `offerExpiresAfterHours` | `48` |
+| `requestExpiresAfterDays` | `7` |
+| `requestCooldownSeconds` | `60` |
+
+O Presidente escolhe condições para cada proposta dentro destes limites. Desativar novos empréstimos impede pedidos e novas aprovações; propostas emitidas conservam as condições e empréstimos ativos continuam a aceitar pagamentos. O livro suporta até 4096 contratos persistentes e 512 acontecimentos recentes, com listas paginadas. Ao atingir a capacidade, novos pedidos são recusados; as dívidas existentes continuam a aceitar pagamentos.
+
+### Gravação e recuperação
+
+Antes de iniciar uma transferência, o mod confirma que a carteira e o inventário de partida estão guardados. Depois grava uma intenção financeira no mesmo `crown_ledger.dat` dos saldos e contratos, altera a carteira com recibo único, confirma os ficheiros nativos do jogador e, no anfitrião LAN, também `level.dat/Data/Player`. Só então conclui o contrato ou pagamento no livro público. Não edita carteiras offline.
+
+Uma falha conserva a intenção para recuperação pelo próprio requerente, ao voltar a ligar ou abrir o balcão. Operações públicas ficam suspensas enquanto existir uma transferência por reconciliar, para preservar o saldo que a financia. Um estado ambíguo é recusado e registado, em vez de inventar dinheiro ou apagar dívida. Guarda mundo, perfis e tesouraria na mesma cópia de segurança. O formato 9 migra formatos 1–8; JARs antigos não conseguem ler empréstimos.
 
 ## Votações e benefícios
 
@@ -12,7 +68,7 @@ No **Cofre da Coroa**, o Presidente empossado abre **Votações públicas → Pr
 
 O aviso no ecrã mostra o título e uma pré-visualização da descrição; **F8** abre o boletim completo, com deslocamento para textos longos. No histórico, **Ler** mostra a descrição original e o resultado. O texto fica fixado ao anunciar e é guardado mesmo após reiniciar o mundo. A votação livre é consultiva: não cobra dinheiro nem aplica alterações automáticas ao mundo.
 
-**Benefício do reino** é uma opção adicional no mesmo menu. Não existem novos cargos nem outro bloco.
+**Benefício do reino** é uma opção adicional no mesmo menu. As votações e os benefícios continuam no cofre; o crédito utiliza o Balcão de Empréstimos.
 
 A proposta aparece num aviso discreto no topo do ecrã. **F8**, configurável nos controlos, abre o boletim. Não abre menus automaticamente nem bloqueia movimentos. O aviso grande recolhe após 12 segundos; fechar o boletim dispensa o aviso nessa ligação. O dinheiro e os resultados são sempre decididos no servidor.
 
@@ -37,8 +93,8 @@ O menu permite consultar benefícios ativos, tempo restante e as últimas 64 dec
 
 ## Instalação e primeiro uso
 
-1. Antes de atualizar um mundo existente, faz uma cópia de segurança do mundo completo e dos perfis do Realm Origins. Esta versão migra o registo do tesouro para o formato 8; voltar ao JAR antigo exige restaurar a cópia anterior à atualização.
-2. Coloca `realm-treasury-0.3.1.jar` na pasta `mods` de cada cliente e do servidor. Se usas Realm Markets, atualiza também para **Realm Markets 0.2.1+** em todos eles; substitui os JARs antigos e não deixes duas versões do mesmo mod.
+1. Antes de atualizar um mundo existente, faz uma cópia de segurança do mundo completo e dos perfis do Realm Origins. Esta versão migra o registo do tesouro para o formato 9; voltar ao JAR antigo exige restaurar a cópia anterior à atualização.
+2. Coloca `realm-treasury-0.4.0.jar` na pasta `mods` de cada cliente e do servidor. Se usas Realm Markets, atualiza também para **Realm Markets 0.2.1+** em todos eles; substitui os JARs antigos e não deixes duas versões do mesmo mod.
 3. Para integrar os restantes sistemas, usa **Contracts & Bounties 0.4.0+**, **Realm Council 0.2.2+** e, opcionalmente, **Realm Origins 0.5.7** com as suas dependências.
 4. Fabrica o **Cofre da Coroa** e clica nele com o botão direito. Também aparece na aba criativa **Realm Treasury** e na pesquisa.
 
@@ -145,10 +201,10 @@ Na máquina cloud, usa `python3 tools/cloud_gradle.py` em vez de `./gradlew`; ma
 
 A versão 0.3.1 foi validada com **80 testes unitários**, **40 GameTests independentes**, **40 GameTests com os companheiros publicados**, a regressão visual do cofre e das interfaces anteriores e **dois clientes Minecraft reais ligados por TCP LAN**. A sequência LAN confirmou votos alteráveis, aprovação de um benefício financiado, rejeição de uma consulta empatada e reabertura efetiva do mundo com o saldo e decisões conservados. As capturas dos novos menus usam esses dados reais; as três capturas anteriores de contas e impostos usam dados de demonstração.
 
-[Resultados, reprodução e limites](VALIDACAO-0.3.1.md). A publicação automática volta a executar os testes antes de guardar o JAR, o ZIP, os hashes, os relatórios e a galeria. O histórico das validações anteriores continua em [VALIDACAO.md](VALIDACAO.md).
+[Resultados, reprodução e limites](VALIDACAO-0.4.0.md). A publicação automática volta a executar os testes antes de guardar o JAR, o ZIP, os hashes, os relatórios e a galeria. O histórico das validações anteriores continua em [VALIDACAO.md](VALIDACAO.md).
 
 ## Pagamentos judiciais — 0.2.2
 
 Laws & Justice 0.4.0 envia multas e fianças já pagas para a tesouraria na moeda original. Cada transferência guarda um recibo único no mesmo ficheiro que o saldo. Repetir o recibo, incluindo após reiniciar um mundo LAN, não cria outra entrada de dinheiro. Se a gravação ou o limite de saldo impedir a transferência, o tribunal conserva os fundos até poder entregá-los.
 
-A atualização migra automaticamente o formato 1 ou 2 para o formato 8, conservando as contas, os impostos e os salários. Usa Realm Treasury 0.3.1 no servidor e em todos os clientes. Realm Markets 0.2.1 continua compatível. A API é exclusiva do servidor e não dá aos clientes uma forma de criar dinheiro.
+A atualização migra automaticamente o formato 1 ou 2 para o formato 9, conservando as contas, os impostos e os salários. Usa Realm Treasury 0.3.1 no servidor e em todos os clientes. Realm Markets 0.2.1 continua compatível. A API é exclusiva do servidor e não dá aos clientes uma forma de criar dinheiro.

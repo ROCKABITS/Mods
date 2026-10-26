@@ -27,7 +27,7 @@ public final class GovernanceConfig {
                     b.defineInRange("priceEmeralds",400L,1,1_000_000_000L),b.defineInRange("strengthPercent",20,1,50)));
             b.pop();
         }
-        SPEC=b.build();
+        LoanConfig.define(b);SPEC=b.build();
     }
     public static Governance.Offer offer(Governance.Benefit kind,Treasury.Currency currency){
         var s=OFFERS.get(kind);if(!ENABLED.get()||!s.enabled.get())throw new IllegalStateException("realm.treasury.error.disabled");
