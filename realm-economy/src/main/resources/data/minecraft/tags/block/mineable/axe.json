@@ -1,6 +1,7 @@
 {
   "replace": false,
   "values": [
-    "realmeconomy:economy_desk"
+    "realmeconomy:economy_desk",
+    "realmeconomy:colony_coffer"
   ]
 }

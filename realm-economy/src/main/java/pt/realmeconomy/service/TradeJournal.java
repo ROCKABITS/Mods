@@ -24,6 +24,7 @@ public final class TradeJournal {
     public static void commit(ServerPlayer player,CompoundTag intent) {
         requirePlayer(player);EconomyData data=EconomyData.get(player.getServer());data.requireAvailable();
         if(!intent.getUUID("player").equals(player.getUUID()))throw failure("invalid_request");
+        if(intent.contains("colonyOperation")){pt.realmeconomy.colony.ColonyTransactions.validate(intent,data.colonies());persistStartingState(player);}
         data.prepare(intent);recover(player);
     }
 
@@ -70,6 +71,17 @@ public final class TradeJournal {
         // Run them only after the complete financial receipt is committed, never during an intent.
         try{if(intent.getLong("after")>=0)ChroniclesBridge.sync(player);player.inventoryMenu.broadcastChanges();player.containerMenu.broadcastChanges();}
         catch(RuntimeException|LinkageError secondary){com.mojang.logging.LogUtils.getLogger().warn("Trade is committed; an inventory notification failed",secondary);}
+    }
+    private static void persistStartingState(ServerPlayer player) {
+        savePlayer(player);var file=player.getServer().getWorldPath(LevelResource.PLAYER_DATA_DIR).resolve(player.getUUID()+".dat");forceSavedFile(file);
+        try {
+            if(!sameStartingPlayer(NbtIo.readCompressed(file,NbtAccounter.create(64L*1024*1024)),player))throw failure("storage");
+            if(player.getServer().isSingleplayerOwner(player.getGameProfile())){saveHost(player);var host=player.getServer().getWorldPath(LevelResource.LEVEL_DATA_FILE);forceSavedFile(host);if(!sameStartingPlayer(NbtIo.readCompressed(host,NbtAccounter.create(104857600L)).getCompound("Data").getCompound("Player"),player))throw failure("storage");}
+        }catch(IOException failure){throw new IllegalStateException("error.realmeconomy.storage",failure);}
+    }
+    private static boolean sameStartingPlayer(CompoundTag root,ServerPlayer player) {
+        var profile=root.getCompound("neoforge:attachments").getCompound("cronicasrp:profile");
+        return root.hasUUID("UUID")&&root.getUUID("UUID").equals(player.getUUID())&&profile.getBoolean("created")&&profile.getInt("moneyVersion")==1&&profile.contains("balance",Tag.TAG_LONG)&&profile.getLong("balance")==ChroniclesBridge.balance(player)&&TradeItems.savedInventory(player,root).equals(TradeItems.inventory(player));
     }
     public static boolean savedReceipt(ServerPlayer player,CompoundTag intent) {
         var path=player.getServer().getWorldPath(LevelResource.PLAYER_DATA_DIR).resolve(player.getUUID()+".dat");

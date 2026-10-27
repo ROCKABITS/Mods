@@ -16,7 +16,7 @@ import pt.realmeconomy.service.TradingService;
 public final class EconomyMenu extends AbstractContainerMenu {
     static final DeferredRegister<MenuType<?>> MENUS=DeferredRegister.create(net.minecraft.core.registries.Registries.MENU,"realmeconomy");
     public static final Supplier<MenuType<EconomyMenu>> TYPE=MENUS.register("trading",()->IMenuTypeExtension.create((int id,Inventory inventory,RegistryFriendlyByteBuf buffer)->new EconomyMenu(id,inventory)));
-    public static void register(IEventBus bus){ServicesMenu.load();MENUS.register(bus);}
+    public static void register(IEventBus bus){ServicesMenu.load();ColonyMenu.load();MENUS.register(bus);}
     public EconomyMenu(int id,Inventory inventory){super(TYPE.get(),id);}
     @Override public ItemStack quickMoveStack(Player player,int index){return ItemStack.EMPTY;}
     @Override public boolean stillValid(Player player){return player.level().isClientSide||TradingService.valid((net.minecraft.server.level.ServerPlayer)player);}

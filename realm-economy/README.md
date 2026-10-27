@@ -1,19 +1,21 @@
 # Realm Economy
 
-**Minecraft 1.21.1 · NeoForge 21.1.256+ · Java 21 · 0.4.1 Beta**
+**Minecraft 1.21.1 · NeoForge 21.1.256+ · Java 21 · 0.5.0 Beta**
 
 Realm Economy dá utilidade à carteira do **Realm Origins 0.5.7** durante a sobrevivência: compras aos aldeões, bigorna, encantamentos, melhorias, poções e ativações temporárias de beacons. A **Mesa da Economia** permite ao Presidente empossado governar os preços e impostos, respeitando os limites administrativos.
+
+A **0.5.0** acrescenta a [economia opcional do MineColonies](MINECOLONIES.md): Cofre da Colónia 3D, orçamento independente por cidade, depósitos e levantamentos, exportações diárias limitadas e autorizações pagas de construção e recrutamento. [Validação da atualização](VALIDACAO-0.5.0.md).
 
 ## Instalação e atualização
 
 1. Guarda uma cópia conjunta do mundo, perfis e tesouraria.
 2. **Retira `realm-villager-economy-0.1.0.jar`. Realm Economy substitui esse mod.** Os dois não devem estar instalados juntos.
-3. Instala `realm-economy-0.4.1.jar` nos clientes e servidor. Para impostos, utiliza **Realm Treasury 0.3.1** ou Crown Ledger 0.2.5+. Instala a mesma versão da tesouraria nos clientes e servidor.
+3. Instala `realm-economy-0.5.0.jar` nos clientes e servidor. Para impostos, utiliza **Realm Treasury 0.4.0** ou Crown Ledger 0.2.5+. Instala a mesma versão da tesouraria nos clientes e servidor.
 4. Usa Realm Origins 0.5.7 e as suas dependências. Realm Council 0.2.2+ identifica o Presidente. Realm Notifications 0.1.1 é opcional.
 
-Foi desenvolvido para servidor integrado, LAN e servidor dedicado; consulta os testes efetivos em [VALIDACAO-0.4.1.md](VALIDACAO-0.4.1.md).
+Foi desenvolvido para servidor integrado, LAN e servidor dedicado. A atualização inclui validação com dois clientes TCP LAN e os addons MineColonies indicados pelo utilizador; os resultados ficam em [VALIDACAO-0.5.0.md](VALIDACAO-0.5.0.md). A correção dos livros encantados está documentada em [VALIDACAO-0.4.1.md](VALIDACAO-0.4.1.md).
 
-A migração lê `data/realm_villager_economy.dat` quando ainda não existe `data/realm_economy.dat`. Conserva taxa, stock, transferências pendentes e intenções interrompidas. Lê também a conversão inicial de `config/realmvillagereconomy-server.json`, se existir. O ficheiro anterior permanece intacto como referência. Depois da migração, os registos ativos usam o formato 2 do Realm Economy; a tesouraria conserva o formato da sua própria versão. Regressar aos mods antigos exige restaurar a cópia anterior completa.
+A migração lê `data/realm_villager_economy.dat` quando ainda não existe `data/realm_economy.dat`. Conserva taxa, stock, transferências pendentes e intenções interrompidas. Lê também a conversão inicial de `config/realmvillagereconomy-server.json`, se existir. O ficheiro anterior permanece intacto como referência. Depois da migração, os registos ativos usam o formato 3 do Realm Economy; a tesouraria conserva o formato da sua própria versão. Regressar aos mods antigos exige restaurar a cópia anterior completa.
 
 ## Mesa da Economia
 
@@ -118,4 +120,4 @@ A integração utiliza `-PintegrationTests`, os JARs verificados em `.github/scr
 
 [Changelog](CHANGELOG.md) · [Validação](VALIDACAO.md) · [Plano original](PLANO-REALM-ECONOMY.md).
 
-[Download JAR](../mod-pronto/realm-economy-0.4.1.jar) · [Download ZIP](../mod-pronto/realm-economy-0.4.1.zip) · [Galeria](../media/realm-economy/README.md).
+[Download JAR](../mod-pronto/realm-economy-0.5.0.jar) · [Download ZIP](../mod-pronto/realm-economy-0.5.0.zip) · [Galeria](../media/realm-economy/README.md).

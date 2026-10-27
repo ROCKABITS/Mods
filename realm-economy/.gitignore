@@ -11,3 +11,7 @@ runs/
 *.iml
 compat-libs/
 integration.log
+minecolonies-libs/
+run-colony-qa/
+colony-addon-libs/
+colony-*.log

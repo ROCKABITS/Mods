@@ -1,0 +1,15 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "pt.realmeconomy.mixin.colony",
+  "plugin": "pt.realmeconomy.mixin.colony.ColonyMixinPlugin",
+  "compatibilityLevel": "JAVA_21",
+  "mixins": [
+    "BuildingInvoiceMixin",
+    "RecruitInvoiceMixin",
+    "ColonyDeletionMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

@@ -6,6 +6,7 @@ on:
       - 'realm-economy/**'
       - '.github/workflows/build-realm-economy.yml'
       - '.github/scripts/economy_release.py'
+      - '.github/scripts/colony_validation.py'
   workflow_dispatch:
 permissions:
   contents: write
@@ -17,7 +18,7 @@ jobs:
     # Other releases retain their existing workflows; this marker selects one atomic suite publisher.
     if: ${{ github.event_name == 'workflow_dispatch' || contains(github.event.head_commit.message, '[realm-economy-release]') }}
     runs-on: ubuntu-latest
-    timeout-minutes: 40
+    timeout-minutes: 60
     defaults:
       run:
         shell: bash
@@ -41,6 +42,12 @@ jobs:
       - name: Native monetary, persistence and recovery integration
         working-directory: realm-economy
         run: python3 ../.github/scripts/economy_release.py integrated
+      - name: Native MineColonies budgets, rights, exports, permits and recovery
+        run: python3 .github/scripts/colony_validation.py native
+      - name: Verify the user's six colony addons and their dependencies
+        run: python3 .github/scripts/colony_validation.py install
+      - name: Native MineColonies suite with all selected addons on NeoForge 21.1.262
+        run: python3 .github/scripts/colony_validation.py addons
       - name: Actual Minecraft trading, economic desk, paid services, potions and timed beacons
         working-directory: realm-economy
         env:
@@ -53,6 +60,14 @@ jobs:
           fi
           timeout 960s xvfb-run -a -s '-screen 0 1600x900x24' ./gradlew --no-daemon --console=plain -PeconomyVisualTests -PintegrationTests runClient 2>&1 | tee visual-client.log
           python3 -c "import json; r=json.load(open('qa-results/economy-client/result.json')); assert r.get('success') is True, r"
+      - name: Two actual LAN clients, colony coffers, exports, fees, policy and world reopening
+        working-directory: realm-economy
+        env:
+          LIBGL_ALWAYS_SOFTWARE: '1'
+          ALSOFT_DRIVERS: 'null'
+        run: |
+          timeout 960s xvfb-run -a -s '-screen 0 1600x900x24' ./gradlew --no-daemon --console=plain -Pneo_version=21.1.262 -PcolonyVisualTests -PminecoloniesTests -PcolonyAddonsTests -PintegrationTests runClient 2>&1 | tee colony-client.log
+          python3 ../.github/scripts/colony_validation.py validate
       - name: Validation summary and bounded failure diagnostics
         if: always()
         run: python3 .github/scripts/economy_release.py summary
@@ -90,6 +105,9 @@ jobs:
             */gametests.log
             */integration.log
             */visual-client.log
+            realm-economy/colony-native.log
+            realm-economy/colony-addons.log
+            realm-economy/colony-client.log
             */build/test-results/test/
             realm-economy/build/economy-release/manifest.json
             realm-economy/build/economy-release/companions.json

@@ -20,12 +20,19 @@ neoForge {
             type = 'gameTestServer'
             systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
             systemProperty 'villager.integration', providers.gradleProperty('integrationTests').isPresent().toString()
+            systemProperty 'colony.selectedAddons', providers.gradleProperty('colonyAddonsTests').isPresent().toString()
         }
     }
     mods { realmeconomy { sourceSet(sourceSets.main) } }
 }
 configurations { runtimeClasspath.extendsFrom localRuntime }
 dependencies {
+    if (providers.gradleProperty('colonyAddonsTests').isPresent()) { localRuntime fileTree(dir: 'colony-addon-libs', include: ['*.jar']) }
+    def colonyCoordinates = ['curse.maven:minecolonies-245506:9058295', 'curse.maven:structurize-298744:8610535', 'curse.maven:blockui-522992:7541336', 'curse.maven:domum-ornamentum-527361:7789217', 'curse.maven:multi-piston-303278:7097877']
+    colonyCoordinates.each { coordinate ->
+        compileOnly(coordinate) { transitive = false }
+        if (providers.gradleProperty('minecoloniesTests').isPresent()) { localRuntime(coordinate) { transitive = false } }
+    }
     testImplementation 'org.junit.jupiter:junit-jupiter:5.11.4'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
     if (providers.gradleProperty('integrationTests').isPresent()) {
@@ -57,3 +64,20 @@ tasks.withType(JavaCompile).configureEach {
     options.release = 21
 }
 tasks.withType(ProcessResources).configureEach { filteringCharset = 'UTF-8' }
+
+if (providers.gradleProperty('colonyGameTests').isPresent()) {
+    sourceSets.main.java.srcDir('src/colonytest/java')
+    sourceSets.main.resources.srcDir('src/colonytest/resources')
+    sourceSets.main.resources.srcDir('src/gametest/resources')
+    neoForge.runs.gameTestServer { systemProperty 'neoforge.enabledGameTestNamespaces', 'realmeconomycolony' }
+}
+if (providers.gradleProperty('colonyVisualTests').isPresent()) {
+    sourceSets.main.java.srcDir('src/colonyvisualtest/java')
+    neoForge.runs.client {
+        jvmArgument '-Xmx2G'
+        systemProperty 'economy.colonyQA', 'true'
+        systemProperty 'economy.colonyQAOutput', file('qa-results/colony-client').absolutePath
+        programArguments.addAll '--width', '1600', '--height', '900'
+    }
+}
+tasks.named('jar', Jar) { exclude('pt/realmeconomy/colonytest/**','pt/realmeconomy/colonyvisualtest/**','data/realmeconomycolony/structure/**') }

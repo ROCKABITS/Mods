@@ -1,5 +1,19 @@
 # Changelog
 
+## 0.5.0 — MineColonies colony budgets
+
+- Adds optional MineColonies 1.1.1403 integration inside Realm Economy, with independent, persistent budgets for each colony.
+- Adds the original 70-element Colony Coffer, seven pixel textures, crafting, creative search, loot and English/Portuguese interfaces.
+- Provides confirmed deposits and withdrawals using the existing Realm Origins wallet. Owners, authorised native officers, members and administrators have distinct access.
+- Adds five deterministic daily export orders from twenty configurable products, with real item consumption and initial €250 caps per colony and per exporter across colonies.
+- Introduces construction/upgrade permits paid from colony funds. Native builders wait for approval; the same site, building type and target level reuse an already-paid permit.
+- Adds visitor-specific recruitment permits while preserving native recruitment materials and colony requirements. Zero fees authorise automatically; old work orders remain valid.
+- Records every budget movement and administrative policy change. Native colony deletion is blocked until the budget is empty, and reused colony IDs start fresh accounts.
+- Extends the durable Economy journal to colony transfers and export deliveries, including integrated-host wallet/inventory receipts and recoverable interrupted withdrawals.
+- Migrates Economy data formats 1/2 to format 3 while preserving existing trading, services, taxes, stock and escrow. Growing colony ledgers use bounded UTF-8 byte arrays.
+- Validates the selected Bits and Bobs, Byzantine, ColonyRank, MapColonies and SmallColonies packs. MapColonies requires NeoForge 21.1.262+; the base integration retains 21.1.256+ support.
+- Keeps all earlier enchanted-book previews and economic services. Third-party mods remain optional and are not bundled.
+
 ## 0.4.1 — Enchanted book previews
 
 - Shows stored enchantment names and levels directly in Villager trade offers and the selected preview.
