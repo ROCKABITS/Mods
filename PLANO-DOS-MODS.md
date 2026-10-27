@@ -8,12 +8,13 @@ Plataforma: **Minecraft 1.21.1, NeoForge e Java 21**. Os mods mantêm responsabi
 
 **Estado: planeado; não implementar nesta etapa.** O utilizador escolheu uma meta de **8 000 €** para um servidor de cerca de cinco jogadores, substituindo os exemplos anteriores de 12 000 € e 20 000 €.
 
-- Integrar a progressão tecnológica no **Realm Treasury**, sem criar um mod separado.
+- Implementar o bloqueio num **addon opcional separado**, com integração entre **Create** e **Realm Treasury**. Esta decisão substitui a proposta anterior de incluir o sistema no próprio Realm Treasury.
+- O addon consulta o tesouro existente, sem criar outra carteira. O modpack pode utilizar Create e Realm Treasury normalmente sem instalar este addon.
 - O tesouro público global precisa de atingir **8 000 €** para desbloquear o Create para todos os jogadores desse mundo.
 - A condição é atingir o saldo: o dinheiro permanece no tesouro após o desbloqueio e pode financiar as despesas habituais do reino.
 - O desbloqueio é permanente e persiste após reinícios, mudanças de Presidente e despesas posteriores que reduzam o saldo.
 - O Create permanece instalado no modpack desde o início. O bloqueio funcional deve ser validado no servidor; esconder receitas no JEI é apenas apresentação.
-- A proposta inclui progresso visível no cofre, anúncio coletivo e meta configurada pela administração. Antes da implementação, verificar a versão concreta do Create, as APIs e os addons instalados para definir e testar a cobertura do bloqueio.
+- A proposta inclui progresso visível através da integração com o tesouro, anúncio coletivo e meta configurada pela administração. Antes da implementação, verificar a versão concreta do Create, as APIs e os addons instalados para definir e testar a cobertura do bloqueio.
 
 A integração económica com **MineColonies** está publicada no **Realm Economy 0.5.0**, com validação local e no GitHub aprovada: contas por colónia, cofre físico, depósitos/levantamentos, exportações diárias e autorizações de construção/recrutamento. O âmbito e as regras estão no [guia da integração](realm-economy/MINECOLONIES.md); os [resultados da validação](realm-economy/VALIDACAO-0.5.0.md) incluem os seis addons escolhidos e dois clientes TCP LAN. O desbloqueio do Create continua reservado para uma atualização posterior.
 
