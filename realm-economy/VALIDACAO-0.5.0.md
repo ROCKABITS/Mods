@@ -2,7 +2,9 @@
 
 Plataforma base: Minecraft 1.21.1, NeoForge 21.1.256 e Java 21. O cenário com os seis addons indicados pelo utilizador usa **NeoForge 21.1.262**, exigido pelo MapColonies 1.0.0.
 
-Estado: **27 testes nativos MineColonies aprovados após acrescentar a compatibilidade do alquimista**. As suites de regressão e os clientes estão a ser repetidos para o commit final; a publicação exige os mesmos resultados no workflow.
+Estado: **validação local e publicação no GitHub aprovadas**. As 223 execuções de lógica/servidor, o cliente económico e os dois clientes TCP LAN passaram no [workflow 40548960095](https://github.com/ROCKABITS/Mods/actions/runs/40548960095). O JAR, o ZIP e as 48 capturas estão publicados.
+
+Código validado: `82f410a78fbef0f9bcecb24b2af01c5569f62b26`. JAR de produção SHA-256: `f1dbb1ae42caa1a6982a2e27843baf3776f0c5b146bf415a6290c097883ed439`. O artefacto publicado é idêntico ao snapshot de produção validado localmente. [Metadados da compilação](../mod-pronto/realm-economy-0.5.0.build.json) · [Galeria publicada](../media/realm-economy/0.5.0/README.md).
 
 | Suite | Execuções | Evidência |
 | --- | ---: | --- |
