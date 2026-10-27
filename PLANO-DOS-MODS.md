@@ -6,7 +6,7 @@ Plataforma: **Minecraft 1.21.1, NeoForge e Java 21**. Os mods mantêm responsabi
 
 ## Realm Progression — desbloqueio configurável de crafts
 
-**Estado: implementação autorizada e em validação em `realm-progression/`.** O utilizador escolheu uma meta inicial de **8 000 €** para o Create num servidor de cerca de cinco jogadores. O [guia](realm-progression/README.md) descreve o menu, o âmbito do bloqueio e a persistência.
+**Estado: Realm Progression 0.1.0 Beta publicado, com validação local e no GitHub aprovada.** O utilizador escolheu uma meta inicial de **8 000 €** para o Create num servidor de cerca de cinco jogadores. O [guia](realm-progression/README.md) descreve o menu, o âmbito do bloqueio e a persistência; a [validação](realm-progression/VALIDACAO.md) regista 77 execuções de testes aprovadas e um cenário com dois clientes TCP LAN.
 
 - Implementar o bloqueio num **addon opcional separado**, integrado com **Realm Treasury** e configurável para vários mods. Create é o primeiro alvo previsto, não uma dependência obrigatória do addon genérico. Esta decisão substitui a proposta anterior de incluir o sistema no próprio Realm Treasury.
 - O addon consulta o tesouro existente, sem criar outra carteira. O modpack pode utilizar os seus mods normalmente sem instalar este addon.

@@ -1,6 +1,17 @@
 # Validação — Realm Progression 0.1.0
 
-Minecraft 1.21.1, NeoForge 21.1.256 e Java 21. Estado: em validação; o JAR só será publicado depois de concluir todas as suites e os clientes reais.
+Minecraft 1.21.1, NeoForge 21.1.256 e Java 21. **Validação local e publicação aprovadas no [workflow 40563579557](https://github.com/ROCKABITS/Mods/actions/runs/40563579557)**. O JAR, ZIP e as 14 capturas reais estão disponíveis no repositório.
+
+| Suite | Execuções aprovadas |
+| --- | ---: |
+| JUnit: domínio e armazenamento | 25 |
+| GameTests com Realm Treasury | 26 |
+| GameTests com Create 6.0.10 e os companheiros reais | 26 |
+| Total de lógica/servidor | **77** |
+
+Além destas suites, passou o cenário com **dois clientes Minecraft ligados por TCP LAN**, incluindo uma doação real, fabrico real do Create e encerramento/reabertura do mundo. A configuração de um segundo mod foi enviada pelo menu de produção e a tentativa de configuração de um convidado sem OP foi recusada pelo servidor.
+
+Código validado: `39c142b737a8dbf374c43be978c121caac61da7b`. JAR SHA-256: `ad2b7e8b72a5a5a3f0b28dcde9e165a047f02f4769a92805b55d2d216c126d69`. O JAR publicado coincide com o snapshot local; os downloads JAR/ZIP/media e o JAR contido no ZIP foram verificados após a publicação. [Metadados](../mod-pronto/realm-progression-0.1.0.build.json) · [Galeria](../media/realm-progression/0.1.0/README.md).
 
 ## Suites executáveis
 
