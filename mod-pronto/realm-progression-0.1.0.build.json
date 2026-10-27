@@ -1,0 +1,40 @@
+{
+  "unit_tests": 25,
+  "standalone_native_tests": 26,
+  "integrated_create_tests": 26,
+  "actual_minecraft_clients": 2,
+  "actual_tcp_lan": true,
+  "actual_world_reopening": true,
+  "actual_native_shift_crafting": true,
+  "non_operator_packet_denied": true,
+  "version": "0.1.0",
+  "source_commit": "39c142b737a8dbf374c43be978c121caac61da7b",
+  "jar_sha256": "ad2b7e8b72a5a5a3f0b28dcde9e165a047f02f4769a92805b55d2d216c126d69",
+  "tested_run": "https://github.com/ROCKABITS/Mods/actions/runs/40563579557",
+  "companions": {
+    "realm-treasury-0.4.0.jar": "fb22b77ae2ab11ecfc4b81701c67d22a4618198f3b04d97922625491f5f32f39",
+    "realm-origins-0.5.7.jar": "0b90c49b9e3c49d2f0343301ac3662b21d6ce5551ea343fb7fc8ebdab9e09684",
+    "realm-economy-0.5.0.jar": "f1dbb1ae42caa1a6982a2e27843baf3776f0c5b146bf415a6290c097883ed439",
+    "realm-notifications-0.1.1.jar": "2fb85c87eb296e49f3f68c0d7defd709ceca8913fa5a3f6ef9442d9b9548c99e",
+    "contracts-bounties-0.4.0.jar": "d1bd4726ac210e6d5904829bf9185efef76920aa8070ffb292d6e479689ee07e",
+    "realmcouncil-0.2.2.jar": "0a77af87a5c4e36f55ad12578662834886a7986864896a908a3dc4217e2c19cb"
+  },
+  "create_sha256": "ef87fe5709f1ba1f5b8bb20a2925b5afb4669e178fd6d8bf10c167759eefe37a",
+  "zip_sha256": "369908f2cf6e25bfc51f501caa6c09534a27c5057e61159e2ecc02d9001227b3",
+  "screenshots": {
+    "research-tables.png": "c2421806cb5e8f3d29235cc39d5afe9203c7f7f8ff33c937790b979b00b0a84d",
+    "research-table-closeup.png": "71f7e8c423fd4fb69e6df139f56179c33e894d547523d6c28f9018f9d042618a",
+    "research-create-locked.png": "d49195f881bf108587e1a894c5bb78c9a6099e9c38e6df738a6fa2fd6e2e923e",
+    "research-installed-mods.png": "c8fd3aa536d24d8368b8be1bb78f7e7e24c2fc8e4e5e595bf302b6ac4f1fd125",
+    "research-goal-confirmation.png": "bf6002abeaa8d6dc493901686c29c029193889360779e6ef9c9f09950bf3e8b8",
+    "research-independent-goals.png": "a2de46e93be8b5422bd19633d345d3345aeffe968f6dda355252ec8e27b46e17",
+    "research-blocked-create-craft.png": "ca96e4a204caf62524beaa1796c353bc6ad4d98f630dbc0679a19503b5be951c",
+    "research-unlock-banner.png": "f8f83f86c9e5a2033cf2bdd0212c19141161172cf654216ba663bf286ea05a02",
+    "research-create-unlocked.png": "5506a00b0f4507ec676642d9a268b47f1670e70c7fe156630514a14f46cef31d",
+    "research-audit.png": "a56d8423157d08e0277ae8944e55f68d66452744dc9a2b3c3a13c57486f0f80d",
+    "research-compact-records.png": "d26834f158d9d27df683cf3ab62fc8c75390a570d293785c7cfbc295941f4d31",
+    "research-after-world-reopen.png": "b21f295ad0a624c6a9ec0434b19a432910432bffc3612cf82a73c583745fb742",
+    "research-player-locked.png": "9333ec61537a5f10493b9786aea9b2ed5a36fee8a1e233caf6ea5977c831dce7",
+    "research-player-unlocked.png": "ef3e0639aabc552c2b445f51154ba113aafb3ef5018a7c6def61d52c2127b43d"
+  }
+}

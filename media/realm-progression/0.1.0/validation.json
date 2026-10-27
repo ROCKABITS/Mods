@@ -1,0 +1,247 @@
+{
+  "success": true,
+  "message": "Actual Create crafts, admin-configured second mod, denied non-OP packet, unchanged public unlock funds, real Crown donation, repeated native crafting, two TCP LAN clients and world reopening passed.",
+  "stage": 27,
+  "screenshots": [
+    "research-tables.png",
+    "research-table-closeup.png",
+    "research-create-locked.png",
+    "research-installed-mods.png",
+    "research-goal-confirmation.png",
+    "research-independent-goals.png",
+    "research-blocked-create-craft.png",
+    "research-unlock-banner.png",
+    "research-create-unlocked.png",
+    "research-audit.png",
+    "research-compact-records.png",
+    "research-after-world-reopen.png",
+    "research-player-locked.png",
+    "research-player-unlocked.png"
+  ],
+  "requests": [
+    {
+      "search": "",
+      "selected": "",
+      "page": 0,
+      "browse": true,
+      "operation": "query"
+    },
+    {
+      "search": "Realm Economy",
+      "selected": "additionalentityattributes",
+      "page": 0,
+      "browse": true,
+      "operation": "query"
+    },
+    {
+      "nonce": "1dc01973-5f5a-431d-90af-329b20b7191c",
+      "revision": 0,
+      "mod": "realmeconomy",
+      "goal": 1000000,
+      "enabled": true,
+      "namespaces": "realmeconomy",
+      "operation": "configure"
+    },
+    {
+      "search": "",
+      "selected": "realmeconomy",
+      "page": 0,
+      "browse": true,
+      "operation": "query"
+    },
+    {
+      "search": "",
+      "selected": "",
+      "page": 0,
+      "browse": false,
+      "operation": "query"
+    },
+    {
+      "search": "",
+      "selected": "create",
+      "page": 0,
+      "browse": false,
+      "operation": "query"
+    },
+    {
+      "search": "",
+      "selected": "create",
+      "page": 0,
+      "browse": false,
+      "operation": "query"
+    },
+    {
+      "search": "",
+      "selected": "create",
+      "page": 0,
+      "browse": false,
+      "operation": "query"
+    },
+    {
+      "search": "",
+      "selected": "create",
+      "page": 0,
+      "browse": false,
+      "operation": "query"
+    },
+    {
+      "search": "",
+      "selected": "create",
+      "page": 0,
+      "browse": false,
+      "operation": "query"
+    },
+    {
+      "search": "",
+      "selected": "create",
+      "page": 0,
+      "browse": false,
+      "operation": "query"
+    },
+    {
+      "search": "",
+      "selected": "create",
+      "page": 0,
+      "browse": false,
+      "operation": "query"
+    },
+    {
+      "search": "",
+      "selected": "create",
+      "page": 0,
+      "browse": false,
+      "operation": "query"
+    },
+    {
+      "search": "",
+      "selected": "create",
+      "page": 0,
+      "browse": false,
+      "operation": "query"
+    },
+    {
+      "search": "",
+      "selected": "create",
+      "page": 0,
+      "browse": false,
+      "operation": "query"
+    },
+    {
+      "search": "",
+      "selected": "create",
+      "page": 0,
+      "browse": false,
+      "operation": "query"
+    },
+    {
+      "search": "",
+      "selected": "create",
+      "page": 0,
+      "browse": false,
+      "operation": "query"
+    },
+    {
+      "search": "",
+      "selected": "create",
+      "page": 0,
+      "browse": false,
+      "operation": "query"
+    },
+    {
+      "search": "",
+      "selected": "create",
+      "page": 0,
+      "browse": false,
+      "operation": "query"
+    },
+    {
+      "search": "",
+      "selected": "create",
+      "page": 0,
+      "browse": false,
+      "operation": "query"
+    },
+    {
+      "search": "",
+      "selected": "create",
+      "page": 0,
+      "browse": false,
+      "operation": "query"
+    },
+    {
+      "search": "",
+      "selected": "create",
+      "page": 0,
+      "browse": false,
+      "operation": "query"
+    },
+    {
+      "search": "",
+      "selected": "create",
+      "page": 0,
+      "browse": false,
+      "operation": "query"
+    },
+    {
+      "search": "",
+      "selected": "create",
+      "page": 0,
+      "browse": false,
+      "operation": "query"
+    },
+    {
+      "search": "",
+      "selected": "create",
+      "page": 0,
+      "browse": false,
+      "operation": "query"
+    },
+    {
+      "search": "",
+      "selected": "create",
+      "page": 0,
+      "browse": false,
+      "operation": "query"
+    },
+    {
+      "search": "",
+      "selected": "create",
+      "page": 0,
+      "browse": false,
+      "operation": "query"
+    },
+    {
+      "search": "",
+      "selected": "create",
+      "page": 0,
+      "browse": false,
+      "operation": "query"
+    }
+  ],
+  "actualMinecraftClients": 2,
+  "actualTcpLan": true,
+  "actualCreateCrafts": true,
+  "actualTreasuryDonation": true,
+  "actualWorldReopening": true,
+  "syntheticFinancialSnapshots": false,
+  "mods": {
+    "minecraft": "1.21.1",
+    "cronicasrp": "0.5.7",
+    "realmprogression": "0.1.0",
+    "additionalentityattributes": "2.0.2+1.21.1",
+    "jupiter": "2.3.7",
+    "ponder": "1.0.82+mc1.21.1",
+    "contracts": "0.4.0",
+    "realmnotifications": "0.1.1",
+    "realmcouncil": "0.2.2",
+    "realmeconomy": "0.5.0",
+    "caelus": "7.0.1+1.21.1",
+    "kingdomtreasury": "0.4.0",
+    "integration": "0.2",
+    "flywheel": "1.0.6",
+    "origins": "0.3.2",
+    "create": "6.0.10",
+    "origins_classes": "0.3",
+    "neoforge": "21.1.256"
+  }
+}
