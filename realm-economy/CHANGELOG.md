@@ -12,6 +12,7 @@
 - Extends the durable Economy journal to colony transfers and export deliveries, including integrated-host wallet/inventory receipts and recoverable interrupted withdrawals.
 - Migrates Economy data formats 1/2 to format 3 while preserving existing trading, services, taxes, stock and escrow. Growing colony ledgers use bounded UTF-8 byte arrays.
 - Validates the selected Bits and Bobs, Byzantine, ColonyRank, MapColonies and SmallColonies packs. MapColonies requires NeoForge 21.1.262+; the base integration retains 21.1.256+ support.
+- Preserves native brewing in registered, staffed MineColonies alchemist workshops, including fuel and ingredient consumption; unrelated personal stands retain the paid-service rules.
 - Keeps all earlier enchanted-book previews and economic services. Third-party mods remain optional and are not bundled.
 
 ## 0.4.1 — Enchanted book previews

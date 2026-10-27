@@ -31,5 +31,10 @@ public final class ColonyAccess {
         for(var visitor:c.getVisitorManager().getCivilianDataMap().values())if(visitor instanceof IVisitorData v){UUID id=recruitId(v);state=ColonyLedger.invoice(state,key(c),new ColonyLedger.Invoice(id.toString(),"RECRUIT",v.getName(),"visitor:"+v.getUUID(),state.policy().recruitCents(),state.policy().recruitCents()==0,System.currentTimeMillis()),System.currentTimeMillis());}
         data.colonies(state);
     }
+    public static boolean alchemistStation(net.minecraft.server.level.ServerLevel level,BlockPos pos){
+        var c=IColonyManager.getInstance().getColonyByPosFromWorld(level,pos);if(c==null||!c.isCoordInColony(level,pos))return false;
+        for(var building:c.getServerBuildingManager().getBuildings().values())if(building instanceof com.minecolonies.core.colony.buildings.workerbuildings.BuildingAlchemist alchemist&&alchemist.getBuildingLevel()>0&&alchemist.getAllBrewingStandPositions().contains(pos)&&alchemist.getAllAssignedCitizen().stream().anyMatch(worker->worker.getWorkBuilding()==alchemist&&worker.getJob()!=null))return true;
+        return false;
+    }
     private static IllegalStateException error(String key){return new IllegalStateException("error.realmeconomy."+key);}
 }

@@ -89,6 +89,12 @@ Os visitantes da taberna aparecem também nas despesas, com autorização inicia
 
 Definir um destes preços em zero dispensa a respetiva cobrança. Os valores e requisitos visíveis das autorizações já emitidas ficam congelados. Esta atualização trabalha com despesas aprovadas individualmente; salários periódicos dos colonos ficam para uma fase posterior.
 
+## Produção do alquimista
+
+Os suportes de poções registados num **alquimista construído e com trabalhador atribuído** mantêm a produção e o inventário nativos do MineColonies. O alquimista pode consumir ingredientes/combustível e produzir as poções normalmente, incluindo a aceleração do seu trabalho.
+
+Essa exceção aplica-se aos postos registados desse edifício. Suportes pessoais noutros locais, incluindo dentro da mesma colónia, continuam sujeitos ao serviço pago de poções do Realm Economy. Uma cabana por construir ou sem trabalhador não concede a exceção. As permissões nativas da colónia continuam a governar o acesso ao inventário da oficina.
+
 ## Configurar
 
 Em **Configuração** no cofre, a administração pode alterar:

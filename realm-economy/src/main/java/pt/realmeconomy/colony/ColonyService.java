@@ -43,7 +43,7 @@ public final class ColonyService {
         var s=SESSIONS.get(p.getUUID());return s!=null&&!(p instanceof FakePlayer)&&p.isAlive()&&!p.isSpectator()&&System.nanoTime()-s.opened<600_000_000_000L&&p.level().dimension().location().toString().equals(s.dimension)&&p.level().hasChunkAt(s.pos)&&p.distanceToSqr(s.pos.getCenter())<=64&&p.level().getBlockState(s.pos).is(EconomyBlocks.COLONY_CHEST.get());
     }
     public static void close(ServerPlayer p){SESSIONS.remove(p.getUUID());}
-    public static void stop(){SESSIONS.clear();ColonyCatalog.clear();}
+    public static void stop(){SESSIONS.clear();ColonyCatalog.clear();ColonyBrewing.clear();}
     private static Session session(ServerPlayer p){if(!loaded()||!valid(p)||!(p.containerMenu instanceof ColonyMenu))throw error("distance");return SESSIONS.get(p.getUUID());}
     private static void exact(JsonObject r,String...keys){if(!r.keySet().equals(Set.of(keys)))throw error("invalid_request");}
     private static long number(JsonObject r,String key){if(!r.has(key)||!r.get(key).isJsonPrimitive()||!r.getAsJsonPrimitive(key).isNumber())throw error("invalid_request");return r.get(key).getAsBigDecimal().longValueExact();}

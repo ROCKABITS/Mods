@@ -41,15 +41,15 @@ public final class Services {
  }
  public static void interact(PlayerInteractEvent.RightClickBlock event){
   if(event.getLevel().isClientSide||!(event.getEntity() instanceof ServerPlayer p)||p.isSecondaryUseActive()&&!p.getMainHandItem().isEmpty())return;
-  String context=context(event.getLevel().getBlockState(event.getPos()));if(context.isEmpty()||!context.equals("DESK")&&!ServiceGates.enabled(event.getLevel(),ServiceKind.valueOf(context)))return;
+  String context=context(event.getLevel().getBlockState(event.getPos()));if(context.isEmpty()||!context.equals("DESK")&&!ServiceGates.enabled(event.getLevel(),ServiceKind.valueOf(context),event.getPos()))return;
   event.setCanceled(true);event.setCancellationResult(net.minecraft.world.InteractionResult.SUCCESS);
   try{open(p,event.getPos());}catch(RuntimeException|LinkageError fail){p.displayClientMessage(Component.translatable(message(fail)),false);}
  }
  public static void open(ServerPlayer p,BlockPos pos){
-  String c=context(p.level().getBlockState(pos));if(c.isEmpty()||p.isSpectator()||!p.isAlive()||p.distanceToSqr(pos.getCenter())>64||!c.equals("DESK")&&!ServiceGates.enabled(p.level(),ServiceKind.valueOf(c)))throw error("distance");
+  String c=context(p.level().getBlockState(pos));if(c.isEmpty()||p.isSpectator()||!p.isAlive()||p.distanceToSqr(pos.getCenter())>64||!c.equals("DESK")&&!ServiceGates.enabled(p.level(),ServiceKind.valueOf(c),pos))throw error("distance");
   TradeJournal.recover(p);EconomyData.get(p.getServer()).requireAvailable();p.closeContainer();SESSIONS.put(p.getUUID(),new Session(p,pos,c));p.openMenu(new SimpleMenuProvider((id,inventory,player)->new ServicesMenu(id,inventory),Component.translatable("service.realmeconomy."+(c.equals("ANVIL_REPAIR")?"anvil":c.toLowerCase(java.util.Locale.ROOT)))));send(p,"");
  }
- public static boolean valid(ServerPlayer p){var s=SESSIONS.get(p.getUUID());return s!=null&&p.isAlive()&&!p.isSpectator()&&p.level().dimension().location().toString().equals(s.dimension)&&p.distanceToSqr(s.pos.getCenter())<=64&&context(p.level().getBlockState(s.pos)).equals(s.context)&&(s.context.equals("DESK")||ServiceGates.enabled(p.level(),ServiceKind.valueOf(s.context)));}
+ public static boolean valid(ServerPlayer p){var s=SESSIONS.get(p.getUUID());return s!=null&&p.isAlive()&&!p.isSpectator()&&p.level().dimension().location().toString().equals(s.dimension)&&p.distanceToSqr(s.pos.getCenter())<=64&&context(p.level().getBlockState(s.pos)).equals(s.context)&&(s.context.equals("DESK")||ServiceGates.enabled(p.level(),ServiceKind.valueOf(s.context),s.pos));}
  public static void close(ServerPlayer p){SESSIONS.remove(p.getUUID());}
  public static void stop(MinecraftServer server){SESSIONS.clear();}
  private static Session session(ServerPlayer p){if(!valid(p)||!(p.containerMenu instanceof ServicesMenu))throw error("distance");return SESSIONS.get(p.getUUID());}

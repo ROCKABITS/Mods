@@ -9,6 +9,6 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(BrewingStandBlockEntity.class) public abstract class BrewingGate {
  @Inject(method="serverTick",at=@At("HEAD"),cancellable=true) private static void economy$guard(Level level,BlockPos pos,BlockState state,BrewingStandBlockEntity stand,CallbackInfo callback){
-  if(pt.realmeconomy.service.ServiceGates.enabled(level,pt.realmeconomy.domain.ServiceKind.BREWING))callback.cancel();
+  if(pt.realmeconomy.service.ServiceGates.enabled(level,pt.realmeconomy.domain.ServiceKind.BREWING,pos))callback.cancel();
  }
 }

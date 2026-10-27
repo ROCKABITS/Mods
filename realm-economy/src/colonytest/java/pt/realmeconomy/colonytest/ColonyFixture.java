@@ -38,7 +38,15 @@ final class ColonyFixture implements AutoCloseable {
   for(String name:List.of("customName","customParentName","parentTranslationKey")){var f=cls.getDeclaredField(name);f.setAccessible(true);f.set(o,"");}
   o.setID(sequence*100+colony.getWorkManager().getWorkOrders().size()+1);o.setColony(colony);colony.getWorkManager().getWorkOrders().put(o.getID(),o);o.onAdded(colony,false);return o;
  }
+ com.minecolonies.core.colony.buildings.workerbuildings.BuildingAlchemist alchemist(boolean built,boolean staffed)throws Exception{
+  BlockPos hut=pos.offset(5,0,0);h.getLevel().setBlock(hut,com.minecolonies.api.colony.buildings.ModBuildings.alchemist.get().getBuildingBlock().defaultBlockState(),3);
+  var b=(com.minecolonies.core.colony.buildings.workerbuildings.BuildingAlchemist)com.minecolonies.api.colony.buildings.ModBuildings.alchemist.get().produceBuilding(hut,colony);
+  var tile=(com.minecolonies.api.tileentities.AbstractTileEntityColonyBuilding)h.getLevel().getBlockEntity(hut);tile.setColony(colony);tile.setBuilding(b);b.setBuildingLevel(built?1:0);
+  var manager=colony.getServerBuildingManager();var f=manager.getClass().getDeclaredField("buildings");f.setAccessible(true);var buildings=new HashMap<net.minecraft.core.BlockPos,com.minecolonies.api.colony.buildings.IBuilding>(manager.getBuildings());buildings.put(hut,b);f.set(manager,com.google.common.collect.ImmutableMap.copyOf(buildings));
+  if(staffed){var citizen=(com.minecolonies.api.colony.ICitizenData)colony.getCitizenManager().createAndRegisterCivilianData();if(!b.getFirstModuleOccurance(com.minecolonies.core.colony.buildings.modules.WorkerBuildingModule.class).assignCitizen(citizen))throw new IllegalStateException("Native alchemist assignment failed");}
+  ColonyBrewing.clear();return b;
+ }
  BuildingBuilder builder(){return new BuildingBuilder(colony,pos.offset(3,0,3));}
  void reload()throws Exception{var ctor=EconomyData.class.getDeclaredConstructor(Path.class,CompoundTag.class);ctor.setAccessible(true);data=ctor.newInstance(data.path(),net.minecraft.nbt.NbtIo.readCompressed(data.path(),net.minecraft.nbt.NbtAccounter.unlimitedHeap()));loaded.put(h.getLevel().getServer(),data);}
- public void close(){try{owner.savedHook=null;owner.closeContainer();friend.closeContainer();outsider.closeContainer();loaded.put(h.getLevel().getServer(),previous);IColonyManager.getInstance().deleteColonyByWorld(colony.getID(),false,h.getLevel());}finally{loaded.put(h.getLevel().getServer(),previous);actors.close();}}
+ public void close(){try{owner.savedHook=null;ColonyBrewing.clear();owner.closeContainer();friend.closeContainer();outsider.closeContainer();loaded.put(h.getLevel().getServer(),previous);IColonyManager.getInstance().deleteColonyByWorld(colony.getID(),false,h.getLevel());}finally{loaded.put(h.getLevel().getServer(),previous);actors.close();}}
 }

@@ -2,17 +2,17 @@
 
 Plataforma base: Minecraft 1.21.1, NeoForge 21.1.256 e Java 21. O cenário com os seis addons indicados pelo utilizador usa **NeoForge 21.1.262**, exigido pelo MapColonies 1.0.0.
 
-Estado: **217 execuções de lógica/servidor aprovadas localmente**, mais os dois cenários de cliente aprovados: 31 capturas da regressão económica e 17 da integração colonial. O empacotamento e a publicação exigem os mesmos resultados no workflow do commit de origem.
+Estado: **27 testes nativos MineColonies aprovados após acrescentar a compatibilidade do alquimista**. As suites de regressão e os clientes estão a ser repetidos para o commit final; a publicação exige os mesmos resultados no workflow.
 
 | Suite | Execuções | Evidência |
 | --- | ---: | --- |
 | JUnit: preços, serviços e domínio financeiro colonial | 45 | `build.log`, `build/test-results/test/TEST-*.xml` |
 | Regressão nativa sem os mods opcionais | 62 | `gametests.log` |
 | Regressão nativa com Realm Origins, Realm Treasury e os outros companheiros | 62 | `integration.log` |
-| MineColonies: contas, carteira, permissões, exportações, autorizações e recuperação | 24 | `colony-native.log` |
-| Mesma suite com os seis addons e dependências reais | 24 | `colony-addons.log` |
+| MineColonies: contas, carteira, permissões, exportações, autorizações e recuperação | 27 | `colony-native.log` |
+| Mesma suite com os seis addons e dependências reais | 27 | `colony-addons.log` |
 
-Total das suites de lógica/servidor: **217 execuções**, sem contar os cenários dos clientes.
+Total das suites de lógica/servidor: **223 execuções**, sem contar os cenários dos clientes.
 
 ## O que a integração nativa verifica
 
@@ -24,6 +24,7 @@ Total das suites de lógica/servidor: **217 execuções**, sem contar os cenári
 - Um `WorkOrderBuilding` real, transformado pelo mixin de produção, aguarda a autorização paga. O orçamento é debitado uma vez; o identificador e a aprovação mantêm-se na serialização nativa da ordem.
 - Cancelar uma ordem por pagar impede a cobrança; repetir uma obra com autorização já paga reutiliza a aprovação. Preço zero deixa os construtores trabalhar normalmente.
 - O diálogo nativo `RecruitmentInteraction` não recruta sem autorização; depois do pagamento cria o colono e consome os materiais de recrutamento nativos.
+- Um alquimista nativo construído e com trabalhador prepara efetivamente uma poção de água em poção estranha através de 405 chamadas do tick nativo do suporte, consumindo verruga e combustível sem cobrar a carteira. Suportes não registados na mesma colónia permanecem bloqueados pelo serviço pago; oficinas vazias ou por construir não concedem exceção.
 - Apagar uma colónia financiada é recusado; a migração preserva os serviços do formato 2.
 - Falha na gravação do jogador depois da intenção: recarrega o ficheiro anterior real e recupera o levantamento uma vez.
 - Falha na substituição final do ficheiro económico depois de guardar carteira/recibo: restaura a intenção, recarrega e confirma o crédito sem o repetir.

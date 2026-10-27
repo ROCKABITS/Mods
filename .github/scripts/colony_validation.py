@@ -47,6 +47,7 @@ def check_native(logfile):
  expected=sum(len(re.findall(r'@GameTest\s*\(',p.read_text())) for p in (BASE/'src/colonytest/java').rglob('*.java'))
  text=(BASE/logfile).read_text(errors='replace');counts=re.findall(r'All (\d+) required tests passed',text)
  assert counts and int(counts[-1])==expected and 'BUILD SUCCESSFUL' in text and '/FATAL]' not in text,logfile+': incomplete native suite'
+ assert 'COLONY_ALCHEMIST_PASSED' in text,logfile+': native alchemist compatibility not exercised'
  if logfile=='colony-addons.log':assert 'COLONY_ADDONS_VERIFIED' in text
  return expected
 def runtime():

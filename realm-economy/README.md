@@ -82,7 +82,9 @@ O modo pago trabalha por lotes pessoais. Escolhe até três frascos e um ingredi
 
 Ao confirmar, paga-se uma vez e os materiais ficam reservados. O lote demora **20 segundos reais**, incluindo tempo em que o mundo está encerrado. As poções ficam guardadas até serem recolhidas pelo dono, através de qualquer suporte pago ou Mesa da Economia. Partir o suporte não destrói o lote. Se o inventário estiver cheio, a recolha é recusada e as poções permanecem guardadas. Cada jogador pode ter até 64 lotes pendentes.
 
-Enquanto este sistema está ativo, a mistura automática Vanilla por suportes e funis fica suspensa: não identifica um jogador responsável pelo pagamento. O botão **Armazenamento do suporte** permite recuperar ou guardar os conteúdos físicos anteriores. Desativar o sistema pago repõe a preparação Vanilla. Os lotes já pagos continuam disponíveis na mesa. Não existe uma segunda cobrança ao recolher.
+Os suportes registados num alquimista MineColonies construído e com trabalhador atribuído mantêm o inventário e a produção nativos, incluindo o consumo de ingredientes e combustível. Os outros suportes seguem o serviço pessoal pago.
+
+Enquanto este sistema está ativo, a mistura automática Vanilla por suportes pessoais e funis fica suspensa: não identifica um jogador responsável pelo pagamento. O botão **Armazenamento do suporte** permite recuperar ou guardar os conteúdos físicos anteriores. Desativar o sistema pago repõe a preparação Vanilla. Os lotes já pagos continuam disponíveis na mesa. Não existe uma segunda cobrança ao recolher.
 
 ## Beacons
 
