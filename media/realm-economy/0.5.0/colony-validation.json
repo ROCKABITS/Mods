@@ -1,0 +1,143 @@
+{
+  "mods": {
+    "minecraft": "1.21.1",
+    "realmcasino": "0.3.0",
+    "additionalentityattributes": "2.0.2+1.21.1",
+    "jupiter": "2.3.7",
+    "realmmarriage": "0.1.0",
+    "contracts": "0.4.0",
+    "multipiston": "1.2.58-1.21.1",
+    "domum_ornamentum": "1.0.231",
+    "smallcoloniesme": "1.9",
+    "mapcolonies": "1.0.0",
+    "realmidentity": "0.1.2",
+    "caelus": "7.0.1+1.21.1",
+    "kotlinforforge": "5.12.0",
+    "origins": "0.3.2",
+    "blockui": "1.0.209-1.21.1",
+    "bitsandbobs": "0.1.1",
+    "smallcolonies": "1.8",
+    "origins_classes": "0.3",
+    "neoforge": "21.1.262",
+    "colonyrank": "2.0.1",
+    "realmtitles": "0.1.0",
+    "lawsjustice": "0.4.0",
+    "structurize": "1.0.832-1.21.1",
+    "cronicasrp": "0.5.7",
+    "realmmarkets": "0.2.1",
+    "minecolonies": "1.1.1403-1.21.1",
+    "realmnotifications": "0.1.1",
+    "realmcouncil": "0.2.2",
+    "realmeconomy": "0.5.0",
+    "realmrewards": "0.1.2",
+    "kingdomtreasury": "0.4.0",
+    "fzzy_config": "0.7.7+fix1+1.21+neoforge",
+    "integration": "0.2",
+    "byzantine": "51.1"
+  },
+  "success": true,
+  "actualChroniclesWallet": true,
+  "screenshots": [
+    "colony-coffers.png",
+    "colony-coffer-closeup.png",
+    "colony-account.png",
+    "colony-deposit-confirmation.png",
+    "colony-exports.png",
+    "colony-export-confirmation.png",
+    "colony-expenses.png",
+    "colony-expense-confirmation.png",
+    "colony-records.png",
+    "colony-compact-account.png",
+    "colony-after-world-reopen.png",
+    "colony-reopened-records.png",
+    "colony-admin-settings.png",
+    "colony-policy-confirmation.png",
+    "colony-admin-saved.png",
+    "colony-member-confirmation.png",
+    "colony-member-account.png"
+  ],
+  "actualMinecraftClients": 2,
+  "syntheticFinancialSnapshots": false,
+  "actualTcpLan": true,
+  "requests": [
+    {
+      "amount": 20000,
+      "nonce": "303a93d2-66b7-4ff6-852a-ba84597c00c9",
+      "operation": "clnDeposit"
+    },
+    {
+      "operation": "clnRefresh"
+    },
+    {
+      "operation": "clnRefresh"
+    },
+    {
+      "operation": "clnRefresh"
+    },
+    {
+      "operation": "clnRefresh"
+    },
+    {
+      "operation": "clnRefresh"
+    },
+    {
+      "operation": "clnRefresh"
+    },
+    {
+      "operation": "clnRefresh"
+    },
+    {
+      "operation": "clnRefresh"
+    },
+    {
+      "operation": "clnRefresh"
+    },
+    {
+      "operation": "clnRefresh"
+    },
+    {
+      "operation": "clnRefresh"
+    },
+    {
+      "operation": "clnRefresh"
+    },
+    {
+      "order": "7d92b697-1047-3ba0-99d4-c044dafa4528",
+      "nonce": "cb42f8e4-7ea4-4c57-958e-71fcdbab0b2e",
+      "operation": "clnExport"
+    },
+    {
+      "operation": "clnRefresh"
+    },
+    {
+      "invoice": "1a42bbe3-8c39-3882-8684-e4597d4695d2",
+      "nonce": "b965ad38-bf77-4a2f-adc6-7d86956b0365",
+      "operation": "clnPay"
+    },
+    {
+      "invoice": "ded174e8-a012-4e45-9351-921e229d15a5",
+      "nonce": "057a60bc-e57e-428c-a42a-4c26baf0b3d4",
+      "operation": "clnPay"
+    },
+    {
+      "amount": 5000,
+      "nonce": "8a2682d1-6b24-4b77-a87f-02b0362e5452",
+      "operation": "clnWithdraw"
+    },
+    {
+      "dailyCap": 20000,
+      "playerCap": 25000,
+      "buildCents": 3000,
+      "recruitCents": 2500,
+      "orders": 5,
+      "enabled": true,
+      "nonce": "45780a2a-e392-48f2-bf7d-734e7076b934",
+      "operation": "clnPolicy"
+    },
+    {
+      "operation": "clnRefresh"
+    }
+  ],
+  "stage": 33,
+  "message": "Two actual LAN clients, native MineColonies accounts/rights, RP wallets, export delivery, permits, policy controls/audit, host dual saves and actual world reopening passed."
+}
