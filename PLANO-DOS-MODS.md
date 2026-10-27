@@ -4,9 +4,9 @@ Referências: guião enviado pelo utilizador em `Pasted text.txt` e decisões po
 
 Plataforma: **Minecraft 1.21.1, NeoForge e Java 21**. Os mods mantêm responsabilidades próprias e integram-se quando instalados em conjunto. A identidade e a economia do Crónicas RP devem ser reutilizadas, evitando contas ou personagens concorrentes.
 
-## Decisão guardada para desenvolvimento posterior — desbloqueio configurável de mods
+## Realm Progression — desbloqueio configurável de crafts
 
-**Estado: planeado; não implementar nesta etapa.** O utilizador escolheu uma meta de **8 000 €** para um servidor de cerca de cinco jogadores, substituindo os exemplos anteriores de 12 000 € e 20 000 €.
+**Estado: implementação autorizada e em validação em `realm-progression/`.** O utilizador escolheu uma meta inicial de **8 000 €** para o Create num servidor de cerca de cinco jogadores. O [guia](realm-progression/README.md) descreve o menu, o âmbito do bloqueio e a persistência.
 
 - Implementar o bloqueio num **addon opcional separado**, integrado com **Realm Treasury** e configurável para vários mods. Create é o primeiro alvo previsto, não uma dependência obrigatória do addon genérico. Esta decisão substitui a proposta anterior de incluir o sistema no próprio Realm Treasury.
 - O addon consulta o tesouro existente, sem criar outra carteira. O modpack pode utilizar os seus mods normalmente sem instalar este addon.
@@ -21,7 +21,7 @@ Plataforma: **Minecraft 1.21.1, NeoForge e Java 21**. Os mods mantêm responsabi
 - Proteger Minecraft, NeoForge, o próprio addon, os componentes necessários à economia/administração e as bibliotecas essenciais contra seleção como alvo. Validar permissões no servidor e registar alterações administrativas.
 - A proposta inclui progresso visível através da integração com o tesouro, anúncio coletivo e meta configurada pela administração. Antes da implementação, verificar a versão concreta do Create, as APIs e os addons instalados para definir e testar a cobertura do bloqueio.
 
-A integração económica com **MineColonies** está publicada no **Realm Economy 0.5.0**, com validação local e no GitHub aprovada: contas por colónia, cofre físico, depósitos/levantamentos, exportações diárias e autorizações de construção/recrutamento. O âmbito e as regras estão no [guia da integração](realm-economy/MINECOLONIES.md); os [resultados da validação](realm-economy/VALIDACAO-0.5.0.md) incluem os seis addons escolhidos e dois clientes TCP LAN. O desbloqueio do Create continua reservado para uma atualização posterior.
+A integração económica com **MineColonies** está publicada no **Realm Economy 0.5.0**, com validação local e no GitHub aprovada: contas por colónia, cofre físico, depósitos/levantamentos, exportações diárias e autorizações de construção/recrutamento. O âmbito e as regras estão no [guia da integração](realm-economy/MINECOLONIES.md); os [resultados da validação](realm-economy/VALIDACAO-0.5.0.md) incluem os seis addons escolhidos e dois clientes TCP LAN. A progressão de crafts é desenvolvida separadamente no Realm Progression.
 
 ## Base existente
 

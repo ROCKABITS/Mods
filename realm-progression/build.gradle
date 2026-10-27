@@ -1,0 +1,64 @@
+plugins {
+    id 'java-library'
+    id 'net.neoforged.moddev' version '2.0.148'
+}
+version = mod_version
+group = mod_group_id
+base { archivesName = 'realm-progression' }
+java.toolchain.languageVersion = JavaLanguageVersion.of(21)
+repositories {
+    mavenCentral()
+    maven { url = 'https://cursemaven.com'; content { includeGroup 'curse.maven' } }
+}
+neoForge {
+    version = project.neo_version
+    runs {
+        client { client() }
+        server { server(); programArgument '--nogui' }
+        gameTestServer {
+            type = 'gameTestServer'
+            systemProperty 'neoforge.enabledGameTestNamespaces', 'realmprogression'
+        }
+    }
+    mods { realmprogression { sourceSet(sourceSets.main) } }
+}
+configurations { runtimeClasspath.extendsFrom localRuntime }
+dependencies {
+    compileOnly files('../mod-pronto/realm-treasury-0.4.0.jar')
+    localRuntime files('../mod-pronto/realm-treasury-0.4.0.jar')
+    if (providers.gradleProperty('createTests').isPresent()) { localRuntime fileTree(dir:'create-libs',include:['*.jar']) }
+    if (providers.gradleProperty('integrationTests').isPresent()) {
+        localRuntime fileTree(dir:'compat-libs',include:['*.jar'])
+        localRuntime 'curse.maven:origins-neoforge-1375372:8758523'
+        localRuntime 'curse.maven:jupiter-1072905:7738312'
+        localRuntime 'curse.maven:origins-classes-neoforge-1536425:8758587'
+    }
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.11.4'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
+sourceSets.test.compileClasspath += sourceSets.main.compileClasspath
+sourceSets.test.runtimeClasspath += sourceSets.main.runtimeClasspath
+tasks.named('test',Test) { useJUnitPlatform() }
+tasks.named('processResources') { inputs.property('progressionFixture',providers.gradleProperty('progressionGameTests').isPresent()) }
+if (providers.gradleProperty('progressionGameTests').isPresent()) {
+    sourceSets.main.java.srcDir('src/gametest/java')
+    sourceSets.main.resources.srcDir('src/gametest/resources')
+    def fixtureMetadata = file('build/resources/main/META-INF/neoforge.mods.toml')
+    tasks.named('processResources') {
+        doLast {
+            fixtureMetadata << '\n[[mods]]\nmodId="progressionfixture"\nversion="1.0.0"\ndisplayName="Progression test fixtures"\n'
+        }
+    }
+}
+if (providers.gradleProperty('progressionVisualTests').isPresent()) {
+    sourceSets.main.java.srcDir('src/visualtest/java')
+    neoForge.runs.client {
+        jvmArgument '-Xmx2G'
+        systemProperty 'progression.qaOutput',file('qa-results/progression-client').absolutePath
+        programArguments.addAll '--width','1600','--height','900'
+    }
+}
+tasks.named('jar',Jar) {
+    exclude('pt/realmprogression/test/**','pt/realmprogression/visualtest/**','data/progression_fixture/**','data/realmprogression/structure/**','data/minecraft/recipe/research_alternative.json')
+}
+tasks.withType(JavaCompile).configureEach { options.encoding='UTF-8';options.release=21 }

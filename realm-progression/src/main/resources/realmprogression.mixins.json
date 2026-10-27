@@ -1,0 +1,1 @@
+{"required":true,"minVersion":"0.8","package":"pt.realmprogression.mixin","compatibilityLevel":"JAVA_21","mixins":["CraftingResultGate","QuickCraftGate","SlotPickupGate","ResultRemoveGate","CrafterGate","CrafterMenuAccess","TreasuryCommitObserver","TreasuryIncomeObserver","TreasuryDurableObserver"],"injectors":{"defaultRequire":1}}

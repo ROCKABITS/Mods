@@ -4,6 +4,7 @@ Projetos de ROCKABITS para **Minecraft 1.21.1**, **NeoForge 21.1.256+** e **Java
 
 | Mod | Download | Funcionalidades |
 | --- | --- | --- |
+| **Realm Progression 0.1.0 Beta** | [JAR](https://github.com/ROCKABITS/Mods/raw/refs/heads/main/mod-pronto/realm-progression-0.1.0.jar) · [ZIP](https://github.com/ROCKABITS/Mods/raw/refs/heads/main/mod-pronto/realm-progression-0.1.0.zip) | Mesa de Investigação, metas administrativas por mod e desbloqueios permanentes de crafts pelo saldo público. Create: 8.000 € por defeito, preservados no tesouro. Requer Realm Treasury 0.4.0. |
 | **Season 8 0.1.0** | [JAR](https://github.com/ROCKABITS/Mods/raw/refs/heads/main/mod-pronto/season-eight-0.1.0.jar) · [ZIP](https://github.com/ROCKABITS/Mods/raw/refs/heads/main/mod-pronto/season-eight-0.1.0.zip) | Menu principal, carregamento de recursos, brasão, título e ícone da janela. Apenas nos clientes, sem dependências adicionais. |
 | **Realm Marriage 0.1.0 Beta** | [JAR](https://github.com/ROCKABITS/Mods/raw/refs/heads/main/mod-pronto/realm-marriage-0.1.0.jar) · [ZIP](https://github.com/ROCKABITS/Mods/raw/refs/heads/main/mod-pronto/realm-marriage-0.1.0.zip) | Altar medieval, celebrante escolhido pelo casal, objeções com G, votos, testemunhas, três regimes financeiros e divórcio. |
 | **Laws & Justice 0.4.0 Beta** | [JAR](https://github.com/ROCKABITS/Mods/raw/refs/heads/main/mod-pronto/laws-justice-0.4.0.jar) · [ZIP](https://github.com/ROCKABITS/Mods/raw/refs/heads/main/mod-pronto/laws-justice-0.4.0.zip) | Prisões, tribunal do Presidente, mandados, algemas, seis trabalhos, multas, fianças, Livro de Registos e pagamentos com recibos persistentes. |
@@ -25,6 +26,7 @@ O ZIP é uma alternativa ao download direto do JAR. Extrai-o antes de instalar. 
 
 **Realm Economy 0.5.0 substitui Realm Villager Economy 0.1.0. Retira o JAR antigo.** Usa Realm Origins 0.5.7 e Realm Treasury 0.4.0 para carteira e impostos nos clientes e servidor. Realm Council identifica o Presidente; Realm Admin terá integração por fornecedor quando estiver disponível. O Realm Treasury migra para formato 9: conserva uma cópia conjunta do mundo e perfis antes de atualizar.
 
+- [Guia do Realm Progression](realm-progression/README.md): seleção de mods, metas, permissões, crafts suportados e limites de cobertura. [Galeria](media/realm-progression/README.md).
 - [Guia do Realm Marriage](realm-marriage/README.md): casamentos, objeções, contas, certidões e divórcio; [API explícita de pagamentos](realm-marriage/API.md).
 - [Guia do Laws & Justice](laws-justice/README.md): prisões, tribunal, trabalhos, multas, fianças, registos e integrações; [plano completo por versões](laws-justice/PLANO-COMPLETO.md).
 - [Guia do Realm Economy](realm-economy/README.md) · [Economia das colónias](realm-economy/MINECOLONIES.md): Mesa da Economia, impostos e serviços pagos. [Versão anterior](realm-villager-economy/README.md).

@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "AGA",
+    "PBP",
+    "P P"
+  ],
+  "key": {
+    "A": {
+      "item": "minecraft:amethyst_shard"
+    },
+    "G": {
+      "item": "minecraft:gold_ingot"
+    },
+    "P": {
+      "item": "minecraft:dark_oak_planks"
+    },
+    "B": {
+      "item": "minecraft:writable_book"
+    }
+  },
+  "result": {
+    "id": "realmprogression:research_table",
+    "count": 1
+  }
+}
