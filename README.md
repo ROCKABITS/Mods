@@ -10,8 +10,8 @@ The repository contains standalone mods that can also integrate with one another
 
 - [Installation and update guide](INSTALLATION.md) — choosing mods, dependencies, server/client setup and safe updates.
 - [Architecture and integrations](ARCHITECTURE.md) — how the Realm systems are organised and work together.
-- [All mods and downloads](#mods-de-minecraft) — current versions, JAR/ZIP downloads and feature summaries.
-- [Individual guides and validation](#documentação-e-validação) — usage instructions, changelogs, galleries and test evidence.
+- [Todos os mods e downloads](#mods-e-downloads) — current versions, JAR/ZIP downloads and feature summaries.
+- [Guias individuais e validação](#documentação-e-validação) — usage instructions, changelogs, galleries and test evidence.
 - [Website](https://realmstudios.pt) · [GitHub profile](https://github.com/ROCKABITS)
 
 ## Project principles
