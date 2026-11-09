@@ -1,6 +1,25 @@
-# Mods de Minecraft
+# Realm Studios — Minecraft Modding Ecosystem
 
-Projetos de ROCKABITS para **Minecraft 1.21.1**, **NeoForge 21.1.256+** e **Java 21**. Nos mods de jogo, instala a mesma versão no servidor e nos clientes; substitui os JARs antigos. O **Season 8** é exclusivamente de cliente.
+**Realm Studios** is an independent collection of interconnected mods and custom gameplay systems for **Minecraft Java 1.21.1**, **NeoForge 21.1** and **Java 21**. The projects focus on roleplay, character identity, kingdom governance, economy, progression and multiplayer experiences.
+
+The repository contains standalone mods that can also integrate with one another when the relevant companion mods are installed. Each mod keeps its own responsibilities, documentation, release notes and validation records.
+
+> **Multiplayer rule:** unless a mod's guide says otherwise, install the same mod version on the server and every client. **Season 8 is client-side only.** Always check each mod's guide for its required dependencies and compatibility notes.
+
+## Start here
+
+- [Installation and update guide](INSTALLATION.md) — choosing mods, dependencies, server/client setup and safe updates.
+- [Architecture and integrations](ARCHITECTURE.md) — how the Realm systems are organised and work together.
+- [All mods and downloads](#mods-de-minecraft) — current versions, JAR/ZIP downloads and feature summaries.
+- [Individual guides and validation](#documentação-e-validação) — usage instructions, changelogs, galleries and test evidence.
+- [Website](https://realmstudios.pt) · [GitHub profile](https://github.com/ROCKABITS)
+
+## Project principles
+
+- **Modular:** each mod has a clear purpose and can operate independently where its guide says it can.
+- **Integrated:** shared features such as wallets, treasury, governance and notifications are reused instead of creating competing systems.
+- **Server-authoritative:** important multiplayer actions, permissions and financial operations are checked by the server.
+- **Documented:** guides describe installation and use; validation files record what was actually tested and any known limits.
 
 | Mod | Download | Funcionalidades |
 | --- | --- | --- |
