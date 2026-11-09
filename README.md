@@ -21,6 +21,8 @@ The repository contains standalone mods that can also integrate with one another
 - **Server-authoritative:** important multiplayer actions, permissions and financial operations are checked by the server.
 - **Documented:** guides describe installation and use; validation files record what was actually tested and any known limits.
 
+## Mods e downloads
+
 | Mod | Download | Funcionalidades |
 | --- | --- | --- |
 | **Realm Progression 0.1.0 Beta** | [JAR](https://github.com/ROCKABITS/Mods/raw/refs/heads/main/mod-pronto/realm-progression-0.1.0.jar) · [ZIP](https://github.com/ROCKABITS/Mods/raw/refs/heads/main/mod-pronto/realm-progression-0.1.0.zip) | Mesa de Investigação, metas administrativas por mod e desbloqueios permanentes de crafts pelo saldo público. Create: 8.000 € por defeito, preservados no tesouro. Requer Realm Treasury 0.4.0. |
@@ -44,6 +46,8 @@ O [Realm Treasury 0.4.0](crown-ledger/README.md) substitui o Crown Ledger e pres
 O ZIP é uma alternativa ao download direto do JAR. Extrai-o antes de instalar. Substitui os JARs antigos pelas versões indicadas na tabela, mantendo apenas uma versão de cada mod.
 
 **Realm Economy 0.5.0 substitui Realm Villager Economy 0.1.0. Retira o JAR antigo.** Usa Realm Origins 0.5.7 e Realm Treasury 0.4.0 para carteira e impostos nos clientes e servidor. Realm Council identifica o Presidente; Realm Admin terá integração por fornecedor quando estiver disponível. O Realm Treasury migra para formato 9: conserva uma cópia conjunta do mundo e perfis antes de atualizar.
+
+## Documentação e validação
 
 - [Guia do Realm Progression](realm-progression/README.md): seleção de mods, metas, permissões, crafts suportados e limites de cobertura. [Galeria](media/realm-progression/README.md).
 - [Guia do Realm Marriage](realm-marriage/README.md): casamentos, objeções, contas, certidões e divórcio; [API explícita de pagamentos](realm-marriage/API.md).
