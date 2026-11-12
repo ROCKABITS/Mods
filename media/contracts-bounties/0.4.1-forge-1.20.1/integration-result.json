@@ -1,0 +1,17 @@
+{
+  "checks": [
+    "Forge server-to-client board snapshot opens the production screen",
+    "Real C2S publish, cancel and claim conserve 64 inventory emeralds",
+    "Five real deliveries, six durable rewards, exact inventory debit and replay rejection",
+    "Receipt persisted in both playerdata and integrated host level.dat",
+    "Real Forge S2C completion cinematic rendered on the HUD",
+    "Actual world close/reopen preserves all six paid receipts and 70 emeralds"
+  ],
+  "actualMinecraftClient": true,
+  "actualForgeChannels": true,
+  "message": "Forge channels, standalone daily payments, dual host save and world reopen passed",
+  "controlledQuestTemplates": true,
+  "actualIntegratedServer": true,
+  "success": true,
+  "stage": 19
+}

@@ -1,0 +1,39 @@
+{
+  "version": "0.4.1-forge-1.20.1",
+  "minecraft": "1.20.1",
+  "loader": "Forge",
+  "forge": "47.4.0",
+  "java": 17,
+  "source_commit": "10f214341352a63a96cb9c3ad0ea4c67b2e244c4",
+  "tested_run": "https://github.com/ROCKABITS/Mods/actions/runs/43268814554",
+  "jar_sha256": "f3f3f6dc7ac1673ca4526362ed3c2aa53ecdd7f7ed29508c48abc1734a8d6b9a",
+  "zip_sha256": "bf3367f2173bbfd62bb88b5b73ae759be3682cf3d2fe73a3bf8a117d203bd427",
+  "unit_tests": 91,
+  "native_tests": 38,
+  "visual_captures": 11,
+  "actual_integrated_client": true,
+  "integrated_checks": [
+    "Forge server-to-client board snapshot opens the production screen",
+    "Real C2S publish, cancel and claim conserve 64 inventory emeralds",
+    "Five real deliveries, six durable rewards, exact inventory debit and replay rejection",
+    "Receipt persisted in both playerdata and integrated host level.dat",
+    "Real Forge S2C completion cinematic rendered on the HUD",
+    "Actual world close/reopen preserves all six paid receipts and 70 emeralds"
+  ],
+  "scope": "Standalone emerald contracts and quests. Realm companion integrations, authenticated remote multiplayer and world downgrades are not validated or supplied by this port.",
+  "screenshots": {
+    "contracts-board-small.png": "5305f55bc1d1306e7214940fb7085f198284493062f61d65ae3bbead0580c1bc",
+    "contracts-board-tall.png": "7a6777421ac81023772dcaa98b564dbdf19e4bf72c61622348b7ea29aeca6bcc",
+    "contracts-board-wide.png": "af5d68ff83ab93c3c46f0e639f8070b7b446bb25fd50e23da3d99d21fb1003f7",
+    "contracts-boards-minecraft.png": "938c6f78d8bc8e4472b582b23f779107f6fcddb3be8ad5cb09fc1b6683102e15",
+    "contracts-item-catalogue.png": "a3d914bc3bcce5934fdca5de6c26995067313928bda4e2ab79c533a2315aae16",
+    "contracts-item-search.png": "c5f0bbc97c66cc85931d5c01ccd573603292a1b80e30fbe81b17fa20a5f68396",
+    "contracts-item-selected.png": "54663392132264e9e7466b4d306e013ce6283c47db8d617359bc78dc7c7e01d2",
+    "contracts-menu-browse.png": "8e6ac56917f412990edd17f5c373c8a75c23e2ff46fda89ee13dcdcd4595a50c",
+    "contracts-menu-compact.png": "7181830ff862d634c4c4dc8b02e6d414b67e73b55b678a1bc2369c85992fe1a1",
+    "contracts-menu-create.png": "b05a70ad6604d22079b8b82ba22d90b7c8fded9e1a821cfc6bb4469003c7abfc",
+    "contracts-menu-portuguese.png": "390402ffd8170411dc9669281213141c4d04b95614bdd82927debf3b502184aa",
+    "forge-daily-quests.png": "9b64ce7f4ab39d80689b99fdb89474e5f3ce4de0b3681709f0b1c7803ea84500",
+    "forge-daily-celebration.png": "36a46fa8118af7b4b0531db156b59daecf765db25dc0b4f3b32364fd818772d4"
+  }
+}
