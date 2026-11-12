@@ -1,0 +1,28 @@
+{
+  "checks": [
+    "Legacy 176x166 bounds reproduce real JEI ingredients over the painted colony panel.",
+    "ColonyScreen: correct JEI rectangle and no overlay on the panel.",
+    "TradingScreen: correct JEI rectangle and no overlay on the panel.",
+    "ServicesScreen: correct JEI rectangle and no overlay on the panel.",
+    "Wide viewport: JEI remains visible beside the panel and no ingredients hit the painted panel.",
+    "ColonyScreen: correct JEI rectangle and no overlay on the panel.",
+    "Vanilla inventory still displays JEI after closing the Realm screens."
+  ],
+  "stage": 10,
+  "actualMinecraftClient": true,
+  "message": "Actual JEI overlap reproduced and corrected; all three Realm screens and resize controls passed.",
+  "jeiVersion": "19.70.0.469",
+  "syntheticFinancialSnapshots": true,
+  "screenshots": [
+    "jei-vanilla-before.png",
+    "colony-jei-legacy-reproduction.png",
+    "colony-jei-fixed.png",
+    "trading-jei-fixed.png",
+    "services-jei-fixed.png",
+    "colony-jei-wide.png",
+    "colony-jei-resized.png",
+    "jei-vanilla-after.png"
+  ],
+  "actualJei": true,
+  "success": true
+}

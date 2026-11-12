@@ -1,0 +1,23 @@
+{
+  "version": "0.5.1",
+  "source_commit": "b4c0d1b294790861f8741b64e9e6b4721fd036b8",
+  "tested_run": "https://github.com/ROCKABITS/Mods/actions/runs/43261766964",
+  "jar_sha256": "43716162e02bcf7cbd9e2b12f450d7ffd979e8de792ed2410fcc1c9d8e4e12fe",
+  "zip_sha256": "d7efacc51d412ad93588ee8c14a389e2ce1f6f55541e3bcaea40fa833f8acd1d",
+  "unit_tests": 45,
+  "standalone_native_tests": 62,
+  "actual_client_validation": true,
+  "actual_jei_validation": true,
+  "jei_version": "19.70.0.469",
+  "scope": "Client GUI bounds only. Real JEI with presentation snapshots; financial integrations and MineColonies flows retain their prior 0.5.0 validation.",
+  "screenshots": {
+    "jei-vanilla-before.png": "5731e8d6cb2d12d4a4b46d39bf6d998609d6b9700a824cfe03e4723690f5ebab",
+    "colony-jei-legacy-reproduction.png": "74d45ce2e9749c9503250c8fdf30795b206a526da2ed77e91e59dc73738fa32d",
+    "colony-jei-fixed.png": "abc5ea600b764026c1f162648285637f306899309f90edbdd5fe638aa726deb0",
+    "trading-jei-fixed.png": "b4627863368d62d441cf825723f1da0142d406a1bb0b5daebbd46b8d8ec4dae7",
+    "services-jei-fixed.png": "e36125baffa130877ea8a56c7ba43bed42caf440c40b9aaa4cfe883bd036fa42",
+    "colony-jei-wide.png": "e1fb59dc6911cfef689217b8d0cfda586c840cd592b4a5500415988d3d94c80d",
+    "colony-jei-resized.png": "9246f178fed56f81d31dc8e38f7150826bf1f9eb024709c08f0cd93bb1d81ff4",
+    "jei-vanilla-after.png": "66cae8ea7ace5b87cd03abb20c411d5aa9ef24046cb77f10f3c57ba986b838fa"
+  }
+}
