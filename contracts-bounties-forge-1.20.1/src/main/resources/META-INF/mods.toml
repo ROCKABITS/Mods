@@ -1,0 +1,20 @@
+modLoader="javafml"
+loaderVersion="[47,)"
+license="All Rights Reserved"
+[[mods]]
+modId="contracts"
+version="${mod_version}"
+displayName="Contracts & Bounties"
+description='''Medieval noticeboards, escrow contracts, visual item selection and five daily survival quests. Minecraft 1.20.1 Forge port; standalone emerald economy. Realm companion integrations require separate compatible ports.'''
+[[dependencies.contracts]]
+modId="forge"
+mandatory=true
+versionRange="[47.4.0,48)"
+ordering="NONE"
+side="BOTH"
+[[dependencies.contracts]]
+modId="minecraft"
+mandatory=true
+versionRange="[1.20.1]"
+ordering="NONE"
+side="BOTH"

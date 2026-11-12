@@ -4,6 +4,8 @@
 
 The repository contains standalone mods that can also integrate with one another when the relevant companion mods are installed. Each mod keeps its own responsibilities, documentation, release notes and validation records.
 
+**Minecraft 1.20.1 / Forge / Java 17:** [Contracts & Bounties também tem um port independente](contracts-bounties-forge-1.20.1/README.md), com os três murais, seletor visual e missões diárias em esmeraldas. [Descarregar JAR](mod-pronto/contracts-bounties-0.4.1-forge-1.20.1.jar). As restantes edições listadas abaixo continuam em 1.21.1/NeoForge.
+
 > **Multiplayer rule:** unless a mod's guide says otherwise, install the same mod version on the server and every client. **Season 8 is client-side only.** Always check each mod's guide for its required dependencies and compatibility notes.
 
 ## Start here
