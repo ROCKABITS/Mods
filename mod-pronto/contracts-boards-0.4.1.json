@@ -1,0 +1,35 @@
+{
+  "success": true,
+  "message": "Three production board models and eleven actual Minecraft captures passed. The visual item catalogue, search, draft preservation, exact item selection, session handling, compact controls and Portuguese presentation passed.",
+  "screenshot": "contracts-boards-minecraft.png",
+  "screenshots": [
+    "contracts-boards-minecraft.png",
+    "contracts-board-small.png",
+    "contracts-board-tall.png",
+    "contracts-board-wide.png",
+    "contracts-menu-browse.png",
+    "contracts-menu-create.png",
+    "contracts-item-catalogue.png",
+    "contracts-item-search.png",
+    "contracts-item-selected.png",
+    "contracts-menu-compact.png",
+    "contracts-menu-portuguese.png"
+  ],
+  "visualItemPicker": true,
+  "pickerChecks": [
+    "localized name and namespace search",
+    "inventory and empty-state filters",
+    "draft preserved during selection and policy refresh",
+    "exact item ID selected without typing",
+    "320x240 non-overlapping form and catalogue",
+    "English and Portuguese"
+  ],
+  "interfaceData": "Demonstration contracts rendered by the unmodified production ContractsScreen",
+  "bakedQuadCounts": {
+    "contracts:contract_board": 100,
+    "contracts:tall_contract_board": 254,
+    "contracts:wide_contract_board": 310
+  },
+  "windowWidth": 1600,
+  "windowHeight": 900
+}
