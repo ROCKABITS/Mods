@@ -23,7 +23,7 @@ public final class RpBridge {
             if(!(Boolean)c.getMethod("created").invoke(profile))return fallback;
             return new Identity((String)c.getMethod("name").invoke(profile),(String)c.getMethod("race").invoke(profile),(Integer)c.getMethod("age").invoke(profile),true);
         }catch(ReflectiveOperationException|ClassCastException|LinkageError ex){
-            if(!warned){RealmCouncil.LOG.warn("Crónicas RP adapter unavailable; using Minecraft identities.",ex);warned=true;}
+            if(!warned){RealmCouncil.LOG.warn("Realm Origins adapter unavailable; using Minecraft identities.",ex);warned=true;}
             return fallback;
         }
     }

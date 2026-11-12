@@ -83,7 +83,7 @@ Por defeito, a votação dura **3 minutos**, exige **50% de participação**, ar
 | Mesa Farta | Menos 20% de desgaste da fome nas atividades de sobrevivência. |
 | Saber do Reino | Mais 20% de XP recebida; frações são distribuídas probabilisticamente. |
 
-O custo inicial é **2 000 €** com a moeda Chronicles ou **400 esmeraldas** no modo independente, por benefício. Os valores são alternativas conforme a moeda fiscal. O custo é retirado do saldo disponível e reservado ao anunciar: não pode pagar salários ou contratos ao mesmo tempo. Se for rejeitado ou não tiver participação suficiente, volta ao tesouro. Ao aprovar, é consumido como despesa pública, sem pagamento à carteira do Presidente. Consultas gerais nunca consomem dinheiro.
+O custo inicial é **2 000 €** com a moeda do Realm Origins ou **400 esmeraldas** no modo independente, por benefício. Os valores são alternativas conforme a moeda fiscal. O custo é retirado do saldo disponível e reservado ao anunciar: não pode pagar salários ou contratos ao mesmo tempo. Se for rejeitado ou não tiver participação suficiente, volta ao tesouro. Ao aprovar, é consumido como despesa pública, sem pagamento à carteira do Presidente. Consultas gerais nunca consomem dinheiro.
 
 Os benefícios duram **24 horas reais**, contam a partir do prazo da votação e continuam a expirar com o mundo fechado. Até **dois benefícios diferentes** podem coexistir. Não se acumula nem renova o mesmo benefício enquanto estiver ativo. Preço, duração, potência, quórum, eleitores e prazo ficam fixados ao anunciar. Alterar as configurações não muda propostas existentes.
 

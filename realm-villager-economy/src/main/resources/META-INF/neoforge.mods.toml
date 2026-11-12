@@ -6,7 +6,7 @@ modId="realmvillagereconomy"
 version="0.1.0"
 displayName="Realm Villager Economy"
 authors="ROCKABITS"
-description='''Villager purchases use the Chronicles RP wallet, with server-controlled conversion, a clearly quoted public tax and durable trade receipts. Vanilla material sales still pay physical emeralds.'''
+description='''Villager purchases use the Realm Origins wallet, with server-controlled conversion, a clearly quoted public tax and durable trade receipts. Vanilla material sales still pay physical emeralds.'''
 [[dependencies.realmvillagereconomy]]
 modId="neoforge"
 type="required"

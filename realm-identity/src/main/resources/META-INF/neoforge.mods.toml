@@ -6,7 +6,7 @@ modId="realmidentity"
 version="0.1.2"
 displayName="Realm Identity"
 authors="ROCKABITS"
-description='''Physical character documents with a writing desk, server-verified issuance and consent-based presentation to other players. Optional Chronicles RP identity/signature and current Realm Titles public honours integration.'''
+description='''Physical character documents with a writing desk, server-verified issuance and consent-based presentation to other players. Optional Realm Origins identity/signature and current Realm Titles public honours integration.'''
 [[dependencies.realmidentity]]
 modId="neoforge"
 type="required"

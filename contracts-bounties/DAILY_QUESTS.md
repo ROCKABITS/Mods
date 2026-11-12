@@ -22,9 +22,9 @@ Missões não concluídas expiram na renovação e perdem o progresso parcial. C
 
 ## Carteira, reputação e tesouro
 
-Com **Chronicles RP 0.5.4**, o crédito usa a carteira existente, o nome RP, a reputação e o contador de missões. A reputação respeita o menor limite diário configurado nas quests e nos contratos públicos. Os dois tipos de atividade partilham o teto UTC; atingir 100 de reputação não interrompe a recompensa monetária nem o contador de missões. A animação apresenta a reputação efetivamente recebida.
+Com **Realm Origins**, o crédito usa a carteira existente, o nome RP, a reputação e o contador de missões. A reputação respeita o menor limite diário configurado nas quests e nos contratos públicos. Os dois tipos de atividade partilham o teto UTC; atingir 100 de reputação não interrompe a recompensa monetária nem o contador de missões. A animação apresenta a reputação efetivamente recebida.
 
-Sem Chronicles, o administrador pode ativar `emeraldFallback`. Neste modo, **1 esmeralda corresponde a 1 € de recompensa**. Os valores e o imposto são arredondados por defeito a esmeraldas inteiras; os limites monetários de configuração devem ser múltiplos de 100 cêntimos. Não se cria uma carteira paralela. O modo da moeda fica guardado no conjunto diário; instalar/remover Chronicles a meio de um conjunto pode deixar créditos pendentes até a integração original voltar a estar disponível.
+Sem Realm Origins, o administrador pode ativar `emeraldFallback`. Neste modo, **1 esmeralda corresponde a 1 € de recompensa**. Os valores e o imposto são arredondados por defeito a esmeraldas inteiras; os limites monetários de configuração devem ser múltiplos de 100 cêntimos. Não se cria uma carteira paralela. O modo da moeda fica guardado no conjunto diário; instalar/remover Realm Origins a meio de um conjunto pode deixar créditos pendentes até a integração original voltar a estar disponível.
 
 Para cobrar imposto destas quests, instala **Crown Ledger 0.2.6+**. A taxa inicial é zero e o limite inicial é 25%. O Presidente com mandato ativo e posse concluída, ou um administrador autorizado, pode alterar a taxa no separador **Governo** do mural. Sem Realm Council, apenas a administração tem esse poder. Sem Presidente, mantém-se a última política. A autoridade é consultada em cada pedido, incluindo após sucessão e expiração do mandato.
 

@@ -6,7 +6,7 @@ modId="realmmarkets"
 version="0.2.1"
 displayName="Realm Markets"
 authors="ROCKABITS"
-description='''Craft medieval market stalls, stock real items and sell at fixed prices while the owner is offline. Collect retained sales earnings. Optional Chronicles RP economy integration.'''
+description='''Craft medieval market stalls, stock real items and sell at fixed prices while the owner is offline. Collect retained sales earnings. Optional Realm Origins economy integration.'''
 [[dependencies.realmmarkets]]
 modId="neoforge"
 type="required"

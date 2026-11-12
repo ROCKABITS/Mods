@@ -20,7 +20,7 @@ MarriagePayments.refund(consumer, server, purchaseId);
 
 `reserve` binds the receipt to the exact player, marriage, consumer and positive cent amount. Repeating the same request returns its persisted state; changing any field fails. Only active non-SEPARATE marriages accept new reservations. `commit` and `refund` are terminal and idempotent for the same outcome; a conflicting outcome fails. `DONE` denotes a committed purchase; `CANCELLED` denotes a refunded one. A previously held purchase can be finalized after divorce. A refund after divorce is split into personal pending credits according to the original agreement, including cumulative cent rounding.
 
-Do not retry product delivery merely because `reserve` succeeded again. Your mod must persist and recover its own delivery intent. If a crash leaves the delivery ambiguous, keep the money held and resolve the delivery receipt; do not guess or use an automatic timeout refund. The account API cannot make another mod's unjournalled item creation atomic. It does not deduct from personal wallets and never transparently substitutes for Chronicles wallet calls. This release contains no automatic shop adapter.
+Do not retry product delivery merely because `reserve` succeeded again. Your mod must persist and recover its own delivery intent. If a crash leaves the delivery ambiguous, keep the money held and resolve the delivery receipt; do not guess or use an automatic timeout refund. The account API cannot make another mod's unjournalled item creation atomic. It does not deduct from personal wallets and never transparently substitutes for Realm Origins wallet calls. This release contains no automatic shop adapter.
 
 ## Civil status and documents
 

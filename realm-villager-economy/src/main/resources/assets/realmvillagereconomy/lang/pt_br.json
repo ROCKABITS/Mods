@@ -41,7 +41,7 @@
   "error.realmvillagereconomy.permission": "Só o Presidente empossado com mandato ativo ou um administrador pode alterar o imposto.",
   "error.realmvillagereconomy.tax_limit": "Introduz uma taxa dentro do limite do administrador, com até duas casas decimais.",
   "error.realmvillagereconomy.sold_out": "Esta oferta está esgotada.",
-  "error.realmvillagereconomy.chronicles_unavailable": "As compras exigem personagem criada e carteira do Chronicles RP.",
+  "error.realmvillagereconomy.chronicles_unavailable": "As compras exigem personagem criada e carteira do Realm Origins.",
   "error.realmvillagereconomy.insufficient_funds": "Saldo insuficiente para o preço base mais o imposto.",
   "error.realmvillagereconomy.materials": "Faltam os materiais necessários à troca.",
   "error.realmvillagereconomy.inventory_full": "Não há espaço para o resultado completo. Nada foi cobrado.",

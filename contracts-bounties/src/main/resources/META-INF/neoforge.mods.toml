@@ -5,7 +5,7 @@ license="All Rights Reserved"
 modId="contracts"
 version="0.4.0"
 displayName="Contracts & Bounties"
-description='''Three physical medieval noticeboards, private and public escrow contracts, five daily survival RNG quests, RPG completion cinematics, optional Chronicles RP wallet/reputation and governed Crown Ledger tax.'''
+description='''Three physical medieval noticeboards, private and public escrow contracts, five daily survival RNG quests, RPG completion cinematics, optional Realm Origins wallet/reputation and governed Crown Ledger tax.'''
 [[dependencies.contracts]]
 modId="neoforge"
 type="required"

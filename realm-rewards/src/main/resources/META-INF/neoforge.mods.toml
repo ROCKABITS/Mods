@@ -6,7 +6,7 @@ modId="realmrewards"
 version="0.1.2"
 displayName="Realm Rewards"
 authors="ROCKABITS"
-description='''Configurable, once-per-player advancement rewards with the Chronicles RP wallet and an operator administration menu. Vanilla and mod advancements are discovered automatically.'''
+description='''Configurable, once-per-player advancement rewards with the Realm Origins wallet and an operator administration menu. Vanilla and mod advancements are discovered automatically.'''
 [[dependencies.realmrewards]]
 modId="neoforge"
 type="required"

@@ -164,9 +164,9 @@ transaction|The financial receipt is invalid or its original payload changed.|O 
 funds|Insufficient funds or the account is locked for settlement.|Saldo insuficiente ou conta bloqueada para liquidação.
 consumer|Only the registered payment integration may use this receipt.|Só a integração de pagamentos registada pode usar este recibo.
 storage|Persistent storage is unavailable. Preserve the data and restart after fixing storage.|O armazenamento está indisponível. Preserva os dados e reinicia depois de corrigir o armazenamento.
-wallet|The Chronicles wallet could not be updated safely.|Não foi possível atualizar a carteira Chronicles em segurança.
-chronicles|This financial regime requires Chronicles RP.|Este regime financeiro exige o Chronicles RP.
-profile|Create a Chronicles RP character first.|Cria primeiro uma personagem no Chronicles RP.
+wallet|The Realm Origins wallet could not be updated safely.|Não foi possível atualizar a carteira do Realm Origins em segurança.
+chronicles|This financial regime requires Realm Origins.|Este regime financeiro exige o Realm Origins.
+profile|Create a Realm Origins character first.|Cria primeiro uma personagem no Realm Origins.
 ambiguous|The saved receipt does not match the current player state. No payment was repeated.|O recibo guardado não corresponde ao estado atual do jogador. Nenhum pagamento foi repetido.
 altar|Use an intact nearby Wedding Altar.|Utiliza um Altar de Casamento intacto e próximo.
 cooldown|Wait before sending another proposal.|Aguarda antes de enviar outro pedido.

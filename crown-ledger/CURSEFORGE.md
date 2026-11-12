@@ -37,7 +37,7 @@ Approve treasury-funded benefits for crop growth, mining, hunger and experience,
 
 Prices, limits and durations are set by the server administrator. Benefits never pay the President personally and cannot spend money already reserved for another purpose.
 
-Optional integrations include Realm Council, Realm Origins / Chronicles RP, Contracts & Bounties, Realm Markets, Realm Casino, Laws & Justice, Realm Economy, Realm Marriage and Realm Notifications. Without Realm Council, an operator can appoint the treasury steward. Without the Chronicles wallet, the treasury supports emeralds.
+Optional integrations include Realm Council, Realm Origins, Contracts & Bounties, Realm Markets, Realm Casino, Laws & Justice, Realm Economy, Realm Marriage and Realm Notifications. Without Realm Council, an operator can appoint the treasury steward. Without the Realm Origins wallet, the treasury supports emeralds.
 
 Works in singleplayer, LAN worlds and dedicated servers. Install the same version on the server and every client.
 

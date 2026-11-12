@@ -41,7 +41,7 @@
   "error.realmeconomy.permission": "Only the sworn active President or an administrator may change the tax.",
   "error.realmeconomy.tax_limit": "Enter a tax within the administrator limit, with at most two decimal places.",
   "error.realmeconomy.sold_out": "This offer is out of stock.",
-  "error.realmeconomy.chronicles_unavailable": "Purchases require a created Chronicles RP character and wallet.",
+  "error.realmeconomy.chronicles_unavailable": "Purchases require a created Realm Origins character and wallet.",
   "error.realmeconomy.insufficient_funds": "Insufficient funds for the base price plus public tax.",
   "error.realmeconomy.materials": "Required trade materials are missing.",
   "error.realmeconomy.inventory_full": "There is no room for the complete result. Nothing was charged.",
