@@ -96,8 +96,31 @@ public final class NotificationVisualQA {
         });
     }
     private static void bounds(NotificationScreen screen) {
-        for(var child:screen.children())if(child instanceof AbstractWidget w)
-            check(w.getX()>=0&&w.getY()>=0&&w.getX()+w.getWidth()<=320&&w.getY()+w.getHeight()<=240,"Compact widget outside320x240: "+w.getMessage().getString());
+        var widgets=screen.children().stream().filter(c->c instanceof AbstractWidget).map(c->(AbstractWidget)c).toList();
+        for(var w:widgets) {
+            check(w.getX()>=0&&w.getY()>=0&&w.getX()+w.getWidth()<=screen.width&&w.getY()+w.getHeight()<=screen.height,"Compact widget outside screen: "+w.getMessage().getString());
+            for(var other:widgets)if(w!=other)check(w.getX()>=other.getX()+other.getWidth()||w.getX()+w.getWidth()<=other.getX()
+                    ||w.getY()>=other.getY()+other.getHeight()||w.getY()+w.getHeight()<=other.getY(),"Overlapping widgets: "+w.getMessage().getString()+" / "+other.getMessage().getString());
+        }
+    }
+    private static void compactSettingsPages() {
+        var mc=Minecraft.getInstance();var s=new NotificationScreen(null,false);mc.setScreen(s);s.resize(mc,320,180);bounds(s);
+        check(click("gui.realmnotifications.on"),"First compact page has no enabled toggle");
+        check(!NotificationsClient.preferences().enabled,"Enabled toggle did not change");
+        check(click("gui.realmnotifications.off"),"Missing disabled toggle");
+        check(NotificationsClient.preferences().enabled,"Enabled toggle did not restore");
+        s.mouseScrolled(150,90,0,-1);bounds(s);
+        check(click("gui.realmnotifications.off"),"Second compact page has no muted sound toggle");
+        check(NotificationsClient.preferences().sound,"Sound toggle on second page failed");
+        check(click("gui.realmnotifications.on"),"Missing enabled sound toggle");
+        s.mouseScrolled(150,90,0,-1);bounds(s);
+        check(click("gui.realmnotifications.on"),"Third compact page has no animation toggle");
+        check(!NotificationsClient.preferences().animations,"Animation toggle on third page failed");
+        check(click("gui.realmnotifications.off"),"Missing disabled animation toggle");
+        s.resize(mc,800,450);bounds(s);
+        check(s.children().stream().filter(c->c instanceof Button).count()==11,"Resize retained compact pagination");
+        CHECKS.add("320x180: all three settings pages, non-overlapping widgets, wheel navigation, real toggles and resize back to one page passed.");
+        mc.setScreen(null);
     }
     private static void verifyCompactAndPreferences() {
         var mc=Minecraft.getInstance();var p=NotificationsClient.preferences();
@@ -117,6 +140,7 @@ public final class NotificationVisualQA {
         s.mouseScrolled(40,120,0,-20);
         check(click("gui.realmnotifications.clear"),"Missing clear journal button");check(NotificationsClient.history().isEmpty(),"Journal clear failed");
         NotificationsClient.resetSession();
+        compactSettingsPages();
         check(NotificationsClient.history().isEmpty()&&NotificationsClient.pendingCount()==0&&NotificationsClient.visibleCount()==0,"Session reset retained private data");
         CHECKS.add("Preferences round-trip, sound disabled, all5 anchors,320x240 widget bounds, journal scrolling/clear and private session reset passed.");
         mc.setScreen(null);

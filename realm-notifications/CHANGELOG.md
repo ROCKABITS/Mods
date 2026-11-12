@@ -1,5 +1,13 @@
 # Changelog
 
+## Não publicado — preferências e legibilidade
+
+- Paginação automática das seis preferências quando a altura do painel não permite mostrá-las sem sobrepor o rodapé.
+- Navegação por botões e roda do rato, com página ajustada ao redimensionar a janela.
+- Indicação do separador selecionado, linhas alternadas discretas e estados desativados mais claros.
+- Textos das opções limitados à respetiva coluna e tooltips com o nome e o valor completos.
+- Quatro testes de regressão da disposição e verificação nativa de todas as páginas em 320 × 180.
+
 ## 0.1.1 — Beta
 
 - Group rapid notification bursts into one parchment card, including modpack login floods.
