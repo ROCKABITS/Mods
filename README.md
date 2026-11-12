@@ -10,6 +10,7 @@ The repository contains standalone mods that can also integrate with one another
 
 - [Installation and update guide](INSTALLATION.md) — choosing mods, dependencies, server/client setup and safe updates.
 - [Architecture and integrations](ARCHITECTURE.md) — how the Realm systems are organised and work together.
+- [Mapa técnico e revisão](REPOSITORY-REVIEW.md) — projetos, IDs internos, validações e alterações em revisão.
 - [Todos os mods e downloads](#mods-e-downloads) — current versions, JAR/ZIP downloads and feature summaries.
 - [Guias individuais e validação](#documentação-e-validação) — usage instructions, changelogs, galleries and test evidence.
 - [Website](https://realmstudios.pt) · [GitHub profile](https://github.com/ROCKABITS)
@@ -81,7 +82,7 @@ O [Realm Origins 0.5.7](realm-origins/README.md), anteriormente Chronicles RP, m
 
 ![Livro de personagem do Realm Origins — tecla P](media/realm-origins/0.5.7/realm-origins-07-profile-en.png)
 
-O [pacote Realm Titles + Realm Identity](https://github.com/ROCKABITS/Mods/raw/refs/heads/main/mod-pronto/realm-titles-0.1.0-suite.zip) contém os dois JARs desta atualização. Instala o Titles no servidor e em todos os clientes. Se usas Identity, substitui a versão anterior pela 0.1.1 em todos os lados: o protocolo passou para 2. Os documentos existentes mantêm-se válidos.
+Para instalar Realm Titles com Realm Identity, usa os downloads individuais atuais: [Titles 0.1.0](https://github.com/ROCKABITS/Mods/raw/refs/heads/main/mod-pronto/realm-titles-0.1.0.jar) e [Identity 0.1.2](https://github.com/ROCKABITS/Mods/raw/refs/heads/main/mod-pronto/realm-identity-0.1.2.jar), no servidor e em todos os clientes. O [pacote histórico Titles + Identity](https://github.com/ROCKABITS/Mods/raw/refs/heads/main/mod-pronto/realm-titles-0.1.0-suite.zip) inclui Identity 0.1.1; não contém a integração de casamento da 0.1.2. O protocolo do Identity mantém-se em 2 e os documentos existentes continuam válidos.
 
 A **Mesa do Selo Real** abre o registo público de títulos. Com Realm Council, só o governante do mandato ativo e jurado pode gerir nomeações; sem Council, um operador designa um responsável. Os títulos podem ser permanentes ou durar 1–365 dias reais, mantêm-se quando muda o governante e aparecem numa nova consulta do documento do Identity, sem segunda via. Realm Origins fornece os nomes públicos e Notifications apresenta os avisos opcionais.
 

@@ -42,5 +42,8 @@
   "gui.realmnotifications.preview_body": "This is a visual preview. Your balance has not changed.",
   "notification.realmnotifications.burst.title": "%s notices grouped",
   "notification.realmnotifications.burst.body": "Several notices arrived together. Press %s to see the details.",
-  "notification.realmnotifications.burst.no_history": "Several notices arrived at the same time."
+  "notification.realmnotifications.burst.no_history": "Several notices arrived at the same time.",
+  "gui.realmnotifications.page": "Page %s/%s",
+  "gui.realmnotifications.previous_page": "Previous settings page",
+  "gui.realmnotifications.next_page": "Next settings page"
 }

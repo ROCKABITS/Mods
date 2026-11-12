@@ -2,6 +2,8 @@
 
 Referências: guião enviado pelo utilizador em `Pasted text.txt` e decisões posteriores na conversa. Esta página distingue as funcionalidades existentes dos projetos futuros.
 
+**Estado atual:** as versões publicadas e os downloads estão no [catálogo principal](README.md#mods-e-downloads). As secções detalhadas abaixo conservam também decisões e limitações históricas de cada fase; uma validação antiga não descreve automaticamente a versão atual. O [mapa técnico e revisão do repositório](REPOSITORY-REVIEW.md) identifica os projetos e as verificações desta revisão.
+
 Plataforma: **Minecraft 1.21.1, NeoForge e Java 21**. Os mods mantêm responsabilidades próprias e integram-se quando instalados em conjunto. A identidade e a economia do Crónicas RP devem ser reutilizadas, evitando contas ou personagens concorrentes.
 
 ## Realm Progression — desbloqueio configurável de crafts
@@ -28,8 +30,8 @@ A integração económica com **MineColonies** está publicada no **Realm Econom
 | Mod | Responsabilidade | Situação neste repositório |
 | --- | --- | --- |
 | Realm Origins | Personagens, profissões, reputação, dinheiro e progressão | Projeto importado em `realm-origins/` para a atualização de nomes RP autorizada pelo utilizador. O JAR original 0.5.2 continua apenas como referência local. |
-| Realm Council 0.2.1 | Eleições, mandatos, governantes e decisões públicas | Projeto incluído para a atualização de acesso através dos blocos. |
-| Contracts & Bounties 0.3.1 | Pedidos de materiais, reserva de recompensas, entregas e recolhas | JAR disponível, integrado com as políticas do Crown Ledger. |
+| Realm Council 0.2.2 | Eleições, mandatos, governantes e decisões públicas | Publicado, com acesso através dos blocos e notificações opcionais. |
+| Contracts & Bounties 0.4.0 | Pedidos de materiais, reserva de recompensas, entregas e quests diárias | Publicado, integrado com as políticas do Realm Treasury. |
 
 **Correção ao guião original:** o ZIP fornecido do Realm Council contém o projeto Java. Não é necessário reconstruí-lo a partir do JAR.
 
@@ -37,7 +39,7 @@ A integração económica com **MineColonies** está publicada no **Realm Econom
 
 | Etapa | Projeto | Objetivo do guião | Estado |
 | --- | --- | --- | --- |
-| 1 | Contracts & Bounties | Murais físicos, contratos de materiais e recompensas reservadas. | 0.3.1 disponível; integrado com as políticas e o financiamento do Crown Ledger. Runtime completo do Chronicles por validar. |
+| 1 | Contracts & Bounties | Murais físicos, contratos de materiais e recompensas reservadas. | 0.4.0 disponível, com quests diárias; âmbito atual no [guia e validação](contracts-bounties/README.md). |
 | 2 | Crown Ledger — Tesouro da Coroa | Orçamento, impostos, salários e contratos pagos pelo reino, geridos pelo governante. | Implementado; [guia e downloads](crown-ledger/README.md). |
 | 3 | Realm Identity | Documento físico de RP, assinatura e apresentação a outros jogadores com verificação do servidor. | Implementado; [guia e downloads](realm-identity/README.md). |
 | 4 | Realm Markets | Bancas com stock real, preços por unidade e vendas quando o proprietário está offline. | Implementado; [guia e downloads](realm-markets/README.md). |
@@ -51,10 +53,10 @@ O quadro abaixo distingue as funcionalidades já implementadas das ideias ainda 
 | Projeto | Objetivo | Estado |
 | --- | --- | --- |
 | Realm Rewards | Recompensar conquistas Vanilla e de outros mods com dinheiro do Realm Origins. | Implementado e atualizado para 0.1.2; [guia](realm-rewards/README.md). |
-| Realm Notifications | Notificações no ecrã e API comum para os mods de RP. | Implementado na 0.1.0; [guia](realm-notifications/README.md). |
+| Realm Notifications | Notificações no ecrã e API comum para os mods de RP. | Publicado na 0.1.1, com agrupamento de rajadas; [guia](realm-notifications/README.md). |
 | Realm Titles | Títulos de personagem atribuídos pelo governante eleito. | Implementado na 0.1.0 Beta; [guia](realm-titles/README.md). |
 | Realm Casino | Casino medieval com máquinas e mesas, banca própria de cada proprietário e dinheiro virtual do Realm Origins. | Atualizado para 0.3.0 Beta, com doze jogos físicos, mesas multiplayer e imposto do lucro. [Guia](realm-casino/README.md). |
-| Laws & Justice | Prisões construídas pelos jogadores, justiça pelo Presidente, mandados, trabalho comunitário e economia judicial, por fases. | 0.1.0 Beta em validação final: prisões/celas, penas online, libertação e administração física. Publicação pendente. [Guia](laws-justice/README.md) · [plano completo](laws-justice/PLANO-COMPLETO.md). |
+| Laws & Justice | Prisões construídas pelos jogadores, justiça pelo Presidente, mandados, trabalho comunitário e economia judicial, por fases. | 0.4.0 Beta publicada, incluindo multas, fianças e registos. [Guia](laws-justice/README.md) · [validação](laws-justice/VALIDACAO-0.4.0.md) · [plano completo](laws-justice/PLANO-COMPLETO.md). |
 | Realm Origins — Nomes RP | Mostrar o nome da personagem acima da cabeça, no TAB e no chat. | Implementado na 0.5.3; [guia e downloads](realm-origins/README.md). |
 | Xaero Map Regions + Xaero's World Map | Desenhar e consultar territórios no mapa. | Solução externa indicada pelo utilizador; não desenvolver um mod próprio. |
 
@@ -103,7 +105,7 @@ O guião completo está implementado: slots de cinco rolos, poker Texas Hold’e
 
 ### Laws & Justice — desenvolvimento por versões
 
-A fase **0.3.0 Beta está publicada**, incluindo a base das prisões, o Presidente como juiz e os seis trabalhos prisionais. Os [links do ZIP](https://github.com/ROCKABITS/Mods/raw/refs/heads/main/mod-pronto/laws-justice-0.3.0.zip) e [JAR](https://github.com/ROCKABITS/Mods/raw/refs/heads/main/mod-pronto/laws-justice-0.3.0.jar) permitem descarregar a versão testada. O [guia](laws-justice/README.md) explica a utilização e a [galeria](media/laws-justice/README.md) reúne os modelos e menus reais do cliente.
+A versão **0.4.0 Beta está publicada**, incluindo a base das prisões, o Presidente como juiz, os seis trabalhos prisionais, multas, fianças e registos. Os [links do ZIP](https://github.com/ROCKABITS/Mods/raw/refs/heads/main/mod-pronto/laws-justice-0.4.0.zip) e [JAR](https://github.com/ROCKABITS/Mods/raw/refs/heads/main/mod-pronto/laws-justice-0.4.0.jar) permitem descarregar a versão testada. O [guia](laws-justice/README.md) explica a utilização e a [galeria](media/laws-justice/README.md) reúne os modelos e menus reais do cliente.
 
 - **0.1.0:** prisões e celas delimitadas pelo administrador em construções dos jogadores, penas que contam apenas online, regresso à prisão após morte/teleporte e libertação automática. Quatro blocos — Porta de Cela, Grades de Prisão, Fechadura Reforçada e Controlo da Prisão — e um Agrimensor Prisional. Menus físicos; só administradores autorizam decisões nesta fase. Chronicles e Notifications são opcionais para nomes RP e avisos.
 - **0.2.0:** Presidente eleito e empossado pelo Realm Council como juiz, Mesa de Justiça, algemas e mandados físicos validados no servidor. Não criar cargos adicionais de juiz, guarda ou chefe da prisão. O mandato determina a autoridade, mantendo acesso administrativo de emergência.
