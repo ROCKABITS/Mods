@@ -64,7 +64,10 @@ public final class TradingScreen extends AbstractContainerScreen<EconomyMenu> {
         return ItemStack.EMPTY;
     }
     @Override protected void init(){
-        w=Math.min(760,width-16);h=Math.min(424,height-16);x=(width-w)/2;y=(height-h)/2;top=y+(compact()?55:72);bottom=y+h-28;left=compact()?Math.max(100,w/3):Math.max(220,(int)(w*.38));
+        w=Math.min(760,width-16);h=Math.min(424,height-16);x=(width-w)/2;y=(height-h)/2;
+        // Overlay mods read the vanilla container bounds, not our private drawing coordinates.
+        leftPos=x;topPos=y;imageWidth=w;imageHeight=h;
+        top=y+(compact()?55:72);bottom=y+h-28;left=compact()?Math.max(100,w/3):Math.max(220,(int)(w*.38));
         clearWidgets();int tabW=Math.min(140,(w-40)/3);addRenderableWidget(Button.builder(tr("offers"),b->{fiscal=false;rebuild();}).bounds(x+14,y+(compact()?29:43),tabW,18).build(LedgerButton::new));
         if(flag(data,"manager"))addRenderableWidget(Button.builder(tr("fiscal"),b->{fiscal=true;rebuild();}).bounds(x+20+tabW,y+(compact()?29:43),tabW,18).build(LedgerButton::new));
         addRenderableWidget(Button.builder(tr("close"),b->onClose()).bounds(x+w-70,y+h-23,56,16).build(LedgerButton::new));

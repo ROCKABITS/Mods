@@ -10,6 +10,7 @@ java.toolchain.languageVersion = JavaLanguageVersion.of(21)
 repositories {
     mavenCentral()
     maven { url = 'https://cursemaven.com'; content { includeGroup 'curse.maven' } }
+    maven { url = 'https://maven.blamejared.com'; content { includeGroup 'mezz.jei'; includeGroup 'net.mezzdev.config' } }
 }
 neoForge {
     version = project.neo_version
@@ -27,6 +28,10 @@ neoForge {
 }
 configurations { runtimeClasspath.extendsFrom localRuntime }
 dependencies {
+    if (providers.gradleProperty('jeiGuiTests').isPresent()) {
+        compileOnly 'mezz.jei:jei-1.21.1-neoforge:19.70.0.469'
+        localRuntime 'mezz.jei:jei-1.21.1-neoforge:19.70.0.469'
+    }
     if (providers.gradleProperty('colonyAddonsTests').isPresent()) { localRuntime fileTree(dir: 'colony-addon-libs', include: ['*.jar']) }
     def colonyCoordinates = ['curse.maven:minecolonies-245506:9058295', 'curse.maven:structurize-298744:8610535', 'curse.maven:blockui-522992:7541336', 'curse.maven:domum-ornamentum-527361:7789217', 'curse.maven:multi-piston-303278:7097877']
     colonyCoordinates.each { coordinate ->
@@ -81,3 +86,12 @@ if (providers.gradleProperty('colonyVisualTests').isPresent()) {
     }
 }
 tasks.named('jar', Jar) { exclude('pt/realmeconomy/colonytest/**','pt/realmeconomy/colonyvisualtest/**','data/realmeconomycolony/structure/**') }
+
+if (providers.gradleProperty('jeiGuiTests').isPresent()) {
+    sourceSets.main.java.srcDir('src/jeiguitest/java')
+    neoForge.runs.client {
+        systemProperty 'economy.jeiQAOutput', file('qa-results/jei-client').absolutePath
+        programArguments.addAll '--width', '1600', '--height', '900'
+    }
+}
+tasks.named('jar', Jar) { exclude('pt/realmeconomy/jeiguitest/**') }

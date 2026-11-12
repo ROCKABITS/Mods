@@ -39,7 +39,10 @@ public final class ColonyScreen extends AbstractContainerScreen<ColonyMenu> {
     private Button button(Component text,int bx,int by,int bw,int bh,Runnable action){var b=addRenderableWidget(Button.builder(text,z->action.run()).bounds(bx,by,Math.max(15,bw),bh).build(BankButton::new));b.setTooltip(Tooltip.create(text));return b;}
     private EditBox input(int xx,int yy,int ww,String value,Component label){var e=new EditBox(font,xx,yy,Math.max(25,ww),19,label);e.setMaxLength(16);e.setValue(value);return addRenderableWidget(e);}
     @Override protected void init(){
-        clearWidgets();amount=null;fields.clear();w=Math.min(800,width-16);h=Math.min(450,height-16);x=(width-w)/2;y=(height-h)/2;top=y+(compact()?59:74);bottom=y+h-36;
+        clearWidgets();amount=null;fields.clear();w=Math.min(800,width-16);h=Math.min(450,height-16);x=(width-w)/2;y=(height-h)/2;
+        // Overlay mods read the vanilla container bounds, not our private drawing coordinates.
+        leftPos=x;topPos=y;imageWidth=w;imageHeight=h;
+        top=y+(compact()?59:74);bottom=y+h-36;
         var tabs=new ArrayList<>(List.of("account","exports","invoices","history"));if(flag(data,"administrator"))tabs.add("admin");int tw=(w-24-(tabs.size()-1)*3)/tabs.size();
         for(int i=0;i<tabs.size();i++){String value=tabs.get(i);button(tr(value),x+12+i*(tw+3),y+(compact()?33:45),tw,17,()->change(value)).active=!waiting&&!tab.equals(value);}
         button(tr("close"),x+w-67,y+h-25,54,16,this::onClose);

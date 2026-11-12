@@ -41,7 +41,10 @@ public final class ServicesScreen extends AbstractContainerScreen<ServicesMenu> 
  private EditBox field(int bx,int by,int bw,String value){var input=new EditBox(font,bx,by,Math.max(20,bw),20,Component.empty());input.setMaxLength(50);input.setValue(value);return addRenderableWidget(input);}
  private void tab(String value){tab=value;page=0;rebuild();}
  @Override protected void init(){
-  w=Math.min(760,width-16);h=Math.min(424,height-16);x=(width-w)/2;y=(height-h)/2;top=y+(compact()?52:66);bottom=y+h-30;left=compact()?112:Math.max(280,(int)(w*.43));clearWidgets();
+  w=Math.min(760,width-16);h=Math.min(424,height-16);x=(width-w)/2;y=(height-h)/2;
+  // Overlay mods read the vanilla container bounds, not our private drawing coordinates.
+  leftPos=x;topPos=y;imageWidth=w;imageHeight=h;
+  top=y+(compact()?52:66);bottom=y+h-30;left=compact()?112:Math.max(280,(int)(w*.43));clearWidgets();
   int bx=x+12,by=y+(compact()?28:40),tabWidth=compact()?61:112;
   if(desk()){button(tr("policies"),bx,by,tabWidth,17,()->tab("policy"));if(yes(data,"administrator"))button(tr("admin"),bx+tabWidth+4,by,tabWidth,17,()->tab("admin"));if(yes(data,"manager"))button(tr("history"),bx+2*(tabWidth+4),by,tabWidth,17,()->tab("audit"));}
   else button(tr("operation"),bx,by,tabWidth,17,()->tab("service"));

@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.5.1 — JEI GUI bounds
+
+- Report the actual painted rectangle through Minecraft container bounds in the Colony Coffer, villager trading and service screens. JEI now places its sidebar outside the panel, or hides the list when there is insufficient side space.
+- Keep JEI available beside wide layouts and on vanilla inventory screens; no global JEI setting is changed.
+- Verify the old overlap, corrected bounds, three screens, resizing and vanilla inventory using a real Minecraft client with JEI 19.70.0.469.
+- Preserve all financial rules, protocol fields and saved-data formats. The production JAR has no new JEI dependency.
+
 ## 0.5.0 — MineColonies colony budgets
 
 - Adds optional MineColonies 1.1.1403 integration inside Realm Economy, with independent, persistent budgets for each colony.

@@ -1,16 +1,22 @@
 # Realm Economy
 
-**Minecraft 1.21.1 · NeoForge 21.1.256+ · Java 21 · 0.5.0 Beta**
+**Minecraft 1.21.1 · NeoForge 21.1.256+ · Java 21 · 0.5.1 Beta**
 
 Realm Economy dá utilidade à carteira do **Realm Origins 0.5.7** durante a sobrevivência: compras aos aldeões, bigorna, encantamentos, melhorias, poções e ativações temporárias de beacons. A **Mesa da Economia** permite ao Presidente empossado governar os preços e impostos, respeitando os limites administrativos.
 
 A **0.5.0** acrescenta a [economia opcional do MineColonies](MINECOLONIES.md): Cofre da Colónia 3D, orçamento independente por cidade, depósitos e levantamentos, exportações diárias limitadas e autorizações pagas de construção e recrutamento. [Validação da atualização](VALIDACAO-0.5.0.md).
 
+## Correção da sobreposição do JEI — 0.5.1
+
+O Cofre da Colónia, o comércio com aldeões e os serviços comunicam agora ao Minecraft as dimensões reais dos seus painéis. O JEI respeita esse espaço: coloca a lista ao lado quando cabe e deixa o painel livre nas janelas mais pequenas. O inventário normal continua a mostrar o JEI. Não precisas de alterar a configuração global do JEI.
+
+Atualiza o Realm Economy nos clientes e no servidor; os dados e as regras financeiras mantêm-se. [Validação e limites](VALIDACAO-0.5.1.md) · [Capturas com JEI real](../media/realm-economy/0.5.1/README.md).
+
 ## Instalação e atualização
 
 1. Guarda uma cópia conjunta do mundo, perfis e tesouraria.
 2. **Retira `realm-villager-economy-0.1.0.jar`. Realm Economy substitui esse mod.** Os dois não devem estar instalados juntos.
-3. Instala `realm-economy-0.5.0.jar` nos clientes e servidor. Para impostos, utiliza **Realm Treasury 0.4.0** ou Crown Ledger 0.2.5+. Instala a mesma versão da tesouraria nos clientes e servidor.
+3. Instala `realm-economy-0.5.1.jar` nos clientes e servidor. Para impostos, utiliza **Realm Treasury 0.4.0** ou Crown Ledger 0.2.5+. Instala a mesma versão da tesouraria nos clientes e servidor.
 4. Usa Realm Origins 0.5.7 e as suas dependências. Realm Council 0.2.2+ identifica o Presidente. Realm Notifications 0.1.1 é opcional.
 
 Foi desenvolvido para servidor integrado, LAN e servidor dedicado. A atualização inclui validação com dois clientes TCP LAN e os addons MineColonies indicados pelo utilizador; os resultados ficam em [VALIDACAO-0.5.0.md](VALIDACAO-0.5.0.md). A correção dos livros encantados está documentada em [VALIDACAO-0.4.1.md](VALIDACAO-0.4.1.md).
@@ -122,4 +128,4 @@ A integração utiliza `-PintegrationTests`, os JARs verificados em `.github/scr
 
 [Changelog](CHANGELOG.md) · [Validação](VALIDACAO.md) · [Plano original](PLANO-REALM-ECONOMY.md).
 
-[Download JAR](../mod-pronto/realm-economy-0.5.0.jar) · [Download ZIP](../mod-pronto/realm-economy-0.5.0.zip) · [Galeria](../media/realm-economy/README.md).
+[Download JAR](../mod-pronto/realm-economy-0.5.1.jar) · [Download ZIP](../mod-pronto/realm-economy-0.5.1.zip) · [Galeria](../media/realm-economy/README.md).
