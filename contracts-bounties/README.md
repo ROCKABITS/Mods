@@ -1,10 +1,12 @@
-# Contracts & Bounties — 0.4.0
+# Contracts & Bounties — 0.4.1
 
 Mod para Minecraft **1.21.1**, **NeoForge 21.1.256** e **Java 21**, instalado no cliente e no servidor.
 
-[Descarregar JAR](https://github.com/ROCKABITS/Mods/raw/refs/heads/main/mod-pronto/contracts-bounties-0.4.0.jar) · [ZIP](https://github.com/ROCKABITS/Mods/raw/refs/heads/main/mod-pronto/contracts-bounties-0.4.0.zip) · [Changelog em inglês](CHANGELOG.md) · [Validação](VALIDACAO.md) · [Capturas reais](../media/contracts-bounties/0.4.0/README.md).
+[Descarregar JAR](https://github.com/ROCKABITS/Mods/raw/refs/heads/main/mod-pronto/contracts-bounties-0.4.1.jar) · [ZIP](https://github.com/ROCKABITS/Mods/raw/refs/heads/main/mod-pronto/contracts-bounties-0.4.1.zip) · [Changelog em inglês](CHANGELOG.md) · [Validação](VALIDACAO.md) · [Capturas reais](../media/0.4.1/README.md).
 
-A **0.4.0** acrescenta **cinco quests RNG diárias por jogador**, atividades de sobrevivência, pagamentos automáticos e **celebrações RPG com pergaminhos, selos, partículas e sons originais**. Mantém os três murais, contratos particulares/públicos, dinheiro reservado, impostos e reputação.
+A **0.4.1** renova o mural e permite escolher materiais num catálogo com ícones e pesquisa por nome, sem escrever IDs. Mantém as regras e os dados existentes.
+
+A **0.4.0** acrescentou **cinco quests RNG diárias por jogador**, atividades de sobrevivência, pagamentos automáticos e **celebrações RPG com pergaminhos, selos, partículas e sons originais**. Mantém os três murais, contratos particulares/públicos, dinheiro reservado, impostos e reputação.
 
 Abre **Quests Diárias** em qualquer mural. São duas fáceis, duas médias e uma difícil, com renovação às 00:00 UTC e limite inicial de 300 € brutos. O progresso começa depois de aceitar. [Regras, configuração, datapacks, administração, animações e limitações](DAILY_QUESTS.md). Para o imposto destas quests, atualiza também o **Crown Ledger para 0.2.6+**.
 
@@ -15,7 +17,7 @@ Com o **[Realm Notifications](../realm-notifications/README.md) 0.1.0+** no serv
 ## Atualizar e abrir
 
 1. Guardar uma cópia do mundo antes de atualizar. Fechar o jogo e o servidor e substituir o JAR antigo, mantendo uma única versão do mod.
-2. Atualizar cliente e servidor juntos para a 0.4.0: o protocolo de rede passa a **3**.
+2. Atualizar cliente e servidor juntos para a 0.4.1. O protocolo de rede mantém-se em **3**; esta atualização não muda os dados guardados nem as regras financeiras.
 3. Colocar um mural e interagir com ele. A abertura remota por `/contracts` foi retirada. O jogador precisa de permanecer na mesma dimensão e a oito blocos da estrutura intacta; o menu verifica a sessão a cada cinco segundos e as ações são verificadas no servidor. Ao fim de cinco minutos, voltar a interagir com o mural.
 
 Os três murais aparecem na aba **Contracts & Bounties** e na pesquisa. Operadores podem obter o pequeno com `/contracts board` ou os três com `/contracts boards`. Estes comandos entregam itens e não abrem o menu.
@@ -32,7 +34,7 @@ O pequeno usa três papéis na linha superior e seis tábuas de carvalho nas dua
 
 ## Contratos, impostos e reembolsos
 
-O autor publica um pedido por identificador de item, quantidade e recompensa. A recompensa total é retirada e fica reservada. Outro jogador entrega todos os materiais de uma vez e recebe um crédito para levantar no mural; o autor recolhe os materiais. O autor de um contrato particular não pode concluí-lo.
+O autor escolhe um material no catálogo visual, indica a quantidade e a recompensa e publica o pedido. A recompensa total é retirada e fica reservada. Outro jogador entrega todos os materiais de uma vez e recebe um crédito para levantar no mural; o autor recolhe os materiais. O autor de um contrato particular não pode concluí-lo.
 
 Quando a Tesouraria fornecer uma taxa, esta fica guardada na publicação. Exemplo: **20 € com imposto de 5% = 19 € de crédito do trabalhador e 1 € de crédito do reino**. O menu mostra recompensa total, imposto e valor líquido antes da entrega. Levantar o crédito não cobra novo imposto.
 
@@ -40,7 +42,11 @@ A taxa é calculada em unidades inteiras, arredondada por defeito: cêntimos no 
 
 A migração conserva os contratos antigos com imposto zero e sem atribuição retroativa de reputação. Uma nova regra de reputação só afeta novas publicações; concluir, cancelar contratos próprios e recolher continuam disponíveis.
 
-São aceites itens comuns por ID, como `minecraft:oak_log`, sem nomes, encantamentos ou outros componentes personalizados. Usam-se os 36 espaços principais do inventário, sem consumir equipamento ou a mão secundária. Recolhas parciais preservam o que não couber. Limites atuais: 16 contratos abertos por autor, 1–4096 materiais por contrato e 2048 entradas no arquivo; a rotação do histórico preserva entregas e créditos pendentes.
+O catálogo inclui os itens registados no Minecraft e nos mods instalados. Pesquisa pelo nome no idioma do jogo e clica no ícone. A pesquisa ignora acentos e maiúsculas/minúsculas; IDs, identificadores de mods e `#tags` são filtros opcionais. Uma tag filtra o catálogo: o contrato continua a pedir um item concreto, sem aceitar automaticamente todos os itens da tag.
+
+**No meu inventário** mostra apenas itens normais nos 36 espaços principais; itens com nome, encantamentos ou outros componentes personalizados não contam. Podes usar **Todos os materiais** para pedir algo que ainda não tens. O título, a quantidade e a recompensa mantêm-se quando abres, fechas ou redimensionas o catálogo.
+
+São aceites itens comuns, sem nomes, encantamentos ou outros componentes personalizados. Usam-se os 36 espaços principais do inventário, sem consumir equipamento ou a mão secundária. Recolhas parciais preservam o que não couber. Limites atuais: 16 contratos abertos por autor, 1–4096 materiais por contrato e 2048 entradas no arquivo; a rotação do histórico preserva entregas e créditos pendentes.
 
 ## Reputação e missões do Realm Origins
 
@@ -72,7 +78,7 @@ Com Java 21:
 ./gradlew -PboardVisualTests runClient
 ```
 
-O último comando precisa de ambiente gráfico; o cliente verifica os modelos e a interface, captura seis imagens e termina. Os fixtures de teste não entram no JAR de produção.
+O último comando precisa de ambiente gráfico; o cliente verifica os modelos e a interface, captura onze imagens e termina. Os fixtures de teste não entram no JAR de produção.
 
 Testes de domínio sem descarregar Minecraft:
 
@@ -80,7 +86,7 @@ Testes de domínio sem descarregar Minecraft:
 python3 tools/test_domain.py
 ```
 
-Os helpers `tools/bootstrap_cloud.py` e `tools/cloud_gradle.py` preparam o JDK e a ligação segura do proxy deste ambiente. O proxy atual continua a impedir downloads NeoForge/Mojang; a compilação completa é executada no GitHub Actions. As verificações e limitações estão em [VALIDACAO.md](VALIDACAO.md).
+Os helpers `tools/bootstrap_cloud.py` e `tools/cloud_gradle.py` preparam o JDK e a ligação segura do proxy deste ambiente. A compilação e os ensaios devem usar o proxy e as autoridades de certificação fornecidos pelo ambiente. O GitHub Actions repete as verificações antes de publicar os ficheiros. As verificações e limitações estão em [VALIDACAO.md](VALIDACAO.md).
 
 ## Dados e recuperação
 

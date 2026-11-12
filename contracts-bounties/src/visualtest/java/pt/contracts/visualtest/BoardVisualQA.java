@@ -35,6 +35,7 @@ import org.lwjgl.glfw.GLFW;
 import pt.contracts.ContractsMod;
 import pt.contracts.ContractBoardBlock;
 import pt.contracts.client.ContractsScreen;
+import pt.contracts.client.ContractItemPickerScreen;
 import pt.contracts.domain.Ledger;
 
 /**
@@ -52,7 +53,9 @@ public final class BoardVisualQA {
     private static final String[] FILENAMES = {
             "contracts-boards-minecraft.png", "contracts-board-small.png",
             "contracts-board-tall.png", "contracts-board-wide.png",
-            "contracts-menu-browse.png", "contracts-menu-create.png"
+            "contracts-menu-browse.png", "contracts-menu-create.png",
+            "contracts-item-catalogue.png", "contracts-item-search.png", "contracts-item-selected.png",
+            "contracts-menu-compact.png", "contracts-menu-portuguese.png"
     };
     private static final long STARTED = System.currentTimeMillis();
     private static final Map<String, Integer> QUAD_COUNTS = new LinkedHashMap<>();
@@ -97,6 +100,7 @@ public final class BoardVisualQA {
                 return;
             }
             if (mc.screen != captureScreen) throw new IllegalStateException("Unexpected screen during gallery capture");
+            if (captureIndex == 10 && screenTicks == 0) captureScreen.resize(mc, mc.getWindow().getGuiScaledWidth(), mc.getWindow().getGuiScaledHeight());
             screenTicks++;
             // The production interface uses the same client frame loop. Wait for
             // stable ticks and time; preview screens additionally count real renders.
@@ -104,7 +108,7 @@ public final class BoardVisualQA {
                     || captureScreen instanceof PreviewScreen preview && preview.renderedFrames < 30) return;
             Files.createDirectories(OUT);
             try (var image = Screenshot.takeScreenshot(mc.getMainRenderTarget())) {
-                check(image.getWidth() >= 1200 && image.getHeight() >= 680,
+                check(captureIndex == 9 ? image.getWidth() == 640 && image.getHeight() == 480 : image.getWidth() >= 1200 && image.getHeight() >= 680,
                         "Screenshot window was smaller than requested: " + image.getWidth() + "x" + image.getHeight());
                 image.writeToFile(OUT.resolve(FILENAMES[captureIndex]));
             }
@@ -112,58 +116,96 @@ public final class BoardVisualQA {
             ContractsMod.LOG.info("CONTRACTS_BOARD_VISUAL_QA captured {}", FILENAMES[captureIndex]);
             captureIndex++;
             if (captureIndex < FILENAMES.length) showCapture(mc);
-            else complete(true, "Three registered board items and their placed models have valid geometry and sprites. Captured overview, three close-ups, and the real ContractsScreen browse and creation tabs with demonstration data.");
+            else complete(true, "Three production board models and eleven actual Minecraft captures passed. The visual item catalogue, search, draft preservation, exact item selection, session handling, compact controls and Portuguese presentation passed.");
         } catch (Throwable failure) {
             failure.printStackTrace();
             complete(false, failure.toString());
         }
     }
 
-    private static void showCapture(Minecraft mc) {
+    private static void showCapture(Minecraft mc) throws Exception {
         if (captureIndex < 4) {
-            captureScreen = new PreviewScreen(captureIndex - 1);
-            mc.setScreen(captureScreen);
+            captureScreen = new PreviewScreen(captureIndex - 1); mc.setScreen(captureScreen);
         } else if (captureIndex == 4) {
             validatePublicationAccess(mc);
-            // Feed the exact public snapshot entry point used by server packets.
-            // These snapshots are presentation fixtures, not live trades or treasury policies.
             ContractsScreen.receive(demonstrationSnapshot());
             check(mc.screen instanceof ContractsScreen, "Production contract interface did not open");
             captureScreen = mc.screen;
-        } else {
-            check(mc.screen instanceof ContractsScreen, "Expected production contract interface before opening form");
-            boolean clicked = false;
-            for (var child : List.copyOf(mc.screen.children())) {
-                if (child instanceof AbstractButton button && button.active && button.visible
-                        && button.getMessage().getContents() instanceof TranslatableContents text
-                        && text.getKey().equals("gui.contracts.create")) {
-                    button.onPress();
-                    clicked = true;
-                    break;
-                }
-            }
-            check(clicked, "Could not open the production Create contract tab");
+        } else if (captureIndex == 5) {
+            check(click(mc.screen, "gui.contracts.create"), "Create tab did not open");
             int fields = 0;
-            for (var child : mc.screen.children()) {
-                if (child instanceof EditBox field
-                        && field.getMessage().getContents() instanceof TranslatableContents text) {
-                    switch (text.getKey()) {
-                        case "gui.contracts.label_title" -> field.setValue("Timber for the village inn");
-                        case "gui.contracts.label_item" -> field.setValue("minecraft:oak_log");
-                        case "gui.contracts.label_quantity" -> field.setValue("64");
-                        case "gui.contracts.label_reward" -> field.setValue("20");
-                        default -> throw new IllegalStateException("Unexpected production form field: " + text.getKey());
-                    }
-                    fields++;
+            for (var child : mc.screen.children()) if (child instanceof EditBox field) {
+                String key = ((TranslatableContents)field.getMessage().getContents()).getKey();
+                switch (key) {
+                    case "gui.contracts.label_title" -> field.setValue("Timber for the village inn");
+                    case "gui.contracts.label_quantity" -> field.setValue("64");
+                    case "gui.contracts.label_reward" -> field.setValue("20");
+                    default -> throw new IllegalStateException("Unexpected form field: " + key);
                 }
+                fields++;
             }
-            check(fields == 4, "Expected four fields in the production Create contract form");
-            mc.screen.setFocused(null);
+            check(fields == 3, "Only title, quantity and reward should need typing");
+            check(hasButton(mc.screen, "gui.contracts.publish", false), "Publishing without a selected item must be disabled");
+            mc.screen.setFocused(null); captureScreen = mc.screen;
+        } else if (captureIndex == 6) {
+            check(click(mc.screen, "gui.contracts.choose_item"), "Missing visual material chooser");
+            check(mc.screen instanceof ContractItemPickerScreen, "Catalogue did not open");
+            Screen picker = mc.screen;
+            ContractsScreen.receive(demonstrationSnapshot());
+            check(mc.screen == picker, "Policy refresh replaced the picker and lost its draft");
+            search(mc.screen).setValue("contracts:");
+            check(itemButtons(mc.screen) == 3, "Namespace search must find all three registered mod boards");
+            search(mc.screen).setValue("no_such_material_1234");
+            check(itemButtons(mc.screen) == 0, "Unknown search must have no results");
+            search(mc.screen).setValue("");
+            check(click(mc.screen, "gui.contracts.picker_inventory"), "Missing inventory filter");
+            check(itemButtons(mc.screen) == 0, "Offline fixture must have no inventory items");
+            check(click(mc.screen, "gui.contracts.picker_all"), "Missing all-materials filter");
+            check(itemButtons(mc.screen) > 0, "All-materials filter did not restore items");
             captureScreen = mc.screen;
+        } else if (captureIndex == 7) {
+            search(mc.screen).setValue("oak log");
+            check(itemButtons(mc.screen) > 0, "Name search found no oak logs"); captureScreen = mc.screen;
+        } else if (captureIndex == 8) {
+            check(clickLiteral(mc.screen, "Oak Log"), "Could not select Oak Log by name and icon");
+            check(mc.screen instanceof ContractsScreen, "Selection did not return to the form");
+            var target = ContractsScreen.class.getDeclaredField("itemValue"); target.setAccessible(true);
+            check("minecraft:oak_log".equals(target.get(mc.screen)), "Wrong item selected for the existing server request");
+            for (var child : mc.screen.children()) if (child instanceof EditBox field) {
+                String key = ((TranslatableContents)field.getMessage().getContents()).getKey();
+                check(field.getValue().equals(key.endsWith("label_title") ? "Timber for the village inn" : key.endsWith("label_quantity") ? "64" : "20"), "Picker lost a draft field");
+            }
+            check(hasButton(mc.screen, "gui.contracts.publish", true), "Selected item should allow publication"); captureScreen = mc.screen;
+        } else if (captureIndex == 9) {
+            mc.getWindow().setWindowed(640, 480); mc.resizeDisplay(); bounds(mc.screen);
+            check(clickLiteral(mc.screen, "Oak Log"), "Compact material button missing");
+            check(mc.screen instanceof ContractItemPickerScreen, "Compact catalogue did not open"); bounds(mc.screen);
+            check(click(mc.screen, "gui.contracts.back"), "Compact catalogue did not return"); bounds(mc.screen); captureScreen = mc.screen;
+        } else {
+            mc.getWindow().setWindowed(1600, 900); mc.resizeDisplay();
+            mc.getLanguageManager().setSelected("pt_pt"); mc.options.languageCode = "pt_pt"; mc.reloadResourcePacks(); captureScreen = mc.screen;
         }
-        GLFW.glfwSetCursorPos(mc.getWindow().getWindow(), 1, 1);
-        screenTicks = 0;
-        screenStarted = System.currentTimeMillis();
+        GLFW.glfwSetCursorPos(mc.getWindow().getWindow(), 1, 1); screenTicks = 0; screenStarted = System.currentTimeMillis();
+    }
+    private static EditBox search(Screen screen) {
+        return screen.children().stream().filter(c -> c instanceof EditBox).map(c -> (EditBox)c).findFirst().orElseThrow();
+    }
+    private static int itemButtons(Screen screen) {
+        return (int)screen.children().stream().filter(c -> c instanceof AbstractButton b && b.visible && b.active
+                && b.getMessage().getContents() instanceof net.minecraft.network.chat.contents.PlainTextContents
+                && !b.getMessage().getString().equals("←") && !b.getMessage().getString().equals("→")).count();
+    }
+    private static boolean clickLiteral(Screen screen, String label) {
+        for (var child : List.copyOf(screen.children())) if (child instanceof AbstractButton b && b.active && b.visible && b.getMessage().getString().equals(label)) { b.onPress(); return true; }
+        return false;
+    }
+    private static boolean click(Screen screen, String key) { return clickLiteral(screen, Component.translatable(key).getString()); }
+    private static void bounds(Screen screen) {
+        var widgets = screen.children().stream().filter(c -> c instanceof net.minecraft.client.gui.components.AbstractWidget w && w.visible).map(c -> (net.minecraft.client.gui.components.AbstractWidget)c).toList();
+        for (var a : widgets) {
+            check(a.getX() >= 0 && a.getY() >= 0 && a.getX() + a.getWidth() <= screen.width && a.getY() + a.getHeight() <= screen.height, "Compact widget outside screen");
+            for (var b : widgets) if (a != b) check(a.getX() >= b.getX() + b.getWidth() || a.getX() + a.getWidth() <= b.getX() || a.getY() >= b.getY() + b.getHeight() || a.getY() + a.getHeight() <= b.getY(), "Compact widgets overlap");
+        }
     }
 
     private static void validatePublicationAccess(Minecraft mc) {
@@ -182,6 +224,14 @@ public final class BoardVisualQA {
         ContractsScreen.receive(demonstrationSnapshot());
         ContractsScreen.receive("{\"close\":true,\"message\":\"gui.contracts.board_range\"}");
         check(!(mc.screen instanceof ContractsScreen), "Expired board session must close the contract menu");
+        ContractsScreen.receive(demonstrationSnapshot());
+        check(click(mc.screen, "gui.contracts.create") && click(mc.screen, "gui.contracts.choose_item"), "Could not open picker for session checks");
+        ContractsScreen.receive("{\"close\":true}");
+        check(!(mc.screen instanceof ContractItemPickerScreen), "An expired session must close its picker too");
+        ContractsScreen.receive(demonstrationSnapshot());
+        check(click(mc.screen, "gui.contracts.create") && click(mc.screen, "gui.contracts.choose_item"), "Could not reopen picker");
+        ContractsScreen.receive(locked.toString());
+        check(mc.screen instanceof ContractsScreen && hasButton(mc.screen, "gui.contracts.create", false), "Revoked publication permission must leave the picker and lock creation");
         mc.setScreen(previous);
         ContractsScreen.receive("{\"close\":true}");
         check(mc.screen == previous, "Session close must leave unrelated screens open");
@@ -315,6 +365,8 @@ public final class BoardVisualQA {
             report.put("message", message);
             report.put("screenshot", "contracts-boards-minecraft.png");
             report.put("screenshots", List.copyOf(CAPTURED));
+            report.put("visualItemPicker", true);
+            report.put("pickerChecks", List.of("localized name and namespace search", "inventory and empty-state filters", "draft preserved during selection and policy refresh", "exact item ID selected without typing", "320x240 non-overlapping form and catalogue", "English and Portuguese"));
             report.put("interfaceData", "Demonstration contracts rendered by the unmodified production ContractsScreen");
             report.put("bakedQuadCounts", QUAD_COUNTS);
             report.put("windowWidth", Minecraft.getInstance().getWindow().getWidth());

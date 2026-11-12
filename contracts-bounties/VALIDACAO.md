@@ -1,3 +1,7 @@
+# Atualização 0.4.1 — catálogo visual de materiais
+
+A revisão da interface, os 90 testes JUnit, os 38 GameTests e o ensaio real do catálogo estão em [VALIDACAO-0.4.1.md](VALIDACAO-0.4.1.md). Os resultados abaixo descrevem os lançamentos anteriores e as respetivas integrações financeiras.
+
 # Validação — Contracts & Bounties 0.4.0
 
 [Execução aprovada 39458831632](https://github.com/ROCKABITS/Mods/actions/runs/39458831632), código [`e67578e`](https://github.com/ROCKABITS/Mods/commit/e67578e5d38f8e450023f3f91b839b7de916aaf0). **Publicação concluída; downloads públicos verificados por SHA-256.**

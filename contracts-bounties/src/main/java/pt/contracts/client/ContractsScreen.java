@@ -15,6 +15,7 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
 import org.lwjgl.glfw.GLFW;
 import pt.contracts.domain.Ledger;
 import pt.contracts.network.ContractsNetwork;
@@ -24,7 +25,7 @@ public final class ContractsScreen extends Screen {
     private static final Gson JSON = new Gson();
     private static final int INK = 0xFF392B20, MUTED = 0xFF715F48, EDGE = 0xFF92734A;
     private static final int PAPER = 0xFFEAD7AD, LIGHT = 0xFFF5E6C9, ACCENT = 0xFF315D48;
-    private static final int ROW_HEIGHT = 46, ROW_TOP = 81;
+    private static final int ROW_HEIGHT = 52, ROW_TOP = 81;
     private Snapshot snapshot;
     private boolean creating;
     private boolean waiting;
@@ -33,9 +34,14 @@ public final class ContractsScreen extends Screen {
     private String pendingOperation = "";
     private int x, y, w, h, rowOffset, visibleRows;
     private int pendingRowOffset = -1;
-    private String titleValue = "", itemValue = "minecraft:oak_log", quantityValue = "64", rewardValue = "20";
+    private String titleValue = "", itemValue = "", quantityValue = "64", rewardValue = "20";
     private String notice = "";
-    private EditBox titleField, itemField, quantityField, rewardField;
+    private EditBox titleField, quantityField, rewardField;
+
+    private static ContractsScreen owner(Screen screen) {
+        if (screen instanceof ContractsScreen contracts) return contracts;
+        return screen instanceof ContractItemPickerScreen picker ? picker.parent() : null;
+    }
 
     private ContractsScreen(Snapshot snapshot) {
         super(tr("title"));
@@ -47,7 +53,7 @@ public final class ContractsScreen extends Screen {
     public static void receive(String json) {
         if (json == null || json.isBlank()) {
             Minecraft minecraft = Minecraft.getInstance();
-            minecraft.execute(() -> { if (minecraft.screen instanceof ContractsScreen) minecraft.setScreen(null); });
+            minecraft.execute(() -> { if (owner(minecraft.screen) != null) minecraft.setScreen(null); });
             return;
         }
         Snapshot incoming;
@@ -62,11 +68,15 @@ public final class ContractsScreen extends Screen {
         final Snapshot data = incoming;
         Minecraft minecraft = Minecraft.getInstance();
         minecraft.execute(() -> {
+            ContractsScreen current = owner(minecraft.screen);
             if (data.close) {
-                if (minecraft.screen instanceof ContractsScreen) minecraft.setScreen(null);
+                if (current != null) minecraft.setScreen(null);
                 return;
             }
-            if (minecraft.screen instanceof ContractsScreen current) current.accept(data);
+            if (current != null) {
+                current.accept(data);
+                if (minecraft.screen instanceof ContractItemPickerScreen && !data.canPublish) minecraft.setScreen(current);
+            }
             else minecraft.setScreen(new ContractsScreen(data));
         });
     }
@@ -99,14 +109,13 @@ public final class ContractsScreen extends Screen {
     private boolean chronicles() { return "CHRONICLES".equals(snapshot.currency); }
     private void capture() {
         if (titleField != null) titleValue = titleField.getValue();
-        if (itemField != null) itemValue = itemField.getValue();
         if (quantityField != null) quantityValue = quantityField.getValue();
         if (rewardField != null) rewardValue = rewardField.getValue();
     }
 
     @Override protected void init() {
         capture();
-        titleField = itemField = quantityField = rewardField = null;
+        titleField = quantityField = rewardField = null;
         w = Math.min(610, width - 16);
         h = Math.min(390, height - 16);
         x = (width - w) / 2;
@@ -171,10 +180,12 @@ public final class ContractsScreen extends Screen {
         boolean compact = compactForm();
         titleField = field(fieldX, y + 83, compact ? half : fieldW, "label_title", titleValue, 64);
         titleField.setHint(tr("title_hint"));
-        itemField = field(compact ? fieldX + half + 10 : fieldX, y + (compact ? 83 : 119),
-                compact ? half : fieldW, "label_item", itemValue, 128);
-        itemField.setHint(Component.literal("minecraft:oak_log"));
-        itemField.setTooltip(Tooltip.create(tr("item_hint")));
+        var material = addRenderableWidget(new MaterialButton(compact ? fieldX + half + 10 : fieldX,
+                y + (compact ? 83 : 119), compact ? half : fieldW));
+        material.active = !waiting;
+        material.setTooltip(Tooltip.create(Component.empty()
+                .append(itemValue.isBlank() ? tr("choose_item") : Component.literal(itemName(itemValue)))
+                .append("\n").append(tr("item_hint"))));
         quantityField = field(fieldX, y + (compact ? 119 : 155), half, "label_quantity", quantityValue, 4);
         quantityField.setFilter(value -> value.matches("[0-9]*"));
         quantityField.setTooltip(Tooltip.create(tr("quantity_hint")));
@@ -183,11 +194,24 @@ public final class ContractsScreen extends Screen {
         rewardField.setTooltip(Tooltip.create(tr(chronicles() ? "reward_coins_hint" : "reward_emeralds_hint")));
         int controls = y + h - (compact ? 38 : 61);
         PaperButton publish = button(x + w - 123, controls, 111, "publish", this::publish);
-        publish.active = !waiting && snapshot.canPublish;
+        publish.active = !waiting && snapshot.canPublish && !itemValue.isBlank();
         publish.setTooltip(Tooltip.create(Component.literal(publicationDetails() + "\n" + text("tax_lock_hint")
                 + "\n" + text("escrow_hint"))));
         button(x + 12, controls, 76, "back", () -> switchView(false));
         setInitialFocus(titleField);
+    }
+
+    public void selectItem(String id) {
+        ResourceLocation key = ResourceLocation.tryParse(id);
+        if (key == null || !BuiltInRegistries.ITEM.containsKey(key) || BuiltInRegistries.ITEM.get(key) == net.minecraft.world.item.Items.AIR) return;
+        itemValue = key.toString();
+        minecraft.setScreen(this);
+    }
+
+    private void chooseItem() {
+        if (waiting || !snapshot.canPublish) return;
+        capture();
+        minecraft.setScreen(new ContractItemPickerScreen(this));
     }
 
     private EditBox field(int fieldX, int fieldY, int fieldW, String label, String value, int maxLength) {
@@ -309,17 +333,19 @@ public final class ContractsScreen extends Screen {
     }
 
     @Override public void render(GuiGraphics g, int mouseX, int mouseY, float partialTick) {
-        g.fill(0, 0, width, height, 0xAB17130F);
-        frame(g, x, y, w, h, PAPER, EDGE);
-        g.fill(x + 4, y + 4, x + w - 4, y + 27, 0xFFDFC694);
+        g.fill(0, 0, width, height, 0xD5101B17);
+        DailyTheme.panel(g, x, y, w, h);
+        DailyTheme.seal(g, x + 10, y + 6, 18, "MEDIUM");
         String wallet = text("wallet", money(snapshot.wallet, snapshot.currency));
         int walletWidth = Math.min(font.width(wallet), w / 2);
-        line(g, getTitle().getString(), x + 11, y + 10, w - walletWidth - 38, INK);
-        line(g, wallet, x + w - walletWidth - 11, y + 11, walletWidth, INK);
+        line(g, getTitle().getString(), x + 34, y + 10, w - walletWidth - 56, DailyTheme.GOLD);
+        line(g, wallet, x + w - walletWidth - 11, y + 11, walletWidth, DailyTheme.PALE);
+        int tabWidth = (w - 28) / 3, selectedX = x + (creating ? 14 + tabWidth : 10);
+        g.fill(selectedX, y + 52, selectedX + tabWidth, y + 54, DailyTheme.GOLD);
         line(g, text("publication_requirement", reputation(), snapshot.requiredReputation), x + 12, y + 56, w - 24,
-                snapshot.canPublish ? ACCENT : MUTED);
+                snapshot.canPublish ? DailyTheme.GOLD : DailyTheme.PALE);
         if (!creating) line(g, text("board_policy", percentage(snapshot.taxBasisPoints),
-                text(snapshot.canPublish ? "publication_allowed" : "publication_locked")), x + 12, y + 68, w - 24, MUTED);
+                text(snapshot.canPublish ? "publication_allowed" : "publication_locked")), x + 12, y + 68, w - 24, 0xFFC6BC9B);
         if (creating) renderForm(g); else renderBoard(g, mouseX, mouseY);
         super.render(g, mouseX, mouseY, partialTick);
         if (!creating) renderRowTooltip(g, mouseX, mouseY);
@@ -327,7 +353,7 @@ public final class ContractsScreen extends Screen {
             g.renderTooltip(font, font.split(Component.literal(publicationDetails()), Math.min(300, w - 24)), mouseX, mouseY);
         if (!notice.isEmpty()) {
             String translated = Component.translatable(notice).getString();
-            line(g, translated, x + 10, y + h - 12, w - 20, ACCENT);
+            line(g, translated, x + 10, y + h - 12, w - 20, DailyTheme.GOLD);
             if (mouseY >= y + h - 14 && mouseY <= y + h && mouseX >= x && mouseX <= x + w && font.width(translated) > w - 20)
                 g.renderTooltip(font, font.split(Component.literal(translated), Math.max(120, w - 20)), mouseX, mouseY);
         }
@@ -335,26 +361,32 @@ public final class ContractsScreen extends Screen {
 
     private void renderBoard(GuiGraphics g, int mouseX, int mouseY) {
         if (snapshot.contracts.isEmpty()) {
-            line(g, text("empty"), x + 14, y + ROW_TOP + 12, w - 28, MUTED);
+            DailyTheme.seal(g, x + w / 2 - 16, y + ROW_TOP + 9, 32, "EASY");
+            line(g, text("empty"), x + 14, y + ROW_TOP + 47, w - 28, DailyTheme.PALE);
         }
         for (int i = 0; i < visibleRows && rowOffset + i < snapshot.contracts.size(); i++) {
             Contract contract = snapshot.contracts.get(rowOffset + i);
             int rowY = y + ROW_TOP + i * ROW_HEIGHT;
             frame(g, x + 10, rowY, w - 20, ROW_HEIGHT - 3, i % 2 == 0 ? LIGHT : 0xFFE4CFA5, 0xFFBEA375);
-            int textW = w - 105;
+            g.fill(x + 10, rowY, x + 13, rowY + ROW_HEIGHT - 3, publicContract(contract) ? 0xFFAE843D : ACCENT);
+            frame(g, x + 17, rowY + 9, 28, 30, 0xFFE1C99C, 0xFFC2A574);
+            ResourceLocation item = ResourceLocation.tryParse(safe(contract.item));
+            if (item != null && BuiltInRegistries.ITEM.containsKey(item))
+                g.renderItem(new ItemStack(BuiltInRegistries.ITEM.get(item)), x + 23, rowY + 16);
+            int textW = w - 147;
             String label = text(publicContract(contract) ? "funding_kingdom_short" : "funding_player_short");
             if (publicContract(contract) && contract.reputationReward > 0)
                 label += " · " + text("reputation_reward_short", contract.reputationReward);
-            line(g, "[" + label + "] " + safe(contract.title), x + 15, rowY + 3, textW, INK);
+            line(g, "[" + label + "] " + safe(contract.title), x + 52, rowY + 5, textW, INK);
             line(g, contract.quantity + " × " + itemName(contract.item) + " · " + text("gross_reward", money(contract.reward, contract.currency)),
-                    x + 15, rowY + 15, textW, MUTED);
+                    x + 52, rowY + 19, textW, MUTED);
             line(g, text("net_and_tax", money(contract.netReward, contract.currency), money(contract.tax, contract.currency),
-                    percentage(contract.taxBasisPoints)), x + 15, rowY + 28, textW, ACCENT);
+                    percentage(contract.taxBasisPoints)), x + 52, rowY + 33, textW, ACCENT);
         }
         int from = snapshot.contracts.isEmpty() ? 0 : rowOffset + 1;
         int to = Math.min(rowOffset + visibleRows, snapshot.contracts.size());
         line(g, text("page", snapshot.page + 1, Math.max(1, snapshot.pages), from, to),
-                x + 135, y + h - 55, w - 205, MUTED);
+                x + 135, y + h - 55, w - 205, DailyTheme.PALE);
     }
 
     private void renderRowTooltip(GuiGraphics g, int mouseX, int mouseY) {
@@ -369,12 +401,13 @@ public final class ContractsScreen extends Screen {
     private void renderForm(GuiGraphics g) {
         boolean compact = compactForm();
         int half = (w - 34) / 2;
+        frame(g, x + 10, y + 68, w - 20, h - (compact ? 110 : 148), PAPER, 0xFFBEA375);
         line(g, text("label_title"), x + 12, y + 72, compact ? half : w - 24, INK);
         line(g, text("label_item"), compact ? x + 22 + half : x + 12, y + (compact ? 72 : 108), compact ? half : w - 24, INK);
         line(g, text("label_quantity"), x + 12, y + (compact ? 108 : 144), half, INK);
         line(g, text(chronicles() ? "label_reward_coins" : "label_reward_emeralds"), x + 22 + half,
                 y + (compact ? 108 : 144), half, INK);
-        int splitY = y + (compact ? 150 : 190);
+        int splitY = y + (compact ? 147 : 190);
         long gross = estimatedReward();
         long tax = gross < 0 ? 0 : gross * Math.max(0, Math.min(10_000, snapshot.taxBasisPoints)) / 10_000;
         if (!compact) frame(g, x + 10, splitY - 8, w - 20, 66, LIGHT, 0xFFBEA375);
@@ -388,7 +421,7 @@ public final class ContractsScreen extends Screen {
                 g.drawString(font, rule.get(i), x + 15, splitY + 39 + i * 9, MUTED, false);
             var hint = font.split(tr("escrow_hint"), w - 24);
             for (int i = 0; i < Math.min(2, hint.size()); i++)
-                g.drawString(font, hint.get(i), x + 12, y + h - 36 + i * 9, MUTED, false);
+                g.drawString(font, hint.get(i), x + 12, y + h - 36 + i * 9, DailyTheme.PALE, false);
         }
     }
 
@@ -443,6 +476,22 @@ public final class ContractsScreen extends Screen {
     private PaperButton button(int bx, int by, int bw, String key, Runnable action) {
         return addRenderableWidget(new PaperButton(bx, by, bw, tr(key), action));
     }
+    private final class MaterialButton extends AbstractButton {
+        MaterialButton(int bx, int by, int bw) {
+            super(bx, by, bw, 20, itemValue.isBlank() ? tr("choose_item") : Component.literal(itemName(itemValue)));
+        }
+        @Override public void onPress() { chooseItem(); }
+        @Override protected void renderWidget(GuiGraphics g, int mx, int my, float partial) {
+            frame(g, getX(), getY(), getWidth(), getHeight(), isHoveredOrFocused() ? LIGHT : 0xFFE0C99D,
+                    isHoveredOrFocused() ? ACCENT : EDGE);
+            ResourceLocation id = ResourceLocation.tryParse(itemValue);
+            if (id != null && BuiltInRegistries.ITEM.containsKey(id))
+                g.renderItem(new ItemStack(BuiltInRegistries.ITEM.get(id)), getX() + 3, getY() + 2);
+            line(g, getMessage().getString(), getX() + 24, getY() + 6, getWidth() - 39, INK);
+            g.drawString(font, "…", getX() + getWidth() - 12, getY() + 6, ACCENT, false);
+        }
+        @Override protected void updateWidgetNarration(NarrationElementOutput output) { defaultButtonNarrationText(output); }
+    }
     private static final class PaperButton extends AbstractButton {
         private final Runnable action;
         PaperButton(int x, int y, int width, Component label, Runnable action) {
@@ -451,14 +500,14 @@ public final class ContractsScreen extends Screen {
         }
         @Override public void onPress() { action.run(); }
         @Override protected void renderWidget(GuiGraphics g, int mouseX, int mouseY, float partialTick) {
-            frame(g, getX(), getY(), width, height, !active ? 0xFFD8C7A4 : isHoveredOrFocused() ? LIGHT : 0xFFE1C697,
-                    isHoveredOrFocused() && active ? ACCENT : EDGE);
+            frame(g, getX(), getY(), width, height, !active ? 0xFF243C32 : isHoveredOrFocused() ? 0xFF40634B : 0xFF24473A,
+                    isHoveredOrFocused() && active ? DailyTheme.GOLD : 0xFF9D8754);
             var font = Minecraft.getInstance().font;
             float scale = Math.min(1.0F, (width - 8.0F) / Math.max(1, font.width(getMessage())));
             g.pose().pushPose();
             g.pose().translate(getX() + (width - font.width(getMessage()) * scale) / 2, getY() + (height - 9 * scale) / 2, 0);
             g.pose().scale(scale, scale, 1);
-            g.drawString(font, getMessage(), 0, 0, active ? INK : MUTED, false);
+            g.drawString(font, getMessage(), 0, 0, active ? DailyTheme.PALE : 0xFFA49C7E, false);
             g.pose().popPose();
         }
         @Override protected void updateWidgetNarration(NarrationElementOutput output) { defaultButtonNarrationText(output); }

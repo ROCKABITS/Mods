@@ -30,7 +30,7 @@ if not matches or int(matches[-1]) < expected or expected == 0:
 
 visual_dir = project / 'qa-results/boards-client'
 visual = json.loads((visual_dir / 'result.json').read_text())
-if visual.get('success') is not True:
+if visual.get('success') is not True or visual.get('visualItemPicker') is not True:
     raise SystemExit('Minecraft model/texture validation failed.')
 screenshot = visual_dir / 'contracts-boards-minecraft.png'
 if not screenshot.is_file() or screenshot.stat().st_size < 1024:

@@ -40,6 +40,8 @@ classes = output / 'classes'
 classes.mkdir(parents=True)
 sources = sorted((project / 'src/main/java/pt/contracts/domain').glob('*.java'))
 sources += sorted((project / 'src/test/java/pt/contracts/domain').glob('*.java'))
+sources += [project / 'src/main/java/pt/contracts/client' / name for name in ('ItemSearch.java', 'ItemPickerLayout.java')]
+sources += sorted((project / 'src/test/java/pt/contracts/client').glob('*.java'))
 subprocess.run([executable('javac'), '--release', '21', '-encoding', 'UTF-8', '-cp', str(jar),
                 '-d', str(classes), *map(str, sources)], check=True)
 subprocess.run([executable('java'), '-jar', str(jar), 'execute', '--class-path', str(classes),

@@ -357,7 +357,7 @@ public final class ContractsService {
     private static Item item(String id) {
         ResourceLocation key = ResourceLocation.tryParse(id);
         if (key == null || !BuiltInRegistries.ITEM.containsKey(key) || BuiltInRegistries.ITEM.get(key) == Items.AIR)
-            throw new IllegalArgumentException("Indica um objeto válido, por exemplo minecraft:oak_log.");
+            throw new IllegalArgumentException("gui.contracts.error_item");
         return BuiltInRegistries.ITEM.get(key);
     }
     private static List<ItemStack> inventory(ServerPlayer player) {

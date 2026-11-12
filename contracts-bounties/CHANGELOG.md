@@ -1,3 +1,12 @@
+# Contracts & Bounties 0.4.1 — Visual material selection
+
+- Replaced the raw item-ID field with a visual catalogue of registered Vanilla and modded items, using real icons and localized names.
+- Added accent-insensitive name search, optional namespace/ID/#tag filters, pagination, keyboard selection and a main-inventory filter that excludes customized items.
+- Preserve the title, quantity and reward while selecting or cancelling, resizing and receiving server policy refreshes. An expired session closes the catalogue; revoked publication permission returns to the board.
+- Refreshed the board and form with emerald lacquer, gold trim, parchment cards, material icons and clearer selected tabs.
+- Kept the existing single-item contract target, server validation, protocol 3, escrow, taxes, rewards and saved-data formats.
+- Added search and viewport regression tests plus actual Minecraft catalogue, draft, selection and compact-screen checks in English and Portuguese.
+
 # Contracts & Bounties 0.4.0 — Daily Quests & RPG Celebrations
 
 - Added five server-generated daily RNG quests per UUID: two easy, two medium and one hard, with 57 configurable templates across mining, combat, farming, fishing, exploration and physical deliveries.
