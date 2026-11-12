@@ -82,12 +82,12 @@ public final class DailyScreen extends Screen {
                 JsonObject q=quests.get(i).getAsJsonObject(),t=q.getAsJsonObject("template");int top=y+(h<300?62:80)+i*rowHeight;
                 int right=x+w-(w<450?88:130),color=DailyTheme.color(str(t,"difficulty"));
                 g.fill(x+11,top,x+w-11,top+rowHeight-3,DailyTheme.PAPER);g.fill(x+11,top,x+15,top+rowHeight-3,color);
-                if(rowHeight>32)DailyTheme.seal(g,x+20,top+9,27,str(t,"difficulty"));
-                int left=x+(rowHeight>32?57:22),available=right-left;
+                if(rowHeight>=44)DailyTheme.seal(g,x+20,top+9,27,str(t,"difficulty"));
+                int left=x+(rowHeight>=44?57:22),available=right-left;
                 String title=font.plainSubstrByWidth(label(str(t,"title")).getString(),available-5);
                 g.drawString(font,title,left,top+6,DailyTheme.INK,false);
                 int quantity=(int)number(t,"quantity"),progress=(int)number(q,"progress");
-                if(rowHeight>32){
+                if(rowHeight>=44){
                     String line=DailyTheme.tr("category."+str(t,"category").toLowerCase(Locale.ROOT)).getString()+" · "+DailyTheme.tr("difficulty."+str(t,"difficulty").toLowerCase(Locale.ROOT)).getString();
                     g.drawString(font,font.plainSubstrByWidth(line,Math.max(30,available-115)),left,top+20,DailyTheme.MUTED,false);
                     String value=amount(round,number(q,"gross"));g.drawString(font,value,right-font.width(value),top+20,DailyTheme.INK,false);

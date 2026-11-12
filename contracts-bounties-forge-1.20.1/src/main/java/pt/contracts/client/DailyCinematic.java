@@ -88,7 +88,7 @@ public final class DailyCinematic {
         if(timeline>=1){String title=all?DailyTheme.tr("all_total").getString():DailyScreen.label(DailyScreen.str(active,"title")).getString().toUpperCase(Locale.ROOT);g.drawCenteredString(mc.font,mc.font.plainSubstrByWidth(title,400),0,-39,alphaByte|0x382C24);}
         if(timeline>=1.5){long value=all?DailyScreen.number(active,"total"):DailyScreen.number(active,"money");long shown=Math.round(value*smooth((timeline-1.5)/1.25));String amount=(all?"":"+")+(DailyScreen.str(active,"currency").equals("EMERALD")?DailyTheme.tr("emerald_amount",shown/100).getString():DailyTheme.money(shown));g.pose().pushPose();g.pose().scale(2,2,1);g.drawString(mc.font,amount,-mc.font.width(amount)/2,-3,alphaByte|0x315C3F,false);g.pose().popPose();}
         if(timeline>=3){
-            int rep=(int)DailyScreen.number(active,"reputation");String subtitle=all?DailyTheme.tr("five_of_five").getString():DailyTheme.tr("reputation",rep).getString();g.drawCenteredString(mc.font,subtitle,0,29,titleColor);
+            int rep=(int)DailyScreen.number(active,"reputation");String subtitle=all?DailyTheme.tr("five_of_five").getString():DailyTheme.tr("reputation",rep).getString();if(all||rep>0)g.drawCenteredString(mc.font,subtitle,0,29,titleColor);
             double stamp=smooth((timeline-3)/.35);int size=(int)(52+(1-stamp)*35);g.setColor(1,1,1,(float)(alpha*stamp));DailyTheme.seal(g,177-size/2,24-size/2,size,difficulty.name());g.flush();g.setColor(1,1,1,1);
         }
         g.drawCenteredString(mc.font,DailyTheme.tr("skip_hint",SKIP.getTranslatedKeyMessage()),0,51,alphaByte|0x8B795A);g.pose().popPose();
