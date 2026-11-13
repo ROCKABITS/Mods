@@ -1,10 +1,10 @@
-# Realm Fitness 0.3.0 Beta — validação
+# Realm Fitness 0.4.0 Beta — validação
 
 Validação local em 13 de novembro de 2026, com Minecraft 1.21.1, NeoForge 21.1.256, Temurin Java 21 e cliente gráfico real sob Xvfb/Mesa.
 
 ## Testes de lógica e servidor
 
-- **46 testes JUnit:** os seis minijogos podem ser concluídos com os controlos documentados; ausência de inputs, spam de teclas, sequências antigas e séries incompletas não produzem uma conclusão válida. Inclui taps rápidos entre ticks, limites de experiência, bónus diário único, relógio recuado, fadiga/recuperação, planos ativos imutáveis, cargas bloqueadas, limites de rotinas, separação de jogadores, persistência JSON, dados inválidos e classificações comparáveis por categoria/zona/dimensão.
+- **70 testes JUnit:** os seis minijogos distintos podem ser concluídos com os controlos documentados, incluindo cargas máximas desbloqueadas com fadiga; ausência de inputs, spam de teclas, sequências antigas e séries incompletas não produzem uma conclusão válida. Inclui pressão que desce sem toques, Espaço segurado que não levanta, necessidade de mais toques com mais peso, cargas baixas facilitadas pela evolução, exigência crescente com fadiga/repetições, marcador de boxe que continua a mover-se até ao golpe, primeiro resultado bloqueado contra spam, sequências perfeitas e quebra por falha, transição rápida após o ataque, alternância dos pés, subida e descida completas nas elevações, recuperação obrigatória no remo, pausa no fundo do agachamento, previsão de toques removida após confirmação e taps rápidos entre ticks, limites de experiência, bónus diário único, relógio recuado, fadiga/recuperação, planos ativos imutáveis, cargas bloqueadas, limites de rotinas, separação de jogadores, persistência JSON, dados inválidos e classificações comparáveis por categoria/zona/dimensão.
 - **18 GameTests nativos:** equipamentos e receitas, colocação das seis máquinas e de todas as células nas quatro direções, resolução das âncoras, destruição por qualquer célula com um único drop, rejeição de obstáculos distantes, perda de suporte, compatibilidade com máquinas antigas de duas partes, colisões locais e aberturas, destruição em criativo, NBT dos atletas, rejeição de NBT inválido, modificadores sem acumulação e configuração persistente do painel, passageiros reais em entidades de montagem nas quatro direções, desmontagem ao destruir equipamento, estados visuais em uso e exclusão das montagens temporárias da gravação do mundo. Os testes de passageiros nativos usam entidades ArmorStand; a montagem por jogadores é exercitada no cliente real.
 
 ## Cliente e servidor integrado reais
@@ -21,12 +21,12 @@ As **32 capturas** incluem os seis modelos no renderizador Minecraft, incluindo 
 
 O [workflow](../.github/workflows/build-realm-fitness.yml) repete build, testes JUnit, GameTests e cliente integrado antes de publicar. Conserva uma cópia do JAR de produção antes das execuções com código de teste e publica apenas se a main ainda estiver no commit validado.
 
-O empacotador confirma metadados, bytecode Java 21, recursos, paridade de traduções e ausência de classes de teste e bibliotecas/jogos incorporados no JAR. `mod-pronto/realm-fitness-0.3.0.build.json` regista o commit, execução CI, contagens, verificações e hashes do JAR, ZIP e capturas. Os relatórios completos ficam nos artefactos da execução; o resultado do cliente acompanha a [galeria](../media/realm-fitness/0.3.0/README.md).
+O empacotador confirma metadados, bytecode Java 21, recursos, paridade de traduções e ausência de classes de teste e bibliotecas/jogos incorporados no JAR. `mod-pronto/realm-fitness-0.4.0.build.json` regista o commit, execução CI, contagens, verificações e hashes do JAR, ZIP e capturas. Os relatórios completos ficam nos artefactos da execução; o resultado do cliente acompanha a [galeria](../media/realm-fitness/0.4.0/README.md).
 
 ## Âmbito
 
 Validada a edição independente no cliente e servidor integrado, além do servidor de testes nativos. Não se considera testada uma sessão remota com dois clientes autenticados, nem combinações com mods de stats, modificadores de movimento ou renderizadores alternativos. As poses procedurais usam a skin/camadas exteriores e omitem a renderização do equipamento durante o exercício.
 
-Os indicadores interpolam as atualizações recebidas e usam uma previsão visual curta do esforço; o cálculo das repetições e recompensas continua exclusivamente no servidor. Testes de apresentação verificam movimento entre pacotes, continuidade ao receber correções e limites durante interrupções de rede.
+Os indicadores interpolam as atualizações recebidas e usam uma previsão visual curta do esforço e dos toques ainda não confirmados; o cálculo das repetições e recompensas continua exclusivamente no servidor. Testes de apresentação verificam movimento entre pacotes, continuidade ao receber correções e limites durante interrupções de rede.
 
 Os testes confirmam os resultados das seis mecânicas com inputs automatizados. A dificuldade, os limites e as percentagens continuam sujeitos a afinação com jogadores. O [guia](README.md) descreve os valores, controlos, âmbito das zonas de ginásio e funcionalidades desta beta.

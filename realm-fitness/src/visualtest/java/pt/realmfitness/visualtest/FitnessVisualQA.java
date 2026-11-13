@@ -41,8 +41,9 @@ public final class FitnessVisualQA {
     private static int stage,exercise,held,lastStage=-1,galleryIndex=-1;
     private static long next,stageSince;
     private static boolean done,shot,mountedSeen,compactShot;
-    private static int joinPhase,cancelMode;
+    private static int joinPhase,cancelMode,lastBenchTap=-100,lastRunTap=-100;
     private static final Map<String,Integer> FRAMES=new HashMap<>();
+    private static final Map<String,Long> CAPTURE_STARTED=new HashMap<>();
     private static JsonObject profile;
     private static Minecraft mc(){return Minecraft.getInstance();}
     private static void check(boolean condition,String message){if(!condition)throw new IllegalStateException(message);}
@@ -79,9 +80,15 @@ public final class FitnessVisualQA {
         var state=(JsonObject)field(screen,"state");var pattern=(Minigame)field(screen,"pattern");long received=(long)field(screen,"received");
         int t=FitnessClient.num(state,"tick")+(int)Math.min(4,(System.nanoTime()-received)/50_000_000)+1;
         if((int)field(screen,"countdown")>0){release(screen);return;}
-        int bits;
-        if(pattern.exercise==Exercise.RUN||pattern.exercise==Exercise.BOX||pattern.exercise==Exercise.ROW){int length=pattern.pulseLength(),pulse=(t+length/2)/length;bits=Math.abs(t-pulse*length)<=2?pattern.expectedKey(pulse):0;}
-        else{double target=.5-.34*Math.cos((t%48)*Math.PI*2/48),effort=state.get("effort").getAsDouble();int direction=pattern.exercise==Exercise.SQUAT?((held&Minigame.W)!=0?1:0)-((held&Minigame.S)!=0?1:0):((held&Minigame.SPACE)!=0?1:-1);effort=Math.clamp(effort+direction*.042*Math.min(3,(System.nanoTime()-received)/50_000_000.0+1),0,1);bits=pattern.exercise==Exercise.SQUAT?(effort<target?Minigame.W:Minigame.S):(effort<target?Minigame.SPACE:0);if(pattern.exercise==Exercise.PULL)bits|=state.get("balance").getAsDouble()>.5?Minigame.A:Minigame.D;}
+        int bits=0;String stage=FitnessClient.str(state,"stage");double effort=state.get("effort").getAsDouble();int index=FitnessClient.num(state,"tick")/pattern.repTicks();
+        if(!stage.equals("rest")&&!stage.equals("miss"))switch(pattern.exercise){
+            case BENCH->{if(t-lastBenchTap>=4&&(held&Minigame.SPACE)==0){bits=Minigame.SPACE;lastBenchTap=t;}}
+            case BOX->{if(!state.get("locked").getAsBoolean()&&Math.abs(pattern.boxMarkerAt(t)-.5)<.07)bits=Minigame.LEFT;}
+            case RUN->{double predicted=effort-pattern.runDrag()*Math.min(3,(System.nanoTime()-received)/50_000_000.0);if(predicted<state.get("target").getAsDouble()&&t-lastRunTap>=5){bits=FitnessClient.num(state,"nextFoot");lastRunTap=t;}}
+            case PULL->{if(stage.equals("pull"))bits|=Minigame.SPACE;bits|=state.get("balance").getAsDouble()>.5?Minigame.A:Minigame.D;}
+            case ROW->{double predicted=effort+((held&Minigame.W)!=0?pattern.rowChargeSpeed():0)*Math.min(3,(System.nanoTime()-received)/50_000_000.0);if(stage.equals("charge"))bits=predicted<.71?Minigame.W:0;else if(stage.equals("recover"))bits=Minigame.S;}
+            case SQUAT->{double predicted=effort+((held&Minigame.W)!=0?.045:0)*Math.min(3,(System.nanoTime()-received)/50_000_000.0);if(stage.equals("rise"))bits=Minigame.S;else if(predicted<.73)bits=Minigame.W;}
+        }
         for(int bit:new int[]{1,2,4,8,16,32,64})if((bits&bit)!=(held&bit)){
             boolean down=(bits&bit)!=0;
             if(bit==32||bit==64){if(down)screen.mouseClicked(0,mc().getWindow().getGuiScaledHeight()/2.0,bit==32?0:1);else screen.mouseReleased(0,mc().getWindow().getGuiScaledHeight()/2.0,bit==32?0:1);}
@@ -97,7 +104,8 @@ public final class FitnessVisualQA {
             if(failure!=null)throw new IllegalStateException("Integrated server check failed",failure);
             check(now-START<900000,"Fitness QA timed out at stage "+stage);
             if(TrainingHud.active()!=null&&stage<30){var s=TrainingHud.active();check(mc().screen==null,"Mounted minigame opened a menu");feed(s);int tick=FitnessClient.num((JsonObject)field(s,"state"),"tick");String id=Exercise.values()[exercise].id();int frame=FRAMES.getOrDefault(id,0);
-                if(frame<24&&tick>=60+frame*2){Path target=OUT.resolve("motion/"+id);Files.createDirectories(target);try(var image=Screenshot.takeScreenshot(mc().getMainRenderTarget())){image.writeToFile(target.resolve(String.format("frame-%03d.png",frame)));}FRAMES.put(id,frame+1);}
+                if(tick>=60)CAPTURE_STARTED.putIfAbsent(id,now);
+                if(frame<24&&tick>=60&&now>=CAPTURE_STARTED.get(id)+frame*100L){Path target=OUT.resolve("motion/"+id);Files.createDirectories(target);try(var image=Screenshot.takeScreenshot(mc().getMainRenderTarget())){image.writeToFile(target.resolve(String.format("frame-%03d.png",frame)));}FRAMES.put(id,frame+1);}
                 if(!shot&&tick>112){screenshot("fitness-minigame-"+id+".png");shot=true;}
                 if(exercise==0&&!compactShot&&tick>135){mc().getWindow().setWindowed(640,480);mc().resizeDisplay();compactShot=true;}
                 if(exercise==0&&compactShot&&mc().getWindow().getScreenWidth()==640&&tick>160){screenshot("fitness-compact-training.png");mc().getWindow().setWindowed(1600,900);mc().resizeDisplay();}
@@ -126,7 +134,7 @@ public final class FitnessVisualQA {
                     if(!ready)return;
                     if(exercise==0&&joinPhase==0){mc().player.connection.send(new net.minecraft.network.protocol.game.ServerboundPlayerCommandPacket(mc().player,net.minecraft.network.protocol.game.ServerboundPlayerCommandPacket.Action.PRESS_SHIFT_KEY));useMachine();mc().player.connection.send(new net.minecraft.network.protocol.game.ServerboundPlayerCommandPacket(mc().player,net.minecraft.network.protocol.game.ServerboundPlayerCommandPacket.Action.RELEASE_SHIFT_KEY));joinPhase++;next=now+700;return;}
                     if(exercise==0&&joinPhase==1){server(()->{var d=FitnessData.get(player().getServer());var a=d.ledger.athletes.get(playerId);check(!player().isPassenger()&&d.ledger.selectedLoad(a,Exercise.BENCH)==25,"Sneak-right-click did not increase load without mounting");check(a.workout.load(a.workout.next())==25&&a.workout.next().load()==20,"Equipment load changed the saved plan instead of its active override");a.experience.put(Exercise.BENCH,90);a.preferredLoads.put(Exercise.BENCH,20);a.workout.loadOverrides.clear();d.persist(player().getServer());CHECKS.add("Actual sneak-right-click changes equipment load without mounting or opening a menu; original routine is preserved");});joinPhase++;return;}
-                    useMachine();shot=false;held=0;stage++;
+                    useMachine();shot=false;held=0;lastBenchTap=lastRunTap=-100;stage++;
                 }
                 case 13->{if(TrainingHud.active()!=null){if(mc().player.getVehicle() instanceof GymMount)mountedSeen=true;return;}if(!mountedSeen)return;int index=exercise;server(()->{check(!player().isPassenger(),"Finished set left player mounted");
                     var a=FitnessData.get(player().getServer()).ledger.athletes.get(playerId);check(a.results.size()==index+1,"Set result missing");var r=a.results.getLast();check(r.valid()>=5&&r.accuracy()>=50,"Real "+r.exercise()+" controls did not qualify: "+r.valid()+"/8 at "+r.accuracy()+"%");check(a.workout.completed==index+1,"Active routine did not advance exactly once");CHECKS.add("Actual "+r.exercise()+" minigame: "+r.valid()+"/8 valid at "+r.accuracy()+"%, saved through real player inputs");

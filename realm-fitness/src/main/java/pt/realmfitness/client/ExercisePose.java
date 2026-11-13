@@ -33,7 +33,6 @@ public final class ExercisePose {
                 p.legs[0]=p.legs[2]=-.18-.18*u;p.legs[1]=p.legs[3]=.40+.35*u;
             }
             case ROW->{
-                u=.5-.5*Math.cos(tick*Math.PI*2/Minigame.REP_TICKS);
                 p.hips=.95;p.forward=.35-.18*u;p.lean=.28-.50*u;p.head=-p.lean*.65;p.armSpread=.06;p.legSpread=.22;
                 p.seatZ=p.forward;p.barY=1.06+.12*u;p.barZ=1.30-.30*u;
                 p.hands(p.barY,p.barZ-.65);p.feet(.60,.75);

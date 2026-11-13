@@ -1,8 +1,8 @@
-# Realm Fitness 0.3.0 Beta
+# Realm Fitness 0.4.0 Beta
 
 Ginásio físico para **Minecraft 1.21.1, NeoForge 21.1.256+ e Java 21**. Máquinas 3D, seis minijogos, atributos permanentes, rotinas personalizadas, calendário e painéis de recordes. Funciona de forma independente.
 
-[Descarregar JAR](../mod-pronto/realm-fitness-0.3.0.jar) · [ZIP](../mod-pronto/realm-fitness-0.3.0.zip) · [Galeria](../media/realm-fitness/0.3.0/README.md) · [Validação](VALIDACAO.md) · [Conceito original](DESIGN.md)
+[Descarregar JAR](../mod-pronto/realm-fitness-0.4.0.jar) · [ZIP](../mod-pronto/realm-fitness-0.4.0.zip) · [Galeria](../media/realm-fitness/0.4.0/README.md) · [Validação](VALIDACAO.md) · [Conceito original](DESIGN.md)
 
 Instala o mesmo JAR no servidor e em todos os clientes. Esta edição é para 1.21.1/NeoForge. Identificador: `realmfitness`.
 
@@ -13,7 +13,7 @@ Instala o mesmo JAR no servidor e em todos os clientes. Esta edição é para 1.
 3. Em **Treinos**, escolhe uma das rotinas iniciais ou cria a tua. O editor permite escolher exercícios, ordem, séries, repetições, carga, descanso e dia da semana.
 4. **Botão direito na máquina:** o jogador monta o equipamento e entra diretamente no minijogo, sem ecrã de configuração. Usa o próximo exercício, as repetições e a carga do plano ativo; sem plano, faz uma série livre de oito repetições. Exige Sobrevivência e uma máquina intacta próxima.
 5. **Agachar + botão direito antes de entrar:** aumenta 5 kg no supino/agachamentos ou um nível de resistência nas outras máquinas. Respeita os níveis desbloqueados; no máximo disponível, volta ao mínimo. A seleção fica guardada por jogador e exercício. Num plano, ajusta a sessão ativa sem editar a rotina guardada.
-6. A contagem de entrada dura dois segundos. O HUD ocupa uma faixa pequena acima da barra rápida, com indicadores interpolados a cada frame e resposta visual aos controlos. **SHIFT sai da máquina** e cancela a série incompleta. **F5 muda a perspetiva** e o rato permite observar a animação.
+6. A contagem de entrada dura dois segundos. O HUD ocupa uma faixa pequena acima da barra rápida, com indicadores próprios de cada exercício, movimento interpolado a cada frame e resposta visual aos controlos. **SHIFT sai da máquina** e cancela a série incompleta. **F5 muda a perspetiva** e o rato permite observar a animação.
 
 O supino posiciona o jogador deitado; o remo usa uma posição sentada com assento deslizante. As outras máquinas alinham o corpo com as pegas, tapete ou plataforma. As animações têm cotovelos e joelhos articulados, movimentos específicos de cada exercício e barra/pega sincronizadas com o esforço. Ao concluir a série, o jogador sai do equipamento e recebe um resumo discreto; o diário continua disponível em K.
 
@@ -29,16 +29,22 @@ Quebrar uma peça desmonta a máquina e devolve um único item em Sobrevivência
 
 | Máquina | Controlos | Atributo | Bónus máximo por defeito |
 | --- | --- | --- | --- |
-| Supino | Segurar/largar Espaço para acompanhar a zona verde. | Força | +10% dano corpo a corpo |
-| Passadeira | Alternar A/D no ritmo dos indicadores. | Condição física | +8% velocidade de movimento |
-| Saco de boxe | Cliques esquerdo/direito para socos; A/D para esquivas. | Coordenação | +8% velocidade de ataque |
-| Elevações | Espaço para subir/largar para descer e recuperar a pega; A/D para equilíbrio. | Controlo corporal | 20% menos dano de queda |
-| Remo | W para puxar e S para recuperar, sincronizados com os indicadores. | Resistência aquática | +15% velocidade de natação |
-| Agachamentos | W para descer e S para subir, acompanhando a profundidade indicada. | Potência das pernas | Até +15% altura de salto |
+| Supino | Tocar repetidamente em Espaço para encher uma barra que perde pressão. Segurar a tecla não levanta. | Força | +10% dano corpo a corpo |
+| Passadeira | Alternar A/D para manter velocidade na faixa verde; o ritmo muda entre plano, subida e sprint. Repetir o pé ou exceder a velocidade gasta fôlego. | Condição física | +8% velocidade de movimento |
+| Saco de boxe | Clicar M1/M2 quando o marcador que vai e vem passa no centro. Só o primeiro golpe conta; acertos centrais dão Perfeito e prolongam a sequência. | Coordenação | +8% velocidade de ataque |
+| Elevações | Segurar Espaço para subir e largar para descer, recuperando a pega. A/D corrige o equilíbrio; exige o ciclo completo. | Controlo corporal | 20% menos dano de queda |
+| Remo | Segurar W para carregar a força, largar na zona verde e segurar S para recuperar a remada. | Resistência aquática | +15% velocidade de natação |
+| Agachamentos | W para descer até ao verde, largar para fazer a pausa e S para a subida explosiva. | Potência das pernas | Até +15% altura de salto |
 
 Cada atributo tem **20 níveis permanentes**. Supino e agachamentos começam nos 20 kg, desbloqueando mais 5 kg por nível, até 120 kg. As restantes máquinas usam resistência de 1 a 6, desbloqueada a cada quatro níveis. Carga e fadiga tornam o controlo mais exigente.
 
-Uma série tem 4–20 tentativas, com 2,4 segundos por repetição, além da contagem inicial. Para ganhar XP e avançar o plano exige pelo menos 60% de repetições válidas e 50% de precisão. Resultados inferiores ficam no histórico como prática. O servidor calcula a técnica a partir dos inputs e do seu próprio relógio; o cliente não envia uma pontuação final.
+Uma série tem 4–20 tentativas. No supino, cada repetição tem até 3,2 segundos para atingir o topo; a pressão baixa entre toques e aumenta com a carga, a fadiga e a posição da repetição na série. No boxe, cada alvo oferece até quatro segundos para escolher o golpe; depois do ataque, o resultado é mostrado brevemente antes de passar ao seguinte. As outras mecânicas usam ciclos de 2,4 segundos, além da contagem de entrada.
+
+**A evolução torna cargas baixas mais fáceis.** A dificuldade compara a carga com a capacidade desbloqueada no respetivo atributo: os mesmos 20 kg exigem menos toques num atleta mais forte. Perto do limite pessoal, o desafio mantém-se. A fadiga acumulada entre séries e a exigência crescente dentro da série continuam a contar. Nas outras máquinas, resistências baixas tornam-se mais tolerantes com a evolução: maiores zonas de acerto, melhor economia de fôlego ou pega e mais margem de controlo.
+
+O boxe mostra a sequência atual e a melhor sequência da série, com feedback Perfeito/Bom/Falhou e som discreto nos acertos. Falhar reinicia a sequência; clicar várias vezes no mesmo alvo não substitui o primeiro resultado. A sequência não cria uma recompensa separada que contorne os limites de XP.
+
+Os indicadores continuam a ser desenhados a cada frame. Toques locais recebem resposta visual imediata e são reconciliados com os inputs confirmados pelo servidor. Para ganhar XP e avançar o plano exige pelo menos 60% de repetições válidas e 50% de precisão. Resultados inferiores ficam no histórico como prática. O servidor calcula a técnica a partir dos inputs e do seu próprio relógio; o cliente não envia uma pontuação final.
 
 Os níveis não expiram por faltar ao ginásio e persistem após morte, saída e reinício. Os bónus usam modificadores próprios, reaplicados sem acumulação a cada sincronização. A altura de salto usa uma correção da velocidade de impulso; outros modificadores e a física podem afetar o resultado final.
 

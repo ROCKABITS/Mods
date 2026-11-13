@@ -124,7 +124,7 @@ public final class FitnessService {
         if(v.pos==null||!(p.level().getBlockState(v.pos).getBlock() instanceof GymBlock block)||!block.intact(p.level(),v.pos))throw new IllegalArgumentException("fitness.station_missing");
         for(var t:ACTIVE.values())if(t.dimension.equals(v.dimension)&&t.pos.equals(v.pos))throw new IllegalArgumentException("fitness.machine_busy");
         var d=data(p);var a=athlete(p);d.ledger.ready(a,v.exercise,load,repetitions,d.ledger.highWater);
-        Minigame g=new Minigame(UUID.randomUUID(),v.exercise,load,repetitions,p.getRandom().nextLong(),a.fatigue.get(v.exercise));
+        Minigame g=new Minigame(UUID.randomUUID(),v.exercise,load,repetitions,p.getRandom().nextLong(),a.fatigue.get(v.exercise),d.ledger.level(a,v.exercise));
         GymMount mount=FitnessMod.MOUNT.get().create(p.level());if(mount==null)throw new IllegalStateException("fitness.station_missing");
         var state=p.level().getBlockState(v.pos);mount.configure(v.pos,state.getValue(GymBlock.FACING),v.exercise,!state.getValue(GymBlock.EXPANDED),p.position());
         if(!p.serverLevel().addFreshEntity(mount)){mount.discard();throw new IllegalArgumentException("fitness.machine_busy");}
@@ -133,8 +133,8 @@ public final class FitnessService {
         ACTIVE.put(p.getUUID(),training);mount.positionRider(p);block.working(p.level(),v.pos,true);sendGame(p,g,true);
     }
     private static void sendGame(ServerPlayer p,Minigame g,boolean opening){
-        var t=ACTIVE.get(p.getUUID());Map<String,Object> payload=new LinkedHashMap<>();payload.put("type","game");payload.put("open",opening);payload.put("id",g.id.toString());payload.put("exercise",g.exercise.name());payload.put("load",g.load);payload.put("repetitions",g.repetitions);payload.put("seed",g.seed);payload.put("fatigue",g.fatigue);payload.put("yaw",t==null?p.getYRot():t.mount.actorYaw());payload.put("countdown",t==null?0:Math.max(0,t.startsAt-p.getServer().getTickCount()));
-        payload.put("state",Map.of("tick",g.tick,"effort",g.effort,"balance",g.balance,"grip",g.grip,"valid",g.valid,"accuracy",g.accuracy(),"target",g.target(),"tolerance",g.tolerance()));FitnessNetwork.send(p,payload);
+        var t=ACTIVE.get(p.getUUID());Map<String,Object> payload=new LinkedHashMap<>();payload.put("type","game");payload.put("open",opening);payload.put("id",g.id.toString());payload.put("exercise",g.exercise.name());payload.put("load",g.load);payload.put("repetitions",g.repetitions);payload.put("seed",g.seed);payload.put("fatigue",g.fatigue);payload.put("trainingLevel",g.trainingLevel);payload.put("yaw",t==null?p.getYRot():t.mount.actorYaw());payload.put("countdown",t==null?0:Math.max(0,t.startsAt-p.getServer().getTickCount()));
+        Map<String,Object> state=new LinkedHashMap<>();state.put("tick",g.tick);state.put("sequence",g.sequence());state.put("feedbackId",g.feedbackId);state.put("effort",g.effort);state.put("balance",g.balance);state.put("grip",g.grip);state.put("valid",g.valid);state.put("accuracy",g.accuracy());state.put("target",g.target());state.put("tolerance",g.tolerance());state.put("stage",g.stage());state.put("locked",g.locked);state.put("landed",g.landed);state.put("marker",g.marker());state.put("streak",g.streak);state.put("bestStreak",g.bestStreak);state.put("feedback",g.feedback);state.put("feedbackTicks",g.feedbackTicks);state.put("nextFoot",g.nextFoot);state.put("holdTicks",g.holdTicks);state.put("holdRequired",g.squatHoldRequired());payload.put("state",state);FitnessNetwork.send(p,payload);
     }
     public static void tick(MinecraftServer server){
         for(UUID id:List.copyOf(ACTIVE.keySet())){
@@ -142,10 +142,10 @@ public final class FitnessService {
             try{
                 view(p,true);
                 if(!p.isAlive()||p.gameMode.getGameModeForPlayer()!=GameType.SURVIVAL||p.getVehicle()!=t.mount||t.mount.isRemoved()||!t.dimension.equals(p.level().dimension().location()))throw new IllegalArgumentException("fitness.training_interrupted");
-                if(server.getTickCount()<t.startsAt){if(server.getTickCount()%4==0)sendGame(p,t.game,false);continue;}
+                if(server.getTickCount()<t.startsAt){t.game.clearEdges();if(server.getTickCount()%4==0)sendGame(p,t.game,false);continue;}
                 t.game.advance();t.mount.progress(t.game.tick,t.game.effort,t.game.keys());
                 if(t.game.done()){
-                    release(p,t);var d=data(p);Award award=d.ledger.finish(id,p.getGameProfile().getName(),t.game,System.currentTimeMillis(),t.dimension.toString(),t.pos.asLong(),gym(t.pos));d.persist(server);apply(p);FitnessNetwork.send(p,Map.of("type","done","valid",award.result().valid(),"repetitions",award.result().repetitions(),"accuracy",award.result().accuracy(),"xp",award.gained(),"daily",award.dailyBonus()));
+                    release(p,t);var d=data(p);Award award=d.ledger.finish(id,p.getGameProfile().getName(),t.game,System.currentTimeMillis(),t.dimension.toString(),t.pos.asLong(),gym(t.pos));d.persist(server);apply(p);FitnessNetwork.send(p,Map.of("type","done","valid",award.result().valid(),"repetitions",award.result().repetitions(),"accuracy",award.result().accuracy(),"xp",award.gained(),"daily",award.dailyBonus(),"bestStreak",t.game.bestStreak));
                     refreshBoards(server);
                 }else{
                     if(t.game.tick%2==0)sendGame(p,t.game,false);

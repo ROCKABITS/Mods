@@ -12,10 +12,15 @@ class FitnessRulesTest {
     static final long NOW=Instant.parse("2026-11-13T12:00:00Z").toEpochMilli();
     static final UUID PLAYER=new UUID(1,2),OTHER=new UUID(3,4);
     static int controller(Minigame g){
-        if(g.exercise==Exercise.RUN||g.exercise==Exercise.BOX||g.exercise==Exercise.ROW)return g.tick%g.pulseLength()==0?g.expectedKey(g.tick/g.pulseLength()):0;
-        int bit=g.exercise==Exercise.SQUAT?(g.effort<g.target()?Minigame.W:Minigame.S):(g.effort<g.target()?Minigame.SPACE:0);
-        if(g.exercise==Exercise.PULL)bit|=g.balance>.5?Minigame.A:Minigame.D;
-        return bit;
+        if(g.landed||g.locked)return 0;
+        return switch(g.exercise){
+            case BENCH->g.tick%3==0?Minigame.SPACE:0;
+            case BOX->Math.abs(g.boxMarkerAt(g.tick)-.5)<.035?Minigame.LEFT:0;
+            case RUN->g.effort<g.target()&&g.tick%4==0?g.nextFoot:0;
+            case PULL->(g.stage().equals("pull")?Minigame.SPACE:0)|(g.balance>.5?Minigame.A:Minigame.D);
+            case ROW->g.step==0?(g.effort<.70?Minigame.W:0):Minigame.S;
+            case SQUAT->g.step==1?Minigame.S:g.effort<.73?Minigame.W:0;
+        };
     }
     static Minigame play(Exercise e){Minigame g=new Minigame(UUID.randomUUID(),e,e.minimumLoad(),8,991,.0);int n=0;while(!g.done()){g.input(n++,controller(g));g.advance();}return g;}
     private FitnessLedger ledger(){return new FitnessLedger();}
@@ -26,7 +31,7 @@ class FitnessRulesTest {
     @ParameterizedTest @EnumSource(Exercise.class) void doingNothingNeverCompletesASet(Exercise e){var g=new Minigame(UUID.randomUUID(),e,e.minimumLoad(),8,991,0);while(!g.done())g.advance();assertTrue(g.valid<5,e+" idle valid "+g.valid);var l=ledger();var a=athlete(l);var r=l.finish(PLAYER,"Rock",g,NOW,"minecraft:overworld",12,"0,0");assertEquals(0,r.gained());assertEquals(0,a.validToday);}
     @Test void holdingAllButtonsCannotSucceedAtBoxing(){var g=new Minigame(UUID.randomUUID(),Exercise.BOX,1,8,9,0);for(int n=0;!g.done();n++){g.input(n,127);g.advance();}assertEquals(0,g.valid);}
     @Test void aQuickTapIsNotLostWhenReleasedBeforeTheNextServerTick(){var g=new Minigame(UUID.randomUUID(),Exercise.RUN,1,8,9,0);g.input(0,Minigame.A);g.input(1,0);g.advance();assertEquals(1,g.hits);}
-    @Test void staleSequenceAndInvalidKeysCannotReplaceAcceptedInput(){var g=new Minigame(UUID.randomUUID(),Exercise.BENCH,20,4,0,0);g.input(0,Minigame.SPACE);g.input(0,0);g.input(1,128);g.advance();assertTrue(g.effort>.5);}
+    @Test void staleSequenceAndInvalidKeysCannotReplaceAcceptedInput(){var g=new Minigame(UUID.randomUUID(),Exercise.BENCH,20,4,0,0);double initial=g.effort;g.input(0,Minigame.SPACE);g.input(0,0);g.input(1,128);g.advance();assertTrue(g.effort>initial);}
     @Test void unfinishedSetCannotAwardExperience(){var l=ledger();assertThrows(IllegalArgumentException.class,()->l.finish(PLAYER,"Rock",new Minigame(UUID.randomUUID(),Exercise.RUN,1,8,9,0),NOW,"minecraft:overworld",0,"0,0"));}
     @Test void repeatResultNeverPaysTwice(){var l=ledger();var g=play(Exercise.BENCH);l.finish(PLAYER,"Rock",g,NOW,"minecraft:overworld",0,"0,0");int before=athlete(l).experience.get(Exercise.BENCH);assertThrows(IllegalArgumentException.class,()->l.finish(PLAYER,"Rock",g,NOW+20000,"minecraft:overworld",0,"0,0"));assertEquals(before,athlete(l).experience.get(Exercise.BENCH));}
     @Test void dailyXpCeilingSurvivesRepeatedTraining(){var l=ledger();l.settings.dailyXp=35;for(int i=0;i<8;i++)award(l,Exercise.BENCH,NOW+i*20000L);assertEquals(35,athlete(l).earnedToday);assertEquals(35,athlete(l).experience.get(Exercise.BENCH));}
@@ -55,7 +60,7 @@ class FitnessRulesTest {
     @Test void olderWorldsWithoutLoadSelectionsReceiveSafeDefaults(){var l=ledger();var a=athlete(l);UUID id=UUID.randomUUID();l.saveRoutine(a,new Routine(id,"A",0,List.of(new Step(Exercise.BENCH,2,8,20,5))));l.begin(a,id,NOW);var json=com.google.gson.JsonParser.parseString(FitnessLedger.JSON.toJson(l)).getAsJsonObject();var old=json.getAsJsonObject("athletes").getAsJsonObject(PLAYER.toString());old.remove("preferredLoads");old.getAsJsonObject("workout").remove("loadOverrides");var copy=FitnessLedger.fromJson(json.toString());assertEquals(20,copy.selectedLoad(copy.athletes.get(PLAYER),Exercise.BENCH));assertEquals(0,copy.athletes.get(PLAYER).workout.completed);}
     @Test void corruptOrLockedStoredLoadSelectionsAreRejected(){var l=ledger();var a=athlete(l);a.preferredLoads.put(Exercise.BENCH,120);assertThrows(IllegalArgumentException.class,()->FitnessLedger.fromJson(FitnessLedger.JSON.toJson(l)));var broken=com.google.gson.JsonParser.parseString(FitnessLedger.JSON.toJson(l)).getAsJsonObject();broken.getAsJsonObject("athletes").getAsJsonObject(PLAYER.toString()).add("preferredLoads",com.google.gson.JsonNull.INSTANCE);assertThrows(IllegalArgumentException.class,()->FitnessLedger.fromJson(broken.toString()));}
 
-    @Test void indicatorMovesEveryFrameBetweenServerSnapshots(){var p=new pt.realmfitness.client.TrainingPresentation();long now=1_000_000_000;p.accept(12,.3,.5,1,now);var first=p.frame(Exercise.BENCH,Minigame.SPACE,false,now+16_000_000);var second=p.frame(Exercise.BENCH,Minigame.SPACE,false,now+32_000_000);assertTrue(second.tick()>first.tick());assertTrue(second.effort()>first.effort());assertTrue(second.effort()-first.effort()<.05);}
+    @Test void indicatorMovesEveryFrameBetweenServerSnapshots(){var p=new pt.realmfitness.client.TrainingPresentation();long now=1_000_000_000;p.configure(new Minigame(UUID.randomUUID(),Exercise.BENCH,20,8,0,0));p.accept(12,.3,.5,1,now);p.press(0,Minigame.SPACE);var first=p.frame(Exercise.BENCH,Minigame.SPACE,false,now+16_000_000);var second=p.frame(Exercise.BENCH,Minigame.SPACE,false,now+32_000_000);assertTrue(second.tick()>first.tick());assertTrue(second.effort()>first.effort());assertTrue(second.effort()-first.effort()<.05);}
     @Test void receivingNewSnapshotDoesNotTeleportTheIndicator(){var p=new pt.realmfitness.client.TrainingPresentation();long now=1_000_000_000;p.accept(12,.2,.5,1,now);var before=p.frame(Exercise.BENCH,0,false,now+40_000_000);p.accept(14,.8,.5,1,now+40_000_000);var after=p.frame(Exercise.BENCH,0,false,now+41_000_000);assertTrue(Math.abs(after.effort()-before.effort())<.02);assertTrue(after.tick()>=before.tick());}
     @Test void countdownFreezesIndicatorsAndPredictionStaysBoundedOnPacketStalls(){var p=new pt.realmfitness.client.TrainingPresentation();long now=1_000_000_000;p.accept(0,.5,.5,1,now);assertEquals(0,p.frame(Exercise.BENCH,Minigame.SPACE,true,now+20_000_000).tick());double previous=0;for(int i=1;i<600;i++){var f=p.frame(Exercise.BENCH,Minigame.SPACE,false,now+i*16_000_000L);assertTrue(f.tick()>=previous&&f.tick()<=3.5);assertTrue(f.effort()>=0&&f.effort()<=1);previous=f.tick();}}
 
@@ -64,5 +69,6 @@ class FitnessRulesTest {
         var g=new Minigame(UUID.randomUUID(),Exercise.BENCH,25,8,991,0);int n=0;while(!g.done()){g.input(n++,controller(g));g.advance();}l.finish(PLAYER,"Rock",g,NOW,"minecraft:overworld",0,"0,0");award(l,Exercise.RUN,NOW+5000);assertEquals(30,l.selectedLoad(a,Exercise.BENCH));assertEquals(2,a.workout.completed);
     }
 
-    @Test void rowingSeatAndArmsMoveThroughRhythmEvenThoughEffortIsConstant(){var start=pt.realmfitness.client.ExercisePose.sample(Exercise.ROW,0,.5,Minigame.W,0);var pull=pt.realmfitness.client.ExercisePose.sample(Exercise.ROW,24,.5,Minigame.S,0);assertTrue(Math.abs(pull.seatZ-start.seatZ)>.15);assertTrue(Math.abs(pull.lean-start.lean)>.4);assertTrue(Math.abs(pull.arms[1]-start.arms[1])>.05);}
+
+    @Test void rowingAnimationFollowsActualStrokePower(){var start=pt.realmfitness.client.ExercisePose.sample(Exercise.ROW,0,0,Minigame.W,0);var pull=pt.realmfitness.client.ExercisePose.sample(Exercise.ROW,24,1,Minigame.S,0);assertTrue(Math.abs(pull.seatZ-start.seatZ)>.15);assertTrue(Math.abs(pull.lean-start.lean)>.4);}
 }
