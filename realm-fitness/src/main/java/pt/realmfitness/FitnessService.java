@@ -30,8 +30,9 @@ public final class FitnessService {
         public int load=20,reps=8;
         public String period="all",scope="server";
     }
-    public record Training(Minigame game,BlockPos pos,ResourceLocation dimension,double x,double y,double z,int startsAt){}
+    public record Training(Minigame game,BlockPos pos,ResourceLocation dimension,double x,double y,double z,int startsAt,GymMount mount){}
     private FitnessService(){}
+    public static void stop(MinecraftServer server){for(var p:server.getPlayerList().getPlayers())cancel(p);}
     public static void clear(){ACTIVE.clear();VIEWS.clear();LAST.clear();configured=false;}
     private static FitnessData data(ServerPlayer p){var d=FitnessData.get(p.getServer());d.available();if(!configured){reload(p.getServer());configured=true;}return d;}
     public static void reload(MinecraftServer server){
@@ -47,6 +48,7 @@ public final class FitnessService {
     public static String gym(BlockPos p){return Math.floorDiv(p.getX(),32)+","+Math.floorDiv(p.getZ(),32);}
     private static Athlete athlete(ServerPlayer p){return data(p).ledger.athlete(p.getUUID(),p.getGameProfile().getName(),System.currentTimeMillis());}
     public static void open(ServerPlayer p,BlockPos pos,boolean board){
+        if(pos!=null&&!board){interact(p,pos,false);return;}
         try{
             View v=new View();v.pos=pos==null?null:pos.immutable();v.dimension=p.level().dimension().location();v.board=board;v.expires=p.getServer().getTickCount()+6000;
             if(pos!=null){if(p.distanceToSqr(net.minecraft.world.phys.Vec3.atCenterOf(pos))>64)throw new IllegalArgumentException("fitness.too_far");
@@ -56,6 +58,21 @@ public final class FitnessService {
                 }else if(state.getBlock() instanceof GymBlock b&&b.intact(p.level(),pos))v.exercise=b.exercise;else throw new IllegalArgumentException("fitness.station_missing");
             }
             VIEWS.put(p.getUUID(),v);var a=athlete(p);if(a.routines.isEmpty())suggestions(a);data(p).persist(p.getServer());snapshot(p,"",board?"leaders":pos==null?"profile":"machine");
+        }catch(RuntimeException e){p.displayClientMessage(Component.translatable(error(e)),true);}
+    }
+    public static void interact(ServerPlayer p,BlockPos pos,boolean adjusting){
+        try{
+            if(ACTIVE.containsKey(p.getUUID()))throw new IllegalArgumentException("fitness.already_training");
+            if(!p.isAlive()||p.isSpectator()||p.isPassenger())throw new IllegalArgumentException("fitness.survival_required");
+            if(!p.level().hasChunkAt(pos)||p.distanceToSqr(net.minecraft.world.phys.Vec3.atCenterOf(pos))>64)throw new IllegalArgumentException("fitness.too_far");
+            var state=p.level().getBlockState(pos);if(!(state.getBlock() instanceof GymBlock block)||!block.intact(p.level(),pos))throw new IllegalArgumentException("fitness.station_missing");
+            for(var t:ACTIVE.values())if(t.dimension.equals(p.level().dimension().location())&&t.pos.equals(pos))throw new IllegalArgumentException("fitness.machine_busy");
+            var d=data(p);var a=athlete(p);Exercise exercise=block.exercise;
+            if(adjusting){int load=d.ledger.cycleLoad(a,exercise);d.persist(p.getServer());p.displayClientMessage(Component.translatable("fitness.load_changed",Component.translatable("fitness.exercise."+exercise.id()),exercise.weighted?load+" kg":Component.translatable("fitness.resistance",load)),true);return;}
+            if(!state.getValue(GymBlock.EXPANDED))throw new IllegalArgumentException("fitness.replace_legacy");
+            View v=new View();v.pos=pos.immutable();v.dimension=p.level().dimension().location();v.exercise=exercise;v.expires=p.getServer().getTickCount()+6000;
+            var step=a.workout==null?null:a.workout.next();v.load=d.ledger.selectedLoad(a,exercise);v.reps=step==null?8:step.repetitions();
+            VIEWS.put(p.getUUID(),v);start(p,v,v.load,v.reps);
         }catch(RuntimeException e){p.displayClientMessage(Component.translatable(error(e)),true);}
     }
     private static void suggestions(Athlete a){
@@ -104,28 +121,35 @@ public final class FitnessService {
     }
     public static void start(ServerPlayer p,View v,int load,int repetitions){
         if(p.isSpectator()||p.gameMode.getGameModeForPlayer()!=GameType.SURVIVAL||!p.isAlive()||p.isPassenger()||p instanceof net.neoforged.neoforge.common.util.FakePlayer)throw new IllegalArgumentException("fitness.survival_required");
+        if(v.pos==null||!(p.level().getBlockState(v.pos).getBlock() instanceof GymBlock block)||!block.intact(p.level(),v.pos))throw new IllegalArgumentException("fitness.station_missing");
         for(var t:ACTIVE.values())if(t.dimension.equals(v.dimension)&&t.pos.equals(v.pos))throw new IllegalArgumentException("fitness.machine_busy");
         var d=data(p);var a=athlete(p);d.ledger.ready(a,v.exercise,load,repetitions,d.ledger.highWater);
         Minigame g=new Minigame(UUID.randomUUID(),v.exercise,load,repetitions,p.getRandom().nextLong(),a.fatigue.get(v.exercise));
-        ACTIVE.put(p.getUUID(),new Training(g,v.pos.immutable(),v.dimension,p.getX(),p.getY(),p.getZ(),p.getServer().getTickCount()+60));sendGame(p,g,true);
+        GymMount mount=FitnessMod.MOUNT.get().create(p.level());if(mount==null)throw new IllegalStateException("fitness.station_missing");
+        var state=p.level().getBlockState(v.pos);mount.configure(v.pos,state.getValue(GymBlock.FACING),v.exercise,!state.getValue(GymBlock.EXPANDED),p.position());
+        if(!p.serverLevel().addFreshEntity(mount)){mount.discard();throw new IllegalArgumentException("fitness.machine_busy");}
+        Training training=new Training(g,v.pos.immutable(),v.dimension,p.getX(),p.getY(),p.getZ(),p.getServer().getTickCount()+40,mount);
+        if(!p.startRiding(mount,true)){mount.discard();throw new IllegalArgumentException("fitness.training_interrupted");}
+        ACTIVE.put(p.getUUID(),training);mount.positionRider(p);block.working(p.level(),v.pos,true);sendGame(p,g,true);
     }
     private static void sendGame(ServerPlayer p,Minigame g,boolean opening){
-        FitnessNetwork.send(p,Map.of("type","game","open",opening,"id",g.id.toString(),"exercise",g.exercise.name(),"load",g.load,"repetitions",g.repetitions,"seed",g.seed,"fatigue",g.fatigue,"countdown",Math.max(0,ACTIVE.containsKey(p.getUUID())?ACTIVE.get(p.getUUID()).startsAt-p.getServer().getTickCount():0),"state",Map.of("tick",g.tick,"effort",g.effort,"balance",g.balance,"grip",g.grip,"valid",g.valid,"accuracy",g.accuracy(),"target",g.target(),"tolerance",g.tolerance())));
+        var t=ACTIVE.get(p.getUUID());Map<String,Object> payload=new LinkedHashMap<>();payload.put("type","game");payload.put("open",opening);payload.put("id",g.id.toString());payload.put("exercise",g.exercise.name());payload.put("load",g.load);payload.put("repetitions",g.repetitions);payload.put("seed",g.seed);payload.put("fatigue",g.fatigue);payload.put("yaw",t==null?p.getYRot():t.mount.actorYaw());payload.put("countdown",t==null?0:Math.max(0,t.startsAt-p.getServer().getTickCount()));
+        payload.put("state",Map.of("tick",g.tick,"effort",g.effort,"balance",g.balance,"grip",g.grip,"valid",g.valid,"accuracy",g.accuracy(),"target",g.target(),"tolerance",g.tolerance()));FitnessNetwork.send(p,payload);
     }
     public static void tick(MinecraftServer server){
         for(UUID id:List.copyOf(ACTIVE.keySet())){
-            var p=server.getPlayerList().getPlayer(id);Training t=ACTIVE.get(id);if(p==null){ACTIVE.remove(id);continue;}
+            var p=server.getPlayerList().getPlayer(id);Training t=ACTIVE.get(id);if(p==null){t.mount.discard();if(t.mount.level().getBlockState(t.pos).getBlock() instanceof GymBlock b)b.working(t.mount.level(),t.pos,false);ACTIVE.remove(id);continue;}
             try{
                 view(p,true);
-                if(!p.isAlive()||p.gameMode.getGameModeForPlayer()!=GameType.SURVIVAL||p.isPassenger()||!t.dimension.equals(p.level().dimension().location())||p.distanceToSqr(t.x,t.y,t.z)>2.25)throw new IllegalArgumentException("fitness.training_interrupted");
+                if(!p.isAlive()||p.gameMode.getGameModeForPlayer()!=GameType.SURVIVAL||p.getVehicle()!=t.mount||t.mount.isRemoved()||!t.dimension.equals(p.level().dimension().location()))throw new IllegalArgumentException("fitness.training_interrupted");
                 if(server.getTickCount()<t.startsAt){if(server.getTickCount()%4==0)sendGame(p,t.game,false);continue;}
-                t.game.advance();
+                t.game.advance();t.mount.progress(t.game.tick,t.game.effort,t.game.keys());
                 if(t.game.done()){
-                    ACTIVE.remove(id);var d=data(p);Award award=d.ledger.finish(id,p.getGameProfile().getName(),t.game,System.currentTimeMillis(),t.dimension.toString(),t.pos.asLong(),gym(t.pos));d.persist(server);apply(p);snapshot(p,award.dailyBonus()?"fitness.daily_bonus":award.result().valid()>=Math.ceil(award.result().repetitions()*.6)&&award.result().accuracy()>=50?"fitness.series_saved":"fitness.series_practice","history");broadcastPose(p,t,true);
+                    release(p,t);var d=data(p);Award award=d.ledger.finish(id,p.getGameProfile().getName(),t.game,System.currentTimeMillis(),t.dimension.toString(),t.pos.asLong(),gym(t.pos));d.persist(server);apply(p);FitnessNetwork.send(p,Map.of("type","done","valid",award.result().valid(),"repetitions",award.result().repetitions(),"accuracy",award.result().accuracy(),"xp",award.gained(),"daily",award.dailyBonus()));
                     refreshBoards(server);
                 }else{
                     if(t.game.tick%2==0)sendGame(p,t.game,false);
-                    if(t.game.tick%10==0)broadcastPose(p,t,false);
+
                 }
             }catch(RuntimeException e){cancel(p);p.displayClientMessage(Component.translatable(error(e)),true);}
         }
@@ -139,9 +163,14 @@ public final class FitnessService {
         String display=FitnessLedger.JSON.toJson(results.stream().map(r->Map.of("player",r.player().toString(),"name",r.name(),"points",r.points(),"accuracy",r.accuracy())).toList());
         if(!b.display.equals(display)){b.display=display;b.sync();}else b.setChanged();
     }
-    private static void broadcastPose(ServerPlayer p,Training t,boolean end){for(var other:p.getServer().getPlayerList().getPlayers())if(other.level()==p.level()&&other.distanceToSqr(p)<4096)FitnessNetwork.send(other,Map.of("type","pose","player",p.getUUID().toString(),"exercise",t.game.exercise.name(),"tick",t.game.tick,"end",end));}
-    public static void cancel(ServerPlayer p){Training t=ACTIVE.remove(p.getUUID());if(t!=null)broadcastPose(p,t,true);FitnessNetwork.send(p,Map.of("type","cancel"));}
-    public static void logout(ServerPlayer p){ACTIVE.remove(p.getUUID());VIEWS.remove(p.getUUID());LAST.remove(p.getUUID());}
+    private static void release(ServerPlayer p,Training t){
+        ACTIVE.remove(p.getUUID());var exit=t.mount.safeExit(p);
+        if(p.getVehicle()==t.mount)p.stopRiding();t.mount.discard();
+        if(t.dimension.equals(p.level().dimension().location())){p.teleportTo(p.serverLevel(),exit.x,exit.y,exit.z,p.getYRot(),p.getXRot());p.fallDistance=0;}
+        if(t.mount.level().getBlockState(t.pos).getBlock() instanceof GymBlock block)block.working(t.mount.level(),t.pos,false);
+    }
+    public static void cancel(ServerPlayer p){Training t=ACTIVE.get(p.getUUID());if(t!=null)release(p,t);FitnessNetwork.send(p,Map.of("type","cancel"));}
+    public static void logout(ServerPlayer p){cancel(p);VIEWS.remove(p.getUUID());LAST.remove(p.getUUID());}
     public static double fallReduction(ServerPlayer p){var d=data(p);return d.ledger.bonus(athlete(p),Exercise.PULL);}
     public static void apply(ServerPlayer p){
         var d=data(p);var a=athlete(p);

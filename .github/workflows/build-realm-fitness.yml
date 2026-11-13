@@ -43,6 +43,10 @@ jobs:
             sudo apt-get update
             sudo apt-get install -y xvfb xauth
           fi
+          if ! command -v ffmpeg >/dev/null; then
+            sudo apt-get update
+            sudo apt-get install -y ffmpeg
+          fi
           timeout 1020s xvfb-run -a -s '-screen 0 1600x900x24' ./gradlew --no-daemon --console=plain -PfitnessVisualTests runClient 2>&1 | tee fitness-client.log
           python3 -c "import json; r=json.load(open('qa-results/client/result.json')); assert r.get('success') is True, r"
       - name: Package verified beta
@@ -73,4 +77,6 @@ jobs:
             realm-fitness/qa-results/client/result.json
             realm-fitness/run/crash-reports/
             mod-pronto/realm-fitness-*
+            media/realm-fitness/*/*.mp4
+            media/realm-fitness/*/*.gif
           retention-days: 30

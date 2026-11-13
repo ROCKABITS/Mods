@@ -1,8 +1,8 @@
-# Realm Fitness 0.2.0 Beta
+# Realm Fitness 0.3.0 Beta
 
 Ginásio físico para **Minecraft 1.21.1, NeoForge 21.1.256+ e Java 21**. Máquinas 3D, seis minijogos, atributos permanentes, rotinas personalizadas, calendário e painéis de recordes. Funciona de forma independente.
 
-[Descarregar JAR](../mod-pronto/realm-fitness-0.2.0.jar) · [ZIP](../mod-pronto/realm-fitness-0.2.0.zip) · [Galeria](../media/realm-fitness/0.2.0/README.md) · [Validação](VALIDACAO.md) · [Conceito original](DESIGN.md)
+[Descarregar JAR](../mod-pronto/realm-fitness-0.3.0.jar) · [ZIP](../mod-pronto/realm-fitness-0.3.0.zip) · [Galeria](../media/realm-fitness/0.3.0/README.md) · [Validação](VALIDACAO.md) · [Conceito original](DESIGN.md)
 
 Instala o mesmo JAR no servidor e em todos os clientes. Esta edição é para 1.21.1/NeoForge. Identificador: `realmfitness`.
 
@@ -11,16 +11,19 @@ Instala o mesmo JAR no servidor e em todos os clientes. Esta edição é para 1.
 1. Fabrica as máquinas, o painel e o cartão de atleta. Um operador pode obter o conjunto com `/fitness equipment`.
 2. Abre o perfil com **K**, com o cartão ou com `/fitness`. A tecla do perfil pode ser alterada nos controlos do Minecraft.
 3. Em **Treinos**, escolhe uma das rotinas iniciais ou cria a tua. O editor permite escolher exercícios, ordem, séries, repetições, carga, descanso e dia da semana.
-4. Inicia a rotina e interage com a máquina do próximo exercício. O treino físico exige modo Sobrevivência e uma máquina intacta próxima.
-5. Segue o minijogo. A série começa após três segundos; a câmara passa temporariamente para terceira pessoa e F5 permite alternar a perspetiva. Ao sair, recupera a perspetiva anterior.
+4. **Botão direito na máquina:** o jogador monta o equipamento e entra diretamente no minijogo, sem ecrã de configuração. Usa o próximo exercício, as repetições e a carga do plano ativo; sem plano, faz uma série livre de oito repetições. Exige Sobrevivência e uma máquina intacta próxima.
+5. **Agachar + botão direito antes de entrar:** aumenta 5 kg no supino/agachamentos ou um nível de resistência nas outras máquinas. Respeita os níveis desbloqueados; no máximo disponível, volta ao mínimo. A seleção fica guardada por jogador e exercício. Num plano, ajusta a sessão ativa sem editar a rotina guardada.
+6. A contagem de entrada dura dois segundos. O HUD ocupa uma faixa pequena acima da barra rápida, com indicadores interpolados a cada frame e resposta visual aos controlos. **SHIFT sai da máquina** e cancela a série incompleta. **F5 muda a perspetiva** e o rato permite observar a animação.
+
+O supino posiciona o jogador deitado; o remo usa uma posição sentada com assento deslizante. As outras máquinas alinham o corpo com as pegas, tapete ou plataforma. As animações têm cotovelos e joelhos articulados, movimentos específicos de cada exercício e barra/pega sincronizadas com o esforço. Ao concluir a série, o jogador sai do equipamento e recebe um resumo discreto; o diário continua disponível em K.
 
 O plano guarda o progresso entre sessões e reinícios. Pode ser terminado no menu para começar outro. Editar ou apagar uma rotina guardada não altera a cópia de um treino já iniciado. Os dias associados às rotinas são uma indicação de calendário; o jogador escolhe qual iniciar.
 
-## Equipamento redesenhado na 0.2.0
+## Equipamento e montagem
 
 As seis máquinas usam modelos e texturas originais: aço escuro, estofos verdes com costuras, detalhes em cobre, discos recortados, apoios em borracha e comandos próprios. Os bancos, a passadeira e o remo têm **2 × 3 blocos** de base; boxe, elevações e agachamentos têm **2 × 2 blocos**. Todas reservam **três blocos de altura**. Coloca-as numa superfície sólida, com toda a área livre; a orientação depende da direção do jogador. As colisões acompanham a estrutura e deixam aberturas nos espaços vazios.
 
-Quebrar uma peça desmonta a máquina e devolve um único item em Sobrevivência. Em Criativo não deixa itens. As máquinas colocadas na 0.1.0 continuam com a base antiga e um modelo compacto; recolhe-as e volta a colocá-las para usar o novo tamanho. A progressão, rotinas e recordes são preservados.
+Quebrar uma peça desmonta a máquina e devolve um único item em Sobrevivência. Em Criativo não deixa itens. As máquinas colocadas na 0.1.0 mantêm a base antiga e um modelo compacto; para a montagem da 0.3.0, recolhe-as e volta a colocá-las com espaço para o novo tamanho. A progressão, rotinas e recordes são preservados.
 
 ## Exercícios e progressão
 
@@ -70,9 +73,9 @@ O servidor gera `config/realm-fitness.json`. Permite alterar hora de renovação
 
 Limites: 12 rotinas por jogador, até oito exercícios e 24 séries por rotina, 4.096 resultados recentes e 4.096 melhores categorias por atleta, 10.000 atletas e 100.000 resultados recentes no mundo. Ao atingir um limite, o servidor recusa novas operações em vez de eliminar progresso silenciosamente.
 
-O estado pertence ao mundo, em `data/realm_fitness.dat`, com gravação atómica. Dados inválidos não são substituídos automaticamente por atletas vazios. Mover-se durante a série, morrer, mudar de dimensão, sair ou interromper cancela a execução incompleta.
+O estado pertence ao mundo, em `data/realm_fitness.dat`, com gravação atómica. Dados inválidos não são substituídos automaticamente por atletas vazios. Desmontar, morrer, mudar de dimensão, sair do jogo, abrir um menu ou partir a máquina cancela a execução incompleta. A montagem usa uma entidade temporária que não é gravada no mundo; a saída devolve o jogador a uma posição livre e suportada junto à entrada.
 
-Os minijogos usam Espaço, WASD e os botões do rato nesta beta. As animações são poses procedurais da skin e camadas exteriores; durante a renderização especial do exercício, equipamento e armadura não são desenhados. Continuam equipados e com os seus efeitos.
+Os minijogos usam Espaço, WASD e os botões do rato nesta beta. As animações articuladas conservam a skin e camadas exteriores; durante a renderização especial do exercício, equipamento e armadura não são desenhados. Continuam equipados e com os seus efeitos.
 
 Não há dependência de um mod de stats. Combinações específicas com outros sistemas de atributos ou renderização precisam de validação no respetivo modpack. Mensalidades, personal trainers, alterações musculares da skin, gestão de ginásios e metas semanais com prémios continuam nas ideias do conceito original.
 
@@ -86,4 +89,4 @@ Não há dependência de um mod de stats. Combinações específicas com outros 
 
 O teste de cliente exige um ambiente gráfico. O [workflow](../.github/workflows/build-realm-fitness.yml) executa build, testes de lógica, testes nativos e cliente real com Xvfb; publica apenas depois das verificações. Código e estruturas de teste são excluídos do JAR.
 
-`tools/generate_resources.py` regenera geometrias, materiais pixel e traduções. Os recursos gerados já acompanham o projeto: o build normal não precisa de Python/Pillow.
+`tools/generate_resources.py` regenera geometrias, partes móveis, colisões, materiais pixel e traduções. Os recursos gerados já acompanham o projeto: o build normal não precisa de Python/Pillow.

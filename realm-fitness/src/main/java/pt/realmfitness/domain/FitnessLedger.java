@@ -29,6 +29,7 @@ public final class FitnessLedger {
     public static final class Athlete {
         public String name="";
         public Map<Exercise,Integer> experience=new EnumMap<>(Exercise.class);
+        public Map<Exercise,Integer> preferredLoads=new EnumMap<>(Exercise.class);
         public Map<Exercise,Double> fatigue=new EnumMap<>(Exercise.class);
         public long recoveredAt, restUntil, dailyDay=Long.MIN_VALUE;
         public int earnedToday, validToday;
@@ -39,7 +40,7 @@ public final class FitnessLedger {
         public Workout workout;
         public List<Result> results=new ArrayList<>();
         public Map<String,Result> best=new LinkedHashMap<>();
-        public Athlete(){for(var e:Exercise.values()){experience.put(e,0);fatigue.put(e,0.0);}}
+        public Athlete(){for(var e:Exercise.values()){experience.put(e,0);fatigue.put(e,0.0);preferredLoads.put(e,e.minimumLoad());}}
     }
     public record Step(Exercise exercise,int sets,int repetitions,int load,int restSeconds) {
         public Step {
@@ -60,6 +61,10 @@ public final class FitnessLedger {
         public UUID id=UUID.randomUUID();
         public long started;
         public int completed;
+        public Map<Integer,Integer> loadOverrides=new HashMap<>();
+        public int nextIndex(){int n=completed;for(int i=0;i<plan.steps.size();i++){if(n<plan.steps.get(i).sets)return i;n-=plan.steps.get(i).sets;}return -1;}
+        public int load(Step step){return step==next()?loadOverrides.getOrDefault(nextIndex(),step.load):step.load;}
+        public Workout(){}
         public Workout(Routine plan,long started){this.plan=plan;this.started=started;}
         public int total(){return plan.steps.stream().mapToInt(Step::sets).sum();}
         public Step next(){int n=completed;for(var s:plan.steps){if(n<s.sets)return s;n-=s.sets;}return null;}
@@ -100,11 +105,17 @@ public final class FitnessLedger {
         for(var s:r.steps)s.exercise.checkLoad(s.load,level(a,s.exercise));
         a.workout=new Workout(r,observe(now));
     }
+    public int selectedLoad(Athlete a,Exercise e){var step=a.workout==null?null:a.workout.next();return step!=null&&step.exercise==e?a.workout.load(step):a.preferredLoads.getOrDefault(e,e.minimumLoad());}
+    public int cycleLoad(Athlete a,Exercise e){
+        int maximum=e.maximumLoad(level(a,e)),current=selectedLoad(a,e);if(maximum==e.minimumLoad())throw new IllegalArgumentException("fitness.load_locked");
+        int next=current>=maximum?e.minimumLoad():current+(e.weighted?5:1);e.checkLoad(next,level(a,e));a.preferredLoads.put(e,next);
+        var step=a.workout==null?null:a.workout.next();if(step!=null&&step.exercise==e)a.workout.loadOverrides.put(a.workout.nextIndex(),next);return next;
+    }
     public void ready(Athlete a,Exercise e,int load,int reps,long now){
         refresh(a,observe(now));e.checkLoad(load,level(a,e));
         if(reps<4||reps>20)throw new IllegalArgumentException("fitness.invalid_series");
         if(now<a.restUntil)throw new IllegalArgumentException("fitness.resting");
-        if(a.workout!=null&&a.workout.next()!=null){var s=a.workout.next();if(s.exercise!=e||s.load!=load||s.repetitions!=reps)throw new IllegalArgumentException("fitness.follow_plan");}
+        if(a.workout!=null&&a.workout.next()!=null){var s=a.workout.next();if(s.exercise!=e||a.workout.load(s)!=load||s.repetitions!=reps)throw new IllegalArgumentException("fitness.follow_plan");}
         if(a.best.size()>4094||a.results.size()>=4096||athletes.values().stream().mapToInt(p->p.results.size()).sum()>=MAX_RESULTS)throw new IllegalStateException("fitness.capacity");
     }
     public Award finish(UUID player,String name,Minigame game,long now,String dimension,long station,String gym){
@@ -161,6 +172,9 @@ public final class FitnessLedger {
             if(a.name==null||a.name.length()>64||a.experience==null||a.experience.size()!=6||a.fatigue==null||a.fatigue.size()!=6||a.results==null||a.results.size()>4096||a.routines==null||a.routines.size()>12||a.best==null||a.best.size()>4096||a.completedDays==null||a.completedDays.size()>367||a.trainedToday==null||a.trainedToday.size()>6||a.earnedToday<0||a.earnedToday>10000||a.validToday<0||a.validToday>100000||a.recoveredAt<0||a.restUntil<0)
                 throw new IllegalArgumentException("fitness.corrupt_data");
             for(var e:Exercise.values())if(a.experience.get(e)==null||a.experience.get(e)<0||a.experience.get(e)>threshold(20)||a.fatigue.get(e)==null||!Double.isFinite(a.fatigue.get(e))||a.fatigue.get(e)<0||a.fatigue.get(e)>1)throw new IllegalArgumentException("fitness.corrupt_data");
+            if(a.preferredLoads==null||a.preferredLoads.size()>6)throw new IllegalArgumentException("fitness.corrupt_data");
+            for(var load:a.preferredLoads.entrySet())load.getKey().checkLoad(load.getValue(),level(a,load.getKey()));
+            if(a.workout!=null){if(a.workout.loadOverrides==null||a.workout.loadOverrides.size()>8)throw new IllegalArgumentException("fitness.corrupt_data");for(var load:a.workout.loadOverrides.entrySet()){if(load.getKey()==null||load.getKey()<0||load.getKey()>=a.workout.plan.steps.size())throw new IllegalArgumentException("fitness.corrupt_data");Exercise exercise=a.workout.plan.steps.get(load.getKey()).exercise;exercise.checkLoad(load.getValue(),level(a,exercise));}}
             Set<UUID> plans=new HashSet<>();for(var r:a.routines){new Routine(r.id,r.name,r.weekday,r.steps);if(!plans.add(r.id))throw new IllegalArgumentException("fitness.corrupt_data");}
             if(a.workout!=null){new Routine(a.workout.plan.id,a.workout.plan.name,a.workout.plan.weekday,a.workout.plan.steps);if(a.workout.id==null||a.workout.completed<0||a.workout.completed>a.workout.total()||a.workout.started<0)throw new IllegalArgumentException("fitness.corrupt_data");}
             for(var r:a.results){validateResult(entry.getKey(),r);if(!ids.add(r.id))throw new IllegalArgumentException("fitness.corrupt_data");}

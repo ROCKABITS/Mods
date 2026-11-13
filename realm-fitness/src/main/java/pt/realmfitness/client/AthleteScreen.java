@@ -43,7 +43,6 @@ public final class AthleteScreen extends Screen {
         button(x+w-78,bottom(),66,"close",this::onClose);
         button(x+12,bottom(),76,"refresh",()->FitnessNetwork.request("refresh",Map.of()));
         if(page.equals("routines"))routineButtons();
-        if(page.equals("machine"))machineButtons();
         if(page.equals("history")){String[] modes={"history","records","progress"};for(int i=0;i<3;i++){String mode=modes[i];button(x+12+i*(w-24)/3,body(),(w-30)/3,"tab."+mode,()->{journal=mode;scroll=0;rebuildWidgets();});}}
         if(page.equals("leaders"))leaderButtons();
     }
@@ -55,18 +54,6 @@ public final class AthleteScreen extends Screen {
         if(routines.size()>0){var r=routines.get(selected).getAsJsonObject();button(rx,bottom()-25,Math.max(40,(rw-6)/2),"begin",()->FitnessNetwork.request("begin",Map.of("id",str(r,"id"))));button(rx+(rw+6)/2,bottom()-25,Math.max(40,(rw-6)/2),"edit",()->minecraft.setScreen(new RoutineEditorScreen(data,r)));}
         button(left,bottom()-25,listWidth,"new_plan",()->minecraft.setScreen(new RoutineEditorScreen(data,null)));
         if(data.has("workout"))button(x+w/2-65,bottom(),130,"end_workout",()->FitnessNetwork.request("end_workout",Map.of()));
-    }
-    private void machineButtons(){
-        exercise=Exercise.valueOf(str(data,"machine"));
-        var workout=data.has("workout")?FitnessLedger.JSON.fromJson(data.get("workout"),Workout.class):null;
-        if(workout!=null&&workout.next()!=null){load=workout.next().load();reps=workout.next().repetitions();}
-        else if(!dirtySelection){load=exercise.minimumLoad();reps=8;for(var e:array(data,"history")){var r=e.getAsJsonObject();if(str(r,"exercise").equals(exercise.name())){load=num(r,"load");reps=num(r,"repetitions");break;}}dirtySelection=true;}
-        int cy=body()+Math.max(48,(h-150)/2),half=(w-36)/2;
-        literal(x+15,cy,24,"−",()->{load=Math.max(exercise.minimumLoad(),load-(exercise.weighted?5:1));rebuildWidgets();});
-        literal(x+half-15,cy,24,"+",()->{load=Math.min(exercise.maximumLoad(level(exercise)),load+(exercise.weighted?5:1));rebuildWidgets();});
-        literal(x+half+20,cy,24,"−",()->{reps=Math.max(4,reps-1);rebuildWidgets();});literal(x+w-40,cy,24,"+",()->{reps=Math.min(20,reps+1);rebuildWidgets();});
-        var start=button(x+w/2-80,bottom()-25,160,"start_series",()->FitnessNetwork.request("start",Map.of("load",load,"repetitions",reps)));
-        start.active=remainingRest()==0&&!(workout!=null&&workout.next()!=null&&workout.next().exercise()!=exercise);
     }
     private void leaderButtons(){
         int cw=(w-32)/3;
@@ -82,11 +69,11 @@ public final class AthleteScreen extends Screen {
     private int level(Exercise e){return FitnessLedger.level(data.getAsJsonObject("experience").get(e.name()).getAsInt());}
     private long serverNow(){return time(data,"now")+(System.nanoTime()-received)/1_000_000;}
     private int remainingRest(){return (int)Math.max(0,(time(data,"restUntil")-serverNow()+999)/1000);}
-    @Override public void tick(){if(++ticks%100==0)FitnessNetwork.request("refresh",Map.of());if(page.equals("machine")&&ticks%20==0)rebuildWidgets();}
+    @Override public void tick(){if(++ticks%100==0)FitnessNetwork.request("refresh",Map.of());}
     @Override public void renderBackground(GuiGraphics g,int mx,int my,float partial){}
     @Override public void render(GuiGraphics g,int mx,int my,float partial){
         g.fillGradient(0,0,width,height,0xD5100D19,0xF00B0D14);frame(g,x,y,w,h,PANEL);label(g,"REALM FITNESS",x+14,y+12,w/2,ACCENT);label(g,str(data,"name"),x+w/2,y+12,w/2-15,MUTED);
-        switch(page){case "profile"->profile(g,mx,my);case "catalog"->catalog(g,mx,my);case "routines"->routines(g);case "machine"->machine(g);case "leaders"->leaders(g);default->journal(g);}
+        switch(page){case "profile"->profile(g,mx,my);case "catalog"->catalog(g,mx,my);case "routines"->routines(g);case "leaders"->leaders(g);default->journal(g);}
         String message=str(data,"message");if(!message.isEmpty())label(g,text(message),x+96,bottom()+5,w-185,GREEN);
         super.render(g,mx,my,partial);
     }
@@ -124,15 +111,6 @@ public final class AthleteScreen extends Screen {
         label(g,planName(str(r,"name")),rx,by,rw,ACCENT);var steps=array(r,"steps");int row=Math.max(24,Math.min(42,(h-145)/Math.max(1,steps.size())));
         for(int i=0;i<steps.size()&&by+24+i*row<bottom()-35;i++){var s=steps.get(i).getAsJsonObject();var e=Exercise.valueOf(str(s,"exercise"));int yy=by+24+i*row;label(g,exercise(e),rx,yy,rw,INK);label(g,num(s,"sets")+" × "+num(s,"repetitions")+" · "+load(e,num(s,"load")),rx,yy+11,rw,MUTED);}
         if(data.has("workout")){var workout=FitnessLedger.JSON.fromJson(data.get("workout"),Workout.class);String next=workout.next()==null?text("workout_done"):exercise(workout.next().exercise());label(g,text("workout_progress",workout.completed,workout.total())+" · "+next,x+12,bottom()-46,w-24,GREEN);}
-    }
-    private void machine(GuiGraphics g){
-        int by=body()+7;g.renderItem(new ItemStack(FitnessMod.MACHINES.get(exercise).get()),x+15,by);label(g,exercise(exercise),x+38,by+3,w-54,ACCENT);
-        if(h>310){int line=by+28;for(var s:font.split(tr("help."+exercise.id()),w-30)){g.drawString(font,s,x+15,line,MUTED);line+=10;}}
-        int cy=body()+Math.max(48,(h-150)/2),half=(w-36)/2;
-        label(g,load(exercise,load),x+47,cy+5,Math.max(30,half-65),INK);label(g,text("repetitions",reps),x+half+50,cy+5,Math.max(30,half-65),INK);
-        label(g,remainingRest()>0?text("rest_seconds",remainingRest()):text("series_ready"),x+15,cy+30,w-30,GREEN);
-        label(g,text("duration",reps*Minigame.REP_TICKS/20),x+15,cy+43,w-30,MUTED);
-        if(data.has("workout")){var workout=FitnessLedger.JSON.fromJson(data.get("workout"),Workout.class);if(workout.next()!=null)label(g,text("next_exercise",exercise(workout.next().exercise())),x+15,bottom()-45,w-30,ACCENT);}
     }
     private void journal(GuiGraphics g){
         int by=body()+26;

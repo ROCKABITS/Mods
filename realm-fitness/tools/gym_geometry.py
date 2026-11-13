@@ -67,6 +67,7 @@ class Part:
     rotation:dict|None=None
     solid:bool=True
     face:str|None=None
+    motion:str=""
 
 def box(x,y,z,X,Y,Z,material='frame',solid=True,rotation=None,face=None):return Part((x,y,z),(X,Y,Z),material,rotation,solid,face)
 def rot(x,y,z,axis,angle):return {'origin':[x,y,z],'axis':axis,'angle':angle,'rescale':False}
@@ -100,17 +101,21 @@ def plate(x,y,z,thickness=2.2):
     parts.append(box(x-.3,y-1.2,z-1.2,x+thickness+.3,y+1.2,z+1.2,'steel'))
     return parts
 
+def moving(parts,group):
+    for part in parts:part.motion=group
+    return parts
+
 def bench():
     p=feet(32,48)
-    p += [box(13,3,5,19,6,43),box(13.05,5,9,18.95,11,13,'steel'),box(13.05,5,34,18.95,12,38,'steel')]
+    p += [box(9,6,10,23,7.3,15,'rubber'),box(13,3,5,19,6,43),box(13.05,5,9,18.95,11,13,'steel'),box(13.05,5,34,18.95,12,38,'steel')]
     p += cushion(9,11,4,14,4,12)+cushion(9,12,18,14,4,25)
     # A separate raised head pad and back spine give this bench its own silhouette.
     p += [box(10,16,35,22,18,43,'pad_edge',rotation=rot(16,16,35,'x',-22.5)),box(11,18,36,21,18.3,42,'pad',False,rot(16,16,35,'x',-22.5))]
     for x in (4,25):
         p += [box(x,3,35,x+3,31,39),box(x-.3,28,34.5,x+3.3,29,39.5,'edge'),box(x+.9,7,34.8,x+2.1,26,35,'rubber',False)]
         for yy in range(10,27,4):p.append(box(x+.9,yy,34.6,x+2.1,yy+1,34.85,'steel',False))
-    p += [box(3,27,33,9,29,37,'steel'),box(23,27,33,29,29,37,'steel'),box(1,29.5,35,31,31,36.5,'steel'),box(11,29.45,34.9,21,31.05,36.6,'rubber')]
-    p+=plate(.4,30.25,35.75,2.4)+plate(29.2,30.25,35.75,2.4)
+    p += [box(3,27,33,9,29,37,'steel'),box(23,27,33,29,29,37,'steel')]
+    p += moving([box(1,29.5,35,31,31,36.5,'steel'),box(11,29.45,34.9,21,31.05,36.6,'rubber')]+plate(.4,30.25,35.75,2.4)+plate(29.2,30.25,35.75,2.4),'bar')
     fasteners(p,[(5.5,8,34.7),(26.5,8,34.7),(5.5,27,34.7),(26.5,27,34.7)])
     return p
 
@@ -149,10 +154,13 @@ def pullup():
 
 def rower():
     p=feet(32,48)
-    p += [box(12,3,3,20,6,43,'edge'),box(15,6,4,17,7.2,30,'steel'),box(10,7,6,22,9,14,'frame')]+cushion(9,9,5,14,4,11)
+    p += [box(12,3,3,20,6,43,'edge'),box(15,6,4,17,7.2,30,'steel')]
+    p += moving([box(10,7,6,22,9,14,'frame')]+cushion(9,9,5,14,4,11),'seat')
     p += [box(5,5,28,27,9,45),box(7,9,30,25,22,43,'frame'),box(10,22,32,22,24,41,'edge'),box(8,11,29.8,24,20,30,'mesh',False),box(9,11,43,23,21,43.2,'mesh',False)]
-    for x in (5,22):p += [box(x,7,22,x+5,10,29,'rubber',True,rot(x+2.5,8,25,'x',-22.5)),box(x,10.1,24,x+5,10.5,25,'copper',False,rot(x+2.5,8,25,'x',-22.5))]
-    p += [box(15.5,13,14,16.5,14,34,'steel',False),box(8,12.4,13,24,14.6,15,'steel'),box(8,12,12.6,13,15,15.4,'rubber'),box(19,12,12.6,24,15,15.4,'rubber'),box(15,21,36,17,32,39,'edge'),box(10,30,34,22,35,40),box(11,30.8,33.8,21,34,34,'screen',False)]
+    for x in (9,18):p += [box(x,7,22,x+5,10,29,'rubber',True,rot(x+2.5,8,25,'x',-22.5)),box(x,10.1,24,x+5,10.5,25,'copper',False,rot(x+2.5,8,25,'x',-22.5))]
+    p += moving([box(15.5,13,14,16.5,14,34,'steel',False)],'cable')
+    p += moving([box(8,12.4,13,24,14.6,15,'steel'),box(8,12,12.6,13,15,15.4,'rubber'),box(19,12,12.6,24,15,15.4,'rubber')],'handle')
+    p += [box(15,21,36,17,32,39,'edge'),box(10,30,34,22,35,40),box(11,30.8,33.8,21,34,34,'screen',False)]
     fasteners(p,[(6,6,27.8),(26,6,27.8),(8,17,29.7),(24,17,29.7)])
     return p
 
@@ -162,8 +170,8 @@ def squat():
         p += [box(x,3,19,x+3,44,23),box(x-.4,40,18.6,x+3.4,42,23.4,'edge'),box(x+.8,9,18.8,x+2.2,35,19,'rubber',False)]
         for yy in range(10,36,3):p.append(box(x+.8,yy,18.6,x+2.2,yy+1,18.85,'steel',False))
         p += [box(x,14,4,x+3,17,22,'steel'),box(x-.3,13.97,3.97,x+3.3,17.3,11,'rubber')]
-    p += [box(4,41,20,28,44,23),box(5,37,18.9,27,39,19.1,'copper',False),box(2,29,17,9,31,22,'edge'),box(23,29,17,30,31,22,'edge'),box(0,31.1,18.3,32,32.5,19.7,'steel'),box(11,31,18.2,21,32.6,19.8,'rubber'),box(7,1,5,25,2.4,19,'rubber')]
-    p+=plate(.4,31.8,19,2.4)+plate(29.2,31.8,19,2.4)
+    p += [box(4,41,20,28,44,23),box(5,37,18.9,27,39,19.1,'copper',False),box(2,29,17,9,31,22,'edge'),box(23,29,17,30,31,22,'edge'),box(7,1,5,25,2.4,19,'rubber')]
+    p += moving([box(0,31.1,18.3,32,32.5,19.7,'steel'),box(11,31,18.2,21,32.6,19.8,'rubber')]+plate(.4,31.8,19,2.4)+plate(29.2,31.8,19,2.4),'bar')
     fasteners(p,[(4.5,6,18.8),(27.5,6,18.8),(4.5,39,18.8),(27.5,39,18.8)])
     return p
 
@@ -200,29 +208,36 @@ def bounds(part):
     return [min(p[n] for p in corners) for n in range(3)],[max(p[n] for p in corners) for n in range(3)]
 
 def build_machines(assets,root):
-    textures(assets);collisions={};manifest={}
+    textures(assets);collisions={};active_collisions={};manifest={}
     for name,builder in BUILDERS.items():
         parts=builder();w,d,h=SIZES[name];manifest[name]={'width':w,'depth':d,'height':h,'parts':len(parts)}
-        cells={i:[] for i in range(18)};collision={i:[] for i in range(18)}
+        cells={i:[] for i in range(18)};active_cells={i:[] for i in range(18)};collision={i:[] for i in range(18)};active_collision={i:[] for i in range(18)}
+        for group in sorted({p.motion for p in parts if p.motion}):write(assets/f"models/block/{name}_{group}.json",model([element(p,scale=.5) for p in parts if p.motion==group]))
         for part in parts:
             # Rotated cushions belong to their pivot cell and can overhang its visual boundary.
             if part.rotation:
                 xx=min(w-1,max(0,int(part.rotation['origin'][0]//16)));zz=min(d-1,max(0,int(part.rotation['origin'][2]//16)));yy=min(h-1,max(0,int(part.rotation['origin'][1]//16)))
-                cells[xx+zz*2+yy*6].append(element(part,(xx*16,yy*16,zz*16)))
+                cell=xx+zz*2+yy*6;value=element(part,(xx*16,yy*16,zz*16));cells[cell].append(value)
+                if not part.motion:active_cells[cell].append(value)
             else:
                 for yy in range(h):
                   for zz in range(d):
                    for xx in range(w):
                     base=(xx*16,yy*16,zz*16);lo=tuple(max(a,b) for a,b in zip(part.lo,base));hi=tuple(min(a,b+16) for a,b in zip(part.hi,base))
-                    if all(a<b for a,b in zip(lo,hi)):cells[xx+zz*2+yy*6].append(element(Part(lo,hi,part.material,solid=part.solid,face=part.face),base))
+                    if all(a<b for a,b in zip(lo,hi)):
+                        cell=xx+zz*2+yy*6;value=element(Part(lo,hi,part.material,solid=part.solid,face=part.face),base);cells[cell].append(value)
+                        if not part.motion:active_cells[cell].append(value)
             if part.solid:
                 lo,hi=bounds(part)
                 for yy in range(h):
                   for zz in range(d):
                    for xx in range(w):
                     base=(xx*16,yy*16,zz*16);a=[max(v,b)-b for v,b in zip(lo,base)];b=[min(v,q+16)-q for v,q in zip(hi,base)]
-                    if all(v<u for v,u in zip(a,b)):collision[xx+zz*2+yy*6].append(a+b)
-        for i,items in cells.items():write(assets/f'models/block/{name}_part_{i}.json',model(items))
+                    if all(v<u for v,u in zip(a,b)):
+                        cell=xx+zz*2+yy*6;collision[cell].append(a+b)
+                        if not part.motion:active_collision[cell].append(a+b)
+        for i,items in cells.items():
+            write(assets/f'models/block/{name}_part_{i}.json',model(items));write(assets/f'models/block/{name}_part_{i}_working.json',model(active_cells[i]))
         # Existing 0.1 worlds keep their original two-block footprint until recolocated.
         for half,label in [(0,'lower'),(1,'upper')]:
             items=[]
@@ -233,15 +248,16 @@ def build_machines(assets,root):
                     lp=Part((lo[0],a,lo[2]),(hi[0],b,hi[2]),part.material)
                     items.append(element(lp,(0,half*16,0)))
             write(assets/f'models/block/{name}_{label}.json',model(items))
-        item=model([element(p,scale=.5) for p in parts]);item['display']={'gui':{'rotation':[24,225,0],'translation':[0,-2,0],'scale':[.64,.64,.64]},'ground':{'scale':[.3,.3,.3]},'fixed':{'scale':[.6,.6,.6]},'thirdperson_righthand':{'rotation':[75,45,0],'scale':[.3,.3,.3]}}
+        item=model([element(p,scale=.5) for p in parts]);item['display']={'gui':{'rotation':[24,225,0],'translation':[0,-2,0],'scale':[.64,.64,.64]},'ground':{'scale':[.3,.3,.3]},'fixed':{'scale':[.6,.6,.6]},'thirdperson_righthand':{'rotation':[75,45,0],'scale':[.3,.3,.3]},'firstperson_righthand':{'rotation':[0,45,0],'scale':[.3,.3,.3]},'firstperson_lefthand':{'rotation':[0,225,0],'scale':[.3,.3,.3]}}
         write(assets/f'models/item/{name}.json',item)
         multipart=[]
         for f,angle in [('north',0),('east',90),('south',180),('west',270)]:
             for half in ('lower','upper'):multipart.append({'when':{'expanded':'false','facing':f,'half':half},'apply':{'model':f'realmfitness:block/{name}_{half}','y':angle}})
-            for i in range(18):multipart.append({'when':{'expanded':'true','facing':f,'part':str(i)},'apply':{'model':f'realmfitness:block/{name}_part_{i}','y':angle}})
+            for i in range(18):
+                for working in (False,True):multipart.append({'when':{'expanded':'true','facing':f,'part':str(i),'working':str(working).lower()},'apply':{'model':f'realmfitness:block/{name}_part_{i}'+('_working' if working else ''),'y':angle}})
         write(assets/f'blockstates/{name}.json',{'multipart':multipart})
         # A single anchor owns the drop in both layouts.
         write(root/f'data/realmfitness/loot_table/blocks/{name}.json',{'type':'minecraft:block','pools':[{'rolls':1,'entries':[{'type':'minecraft:item','name':'realmfitness:'+name}],'conditions':[{'condition':'minecraft:survives_explosion'},{'condition':'minecraft:block_state_property','block':'realmfitness:'+name,'properties':{'half':'lower','part':'0'}}]}]})
-        collisions[name]=collision
-    write(assets/'geometry/collisions.json',collisions);write(assets/'geometry/collection.json',manifest)
+        collisions[name]=collision;active_collisions[name]=active_collision
+    write(assets/'geometry/collisions.json',collisions);write(assets/'geometry/collisions_working.json',active_collisions);write(assets/'geometry/collection.json',manifest)
     return manifest

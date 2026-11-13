@@ -10,7 +10,8 @@ import pt.realmfitness.domain.Exercise;
 
 /** Collision boxes are exported from the same authored geometry as the visual models. */
 public final class GymGeometry {
-    private static final VoxelShape[][][] SHAPES=load();
+    private static final VoxelShape[][][] SHAPES=load("collisions.json");
+    private static final VoxelShape[][][] WORKING=load("collisions_working.json");
     private GymGeometry(){}
     public static int depth(Exercise e){return switch(e){case BENCH,RUN,ROW->3;default->2;};}
     public static boolean contains(Exercise e,int part){return part>=0&&part<18&&(part/2)%3<depth(e);}
@@ -18,9 +19,10 @@ public final class GymGeometry {
     public static int z(int part){return (part/2)%3;}
     public static int y(int part){return part/6;}
     public static VoxelShape shape(Exercise e,int part,Direction facing){return SHAPES[e.ordinal()][part][facing.get2DDataValue()];}
-    private static VoxelShape[][][] load(){
+    public static VoxelShape shape(Exercise e,int part,Direction facing,boolean working){return (working?WORKING:SHAPES)[e.ordinal()][part][facing.get2DDataValue()];}
+    private static VoxelShape[][][] load(String resource){
         VoxelShape[][][] result=new VoxelShape[6][18][4];
-        try(var input=GymGeometry.class.getResourceAsStream("/assets/realmfitness/geometry/collisions.json")){
+        try(var input=GymGeometry.class.getResourceAsStream("/assets/realmfitness/geometry/"+resource)){
             if(input==null)throw new IOException("Missing gym collision geometry");
             JsonObject all=JsonParser.parseReader(new InputStreamReader(input,StandardCharsets.UTF_8)).getAsJsonObject();
             for(var e:Exercise.values())for(int part=0;part<18;part++)for(var facing:Direction.Plane.HORIZONTAL){

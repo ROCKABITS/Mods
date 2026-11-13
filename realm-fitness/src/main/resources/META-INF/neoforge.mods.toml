@@ -3,7 +3,7 @@ loaderVersion="[4,)"
 license="All Rights Reserved"
 [[mods]]
 modId="realmfitness"
-version="0.2.0"
+version="0.3.0"
 displayName="Realm Fitness"
 description="Physical gym machines, skill minigames, permanent progression, personal workout plans and live record boards."
 [[dependencies.realmfitness]]

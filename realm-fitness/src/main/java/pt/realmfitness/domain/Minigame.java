@@ -29,6 +29,7 @@ public final class Minigame {
         if (lastInputTick!=tick) {lastInputTick=tick;changes=1;}
         sequence=number;edges|=keys&~held;held=keys;
     }
+    public int keys(){return held;}
     public int phase() { return tick % REP_TICKS; }
     public double target() { return .5-.34*Math.cos(phase()*Math.PI*2/REP_TICKS); }
     public double tolerance() { return Math.max(.11, .31-(exercise.weighted ? (load-20)/1000.0 : (load-1)*.018)-fatigue*.035); }

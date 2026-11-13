@@ -40,7 +40,9 @@ public final class FitnessVisualQA {
     private static volatile String folder;
     private static int stage,exercise,held,lastStage=-1,galleryIndex=-1;
     private static long next,stageSince;
-    private static boolean done,shot;
+    private static boolean done,shot,mountedSeen,compactShot;
+    private static int joinPhase,cancelMode;
+    private static final Map<String,Integer> FRAMES=new HashMap<>();
     private static JsonObject profile;
     private static Minecraft mc(){return Minecraft.getInstance();}
     private static void check(boolean condition,String message){if(!condition)throw new IllegalStateException(message);}
@@ -52,7 +54,7 @@ public final class FitnessVisualQA {
     private static void screenshot(String name)throws Exception{Files.createDirectories(OUT);try(var image=Screenshot.takeScreenshot(mc().getMainRenderTarget())){image.writeToFile(OUT.resolve(name));}if(!CAPTURES.contains(name))CAPTURES.add(name);}
     private static Object field(Object object,String name)throws Exception{var f=object.getClass().getDeclaredField(name);f.setAccessible(true);return f.get(object);}
     private static void prepare(){
-        var p=player();var server=p.getServer();p.setGameMode(GameType.SURVIVAL);server.setDifficulty(Difficulty.PEACEFUL,true);
+        var p=player();var server=p.getServer();p.setGameMode(GameType.SURVIVAL);server.setDifficulty(Difficulty.PEACEFUL,true);p.serverLevel().setDayTime(6000);
         server.getGameRules().getRule(GameRules.RULE_DAYLIGHT).set(false,server);server.getGameRules().getRule(GameRules.RULE_WEATHER_CYCLE).set(false,server);server.getGameRules().getRule(GameRules.RULE_SPAWN_CHUNK_RADIUS).set(0,server);
         for(int x=-17;x<=18;x++)for(int z=-5;z<=9;z++){for(int y=161;y<=164;y++)p.level().setBlockAndUpdate(new BlockPos(x,y,z),Blocks.AIR.defaultBlockState());p.level().setBlockAndUpdate(new BlockPos(x,160,z),Blocks.POLISHED_DEEPSLATE.defaultBlockState());}
         for(var e:Exercise.values()){var pos=station(e.ordinal());var block=FitnessMod.MACHINES.get(e).get();for(int i=0;i<18;i++)if(GymGeometry.contains(e,i))p.level().setBlock(GymBlock.cell(pos,Direction.NORTH,i),block.partState(Direction.NORTH,i),Block.UPDATE_CLIENTS|Block.UPDATE_KNOWN_SHAPE);check(block.intact(p.level(),pos),"Expanded visual machine is incomplete");}
@@ -70,9 +72,10 @@ public final class FitnessVisualQA {
     }
     private static void exercise(){
         var p=player();var a=FitnessData.get(p.getServer()).ledger.athletes.get(p.getUUID());a.restUntil=0;
-        var pos=station(exercise);p.teleportTo(p.serverLevel(),pos.getX()+.5,161,-1.8,0,0);FitnessService.open(p,pos,false);
+        var pos=station(exercise);p.teleportTo(p.serverLevel(),pos.getX()+.5,161,-1.8,0,0);if(exercise==0)a.experience.put(Exercise.BENCH,100);
     }
-    private static void feed(TrainingScreen screen)throws Exception{
+    private static void useMachine(){var pos=station(exercise);mc().gameMode.useItemOn(mc().player,InteractionHand.MAIN_HAND,new net.minecraft.world.phys.BlockHitResult(net.minecraft.world.phys.Vec3.atCenterOf(pos),Direction.UP,pos,false));}
+    private static void feed(TrainingHud screen)throws Exception{
         var state=(JsonObject)field(screen,"state");var pattern=(Minigame)field(screen,"pattern");long received=(long)field(screen,"received");
         int t=FitnessClient.num(state,"tick")+(int)Math.min(4,(System.nanoTime()-received)/50_000_000)+1;
         if((int)field(screen,"countdown")>0){release(screen);return;}
@@ -86,14 +89,19 @@ public final class FitnessVisualQA {
         }
         held=bits;
     }
-    private static void release(TrainingScreen screen){for(int code:new int[]{GLFW.GLFW_KEY_SPACE,GLFW.GLFW_KEY_A,GLFW.GLFW_KEY_D,GLFW.GLFW_KEY_W,GLFW.GLFW_KEY_S})screen.keyReleased(code,0,0);screen.mouseReleased(0,0,0);screen.mouseReleased(0,0,1);held=0;}
-    private static void complete(boolean success,String message){done=true;try{Files.createDirectories(OUT);Files.writeString(OUT.resolve("result.json"),new GsonBuilder().setPrettyPrinting().create().toJson(Map.of("success",success,"stage",stage,"message",message,"checks",CHECKS,"screenshots",CAPTURES,"actualMinecraftClient",true,"actualIntegratedServer",true,"controlledBaselineXp",90,"syntheticSetResults",false)));}catch(Exception e){e.printStackTrace();}System.out.println(success?"FITNESS_CLIENT_PASSED":"FITNESS_CLIENT_FAILED "+message);mc().stop();}
+    private static void release(TrainingHud screen){for(int code:new int[]{GLFW.GLFW_KEY_SPACE,GLFW.GLFW_KEY_A,GLFW.GLFW_KEY_D,GLFW.GLFW_KEY_W,GLFW.GLFW_KEY_S})screen.keyReleased(code,0,0);screen.mouseReleased(0,0,0);screen.mouseReleased(0,0,1);held=0;}
+    private static void complete(boolean success,String message){done=true;try{Files.createDirectories(OUT);Map<String,Object> result=new LinkedHashMap<>();result.put("success",success);result.put("stage",stage);result.put("message",message);result.put("checks",CHECKS);result.put("screenshots",CAPTURES);result.put("actualMinecraftClient",true);result.put("actualIntegratedServer",true);result.put("controlledBaselineXp",90);result.put("syntheticSetResults",false);result.put("actualMountedMinigames",true);result.put("motionFrames",FRAMES);result.put("hudPresentation",Map.of("frames",TrainingHud.renderedFrames,"interpolatedFrames",TrainingHud.interpolatedFrames,"snapshots",TrainingHud.snapshots));Files.writeString(OUT.resolve("result.json"),new GsonBuilder().setPrettyPrinting().create().toJson(result));}catch(Exception e){e.printStackTrace();}System.out.println(success?"FITNESS_CLIENT_PASSED":"FITNESS_CLIENT_FAILED "+message);mc().stop();}
     @SubscribeEvent public static void tick(ClientTickEvent.Post event){
         if(done)return;long now=System.currentTimeMillis();
         try{
             if(failure!=null)throw new IllegalStateException("Integrated server check failed",failure);
             check(now-START<900000,"Fitness QA timed out at stage "+stage);
-            if(mc().screen instanceof TrainingScreen s){feed(s);if(!shot&&FitnessClient.num((JsonObject)field(s,"state"),"tick")>90){screenshot("fitness-minigame-"+Exercise.values()[exercise].id()+".png");shot=true;}}
+            if(TrainingHud.active()!=null&&stage<30){var s=TrainingHud.active();check(mc().screen==null,"Mounted minigame opened a menu");feed(s);int tick=FitnessClient.num((JsonObject)field(s,"state"),"tick");String id=Exercise.values()[exercise].id();int frame=FRAMES.getOrDefault(id,0);
+                if(frame<24&&tick>=60+frame*2){Path target=OUT.resolve("motion/"+id);Files.createDirectories(target);try(var image=Screenshot.takeScreenshot(mc().getMainRenderTarget())){image.writeToFile(target.resolve(String.format("frame-%03d.png",frame)));}FRAMES.put(id,frame+1);}
+                if(!shot&&tick>112){screenshot("fitness-minigame-"+id+".png");shot=true;}
+                if(exercise==0&&!compactShot&&tick>135){mc().getWindow().setWindowed(640,480);mc().resizeDisplay();compactShot=true;}
+                if(exercise==0&&compactShot&&mc().getWindow().getScreenWidth()==640&&tick>160){screenshot("fitness-compact-training.png");mc().getWindow().setWindowed(1600,900);mc().resizeDisplay();}
+            }
             if(now<next||mc().getOverlay()!=null)return;next=now+180;
             if(stage!=lastStage){lastStage=stage;stageSince=now;System.out.println("FITNESS_QA_STAGE "+stage);}else check(now-stageSince<150000,"Fitness stage stalled "+stage);
             switch(stage){
@@ -113,9 +121,14 @@ public final class FitnessVisualQA {
                     // Use an explicit six-exercise plan; completed records still come exclusively from real game inputs.
                     planId=UUID.randomUUID();List<Step> steps=Arrays.stream(Exercise.values()).map(e->new Step(e,1,8,e.minimumLoad(),5)).toList();FitnessNetwork.request("routine",new Routine(planId,"QA daily six",5,steps));stage++;next=now+600;}
                 case 10->{FitnessNetwork.request("begin",Map.of("id",planId.toString()));stage++;next=now+600;}
-                case 11->{server(FitnessVisualQA::exercise);stage++;}
-                case 12->{if(!ready||!(mc().screen instanceof AthleteScreen screen)||!FitnessClient.str(screen.data(),"machine").equals(Exercise.values()[exercise].name()))return;check(click("start_series"),"Start series widget missing");shot=false;held=0;stage++;}
-                case 13->{if(mc().screen instanceof TrainingScreen)return;if(!(mc().screen instanceof AthleteScreen))return;int index=exercise;server(()->{
+                case 11->{mc().setScreen(null);joinPhase=0;mountedSeen=false;server(FitnessVisualQA::exercise);stage++;}
+                case 12->{
+                    if(!ready)return;
+                    if(exercise==0&&joinPhase==0){mc().player.connection.send(new net.minecraft.network.protocol.game.ServerboundPlayerCommandPacket(mc().player,net.minecraft.network.protocol.game.ServerboundPlayerCommandPacket.Action.PRESS_SHIFT_KEY));useMachine();mc().player.connection.send(new net.minecraft.network.protocol.game.ServerboundPlayerCommandPacket(mc().player,net.minecraft.network.protocol.game.ServerboundPlayerCommandPacket.Action.RELEASE_SHIFT_KEY));joinPhase++;next=now+700;return;}
+                    if(exercise==0&&joinPhase==1){server(()->{var d=FitnessData.get(player().getServer());var a=d.ledger.athletes.get(playerId);check(!player().isPassenger()&&d.ledger.selectedLoad(a,Exercise.BENCH)==25,"Sneak-right-click did not increase load without mounting");check(a.workout.load(a.workout.next())==25&&a.workout.next().load()==20,"Equipment load changed the saved plan instead of its active override");a.experience.put(Exercise.BENCH,90);a.preferredLoads.put(Exercise.BENCH,20);a.workout.loadOverrides.clear();d.persist(player().getServer());CHECKS.add("Actual sneak-right-click changes equipment load without mounting or opening a menu; original routine is preserved");});joinPhase++;return;}
+                    useMachine();shot=false;held=0;stage++;
+                }
+                case 13->{if(TrainingHud.active()!=null){if(mc().player.getVehicle() instanceof GymMount)mountedSeen=true;return;}if(!mountedSeen)return;int index=exercise;server(()->{check(!player().isPassenger(),"Finished set left player mounted");
                     var a=FitnessData.get(player().getServer()).ledger.athletes.get(playerId);check(a.results.size()==index+1,"Set result missing");var r=a.results.getLast();check(r.valid()>=5&&r.accuracy()>=50,"Real "+r.exercise()+" controls did not qualify: "+r.valid()+"/8 at "+r.accuracy()+"%");check(a.workout.completed==index+1,"Active routine did not advance exactly once");CHECKS.add("Actual "+r.exercise()+" minigame: "+r.valid()+"/8 valid at "+r.accuracy()+"%, saved through real player inputs");
                 });stage++;}
                 case 14->{if(!ready)return;if(++exercise<6){stage=11;return;}server(()->{var p=player();var a=FitnessData.get(p.getServer()).ledger.athletes.get(playerId);check(a.dailyComplete&&a.validToday==6&&a.completedDays.size()==1,"Daily completion was not recorded once");for(var e:Exercise.values())check(FitnessLedger.level(a.experience.get(e))>=1,"Permanent level missing for "+e);check(p.getAttribute(Attributes.ATTACK_DAMAGE).getModifiers().stream().anyMatch(m->m.id().getNamespace().equals("realmfitness")),"Permanent damage modifier missing");FitnessService.open(p,null,false);CHECKS.add("Six real sets complete a custom routine and exactly one daily bonus; permanent modifiers applied");});stage++;next=now+1000;}
@@ -129,11 +142,16 @@ public final class FitnessVisualQA {
                 case 22->{screenshot("fitness-profile-portuguese.png");server(()->{player().teleportTo(player().serverLevel(),.5,161,3.5,0,0);FitnessService.open(player(),BOARD,true);});stage++;next=now+700;}
                 case 23->{if(!ready||!(mc().screen instanceof AthleteScreen))return;screenshot("fitness-leaderboard-menu.png");CHECKS.add("Real RPG profile, editable plan, history, records, calendar, compact controls and Portuguese presentation captured");server(()->{var b=(RecordBoardEntity)player().level().getBlockEntity(BOARD);FitnessService.refreshBoards(player().getServer());check(!b.display.equals("[]"),"World leaderboard did not receive real records");player().teleportTo(player().serverLevel(),.5,161,2.5,0,23);});stage++;next=now+600;}
                 case 24->{if(!ready)return;mc().setScreen(null);mc().options.setCameraType(CameraType.FIRST_PERSON);stage++;next=now+1200;}
-                case 25->{screenshot("fitness-live-record-board.png");server(()->player().getServer().saveEverything(true,false,true));stage++;}
+                case 25->{screenshot("fitness-live-record-board.png");stage=30;}
                 case 26->{if(!ready)return;mc().level.disconnect();mc().disconnect();mc().setScreen(new TitleScreen());stage++;}
                 case 27->{if(mc().getSingleplayerServer()!=null||mc().level!=null)return;mc().createWorldOpenFlows().openWorld(folder,()->mc().setScreen(new TitleScreen()));stage++;}
-                case 28->{if(mc().player==null||mc().getSingleplayerServer()==null)return;server(()->{var p=player();var a=FitnessData.get(p.getServer()).ledger.athletes.get(playerId);check(a.results.size()==6&&a.dailyComplete&&a.workout.completed==6,"World reopen lost or duplicated workout records");for(var e:Exercise.values())check(FitnessLedger.level(a.experience.get(e))>=1,"World reopen lost permanent levels");FitnessService.apply(p);double first=p.getAttributeValue(Attributes.ATTACK_DAMAGE);FitnessService.apply(p);check(first==p.getAttributeValue(Attributes.ATTACK_DAMAGE),"World reopen stacked modifiers");CHECKS.add("Actual world close/reopen preserves levels, routine completion, six results and daily reward without modifier stacking");});stage++;}
-                case 29->{if(ready)complete(true,"Six actual minigames, RPG menus, custom routine, persistent progression and world leaderboard passed");}
+                case 28->{if(mc().player==null||mc().getSingleplayerServer()==null)return;server(()->{var p=player();var a=FitnessData.get(p.getServer()).ledger.athletes.get(playerId);check(a.results.size()==6&&a.dailyComplete&&a.workout.completed==6,"World reopen lost or duplicated workout records");check(!p.isPassenger()&&p.serverLevel().getEntitiesOfClass(GymMount.class,new net.minecraft.world.phys.AABB(-20,158,-8,22,168,12)).isEmpty(),"World close/reopen left a passenger or temporary gym vehicle");check(!p.level().getBlockState(station(2)).getValue(GymBlock.WORKING),"World close/reopen left equipment stuck in use");for(var e:Exercise.values())check(FitnessLedger.level(a.experience.get(e))>=1,"World reopen lost permanent levels");FitnessService.apply(p);double first=p.getAttributeValue(Attributes.ATTACK_DAMAGE);FitnessService.apply(p);check(first==p.getAttributeValue(Attributes.ATTACK_DAMAGE),"World reopen stacked modifiers");CHECKS.add("Actual world close/reopen preserves levels, routine completion, six results and daily reward without modifier stacking");});stage++;}
+                case 29->{if(ready){check(TrainingHud.interpolatedFrames>0,"HUD never advanced between authoritative snapshots");CHECKS.add("HUD rendered interpolated motion between server snapshots; scoring remains authoritative");complete(true,"Six actual minigames, RPG menus, custom routine, persistent progression and world leaderboard passed");}}
+                case 30->{exercise=cancelMode==0?0:cancelMode==1?1:2;mc().setScreen(null);server(()->{var p=player();var a=FitnessData.get(p.getServer()).ledger.athletes.get(playerId);a.restUntil=0;var pos=station(exercise);p.teleportTo(p.serverLevel(),pos.getX()+.5,161,-1.8,0,0);});stage=31;}
+                case 31->{if(!ready)return;useMachine();stage=32;next=now+500;}
+                case 32->{if(TrainingHud.active()==null||!(mc().player.getVehicle() instanceof GymMount))return;if(cancelMode==2){CHECKS.add("World close while actually mounted is exercised before reopen");stage=26;return;}if(cancelMode==0)TrainingHud.active().keyPressed(GLFW.GLFW_KEY_LEFT_SHIFT,0,0);else server(()->player().level().destroyBlock(station(exercise),true));stage=33;next=now+600;}
+                case 33->{if(TrainingHud.active()!=null)return;server(()->{check(!player().isPassenger(),"Cancelled set left player mounted");check(FitnessData.get(player().getServer()).ledger.athletes.get(playerId).results.size()==6,"Cancelled set awarded a result");if(cancelMode==0)check(!player().level().getBlockState(station(exercise)).getValue(GymBlock.WORKING),"Cancelled set left animated machine state");});stage=34;}
+                case 34->{if(!ready)return;CHECKS.add(cancelMode==0?"Actual SHIFT input dismounts, restores equipment and creates no reward":"Breaking occupied equipment dismounts the actual player and creates no reward");cancelMode++;stage=30;}
                 default->throw new IllegalStateException("Unknown QA stage");
             }
         }catch(Throwable e){e.printStackTrace();complete(false,e.toString());}

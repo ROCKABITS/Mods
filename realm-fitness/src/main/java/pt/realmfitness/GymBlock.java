@@ -20,6 +20,7 @@ import pt.realmfitness.domain.Exercise;
 public final class GymBlock extends HorizontalDirectionalBlock {
     public static final EnumProperty<DoubleBlockHalf> HALF=BlockStateProperties.DOUBLE_BLOCK_HALF;
     public static final BooleanProperty EXPANDED=BooleanProperty.create("expanded");
+    public static final BooleanProperty WORKING=BooleanProperty.create("working");
     public static final IntegerProperty PART=IntegerProperty.create("part",0,17);
     public final Exercise exercise;
     private static final ThreadLocal<Boolean> REMOVING=ThreadLocal.withInitial(()->false);
@@ -27,10 +28,10 @@ public final class GymBlock extends HorizontalDirectionalBlock {
     public GymBlock(Exercise exercise,Properties properties){
         super(properties);this.exercise=exercise;
         // Missing properties in 0.1 saves resolve to the old two-cell layout.
-        registerDefaultState(stateDefinition.any().setValue(FACING,Direction.NORTH).setValue(HALF,DoubleBlockHalf.LOWER).setValue(EXPANDED,false).setValue(PART,0));
+        registerDefaultState(stateDefinition.any().setValue(FACING,Direction.NORTH).setValue(HALF,DoubleBlockHalf.LOWER).setValue(EXPANDED,false).setValue(WORKING,false).setValue(PART,0));
     }
     @Override protected com.mojang.serialization.MapCodec<? extends HorizontalDirectionalBlock> codec(){return simpleCodec(p->new GymBlock(Exercise.BENCH,p));}
-    @Override protected void createBlockStateDefinition(StateDefinition.Builder<Block,BlockState> b){b.add(FACING,HALF,EXPANDED,PART);}
+    @Override protected void createBlockStateDefinition(StateDefinition.Builder<Block,BlockState> b){b.add(FACING,HALF,EXPANDED,PART,WORKING);}
     public static BlockPos cell(BlockPos anchor,Direction facing,int part){return anchor.relative(facing.getClockWise(),GymGeometry.x(part)).relative(facing.getOpposite(),GymGeometry.z(part)).above(GymGeometry.y(part));}
     public static BlockPos anchor(BlockPos pos,BlockState state){
         if(!state.getValue(EXPANDED))return state.getValue(HALF)==DoubleBlockHalf.UPPER?pos.below():pos;
@@ -47,6 +48,10 @@ public final class GymBlock extends HorizontalDirectionalBlock {
         if(!root.is(this)||root.getValue(HALF)!=DoubleBlockHalf.LOWER||root.getValue(PART)!=0||!loaded(level,anchor,root))return false;
         for(int i=0;i<18;i++)if(includes(root,i)&&!matches(level.getBlockState(position(anchor,root,i)),root,i))return false;
         return true;
+    }
+    public void working(Level level,BlockPos anchor,boolean active){
+        if(!level.hasChunkAt(anchor))return;BlockState root=level.getBlockState(anchor);if(!root.is(this))return;
+        for(int i=0;i<18;i++)if(includes(root,i)){BlockPos p=position(anchor,root,i);if(level.hasChunkAt(p)&&matches(level.getBlockState(p),root,i))level.setBlock(p,level.getBlockState(p).setValue(WORKING,active),Block.UPDATE_CLIENTS|Block.UPDATE_KNOWN_SHAPE);}
     }
     private boolean supported(Level level,BlockPos anchor,BlockState root){
         int cells=root.getValue(EXPANDED)?GymGeometry.depth(exercise)*2:1;
@@ -88,8 +93,8 @@ public final class GymBlock extends HorizontalDirectionalBlock {
     }
     @Override public BlockState playerWillDestroy(Level level,BlockPos pos,BlockState state,Player player){if(!level.isClientSide&&player.isCreative())removeOthers(level,pos,state,false);return super.playerWillDestroy(level,pos,state,player);}
     @Override protected void onRemove(BlockState state,Level level,BlockPos pos,BlockState next,boolean piston){if(!level.isClientSide&&!next.is(this))removeOthers(level,pos,state,true);super.onRemove(state,level,pos,next,piston);}
-    @Override protected InteractionResult useWithoutItem(BlockState state,Level level,BlockPos pos,Player player,BlockHitResult hit){if(player instanceof ServerPlayer serverPlayer)FitnessService.open(serverPlayer,anchor(pos,state),false);return InteractionResult.sidedSuccess(level.isClientSide);}
-    @Override protected VoxelShape getShape(BlockState state,BlockGetter level,BlockPos pos,CollisionContext context){return state.getValue(EXPANDED)?GymGeometry.shape(exercise,state.getValue(PART),state.getValue(FACING)):(state.getValue(HALF)==DoubleBlockHalf.LOWER?Block.box(1,0,1,15,16,15):Block.box(1,0,4,15,15,12));}
+    @Override protected InteractionResult useWithoutItem(BlockState state,Level level,BlockPos pos,Player player,BlockHitResult hit){if(player instanceof ServerPlayer serverPlayer)FitnessService.interact(serverPlayer,anchor(pos,state),player.isShiftKeyDown());return InteractionResult.sidedSuccess(level.isClientSide);}
+    @Override protected VoxelShape getShape(BlockState state,BlockGetter level,BlockPos pos,CollisionContext context){return state.getValue(EXPANDED)?GymGeometry.shape(exercise,state.getValue(PART),state.getValue(FACING),state.getValue(WORKING)):(state.getValue(HALF)==DoubleBlockHalf.LOWER?Block.box(1,0,1,15,16,15):Block.box(1,0,4,15,15,12));}
     @Override protected BlockState rotate(BlockState state,Rotation rotation){return state.setValue(FACING,rotation.rotate(state.getValue(FACING)));}
     @Override protected BlockState mirror(BlockState state,Mirror mirror){return rotate(state,mirror.getRotation(state.getValue(FACING)));}
 }
