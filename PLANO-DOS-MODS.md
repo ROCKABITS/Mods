@@ -4,11 +4,11 @@ Referências: guião enviado pelo utilizador em `Pasted text.txt` e decisões po
 
 Plataforma: **Minecraft 1.21.1, NeoForge e Java 21**. Os mods mantêm responsabilidades próprias e integram-se quando instalados em conjunto. A identidade e a economia do Crónicas RP devem ser reutilizadas, evitando contas ou personagens concorrentes.
 
-## Realm Fitness — ginásio, minijogos e treino diário
+## Realm Gym — ginásio, minijogos e treino diário
 
-**Realm Fitness 0.5.0 Beta**: modelos redesenhados com armações finas, estofos azul-acinzentados e animações ajustadas por cinemática inversa 3D; seis máquinas físicas com minijogos próprios, progressão permanente, perfil RPG com personagem 3D, catálogo, editor de rotinas, histórico, calendário e painéis de recordes. Plataforma inicial: **Minecraft 1.21.1 / NeoForge / Java 21**; funcionamento independente, sem adaptação obrigatória a um mod de stats.
+**Realm Gym 0.5.1 Beta**: modelos redesenhados com armações finas, estofos azul-acinzentados e animações ajustadas por cinemática inversa 3D; seis máquinas físicas com minijogos próprios, progressão permanente, perfil RPG com personagem 3D, catálogo, editor de rotinas, histórico, calendário e painéis de recordes. Plataforma inicial: **Minecraft 1.21.1 / NeoForge / Java 21**; funcionamento independente, sem adaptação obrigatória a um mod de stats.
 
-[Guia e downloads](realm-fitness/README.md) · [Conceito original preservado](realm-fitness/DESIGN.md) · [Validação](realm-fitness/VALIDACAO.md) · [Galeria](media/realm-fitness/0.5.0/README.md).
+[Guia e downloads](realm-gym/README.md) · [Conceito original preservado](realm-gym/DESIGN.md) · [Validação](realm-gym/VALIDACAO.md) · [Galeria](media/realm-gym/0.5.1/README.md).
 
 Por defeito: objetivo de seis séries diárias envolvendo três exercícios, vinte níveis por atributo, limites de XP/fadiga configuráveis e ganhos persistentes. O servidor calcula os resultados pelos inputs. Mensalidades, personal trainers e mudanças visuais musculares continuam como propostas futuras.
 
