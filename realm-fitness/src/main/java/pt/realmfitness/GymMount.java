@@ -33,9 +33,7 @@ public final class GymMount extends Entity {
     public void progress(int tick,double effort,int keys){int edges=keys&~keys();if(edges!=0){entityData.set(ACTION,edges);entityData.set(ACTION_TICK,tick);}entityData.set(TICK,tick);entityData.set(EFFORT,(float)effort);entityData.set(KEYS,keys);}
     @Override public void onSyncedDataUpdated(EntityDataAccessor<?> key){super.onSyncedDataUpdated(key);if(key==TICK){double previous=visualServer==0?0:visualTick();double next=entityData.get(TICK);boolean newRound=Math.abs(next-visualServer)>4;visualServer=next;visualCorrection=newRound?0:previous-visualServer;received=System.nanoTime();}else if(key==EFFORT){fromEffort=effort();toEffort=entityData.get(EFFORT);effortReceived=System.nanoTime();}}
     public Vec3 local(double x,double y,double z){double scale=compact()?.48:1;Vec3 a=Vec3.atLowerCornerOf(anchor());Direction right=facing().getClockWise(),back=facing().getOpposite();return a.add(.5+.5*right.getStepX()+.5*back.getStepX(),0,.5+.5*right.getStepZ()+.5*back.getStepZ()).add((x-1)*right.getStepX()*scale,y*scale,(x-1)*right.getStepZ()*scale).add((z-1)*back.getStepX()*scale,0,(z-1)*back.getStepZ()*scale);}
-    private Vec3 actorPosition(){return switch(exercise()){
-        case BENCH->local(1,0,1.0);case RUN->local(1,.394,1.25);case BOX->local(.94,0,.03);case PULL->local(1,.5,.47);case ROW->local(1,0,.65);case SQUAT->local(1,.15,1.1875);
-    };}
+    private Vec3 actorPosition(){var p=GymLayout.point(exercise(),"actor");return local(p.x(),p.y(),p.z());}
     @Override protected void positionRider(Entity rider,Entity.MoveFunction move){Vec3 p=actorPosition();move.accept(rider,p.x,p.y,p.z);rider.setYBodyRot(actorYaw());rider.fallDistance=0;}
     @Override protected boolean canAddPassenger(Entity passenger){return getPassengers().isEmpty();}
     @Override public boolean shouldRiderSit(){return false;}

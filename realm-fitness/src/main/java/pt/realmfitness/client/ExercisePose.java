@@ -1,59 +1,81 @@
 package pt.realmfitness.client;
 
+import pt.realmfitness.GymLayout;
 import pt.realmfitness.domain.*;
 
-/** Authored poses in metres and radians. Two-bone IK keeps hands and feet on their targets. */
+/** Three-dimensional two-bone IK: hands and feet target the actual authored equipment. */
 public final class ExercisePose {
-    public double hips=.703125,forward,lean,twist,sway,head;
-    public final double[] arms=new double[4],legs=new double[4];
-    public double armSpread=.08,legSpread=.05;
+    public double hips=.703125,forward,lean,twist,sway,head,headOffset;
+    public final Limb[] arms=new Limb[2],legs=new Limb[2];
     public double barY,barZ,seatZ;
-    private static final double UNIT=.9375/16;
+    public static final double UNIT=.9375/16;
+    public record V(double x,double y,double z){
+        public V add(V b){return new V(x+b.x,y+b.y,z+b.z);}
+        public V sub(V b){return new V(x-b.x,y-b.y,z-b.z);}
+        public V scale(double s){return new V(x*s,y*s,z*s);}
+        public double dot(V b){return x*b.x+y*b.y+z*b.z;}
+        public double length(){return Math.sqrt(dot(this));}
+    }
+    public record Limb(V start,V joint,V end,V target){}
     private ExercisePose(){}
-    public static ExercisePose sample(Exercise exercise,double tick,double effort,int action,double age){
-        var p=new ExercisePose();double u=Math.clamp(effort,0,1),phase=tick*Math.PI*2/24,beat=Math.sin(phase),strike=age>=0&&age<10?Math.pow(Math.sin(age*Math.PI/10),2):0;
-        switch(exercise){
+    public static ExercisePose sample(Exercise e,double tick,double effort,int action,double age){
+        var p=new ExercisePose();var actor=GymLayout.point(e,"actor");double u=Math.clamp(effort,0,1),phase=tick*Math.PI*2/24,beat=Math.sin(phase),strike=age>=0&&age<10?Math.pow(Math.sin(age*Math.PI/10),2):0;
+        switch(e){
             case BENCH->{
-                p.hips=1.13;p.lean=-Math.PI/2;p.head=.04;p.barY=1.29+.50*u;p.barZ=1.78;p.armSpread=.12;p.legSpread=.12;
-                p.hands(p.barY,-.78);p.feet(.45,.25);
+                p.hips=GymLayout.number(e,"pad_top")+2*UNIT+.012;p.lean=-Math.PI/2;p.head=.04;p.headOffset=-2;
+                p.barY=p.hips+.17+.48*u;p.barZ=GymLayout.number(e,"bar_work_z");
+                p.hands(p.barY,actor.z()-p.barZ,GymLayout.number(e,"grip_half"),new V(1,.6,0));
+                p.feet(GymLayout.number(e,"foot_y"),GymLayout.number(e,"foot_forward"),GymLayout.number(e,"foot_half"));
             }
             case RUN->{
-                p.hips+=.023*Math.cos(phase*2);p.lean=.10;p.head=-.07;
-                p.arms[0]=-.25-beat*.62;p.arms[1]=-1.0;p.arms[2]=-.25+beat*.62;p.arms[3]=-1.0;
-                p.legs[0]=beat*.75;p.legs[1]=.12+Math.max(0,-beat)*1.15;p.legs[2]=-beat*.75;p.legs[3]=.12+Math.max(0,beat)*1.15;
+                p.hips=.62+.015*Math.cos(phase*2);p.lean=.10;p.head=-.07;
+                for(int i=0;i<2;i++){
+                    double swing=i==0?beat:-beat;p.armSwing(i,-.25-swing*.62,-1);
+                    p.foot(i,.16*Math.max(0,i==0?-Math.cos(phase):Math.cos(phase)),GymLayout.number(e,"stride")*swing,.135);
+                }
             }
             case BOX->{
-                p.hips-=.035;p.lean=.08;p.legSpread=.12;
-                double right=(action&Minigame.RIGHT)!=0?strike:0,left=(action&Minigame.LEFT)!=0?strike:0;
+                p.hips=.66;p.lean=.08;double right=(action&Minigame.RIGHT)!=0?strike:0,left=(action&Minigame.LEFT)!=0?strike:0;
                 p.twist=(right-left)*.20;p.sway=((action&Minigame.A)!=0?1:(action&Minigame.D)!=0?-1:0)*strike*.20;
-                p.hand(0,1.24+.08*right,.28+.40*right);p.hand(1,1.24+.08*left,.28+.40*left);p.feet(0,.08);
+                for(int i=0;i<2;i++){double hit=i==0?right:left;p.hand(i,1.24+(GymLayout.number(e,"punch_y")-1.24)*hit,.25+(GymLayout.number(e,"bag_face_z")-actor.z()-.25)*hit,.22-.04*hit,new V(.3,1,.2));}
+                p.foot(0,0,.12,.23);p.foot(1,0,-.12,.23);
             }
             case PULL->{
-                p.hips+=.50*u;p.lean=.03;p.sway=Math.sin(tick*.09)*.025;p.armSpread=.18;p.hands(2.0,0);
-                p.legs[0]=p.legs[2]=-.18-.18*u;p.legs[1]=p.legs[3]=.40+.35*u;
+                p.hips+=.50*u;p.lean=.03;p.sway=Math.sin(tick*.09)*.025;
+                p.hands(GymLayout.number(e,"bar_y")-actor.y(),GymLayout.number(e,"bar_z")-actor.z(),GymLayout.number(e,"grip_half"),new V(.6,.3,-1));
+                for(int i=0;i<2;i++)p.foot(i,.10+.50*u,-.17,.10);
             }
             case ROW->{
-                p.hips=.95;p.forward=.35-.18*u;p.lean=.28-.50*u;p.head=-p.lean*.65;p.armSpread=.06;p.legSpread=.22;
-                p.seatZ=p.forward;p.barY=1.06+.12*u;p.barZ=1.30-.30*u;
-                p.hands(p.barY,p.barZ-.65);p.feet(.60,.75);
+                p.hips=GymLayout.number(e,"seat_top")+2*UNIT+.012;p.forward=GymLayout.number(e,"seat_offset")-GymLayout.number(e,"seat_stroke")*u;
+                p.lean=.28-.50*u;p.head=-p.lean*.65;p.seatZ=p.forward;p.barY=p.hips+.32+.08*u;p.barZ=1.55-.60*u;
+                p.hands(p.barY,p.barZ-actor.z(),.32,new V(.6,.8,.8));
+                p.feet(GymLayout.number(e,"foot_y"),GymLayout.number(e,"foot_z")-actor.z(),GymLayout.number(e,"foot_half"));
             }
             case SQUAT->{
-                p.hips-=.32*u;p.forward=-.22*u;p.lean=.33*u;p.head=-p.lean*.8;p.armSpread=.40;p.legSpread=.12;
-                p.barY=1.40-.32*u;p.barZ=1.14;p.hands(p.barY,-.0475);p.feet(0,.055);
+                p.hips=.66-.34*u;p.forward=-.24*u;p.lean=.34*u;p.head=-p.lean*.8;
+                p.barY=p.hips+11*UNIT*Math.cos(p.lean)+.07;
+                double handForward=p.forward+11*UNIT*Math.sin(p.lean)-.05;p.barZ=actor.z()+handForward;
+                p.hands(p.barY,handForward,GymLayout.number(e,"grip_half"),new V(.7,1,-.4));
+                p.feet(0,GymLayout.number(e,"foot_forward"),GymLayout.number(e,"foot_half"));
             }
         }
         return p;
     }
-    private void hands(double y,double z){hand(0,y,z);hand(1,y,z);}
-    private void hand(int side,double y,double forwardTarget){
-        // Convert a fixed world target into the leaning torso's shoulder coordinates.
-        double dy=-(y-hips)/UNIT,dz=-(forwardTarget-forward)/UNIT,c=Math.cos(lean),s=Math.sin(lean);
-        double localY=dy*c+dz*s+11,localZ=-dy*s+dz*c;
-        solve(localY,localZ,-1,arms,side*2);
+    private V rotate(V v){
+        double cx=Math.cos(lean),sx=Math.sin(lean),cy=Math.cos(twist),sy=Math.sin(twist),cz=Math.cos(sway),sz=Math.sin(sway);
+        double y=v.y*cx-v.z*sx,z=v.y*sx+v.z*cx,x=v.x*cy+z*sy;z=-v.x*sy+z*cy;
+        return new V(x*cz-y*sz,x*sz+y*cz,z);
     }
-    private void feet(double y,double forwardTarget){for(int side=0;side<2;side++)solve((hips-y)/UNIT,-(forwardTarget-forward)/UNIT,1,legs,side*2);}
-    private static void solve(double y,double z,int bend,double[] out,int index){
-        double distance=Math.clamp(Math.hypot(y,z),.25,11.98),elbow=bend*Math.acos(Math.clamp((distance*distance-72)/72,-1,1));
-        out[index]=Math.atan2(z==0?-.00001:z,y)-Math.atan2(6*Math.sin(elbow),6+6*Math.cos(elbow));out[index+1]=elbow;
+    private V target(int side,double y,double f,double half){return new V((side==0?-half:half)/UNIT,-(y-hips)/UNIT,-(f-forward)/UNIT);}
+    private void hands(double y,double f,double half,V pole){for(int i=0;i<2;i++)hand(i,y,f,half,pole);}
+    private void hand(int side,double y,double f,double half,V pole){int sign=side==0?-1:1;arms[side]=solve(rotate(new V(sign*5,-11,0)),target(side,y,f,half),new V(sign*pole.x,pole.y,pole.z));}
+    private void feet(double y,double f,double half){for(int i=0;i<2;i++)foot(i,y,f,half);}
+    private void foot(int side,double y,double f,double half){int sign=side==0?-1:1;legs[side]=solve(new V(sign*1.9,0,0),target(side,y,f,half),new V(sign*.15,0,-1));}
+    private void armSwing(int side,double angle,double elbow){int sign=side==0?-1:1;V a=rotate(new V(sign*5,-11,0)),b=a.add(rotate(new V(0,6*Math.cos(angle),6*Math.sin(angle)))),c=b.add(rotate(new V(0,6*Math.cos(angle+elbow),6*Math.sin(angle+elbow))));arms[side]=new Limb(a,b,c,c);}
+    private static Limb solve(V start,V goal,V pole){
+        V delta=goal.sub(start);double length=Math.max(.001,delta.length()),reach=Math.clamp(length,.01,11.999);V axis=delta.scale(1/length),perp=pole.sub(axis.scale(pole.dot(axis)));
+        if(perp.length()<.0001){V fallback=Math.abs(axis.x)<.8?new V(1,0,0):new V(0,0,1);perp=fallback.sub(axis.scale(fallback.dot(axis)));}
+        V joint=start.add(axis.scale(reach/2)).add(perp.scale(Math.sqrt(36-reach*reach/4)/perp.length()));
+        return new Limb(start,joint,start.add(axis.scale(reach)),goal);
     }
 }

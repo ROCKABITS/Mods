@@ -34,7 +34,7 @@ public final class FitnessClient {
     @EventBusSubscriber(modid="realmfitness",value=Dist.CLIENT,bus=EventBusSubscriber.Bus.MOD)
     public static final class Registration {
         @SubscribeEvent public static void models(net.neoforged.neoforge.client.event.ModelEvent.RegisterAdditional e){
-            e.register(GymMountRenderer.model(pt.realmfitness.domain.Exercise.BENCH,"bar"));e.register(GymMountRenderer.model(pt.realmfitness.domain.Exercise.SQUAT,"bar"));for(var group:java.util.List.of("seat","handle","cable"))e.register(GymMountRenderer.model(pt.realmfitness.domain.Exercise.ROW,group));
+            e.register(GymMountRenderer.model(pt.realmfitness.domain.Exercise.BOX,"bag"));e.register(GymMountRenderer.model(pt.realmfitness.domain.Exercise.RUN,"belt"));e.register(GymMountRenderer.model(pt.realmfitness.domain.Exercise.BENCH,"bar"));e.register(GymMountRenderer.model(pt.realmfitness.domain.Exercise.SQUAT,"bar"));for(var group:java.util.List.of("seat","handle","cable","flywheel"))e.register(GymMountRenderer.model(pt.realmfitness.domain.Exercise.ROW,group));
         }
         @SubscribeEvent public static void keys(RegisterKeyMappingsEvent e){e.register(KEY);}
         @SubscribeEvent public static void renderers(EntityRenderersEvent.RegisterRenderers e){e.registerBlockEntityRenderer(pt.realmfitness.FitnessMod.BOARD_ENTITY.get(),RecordBoardRenderer::new);e.registerEntityRenderer(pt.realmfitness.FitnessMod.MOUNT.get(),GymMountRenderer::new);}

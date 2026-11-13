@@ -8,6 +8,8 @@ import net.minecraft.client.renderer.entity.*;
 import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.resources.ResourceLocation;
 import pt.realmfitness.GymMount;
+import pt.realmfitness.GymLayout;
+import pt.realmfitness.domain.Minigame;
 import pt.realmfitness.domain.Exercise;
 
 /** Production equipment meshes move with the same pose targets as the player's hands. */
@@ -18,13 +20,20 @@ public final class GymMountRenderer extends NoopRenderer<GymMount> {
         if(!mount.isVehicle())return;var pose=ExercisePose.sample(mount.exercise(),mount.visualTick(),mount.effort(),mount.action(),mount.actionAge());var origin=mount.local(0,0,0);
         stack.pushPose();try{
             stack.translate(origin.x-mount.getX(),origin.y-mount.getY(),origin.z-mount.getZ());stack.mulPose(Axis.YP.rotationDegrees(180-mount.facing().toYRot()));
-            switch(mount.exercise()){
-                case BENCH->{stack.translate(0,pose.barY-30.25/16,pose.barZ-35.75/16);mesh(mount,"bar",stack,buffers,light);}
-                case SQUAT->{stack.translate(0,.15+pose.barY-31.8/16,pose.barZ-19/16.0);mesh(mount,"bar",stack,buffers,light);}
+            var e=mount.exercise();var actor=GymLayout.point(e,"actor");
+            switch(e){
+                case BENCH,SQUAT->{var rest=GymLayout.point(e,"bar_rest");stack.translate(0,actor.y()+pose.barY-rest.y(),pose.barZ-rest.z());mesh(mount,"bar",stack,buffers,light);}
+                case RUN->{double travel=(mount.visualTick()*.045)%(3/16.0);stack.translate(0,0,travel);mesh(mount,"belt",stack,buffers,light);}
+                case BOX->{
+                    var pivot=GymLayout.point(e,"bag_pivot");double age=mount.actionAge();boolean hit=(mount.action()&(Minigame.LEFT|Minigame.RIGHT))!=0;
+                    double swing=hit&&age>=0&&age<45?Math.sin(age*.24)*Math.exp(-age/13)*.13:0;
+                    stack.translate(pivot.x(),pivot.y(),pivot.z());stack.mulPose(Axis.XP.rotation((float)-swing));stack.translate(-pivot.x(),-pivot.y(),-pivot.z());mesh(mount,"bag",stack,buffers,light);
+                }
                 case ROW->{
                     stack.pushPose();stack.translate(0,0,pose.seatZ);mesh(mount,"seat",stack,buffers,light);stack.popPose();
-                    stack.pushPose();stack.translate(0,pose.barY-13.5/16,pose.barZ-14/16.0);mesh(mount,"handle",stack,buffers,light);stack.popPose();
-                    double dz=34/16.0-pose.barZ,dy=pose.barY-13.5/16,angle=Math.atan2(dy,dz);stack.translate(1,13.5/16,34/16.0);stack.mulPose(Axis.XP.rotation((float)angle));stack.scale(1,1,(float)(Math.hypot(dz,dy)/(20/16.0)));stack.translate(-1,-13.5/16,-34/16.0);mesh(mount,"cable",stack,buffers,light);
+                    var rest=GymLayout.point(e,"hand_rest");stack.pushPose();stack.translate(0,pose.barY-rest.y(),pose.barZ-rest.z());mesh(mount,"handle",stack,buffers,light);stack.popPose();
+                    var fan=GymLayout.point(e,"flywheel_center");stack.pushPose();stack.translate(fan.x(),fan.y(),fan.z());stack.mulPose(Axis.ZP.rotation((float)(mount.visualTick()*.14)));stack.translate(-fan.x(),-fan.y(),-fan.z());mesh(mount,"flywheel",stack,buffers,light);stack.popPose();
+                    var cable=GymLayout.point(e,"cable_origin");double dz=cable.z()-pose.barZ,dy=pose.barY-cable.y(),angle=Math.atan2(dy,dz);stack.translate(cable.x(),cable.y(),cable.z());stack.mulPose(Axis.XP.rotation((float)angle));stack.scale(1,1,(float)(Math.hypot(dz,dy)/(cable.z()-rest.z())));stack.translate(-cable.x(),-cable.y(),-cable.z());mesh(mount,"cable",stack,buffers,light);
                 }
                 default->{}
             }

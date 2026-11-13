@@ -1,8 +1,8 @@
-# Realm Fitness 0.4.0 Beta
+# Realm Fitness 0.5.0 Beta
 
 Ginásio físico para **Minecraft 1.21.1, NeoForge 21.1.256+ e Java 21**. Máquinas 3D, seis minijogos, atributos permanentes, rotinas personalizadas, calendário e painéis de recordes. Funciona de forma independente.
 
-[Descarregar JAR](../mod-pronto/realm-fitness-0.4.0.jar) · [ZIP](../mod-pronto/realm-fitness-0.4.0.zip) · [Galeria](../media/realm-fitness/0.4.0/README.md) · [Validação](VALIDACAO.md) · [Conceito original](DESIGN.md)
+[Descarregar JAR](../mod-pronto/realm-fitness-0.5.0.jar) · [ZIP](../mod-pronto/realm-fitness-0.5.0.zip) · [Galeria](../media/realm-fitness/0.5.0/README.md) · [Validação](VALIDACAO.md) · [Conceito original](DESIGN.md)
 
 Instala o mesmo JAR no servidor e em todos os clientes. Esta edição é para 1.21.1/NeoForge. Identificador: `realmfitness`.
 
@@ -15,15 +15,17 @@ Instala o mesmo JAR no servidor e em todos os clientes. Esta edição é para 1.
 5. **Agachar + botão direito antes de entrar:** aumenta 5 kg no supino/agachamentos ou um nível de resistência nas outras máquinas. Respeita os níveis desbloqueados; no máximo disponível, volta ao mínimo. A seleção fica guardada por jogador e exercício. Num plano, ajusta a sessão ativa sem editar a rotina guardada.
 6. A contagem de entrada dura dois segundos. O HUD ocupa uma faixa pequena acima da barra rápida, com indicadores próprios de cada exercício, movimento interpolado a cada frame e resposta visual aos controlos. **SHIFT sai da máquina** e cancela a série incompleta. **F5 muda a perspetiva** e o rato permite observar a animação.
 
-O supino posiciona o jogador deitado; o remo usa uma posição sentada com assento deslizante. As outras máquinas alinham o corpo com as pegas, tapete ou plataforma. As animações têm cotovelos e joelhos articulados, movimentos específicos de cada exercício e barra/pega sincronizadas com o esforço. Ao concluir a série, o jogador sai do equipamento e recebe um resumo discreto; o diário continua disponível em K.
+O supino posiciona o jogador deitado; o remo usa uma posição sentada com assento deslizante. As outras máquinas alinham o corpo com as pegas, tapete ou plataforma. As animações têm cotovelos e joelhos articulados, movimentos específicos de cada exercício e barra/pega sincronizadas com o esforço. As mãos e os pés usam cinemática inversa 3D com pontos partilhados com a geometria; o saco oscila após os golpes, o tapete desliza e a roda do remo gira durante o treino. Ao concluir a série, o jogador sai do equipamento e recebe um resumo discreto; o diário continua disponível em K.
 
 O plano guarda o progresso entre sessões e reinícios. Pode ser terminado no menu para começar outro. Editar ou apagar uma rotina guardada não altera a cópia de um treino já iniciado. Os dias associados às rotinas são uma indicação de calendário; o jogador escolhe qual iniciar.
 
 ## Equipamento e montagem
 
-As seis máquinas usam modelos e texturas originais: aço escuro, estofos verdes com costuras, detalhes em cobre, discos recortados, apoios em borracha e comandos próprios. Os bancos, a passadeira e o remo têm **2 × 3 blocos** de base; boxe, elevações e agachamentos têm **2 × 2 blocos**. Todas reservam **três blocos de altura**. Coloca-as numa superfície sólida, com toda a área livre; a orientação depende da direção do jogador. As colisões acompanham a estrutura e deixam aberturas nos espaços vazios.
+As seis máquinas usam modelos e texturas originais: armações finas em aço azul-escuro, estofos azul-acinzentados com rebordo e costuras, detalhes em aço claro, discos octogonais e apoios em borracha. Os bancos, a passadeira e o remo têm **2 × 3 blocos** de base; boxe, elevações e agachamentos têm **2 × 2 blocos**. Todas reservam **três blocos de altura**. Coloca-as numa superfície sólida, com toda a área livre; a orientação depende da direção do jogador. As colisões acompanham a estrutura e deixam aberturas nos espaços vazios.
 
-Quebrar uma peça desmonta a máquina e devolve um único item em Sobrevivência. Em Criativo não deixa itens. As máquinas colocadas na 0.1.0 mantêm a base antiga e um modelo compacto; para a montagem da 0.3.0, recolhe-as e volta a colocá-las com espaço para o novo tamanho. A progressão, rotinas e recordes são preservados.
+A direção visual aproxima-se do [Gym Furniture Pack Volume 1, de EliteCreatures](https://sketchfab.com/3d-models/gym-furniture-pack-volume-1-4b1837a989a2419eb9be6d37fe3ff4f7), com geometrias e texturas próprias criadas para o Realm Fitness. Os bancos foram baixados à escala do personagem; supino, pegas e apoios partilham as coordenadas com o sistema de animação.
+
+Quebrar uma peça desmonta a máquina e devolve um único item em Sobrevivência. Em Criativo não deixa itens. As máquinas colocadas na 0.1.0 mantêm a base antiga e um modelo compacto; para a montagem atual, recolhe-as e volta a colocá-las com espaço para o novo tamanho. A progressão, rotinas e recordes são preservados.
 
 ## Exercícios e progressão
 

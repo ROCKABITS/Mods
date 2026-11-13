@@ -28,7 +28,8 @@ def checkjar(p):
     assert f'assets/realmfitness/models/block/{e}_part_{part}.json' in names and f'assets/realmfitness/models/block/{e}_part_{part}_working.json' in names
   assert 'assets/realmfitness/geometry/collisions.json' in names and 'assets/realmfitness/geometry/collisions_working.json' in names
   assert 'pt/realmfitness/GymMount.class' in names and 'pt/realmfitness/client/TrainingHud.class' in names and 'pt/realmfitness/client/TrainingScreen.class' not in names
-  for model in ('bench_bar','squat_bar','row_seat','row_handle','row_cable'):assert f'assets/realmfitness/models/block/{model}.json' in names
+  for model in ('bench_bar','squat_bar','row_seat','row_handle','row_cable','row_flywheel','box_bag','run_belt'):assert f'assets/realmfitness/models/block/{model}.json' in names
+  assert 'assets/realmfitness/geometry/layout.json' in names and 'pt/realmfitness/GymLayout.class' in names
   collection=json.loads(j.read('assets/realmfitness/geometry/collection.json'))
   collisions=json.loads(j.read('assets/realmfitness/geometry/collisions.json'))
   for e in EXERCISES:
@@ -59,7 +60,7 @@ def package():
  state=json.loads((STATE/'source.json').read_text());assert state['source_commit']==os.environ['GITHUB_SHA']
  source=STATE/NAME;checkjar(source);assert digest(source)==state['jar_sha256']
  reports=[ET.parse(p).getroot() for p in (PROJECT/'build/test-results/test').glob('TEST-*.xml')];units=sum(int(r.get('tests',0)) for r in reports)
- assert units>=70 and not any(int(r.get(k,0)) for r in reports for k in ('failures','errors','skipped'))
+ assert units>=74 and not any(int(r.get(k,0)) for r in reports for k in ('failures','errors','skipped'))
  for n in ('fitness-build.log','fitness-native.log','fitness-client.log'):
   log=(PROJECT/n).read_text(errors='replace');assert 'BUILD SUCCESSFUL' in log and 'BUILD FAILED' not in log,n
  expected=sum(p.read_text().count('@GameTest(') for p in (PROJECT/'src/gametest/java').rglob('*.java'))
@@ -85,6 +86,8 @@ Capturas do Minecraft 1.21.1 com NeoForge 21.1.256 e Java 21. [Validacao CI]({ru
 Botão direito: montar e treinar. Agachar + botão direito: aumentar carga. SHIFT durante o treino: sair. F5: câmara.
 
 Supino: toques repetidos contra a pressão. Boxe: marcador móvel, centro perfeito e sequências. Passadeira: ritmo e fôlego. Elevações: pega e equilíbrio. Remo: força e recuperação. Agachamentos: profundidade, pausa e subida.
+
+Modelos originais redesenhados com armações finas em aço azul-escuro, estofos azul-acinzentados e pontos de contacto partilhados com a animação. As mãos acompanham as barras e a pega; o saco oscila, o tapete desliza e a roda do remo gira.
 
 As cargas baixas tornam-se mais fáceis conforme o nível do respetivo atributo; a fadiga e as cargas próximas do limite continuam a exigir mais.
 
