@@ -1,0 +1,41 @@
+{
+  "controlledBaselineXp": 90,
+  "success": true,
+  "checks": [
+    "Actual BENCH minigame: 8/8 valid at 87%, saved through real player inputs",
+    "Actual RUN minigame: 8/8 valid at 50%, saved through real player inputs",
+    "Actual BOX minigame: 8/8 valid at 51%, saved through real player inputs",
+    "Actual PULL minigame: 8/8 valid at 83%, saved through real player inputs",
+    "Actual ROW minigame: 8/8 valid at 51%, saved through real player inputs",
+    "Actual SQUAT minigame: 8/8 valid at 86%, saved through real player inputs",
+    "Six real sets complete a custom routine and exactly one daily bonus; permanent modifiers applied",
+    "Real RPG profile, editable plan, history, records, calendar, compact controls and Portuguese presentation captured",
+    "Actual world close/reopen preserves levels, routine completion, six results and daily reward without modifier stacking"
+  ],
+  "stage": 29,
+  "actualIntegratedServer": true,
+  "actualMinecraftClient": true,
+  "message": "Six actual minigames, RPG menus, custom routine, persistent progression and world leaderboard passed",
+  "screenshots": [
+    "fitness-six-machines.png",
+    "fitness-athlete-profile.png",
+    "fitness-machine-catalog.png",
+    "fitness-routines.png",
+    "fitness-plan-editor.png",
+    "fitness-minigame-bench.png",
+    "fitness-minigame-run.png",
+    "fitness-minigame-box.png",
+    "fitness-minigame-pull.png",
+    "fitness-minigame-row.png",
+    "fitness-minigame-squat.png",
+    "fitness-earned-attributes.png",
+    "fitness-real-history.png",
+    "fitness-personal-records.png",
+    "fitness-training-calendar.png",
+    "fitness-compact-profile.png",
+    "fitness-profile-portuguese.png",
+    "fitness-leaderboard-menu.png",
+    "fitness-live-record-board.png"
+  ],
+  "syntheticSetResults": false
+}
