@@ -24,6 +24,19 @@ def checkjar(p):
   for e in EXERCISES:
    for part in ('lower','upper'):assert f'assets/realmfitness/models/block/{e}_{part}.json' in names
    assert f'data/realmfitness/recipe/{e}.json' in names
+   for part in range(18):assert f'assets/realmfitness/models/block/{e}_part_{part}.json' in names
+  assert 'assets/realmfitness/geometry/collisions.json' in names
+  collection=json.loads(j.read('assets/realmfitness/geometry/collection.json'))
+  collisions=json.loads(j.read('assets/realmfitness/geometry/collisions.json'))
+  for e in EXERCISES:
+   assert collection[e]['width']==2 and collection[e]['height']==3 and collection[e]['depth']==(3 if e in ('bench','run','row') else 2)
+   assert len(collisions[e])==18
+   for boxes in collisions[e].values():
+    for box in boxes:assert len(box)==6 and all(0<=v<=16 for v in box) and all(box[i]<box[i+3] for i in range(3))
+   for model in [f'assets/realmfitness/models/item/{e}.json']+[f'assets/realmfitness/models/block/{e}_part_{p}.json' for p in range(18)]:
+    for element in json.loads(j.read(model))['elements']:
+     assert all(-16<=v<=32 for key in ('from','to') for v in element[key]),model
+     assert all(0<=v<=16 for face in element['faces'].values() for v in face['uv']),model
   en=json.loads(j.read('assets/realmfitness/lang/en_us.json'));pt=json.loads(j.read('assets/realmfitness/lang/pt_pt.json'));assert en.keys()==pt.keys()
 def snapshot():
  p=PROJECT/'build/libs'/NAME;checkjar(p);STATE.mkdir(parents=True,exist_ok=True);shutil.copyfile(p,STATE/NAME)
@@ -36,11 +49,13 @@ def package():
  for n in ('fitness-build.log','fitness-native.log','fitness-client.log'):
   log=(PROJECT/n).read_text(errors='replace');assert 'BUILD SUCCESSFUL' in log and 'BUILD FAILED' not in log,n
  expected=sum(p.read_text().count('@GameTest(') for p in (PROJECT/'src/gametest/java').rglob('*.java'))
- counts=re.findall(r'All (\d+) required tests passed',(PROJECT/'fitness-native.log').read_text(),re.I);assert counts and int(counts[-1])==expected and expected>=9
+ counts=re.findall(r'All (\d+) required tests passed',(PROJECT/'fitness-native.log').read_text(),re.I);assert counts and int(counts[-1])==expected and expected>=14
  qa=PROJECT/'qa-results/client';result=json.loads((qa/'result.json').read_text());assert result['success'] is True and result['stage']==29
  assert result['actualMinecraftClient'] is True and result['actualIntegratedServer'] is True and result['syntheticSetResults'] is False
- for e in EXERCISES:assert any(('Actual '+e.upper()+' minigame') in c for c in result['checks']),e
- images=result['screenshots'];assert len(images)>=19 and len(images)==len(set(images));assert all(Path(n).name==n and n.endswith('.png') for n in images)
+ for e in EXERCISES:
+  assert any(('Actual '+e.upper()+' minigame') in c for c in result['checks']),e
+  assert f'fitness-model-{e}.png' in result['screenshots'] and f'fitness-world-{e}.png' in result['screenshots'],e
+ images=result['screenshots'];assert len(images)>=31 and len(images)==len(set(images));assert all(Path(n).name==n and n.endswith('.png') for n in images)
  gallery=ROOT/'media/realm-fitness'/VERSION;gallery.mkdir(parents=True,exist_ok=True)
  for n in images:
   p=qa/n;assert p.read_bytes().startswith(b'\x89PNG\r\n\x1a\n');shutil.copyfile(p,gallery/n)
@@ -51,6 +66,13 @@ def package():
 Capturas do Minecraft 1.21.1 com NeoForge 21.1.256 e Java 21. [Validacao CI]({run}).
 
 ![Maquinas 3D](fitness-six-machines.png)
+![Supino redesenhado](fitness-model-bench.png)
+![Passadeira redesenhada](fitness-model-run.png)
+![Boxe redesenhado](fitness-model-box.png)
+![Elevações redesenhadas](fitness-model-pull.png)
+![Remo redesenhado](fitness-model-row.png)
+![Agachamentos redesenhados](fitness-model-squat.png)
+![Equipamento no mundo](fitness-world-bench.png)
 ![Perfil do atleta](fitness-earned-attributes.png)
 ![Editor de planos](fitness-plan-editor.png)
 ![Supino](fitness-minigame-bench.png)

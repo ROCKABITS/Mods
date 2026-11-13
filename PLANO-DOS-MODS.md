@@ -6,9 +6,9 @@ Plataforma: **Minecraft 1.21.1, NeoForge e Java 21**. Os mods mantêm responsabi
 
 ## Realm Fitness — ginásio, minijogos e treino diário
 
-**Realm Fitness 0.1.0 Beta**: seis máquinas físicas com minijogos próprios, progressão permanente, perfil RPG com personagem 3D, catálogo, editor de rotinas, histórico, calendário e painéis de recordes. Plataforma inicial: **Minecraft 1.21.1 / NeoForge / Java 21**; funcionamento independente, sem adaptação obrigatória a um mod de stats.
+**Realm Fitness 0.2.0 Beta**: seis máquinas físicas com minijogos próprios, progressão permanente, perfil RPG com personagem 3D, catálogo, editor de rotinas, histórico, calendário e painéis de recordes. Plataforma inicial: **Minecraft 1.21.1 / NeoForge / Java 21**; funcionamento independente, sem adaptação obrigatória a um mod de stats.
 
-[Guia e downloads](realm-fitness/README.md) · [Conceito original preservado](realm-fitness/DESIGN.md) · [Validação](realm-fitness/VALIDACAO.md) · [Galeria](media/realm-fitness/0.1.0/README.md).
+[Guia e downloads](realm-fitness/README.md) · [Conceito original preservado](realm-fitness/DESIGN.md) · [Validação](realm-fitness/VALIDACAO.md) · [Galeria](media/realm-fitness/0.2.0/README.md).
 
 Por defeito: objetivo de seis séries diárias envolvendo três exercícios, vinte níveis por atributo, limites de XP/fadiga configuráveis e ganhos persistentes. O servidor calcula os resultados pelos inputs. Mensalidades, personal trainers e mudanças visuais musculares continuam como propostas futuras.
 

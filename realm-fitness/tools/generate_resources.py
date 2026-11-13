@@ -29,25 +29,9 @@ def model(parts,half=None):
         elements.append({'from':lo,'to':hi,'faces':{face:{'texture':'#'+material,'uv':[0,0,16,16]} for face in ['north','south','east','west','up','down']}})
     return {'ambientocclusion':True,'textures':{**{m:'realmfitness:block/'+m for m in materials},'particle':'realmfitness:block/iron'},'elements':elements}
 
-feet=[box(1,0,1,15,2,4,'iron'),box(1,0,12,15,2,15,'iron')]
-uprights=[box(2,2,11,4,29,13,'iron'),box(12,2,11,14,29,13,'iron')]
-machines={
- 'bench':feet+uprights+[box(5,2,3,7,8,11,'iron'),box(9,2,3,11,8,11,'iron'),box(4,8,1,12,11,11,'leather'),box(1,22,10,15,24,12,'brass'),box(0,20,8,3,26,14,'iron'),box(13,20,8,16,26,14,'iron'),box(2,28,10,14,30,14,'accent')],
- 'run':feet+[box(2,2,1,14,4,15,'belt'),box(0,3,0,2,6,16,'iron'),box(14,3,0,16,6,16,'iron'),box(1,5,12,3,23,14,'iron'),box(13,5,12,15,23,14,'iron'),box(0,20,10,16,23,15,'iron'),box(3,23,11,13,27,14,'paper'),box(4,24,10.8,12,26,11,'accent')],
- 'box':feet+[box(1,2,11,4,31,14,'iron'),box(1,29,5,12,32,14,'iron'),box(8,23,7,10,30,9,'brass'),box(6,5,5,12,24,11,'leather'),box(5,8,6,13,21,10,'leather'),box(6,13,4.8,12,16,5,'accent'),box(6,20,5,12,22,11,'brass')],
- 'pull':feet+uprights+[box(2,27,3,4,30,13,'iron'),box(12,27,3,14,30,13,'iron'),box(1,28,2,15,30,4,'brass'),box(0,27,1,4,31,5,'leather'),box(12,27,1,16,31,5,'leather'),box(4,4,8,12,6,14,'wood')],
- 'row':feet+[box(5,2,1,11,5,15,'iron'),box(4,5,3,12,8,8,'leather'),box(2,4,11,14,16,15,'iron'),box(3,16,12,13,22,15,'paper'),box(4,17,11.8,12,20,12,'accent'),box(2,8,9,5,10,13,'leather'),box(11,8,9,14,10,13,'leather'),box(7,9,5,9,15,12,'brass'),box(3,13,4,13,15,6,'iron')],
- 'squat':feet+uprights+[box(2,28,10,14,31,14,'iron'),box(2,11,3,4,13,13,'brass'),box(12,11,3,14,13,13,'brass'),box(0,21,10,16,23,12,'brass'),box(0,18,8,3,26,14,'iron'),box(13,18,8,16,26,14,'iron'),box(5,1,2,11,3,7,'wood')]
-}
-for name,parts in machines.items():
-    for half,label in [(0,'lower'),(1,'upper')]:write(ASSETS/f'models/block/{name}_{label}.json',model(parts,half))
-    item=model(parts);item['display']={'gui':{'rotation':[25,225,0],'translation':[0,-3,0],'scale':[.4,.4,.4]},'ground':{'scale':[.25,.25,.25]},'fixed':{'scale':[.4,.4,.4]}}
-    write(ASSETS/f'models/item/{name}.json',item)
-    variants={}
-    for facing,angle in [('north',0),('east',90),('south',180),('west',270)]:
-        for half in ['lower','upper']:variants[f'facing={facing},half={half}']={'model':f'realmfitness:block/{name}_{half}','y':angle}
-    write(ASSETS/f'blockstates/{name}.json',{'variants':variants})
-    write(ROOT/f'data/realmfitness/loot_table/blocks/{name}.json',{'type':'minecraft:block','pools':[{'rolls':1,'entries':[{'type':'minecraft:item','name':'realmfitness:'+name}],'conditions':[{'condition':'minecraft:survives_explosion'},{'condition':'minecraft:block_state_property','block':'realmfitness:'+name,'properties':{'half':'lower'}}]}]})
+from gym_geometry import build_machines
+machines=build_machines(ASSETS,ROOT)
+for name in machines:
     write(ROOT/f'data/realmfitness/recipe/{name}.json',{'type':'minecraft:crafting_shaped','category':'misc','pattern':['IWI','ILI','III'],'key':{'I':{'item':'minecraft:iron_ingot'},'L':{'item':'minecraft:leather'},'W':{'item':{'bench':'minecraft:oak_slab','run':'minecraft:redstone','box':'minecraft:hay_block','pull':'minecraft:chain','row':'minecraft:oak_boat','squat':'minecraft:heavy_weighted_pressure_plate'}[name]}},'result':{'id':'realmfitness:'+name,'count':1}})
 
 parts=[box(0,1,2,16,16,4,'wood'),box(1,2,1.1,15,15,2,'paper'),box(0,0,1,16,2,4,'brass'),box(0,15,1,16,16,4,'brass'),box(0,1,1,1,16,4,'brass'),box(15,1,1,16,16,4,'brass')]

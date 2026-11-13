@@ -38,14 +38,14 @@ public final class FitnessVisualQA {
     private static volatile Throwable failure;
     private static volatile UUID playerId,planId;
     private static volatile String folder;
-    private static int stage,exercise,held,lastStage=-1;
+    private static int stage,exercise,held,lastStage=-1,galleryIndex=-1;
     private static long next,stageSince;
     private static boolean done,shot;
     private static JsonObject profile;
     private static Minecraft mc(){return Minecraft.getInstance();}
     private static void check(boolean condition,String message){if(!condition)throw new IllegalStateException(message);}
     private static ServerPlayer player(){return mc().getSingleplayerServer().getPlayerList().getPlayer(playerId);}
-    private static BlockPos station(int i){return new BlockPos(i*3-8,161,0);}
+    private static BlockPos station(int i){return new BlockPos(i*5-13,161,0);}
     private static final BlockPos BOARD=new BlockPos(0,161,5);
     private static void server(Runnable task){ready=false;mc().getSingleplayerServer().execute(()->{try{task.run();ready=true;}catch(Throwable e){failure=e;}});}
     private static boolean click(String key){if(mc().screen==null)return false;String label=key.startsWith("selectWorld.")||key.startsWith("gui.")?Component.translatable(key).getString():FitnessTheme.text(key);for(var c:List.copyOf(mc().screen.children()))if(c instanceof AbstractButton b&&b.active&&b.visible&&b.getMessage().getString().equals(label)){b.onPress();return true;}return false;}
@@ -54,8 +54,8 @@ public final class FitnessVisualQA {
     private static void prepare(){
         var p=player();var server=p.getServer();p.setGameMode(GameType.SURVIVAL);server.setDifficulty(Difficulty.PEACEFUL,true);
         server.getGameRules().getRule(GameRules.RULE_DAYLIGHT).set(false,server);server.getGameRules().getRule(GameRules.RULE_WEATHER_CYCLE).set(false,server);server.getGameRules().getRule(GameRules.RULE_SPAWN_CHUNK_RADIUS).set(0,server);
-        for(int x=-13;x<=12;x++)for(int z=-5;z<=9;z++){for(int y=161;y<=164;y++)p.level().setBlockAndUpdate(new BlockPos(x,y,z),Blocks.AIR.defaultBlockState());p.level().setBlockAndUpdate(new BlockPos(x,160,z),Blocks.POLISHED_DEEPSLATE.defaultBlockState());}
-        for(var e:Exercise.values()){var pos=station(e.ordinal());var state=FitnessMod.MACHINES.get(e).get().defaultBlockState();p.level().setBlock(pos,state,2);p.level().setBlock(pos.above(),state.setValue(GymBlock.HALF,net.minecraft.world.level.block.state.properties.DoubleBlockHalf.UPPER),3);}
+        for(int x=-17;x<=18;x++)for(int z=-5;z<=9;z++){for(int y=161;y<=164;y++)p.level().setBlockAndUpdate(new BlockPos(x,y,z),Blocks.AIR.defaultBlockState());p.level().setBlockAndUpdate(new BlockPos(x,160,z),Blocks.POLISHED_DEEPSLATE.defaultBlockState());}
+        for(var e:Exercise.values()){var pos=station(e.ordinal());var block=FitnessMod.MACHINES.get(e).get();for(int i=0;i<18;i++)if(GymGeometry.contains(e,i))p.level().setBlock(GymBlock.cell(pos,Direction.NORTH,i),block.partState(Direction.NORTH,i),Block.UPDATE_CLIENTS|Block.UPDATE_KNOWN_SHAPE);check(block.intact(p.level(),pos),"Expanded visual machine is incomplete");}
         p.level().setBlockAndUpdate(BOARD,FitnessMod.BOARD.get().defaultBlockState());
         p.teleportTo(p.serverLevel(),.5,161,-3.5,0,0);p.getInventory().clearContent();
         var d=FitnessData.get(server);d.ledger=new FitnessLedger();var a=d.ledger.athlete(p.getUUID(),p.getGameProfile().getName(),System.currentTimeMillis());
@@ -63,6 +63,10 @@ public final class FitnessVisualQA {
         for(var e:Exercise.values())a.experience.put(e,90);
         d.persist(server);FitnessService.apply(p);FitnessService.open(p,null,false);
         folder=server.getWorldPath(LevelResource.ROOT).toAbsolutePath().normalize().getFileName().toString();
+    }
+    private static void worldModel(int index){
+        mc().setScreen(null);mc().options.hideGui=true;mc().options.setCameraType(CameraType.FIRST_PERSON);
+        server(()->{var p=player();var pos=station(index);p.setGameMode(GameType.SPECTATOR);p.teleportTo(p.serverLevel(),pos.getX()+4.5,162.6,-3.8,33.5f,20);});
     }
     private static void exercise(){
         var p=player();var a=FitnessData.get(p.getServer()).ledger.athletes.get(p.getUUID());a.restUntil=0;
@@ -96,8 +100,11 @@ public final class FitnessVisualQA {
                 case 0->{if(mc().screen instanceof TitleScreen){mc().getWindow().setWindowed(1600,900);mc().options.pauseOnLostFocus=false;mc().options.renderDistance().set(3);mc().options.simulationDistance().set(5);mc().options.guiScale().set(2);mc().resizeDisplay();mc().getTutorial().setStep(net.minecraft.client.tutorial.TutorialSteps.NONE);CreateWorldScreen.openFresh(mc(),mc().screen);stage++;}else if(mc().screen!=null&&mc().screen.getClass().getSimpleName().contains("Accessibility")){for(var child:List.copyOf(mc().screen.children()))if(child instanceof AbstractButton b&&b.getMessage().getString().equals(Component.translatable("gui.continue").getString()))b.onPress();}}
                 case 1->{if(mc().screen instanceof CreateWorldScreen world){world.getUiState().setName("Realm Fitness client QA");world.getUiState().setGameMode(WorldCreationUiState.SelectedGameMode.CREATIVE);world.getUiState().setAllowCommands(true);check(click("selectWorld.create"),"Create world button missing");stage++;}}
                 case 2->{if(mc().player!=null&&mc().getSingleplayerServer()!=null){playerId=mc().player.getUUID();server(FitnessVisualQA::prepare);stage++;}}
-                case 3->{if(!ready||!(mc().screen instanceof AthleteScreen))return;profile=((AthleteScreen)mc().screen).data();mc().setScreen(new Gallery());stage++;next=now+2500;}
-                case 4->{screenshot("fitness-six-machines.png");mc().setScreen(new AthleteScreen(profile));stage++;next=now+1500;}
+                case 3->{if(!ready||!(mc().screen instanceof AthleteScreen))return;profile=((AthleteScreen)mc().screen).data();mc().setScreen(new Gallery(-1));stage++;next=now+2500;}
+                case 4->{
+                    if(galleryIndex<6){if(galleryIndex<0)screenshot("fitness-six-machines.png");else screenshot("fitness-model-"+Exercise.values()[galleryIndex].id()+".png");if(++galleryIndex<6)mc().setScreen(new Gallery(galleryIndex));else worldModel(0);next=now+1300;}
+                    else{if(!ready)return;screenshot("fitness-world-"+Exercise.values()[galleryIndex-6].id()+".png");if(++galleryIndex<12){worldModel(galleryIndex-6);next=now+1500;}else{mc().options.hideGui=false;server(()->player().setGameMode(GameType.SURVIVAL));CHECKS.add("Six original detailed models captured individually as items and as complete expanded structures in the actual integrated world");mc().setScreen(new AthleteScreen(profile));stage++;next=now+1500;}}
+                }
                 case 5->{screenshot("fitness-athlete-profile.png");check(click("tab.catalog"),"Catalog tab missing");stage++;next=now+800;}
                 case 6->{screenshot("fitness-machine-catalog.png");check(click("tab.routines"),"Routine tab missing");stage++;next=now+700;}
                 case 7->{screenshot("fitness-routines.png");check(click("new_plan"),"Visual plan editor missing");stage++;next=now+500;}
@@ -132,15 +139,16 @@ public final class FitnessVisualQA {
         }catch(Throwable e){e.printStackTrace();complete(false,e.toString());}
     }
     private static final class Gallery extends Screen {
-        Gallery(){super(Component.literal("Realm Fitness"));}
+        private final int selected;
+        Gallery(int selected){super(Component.literal("Realm Fitness"));this.selected=selected;}
         @Override public void renderBackground(GuiGraphics g,int mx,int my,float p){}
         @Override public void render(GuiGraphics g,int mx,int my,float partial){
             g.fillGradient(0,0,width,height,0xFF17121F,0xFF0E111B);g.drawCenteredString(font,"REALM FITNESS",width/2,20,FitnessTheme.ACCENT);
-            int cw=(width-48)/3,ch=(height-70)/2;
+            int cw=selected<0?(width-48)/3:width-48,ch=selected<0?(height-70)/2:height-70;
             for(var e:Exercise.values()){
-                int bx=24+e.ordinal()%3*cw,by=45+e.ordinal()/3*ch;FitnessTheme.frame(g,bx,by,cw-8,ch-10,0xFF241D2F);
+                if(selected>=0&&e.ordinal()!=selected)continue;int bx=selected<0?24+e.ordinal()%3*cw:24,by=selected<0?45+e.ordinal()/3*ch:45;FitnessTheme.frame(g,bx,by,cw-8,ch-10,0xFF241D2F);
                 var item=new ItemStack(FitnessMod.MACHINES.get(e).get());var model=mc().getItemRenderer().getModel(item,null,null,0);check(!model.getParticleIcon().contents().name().getPath().contains("missing"),"Missing machine texture");
-                g.pose().pushPose();g.pose().translate(bx+cw/2-40,by+ch/2-45,0);g.pose().scale(5,5,5);g.renderItem(item,0,0);g.pose().popPose();
+                g.pose().pushPose();int scale=selected<0?8:17;g.pose().translate(bx+cw/2-8*scale,by+ch/2-8*scale-10,0);g.pose().scale(scale,scale,scale);g.renderItem(item,0,0);g.pose().popPose();
                 g.drawCenteredString(font,FitnessTheme.exercise(e),bx+cw/2-4,by+ch-29,FitnessTheme.INK);
             }
             g.drawCenteredString(font,"Minecraft 1.21.1 · NeoForge · actual models",width/2,height-16,FitnessTheme.MUTED);

@@ -1,8 +1,8 @@
-# Realm Fitness 0.1.0 Beta
+# Realm Fitness 0.2.0 Beta
 
 Ginásio físico para **Minecraft 1.21.1, NeoForge 21.1.256+ e Java 21**. Máquinas 3D, seis minijogos, atributos permanentes, rotinas personalizadas, calendário e painéis de recordes. Funciona de forma independente.
 
-[Descarregar JAR](../mod-pronto/realm-fitness-0.1.0.jar) · [ZIP](../mod-pronto/realm-fitness-0.1.0.zip) · [Galeria](../media/realm-fitness/0.1.0/README.md) · [Validação](VALIDACAO.md) · [Conceito original](DESIGN.md)
+[Descarregar JAR](../mod-pronto/realm-fitness-0.2.0.jar) · [ZIP](../mod-pronto/realm-fitness-0.2.0.zip) · [Galeria](../media/realm-fitness/0.2.0/README.md) · [Validação](VALIDACAO.md) · [Conceito original](DESIGN.md)
 
 Instala o mesmo JAR no servidor e em todos os clientes. Esta edição é para 1.21.1/NeoForge. Identificador: `realmfitness`.
 
@@ -15,6 +15,12 @@ Instala o mesmo JAR no servidor e em todos os clientes. Esta edição é para 1.
 5. Segue o minijogo. A série começa após três segundos; a câmara passa temporariamente para terceira pessoa e F5 permite alternar a perspetiva. Ao sair, recupera a perspetiva anterior.
 
 O plano guarda o progresso entre sessões e reinícios. Pode ser terminado no menu para começar outro. Editar ou apagar uma rotina guardada não altera a cópia de um treino já iniciado. Os dias associados às rotinas são uma indicação de calendário; o jogador escolhe qual iniciar.
+
+## Equipamento redesenhado na 0.2.0
+
+As seis máquinas usam modelos e texturas originais: aço escuro, estofos verdes com costuras, detalhes em cobre, discos recortados, apoios em borracha e comandos próprios. Os bancos, a passadeira e o remo têm **2 × 3 blocos** de base; boxe, elevações e agachamentos têm **2 × 2 blocos**. Todas reservam **três blocos de altura**. Coloca-as numa superfície sólida, com toda a área livre; a orientação depende da direção do jogador. As colisões acompanham a estrutura e deixam aberturas nos espaços vazios.
+
+Quebrar uma peça desmonta a máquina e devolve um único item em Sobrevivência. Em Criativo não deixa itens. As máquinas colocadas na 0.1.0 continuam com a base antiga e um modelo compacto; recolhe-as e volta a colocá-las para usar o novo tamanho. A progressão, rotinas e recordes são preservados.
 
 ## Exercícios e progressão
 
