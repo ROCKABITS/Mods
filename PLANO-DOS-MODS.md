@@ -4,6 +4,17 @@ Referências: guião enviado pelo utilizador em `Pasted text.txt` e decisões po
 
 Plataforma: **Minecraft 1.21.1, NeoForge e Java 21**. Os mods mantêm responsabilidades próprias e integram-se quando instalados em conjunto. A identidade e a economia do Crónicas RP devem ser reutilizadas, evitando contas ou personagens concorrentes.
 
+## Realm Fitness — ginásio, minijogos e treino diário
+
+**Estado: conceito documentado em 13 de novembro de 2026; sem implementação ou JAR publicado.** O [resumo completo do Realm Fitness](realm-fitness/README.md) conserva os requisitos e as propostas de equilíbrio para retomar o trabalho.
+
+- Incentivar um treino por dia, com máquinas físicas e minijogos próprios.
+- Progressão e bónus permanentes por exercício; a proposta anterior de boosts temporários foi substituída.
+- Perfil de Atleta com personagem 3D, atributos, bónus, fadiga e recordes, no estilo do Realm Origins.
+- Catálogo de máquinas, rotinas personalizadas, registo de sessões e evolução, inspirados no funcionamento do Hevy.
+- Painéis físicos de leaderboard para consultar recordes e classificações.
+- Integração com o mod de stats deixou de ser obrigatória. Plataforma Minecraft/loader, primeira entrega e valores de equilíbrio ainda por definir.
+
 ## Realm Progression — desbloqueio configurável de crafts
 
 **Estado: Realm Progression 0.1.0 Beta publicado, com validação local e no GitHub aprovada.** O utilizador escolheu uma meta inicial de **8 000 €** para o Create num servidor de cerca de cinco jogadores. O [guia](realm-progression/README.md) descreve o menu, o âmbito do bloqueio e a persistência; a [validação](realm-progression/VALIDACAO.md) regista 77 execuções de testes aprovadas e um cenário com dois clientes TCP LAN.
