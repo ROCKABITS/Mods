@@ -20,7 +20,7 @@ public final class FitnessNetwork {
         public static final StreamCodec<RegistryFriendlyByteBuf,Snapshot> CODEC=StreamCodec.of((b,p)->b.writeUtf(p.json,196608),b->new Snapshot(b.readUtf(196608)));
         @Override public Type<Snapshot> type(){return TYPE;}
     }
-    public static void register(RegisterPayloadHandlersEvent event){var r=event.registrar("3");r.playToServer(Request.TYPE,Request.CODEC,(p,c)->c.enqueueWork(()->{if(c.player() instanceof ServerPlayer sp)FitnessService.request(sp,p.operation,p.json);}));r.playToClient(Snapshot.TYPE,Snapshot.CODEC,(p,c)->c.enqueueWork(()->pt.realmfitness.client.FitnessClient.receive(p.json)));}
+    public static void register(RegisterPayloadHandlersEvent event){var r=event.registrar("4");r.playToServer(Request.TYPE,Request.CODEC,(p,c)->c.enqueueWork(()->{if(c.player() instanceof ServerPlayer sp)FitnessService.request(sp,p.operation,p.json);}));r.playToClient(Snapshot.TYPE,Snapshot.CODEC,(p,c)->c.enqueueWork(()->pt.realmfitness.client.FitnessClient.receive(p.json)));}
     public static void request(String operation,Object data){PacketDistributor.sendToServer(new Request(operation,pt.realmfitness.domain.FitnessLedger.JSON.toJson(data)));}
     public static void send(ServerPlayer p,Object data){if(p.connection!=null)PacketDistributor.sendToPlayer(p,new Snapshot(pt.realmfitness.domain.FitnessLedger.JSON.toJson(data)));}
 }

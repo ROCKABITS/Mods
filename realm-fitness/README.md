@@ -4,7 +4,7 @@ Ginásio físico para **Minecraft 1.21.1, NeoForge 21.1.256+ e Java 21**. Máqui
 
 [Descarregar JAR](../mod-pronto/realm-fitness-0.5.0.jar) · [ZIP](../mod-pronto/realm-fitness-0.5.0.zip) · [Galeria](../media/realm-fitness/0.5.0/README.md) · [Validação](VALIDACAO.md) · [Conceito original](DESIGN.md)
 
-Instala o mesmo JAR no servidor e em todos os clientes. Esta edição é para 1.21.1/NeoForge. Identificador: `realmfitness`.
+Instala esta versão no servidor e em todos os clientes. A 0.5.0 exige o mesmo protocolo de montagem para manter o personagem alinhado com as máquinas. Esta edição é para 1.21.1/NeoForge. Identificador: `realmfitness`.
 
 ## Começar
 
