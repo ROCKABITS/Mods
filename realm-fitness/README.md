@@ -1,167 +1,83 @@
-# Realm Fitness — resumo do conceito e plano de produto
+# Realm Fitness 0.1.0 Beta
 
-Atualizado em **13 de novembro de 2026**. Nome de trabalho: **Realm Fitness**.
+Ginásio físico para **Minecraft 1.21.1, NeoForge 21.1.256+ e Java 21**. Máquinas 3D, seis minijogos, atributos permanentes, rotinas personalizadas, calendário e painéis de recordes. Funciona de forma independente.
 
-**Estado: conceito documentado; o mod ainda não foi implementado nem tem JAR publicado.** Este documento conserva o contexto da conversa para retomar o desenvolvimento. As decisões do utilizador e os exemplos propostos estão identificados separadamente.
+[Descarregar JAR](../mod-pronto/realm-fitness-0.1.0.jar) · [ZIP](../mod-pronto/realm-fitness-0.1.0.zip) · [Galeria](../media/realm-fitness/0.1.0/README.md) · [Validação](VALIDACAO.md) · [Conceito original](DESIGN.md)
 
-## 1. Objetivo e decisões principais
+Instala o mesmo JAR no servidor e em todos os clientes. Esta edição é para 1.21.1/NeoForge. Identificador: `realmfitness`.
 
-Criar um mod de ginásio para o servidor de RP, que motive os jogadores a fazer **um treino por dia**, com sessões divertidas e evolução da personagem ao longo das semanas.
+## Começar
 
-Requisitos pedidos ou orientados pelo utilizador:
+1. Fabrica as máquinas, o painel e o cartão de atleta. Um operador pode obter o conjunto com `/fitness equipment`.
+2. Abre o perfil com **K**, com o cartão ou com `/fitness`. A tecla do perfil pode ser alterada nos controlos do Minecraft.
+3. Em **Treinos**, escolhe uma das rotinas iniciais ou cria a tua. O editor permite escolher exercícios, ordem, séries, repetições, carga, descanso e dia da semana.
+4. Inicia a rotina e interage com a máquina do próximo exercício. O treino físico exige modo Sobrevivência e uma máquina intacta próxima.
+5. Segue o minijogo. A série começa após três segundos; a câmara passa temporariamente para terceira pessoa e F5 permite alternar a perspetiva. Ao sair, recupera a perspetiva anterior.
 
-- Exercícios em máquinas, com **minijogos próprios**, alguma dificuldade e participação ativa.
-- **Bónus permanentes** obtidos através do treino.
-- Um ou mais **blocos físicos de leaderboard**, visíveis no ginásio.
-- **Menu RPG com a personagem e os atributos ao lado**, incluindo bónus atuais e recordes de peso, seguindo o estilo do Realm Origins.
-- **Catálogo de máquinas e criação de planos de treino**, inspirados no funcionamento da aplicação Hevy.
-- Experiência organizada para incentivar a regularidade diária.
+O plano guarda o progresso entre sessões e reinícios. Pode ser terminado no menu para começar outro. Editar ou apagar uma rotina guardada não altera a cópia de um treino já iniciado. Os dias associados às rotinas são uma indicação de calendário; o jogador escolhe qual iniciar.
 
-O utilizador inicialmente referiu um mod de stats semelhante a Elden Ring, mas retirou a necessidade de adaptação específica. A base planeada funciona de forma independente, com efeitos configuráveis; uma integração específica pode ser considerada mais tarde. O mod de stats não foi identificado e não deve ser tratado como dependência confirmada.
+## Exercícios e progressão
 
-**Versão Minecraft e loader do Realm Fitness: ainda por definir.** O repositório tem principalmente projetos 1.21.1/NeoForge/Java 21 e um port de Contracts & Bounties para 1.20.1/Forge/Java 17. A existência desse port não estabelece automaticamente a plataforma do novo mod.
+| Máquina | Controlos | Atributo | Bónus máximo por defeito |
+| --- | --- | --- | --- |
+| Supino | Segurar/largar Espaço para acompanhar a zona verde. | Força | +10% dano corpo a corpo |
+| Passadeira | Alternar A/D no ritmo dos indicadores. | Condição física | +8% velocidade de movimento |
+| Saco de boxe | Cliques esquerdo/direito para socos; A/D para esquivas. | Coordenação | +8% velocidade de ataque |
+| Elevações | Espaço para subir/largar para descer e recuperar a pega; A/D para equilíbrio. | Controlo corporal | 20% menos dano de queda |
+| Remo | W para puxar e S para recuperar, sincronizados com os indicadores. | Resistência aquática | +15% velocidade de natação |
+| Agachamentos | W para descer e S para subir, acompanhando a profundidade indicada. | Potência das pernas | Até +15% altura de salto |
 
-## 2. Máquinas e minijogos
+Cada atributo tem **20 níveis permanentes**. Supino e agachamentos começam nos 20 kg, desbloqueando mais 5 kg por nível, até 120 kg. As restantes máquinas usam resistência de 1 a 6, desbloqueada a cada quatro níveis. Carga e fadiga tornam o controlo mais exigente.
 
-Foi proposta a seguinte coleção inicial. A existência dos minijogos faz parte do pedido; os controlos exatos, as máquinas da primeira entrega e os valores de dificuldade ainda precisam de afinação.
+Uma série tem 4–20 tentativas, com 2,4 segundos por repetição, além da contagem inicial. Para ganhar XP e avançar o plano exige pelo menos 60% de repetições válidas e 50% de precisão. Resultados inferiores ficam no histórico como prática. O servidor calcula a técnica a partir dos inputs e do seu próprio relógio; o cliente não envia uma pontuação final.
 
-| Máquina/exercício | Minijogo proposto | Atributo desenvolvido |
-| --- | --- | --- |
-| Supino | Controlar a descida da barra e acertar o momento de subir. Pesos maiores estreitam a zona ideal. | Força |
-| Passadeira | Acompanhar um ritmo dentro de uma zona variável, mantendo o controlo quando muda a velocidade. | Condição física |
-| Saco de boxe | Responder a sequências de golpes e esquivas; combos corretos melhoram o resultado. | Coordenação |
-| Barra de elevações | Coordenar subida, estabilização e descida; a fadiga aumenta a exigência das repetições. | Controlo corporal |
-| Remo | Sincronizar puxada e recuperação para percorrer mais distância. | Resistência aquática |
-| Agachamentos | Acompanhar uma marca para controlar profundidade, equilíbrio e velocidade. | Potência das pernas |
+Os níveis não expiram por faltar ao ginásio e persistem após morte, saída e reinício. Os bónus usam modificadores próprios, reaplicados sem acumulação a cada sincronização. A altura de salto usa uma correção da velocidade de impulso; outros modificadores e a física podem afetar o resultado final.
 
-Apresentação proposta: equipamento 3D funcional e animações da personagem visíveis aos outros jogadores. A qualidade da execução deve contar para a experiência e para os resultados.
+## Treino diário
 
-Séries de **20–40 segundos** foram sugeridas como ponto de partida, com feedback de técnica, ritmo e precisão. No fim, mostrar repetições válidas, carga, precisão e recordes alcançados. Estes tempos são exemplos para testar, não números finais.
+Por defeito:
 
-## 3. Progressão e bónus permanentes
+- Objetivo: **seis séries válidas de pelo menos oito repetições previstas**, com pelo menos **três exercícios diferentes**.
+- Bónus diário: até **30 XP adicionais**, distribuídos pelos atributos treinados.
+- Limite: **240 XP por jogador e por dia**, incluindo o bónus. Treino adicional permite praticar e bater recordes.
+- Fadiga: cada série válida acrescenta 12 pontos percentuais nesse exercício. Uma escala completa de fadiga recupera em 30 minutos reais, incluindo tempo offline; uma série isolada recupera mais depressa.
+- Renovação: meia-noite UTC, configurável.
+- Descanso livre: 15 segundos entre séries válidas. Num plano, aplica-se o descanso escolhido para a série concluída, entre 5 e 180 segundos.
 
-A opção mais recente é progressão permanente: ganhar experiência no atributo associado ao exercício e subir de nível. Foi sugerido aumentar gradualmente a experiência necessária e permitir configurar limites e intensidade dos efeitos.
+Qualidade, repetições válidas e fadiga determinam o XP. O calendário destaca os dias com objetivo cumprido. O histórico apresenta carga, repetições, precisão, XP e data; a página de evolução mostra 28 dias e os níveis atuais. O perfil e o editor seguem a paleta escura/lilás do criador de personagem do Realm Origins, com recursos locais e sem dependência desse mod.
 
-**Os valores abaixo são uma proposta inicial de equilíbrio**, ainda não confirmada como configuração final:
+## Recordes no mundo
 
-| Exercício | Bónus permanente máximo proposto |
-| --- | --- |
-| Supino | +10% de dano corpo a corpo |
-| Passadeira | +8% de velocidade de movimento |
-| Saco de boxe | +8% de velocidade de ataque |
-| Elevações | 20% menos dano de queda |
-| Remo | +15% de velocidade a nadar |
-| Agachamentos | +15% de altura de salto |
+O painel mostra os cinco primeiros da categoria, com nome, pontuação e cabeça do jogador. O menu consulta até dez posições e permite escolher exercício, carga/resistência, repetições, período e âmbito.
 
-Foram sugeridos **20 níveis por exercício**. Os níveis permitiriam cargas, dificuldades e desafios mais avançados. A aplicação concreta dos atributos e a interação dos modificadores com o modpack precisam de validação durante a implementação.
+- **Período:** sempre, semana atual ou mês atual. A semana começa à segunda-feira.
+- **Âmbito:** servidor ou zona fixa de **32 × 32 blocos**, determinada pelas coordenadas do painel. Nesta beta, a zona é a definição prática de ginásio.
+- Comparam-se resultados com o mesmo exercício, carga e repetições. Pontuação: repetições válidas × precisão. Cada jogador ocupa uma posição por categoria.
+- Todos podem consultar filtros pessoais. Um **operador** pode usar **Aplicar ao painel** para alterar a categoria pública.
+- Os resultados atualizam automaticamente enquanto o painel está carregado.
 
-A proposta permite desenvolver todos os atributos. **A ideia anterior de boosts de 15–30 minutos e de apenas dois boosts ativos foi substituída pela preferência por ganhos permanentes.**
+Os resultados detalhados conservam-se durante 70 dias, sujeitos aos limites de armazenamento; os melhores globais e por zona guardam-se separadamente para a classificação de sempre. As cabeças usam a skin disponível no cliente para jogadores online e a skin padrão por UUID quando essa informação não está disponível.
 
-Fadiga e recuperação regulam o treino e a eficiência dos ganhos. Foi proposto preservar os níveis conquistados quando o jogador falta a treinos; o descanso recupera a eficiência. Não confundir fadiga temporária com perda dos atributos permanentes.
+## Configuração e âmbito
 
-## 4. Um treino por dia
+O servidor gera `config/realm-fitness.json`. Permite alterar hora de renovação, XP diário, requisitos do objetivo, bónus diário, fadiga/recuperação e percentagens máximas. Usa `/fitness reload` como operador para validar e aplicar alterações. Percentagem 0 desativa o respetivo efeito, preservando a progressão.
 
-A regularidade diária é o objetivo central. O treino diário pode ser uma **rotina criada pelo próprio jogador**, com planos sugeridos para quem está a começar.
+Limites: 12 rotinas por jogador, até oito exercícios e 24 séries por rotina, 4.096 resultados recentes e 4.096 melhores categorias por atleta, 10.000 atletas e 100.000 resultados recentes no mundo. Ao atingir um limite, o servidor recusa novas operações em vez de eliminar progresso silenciosamente.
 
-Propostas discutidas para o funcionamento:
+O estado pertence ao mundo, em `data/realm_fitness.dat`, com gravação atómica. Dados inválidos não são substituídos automaticamente por atletas vazios. Mover-se durante a série, morrer, mudar de dimensão, sair ou interromper cancela a execução incompleta.
 
-- Sessão de aproximadamente **5–10 minutos**, usando como exemplo três exercícios e duas séries por exercício.
-- Experiência por cada série válida, melhorada pela qualidade da execução.
-- Experiência adicional por concluir o plano diário.
-- Limite diário de experiência configurável. Treino extra continua útil para praticar, competir e bater recordes.
-- Fadiga reduz os ganhos de séries repetidas em excesso.
-- Renovação diária à mesma hora para o servidor, configurável.
-- Calendário e metas semanais, por exemplo três ou cinco treinos, para dar margem a quem falta um dia.
+Os minijogos usam Espaço, WASD e os botões do rato nesta beta. As animações são poses procedurais da skin e camadas exteriores; durante a renderização especial do exercício, equipamento e armadura não são desenhados. Continuam equipados e com os seus efeitos.
 
-Os tempos, a quantidade de séries, os limites e as metas semanais são propostas. **Ainda falta definir como um plano personalizado cumpre os requisitos do treino diário e recebe o bónus de conclusão.** O sistema não deve obrigar todos a seguir o mesmo plano sugerido.
+Não há dependência de um mod de stats. Combinações específicas com outros sistemas de atributos ou renderização precisam de validação no respetivo modpack. Mensalidades, personal trainers, alterações musculares da skin, gestão de ginásios e metas semanais com prémios continuam nas ideias do conceito original.
 
-## 5. Perfil de Atleta — menu RPG
+## Desenvolvimento
 
-Referência visual pedida: **Realm Origins**, mantendo coerência de paleta, molduras, tipografia e botões.
+```sh
+./gradlew build
+./gradlew -PfitnessGameTests runGameTestServer
+./gradlew -PfitnessVisualTests runClient
+```
 
-Consultar o [projeto Realm Origins](../realm-origins/README.md) e a [galeria existente](../media/realm-origins/README.md) antes de desenhar a interface. O Origins tem criação de personagem e livro de perfil com apresentações diferentes; a referência exata deve ser resolvida no desenho do menu.
+O teste de cliente exige um ambiente gráfico. O [workflow](../.github/workflows/build-realm-fitness.yml) executa build, testes de lógica, testes nativos e cliente real com Xvfb; publica apenas depois das verificações. Código e estruturas de teste são excluídos do JAR.
 
-Disposição discutida:
-
-- **Personagem à esquerda:** modelo 3D com a skin, rotação com o rato e identificação do atleta.
-- **Atributos à direita:** nível, barra de experiência e bónus permanente efetivamente conquistado em cada atributo.
-- **Estado físico:** fadiga, recuperação e eficiência prevista para o próximo treino.
-- **Recordes:** carga máxima, repetições válidas, precisão, pontuação e data, conforme o exercício.
-- **Treino de hoje:** séries concluídas, exercícios previstos e acesso ao calendário.
-
-Exemplo de apresentação, sem constituir um valor obrigatório:
-
-> Força — nível 12/20 · +6% de dano corpo a corpo  
-> Experiência: 340/600  
-> Recorde de supino: 85 kg × 8 repetições  
-> Melhor técnica: 96%
-
-Tecla configurável e cartão de atleta foram sugeridos como formas de acesso. O menu deve identificar os ganhos concedidos pelo ginásio; consultar todos os atributos de outro mod não faz parte de uma integração já acordada.
-
-## 6. Área Treinos — inspiração Hevy
-
-O utilizador quer conseguir conhecer as máquinas e construir o seu próprio plano.
-
-### Catálogo e rotinas
-
-- Catálogo de máquinas com imagem ou modelo 3D, explicação do exercício, atributo desenvolvido e indicação de disponibilidade naquele ginásio.
-- Criar, nomear, editar e guardar rotinas.
-- Escolher e ordenar exercícios.
-- Definir séries, repetições, carga e descanso quando aplicável.
-- Associar rotinas a dias da semana.
-- Oferecer planos sugeridos para iniciantes.
-
-Exemplo:
-
-> Treino A — Força  
-> Supino · 2 × 8 · 40 kg  
-> Elevações · 2 × 6  
-> Agachamentos · 2 × 10 · 30 kg  
-> Iniciar treino
-
-As unidades e os objetivos devem fazer sentido para cada máquina: peso não é uma medida obrigatória para todos os exercícios.
-
-### Sessão, histórico e evolução
-
-- Iniciar uma rotina e acompanhar o exercício e a série atuais.
-- Reconhecer na máquina o exercício previsto para a sessão.
-- Ao terminar o minijogo, registar automaticamente repetições válidas, carga e precisão, marcar a série e iniciar o descanso.
-- Consultar sessões anteriores e preencher os valores da última sessão para facilitar uma pequena melhoria no treino seguinte.
-- Mostrar evolução de atributos, frequência de treino e recordes através de gráficos simples.
-
-A inspiração no Hevy é funcional. A apresentação deve manter a identidade visual pretendida para o mod e a utilização dentro do Minecraft.
-
-## 7. Painel físico de leaderboard
-
-Pedido do utilizador: um bloco que mostre a classificação no mundo.
-
-Detalhes propostos:
-
-- Painel 3D de parede ou de chão; possível variante maior com vários blocos.
-- Cabeça do jogador, nome, posição e resultado visíveis.
-- Atualização automática quando termina uma série com um resultado relevante.
-- Ao interagir, escolher exercício, período e âmbito.
-- Períodos sugeridos: semanal, mensal e recordes de sempre.
-- Âmbito sugerido: aquele ginásio ou o servidor inteiro.
-- Comparar resultados em condições equivalentes de exercício, carga e dificuldade.
-
-O menu pessoal e os painéis devem consultar os mesmos registos. A fórmula de classificação e a definição de um ginásio/local ainda estão por decidir.
-
-## 8. Ideias secundárias mencionadas
-
-Ainda sem confirmação de âmbito: ginásios geridos por jogadores, mensalidades e passes, personal trainers, desafios entre jogadores, títulos de atleta e evolução visual opcional do corpo preservando a skin.
-
-Estas ideias não devem atrasar a base de treino diário, minijogos, progressão permanente, planos e recordes.
-
-## 9. Ao retomar o desenvolvimento
-
-1. Ler este documento e consultar o estado atual do repositório.
-2. Definir a plataforma inicial, o conjunto da primeira entrega e o desenho visual concreto.
-3. Afinar a duração dos treinos, a dificuldade, a curva de experiência, os limites diários e os bónus. Os números deste resumo são exemplos ajustáveis.
-4. Definir a relação entre rotinas personalizadas, treino diário e metas semanais.
-5. Guardar progressão, planos, sessões e recordes por jogador, com persistência após saídas e reinícios. O servidor valida resultados e aplica os ganhos.
-6. Validar as máquinas, os minijogos, os menus, os painéis e a persistência dentro do Minecraft antes de publicar um JAR.
-
-Prioridade de produto: **voltar ao ginásio, escolher o plano, jogar os exercícios e ver a evolução permanente da personagem**.
-
-[Voltar ao plano dos mods](../PLANO-DOS-MODS.md) · [Repositório](../README.md)
+`tools/generate_resources.py` regenera geometrias, materiais pixel e traduções. Os recursos gerados já acompanham o projeto: o build normal não precisa de Python/Pillow.

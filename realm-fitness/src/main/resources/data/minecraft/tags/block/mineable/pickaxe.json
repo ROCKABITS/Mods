@@ -1,0 +1,12 @@
+{
+  "replace": false,
+  "values": [
+    "realmfitness:bench",
+    "realmfitness:run",
+    "realmfitness:box",
+    "realmfitness:pull",
+    "realmfitness:row",
+    "realmfitness:squat",
+    "realmfitness:record_board"
+  ]
+}

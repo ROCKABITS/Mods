@@ -1,0 +1,20 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "realmfitness:block/record_board",
+      "y": 0
+    },
+    "facing=east": {
+      "model": "realmfitness:block/record_board",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "realmfitness:block/record_board",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "realmfitness:block/record_board",
+      "y": 270
+    }
+  }
+}
