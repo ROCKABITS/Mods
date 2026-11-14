@@ -1,0 +1,21 @@
+modLoader="javafml"
+loaderVersion="[47,)"
+license="All Rights Reserved"
+[[mods]]
+modId="realmfitness"
+version="${mod_version}"
+displayName="Realm Gym"
+logoFile="realm-gym-icon.png"
+description="Physical gym machines, skill minigames, permanent progression, personal workout plans and live record boards. Forge 1.20.1 edition."
+[[dependencies.realmfitness]]
+modId="forge"
+mandatory=true
+versionRange="[47.4.0,48)"
+ordering="NONE"
+side="BOTH"
+[[dependencies.realmfitness]]
+modId="minecraft"
+mandatory=true
+versionRange="[1.20.1]"
+ordering="NONE"
+side="BOTH"

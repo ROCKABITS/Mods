@@ -1,0 +1,93 @@
+plugins {
+    id 'java-library'
+    id 'net.minecraftforge.gradle' version '6.0.36'
+}
+version = mod_version
+group = mod_group_id
+base { archivesName = 'realm-gym' }
+java.toolchain.languageVersion = JavaLanguageVersion.of(17)
+
+// Keep rules, animation mathematics, contact geometry and their tests shared.
+// Only the Java 21 clamp/List conveniences are backported; game rules are unchanged.
+def sharedJava = layout.buildDirectory.dir('generated/sources/shared')
+tasks.register('prepareSharedJava', Sync) {
+    from('../realm-gym/src/main/java') {
+        include 'pt/realmfitness/domain/**', 'pt/realmfitness/GymGeometry.java', 'pt/realmfitness/GymLayout.java',
+            'pt/realmfitness/client/ExercisePose.java', 'pt/realmfitness/client/TrainingPresentation.java'
+        filter { line -> line.replace('Math.clamp(', 'pt.realmfitness.domain.FitnessMath.clamp(') }
+    }
+    into sharedJava
+}
+def sharedTests = layout.buildDirectory.dir('generated/sources/shared-tests')
+tasks.register('prepareSharedTests', Sync) {
+    from('../realm-gym/src/test/java') {
+        filter { line -> line.replace('.getFirst()', '.get(0)').replace('Math.clamp(', 'pt.realmfitness.domain.FitnessMath.clamp(') }
+    }
+    into sharedTests
+}
+sourceSets {
+    main { java.srcDir sharedJava }
+    test { java.srcDir sharedTests }
+    gameTest { java.srcDir 'src/gametest/java'; resources.srcDir 'src/gametest/resources' }
+    visualTest { java.srcDir 'src/visualtest/java'; resources.srcDir 'src/visualtest/resources' }
+}
+tasks.named('compileJava') { dependsOn 'prepareSharedJava' }
+tasks.named('compileTestJava') { dependsOn 'prepareSharedTests' }
+configurations {
+    gameTestImplementation.extendsFrom implementation
+    visualTestImplementation.extendsFrom implementation
+}
+for (def name : ['gameTest', 'visualTest']) {
+    sourceSets[name].compileClasspath += sourceSets.main.output + sourceSets.main.compileClasspath
+    sourceSets[name].runtimeClasspath += sourceSets.main.output + sourceSets.main.runtimeClasspath
+}
+minecraft {
+    mappings channel: 'official', version: minecraft_version
+    copyIdeResources = true
+    runs {
+        configureEach {
+            workingDirectory project.file('run')
+            property 'forge.logging.console.level', 'info'
+            mods { realmfitness { source sourceSets.main } }
+        }
+        client {
+            jvmArgs '-Xmx2G'
+            if (project.hasProperty('fitnessVisualTests')) {
+                workingDirectory project.file('qa-results/client')
+                mods { realmfitness { source sourceSets.visualTest } }
+                property 'fitness.qaOutput', project.file('qa-results/client').absolutePath
+                args '--width', '1600', '--height', '900'
+            }
+        }
+        server { args '--nogui' }
+        gameTestServer {
+            property 'forge.enabledGameTestNamespaces', 'realmfitness'
+            mods { realmfitness { source sourceSets.gameTest } }
+        }
+    }
+}
+repositories { mavenCentral() }
+dependencies {
+    minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.11.4'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
+sourceSets.test.compileClasspath += sourceSets.main.compileClasspath
+sourceSets.test.runtimeClasspath += sourceSets.main.runtimeClasspath
+tasks.named('test', Test) { useJUnitPlatform() }
+processResources {
+    from('../realm-gym/src/main/resources') {
+        exclude 'META-INF/**', 'pack.mcmeta', 'data/**/recipe/**'
+        eachFile { f -> f.path = f.path.replace('/loot_table/', '/loot_tables/').replace('/tags/item/', '/tags/items/').replace('/tags/block/', '/tags/blocks/') }
+        includeEmptyDirs = false
+    }
+    from('../realm-gym/src/main/resources') {
+        include 'data/**/recipe/**'
+        eachFile { f -> f.path = f.path.replace('/recipe/', '/recipes/') }
+        filter { line -> line.replace('"id": "realmfitness:', '"item": "realmfitness:') }
+        includeEmptyDirs = false
+    }
+    filesMatching('META-INF/mods.toml') { expand mod_version: project.version }
+}
+tasks.withType(JavaCompile).configureEach { options.encoding = 'UTF-8'; options.release = 17 }
+jar { finalizedBy 'reobfJar' }
