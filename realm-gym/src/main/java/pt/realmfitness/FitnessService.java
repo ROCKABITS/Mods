@@ -106,10 +106,10 @@ public final class FitnessService {
                 case "delete" -> {d.ledger.deleteRoutine(a,UUID.fromString(string(j,"id",36)));d.persist(p.getServer());page="routines";}
                 case "begin" -> {d.ledger.begin(a,UUID.fromString(string(j,"id",36)),System.currentTimeMillis());d.persist(p.getServer());page="routines";}
                 case "end_workout" -> {a.workout=null;d.persist(p.getServer());page="routines";}
-                case "start" -> {if(v.board)throw new IllegalArgumentException("fitness.station_missing");start(p,v,number(j,"load",1,120),number(j,"repetitions",4,20));return;}
+                case "start" -> {if(v.board)throw new IllegalArgumentException("fitness.station_missing");start(p,v,number(j,"load",1,240),number(j,"repetitions",4,20));return;}
                 case "filter", "pin" -> {
                     if(!v.board)throw new IllegalArgumentException("fitness.station_missing");
-                    v.exercise=Exercise.valueOf(string(j,"exercise",12));v.load=number(j,"load",1,120);v.exercise.checkLoad(v.load,20);v.reps=number(j,"repetitions",4,20);
+                    v.exercise=Exercise.valueOf(string(j,"exercise",12));v.load=number(j,"load",1,240);v.exercise.checkLoad(v.load,20);v.reps=number(j,"repetitions",4,20);
                     v.period=string(j,"period",8);v.scope=string(j,"scope",8);if(!Set.of("all","week","month").contains(v.period)||!Set.of("gym","server").contains(v.scope))throw new IllegalArgumentException("fitness.invalid_request");
                     if(operation.equals("pin")){if(!p.hasPermissions(2))throw new IllegalArgumentException("fitness.forbidden");var b=(RecordBoardEntity)p.level().getBlockEntity(v.pos);b.exercise=v.exercise.name();b.load=v.load;b.repetitions=v.reps;b.period=v.period;b.scope=v.scope;updateBoard(p.getServer(),b);}
                     page="leaders";
@@ -124,7 +124,7 @@ public final class FitnessService {
         if(v.pos==null||!(p.level().getBlockState(v.pos).getBlock() instanceof GymBlock block)||!block.intact(p.level(),v.pos))throw new IllegalArgumentException("fitness.station_missing");
         for(var t:ACTIVE.values())if(t.dimension.equals(v.dimension)&&t.pos.equals(v.pos))throw new IllegalArgumentException("fitness.machine_busy");
         var d=data(p);var a=athlete(p);d.ledger.ready(a,v.exercise,load,repetitions,d.ledger.highWater);
-        Minigame g=new Minigame(UUID.randomUUID(),v.exercise,load,repetitions,p.getRandom().nextLong(),a.fatigue.get(v.exercise),d.ledger.level(a,v.exercise));
+        Minigame g=new Minigame(UUID.randomUUID(),v.exercise,load,repetitions,p.getRandom().nextLong(),a.fatigue.get(v.exercise.attribute()),d.ledger.level(a,v.exercise));
         GymMount mount=FitnessMod.MOUNT.get().create(p.level());if(mount==null)throw new IllegalStateException("fitness.station_missing");
         var state=p.level().getBlockState(v.pos);mount.configure(v.pos,state.getValue(GymBlock.FACING),v.exercise,!state.getValue(GymBlock.EXPANDED),p.position());
         if(!p.serverLevel().addFreshEntity(mount)){mount.discard();throw new IllegalArgumentException("fitness.machine_busy");}
@@ -134,7 +134,7 @@ public final class FitnessService {
     }
     private static void sendGame(ServerPlayer p,Minigame g,boolean opening){
         var t=ACTIVE.get(p.getUUID());Map<String,Object> payload=new LinkedHashMap<>();payload.put("type","game");payload.put("open",opening);payload.put("id",g.id.toString());payload.put("exercise",g.exercise.name());payload.put("load",g.load);payload.put("repetitions",g.repetitions);payload.put("seed",g.seed);payload.put("fatigue",g.fatigue);payload.put("trainingLevel",g.trainingLevel);payload.put("yaw",t==null?p.getYRot():t.mount.actorYaw());payload.put("countdown",t==null?0:Math.max(0,t.startsAt-p.getServer().getTickCount()));
-        Map<String,Object> state=new LinkedHashMap<>();state.put("tick",g.tick);state.put("sequence",g.sequence());state.put("feedbackId",g.feedbackId);state.put("effort",g.effort);state.put("balance",g.balance);state.put("grip",g.grip);state.put("valid",g.valid);state.put("accuracy",g.accuracy());state.put("target",g.target());state.put("tolerance",g.tolerance());state.put("stage",g.stage());state.put("locked",g.locked);state.put("landed",g.landed);state.put("marker",g.marker());state.put("streak",g.streak);state.put("bestStreak",g.bestStreak);state.put("feedback",g.feedback);state.put("feedbackTicks",g.feedbackTicks);state.put("nextFoot",g.nextFoot);state.put("holdTicks",g.holdTicks);state.put("holdRequired",g.squatHoldRequired());payload.put("state",state);FitnessNetwork.send(p,payload);
+        Map<String,Object> state=new LinkedHashMap<>();state.put("tick",g.tick);state.put("sequence",g.sequence());state.put("feedbackId",g.feedbackId);state.put("effort",g.effort);state.put("balance",g.balance);state.put("leftPressure",g.leftPressure);state.put("rightPressure",g.rightPressure);state.put("grip",g.grip);state.put("valid",g.valid);state.put("accuracy",g.accuracy());state.put("target",g.target());state.put("tolerance",g.tolerance());state.put("stage",g.stage());state.put("locked",g.locked);state.put("landed",g.landed);state.put("marker",g.marker());state.put("streak",g.streak);state.put("bestStreak",g.bestStreak);state.put("feedback",g.feedback);state.put("feedbackTicks",g.feedbackTicks);state.put("nextFoot",g.nextFoot);state.put("holdTicks",g.holdTicks);state.put("holdRequired",g.squatHoldRequired());payload.put("state",state);FitnessNetwork.send(p,payload);
     }
     public static void tick(MinecraftServer server){
         for(UUID id:List.copyOf(ACTIVE.keySet())){

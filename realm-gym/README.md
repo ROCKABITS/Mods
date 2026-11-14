@@ -1,12 +1,12 @@
-# Realm Gym 0.5.1 Beta
+# Realm Gym 0.6.0 Beta
 
-Ginásio físico para **Minecraft 1.21.1, NeoForge 21.1.256+ e Java 21**. Máquinas 3D, seis minijogos, atributos permanentes, rotinas personalizadas, calendário e painéis de recordes. Funciona de forma independente.
+Ginásio físico para **Minecraft 1.21.1, NeoForge 21.1.256+ e Java 21**. Máquinas 3D, oito minijogos, atributos permanentes, rotinas personalizadas, calendário e painéis de recordes. Funciona de forma independente.
 
-[Descarregar JAR](../mod-pronto/realm-gym-0.5.1.jar) · [ZIP](../mod-pronto/realm-gym-0.5.1.zip) · [Galeria](../media/realm-gym/0.5.1/README.md) · [Validação](VALIDACAO.md) · [Conceito original](DESIGN.md)
+[Descarregar JAR](../mod-pronto/realm-gym-0.6.0.jar) · [ZIP](../mod-pronto/realm-gym-0.6.0.zip) · [Galeria](../media/realm-gym/0.6.0/README.md) · [Validação](VALIDACAO.md) · [Conceito original](DESIGN.md)
 
 Instala esta versão no servidor e em todos os clientes. Esta versão exige o mesmo protocolo de montagem para manter o personagem alinhado com as máquinas. Esta edição é para 1.21.1/NeoForge.
 
-**Realm Gym é o novo nome do Realm Fitness.** Substitui o JAR antigo por `realm-gym-0.5.1.jar`; instala apenas uma edição. O identificador `realmfitness`, os blocos, `data/realm_fitness.dat` e `config/realm-fitness.json` mantêm-se para conservar os mundos, níveis, rotinas e recordes. O comando principal passa a `/gym`; `/fitness` continua como alias, incluindo `equipment` e `reload`.
+**Realm Gym é o novo nome do Realm Fitness.** Substitui o JAR antigo por `realm-gym-0.6.0.jar`; instala apenas uma edição. O identificador `realmfitness`, os blocos, `data/realm_fitness.dat` e `config/realm-fitness.json` mantêm-se para conservar os mundos, níveis, rotinas e recordes. O comando principal passa a `/gym`; `/fitness` continua como alias, incluindo `equipment` e `reload`.
 
 ![Ícone do Realm Gym](../media/realm-gym/branding/realm-gym-icon.png)
 
@@ -16,16 +16,18 @@ Instala esta versão no servidor e em todos os clientes. Esta versão exige o me
 2. Abre o perfil com **K**, com o cartão ou com `/gym`. A tecla do perfil pode ser alterada nos controlos do Minecraft.
 3. Em **Treinos**, escolhe uma das rotinas iniciais ou cria a tua. O editor permite escolher exercícios, ordem, séries, repetições, carga, descanso e dia da semana.
 4. **Botão direito na máquina:** o jogador monta o equipamento e entra diretamente no minijogo, sem ecrã de configuração. Usa o próximo exercício, as repetições e a carga do plano ativo; sem plano, faz uma série livre de oito repetições. Exige Sobrevivência e uma máquina intacta próxima.
-5. **Agachar + botão direito antes de entrar:** aumenta 5 kg no supino/agachamentos ou um nível de resistência nas outras máquinas. Respeita os níveis desbloqueados; no máximo disponível, volta ao mínimo. A seleção fica guardada por jogador e exercício. Num plano, ajusta a sessão ativa sem editar a rotina guardada.
+5. **Agachar + botão direito antes de entrar:** aumenta 10 kg no leg press, 5 kg no supino/agachamentos/tríceps ou um nível de resistência nas outras máquinas. Respeita os níveis desbloqueados; no máximo disponível, volta ao mínimo. A seleção fica guardada por jogador e exercício. Num plano, ajusta a sessão ativa sem editar a rotina guardada.
 6. A contagem de entrada dura dois segundos. O HUD ocupa uma faixa pequena acima da barra rápida, com indicadores próprios de cada exercício, movimento interpolado a cada frame e resposta visual aos controlos. **SHIFT sai da máquina** e cancela a série incompleta. **F5 muda a perspetiva** e o rato permite observar a animação.
 
 O supino posiciona o jogador deitado; o remo usa uma posição sentada com assento deslizante. As outras máquinas alinham o corpo com as pegas, tapete ou plataforma. As animações têm cotovelos e joelhos articulados, movimentos específicos de cada exercício e barra/pega sincronizadas com o esforço. As mãos e os pés usam cinemática inversa 3D com pontos partilhados com a geometria; o saco oscila após os golpes, o tapete desliza e a roda do remo gira durante o treino. Ao concluir a série, o jogador sai do equipamento e recebe um resumo discreto; o diário continua disponível em K.
+
+O leg press tem um banco reclinado e uma plataforma carregada com discos que desliza nos carris; os pés acompanham a plataforma. A polia de tríceps tem corda dupla, roldanas, cabo extensível e placas que sobem durante a puxada. As mãos abrem a corda ao contrair.
 
 O plano guarda o progresso entre sessões e reinícios. Pode ser terminado no menu para começar outro. Editar ou apagar uma rotina guardada não altera a cópia de um treino já iniciado. Os dias associados às rotinas são uma indicação de calendário; o jogador escolhe qual iniciar.
 
 ## Equipamento e montagem
 
-As seis máquinas usam modelos e texturas originais: armações finas em aço azul-escuro, estofos azul-acinzentados com rebordo e costuras, detalhes em aço claro, discos octogonais e apoios em borracha. Os bancos, a passadeira e o remo têm **2 × 3 blocos** de base; boxe, elevações e agachamentos têm **2 × 2 blocos**. Todas reservam **três blocos de altura**. Coloca-as numa superfície sólida, com toda a área livre; a orientação depende da direção do jogador. As colisões acompanham a estrutura e deixam aberturas nos espaços vazios.
+As oito máquinas usam modelos e texturas originais: armações finas em aço azul-escuro, estofos azul-acinzentados com rebordo e costuras, detalhes em aço claro, discos octogonais e apoios em borracha. Os bancos, a passadeira, o remo e o leg press têm **2 × 3 blocos** de base; boxe, elevações, agachamentos e a polia de tríceps têm **2 × 2 blocos**. Todas reservam **três blocos de altura**. Coloca-as numa superfície sólida, com toda a área livre; a orientação depende da direção do jogador. As colisões acompanham a estrutura e deixam aberturas nos espaços vazios.
 
 A direção visual aproxima-se do [Gym Furniture Pack Volume 1, de EliteCreatures](https://sketchfab.com/3d-models/gym-furniture-pack-volume-1-4b1837a989a2419eb9be6d37fe3ff4f7), com geometrias e texturas próprias criadas para o Realm Gym. Os bancos foram baixados à escala do personagem; supino, pegas e apoios partilham as coordenadas com o sistema de animação.
 
@@ -41,10 +43,12 @@ Quebrar uma peça desmonta a máquina e devolve um único item em Sobrevivência
 | Elevações | Segurar Espaço para subir e largar para descer, recuperando a pega. A/D corrige o equilíbrio; exige o ciclo completo. | Controlo corporal | 20% menos dano de queda |
 | Remo | Segurar W para carregar a força, largar na zona verde e segurar S para recuperar a remada. | Resistência aquática | +15% velocidade de natação |
 | Agachamentos | W para descer até ao verde, largar para fazer a pausa e S para a subida explosiva. | Potência das pernas | Até +15% altura de salto |
+| Leg press | A/D controlam a pressão de cada perna; mantém as duas faixas no verde para empurrar. Larga ambas para regressar. Segurar sempre ou usar só uma perna não completa a repetição. | Potência das pernas, partilhada com agachamentos | Mesmo limite de +15% altura de salto |
+| Tríceps na polia | Segura Espaço para puxar, clica M1/M2 no verde, mantém a contração por um instante e larga Espaço para regressar. | Força, partilhada com supino | Mesmo limite de +10% dano corpo a corpo |
 
-Cada atributo tem **20 níveis permanentes**. Supino e agachamentos começam nos 20 kg, desbloqueando mais 5 kg por nível, até 120 kg. As restantes máquinas usam resistência de 1 a 6, desbloqueada a cada quatro níveis. Carga e fadiga tornam o controlo mais exigente.
+Existem **seis atributos**, cada um com **20 níveis permanentes**. As novas máquinas dão XP aos atributos existentes; não duplicam os bónus. Os recordes e as cargas escolhidas continuam separados por máquina. Supino e agachamentos começam nos 20 kg, desbloqueando mais 5 kg por nível, até 120 kg. O leg press começa nos **40 kg**, desbloqueia mais 10 kg por nível de pernas e chega aos **240 kg**. A polia começa nos **5 kg**, desbloqueia mais 5 kg a cada dois níveis de força e chega aos **55 kg**. Passadeira, saco de boxe, elevações e remo usam resistência de 1 a 6, desbloqueada a cada quatro níveis. Carga e fadiga tornam o controlo mais exigente.
 
-Uma série tem 4–20 tentativas. No supino, cada repetição tem até 3,2 segundos para atingir o topo; a pressão baixa entre toques e aumenta com a carga, a fadiga e a posição da repetição na série. No boxe, cada alvo oferece até quatro segundos para escolher o golpe; depois do ataque, o resultado é mostrado brevemente antes de passar ao seguinte. As outras mecânicas usam ciclos de 2,4 segundos, além da contagem de entrada.
+Uma série tem 4–20 tentativas. No supino, cada repetição tem até 3,2 segundos para atingir o topo; a pressão baixa entre toques e aumenta com a carga, a fadiga e a posição da repetição na série. No boxe, cada alvo oferece até quatro segundos para escolher o golpe; depois do ataque, o resultado é mostrado brevemente antes de passar ao seguinte. Leg press e tríceps têm até quatro segundos por ciclo. As restantes mecânicas usam ciclos de 2,4 segundos, além da contagem de entrada.
 
 **A evolução torna cargas baixas mais fáceis.** A dificuldade compara a carga com a capacidade desbloqueada no respetivo atributo: os mesmos 20 kg exigem menos toques num atleta mais forte. Perto do limite pessoal, o desafio mantém-se. A fadiga acumulada entre séries e a exigência crescente dentro da série continuam a contar. Nas outras máquinas, resistências baixas tornam-se mais tolerantes com a evolução: maiores zonas de acerto, melhor economia de fôlego ou pega e mais margem de controlo.
 
@@ -58,10 +62,10 @@ Os níveis não expiram por faltar ao ginásio e persistem após morte, saída e
 
 Por defeito:
 
-- Objetivo: **seis séries válidas de pelo menos oito repetições previstas**, com pelo menos **três exercícios diferentes**.
+- Objetivo: **seis séries válidas de pelo menos oito repetições previstas**, com pelo menos **três grupos de atributos diferentes**.
 - Bónus diário: até **30 XP adicionais**, distribuídos pelos atributos treinados.
 - Limite: **240 XP por jogador e por dia**, incluindo o bónus. Treino adicional permite praticar e bater recordes.
-- Fadiga: cada série válida acrescenta 12 pontos percentuais nesse exercício. Uma escala completa de fadiga recupera em 30 minutos reais, incluindo tempo offline; uma série isolada recupera mais depressa.
+- Fadiga: cada série válida acrescenta 12 pontos percentuais no respetivo grupo de atributos. Supino/tríceps e agachamentos/leg press partilham fadiga; trocar de máquina não a limpa. Uma escala completa de fadiga recupera em 30 minutos reais, incluindo tempo offline; uma série isolada recupera mais depressa.
 - Renovação: meia-noite UTC, configurável.
 - Descanso livre: 15 segundos entre séries válidas. Num plano, aplica-se o descanso escolhido para a série concluída, entre 5 e 180 segundos.
 
@@ -90,6 +94,10 @@ O estado pertence ao mundo, em `data/realm_fitness.dat`, com gravação atómica
 Os minijogos usam Espaço, WASD e os botões do rato nesta beta. As animações articuladas conservam a skin e camadas exteriores; durante a renderização especial do exercício, equipamento e armadura não são desenhados. Continuam equipados e com os seus efeitos.
 
 Não há dependência de um mod de stats. Combinações específicas com outros sistemas de atributos ou renderização precisam de validação no respetivo modpack. Mensalidades, personal trainers, alterações musculares da skin, gestão de ginásios e metas semanais com prémios continuam nas ideias do conceito original.
+
+## Atualização 0.6.0
+
+Acrescenta leg press e tríceps com corda à edição **NeoForge 1.21.1**. As gravações da 0.5.1 mantêm os seis atributos, rotinas, históricos e configurações; as novas cargas começam no mínimo de cada máquina. Atualiza servidor e clientes em conjunto: o protocolo de rede passa a 5. A edição Forge 1.20.1 continua na base 0.5.1, com seis máquinas.
 
 ## Desenvolvimento
 

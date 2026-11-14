@@ -1,0 +1,1 @@
+{"type":"minecraft:block","pools":[{"rolls":1,"entries":[{"type":"minecraft:item","name":"realmfitness:bench"}],"conditions":[{"condition":"minecraft:survives_explosion"},{"condition":"minecraft:block_state_property","block":"realmfitness:bench","properties":{"half":"lower","part":"0"}}]}]}

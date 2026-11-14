@@ -46,6 +46,14 @@ final class MinigameHudRenderer {
                     track(g,x,by,w,11);zone(g,x,by,w,.75,tolerance,GOOD);marker(g,x,by,w,value,ACCENT);
                     label(g,text("game.pause",num(state,"holdTicks"),num(state,"holdRequired")),x,by+18,w/2,MUTED);bar(g,x+w-67,by+21,67,Math.min(1,num(state,"holdTicks")/(double)Math.max(1,num(state,"holdRequired"))),GREEN);
                 }
+                case LEG_PRESS->{
+                    int half=(w-18)/2;for(int side=0;side<2;side++){int bx=x+side*(half+18);double pressure=side==0?frame.leftPressure():frame.rightPressure();track(g,bx,by,half,11);zone(g,bx,by,half,target,tolerance,GOOD);marker(g,bx,by,half,pressure,ACCENT);}
+                    label(g,"A",x,by+18,20,INK);label(g,"D",x+w-9,by+18,20,INK);bar(g,x+22,by+21,w-44,value,GREEN);
+                }
+                case TRICEPS->{
+                    track(g,x,by,w,11);zone(g,x,by,w,.86,tolerance,GOOD);marker(g,x,by,w,value,ACCENT);
+                    label(g,text(stage.equals("rope_hold")?"game.rope_hold":"game.rope_timing"),x,by+18,w,MUTED);
+                }
             }
         }
         String footer=countdown>0?text("compact_controls."+rules.exercise.id()):text("game.stage."+stage);

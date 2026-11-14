@@ -13,7 +13,7 @@ public final class GymGeometry {
     private static final VoxelShape[][][] SHAPES=load("collisions.json");
     private static final VoxelShape[][][] WORKING=load("collisions_working.json");
     private GymGeometry(){}
-    public static int depth(Exercise e){return switch(e){case BENCH,RUN,ROW->3;default->2;};}
+    public static int depth(Exercise e){return switch(e){case BENCH,RUN,ROW,LEG_PRESS->3;default->2;};}
     public static boolean contains(Exercise e,int part){return part>=0&&part<18&&(part/2)%3<depth(e);}
     public static int x(int part){return part%2;}
     public static int z(int part){return (part/2)%3;}
@@ -21,7 +21,7 @@ public final class GymGeometry {
     public static VoxelShape shape(Exercise e,int part,Direction facing){return SHAPES[e.ordinal()][part][facing.get2DDataValue()];}
     public static VoxelShape shape(Exercise e,int part,Direction facing,boolean working){return (working?WORKING:SHAPES)[e.ordinal()][part][facing.get2DDataValue()];}
     private static VoxelShape[][][] load(String resource){
-        VoxelShape[][][] result=new VoxelShape[6][18][4];
+        VoxelShape[][][] result=new VoxelShape[Exercise.values().length][18][4];
         try(var input=GymGeometry.class.getResourceAsStream("/assets/realmfitness/geometry/"+resource)){
             if(input==null)throw new IOException("Missing gym collision geometry");
             JsonObject all=JsonParser.parseReader(new InputStreamReader(input,StandardCharsets.UTF_8)).getAsJsonObject();

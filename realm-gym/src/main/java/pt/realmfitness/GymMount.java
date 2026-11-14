@@ -22,7 +22,7 @@ public final class GymMount extends Entity {
     public void configure(BlockPos anchor,Direction facing,Exercise exercise,boolean compact,Vec3 entrance){entityData.set(ANCHOR,anchor.immutable());entityData.set(FACING,facing.get3DDataValue());entityData.set(EXERCISE,exercise.ordinal());entityData.set(COMPACT,compact);this.entrance=entrance;setPos(actorPosition());}
     public BlockPos anchor(){return entityData.get(ANCHOR);}
     public Direction facing(){return Direction.from3DDataValue(entityData.get(FACING));}
-    public Exercise exercise(){return Exercise.values()[Math.clamp(entityData.get(EXERCISE),0,5)];}
+    public Exercise exercise(){return Exercise.values()[Math.clamp(entityData.get(EXERCISE),0,Exercise.values().length-1)];}
     public boolean compact(){return entityData.get(COMPACT);}
     public double effort(){double t=Math.clamp((System.nanoTime()-effortReceived)/75_000_000.0,0,1);return fromEffort+(toEffort-fromEffort)*t;}
     public int keys(){return entityData.get(KEYS);}

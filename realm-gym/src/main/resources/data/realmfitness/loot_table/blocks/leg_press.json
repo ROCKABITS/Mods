@@ -1,0 +1,1 @@
+{"type":"minecraft:block","pools":[{"rolls":1,"entries":[{"type":"minecraft:item","name":"realmfitness:leg_press"}],"conditions":[{"condition":"minecraft:survives_explosion"},{"condition":"minecraft:block_state_property","block":"realmfitness:leg_press","properties":{"half":"lower","part":"0"}}]}]}

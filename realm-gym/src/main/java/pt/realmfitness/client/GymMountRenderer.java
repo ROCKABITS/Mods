@@ -35,6 +35,18 @@ public final class GymMountRenderer extends NoopRenderer<GymMount> {
                     var fan=GymLayout.point(e,"flywheel_center");stack.pushPose();stack.translate(fan.x(),fan.y(),fan.z());stack.mulPose(Axis.ZP.rotation((float)(mount.visualTick()*.14)));stack.translate(-fan.x(),-fan.y(),-fan.z());mesh(mount,"flywheel",stack,buffers,light);stack.popPose();
                     var cable=GymLayout.point(e,"cable_origin");double dz=cable.z()-pose.barZ,dy=pose.barY-cable.y(),angle=Math.atan2(dy,dz);stack.translate(cable.x(),cable.y(),cable.z());stack.mulPose(Axis.XP.rotation((float)angle));stack.scale(1,1,(float)(Math.hypot(dz,dy)/(cable.z()-rest.z())));stack.translate(-cable.x(),-cable.y(),-cable.z());mesh(mount,"cable",stack,buffers,light);
                 }
+                case LEG_PRESS->{double travel=GymLayout.number(e,"sled_stroke")*Math.clamp(mount.effort(),0,1);stack.translate(0,travel,travel);mesh(mount,"sled",stack,buffers,light);}
+                case TRICEPS->{
+                    var rest=GymLayout.point(e,"rope_origin");var pulley=GymLayout.point(e,"pulley");double lift=(rest.y()-pose.ropeForkY)*GymLayout.scalar(e,"stack_ratio");
+                    stack.pushPose();stack.translate(0,lift,0);mesh(mount,"stack",stack,buffers,light);stack.popPose();
+                    stack.pushPose();stack.translate(0,pulley.y(),0);stack.scale(1,(float)((pulley.y()-pose.ropeForkY)/(pulley.y()-rest.y())),1);stack.translate(0,-pulley.y(),0);mesh(mount,"front_cable",stack,buffers,light);stack.popPose();
+                    stack.pushPose();stack.translate(0,pulley.y(),0);stack.scale(1,(float)((pulley.y()-(18/16.0+lift))/(pulley.y()-18/16.0)),1);stack.translate(0,-pulley.y(),0);mesh(mount,"stack_cable",stack,buffers,light);stack.popPose();
+                    stack.pushPose();stack.translate(0,pose.ropeForkY-rest.y(),0);mesh(mount,"clip",stack,buffers,light);stack.popPose();
+                    for(int side:new int[]{-1,1}){
+                        var delta=new org.joml.Vector3f((float)(side*pose.ropeHalf),(float)(pose.barY-pose.ropeForkY),0);float length=delta.length();
+                        stack.pushPose();stack.translate(rest.x(),pose.ropeForkY,rest.z());stack.mulPose(new org.joml.Quaternionf().rotationTo(new org.joml.Vector3f(0,-1,0),delta.normalize()));stack.scale(1,length/(float)GymLayout.number(e,"rope_length"),1);stack.mulPose(Axis.ZP.rotationDegrees(-side*22.5f));stack.translate(-rest.x(),-rest.y(),-rest.z());mesh(mount,side<0?"rope_left":"rope_right",stack,buffers,light);stack.popPose();
+                    }
+                }
                 default->{}
             }
         }finally{stack.popPose();}

@@ -27,7 +27,7 @@ The repository contains standalone mods that can also integrate with one another
 
 | Mod | Download | Funcionalidades |
 | --- | --- | --- |
-| **Realm Gym 0.5.1 Beta** | [JAR](https://github.com/ROCKABITS/Mods/raw/refs/heads/main/mod-pronto/realm-gym-0.5.1.jar) · [ZIP](https://github.com/ROCKABITS/Mods/raw/refs/heads/main/mod-pronto/realm-gym-0.5.1.zip) | Seis máquinas de ginásio e minijogos, atributos permanentes, treino diário, perfil RPG, rotinas personalizadas e painéis de recordes. |
+| **Realm Gym 0.6.0 Beta** | [JAR](https://github.com/ROCKABITS/Mods/raw/refs/heads/main/mod-pronto/realm-gym-0.6.0.jar) · [ZIP](https://github.com/ROCKABITS/Mods/raw/refs/heads/main/mod-pronto/realm-gym-0.6.0.zip) | Oito máquinas, incluindo leg press e tríceps com corda, minijogos, atributos permanentes, treino diário, perfil RPG, rotinas personalizadas e painéis de recordes. |
 | **Realm Progression 0.1.0 Beta** | [JAR](https://github.com/ROCKABITS/Mods/raw/refs/heads/main/mod-pronto/realm-progression-0.1.0.jar) · [ZIP](https://github.com/ROCKABITS/Mods/raw/refs/heads/main/mod-pronto/realm-progression-0.1.0.zip) | Mesa de Investigação, metas administrativas por mod e desbloqueios permanentes de crafts pelo saldo público. Create: 8.000 € por defeito, preservados no tesouro. Requer Realm Treasury 0.4.0. |
 | **Season 8 0.1.0** | [JAR](https://github.com/ROCKABITS/Mods/raw/refs/heads/main/mod-pronto/season-eight-0.1.0.jar) · [ZIP](https://github.com/ROCKABITS/Mods/raw/refs/heads/main/mod-pronto/season-eight-0.1.0.zip) | Menu principal, carregamento de recursos, brasão, título e ícone da janela. Apenas nos clientes, sem dependências adicionais. |
 | **Realm Marriage 0.1.0 Beta** | [JAR](https://github.com/ROCKABITS/Mods/raw/refs/heads/main/mod-pronto/realm-marriage-0.1.0.jar) · [ZIP](https://github.com/ROCKABITS/Mods/raw/refs/heads/main/mod-pronto/realm-marriage-0.1.0.zip) | Altar medieval, celebrante escolhido pelo casal, objeções com G, votos, testemunhas, três regimes financeiros e divórcio. |
@@ -52,7 +52,7 @@ O ZIP é uma alternativa ao download direto do JAR. Extrai-o antes de instalar. 
 
 ## Documentação e validação
 
-- [Guia do Realm Gym](realm-gym/README.md): treino diário, controlos, rotinas, atributos e recordes. [Conceito original](realm-gym/DESIGN.md) · [Galeria](media/realm-gym/0.5.1/README.md).
+- [Guia do Realm Gym](realm-gym/README.md): treino diário, controlos, rotinas, atributos e recordes. [Conceito original](realm-gym/DESIGN.md) · [Galeria](media/realm-gym/0.6.0/README.md).
 
 - [Guia do Realm Progression](realm-progression/README.md): seleção de mods, metas, permissões, crafts suportados e limites de cobertura. [Galeria](media/realm-progression/README.md).
 - [Guia do Realm Marriage](realm-marriage/README.md): casamentos, objeções, contas, certidões e divórcio; [API explícita de pagamentos](realm-marriage/API.md).

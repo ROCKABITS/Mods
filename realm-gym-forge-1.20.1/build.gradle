@@ -7,11 +7,11 @@ group = mod_group_id
 base { archivesName = 'realm-gym' }
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 
-// Keep rules, animation mathematics, contact geometry and their tests shared.
+// Preserve the verified 0.5.1 base while the NeoForge edition gains new machines.
 // Only the Java 21 clamp/List conveniences are backported; game rules are unchanged.
 def sharedJava = layout.buildDirectory.dir('generated/sources/shared')
 tasks.register('prepareSharedJava', Sync) {
-    from('../realm-gym/src/main/java') {
+    from('shared/java') {
         include 'pt/realmfitness/domain/**', 'pt/realmfitness/GymGeometry.java', 'pt/realmfitness/GymLayout.java',
             'pt/realmfitness/client/ExercisePose.java', 'pt/realmfitness/client/TrainingPresentation.java'
         filter { line -> line.replace('Math.clamp(', 'pt.realmfitness.domain.FitnessMath.clamp(') }
@@ -20,7 +20,7 @@ tasks.register('prepareSharedJava', Sync) {
 }
 def sharedTests = layout.buildDirectory.dir('generated/sources/shared-tests')
 tasks.register('prepareSharedTests', Sync) {
-    from('../realm-gym/src/test/java') {
+    from('shared/test') {
         filter { line -> line.replace('.getFirst()', '.get(0)').replace('Math.clamp(', 'pt.realmfitness.domain.FitnessMath.clamp(') }
     }
     into sharedTests
@@ -76,12 +76,12 @@ sourceSets.test.compileClasspath += sourceSets.main.compileClasspath
 sourceSets.test.runtimeClasspath += sourceSets.main.runtimeClasspath
 tasks.named('test', Test) { useJUnitPlatform() }
 processResources {
-    from('../realm-gym/src/main/resources') {
+    from('shared/resources') {
         exclude 'META-INF/**', 'pack.mcmeta', 'data/**/recipe/**'
         eachFile { f -> f.path = f.path.replace('/loot_table/', '/loot_tables/').replace('/tags/item/', '/tags/items/').replace('/tags/block/', '/tags/blocks/') }
         includeEmptyDirs = false
     }
-    from('../realm-gym/src/main/resources') {
+    from('shared/resources') {
         include 'data/**/recipe/**'
         eachFile { f -> f.path = f.path.replace('/recipe/', '/recipes/') }
         filter { line -> line.replace('"id": "realmfitness:', '"item": "realmfitness:') }

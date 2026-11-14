@@ -7,6 +7,8 @@
     "realmfitness:pull",
     "realmfitness:row",
     "realmfitness:squat",
-    "realmfitness:record_board"
+    "realmfitness:record_board",
+    "realmfitness:leg_press",
+    "realmfitness:triceps"
   ]
 }

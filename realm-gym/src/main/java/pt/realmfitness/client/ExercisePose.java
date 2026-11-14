@@ -7,7 +7,7 @@ import pt.realmfitness.domain.*;
 public final class ExercisePose {
     public double hips=.703125,forward,lean,twist,sway,head,headOffset;
     public final Limb[] arms=new Limb[2],legs=new Limb[2];
-    public double barY,barZ,seatZ;
+    public double barY,barZ,seatZ,ropeHalf,ropeForkY;
     public static final double UNIT=.9375/16;
     public record V(double x,double y,double z){
         public V add(V b){return new V(x+b.x,y+b.y,z+b.z);}
@@ -57,6 +57,20 @@ public final class ExercisePose {
                 double handForward=p.forward+11*UNIT*Math.sin(p.lean)-.05;p.barZ=actor.z()+handForward;
                 p.hands(p.barY,handForward,GymLayout.number(e,"grip_half"),new V(.7,1,-.4));
                 p.feet(0,GymLayout.number(e,"foot_forward"),GymLayout.number(e,"foot_half"));
+            }
+            case LEG_PRESS->{
+                p.hips=GymLayout.number(e,"seat_top")+2*UNIT+.012;p.lean=-Math.PI/4;p.head=.08;
+                var hand=GymLayout.point(e,"hand_rest");p.hands(hand.y(),hand.z()-actor.z(),GymLayout.number(e,"grip_half"),new V(.8,.6,.5));
+                var foot=GymLayout.point(e,"foot_rest");double stroke=GymLayout.number(e,"sled_stroke")*u;
+                p.feet(foot.y()+stroke,foot.z()+stroke-actor.z(),GymLayout.number(e,"foot_half"));
+            }
+            case TRICEPS->{
+                p.hips=.703125;p.lean=.025;p.head=-.06;
+                double extension=Math.clamp(u/.86,0,1),open=(action&(Minigame.LEFT|Minigame.RIGHT))!=0&&age>=0&&age<60?Math.min(1,age/4)*Math.clamp((u-.15)/.45,0,1):0;
+                p.barY=GymLayout.number(e,"hand_top")+(GymLayout.number(e,"hand_bottom")-GymLayout.number(e,"hand_top"))*extension;p.barZ=GymLayout.number(e,"hand_z");
+                p.ropeHalf=GymLayout.number(e,"grip_closed")+(GymLayout.number(e,"grip_open")-GymLayout.number(e,"grip_closed"))*open;
+                p.ropeForkY=p.barY+Math.sqrt(Math.pow(GymLayout.number(e,"rope_length"),2)-p.ropeHalf*p.ropeHalf);
+                p.hands(p.barY,p.barZ-actor.z(),p.ropeHalf,new V(.15,.8,-.3));p.foot(0,0,.07,.16);p.foot(1,0,-.07,.16);
             }
         }
         return p;

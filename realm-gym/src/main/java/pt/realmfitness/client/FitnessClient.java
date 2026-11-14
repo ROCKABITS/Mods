@@ -34,6 +34,7 @@ public final class FitnessClient {
     @EventBusSubscriber(modid="realmfitness",value=Dist.CLIENT,bus=EventBusSubscriber.Bus.MOD)
     public static final class Registration {
         @SubscribeEvent public static void models(net.neoforged.neoforge.client.event.ModelEvent.RegisterAdditional e){
+            e.register(GymMountRenderer.model(pt.realmfitness.domain.Exercise.LEG_PRESS,"sled"));for(var group:java.util.List.of("stack","front_cable","stack_cable","clip","rope_left","rope_right"))e.register(GymMountRenderer.model(pt.realmfitness.domain.Exercise.TRICEPS,group));
             e.register(GymMountRenderer.model(pt.realmfitness.domain.Exercise.BOX,"bag"));e.register(GymMountRenderer.model(pt.realmfitness.domain.Exercise.RUN,"belt"));e.register(GymMountRenderer.model(pt.realmfitness.domain.Exercise.BENCH,"bar"));e.register(GymMountRenderer.model(pt.realmfitness.domain.Exercise.SQUAT,"bar"));for(var group:java.util.List.of("seat","handle","cable","flywheel"))e.register(GymMountRenderer.model(pt.realmfitness.domain.Exercise.ROW,group));
         }
         @SubscribeEvent public static void keys(RegisterKeyMappingsEvent e){e.register(KEY);}

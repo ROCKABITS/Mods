@@ -1,0 +1,17 @@
+{
+  "parent": "realmfitness:block/record_board",
+  "display": {
+    "gui": {
+      "rotation": [
+        15,
+        210,
+        0
+      ],
+      "scale": [
+        0.75,
+        0.75,
+        0.75
+      ]
+    }
+  }
+}

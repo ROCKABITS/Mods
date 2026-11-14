@@ -34,7 +34,7 @@ jobs:
         run: python3 ../.github/scripts/gym_release.py snapshot
       - name: Native machines, loot, recipes, data and attributes
         run: ./gradlew --no-daemon --console=plain -PfitnessGameTests runGameTestServer 2>&1 | tee fitness-native.log
-      - name: Actual client controls, six minigames and world reopen
+      - name: Actual client controls, eight minigames and world reopen
         env:
           LIBGL_ALWAYS_SOFTWARE: '1'
           ALSOFT_DRIVERS: 'null'

@@ -113,7 +113,9 @@ LAYOUT={
  'box':{'actor':[15,0,-2],'bag_pivot':[15,40,14],'bag_face_z':7,'punch_y':24},
  'pull':{'actor':[16,8,9],'bar_y':40.5,'bar_z':9,'grip_half':7.5},
  'row':{'actor':[16,0,13],'seat_top':10.5,'seat_stroke':3,'seat_offset':3.2,'hand_rest':[16,14,18],'cable_origin':[16,14,34],'flywheel_center':[16,14,35],'foot_y':7.7,'foot_z':23,'foot_half':4.6},
- 'squat':{'actor':[16,1.2,21.5],'bar_rest':[16,27,22],'grip_half':8,'foot_half':4.4,'foot_forward':1.2}
+ 'squat':{'actor':[16,1.2,21.5],'bar_rest':[16,27,22],'grip_half':8,'foot_half':4.4,'foot_forward':1.2},
+ 'leg_press':{'actor':[16,0,18],'seat_top':11,'hand_rest':[16,16,17],'grip_half':8.6,'foot_rest':[16,15,24],'foot_half':4.1,'sled_stroke':3,'sled_rest':[16,16,25]},
+ 'triceps':{'actor':[16,0,8],'hand_top':23,'hand_bottom':12.5,'hand_z':13.5,'rope_length':7.3,'rope_origin':[16,30,13.5],'pulley':[16,41,13.5],'stack_ratio':.5,'grip_closed':2.8,'grip_open':6}
 }
 
 def bench():
@@ -195,8 +197,67 @@ def squat():
     fasteners(p,[(5,5,23.8),(27,5,23.8),(5,39,23.8),(27,39,23.8)])
     return p
 
-BUILDERS={'bench':bench,'run':treadmill,'box':punching_bag,'pull':pullup,'row':rower,'squat':squat}
-SIZES={'bench':(2,3,3),'run':(2,3,3),'box':(2,2,3),'pull':(2,2,3),'row':(2,3,3),'squat':(2,2,3)}
+def leg_press():
+    """Plate-loaded inclined sled, low seat and open frame; original authored geometry."""
+    p=feet(32,48)
+    for z in (5,41):p += [box(5,2,z,27,4,z+2),box(5,4,z,27,4.3,z+.45,'edge',False)]
+    p += [box(14,3,6,18,8,21)]+cushion(9.5,8.5,13,13,2.5,10)
+    back=cushion(9.5,10,1.9,13,2.3,16)
+    # Back pad lies at 45 degrees. Its local Z direction becomes the backrest height.
+    for part in back:part.rotation=rot(16,12,17.9,'x',45)
+    p += back
+    for x in (4.5,25.5):
+        p += [box(x,3,40,x+2,29,42),box(x-.3,28.3,39.7,x+2.3,30,42.3,'edge')]
+        # Split rails keep each vanilla element within Minecraft's legal model bounds.
+        for y,z in ((5,17),(17.728,29.728)):
+            p += [box(x,y,z,x+2,y+18,z+2,'frame',rotation=rot(x+1,y,z+1,'x',45)),
+                  box(x+.7,y,z-.25,x+1.3,y+18,z+.15,'steel',rotation=rot(x+1,y,z+1,'x',45))]
+    p += [box(5,27,39,27,29,42),box(8,28,38.8,24,28.7,39,'edge',False)]
+    for x in (6,24):p += [box(x,8,15,x+2,16,17,'steel'),box(x-.4,15,13,x+2.4,16.5,20,'rubber')]
+    sled=[box(6,14.4,23.4,26,16.2,26.6,'steel'),box(7.5,15,18,24.5,17,32,'frame',rotation=rot(16,16,25,'x',45)),
+          box(8,14.7,18.5,24,15,31.5,'rubber',rotation=rot(16,16,25,'x',45))]
+    for x in (9,13,17,21):sled.append(box(x,14.4,20,x+.45,14.7,30,'edge',False,rot(16,16,25,'x',45)))
+    sled += [box(.5,15.4,24.4,31.5,16.6,25.6,'steel')]+plate(.7,16,25,2.1)+plate(29.2,16,25,2.1)
+    p += moving(sled,'sled')
+    # Spare disc storage and a small safety latch distinguish it from the squat rack.
+    p += [box(6,7,37,12,8.2,38.2,'steel'),box(20,7,37,26,8.2,38.2,'steel'),box(23,11,20,25,12.5,25,'red',False)]
+    fasteners(p,[(6,5,4.8),(26,5,4.8),(5.5,26,39.8),(26.5,26,39.8),(7,12,14.8),(25,12,14.8)])
+    return p
+
+def pulley(x,y,z):
+    p=[]
+    for a,b,r in [(-2.3,-1.6,1),(-1.6,1.6,2.3),(1.6,2.3,1)]:p.append(box(x-.55,y+a,z-r,x+.55,y+b,z+r,'rubber',False))
+    p += [box(x-.7,y-.6,z-.6,x+.7,y+.6,z+.6,'steel',False)]
+    return p
+
+def triceps():
+    """Open cable tower with selector stack, pulleys and a two-ended rope attachment."""
+    p=feet(32,32)+[box(5,2,25,27,4,29),box(8,2,20,24,3,29,'edge'),box(11,3,21,21,4.5,29,'rubber')]
+    for x in (7.5,22.5):
+        p += [box(x,3,25,x+2,44,28),box(x-.18,42.5,24.85,x+2.18,44.3,28.15,'edge'),
+              box(x+.55,5,24.6,x+1.45,41,25,'steel'),box(x-.2,12,24.8,x+2.2,12.7,25.1,'edge',False)]
+    p += [box(8,42,24,24,44,28),box(14.8,40,12,17.2,43,27),box(13,39,11.5,19,42,14.5,'frame')]
+    p += pulley(16,41,13.5)+pulley(16,41,26)
+    p += [box(10,6,28.5,22,37,29,'mesh',False),box(10,36,28.2,22,38,29.2,'edge'),box(13,35,24.4,19,37.4,24.7,'screen',False)]
+    weights=[]
+    for i in range(10):
+        y=5+i*1.25;weights += [box(10.8,y,22,21.2,y+1.02,28,'plate'),box(11.2,y+.9,21.8,20.8,y+1.02,22.1,'edge',False)]
+    weights += [box(14.8,16.7,23,17.2,18,27,'steel'),box(19.9,10,21.3,21.8,10.6,22.4,'red',False)]
+    p += moving(weights,'stack')
+    p += moving([box(15.75,30,13.25,16.25,41,13.75,'rubber',False)],'front_cable')
+    p += moving([box(15.75,18,25.75,16.25,41,26.25,'rubber',False)],'stack_cable')
+    p += moving([box(15.3,29.1,12.8,16.7,30.3,14.2,'steel',False)],'clip')
+    for side in (-1,1):
+        angle=side*22.5;rotation=rot(16,30,13.5,'z',angle)
+        rope=[box(15.65,22.7,13.15,16.35,30,13.85,'rubber',False,rotation)]
+        for y in (23.5,25,26.5,28):rope.append(box(15.60,y,13.1,16.40,y+.3,13.9,'edge',False,rotation))
+        rope += [box(15.1,22,12.6,16.9,23.4,14.4,'rubber',False,rotation),box(15.5,21.7,13,16.5,22,14,'edge',False,rotation)]
+        p += moving(rope,'rope_left' if side<0 else 'rope_right')
+    fasteners(p,[(8.5,6,24.8),(23.5,6,24.8),(8.5,40,24.8),(23.5,40,24.8)])
+    return p
+
+BUILDERS={'bench':bench,'run':treadmill,'box':punching_bag,'pull':pullup,'row':rower,'squat':squat,'leg_press':leg_press,'triceps':triceps}
+SIZES={'bench':(2,3,3),'run':(2,3,3),'box':(2,2,3),'pull':(2,2,3),'row':(2,3,3),'squat':(2,2,3),'leg_press':(2,3,3),'triceps':(2,2,3)}
 
 def element(part,base=(0,0,0),scale=1):
     lo=[(v-b)*scale for v,b in zip(part.lo,base)];hi=[(v-b)*scale for v,b in zip(part.hi,base)]
@@ -227,8 +288,9 @@ def bounds(part):
         p=[x-o[0],y-o[1],z-o[2]];i,j=[n for n in range(3) if n!=axis];p[i],p[j]=p[i]*c-p[j]*s,p[i]*s+p[j]*c;corners.append([p[n]+o[n] for n in range(3)])
     return [min(p[n] for p in corners) for n in range(3)],[max(p[n] for p in corners) for n in range(3)]
 
-def build_machines(assets,root):
-    textures(assets);collisions={};active_collisions={};manifest={}
+def build_machines(assets,root,refresh_textures=True):
+    if refresh_textures:textures(assets)
+    collisions={};active_collisions={};manifest={}
     for name,builder in BUILDERS.items():
         parts=builder();w,d,h=SIZES[name];manifest[name]={'width':w,'depth':d,'height':h,'parts':len(parts)}
         cells={i:[] for i in range(18)};active_cells={i:[] for i in range(18)};collision={i:[] for i in range(18)};active_collision={i:[] for i in range(18)}

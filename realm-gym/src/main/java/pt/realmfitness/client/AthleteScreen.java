@@ -57,16 +57,16 @@ public final class AthleteScreen extends Screen {
     }
     private void leaderButtons(){
         int cw=(w-32)/3;
-        button(x+12,body(),cw,"exercise."+exercise.id(),()->{exercise=Exercise.values()[(exercise.ordinal()+1)%6];load=exercise.minimumLoad();filter(false);});
+        button(x+12,body(),cw,"exercise."+exercise.id(),()->{exercise=Exercise.values()[(exercise.ordinal()+1)%Exercise.values().length];load=exercise.minimumLoad();filter(false);});
         button(x+16+cw,body(),cw,"period."+period,()->{period=switch(period){case "all"->"week";case "week"->"month";default->"all";};filter(false);});
         button(x+20+cw*2,body(),cw,"scope."+scope,()->{scope=scope.equals("server")?"gym":"server";filter(false);});
-        literal(x+12,body()+25,25,"−",()->{load=Math.max(exercise.minimumLoad(),load-(exercise.weighted?5:1));filter(false);});
-        literal(x+110,body()+25,25,"+",()->{load=Math.min(exercise.maximumLoad(20),load+(exercise.weighted?5:1));filter(false);});
+        literal(x+12,body()+25,25,"−",()->{load=Math.max(exercise.minimumLoad(),load-exercise.loadStep());filter(false);});
+        literal(x+110,body()+25,25,"+",()->{load=Math.min(exercise.maximumLoad(20),load+exercise.loadStep());filter(false);});
         literal(x+w/2+4,body()+25,25,"−",()->{reps=Math.max(4,reps-1);filter(false);});literal(x+w-38,body()+25,25,"+",()->{reps=Math.min(20,reps+1);filter(false);});
         var pin=button(x+w/2-64,bottom(),128,"pin_board",()->filter(true));pin.active=data.has("mayPin")&&data.get("mayPin").getAsBoolean();
     }
     private void filter(boolean pin){dirtySelection=true;FitnessNetwork.request(pin?"pin":"filter",Map.of("exercise",exercise.name(),"load",load,"repetitions",reps,"period",period,"scope",scope));}
-    private int level(Exercise e){return FitnessLedger.level(data.getAsJsonObject("experience").get(e.name()).getAsInt());}
+    private int level(Exercise e){return FitnessLedger.level(data.getAsJsonObject("experience").get(e.attribute().name()).getAsInt());}
     private long serverNow(){return time(data,"now")+(System.nanoTime()-received)/1_000_000;}
     private int remainingRest(){return (int)Math.max(0,(time(data,"restUntil")-serverNow()+999)/1000);}
     @Override public void tick(){if(++ticks%100==0)FitnessNetwork.request("refresh",Map.of());}
@@ -81,10 +81,10 @@ public final class AthleteScreen extends Screen {
         int left=x+12,pw=Math.max(78,w*30/100),top=body()+3,ph=Math.max(42,h-150);
         frame(g,left,top,pw,ph,0xFF211A2C);g.fillGradient(left+4,top+4,left+pw-4,top+ph-4,0x10292A44,0x804D385F);
         if(minecraft.player!=null)InventoryScreen.renderEntityInInventoryFollowsMouse(g,left+3,top+3,left+pw-3,top+ph-15,Math.max(12,Math.min(pw/3,(ph-20)*9/20)),.05f,mx,my,minecraft.player);
-        int average=Arrays.stream(Exercise.values()).mapToInt(this::level).sum();label(g,text("athlete_level",average),left+7,top+ph-13,pw-12,ACCENT);
+        int average=Arrays.stream(Exercise.attributes()).mapToInt(this::level).sum();label(g,text("athlete_level",average),left+7,top+ph-13,pw-12,ACCENT);
         int rx=left+pw+12,rw=w-pw-38,row=Math.max(15,Math.min(42,(h-142)/6));
-        for(var e:Exercise.values()){
-            int yy=top+e.ordinal()*row,xp=data.getAsJsonObject("experience").get(e.name()).getAsInt(),lv=level(e);double max=data.getAsJsonObject("bonuses").get(e.name()).getAsDouble(),fatigue=data.getAsJsonObject("fatigue").get(e.name()).getAsDouble();
+        for(var e:Exercise.attributes()){
+            int yy=top+e.ordinal()*row,xp=data.getAsJsonObject("experience").get(e.attribute().name()).getAsInt(),lv=level(e);double max=data.getAsJsonObject("bonuses").get(e.name()).getAsDouble(),fatigue=data.getAsJsonObject("fatigue").get(e.name()).getAsDouble();
             g.pose().pushPose();g.pose().translate(rx,yy-3,0);g.pose().scale(.7f,.7f,1);g.renderItem(new ItemStack(FitnessMod.MACHINES.get(e).get()),0,0);g.pose().popPose();
             label(g,text("stat."+e.id())+" · "+lv+"/20",rx+15,yy,row<24?rw-64:rw-15,INK);
             String value=String.format(Locale.ROOT,"+%.1f%%",max*lv/20*100);label(g,value,rx+rw-font.width(value),yy+(row<24?0:10),font.width(value),GREEN);
@@ -97,8 +97,8 @@ public final class AthleteScreen extends Screen {
     }
     private void catalog(GuiGraphics g,int mx,int my){
         int cols=w<420?1:2,cw=(w-30)/cols,ch=Math.max(38,(h-100)/3),visible=Math.max(1,(h-100)/ch)*cols;
-        scroll=Math.clamp(scroll,0,Math.max(0,6-visible));Set<String> available=new HashSet<>();array(data,"available").forEach(e->available.add(e.getAsString()));
-        for(int i=0;i<visible&&i+scroll<6;i++){
+        scroll=Math.clamp(scroll,0,Math.max(0,Exercise.values().length-visible));Set<String> available=new HashSet<>();array(data,"available").forEach(e->available.add(e.getAsString()));
+        for(int i=0;i<visible&&i+scroll<Exercise.values().length;i++){
             Exercise e=Exercise.values()[i+scroll];int bx=x+12+i%cols*(cw+6),by=body()+i/cols*ch;
             frame(g,bx,by,cw-2,ch-5,0xFF251E30);g.renderItem(new ItemStack(FitnessMod.MACHINES.get(e).get()),bx+5,by+7);
             label(g,exercise(e),bx+28,by+7,cw-34,INK);label(g,text(available.contains(e.name())?"nearby":"not_nearby"),bx+28,by+20,cw-34,available.contains(e.name())?GREEN:MUTED);
@@ -120,7 +120,7 @@ public final class AthleteScreen extends Screen {
             for(int n=0;n<28;n++){int bx=x+14+n%14*cell,yy=by+20+n/14*cell;g.fill(bx,yy,bx+cell-3,yy+cell-3,days.contains(today-27+n)?GREEN:0xFF393143);}
             int chartY=by+28+cell*2;label(g,text("attribute_progress"),x+14,chartY,w-28,MUTED);
             int cw=(w-28)/6,maxH=Math.max(12,bottom()-chartY-34);
-            for(var e:Exercise.values()){int bh=(int)(maxH*level(e)/20.0),bx=x+14+e.ordinal()*cw;g.fill(bx,chartY+18+maxH-bh,bx+cw-6,chartY+18+maxH,ACCENT);label(g,exercise(e),bx,chartY+21+maxH,cw-5,MUTED);}
+            for(var e:Exercise.attributes()){int bh=(int)(maxH*level(e)/20.0),bx=x+14+e.ordinal()*cw;g.fill(bx,chartY+18+maxH-bh,bx+cw-6,chartY+18+maxH,ACCENT);label(g,exercise(e),bx,chartY+21+maxH,cw-5,MUTED);}
             return;
         }
         var entries=array(data,journal.equals("records")?"records":"history");int row=h<300?24:33,visible=Math.max(1,(bottom()-by-8)/row);scroll=Math.clamp(scroll,0,Math.max(0,entries.size()-visible));

@@ -10,7 +10,7 @@ VERSION=dict(line.split('=',1) for line in (PROJECT/'gradle.properties').read_te
 assert re.fullmatch(r'\d+\.\d+\.\d+',VERSION)
 NAME=f'realm-gym-{VERSION}.jar'
 STATE=PROJECT/'build/gym-release'
-EXERCISES=('bench','run','box','pull','row','squat')
+EXERCISES=('bench','run','box','pull','row','squat','leg_press','triceps')
 def digest(p):return hashlib.sha256(p.read_bytes()).hexdigest()
 def checkjar(p):
  with zipfile.ZipFile(p) as j:
@@ -29,12 +29,12 @@ def checkjar(p):
     assert f'assets/realmfitness/models/block/{e}_part_{part}.json' in names and f'assets/realmfitness/models/block/{e}_part_{part}_working.json' in names
   assert 'assets/realmfitness/geometry/collisions.json' in names and 'assets/realmfitness/geometry/collisions_working.json' in names
   assert 'pt/realmfitness/GymMount.class' in names and 'pt/realmfitness/client/TrainingHud.class' in names and 'pt/realmfitness/client/TrainingScreen.class' not in names
-  for model in ('bench_bar','squat_bar','row_seat','row_handle','row_cable','row_flywheel','box_bag','run_belt'):assert f'assets/realmfitness/models/block/{model}.json' in names
+  for model in ('bench_bar','squat_bar','row_seat','row_handle','row_cable','row_flywheel','box_bag','run_belt','leg_press_sled','triceps_stack','triceps_front_cable','triceps_stack_cable','triceps_clip','triceps_rope_left','triceps_rope_right'):assert f'assets/realmfitness/models/block/{model}.json' in names
   assert 'assets/realmfitness/geometry/layout.json' in names and 'pt/realmfitness/GymLayout.class' in names
   collection=json.loads(j.read('assets/realmfitness/geometry/collection.json'))
   collisions=json.loads(j.read('assets/realmfitness/geometry/collisions.json'))
   for e in EXERCISES:
-   assert collection[e]['width']==2 and collection[e]['height']==3 and collection[e]['depth']==(3 if e in ('bench','run','row') else 2)
+   assert collection[e]['width']==2 and collection[e]['height']==3 and collection[e]['depth']==(3 if e in ('bench','run','row','leg_press') else 2)
    assert len(collisions[e])==18
    for boxes in collisions[e].values():
     for box in boxes:assert len(box)==6 and all(0<=v<=16 for v in box) and all(box[i]<box[i+3] for i in range(3))
@@ -63,7 +63,7 @@ def package():
  state=json.loads((STATE/'source.json').read_text());assert state['source_commit']==os.environ['GITHUB_SHA']
  source=STATE/NAME;checkjar(source);assert digest(source)==state['jar_sha256']
  reports=[ET.parse(p).getroot() for p in (PROJECT/'build/test-results/test').glob('TEST-*.xml')];units=sum(int(r.get('tests',0)) for r in reports)
- assert units>=74 and not any(int(r.get(k,0)) for r in reports for k in ('failures','errors','skipped'))
+ assert units>=90 and not any(int(r.get(k,0)) for r in reports for k in ('failures','errors','skipped'))
  for n in ('fitness-build.log','fitness-native.log','fitness-client.log'):
   log=(PROJECT/n).read_text(errors='replace');assert 'BUILD SUCCESSFUL' in log and 'BUILD FAILED' not in log,n
  expected=sum(p.read_text().count('@GameTest(') for p in (PROJECT/'src/gametest/java').rglob('*.java'))
@@ -71,11 +71,12 @@ def package():
  qa=PROJECT/'qa-results/client';result=json.loads((qa/'result.json').read_text());assert result['success'] is True and result['stage']==29
  assert result['actualMountedMinigames'] is True and result['hudPresentation']['interpolatedFrames']>0
  assert any('Actual SHIFT input' in c for c in result['checks']) and any('Breaking occupied equipment' in c for c in result['checks']) and any('Actual sneak-right-click' in c for c in result['checks'])
+ assert any('all six moving triceps meshes baked' in c for c in result['checks'])
  assert result['actualMinecraftClient'] is True and result['actualIntegratedServer'] is True and result['syntheticSetResults'] is False
  for e in EXERCISES:
   assert any(('Actual '+e.upper()+' minigame') in c for c in result['checks']),e
   assert f'fitness-model-{e}.png' in result['screenshots'] and f'fitness-world-{e}.png' in result['screenshots'],e
- images=result['screenshots'];assert len(images)>=32 and len(images)==len(set(images));assert all(Path(n).name==n and n.endswith('.png') for n in images)
+ images=result['screenshots'];assert len(images)>=38 and len(images)==len(set(images));assert all(Path(n).name==n and n.endswith('.png') for n in images)
  gallery=ROOT/'media/realm-gym'/VERSION;gallery.mkdir(parents=True,exist_ok=True)
  for n in images:
   p=qa/n;assert p.read_bytes().startswith(b'\x89PNG\r\n\x1a\n');shutil.copyfile(p,gallery/n)
@@ -88,23 +89,25 @@ Capturas do Minecraft 1.21.1 com NeoForge 21.1.256 e Java 21. [Validacao CI]({ru
 
 Botão direito: montar e treinar. Agachar + botão direito: aumentar carga. SHIFT durante o treino: sair. F5: câmara.
 
-Supino: toques repetidos contra a pressão. Boxe: marcador móvel, centro perfeito e sequências. Passadeira: ritmo e fôlego. Elevações: pega e equilíbrio. Remo: força e recuperação. Agachamentos: profundidade, pausa e subida.
+Supino: toques repetidos contra a pressão. Boxe: marcador móvel, centro perfeito e sequências. Passadeira: ritmo e fôlego. Elevações: pega e equilíbrio. Remo: força e recuperação. Agachamentos: profundidade, pausa e subida. Leg press: pressão independente das duas pernas e retorno controlado. Tríceps: puxada da corda, contração no momento certo e retorno.
 
-Modelos originais redesenhados com armações finas em aço azul-escuro, estofos azul-acinzentados e pontos de contacto partilhados com a animação. As mãos acompanham as barras e a pega; o saco oscila, o tapete desliza e a roda do remo gira.
+Modelos originais redesenhados com armações finas em aço azul-escuro, estofos azul-acinzentados e pontos de contacto partilhados com a animação. As mãos acompanham as barras e a pega; o saco oscila, o tapete desliza e a roda do remo gira. No leg press, os pés acompanham a plataforma; na polia, as mãos abrem a corda e as placas sobem com a puxada.
 
 As cargas baixas tornam-se mais fáceis conforme o nível do respetivo atributo; a fadiga e as cargas próximas do limite continuam a exigir mais.
 
 ![Supino montado com HUD discreto](fitness-motion-bench.gif)
 
-Vídeos capturados no cliente real (24 frames por exercício, amostras a 10 fps): [supino](fitness-motion-bench.mp4) · [passadeira](fitness-motion-run.mp4) · [boxe](fitness-motion-box.mp4) · [elevações](fitness-motion-pull.mp4) · [remo](fitness-motion-row.mp4) · [agachamentos](fitness-motion-squat.mp4).
+Vídeos capturados no cliente real (24 frames por exercício, amostras a 10 fps): [supino](fitness-motion-bench.mp4) · [passadeira](fitness-motion-run.mp4) · [boxe](fitness-motion-box.mp4) · [elevações](fitness-motion-pull.mp4) · [remo](fitness-motion-row.mp4) · [agachamentos](fitness-motion-squat.mp4) · [leg press](fitness-motion-leg_press.mp4) · [tríceps na polia](fitness-motion-triceps.mp4).
 
-![Maquinas 3D](fitness-six-machines.png)
+![Maquinas 3D](fitness-eight-machines.png)
 ![Supino redesenhado](fitness-model-bench.png)
 ![Passadeira redesenhada](fitness-model-run.png)
 ![Boxe redesenhado](fitness-model-box.png)
 ![Elevações redesenhadas](fitness-model-pull.png)
 ![Remo redesenhado](fitness-model-row.png)
 ![Agachamentos redesenhados](fitness-model-squat.png)
+![Leg press](fitness-model-leg_press.png)
+![Tríceps na polia](fitness-model-triceps.png)
 ![Equipamento no mundo](fitness-world-bench.png)
 ![Perfil do atleta](fitness-earned-attributes.png)
 ![Editor de planos](fitness-plan-editor.png)
@@ -114,13 +117,13 @@ Vídeos capturados no cliente real (24 frames por exercício, amostras a 10 fps)
 ![Recordes no mundo](fitness-live-record-board.png)
 ![Portugues](fitness-profile-portuguese.png)
 
-O teste de carga usa temporariamente 100 XP no supino para desbloquear 25 kg e repõe esse valor antes das séries. O jogador inicia as séries com uma base controlada de 90 XP por atributo para tornar visivel a subida de nivel. As seis series e os seus resultados usam efetivamente os controlos do cliente e os canais de rede, sem enviar pontuacoes inventadas. O teste verifica o plano personalizado, bonus diario, persistencia e reabertura do mundo. A galeria das maquinas usa os modelos de producao no renderizador Minecraft.
+O teste de carga usa temporariamente 100 XP no supino para desbloquear 25 kg e repõe esse valor antes das séries. O jogador inicia as séries com uma base controlada de 90 XP por atributo para tornar visivel a subida de nivel. As oito series e os seus resultados usam efetivamente os controlos do cliente e os canais de rede, sem enviar pontuacoes inventadas. O teste verifica o plano personalizado, bonus diario, persistencia e reabertura do mundo. A galeria das maquinas usa os modelos de producao no renderizador Minecraft.
 ''')
  out=ROOT/'mod-pronto';out.mkdir(exist_ok=True);jar=out/NAME;shutil.copyfile(source,jar)
  archive=jar.with_suffix('.zip')
  with zipfile.ZipFile(archive,'w',zipfile.ZIP_DEFLATED) as z:
   z.write(jar,NAME);z.writestr('LEIA-ME.txt',f'Realm Gym {VERSION} Beta\nMinecraft 1.21.1 / NeoForge 21.1.256+ / Java 21\nInstala o mesmo JAR no servidor e nos clientes.\nBotao direito: montar; agachar + botao direito: carga; SHIFT: sair.\nPerfil: K ou /gym; maquinas: receitas ou /gym equipment (operador).\nConfiguracao: config/realm-fitness.json.\nGuia: https://github.com/ROCKABITS/Mods/tree/main/realm-gym\n')
- meta={'name':'Realm Gym','previous_name':'Realm Fitness','mod_id':'realmfitness','version':VERSION,'status':'Beta','minecraft':'1.21.1','neoforge':'21.1.256','java':21,'source_commit':state['source_commit'],'tested_run':run,'jar_sha256':digest(jar),'zip_sha256':digest(archive),'unit_tests':units,'native_tests':expected,'actual_minigame_client':True,'actual_mounted_minigames':True,'hud_presentation':result['hudPresentation'],'distinct_minigame_rules':2,'relative_training_difficulty':True,'motion_previews':videos,'checks':result['checks'],'scope':'Standalone integrated-host validation with real inputs, controlled 90-XP baseline and six real results. Remote authenticated multiplayer and third-party stat-mod combinations are not covered.','screenshots':{n:digest(gallery/n) for n in images}}
+ meta={'name':'Realm Gym','previous_name':'Realm Fitness','mod_id':'realmfitness','version':VERSION,'status':'Beta','minecraft':'1.21.1','neoforge':'21.1.256','java':21,'source_commit':state['source_commit'],'tested_run':run,'jar_sha256':digest(jar),'zip_sha256':digest(archive),'unit_tests':units,'native_tests':expected,'actual_minigame_client':True,'actual_mounted_minigames':True,'hud_presentation':result['hudPresentation'],'distinct_minigame_rules':3,'machines':list(EXERCISES),'permanent_attributes':6,'relative_training_difficulty':True,'motion_previews':videos,'checks':result['checks'],'scope':'Standalone integrated-host validation with real inputs, controlled 90-XP baseline and eight real results. Remote authenticated multiplayer and third-party stat-mod combinations are not covered.','screenshots':{n:digest(gallery/n) for n in images}}
  (out/f'realm-gym-{VERSION}.build.json').write_text(json.dumps(meta,indent=2)+'\n');(out/f'realm-gym-{VERSION}.sha256').write_text(''.join(f'{digest(p)}  {p.name}\n' for p in (jar,archive)))
  print(json.dumps(meta,indent=2))
 if __name__=='__main__':{'snapshot':snapshot,'package':package}[sys.argv[1]]()

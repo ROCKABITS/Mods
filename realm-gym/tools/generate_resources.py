@@ -32,7 +32,7 @@ def model(parts,half=None):
 from gym_geometry import build_machines
 machines=build_machines(ASSETS,ROOT)
 for name in machines:
-    write(ROOT/f'data/realmfitness/recipe/{name}.json',{'type':'minecraft:crafting_shaped','category':'misc','pattern':['IWI','ILI','III'],'key':{'I':{'item':'minecraft:iron_ingot'},'L':{'item':'minecraft:leather'},'W':{'item':{'bench':'minecraft:oak_slab','run':'minecraft:redstone','box':'minecraft:hay_block','pull':'minecraft:chain','row':'minecraft:oak_boat','squat':'minecraft:heavy_weighted_pressure_plate'}[name]}},'result':{'id':'realmfitness:'+name,'count':1}})
+    write(ROOT/f'data/realmfitness/recipe/{name}.json',{'type':'minecraft:crafting_shaped','category':'misc','pattern':['IWI','ILI','III'],'key':{'I':{'item':'minecraft:iron_ingot'},'L':{'item':'minecraft:leather'},'W':{'item':{'bench':'minecraft:oak_slab','run':'minecraft:redstone','box':'minecraft:hay_block','pull':'minecraft:chain','row':'minecraft:oak_boat','squat':'minecraft:heavy_weighted_pressure_plate','leg_press':'minecraft:heavy_weighted_pressure_plate','triceps':'minecraft:lead'}[name]}},'result':{'id':'realmfitness:'+name,'count':1}})
 
 parts=[box(0,1,2,16,16,4,'wood'),box(1,2,1.1,15,15,2,'paper'),box(0,0,1,16,2,4,'brass'),box(0,15,1,16,16,4,'brass'),box(0,1,1,1,16,4,'brass'),box(15,1,1,16,16,4,'brass')]
 write(ASSETS/'models/block/record_board.json',model(parts));write(ASSETS/'models/item/record_board.json',{'parent':'realmfitness:block/record_board','display':{'gui':{'rotation':[15,210,0],'scale':[.75,.75,.75]}}})
@@ -108,9 +108,12 @@ pt.update({
  'game.stage.tap':'Toca em ESPAÇO · SHIFT: sair', 'game.stage.aim':'M1 / M2: golpeia no centro', 'game.stage.pace':'Alterna A / D · ritmo e fôlego', 'game.stage.pull':'Segura ESPAÇO · A / D: equilíbrio', 'game.stage.lower':'Larga ESPAÇO para descer e recuperar', 'game.stage.charge':'Segura W, depois larga no verde', 'game.stage.recover':'Segura S para recuperar a remada', 'game.stage.descend':'Segura W até à profundidade verde', 'game.stage.hold':'Larga W e aguenta a pausa', 'game.stage.rise':'Segura S: sobe!', 'game.stage.rest':'Repetição concluída · respira', 'game.stage.miss':'Tenta novamente na próxima repetição',
  'game.feedback.perfect':'PERFEITO', 'game.feedback.good':'BOM', 'game.feedback.miss':'FALHOU', 'game.feedback.wrong_step':'PÉ ERRADO', 'game.feedback.rise':'SOBE AGORA'
 })
+from generate_expansion_resources import texts,generate as generate_expansion
+en.update(texts['en_us']);pt.update(texts['pt_pt'])
 assert en.keys()==pt.keys()
 for lang,strings in [('en_us',en),('pt_pt',pt),('pt_br',pt)]:
     data={'fitness.'+k:v for k,v in strings.items()};data.update({'itemGroup.realmfitness':'Realm Gym','item.realmfitness.athlete_card':'Cartão de atleta' if lang.startswith('pt') else 'Athlete card','block.realmfitness.record_board':'Painel de recordes' if lang.startswith('pt') else 'Record board','key.realmfitness.profile':'Perfil de Atleta' if lang.startswith('pt') else 'Athlete profile','key.categories.realmfitness':'Realm Gym'})
     for n in machines:data['block.realmfitness.'+n]=strings['exercise.'+n]
     write(ASSETS/f'lang/{lang}.json',data)
-print('Generated six original machines, record board, athlete card, recipes and three language files.')
+generate_expansion(ROOT)
+print('Generated eight original machines, record board, athlete card, recipes and three language files.')

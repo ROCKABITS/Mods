@@ -1,0 +1,19 @@
+#!/usr/bin/env python3
+"""Recipes and translations for the two authored 1.21.1 expansion machines."""
+from pathlib import Path
+import json
+texts={
+'en_us':{'exercise.leg_press':'Leg press','exercise.triceps':'Cable triceps','attribute.leg_press':'Leg power · shared with squats','attribute.triceps':'Strength · shared with bench press','help.leg_press':'A and D control each leg. Keep both pressures inside green to extend the sled, then release both keys to return. Holding continuously overloads the repetition.','help.triceps':'Hold SPACE to pull down. Click either mouse button inside green, keep SPACE held for the short contraction, then release to return.','controls.leg_press':'A / D: leg pressure · release both: return','controls.triceps':'SPACE: pull · M1 / M2 in green · hold, release','compact_controls.leg_press':'A / D: keep both legs inside green','compact_controls.triceps':'SPACE + click in green · hold, release','game.stage.leg_push':'Balance both pressures in green · A / D','game.stage.leg_return':'Release A and D · return under control','game.stage.rope_pull':'Hold SPACE · click inside green','game.stage.rope_hold':'Keep SPACE held · squeeze the rope','game.stage.rope_return':'Release SPACE · controlled return','game.rope_hold':'Keep the short contraction','game.rope_timing':'Click in green, hold briefly, then release'},
+'pt_pt':{'exercise.leg_press':'Leg press','exercise.triceps':'Tríceps na polia','attribute.leg_press':'Potência das pernas · partilhada com agachamentos','attribute.triceps':'Força · partilhada com supino','help.leg_press':'A e D controlam cada perna. Mantém as duas pressões no verde para estender a plataforma e larga as duas teclas para regressar. Segurar continuamente sobrecarrega a repetição.','help.triceps':'Segura ESPAÇO para puxar. Clica num botão do rato no verde, mantém ESPAÇO durante a contração curta e larga para regressar.','controls.leg_press':'A / D: pressão das pernas · largar: regressar','controls.triceps':'ESPAÇO: puxar · M1 / M2 no verde · manter, largar','compact_controls.leg_press':'A / D: mantém as duas pernas no verde','compact_controls.triceps':'ESPAÇO + clique no verde · mantém, larga','game.stage.leg_push':'Equilibra as duas pressões no verde · A / D','game.stage.leg_return':'Larga A e D · regressa com controlo','game.stage.rope_pull':'Segura ESPAÇO · clica na zona verde','game.stage.rope_hold':'Mantém ESPAÇO · contrai com a corda','game.stage.rope_return':'Larga ESPAÇO · regresso controlado','game.rope_hold':'Mantém a contração curta','game.rope_timing':'Clica no verde, mantém e depois larga'}
+}
+
+def generate(root):
+    assets=root/'assets/realmfitness'
+    for lang in ['en_us','pt_pt','pt_br']:
+     p=assets/f'lang/{lang}.json';data=json.loads(p.read_text());strings=texts['en_us' if lang=='en_us' else 'pt_pt'];data.update({'fitness.'+k:v for k,v in strings.items()});data['block.realmfitness.leg_press']=strings['exercise.leg_press'];data['block.realmfitness.triceps']=strings['exercise.triceps'];p.write_text(json.dumps(data,ensure_ascii=False,indent=2)+'\n')
+    for name,pattern,keys in [('leg_press',['IPI','ILI','III'],{'I':'iron_ingot','P':'heavy_weighted_pressure_plate','L':'leather'}),('triceps',['ICI','ILI','IRI'],{'I':'iron_ingot','C':'chain','L':'lead','R':'redstone'})]:
+     data={'type':'minecraft:crafting_shaped','category':'misc','pattern':pattern,'key':{k:{'item':'minecraft:'+v} for k,v in keys.items()},'result':{'id':'realmfitness:'+name,'count':1}}
+     (root/f'data/realmfitness/recipe/{name}.json').write_text(json.dumps(data,indent=2)+'\n')
+    p=root/'data/minecraft/tags/block/mineable/pickaxe.json';data=json.loads(p.read_text());data['values']+=['realmfitness:'+name for name in ['leg_press','triceps'] if 'realmfitness:'+name not in data['values']];p.write_text(json.dumps(data,indent=2)+'\n')
+
+if __name__=='__main__':generate(Path(__file__).resolve().parents[1]/'src/main/resources')

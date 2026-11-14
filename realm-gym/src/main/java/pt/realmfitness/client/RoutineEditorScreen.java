@@ -35,7 +35,7 @@ public final class RoutineEditorScreen extends Screen {
         button(x+20+(w-34)/2,y+58,(w-34)/2,text("add_exercise"),()->{if(steps.size()<8){steps.add(new Step(Exercise.RUN,2,8,1,30));index=steps.size()-1;rebuild();}});
         int yy=y+85;Step s=steps.get(index);
         button(x+14,yy,24,"‹",()->{index=Math.floorMod(index-1,steps.size());rebuild();});
-        button(x+44,yy,w-88,exercise(s.exercise()),()->{var e=Exercise.values()[(s.exercise().ordinal()+1)%6];steps.set(index,new Step(e,s.sets(),s.repetitions(),e.minimumLoad(),s.restSeconds()));rebuild();});
+        button(x+44,yy,w-88,exercise(s.exercise()),()->{var e=Exercise.values()[(s.exercise().ordinal()+1)%Exercise.values().length];steps.set(index,new Step(e,s.sets(),s.repetitions(),e.minimumLoad(),s.restSeconds()));rebuild();});
         button(x+w-38,yy,24,"›",()->{index=(index+1)%steps.size();rebuild();});
         int gap=h<300?28:42,top=yy+30,col=(w-34)/2;
         for(int n=0;n<4;n++){int kind=n,bx=x+14+(n%2)*(col+6),by=top+(n/2)*gap;button(bx,by,22,"−",()->change(kind,-1));button(bx+col-22,by,22,"+",()->change(kind,1));}
@@ -45,7 +45,7 @@ public final class RoutineEditorScreen extends Screen {
         button(x+w-94,bottom,80,text("save"),()->{capture();if(!name.isBlank())FitnessNetwork.request("routine",new Routine(id,name,weekday,steps));});
         if(existing)button(x+w-94,bottom-24,80,text("delete"),()->FitnessNetwork.request("delete",Map.of("id",id.toString())));
     }
-    private void change(int kind,int delta){Step s=steps.get(index);int sets=s.sets(),reps=s.repetitions(),load=s.load(),rest=s.restSeconds();switch(kind){case 0->sets=Math.clamp(sets+delta,1,5);case 1->reps=Math.clamp(reps+delta,4,20);case 2->load=Math.clamp(load+delta*(s.exercise().weighted?5:1),s.exercise().minimumLoad(),s.exercise().maximumLoad(20));case 3->rest=Math.clamp(rest+delta*5,5,180);}steps.set(index,new Step(s.exercise(),sets,reps,load,rest));rebuild();}
+    private void change(int kind,int delta){Step s=steps.get(index);int sets=s.sets(),reps=s.repetitions(),load=s.load(),rest=s.restSeconds();switch(kind){case 0->sets=Math.clamp(sets+delta,1,5);case 1->reps=Math.clamp(reps+delta,4,20);case 2->load=Math.clamp(load+delta*s.exercise().loadStep(),s.exercise().minimumLoad(),s.exercise().maximumLoad(20));case 3->rest=Math.clamp(rest+delta*5,5,180);}steps.set(index,new Step(s.exercise(),sets,reps,load,rest));rebuild();}
     @Override public void renderBackground(GuiGraphics g,int mx,int my,float p){}
     @Override public void render(GuiGraphics g,int mx,int my,float partial){
         g.fill(0,0,width,height,0xDA100E19);frame(g,x,y,w,h,PANEL);label(g,text("edit_plan")+" · "+(index+1)+"/"+steps.size(),x+14,y+13,w-28,ACCENT);

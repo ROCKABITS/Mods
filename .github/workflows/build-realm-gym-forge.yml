@@ -2,7 +2,7 @@ name: Build Realm Gym Forge 1.20.1
 on:
   push:
     branches: [main]
-    paths: ['realm-gym-forge-1.20.1/**', 'realm-gym/src/main/**', 'realm-gym/src/test/**', '.github/workflows/build-realm-gym-forge.yml', '.github/scripts/gym_forge_release.py']
+    paths: ['realm-gym-forge-1.20.1/**', '.github/workflows/build-realm-gym-forge.yml', '.github/scripts/gym_forge_release.py']
   workflow_dispatch:
 permissions:
   contents: write
@@ -55,6 +55,11 @@ jobs:
         if: github.ref == 'refs/heads/main'
         working-directory: .
         run: |
+          version=$(sed -n 's/^mod_version=//p' realm-gym-forge-1.20.1/gradle.properties)
+          if git cat-file -e "HEAD:mod-pronto/realm-gym-$version.build.json" 2>/dev/null; then
+            echo 'This version is already published; validation completed without replacing its downloads.'
+            exit 0
+          fi
           git fetch --no-tags origin main
           if [[ "$(git rev-parse FETCH_HEAD)" != "$GITHUB_SHA" ]]; then
             echo '::error::Main changed during validation; rerun against the latest commit.'

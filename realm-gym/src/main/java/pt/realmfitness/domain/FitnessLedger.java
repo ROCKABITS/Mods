@@ -16,12 +16,12 @@ public final class FitnessLedger {
         public int resetMinute=0, dailyXp=240, dailySets=6, dailyVariety=3, bonusXp=30;
         public double fatiguePerSet=.12, recoveryMinutes=30;
         public Map<Exercise,Double> bonuses=new EnumMap<>(Exercise.class);
-        public Settings(){for(var e:Exercise.values())bonuses.put(e,e.maximumBonus);}
+        public Settings(){for(var e:Exercise.attributes())bonuses.put(e,e.maximumBonus);}
         public void validate(){
             if(resetMinute<0||resetMinute>=1440||dailyXp<0||dailyXp>10000||dailySets<1||dailySets>24||dailyVariety<1||dailyVariety>6||bonusXp<0||bonusXp>1000
                     ||!Double.isFinite(fatiguePerSet)||fatiguePerSet<0||fatiguePerSet>1||!Double.isFinite(recoveryMinutes)||recoveryMinutes<1||recoveryMinutes>1440||bonuses==null||bonuses.size()!=6)
                 throw new IllegalArgumentException("fitness.invalid_settings");
-            for(var e:Exercise.values()){Double b=bonuses.get(e);if(b==null||!Double.isFinite(b)||b<0||b>(e==Exercise.PULL?.8:1))throw new IllegalArgumentException("fitness.invalid_settings");}
+            for(var e:Exercise.attributes()){Double b=bonuses.get(e);if(b==null||!Double.isFinite(b)||b<0||b>(e==Exercise.PULL?.8:1))throw new IllegalArgumentException("fitness.invalid_settings");}
         }
         public long day(long now){return Math.floorDiv(now-resetMinute*60_000L,DAY);}
         public long resetAt(long now){return (day(now)+1)*DAY+resetMinute*60_000L;}
@@ -40,7 +40,7 @@ public final class FitnessLedger {
         public Workout workout;
         public List<Result> results=new ArrayList<>();
         public Map<String,Result> best=new LinkedHashMap<>();
-        public Athlete(){for(var e:Exercise.values()){experience.put(e,0);fatigue.put(e,0.0);preferredLoads.put(e,e.minimumLoad());}}
+        public Athlete(){for(var e:Exercise.attributes()){experience.put(e,0);fatigue.put(e,0.0);}for(var e:Exercise.values())preferredLoads.put(e,e.minimumLoad());}
     }
     public record Step(Exercise exercise,int sets,int repetitions,int load,int restSeconds) {
         public Step {
@@ -90,8 +90,8 @@ public final class FitnessLedger {
     }
     public static int threshold(int level){int n=Math.clamp(level,0,20);return 100*n+25*n*(n-1)/2;}
     public static int level(int xp){int n=0;while(n<20&&xp>=threshold(n+1))n++;return n;}
-    public int level(Athlete a,Exercise e){return level(a.experience.getOrDefault(e,0));}
-    public double bonus(Athlete a,Exercise e){return settings.bonuses.get(e)*level(a,e)/20.0;}
+    public int level(Athlete a,Exercise e){return level(a.experience.getOrDefault(e.attribute(),0));}
+    public double bonus(Athlete a,Exercise e){return settings.bonuses.get(e.attribute())*level(a,e)/20.0;}
     public void saveRoutine(Athlete a,Routine routine){
         var existing=a.routines.stream().filter(r->r.id.equals(routine.id)).findFirst();
         if(existing.isEmpty()&&a.routines.size()>=12)throw new IllegalArgumentException("fitness.plan_limit");
@@ -108,7 +108,7 @@ public final class FitnessLedger {
     public int selectedLoad(Athlete a,Exercise e){var step=a.workout==null?null:a.workout.next();return step!=null&&step.exercise==e?a.workout.load(step):a.preferredLoads.getOrDefault(e,e.minimumLoad());}
     public int cycleLoad(Athlete a,Exercise e){
         int maximum=e.maximumLoad(level(a,e)),current=selectedLoad(a,e);if(maximum==e.minimumLoad())throw new IllegalArgumentException("fitness.load_locked");
-        int next=current>=maximum?e.minimumLoad():current+(e.weighted?5:1);e.checkLoad(next,level(a,e));a.preferredLoads.put(e,next);
+        int next=current>=maximum?e.minimumLoad():current+e.loadStep();e.checkLoad(next,level(a,e));a.preferredLoads.put(e,next);
         var step=a.workout==null?null:a.workout.next();if(step!=null&&step.exercise==e)a.workout.loadOverrides.put(a.workout.nextIndex(),next);return next;
     }
     public void ready(Athlete a,Exercise e,int load,int reps,long now){
@@ -129,10 +129,10 @@ public final class FitnessLedger {
         boolean complete=false,bonus=false;
         UUID workout=a.workout==null?null:a.workout.id;
         if(qualified){
-            if(game.repetitions>=8){a.validToday++;a.trainedToday.add(game.exercise);}
+            if(game.repetitions>=8){a.validToday++;a.trainedToday.add(game.exercise.attribute());}
             if(a.workout!=null&&a.workout.next()!=null){a.restUntil=now+a.workout.next().restSeconds*1000L;a.workout.completed++;complete=a.workout.next()==null;}
             else a.restUntil=now+15_000L;
-            a.fatigue.put(game.exercise,Math.min(1,a.fatigue.get(game.exercise)+settings.fatiguePerSet));
+            a.fatigue.put(game.exercise.attribute(),Math.min(1,a.fatigue.get(game.exercise.attribute())+settings.fatiguePerSet));
             if(!a.dailyComplete&&a.validToday>=settings.dailySets&&a.trainedToday.size()>=settings.dailyVariety){
                 a.dailyComplete=true;a.completedDays.add(a.dailyDay);bonus=true;
                 int each=settings.bonusXp/a.trainedToday.size();
@@ -146,7 +146,7 @@ public final class FitnessLedger {
         }
         return new Award(r,bonus,gain,complete);
     }
-    private int credit(Athlete a,Exercise e,int amount){int n=Math.max(0,Math.min(amount,Math.min(settings.dailyXp-a.earnedToday,threshold(20)-a.experience.get(e))));a.experience.merge(e,n,Integer::sum);a.earnedToday+=n;return n;}
+    private int credit(Athlete a,Exercise e,int amount){e=e.attribute();int n=Math.max(0,Math.min(amount,Math.min(settings.dailyXp-a.earnedToday,threshold(20)-a.experience.get(e))));a.experience.merge(e,n,Integer::sum);a.earnedToday+=n;return n;}
     private static boolean better(Result a,Result b){return a.points()>b.points()||a.points()==b.points()&&a.accuracy>b.accuracy;}
     public List<Result> leaders(Exercise e,int load,int reps,String period,String dimension,String gym,long now){
         observe(now);long cutoff=switch(period){
@@ -171,8 +171,8 @@ public final class FitnessLedger {
             Athlete a=Objects.requireNonNull(entry.getValue());Objects.requireNonNull(entry.getKey());
             if(a.name==null||a.name.length()>64||a.experience==null||a.experience.size()!=6||a.fatigue==null||a.fatigue.size()!=6||a.results==null||a.results.size()>4096||a.routines==null||a.routines.size()>12||a.best==null||a.best.size()>4096||a.completedDays==null||a.completedDays.size()>367||a.trainedToday==null||a.trainedToday.size()>6||a.earnedToday<0||a.earnedToday>10000||a.validToday<0||a.validToday>100000||a.recoveredAt<0||a.restUntil<0)
                 throw new IllegalArgumentException("fitness.corrupt_data");
-            for(var e:Exercise.values())if(a.experience.get(e)==null||a.experience.get(e)<0||a.experience.get(e)>threshold(20)||a.fatigue.get(e)==null||!Double.isFinite(a.fatigue.get(e))||a.fatigue.get(e)<0||a.fatigue.get(e)>1)throw new IllegalArgumentException("fitness.corrupt_data");
-            if(a.preferredLoads==null||a.preferredLoads.size()>6)throw new IllegalArgumentException("fitness.corrupt_data");
+            for(var e:Exercise.attributes())if(a.experience.get(e)==null||a.experience.get(e)<0||a.experience.get(e)>threshold(20)||a.fatigue.get(e)==null||!Double.isFinite(a.fatigue.get(e))||a.fatigue.get(e)<0||a.fatigue.get(e)>1)throw new IllegalArgumentException("fitness.corrupt_data");
+            if(a.preferredLoads==null||a.preferredLoads.size()>Exercise.values().length)throw new IllegalArgumentException("fitness.corrupt_data");
             for(var load:a.preferredLoads.entrySet())load.getKey().checkLoad(load.getValue(),level(a,load.getKey()));
             if(a.workout!=null){if(a.workout.loadOverrides==null||a.workout.loadOverrides.size()>8)throw new IllegalArgumentException("fitness.corrupt_data");for(var load:a.workout.loadOverrides.entrySet()){if(load.getKey()==null||load.getKey()<0||load.getKey()>=a.workout.plan.steps.size())throw new IllegalArgumentException("fitness.corrupt_data");Exercise exercise=a.workout.plan.steps.get(load.getKey()).exercise;exercise.checkLoad(load.getValue(),level(a,exercise));}}
             Set<UUID> plans=new HashSet<>();for(var r:a.routines){new Routine(r.id,r.name,r.weekday,r.steps);if(!plans.add(r.id))throw new IllegalArgumentException("fitness.corrupt_data");}

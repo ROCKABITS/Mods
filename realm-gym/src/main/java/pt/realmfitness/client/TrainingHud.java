@@ -45,6 +45,7 @@ public final class TrainingHud {
     private static void resetMovement(){var mc=Minecraft.getInstance();for(var key:new KeyMapping[]{mc.options.keyUp,mc.options.keyDown,mc.options.keyLeft,mc.options.keyRight,mc.options.keyJump,mc.options.keyShift,mc.options.keyAttack,mc.options.keyUse})key.setDown(false);}
     public void accept(JsonObject d){
         if(!id.equals(str(d,"id")))return;snapshots++;countdown=num(d,"countdown");state=d.getAsJsonObject("state");received=System.nanoTime();presentation.accept(num(state,"tick"),state.get("effort").getAsDouble(),state.get("balance").getAsDouble(),state.get("grip").getAsDouble(),received);presentation.acknowledge(num(state,"sequence"),str(state,"stage"));
+        presentation.pressure(state.get("leftPressure").getAsDouble(),state.get("rightPressure").getAsDouble());
         if(pendingPunch>=0&&num(state,"sequence")>=pendingPunch)pendingPunch=-1;
         int feedback=num(state,"feedbackId");if(feedback!=lastFeedback&&num(state,"feedbackTicks")>0){lastFeedback=feedback;String grade=str(state,"feedback");var player=Minecraft.getInstance().player;if(player!=null&&(grade.equals("perfect")||grade.equals("good")))player.playSound(net.minecraft.sounds.SoundEvents.EXPERIENCE_ORB_PICKUP,.16f,grade.equals("perfect")?1.45f:1.05f);}
     }

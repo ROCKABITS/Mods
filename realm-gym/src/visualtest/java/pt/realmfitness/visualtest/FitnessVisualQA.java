@@ -31,6 +31,7 @@ import pt.realmfitness.domain.FitnessLedger.*;
 /** Actual client inputs and C2S/S2C packets; no client-submitted scores or synthetic results. */
 @EventBusSubscriber(modid="realmfitness",value=Dist.CLIENT)
 public final class FitnessVisualQA {
+    private static final int COUNT=Exercise.values().length;
     private static final Path OUT=Path.of(System.getProperty("fitness.qaOutput"));
     private static final long START=System.currentTimeMillis();
     private static final List<String> CHECKS=new ArrayList<>(),CAPTURES=new ArrayList<>();
@@ -48,7 +49,7 @@ public final class FitnessVisualQA {
     private static Minecraft mc(){return Minecraft.getInstance();}
     private static void check(boolean condition,String message){if(!condition)throw new IllegalStateException(message);}
     private static ServerPlayer player(){return mc().getSingleplayerServer().getPlayerList().getPlayer(playerId);}
-    private static BlockPos station(int i){return new BlockPos(i*5-13,161,0);}
+    private static BlockPos station(int i){return new BlockPos(i*5-18,161,0);}
     private static final BlockPos BOARD=new BlockPos(0,161,5);
     private static void server(Runnable task){ready=false;mc().getSingleplayerServer().execute(()->{try{task.run();ready=true;}catch(Throwable e){failure=e;}});}
     private static boolean click(String key){if(mc().screen==null)return false;String label=key.startsWith("selectWorld.")||key.startsWith("gui.")?Component.translatable(key).getString():FitnessTheme.text(key);for(var c:List.copyOf(mc().screen.children()))if(c instanceof AbstractButton b&&b.active&&b.visible&&b.getMessage().getString().equals(label)){b.onPress();return true;}return false;}
@@ -57,13 +58,13 @@ public final class FitnessVisualQA {
     private static void prepare(){
         var p=player();var server=p.getServer();p.setGameMode(GameType.SURVIVAL);server.setDifficulty(Difficulty.PEACEFUL,true);p.serverLevel().setDayTime(6000);
         server.getGameRules().getRule(GameRules.RULE_DAYLIGHT).set(false,server);server.getGameRules().getRule(GameRules.RULE_WEATHER_CYCLE).set(false,server);server.getGameRules().getRule(GameRules.RULE_SPAWN_CHUNK_RADIUS).set(0,server);
-        for(int x=-17;x<=18;x++)for(int z=-5;z<=9;z++){for(int y=161;y<=164;y++)p.level().setBlockAndUpdate(new BlockPos(x,y,z),Blocks.AIR.defaultBlockState());p.level().setBlockAndUpdate(new BlockPos(x,160,z),Blocks.POLISHED_DEEPSLATE.defaultBlockState());}
+        for(int x=-22;x<=23;x++)for(int z=-5;z<=9;z++){for(int y=161;y<=164;y++)p.level().setBlockAndUpdate(new BlockPos(x,y,z),Blocks.AIR.defaultBlockState());p.level().setBlockAndUpdate(new BlockPos(x,160,z),Blocks.POLISHED_DEEPSLATE.defaultBlockState());}
         for(var e:Exercise.values()){var pos=station(e.ordinal());var block=FitnessMod.MACHINES.get(e).get();for(int i=0;i<18;i++)if(GymGeometry.contains(e,i))p.level().setBlock(GymBlock.cell(pos,Direction.NORTH,i),block.partState(Direction.NORTH,i),Block.UPDATE_CLIENTS|Block.UPDATE_KNOWN_SHAPE);check(block.intact(p.level(),pos),"Expanded visual machine is incomplete");}
         p.level().setBlockAndUpdate(BOARD,FitnessMod.BOARD.get().defaultBlockState());
         p.teleportTo(p.serverLevel(),.5,161,-3.5,0,0);p.getInventory().clearContent();
         var d=FitnessData.get(server);d.ledger=new FitnessLedger();var a=d.ledger.athlete(p.getUUID(),p.getGameProfile().getName(),System.currentTimeMillis());
         // Controlled baseline exposes a level-up from each genuinely played series.
-        for(var e:Exercise.values())a.experience.put(e,90);
+        for(var e:Exercise.values())a.experience.put(e.attribute(),90);
         d.persist(server);FitnessService.apply(p);FitnessService.open(p,null,false);
         folder=server.getWorldPath(LevelResource.ROOT).toAbsolutePath().normalize().getFileName().toString();
     }
@@ -88,6 +89,8 @@ public final class FitnessVisualQA {
             case PULL->{if(stage.equals("pull"))bits|=Minigame.SPACE;bits|=state.get("balance").getAsDouble()>.5?Minigame.A:Minigame.D;}
             case ROW->{double predicted=effort+((held&Minigame.W)!=0?pattern.rowChargeSpeed():0)*Math.min(3,(System.nanoTime()-received)/50_000_000.0);if(stage.equals("charge"))bits=predicted<.71?Minigame.W:0;else if(stage.equals("recover"))bits=Minigame.S;}
             case SQUAT->{double predicted=effort+((held&Minigame.W)!=0?.045:0)*Math.min(3,(System.nanoTime()-received)/50_000_000.0);if(stage.equals("rise"))bits=Minigame.S;else if(predicted<.73)bits=Minigame.W;}
+            case LEG_PRESS->{double elapsed=Math.min(2,(System.nanoTime()-received)/50_000_000.0),rate=pattern.legPressureRate();if(stage.equals("leg_push")){double left=state.get("leftPressure").getAsDouble()+((held&Minigame.A)!=0?rate:-rate*.7)*elapsed,right=state.get("rightPressure").getAsDouble()+((held&Minigame.D)!=0?rate:-rate*.7)*elapsed;if(left<state.get("target").getAsDouble())bits|=Minigame.A;if(right<state.get("target").getAsDouble())bits|=Minigame.D;}}
+            case TRICEPS->{if(stage.equals("rope_pull")){bits=Minigame.SPACE;double predicted=effort+pattern.ropeSpeed()*Math.min(2,(System.nanoTime()-received)/50_000_000.0);if(predicted>=.83&&predicted<=.91)bits|=Minigame.LEFT;}else if(stage.equals("rope_hold"))bits=Minigame.SPACE;}
         }
         for(int bit:new int[]{1,2,4,8,16,32,64})if((bits&bit)!=(held&bit)){
             boolean down=(bits&bit)!=0;
@@ -116,18 +119,22 @@ public final class FitnessVisualQA {
                 case 0->{if(mc().screen instanceof TitleScreen){mc().getWindow().setWindowed(1600,900);mc().options.pauseOnLostFocus=false;mc().options.renderDistance().set(3);mc().options.simulationDistance().set(5);mc().options.guiScale().set(2);mc().resizeDisplay();mc().getTutorial().setStep(net.minecraft.client.tutorial.TutorialSteps.NONE);CreateWorldScreen.openFresh(mc(),mc().screen);stage++;}else if(mc().screen!=null&&mc().screen.getClass().getSimpleName().contains("Accessibility")){for(var child:List.copyOf(mc().screen.children()))if(child instanceof AbstractButton b&&b.getMessage().getString().equals(Component.translatable("gui.continue").getString()))b.onPress();}}
                 case 1->{if(mc().screen instanceof CreateWorldScreen world){world.getUiState().setName("Realm Gym client QA");world.getUiState().setGameMode(WorldCreationUiState.SelectedGameMode.CREATIVE);world.getUiState().setAllowCommands(true);check(click("selectWorld.create"),"Create world button missing");stage++;}}
                 case 2->{if(mc().player!=null&&mc().getSingleplayerServer()!=null){playerId=mc().player.getUUID();server(FitnessVisualQA::prepare);stage++;}}
-                case 3->{if(!ready||!(mc().screen instanceof AthleteScreen))return;profile=((AthleteScreen)mc().screen).data();mc().setScreen(new Gallery(-1));stage++;next=now+2500;}
+                case 3->{if(!ready||!(mc().screen instanceof AthleteScreen))return;profile=((AthleteScreen)mc().screen).data();
+                    for(var name:List.of("leg_press_sled","triceps_stack","triceps_front_cable","triceps_stack_cable","triceps_clip","triceps_rope_left","triceps_rope_right")){
+                        var id=net.minecraft.client.resources.model.ModelResourceLocation.standalone(net.minecraft.resources.ResourceLocation.fromNamespaceAndPath("realmfitness","block/"+name));var model=mc().getModelManager().getModel(id);check(model!=mc().getModelManager().getMissingModel()&&!model.getParticleIcon().contents().name().getPath().contains("missing"),"Moving model failed to bake: "+name);
+                    }
+                    CHECKS.add("Leg press sled and all six moving triceps meshes baked with valid textures");mc().setScreen(new Gallery(-1));stage++;next=now+2500;}
                 case 4->{
-                    if(galleryIndex<6){if(galleryIndex<0)screenshot("fitness-six-machines.png");else screenshot("fitness-model-"+Exercise.values()[galleryIndex].id()+".png");if(++galleryIndex<6)mc().setScreen(new Gallery(galleryIndex));else worldModel(0);next=now+1300;}
-                    else{if(!ready)return;screenshot("fitness-world-"+Exercise.values()[galleryIndex-6].id()+".png");if(++galleryIndex<12){worldModel(galleryIndex-6);next=now+1500;}else{mc().options.hideGui=false;server(()->player().setGameMode(GameType.SURVIVAL));CHECKS.add("Six original detailed models captured individually as items and as complete expanded structures in the actual integrated world");mc().setScreen(new AthleteScreen(profile));stage++;next=now+1500;}}
+                    if(galleryIndex<COUNT){if(galleryIndex<0)screenshot("fitness-eight-machines.png");else screenshot("fitness-model-"+Exercise.values()[galleryIndex].id()+".png");if(++galleryIndex<COUNT)mc().setScreen(new Gallery(galleryIndex));else worldModel(0);next=now+1300;}
+                    else{if(!ready)return;screenshot("fitness-world-"+Exercise.values()[galleryIndex-COUNT].id()+".png");if(++galleryIndex<COUNT*2){worldModel(galleryIndex-COUNT);next=now+1500;}else{mc().options.hideGui=false;server(()->player().setGameMode(GameType.SURVIVAL));CHECKS.add("Eight original detailed models captured individually as items and as complete expanded structures in the actual integrated world");mc().setScreen(new AthleteScreen(profile));stage++;next=now+1500;}}
                 }
                 case 5->{screenshot("fitness-athlete-profile.png");check(click("tab.catalog"),"Catalog tab missing");stage++;next=now+800;}
                 case 6->{screenshot("fitness-machine-catalog.png");check(click("tab.routines"),"Routine tab missing");stage++;next=now+700;}
                 case 7->{screenshot("fitness-routines.png");check(click("new_plan"),"Visual plan editor missing");stage++;next=now+500;}
-                case 8->{check(mc().screen instanceof RoutineEditorScreen,"Editor failed to open");((EditBox)field(mc().screen,"nameField")).setValue("QA daily six");screenshot("fitness-plan-editor.png");check(click("save"),"Save routine widget missing");stage++;next=now+800;}
-                case 9->{if(!(mc().screen instanceof AthleteScreen screen))return;check(screen.data().getAsJsonArray("routines").asList().stream().anyMatch(e->FitnessClient.str(e.getAsJsonObject(),"name").equals("QA daily six")),"Routine was not saved over the real channel");
-                    // Use an explicit six-exercise plan; completed records still come exclusively from real game inputs.
-                    planId=UUID.randomUUID();List<Step> steps=Arrays.stream(Exercise.values()).map(e->new Step(e,1,8,e.minimumLoad(),5)).toList();FitnessNetwork.request("routine",new Routine(planId,"QA daily six",5,steps));stage++;next=now+600;}
+                case 8->{check(mc().screen instanceof RoutineEditorScreen,"Editor failed to open");((EditBox)field(mc().screen,"nameField")).setValue("QA daily eight");screenshot("fitness-plan-editor.png");check(click("save"),"Save routine widget missing");stage++;next=now+800;}
+                case 9->{if(!(mc().screen instanceof AthleteScreen screen))return;check(screen.data().getAsJsonArray("routines").asList().stream().anyMatch(e->FitnessClient.str(e.getAsJsonObject(),"name").equals("QA daily eight")),"Routine was not saved over the real channel");
+                    // Use an explicit eight-exercise plan; completed records still come exclusively from real game inputs.
+                    planId=UUID.randomUUID();List<Step> steps=Arrays.stream(Exercise.values()).map(e->new Step(e,1,8,e.minimumLoad(),5)).toList();FitnessNetwork.request("routine",new Routine(planId,"QA daily eight",5,steps));stage++;next=now+600;}
                 case 10->{FitnessNetwork.request("begin",Map.of("id",planId.toString()));stage++;next=now+600;}
                 case 11->{mc().setScreen(null);joinPhase=0;mountedSeen=false;server(FitnessVisualQA::exercise);stage++;}
                 case 12->{
@@ -139,7 +146,7 @@ public final class FitnessVisualQA {
                 case 13->{if(TrainingHud.active()!=null){if(mc().player.getVehicle() instanceof GymMount)mountedSeen=true;return;}if(!mountedSeen)return;int index=exercise;server(()->{check(!player().isPassenger(),"Finished set left player mounted");
                     var a=FitnessData.get(player().getServer()).ledger.athletes.get(playerId);check(a.results.size()==index+1,"Set result missing");var r=a.results.getLast();check(r.valid()>=5&&r.accuracy()>=50,"Real "+r.exercise()+" controls did not qualify: "+r.valid()+"/8 at "+r.accuracy()+"%");check(a.workout.completed==index+1,"Active routine did not advance exactly once");CHECKS.add("Actual "+r.exercise()+" minigame: "+r.valid()+"/8 valid at "+r.accuracy()+"%, saved through real player inputs");
                 });stage++;}
-                case 14->{if(!ready)return;if(++exercise<6){stage=11;return;}server(()->{var p=player();var a=FitnessData.get(p.getServer()).ledger.athletes.get(playerId);check(a.dailyComplete&&a.validToday==6&&a.completedDays.size()==1,"Daily completion was not recorded once");for(var e:Exercise.values())check(FitnessLedger.level(a.experience.get(e))>=1,"Permanent level missing for "+e);check(p.getAttribute(Attributes.ATTACK_DAMAGE).getModifiers().stream().anyMatch(m->m.id().getNamespace().equals("realmfitness")),"Permanent damage modifier missing");FitnessService.open(p,null,false);CHECKS.add("Six real sets complete a custom routine and exactly one daily bonus; permanent modifiers applied");});stage++;next=now+1000;}
+                case 14->{if(!ready)return;if(++exercise<COUNT){stage=11;return;}server(()->{var p=player();var a=FitnessData.get(p.getServer()).ledger.athletes.get(playerId);check(a.dailyComplete&&a.validToday==COUNT&&a.completedDays.size()==1,"Daily completion was not recorded once");for(var e:Exercise.values())check(FitnessLedger.level(a.experience.get(e.attribute()))>=1,"Permanent level missing for "+e);check(p.getAttribute(Attributes.ATTACK_DAMAGE).getModifiers().stream().anyMatch(m->m.id().getNamespace().equals("realmfitness")),"Permanent damage modifier missing");FitnessService.open(p,null,false);CHECKS.add("Eight real sets complete a custom routine and exactly one daily bonus; permanent modifiers applied");});stage++;next=now+1000;}
                 case 15->{if(!ready||!(mc().screen instanceof AthleteScreen))return;check(click("tab.profile"),"Profile tab missing");stage++;next=now+900;}
                 case 16->{screenshot("fitness-earned-attributes.png");check(click("tab.history"),"Journal tab missing");stage++;next=now+800;}
                 case 17->{screenshot("fitness-real-history.png");check(click("tab.records"),"Record view missing");stage++;next=now+700;}
@@ -153,12 +160,12 @@ public final class FitnessVisualQA {
                 case 25->{screenshot("fitness-live-record-board.png");stage=30;}
                 case 26->{if(!ready)return;mc().level.disconnect();mc().disconnect();mc().setScreen(new TitleScreen());stage++;}
                 case 27->{if(mc().getSingleplayerServer()!=null||mc().level!=null)return;mc().createWorldOpenFlows().openWorld(folder,()->mc().setScreen(new TitleScreen()));stage++;}
-                case 28->{if(mc().player==null||mc().getSingleplayerServer()==null)return;server(()->{var p=player();var a=FitnessData.get(p.getServer()).ledger.athletes.get(playerId);check(a.results.size()==6&&a.dailyComplete&&a.workout.completed==6,"World reopen lost or duplicated workout records");check(!p.isPassenger()&&p.serverLevel().getEntitiesOfClass(GymMount.class,new net.minecraft.world.phys.AABB(-20,158,-8,22,168,12)).isEmpty(),"World close/reopen left a passenger or temporary gym vehicle");check(!p.level().getBlockState(station(2)).getValue(GymBlock.WORKING),"World close/reopen left equipment stuck in use");for(var e:Exercise.values())check(FitnessLedger.level(a.experience.get(e))>=1,"World reopen lost permanent levels");FitnessService.apply(p);double first=p.getAttributeValue(Attributes.ATTACK_DAMAGE);FitnessService.apply(p);check(first==p.getAttributeValue(Attributes.ATTACK_DAMAGE),"World reopen stacked modifiers");CHECKS.add("Actual world close/reopen preserves levels, routine completion, six results and daily reward without modifier stacking");});stage++;}
-                case 29->{if(ready){check(TrainingHud.interpolatedFrames>0,"HUD never advanced between authoritative snapshots");CHECKS.add("HUD rendered interpolated motion between server snapshots; scoring remains authoritative");complete(true,"Six actual minigames, RPG menus, custom routine, persistent progression and world leaderboard passed");}}
-                case 30->{exercise=cancelMode==0?0:cancelMode==1?1:2;mc().setScreen(null);server(()->{var p=player();var a=FitnessData.get(p.getServer()).ledger.athletes.get(playerId);a.restUntil=0;var pos=station(exercise);p.teleportTo(p.serverLevel(),pos.getX()+.5,161,-1.8,0,0);});stage=31;}
+                case 28->{if(mc().player==null||mc().getSingleplayerServer()==null)return;server(()->{var p=player();var a=FitnessData.get(p.getServer()).ledger.athletes.get(playerId);check(a.results.size()==COUNT&&a.dailyComplete&&a.workout.completed==COUNT,"World reopen lost or duplicated workout records");check(!p.isPassenger()&&p.serverLevel().getEntitiesOfClass(GymMount.class,new net.minecraft.world.phys.AABB(-30,158,-8,35,168,12)).isEmpty(),"World close/reopen left a passenger or temporary gym vehicle");check(!p.level().getBlockState(station(2)).getValue(GymBlock.WORKING),"World close/reopen left equipment stuck in use");for(var e:Exercise.values())check(FitnessLedger.level(a.experience.get(e.attribute()))>=1,"World reopen lost permanent levels");FitnessService.apply(p);double first=p.getAttributeValue(Attributes.ATTACK_DAMAGE);FitnessService.apply(p);check(first==p.getAttributeValue(Attributes.ATTACK_DAMAGE),"World reopen stacked modifiers");CHECKS.add("Actual world close/reopen preserves levels, routine completion, eight results and daily reward without modifier stacking");});stage++;}
+                case 29->{if(ready){check(TrainingHud.interpolatedFrames>0,"HUD never advanced between authoritative snapshots");CHECKS.add("HUD rendered interpolated motion between server snapshots; scoring remains authoritative");complete(true,"Eight actual minigames, RPG menus, custom routine, persistent progression and world leaderboard passed");}}
+                case 30->{exercise=cancelMode==0?Exercise.LEG_PRESS.ordinal():cancelMode==1?Exercise.TRICEPS.ordinal():2;mc().setScreen(null);server(()->{var p=player();var a=FitnessData.get(p.getServer()).ledger.athletes.get(playerId);a.restUntil=0;var pos=station(exercise);p.teleportTo(p.serverLevel(),pos.getX()+.5,161,-1.8,0,0);});stage=31;}
                 case 31->{if(!ready)return;useMachine();stage=32;next=now+500;}
                 case 32->{if(TrainingHud.active()==null||!(mc().player.getVehicle() instanceof GymMount))return;if(cancelMode==2){CHECKS.add("World close while actually mounted is exercised before reopen");stage=26;return;}if(cancelMode==0)TrainingHud.active().keyPressed(GLFW.GLFW_KEY_LEFT_SHIFT,0,0);else server(()->player().level().destroyBlock(station(exercise),true));stage=33;next=now+600;}
-                case 33->{if(TrainingHud.active()!=null)return;server(()->{check(!player().isPassenger(),"Cancelled set left player mounted");check(FitnessData.get(player().getServer()).ledger.athletes.get(playerId).results.size()==6,"Cancelled set awarded a result");if(cancelMode==0)check(!player().level().getBlockState(station(exercise)).getValue(GymBlock.WORKING),"Cancelled set left animated machine state");});stage=34;}
+                case 33->{if(TrainingHud.active()!=null)return;server(()->{check(!player().isPassenger(),"Cancelled set left player mounted");check(FitnessData.get(player().getServer()).ledger.athletes.get(playerId).results.size()==COUNT,"Cancelled set awarded a result");if(cancelMode==0)check(!player().level().getBlockState(station(exercise)).getValue(GymBlock.WORKING),"Cancelled set left animated machine state");});stage=34;}
                 case 34->{if(!ready)return;CHECKS.add(cancelMode==0?"Actual SHIFT input dismounts, restores equipment and creates no reward":"Breaking occupied equipment dismounts the actual player and creates no reward");cancelMode++;stage=30;}
                 default->throw new IllegalStateException("Unknown QA stage");
             }
@@ -170,11 +177,11 @@ public final class FitnessVisualQA {
         @Override public void renderBackground(GuiGraphics g,int mx,int my,float p){}
         @Override public void render(GuiGraphics g,int mx,int my,float partial){
             g.fillGradient(0,0,width,height,0xFF17121F,0xFF0E111B);g.drawCenteredString(font,"REALM GYM",width/2,20,FitnessTheme.ACCENT);
-            int cw=selected<0?(width-48)/3:width-48,ch=selected<0?(height-70)/2:height-70;
+            int cw=selected<0?(width-48)/3:width-48,ch=selected<0?(height-70)/((COUNT+2)/3):height-70;
             for(var e:Exercise.values()){
                 if(selected>=0&&e.ordinal()!=selected)continue;int bx=selected<0?24+e.ordinal()%3*cw:24,by=selected<0?45+e.ordinal()/3*ch:45;FitnessTheme.frame(g,bx,by,cw-8,ch-10,0xFF241D2F);
                 var item=new ItemStack(FitnessMod.MACHINES.get(e).get());var model=mc().getItemRenderer().getModel(item,null,null,0);check(!model.getParticleIcon().contents().name().getPath().contains("missing"),"Missing machine texture");
-                g.pose().pushPose();int scale=selected<0?8:17;g.pose().translate(bx+cw/2-8*scale,by+ch/2-8*scale-10,0);g.pose().scale(scale,scale,scale);g.renderItem(item,0,0);g.pose().popPose();
+                g.pose().pushPose();int scale=selected<0?5:17;g.pose().translate(bx+cw/2-8*scale,by+ch/2-8*scale-10,0);g.pose().scale(scale,scale,scale);g.renderItem(item,0,0);g.pose().popPose();
                 g.drawCenteredString(font,FitnessTheme.exercise(e),bx+cw/2-4,by+ch-29,FitnessTheme.INK);
             }
             g.drawCenteredString(font,"Minecraft 1.21.1 · NeoForge · actual models",width/2,height-16,FitnessTheme.MUTED);

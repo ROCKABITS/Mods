@@ -41,7 +41,7 @@ As regras completas de planos, fadiga, limites e classificações são partilhad
 
 ## Desenvolvimento
 
-A compilação usa o monorepo: mantém `realm-gym` ao lado desta pasta. O Gradle partilha as regras de treino, matemática das animações, contactos/colisões, testes JUnit, modelos, texturas e traduções; adapta apenas as conveniências Java 21 e os formatos de recursos. O JAR final é independente da pasta de fontes e não inclui Minecraft, Forge nem classes de teste.
+A pasta `shared` conserva a base verificada da 0.5.1: regras de treino, matemática das animações, contactos/colisões, testes JUnit, modelos, texturas e traduções. O Gradle adapta as conveniências Java 21 e os formatos de recursos. Esta base permite desenvolver máquinas novas na edição 1.21.1 sem alterar o conteúdo publicado para 1.20.1. O JAR final é independente da pasta de fontes e não inclui Minecraft, Forge nem classes de teste.
 
 ```sh
 cd realm-gym-forge-1.20.1
