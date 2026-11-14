@@ -1,0 +1,21 @@
+modLoader="javafml"
+loaderVersion="[52,)"
+license="All Rights Reserved"
+[[mods]]
+modId="realmfitness"
+version="${mod_version}"
+displayName="Realm Gym"
+logoFile="realm-gym-icon.png"
+description="Eight animated gym machines, skill minigames, permanent progression, workout plans and live leaderboards. Forge 1.21.1 edition."
+[[dependencies.realmfitness]]
+modId="forge"
+mandatory=true
+versionRange="[52.1.20,53)"
+ordering="NONE"
+side="BOTH"
+[[dependencies.realmfitness]]
+modId="minecraft"
+mandatory=true
+versionRange="[1.21.1]"
+ordering="NONE"
+side="BOTH"

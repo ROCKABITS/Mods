@@ -8,6 +8,8 @@ The repository contains standalone mods that can also integrate with one another
 
 **Minecraft 1.21.1 / Fabric / Java 21:** [Realm Gym 0.6.0](realm-gym-fabric-1.21.1/README.md), com as oito máquinas. [Descarregar JAR](mod-pronto/realm-gym-0.6.0-fabric-1.21.1.jar) · [Galeria](media/realm-gym/0.6.0-fabric-1.21.1/README.md). Requer Fabric API.
 
+**Minecraft 1.21.1 / Forge / Java 21:** [Realm Gym 0.6.0](realm-gym-forge-1.21.1/README.md), com as oito máquinas. [Descarregar JAR](mod-pronto/realm-gym-0.6.0-forge-1.21.1.jar) · [Galeria](media/realm-gym/0.6.0-forge-1.21.1/README.md). Requer Forge 52.1.20+.
+
 > **Multiplayer rule:** unless a mod's guide says otherwise, install the same mod version on the server and every client. **Season 8 is client-side only.** Always check each mod's guide for its required dependencies and compatibility notes.
 
 ## Start here

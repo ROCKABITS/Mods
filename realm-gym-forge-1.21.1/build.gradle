@@ -1,0 +1,69 @@
+plugins {
+    id 'java-library'
+    id 'net.minecraftforge.gradle' version '7.0.3'
+}
+version = mod_version
+group = mod_group_id
+base { archivesName = 'realm-gym' }
+java.toolchain.languageVersion = JavaLanguageVersion.of(21)
+def shared = layout.buildDirectory.dir('generated/sources/shared')
+tasks.register('prepareSharedJava', Sync) {
+    from('../realm-gym/src/main/java') {
+        include 'pt/realmfitness/domain/**', 'pt/realmfitness/GymGeometry.java', 'pt/realmfitness/GymLayout.java',
+            'pt/realmfitness/GymBlock.java', 'pt/realmfitness/RecordBoardBlock.java', 'pt/realmfitness/RecordBoardEntity.java',
+            'pt/realmfitness/client/AthleteScreen.java', 'pt/realmfitness/client/RoutineEditorScreen.java',
+            'pt/realmfitness/client/FitnessRig.java', 'pt/realmfitness/client/FitnessTheme.java',
+            'pt/realmfitness/client/MinigameHudRenderer.java', 'pt/realmfitness/client/TrainingPresentation.java',
+            'pt/realmfitness/client/ExercisePose.java', 'pt/realmfitness/client/RecordBoardRenderer.java'
+    }
+    into shared
+}
+sourceSets.main.java.srcDir shared
+sourceSets.test.java.srcDir '../realm-gym/src/test/java'
+sourceSets.main.resources.srcDir '../realm-gym/src/main/resources'
+tasks.named('compileJava') { dependsOn 'prepareSharedJava' }
+if (project.hasProperty('fitnessGameTests')) {
+    sourceSets.main.java.srcDir 'src/gametest/java'
+    sourceSets.main.resources.srcDir 'src/gametest/resources'
+}
+if (project.hasProperty('fitnessVisualTests')) sourceSets.main.java.srcDir 'src/visualtest/java'
+minecraft {
+    mappings channel: 'official', version: minecraft_version
+    runs {
+        configureEach { workingDir = layout.projectDirectory.dir('run'); systemProperty 'forge.enabledGameTestNamespaces', 'realmfitness' }
+        register('client') {
+            if (project.hasProperty('fitnessVisualTests')) {
+                systemProperty 'fitness.qaOutput', file('qa-results/client').absolutePath
+                args '--width', '1600', '--height', '900'
+            }
+        }
+        register('server') { args '--nogui' }
+        register('gameTestServer')
+    }
+}
+repositories {
+    minecraft.mavenizer(it)
+    maven fg.forgeMaven
+    maven fg.minecraftLibsMaven
+    mavenCentral()
+}
+dependencies {
+    implementation minecraft.dependency("net.minecraftforge:forge:${minecraft_version}-${forge_version}")
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.11.4'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
+tasks.named('test', Test) { useJUnitPlatform() }
+processResources {
+    exclude 'META-INF/neoforge.mods.toml'
+    filesMatching('META-INF/mods.toml') { expand mod_version: project.version }
+}
+tasks.named('jar', Jar) { exclude 'pt/realmfitness/test/**', 'pt/realmfitness/visualtest/**', 'data/realmfitness/structure/empty.nbt' }
+tasks.withType(JavaCompile).configureEach { options.encoding = 'UTF-8'; options.release = 21 }
+
+// Apply local test properties after ForgeGradle registers the run tasks.
+tasks.withType(JavaExec).configureEach {
+    if (name == 'runGameTestServer') systemProperty 'forge.enabledGameTestNamespaces', 'realmfitness'
+    if (name == 'runClient' && project.hasProperty('fitnessVisualTests')) {
+        systemProperty 'fitness.qaOutput', file('qa-results/client').absolutePath
+    }
+}
