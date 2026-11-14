@@ -1,0 +1,18 @@
+{
+  "required": true,
+  "package": "pt.realmfitness.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "mixins": [
+    "LivingEntityMixin"
+  ],
+  "client": [
+    "PlayerRendererMixin",
+    "KeyboardHandlerMixin",
+    "MouseHandlerMixin",
+    "KeyboardInputMixin",
+    "MinecraftMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
