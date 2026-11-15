@@ -1,6 +1,6 @@
 # Realm Gym 0.7.0 Beta
 
-Capturas do Minecraft 1.21.1 com NeoForge 21.1.256 e Java 21. [Validacao CI](https://github.com/ROCKABITS/Mods/actions/runs/43727389173).
+Capturas do Minecraft 1.21.1 com NeoForge 21.1.256 e Java 21. [Validacao CI](https://github.com/ROCKABITS/Mods/actions/runs/43753506704).
 
 Botão direito: montar e treinar. Agachar + botão direito: aumentar carga. SHIFT durante o treino: sair. F5: câmara.
 
