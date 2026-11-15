@@ -1,6 +1,6 @@
 # Realm Gym 0.7.0-forge-1.20.1 Beta
 
-Capturas do Minecraft 1.20.1 com Forge 47.4.0 e Java 17. [Validacao CI](https://github.com/ROCKABITS/Mods/actions/runs/43726997372).
+Capturas do Minecraft 1.20.1 com Forge 47.4.0 e Java 17. [Validacao CI](https://github.com/ROCKABITS/Mods/actions/runs/43753506663).
 
 Botão direito: montar e treinar. Agachar + botão direito: aumentar carga. SHIFT durante o treino: sair. F5: câmara.
 
