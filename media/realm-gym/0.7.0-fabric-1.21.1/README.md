@@ -1,6 +1,6 @@
 # Realm Gym 0.7.0-fabric-1.21.1 Beta
 
-Capturas do Minecraft 1.21.1 com Fabric Loader 0.16.14, Fabric API 0.116.18+1.21.1 e Java 21. [Validacao CI](https://github.com/ROCKABITS/Mods/actions/runs/43726997404).
+Capturas do Minecraft 1.21.1 com Fabric Loader 0.16.14, Fabric API 0.116.18+1.21.1 e Java 21. [Validacao CI](https://github.com/ROCKABITS/Mods/actions/runs/43753506715).
 
 Botão direito: montar e treinar. Agachar + botão direito: aumentar carga. SHIFT durante o treino: sair. F5: câmara.
 
