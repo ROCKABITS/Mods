@@ -1,12 +1,14 @@
-# Realm Gym 0.7.0 Beta — Forge 1.21.1
+# Realm Gym 0.7.1 Beta — Forge 1.21.1
 
-Edição Forge das oito máquinas, minijogos, animações articuladas, atributos permanentes, planos de treino e recordes do Realm Gym 0.7.0. Inclui **leg press e tríceps com corda**.
+Edição Forge das oito máquinas, minijogos, animações articuladas, atributos permanentes, planos de treino e recordes do Realm Gym 0.7.1. Inclui **leg press e tríceps com corda**.
 
 **Requisitos:** Minecraft **1.21.1**, **Java 21**, **Forge 52.1.20+**. Instala o mesmo Realm Gym no servidor e nos clientes. Cada loader tem o seu ficheiro de instalação.
 
-[Descarregar JAR](../mod-pronto/realm-gym-0.7.0-forge-1.21.1.jar) · [ZIP](../mod-pronto/realm-gym-0.7.0-forge-1.21.1.zip) · [Galeria e animações](../media/realm-gym/0.7.0-forge-1.21.1/README.md) · [Validação](VALIDACAO.md) · [Publicar no CurseForge](CURSEFORGE.md)
+[Descarregar JAR](../mod-pronto/realm-gym-0.7.1-forge-1.21.1.jar) · [ZIP](../mod-pronto/realm-gym-0.7.1-forge-1.21.1.zip) · [Galeria e animações](../media/realm-gym/0.7.1-forge-1.21.1/README.md) · [Validação](VALIDACAO.md) · [Publicar no CurseForge](CURSEFORGE.md)
 
-**Novo na 0.7.0:** [condição física opcional](../realm-gym/CONDITIONING.md), com perda gradual dos bónus por inatividade e recuperação através de manutenção. Desativada por defeito; o servidor ativa `conditioning.enabled` em `config/realm-fitness.json` e executa `/gym reload`. XP, cargas desbloqueadas e recordes permanecem guardados. Atualiza servidor e clientes em conjunto.
+**Novo na 0.7.1:** [condição física opcional](../realm-gym/CONDITIONING.md), com perda gradual dos bónus por inatividade e recuperação através de manutenção. Desativada por defeito; um operador ativa com `/gym conditioning on` e desativa com `/gym conditioning off`; `/gym conditioning status` consulta o estado. XP, cargas desbloqueadas e recordes permanecem guardados. Atualiza servidor e clientes em conjunto.
+
+**Comandos da 0.7.1:** `/gym conditioning on` ativa e `/gym conditioning off` desativa, com aplicação imediata e gravação automática. Requer operador para alterar; qualquer jogador pode consultar `/gym conditioning status`. Também funciona na consola e através de `/fitness conditioning`. Não é necessário editar ficheiros nem executar `/gym reload`.
 
 ## Jogar
 
@@ -31,7 +33,7 @@ A edição Forge partilha as regras, modelos, pontos de contacto e ecrãs com a 
 
 Os seis atributos continuam a dar dano corpo a corpo, velocidade de movimento, velocidade de ataque, proteção contra quedas, velocidade de natação e altura de salto. A natação usa o atributo `forge:swim_speed`; a queda usa a redução calculada no servidor. Não requer Realm Origins nem um mod de stats.
 
-A configuração mantém-se em `config/realm-fitness.json` e a progressão em `data/realm_fitness.dat`, com o mesmo formato da 0.7.0. Os treinos e recordes pertencem ao mundo. As montagens temporárias não são gravadas e uma série interrompida não atribui XP.
+A configuração mantém-se em `config/realm-fitness.json` e a progressão em `data/realm_fitness.dat`, com o mesmo formato da 0.7.1. Os treinos e recordes pertencem ao mundo. As montagens temporárias não são gravadas e uma série interrompida não atribui XP.
 
 ## Desenvolvimento
 
@@ -43,8 +45,8 @@ echo 'eula=true' > run/eula.txt
 ./gradlew -PfitnessVisualTests runClient
 ```
 
-O JAR para distribuir é `build/libs/realm-gym-0.7.0-forge-1.21.1.jar`. Usa ForgeGradle 7.0.3, Gradle 9.3.1 e os mappings oficiais Mojang, também usados pelo runtime Forge 52 atual. O JAR final é testado numa instalação oficial de servidor, além dos testes de desenvolvimento. As fixtures são excluídas da distribuição.
+O JAR para distribuir é `build/libs/realm-gym-0.7.1-forge-1.21.1.jar`. Usa ForgeGradle 7.0.3, Gradle 9.3.1 e os mappings oficiais Mojang, também usados pelo runtime Forge 52 atual. O JAR final é testado numa instalação oficial de servidor, além dos testes de desenvolvimento. As fixtures são excluídas da distribuição.
 
 Para desenvolver, instala JDKs **8, 21 e 25**, detetáveis pelo Gradle ou pelas variáveis `JAVA_HOME_8_X64`, `JAVA_HOME_21_X64` e `JAVA_HOME_25_X64`. O Mavenizer e o launcher usam ferramentas separadas; a compilação e o jogo usam Java 21. **Os jogadores só precisam de Java 21.**
 
-O núcleo de domínio, geometrias, recursos, poses, apresentação e vários ecrãs são compilados diretamente de `../realm-gym`. Os adaptadores Forge ficam neste projeto: registos, ciclo de vida, rede, montagem, efeitos físicos, renderização e controlos. A edição Forge 1.20.1 conserva as seis máquinas e recebe a mesma condição física na 0.7.0.
+O núcleo de domínio, geometrias, recursos, poses, apresentação e vários ecrãs são compilados diretamente de `../realm-gym`. Os adaptadores Forge ficam neste projeto: registos, ciclo de vida, rede, montagem, efeitos físicos, renderização e controlos. A edição Forge 1.20.1 conserva as seis máquinas e recebe a mesma condição física na 0.7.1.

@@ -60,13 +60,21 @@ public final class FitnessVisualQA {
         p.teleportTo(p.serverLevel(),.5,161,-3.5,0,0);p.getInventory().clearContent();
         var d=FitnessData.get(server);d.ledger=new FitnessLedger();
         // Isolate the daily boundary and enable the optional feature for this QA world.
-        var settings=new Settings();settings.resetMinute=(int)Math.floorMod(System.currentTimeMillis()/60_000L+720,1440);settings.conditioning.enabled=true;
+        var settings=new Settings();settings.resetMinute=(int)Math.floorMod(System.currentTimeMillis()/60_000L+720,1440);settings.conditioning.enabled=false;
         try{Files.writeString(net.fabricmc.loader.api.FabricLoader.getInstance().getConfigDir().resolve("realm-fitness.json"),FitnessLedger.JSON.toJson(settings));}catch(java.io.IOException error){throw new IllegalStateException("Cannot configure isolated QA day",error);}
-        FitnessService.reload(server);var a=d.ledger.athlete(p.getUUID(),p.getGameProfile().getName(),System.currentTimeMillis());
+        FitnessService.reload(server);command(server,"gym conditioning on");var a=d.ledger.athlete(p.getUUID(),p.getGameProfile().getName(),System.currentTimeMillis());
         // Controlled baseline exposes a level-up from each genuinely played series.
         for(var e:Exercise.values())a.experience.put(e.attribute(),90);
         // Seed condition, never scores; recovery is earned through the actual minigames below.
         a.condition.get(Exercise.BENCH).percent=80;a.condition.get(Exercise.SQUAT).percent=80;
+        // Exercise the real operator command tree against the connected player and saved config.
+        a.experience.put(Exercise.BENCH,100);FitnessService.apply(p);
+        command(server,"gym conditioning off");check(!FitnessService.conditioningEnabled(server),"Disable command did not apply immediately");
+        check(Math.abs(p.getAttributeValue(Attributes.ATTACK_DAMAGE)-p.getAttribute(Attributes.ATTACK_DAMAGE).getBaseValue()*(1+d.ledger.baseBonus(a,Exercise.BENCH)))<.000001,"Disable command did not restore the connected player's full bonus");
+        command(server,"gym conditioning on");command(server,"gym conditioning status");
+        check(FitnessService.conditioningEnabled(server)&&d.ledger.condition(a,Exercise.BENCH)==80,"Enable command lost saved physical condition");
+        check(Math.abs(p.getAttributeValue(Attributes.ATTACK_DAMAGE)-p.getAttribute(Attributes.ATTACK_DAMAGE).getBaseValue()*(1+d.ledger.bonus(a,Exercise.BENCH)))<.000001,"Enable command did not update the connected player's real bonus");
+        a.experience.put(Exercise.BENCH,90);CHECKS.add("Conditioning on/off/status commands immediately update the connected player and preserve saved condition");
         d.persist(server);FitnessService.apply(p);FitnessService.open(p,null,false);
         folder=server.getWorldPath(LevelResource.ROOT).toAbsolutePath().normalize().getFileName().toString();
     }
@@ -114,7 +122,10 @@ public final class FitnessVisualQA {
         check(d.ledger.condition(a,Exercise.BENCH)==100&&d.ledger.condition(a,Exercise.SQUAT)==100,"Actual sets did not preserve the expected condition or recover it once");
         check(Math.abs(p.getAttributeValue(Attributes.ATTACK_DAMAGE)-p.getAttribute(Attributes.ATTACK_DAMAGE).getBaseValue()*(1+d.ledger.bonus(a,Exercise.BENCH)))<.000001,"Effective condition bonus differs from actual damage attribute");
     }
-    private static void complete(boolean success,String message){done=true;try{Files.createDirectories(OUT);Map<String,Object> result=new LinkedHashMap<>();result.put("success",success);result.put("stage",stage);result.put("message",message);result.put("checks",CHECKS);result.put("screenshots",CAPTURES);result.put("actualMinecraftClient",true);result.put("actualIntegratedServer",true);result.put("controlledBaselineXp",90);result.put("syntheticSetResults",false);result.put("actualMountedMinigames",true);result.put("optionalConditioning",true);result.put("motionFrames",FRAMES);result.put("hudPresentation",Map.of("frames",TrainingHud.renderedFrames,"interpolatedFrames",TrainingHud.interpolatedFrames,"snapshots",TrainingHud.snapshots));Files.writeString(OUT.resolve("result.json"),new GsonBuilder().setPrettyPrinting().create().toJson(result));}catch(Exception e){e.printStackTrace();}System.out.println(success?"FITNESS_CLIENT_PASSED":"FITNESS_CLIENT_FAILED "+message);mc().stop();}
+    private static void command(net.minecraft.server.MinecraftServer server,String command){
+        try{check(server.getCommands().getDispatcher().execute(command,server.createCommandSourceStack().withSuppressedOutput())==1,"Operator command failed: "+command);}catch(com.mojang.brigadier.exceptions.CommandSyntaxException error){throw new IllegalStateException(error);}
+    }
+    private static void complete(boolean success,String message){done=true;try{Files.createDirectories(OUT);Map<String,Object> result=new LinkedHashMap<>();result.put("success",success);result.put("stage",stage);result.put("message",message);result.put("checks",CHECKS);result.put("screenshots",CAPTURES);result.put("actualMinecraftClient",true);result.put("actualIntegratedServer",true);result.put("controlledBaselineXp",90);result.put("syntheticSetResults",false);result.put("actualMountedMinigames",true);result.put("optionalConditioning",true);result.put("conditioningCommands",true);result.put("motionFrames",FRAMES);result.put("hudPresentation",Map.of("frames",TrainingHud.renderedFrames,"interpolatedFrames",TrainingHud.interpolatedFrames,"snapshots",TrainingHud.snapshots));Files.writeString(OUT.resolve("result.json"),new GsonBuilder().setPrettyPrinting().create().toJson(result));}catch(Exception e){e.printStackTrace();}System.out.println(success?"FITNESS_CLIENT_PASSED":"FITNESS_CLIENT_FAILED "+message);mc().stop();}
     public static void tick(net.minecraft.client.Minecraft event){
         if(done)return;long now=System.currentTimeMillis();
         try{

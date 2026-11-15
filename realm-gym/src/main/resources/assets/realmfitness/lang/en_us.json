@@ -193,5 +193,10 @@
   "fitness.conditioning.no_loss": "No further loss scheduled",
   "fitness.conditioning.real_time": "Real time, including time offline",
   "fitness.conditioning.online_time": "Only time spent connected counts",
-  "fitness.conditioning.disabled": "Physical condition is disabled on this server"
+  "fitness.conditioning.disabled": "Physical condition is disabled on this server",
+  "fitness.conditioning.status_on": "Physical condition is enabled on this server.",
+  "fitness.conditioning.status_off": "Physical condition is disabled on this server.",
+  "fitness.conditioning.turned_on": "Physical condition enabled. The setting is saved and applies immediately.",
+  "fitness.conditioning.turned_off": "Physical condition disabled. Full level bonuses restored; setting saved.",
+  "fitness.conditioning.command_failed": "Could not read or save the setting. Check the server log."
 }

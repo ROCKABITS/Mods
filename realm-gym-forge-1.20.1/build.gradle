@@ -12,7 +12,7 @@ java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 def sharedJava = layout.buildDirectory.dir('generated/sources/shared')
 tasks.register('prepareSharedJava', Sync) {
     from('shared/java') {
-        include 'pt/realmfitness/domain/**', 'pt/realmfitness/GymGeometry.java', 'pt/realmfitness/GymLayout.java',
+        include 'pt/realmfitness/ConditioningCommands.java', 'pt/realmfitness/domain/**', 'pt/realmfitness/GymGeometry.java', 'pt/realmfitness/GymLayout.java',
             'pt/realmfitness/client/ExercisePose.java', 'pt/realmfitness/client/TrainingPresentation.java'
         filter { line -> line.replace('Math.clamp(', 'pt.realmfitness.domain.FitnessMath.clamp(') }
     }

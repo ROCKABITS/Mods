@@ -51,7 +51,8 @@ public final class FitnessMod implements ModInitializer {
         CommandRegistrationCallback.EVENT.register((dispatcher,access,environment)->{
             var gym=dispatcher.register(Commands.literal("gym").executes(c->{FitnessService.open(c.getSource().getPlayerOrException(),null,false);return 1;})
                 .then(Commands.literal("equipment").requires(s->s.hasPermission(2)).executes(c->{var player=c.getSource().getPlayerOrException();for(var b:MACHINES.values())give(player,new ItemStack(b.get()));give(player,new ItemStack(BOARD.get()));give(player,new ItemStack(CARD.get()));return 1;}))
-                .then(Commands.literal("reload").requires(s->s.hasPermission(2)).executes(c->{FitnessService.reload(c.getSource().getServer());c.getSource().sendSuccess(()->Component.translatable("fitness.settings_reloaded"),false);return 1;})));
+                .then(ConditioningCommands.create())
+            .then(Commands.literal("reload").requires(s->s.hasPermission(2)).executes(c->{FitnessService.reload(c.getSource().getServer());c.getSource().sendSuccess(()->Component.translatable("fitness.settings_reloaded"),false);return 1;})));
             dispatcher.register(Commands.literal("fitness").executes(gym.getCommand()).redirect(gym));
         });
         ServerTickEvents.END_SERVER_TICK.register(FitnessService::tick);

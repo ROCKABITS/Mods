@@ -1,10 +1,24 @@
-# Condição física — Realm Gym 0.7.0
+# Condição física — Realm Gym 0.7.1
 
 O sistema é opcional e vem **desativado por defeito** nas quatro edições. Os níveis, o XP, as cargas desbloqueadas, os planos e os recordes continuam permanentes. Quando ativado, a condição física de cada um dos seis atributos multiplica o respetivo bónus do Realm Gym.
 
-## Ativar no servidor
+## Ativar e desativar no Minecraft
 
-Atualiza o servidor e todos os clientes para a mesma edição 0.7.0. Em `config/realm-fitness.json`, altera `conditioning.enabled` para `true` e executa `/gym reload` como operador. O mod acrescenta automaticamente este bloco às configurações antigas, preservando os outros valores:
+Atualiza o servidor e os clientes para a mesma edição 0.7.1. Um operador pode usar:
+
+```text
+/gym conditioning on
+/gym conditioning off
+/gym conditioning status
+```
+
+`on` ativa e `off` desativa a condição física para todo o servidor, com aplicação imediata aos jogadores ligados. A alteração é guardada automaticamente e mantém-se após reinícios. **Não é preciso editar ficheiros nem executar `/gym reload`.**
+
+Ativar e desativar exige nível de permissão 2 (operador). Qualquer jogador pode consultar o estado com `/gym conditioning status` ou apenas `/gym conditioning`. Os comandos também funcionam na consola e através do alias `/fitness conditioning`. Repetir `on` quando já está ativo não repõe a condição nem renova o período de tolerância.
+
+## Configuração avançada
+
+Para afinar as regras, o bloco em `config/realm-fitness.json` mantém-se disponível. As outras opções e campos adicionais são preservados quando se usam os comandos:
 
 ```json
 "conditioning": {
@@ -17,6 +31,8 @@ Atualiza o servidor e todos os clientes para a mesma edição 0.7.0. Em `config/
   "recoveryPerDay": 20.0
 }
 ```
+
+Se editares os valores manualmente, usa `/gym reload` para os aplicar.
 
 Os valores de perda e recuperação são **pontos percentuais**. O mínimo é uma percentagem do bónus adquirido através do mod. Por exemplo, um bónus potencial de +10% de dano passa a +8% com condição de 80% e a +6% com condição de 60%. Os atributos base do Minecraft e os modificadores de outros mods conservam os seus próprios valores.
 

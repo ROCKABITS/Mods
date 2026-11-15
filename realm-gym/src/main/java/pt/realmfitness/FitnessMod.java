@@ -39,6 +39,7 @@ public final class FitnessMod {
     private static void commands(RegisterCommandsEvent event){
         var gym=event.getDispatcher().register(Commands.literal("gym").executes(c->{FitnessService.open(c.getSource().getPlayerOrException(),null,false);return 1;})
             .then(Commands.literal("equipment").requires(s->s.hasPermission(2)).executes(c->{var p=c.getSource().getPlayerOrException();for(var b:MACHINES.values())give(p,new ItemStack(b.get()));give(p,new ItemStack(BOARD.get()));give(p,new ItemStack(CARD.get()));return 1;}))
+            .then(ConditioningCommands.create())
             .then(Commands.literal("reload").requires(s->s.hasPermission(2)).executes(c->{FitnessService.reload(c.getSource().getServer());c.getSource().sendSuccess(()->Component.translatable("fitness.settings_reloaded"),false);return 1;})));
         event.getDispatcher().register(Commands.literal("fitness").executes(gym.getCommand()).redirect(gym));
     }

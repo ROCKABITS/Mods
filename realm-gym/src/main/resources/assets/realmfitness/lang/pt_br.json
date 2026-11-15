@@ -193,5 +193,10 @@
   "fitness.conditioning.no_loss": "Nenhuma perda adicional programada",
   "fitness.conditioning.real_time": "Tempo real, incluindo tempo offline",
   "fitness.conditioning.online_time": "Conta apenas o tempo conectado ao servidor",
-  "fitness.conditioning.disabled": "Condição física desativada neste servidor"
+  "fitness.conditioning.disabled": "Condição física desativada neste servidor",
+  "fitness.conditioning.status_on": "A condição física está ativada neste servidor.",
+  "fitness.conditioning.status_off": "A condição física está desativada neste servidor.",
+  "fitness.conditioning.turned_on": "Condição física ativada. Alteração salva e aplicada imediatamente.",
+  "fitness.conditioning.turned_off": "Condição física desativada. Bônus completos restaurados; alteração salva.",
+  "fitness.conditioning.command_failed": "Não foi possível consultar ou salvar a opção. Verifique o registro do servidor."
 }

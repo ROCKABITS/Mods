@@ -2,7 +2,7 @@
 
 - **Project name:** Realm Gym
 - **Suggested slug:** `realm-gym`
-- **File display name:** Realm Gym 0.7.0 Beta — NeoForge 1.21.1
+- **File display name:** Realm Gym 0.7.1 Beta — NeoForge 1.21.1
 - **Release type:** Beta
 - **Minecraft:** 1.21.1
 - **Loader:** NeoForge 21.1.256+
@@ -13,7 +13,7 @@
 - **Required third-party mods:** None
 - **Source:** https://github.com/ROCKABITS/Mods/tree/main/realm-gym
 - **Icon:** [realm-gym-icon.png](../media/realm-gym/branding/realm-gym-icon.png)
-- **Upload:** [realm-gym-0.7.0.jar](../mod-pronto/realm-gym-0.7.0.jar)
+- **Upload:** [realm-gym-0.7.1.jar](../mod-pronto/realm-gym-0.7.1.jar)
 
 ## Summary
 
@@ -46,8 +46,11 @@ Requires **Minecraft 1.21.1, NeoForge 21.1.256+ and Java 21**. Install the same 
 
 ## Changelog
 
-Version 0.7.0 adds optional per-attribute physical condition, disabled by default. After a configurable grace period, inactivity gradually reduces Realm Gym bonuses. Valid maintenance sets restore condition once per attribute per training day. Lifetime XP, equipment unlocks, workout plans and personal records remain saved. Includes an offline-time option, RPG condition indicators, legacy-world migration and client/server persistence checks. Enable `conditioning.enabled` in `config/realm-fitness.json` and run `/gym reload`. Update the server and clients together.
- — 0.7.0
+Version 0.7.1 adds in-game physical condition controls: `/gym conditioning on`, `/gym conditioning off` and `/gym conditioning status`. Operators can enable or disable it immediately; the choice is saved automatically and survives server restarts. Status is available to all players. Console and `/fitness conditioning` commands are supported. Existing configuration values, lifetime XP, unlocked weights and records are preserved.
+
+
+Version 0.7.1 adds optional per-attribute physical condition, disabled by default. After a configurable grace period, inactivity gradually reduces Realm Gym bonuses. Valid maintenance sets restore condition once per attribute per training day. Lifetime XP, equipment unlocks, workout plans and personal records remain saved. Includes an offline-time option, RPG condition indicators, legacy-world migration and client/server persistence checks. Enable with `/gym conditioning on` and disable with `/gym conditioning off`. Update the server and clients together.
+ — 0.7.1
 
 - Added a plate-loaded leg press with a reclined seat, moving sled and independent left/right pressure minigame.
 - Added a high-pulley rope triceps machine with moving plates, cable and rope, timed contraction and controlled return.
@@ -55,4 +58,4 @@ Version 0.7.0 adds optional per-attribute physical condition, disabled by defaul
 - Added both machines to recipes, the catalog, workout plans, personal records and world leaderboards.
 - Leg press loads range from 40–240 kg; triceps loads range from 5–55 kg, subject to progression unlocks.
 - Shared existing attribute progression and fatigue without adding duplicate permanent bonuses. Preserved 0.5.1 progress and configuration.
-- Requires matching 0.7.0 clients and server. This expansion targets NeoForge 1.21.1; Forge 1.20.1 remains on 0.5.1.
+- Requires matching 0.7.1 clients and server. This expansion targets NeoForge 1.21.1; Forge 1.20.1 remains on 0.5.1.

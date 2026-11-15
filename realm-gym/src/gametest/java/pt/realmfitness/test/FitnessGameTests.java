@@ -140,4 +140,53 @@ public final class FitnessGameTests {
         }finally{d.ledger.configure(previous,System.currentTimeMillis());FitnessService.apply(p);}
         h.succeed();
     }
+
+    private static java.nio.file.Path commandConfig(){return net.neoforged.fml.loading.FMLPaths.CONFIGDIR.get().resolve("realm-fitness.json");}
+    private static void restoreCommandConfig(net.minecraft.server.MinecraftServer server,byte[] contents){
+        try{java.nio.file.Files.write(commandConfig(),contents);FitnessService.reload(server);}catch(java.io.IOException error){throw new AssertionError(error);}
+    }
+    @GameTest(template="empty",timeoutTicks=120) public static void conditioningCommandsPersistAndRespectOperatorPermissions(GameTestHelper h){
+        var server=h.getLevel().getServer();FitnessService.conditioningEnabled(server);byte[] original;
+        try{original=java.nio.file.Files.readAllBytes(commandConfig());}catch(java.io.IOException error){throw new AssertionError(error);}
+        try{
+            var json=com.google.gson.JsonParser.parseString(new String(original,java.nio.charset.StandardCharsets.UTF_8)).getAsJsonObject();json.addProperty("command_test_extension","preserved");java.nio.file.Files.writeString(commandConfig(),json.toString());
+            var dispatcher=server.getCommands().getDispatcher();var operator=server.createCommandSourceStack().withPermission(2).withSuppressedOutput();var visitor=operator.withPermission(0);
+            h.assertTrue(dispatcher.execute("gym conditioning on",operator)==1,"Console-compatible enable command failed");
+            h.assertTrue(FitnessService.conditioningEnabled(server),"Enable command did not immediately change the active rules");
+            h.assertTrue(FitnessConfig.load(commandConfig()).conditioning.enabled,"Enabled state was not saved to the configuration");
+            FitnessService.reload(server);h.assertTrue(FitnessService.conditioningEnabled(server),"Reload lost the saved enabled state");
+            var before=java.nio.file.Files.readString(commandConfig());
+            for(String prefix:List.of("gym","fitness")){
+                h.assertTrue(dispatcher.execute(prefix+" conditioning",visitor)==1&&dispatcher.execute(prefix+" conditioning status",visitor)==1,"Status command requires a player or operator");
+                for(String operation:List.of("on","off")){
+                    boolean denied=false;try{dispatcher.execute(prefix+" conditioning "+operation,visitor);}catch(com.mojang.brigadier.exceptions.CommandSyntaxException expected){denied=true;}
+                    h.assertTrue(denied,"Non-operator changed the condition setting");
+                }
+            }
+            h.assertTrue(java.nio.file.Files.readString(commandConfig()).equals(before),"Denied commands changed the file");
+            h.assertTrue(dispatcher.execute("fitness conditioning off",operator)==1&&!FitnessService.conditioningEnabled(server),"Legacy alias did not disable the rules immediately");
+            var saved=com.google.gson.JsonParser.parseString(java.nio.file.Files.readString(commandConfig())).getAsJsonObject();
+            h.assertTrue(!FitnessConfig.load(commandConfig()).conditioning.enabled&&saved.get("command_test_extension").getAsString().equals("preserved"),"Disable command lost persisted state or unrelated settings");
+        }catch(java.io.IOException|com.mojang.brigadier.exceptions.CommandSyntaxException error){throw new AssertionError(error);}
+        finally{restoreCommandConfig(server,original);}
+        h.succeed();
+    }
+    @GameTest(template="empty",timeoutTicks=120) public static void repeatedEnableKeepsConditionAndInvalidConfigDoesNotChangeActiveRules(GameTestHelper h){
+        var server=h.getLevel().getServer();FitnessService.conditioningEnabled(server);byte[] original;
+        try{original=java.nio.file.Files.readAllBytes(commandConfig());}catch(java.io.IOException error){throw new AssertionError(error);}
+        try{
+            var dispatcher=server.getCommands().getDispatcher();var operator=server.createCommandSourceStack().withPermission(2).withSuppressedOutput();
+            h.assertTrue(dispatcher.execute("gym conditioning on",operator)==1,"Enable command failed");
+            var p=player(h);var d=FitnessData.get(server);var a=d.ledger.athlete(p.getUUID(),p.getGameProfile().getName(),System.currentTimeMillis());a.experience.put(Exercise.BENCH,FitnessLedger.threshold(20));
+            ageCondition(d.ledger,a,11);FitnessService.apply(p);double condition=d.ledger.condition(a,Exercise.BENCH);long maintained=a.condition.get(Exercise.BENCH).maintainedAt;
+            h.assertTrue(dispatcher.execute("gym conditioning on",operator)==1,"Repeated enable failed");
+            h.assertTrue(d.ledger.condition(a,Exercise.BENCH)==condition&&a.condition.get(Exercise.BENCH).maintainedAt==maintained,"Repeated enable reset condition or its grace period");
+            var invalid=com.google.gson.JsonParser.parseString(java.nio.file.Files.readString(commandConfig())).getAsJsonObject();invalid.getAsJsonObject("conditioning").addProperty("graceDays",-1);String broken=invalid.toString();java.nio.file.Files.writeString(commandConfig(),broken);
+            h.assertTrue(dispatcher.execute("gym conditioning off",operator)==0,"Invalid configuration was reported as a successful update");
+            h.assertTrue(FitnessService.conditioningEnabled(server)&&java.nio.file.Files.readString(commandConfig()).equals(broken),"Failed command changed the active mode or configuration");
+            h.assertTrue(a.experience.get(Exercise.BENCH)==FitnessLedger.threshold(20),"Commands changed permanent experience");
+        }catch(java.io.IOException|com.mojang.brigadier.exceptions.CommandSyntaxException error){throw new AssertionError(error);}
+        finally{restoreCommandConfig(server,original);}
+        h.succeed();
+    }
 }

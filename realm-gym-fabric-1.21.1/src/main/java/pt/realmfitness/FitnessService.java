@@ -33,21 +33,25 @@ public final class FitnessService {
     public static void stop(MinecraftServer server){for(var p:server.getPlayerList().getPlayers())logout(p);}
     public static void clear(){ACTIVE.clear();VIEWS.clear();LAST.clear();configured=false;}
     private static FitnessData data(ServerPlayer p){var d=FitnessData.get(p.getServer());d.available();if(!configured){reload(p.getServer());configured=true;}return d;}
+    private static Path configFile(){return net.fabricmc.loader.api.FabricLoader.getInstance().getConfigDir().resolve("realm-fitness.json");}
+    private static void requireServerThread(MinecraftServer server){if(!server.isSameThread())throw new IllegalStateException("Fitness requires server thread");}
+    private static void configure(MinecraftServer server,Settings settings){
+        var d=FitnessData.get(server);d.available();d.ledger.configure(settings,System.currentTimeMillis());d.persist(server);configured=true;
+        for(var player:server.getPlayerList().getPlayers())apply(player);
+    }
     public static void reload(MinecraftServer server){
-        Path file=net.fabricmc.loader.api.FabricLoader.getInstance().getConfigDir().resolve("realm-fitness.json");
-        try{
-            if(!Files.exists(file))Files.writeString(file,new GsonBuilder().setPrettyPrinting().create().toJson(new Settings())+"\n");
-            if(Files.size(file)>16384)throw new IllegalArgumentException("fitness.invalid_settings");
-            JsonObject json=JsonParser.parseString(Files.readString(file)).getAsJsonObject();
-            Settings settings=FitnessLedger.JSON.fromJson(json,Settings.class);settings.validate();
-            if(!json.has("conditioning")){
-                json.add("conditioning",FitnessLedger.JSON.toJsonTree(settings.conditioning));
-                Path temp=Files.createTempFile(file.getParent(),"realm-fitness-",".tmp");
-                try{Files.writeString(temp,new GsonBuilder().setPrettyPrinting().create().toJson(json)+"\n");Files.move(temp,file,StandardCopyOption.ATOMIC_MOVE,StandardCopyOption.REPLACE_EXISTING);}finally{Files.deleteIfExists(temp);}
-            }
-            var d=FitnessData.get(server);d.ledger.configure(settings,System.currentTimeMillis());d.persist(server);configured=true;
-            for(var p:server.getPlayerList().getPlayers())apply(p);
-        }catch(java.io.IOException e){throw new IllegalStateException("fitness.invalid_settings",e);}
+        requireServerThread(server);
+        try{configure(server,FitnessConfig.load(configFile()));}
+        catch(java.io.IOException error){throw new IllegalStateException("fitness.invalid_settings",error);}
+    }
+    public static boolean conditioningEnabled(MinecraftServer server){
+        requireServerThread(server);if(!configured)reload(server);
+        var d=FitnessData.get(server);d.available();return d.ledger.settings.conditioning.enabled;
+    }
+    public static void setConditioning(MinecraftServer server,boolean enabled){
+        requireServerThread(server);FitnessData.get(server).available();
+        try{configure(server,FitnessConfig.setConditioning(configFile(),enabled));}
+        catch(java.io.IOException error){throw new IllegalStateException("fitness.invalid_settings",error);}
     }
     public static String gym(BlockPos p){return Math.floorDiv(p.getX(),32)+","+Math.floorDiv(p.getZ(),32);}
     private static Athlete athlete(ServerPlayer p){
