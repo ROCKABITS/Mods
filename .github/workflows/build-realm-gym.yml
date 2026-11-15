@@ -2,7 +2,7 @@ name: Build Realm Gym
 on:
   push:
     branches: [main]
-    paths: ['realm-gym/**', '.github/workflows/build-realm-gym.yml', '.github/scripts/gym_release.py']
+    paths: ['realm-gym/**', '.github/workflows/build-realm-gym.yml', '.github/scripts/gym_release.py', '.github/scripts/gym_publish.py', '.github/scripts/test_gym_publish.py']
   workflow_dispatch:
 permissions:
   contents: write
@@ -28,6 +28,9 @@ jobs:
           cache: gradle
       - name: Verify wrapper
         run: echo '423cb469ccc0ecc31f0e4e1c309976198ccb734cdcbb7029d4bda0f18f57e8d9  gradle/wrapper/gradle-wrapper.jar' | sha256sum --check --strict
+      - name: Verify concurrent edition publishing
+        working-directory: .
+        run: python3 .github/scripts/test_gym_publish.py
       - name: Production build and domain tests
         run: ./gradlew --no-daemon --console=plain build 2>&1 | tee fitness-build.log
       - name: Snapshot production JAR
@@ -54,17 +57,7 @@ jobs:
       - name: Publish tested downloads
         if: github.ref == 'refs/heads/main'
         working-directory: .
-        run: |
-          git fetch --no-tags origin main
-          if [[ "$(git rev-parse FETCH_HEAD)" != "$GITHUB_SHA" ]]; then
-            echo '::error::Main changed during validation; rerun against the latest commit.'
-            exit 1
-          fi
-          version=$(sed -n 's/^mod_version=//p' realm-gym/gradle.properties)
-          git add -- "mod-pronto/realm-gym-$version.jar" "mod-pronto/realm-gym-$version.zip" "mod-pronto/realm-gym-$version.sha256" "mod-pronto/realm-gym-$version.build.json" "media/realm-gym/$version/"
-          if git diff --cached --quiet; then exit 0; fi
-          git -c user.name='github-actions[bot]' -c user.email='41898282+github-actions[bot]@users.noreply.github.com' commit -m "Publish verified Realm Gym $version Beta [skip ci]"
-          git push origin HEAD:refs/heads/main
+        run: python3 .github/scripts/gym_publish.py realm-gym
       - name: Validation evidence
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02

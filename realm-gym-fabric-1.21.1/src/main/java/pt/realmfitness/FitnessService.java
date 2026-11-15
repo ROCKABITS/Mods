@@ -30,7 +30,7 @@ public final class FitnessService {
     }
     public record Training(Minigame game,BlockPos pos,ResourceLocation dimension,double x,double y,double z,int startsAt,GymMount mount){}
     private FitnessService(){}
-    public static void stop(MinecraftServer server){for(var p:server.getPlayerList().getPlayers())cancel(p);}
+    public static void stop(MinecraftServer server){for(var p:server.getPlayerList().getPlayers())logout(p);}
     public static void clear(){ACTIVE.clear();VIEWS.clear();LAST.clear();configured=false;}
     private static FitnessData data(ServerPlayer p){var d=FitnessData.get(p.getServer());d.available();if(!configured){reload(p.getServer());configured=true;}return d;}
     public static void reload(MinecraftServer server){
@@ -38,13 +38,24 @@ public final class FitnessService {
         try{
             if(!Files.exists(file))Files.writeString(file,new GsonBuilder().setPrettyPrinting().create().toJson(new Settings())+"\n");
             if(Files.size(file)>16384)throw new IllegalArgumentException("fitness.invalid_settings");
-            Settings settings=FitnessLedger.JSON.fromJson(Files.readString(file),Settings.class);settings.validate();
-            var d=FitnessData.get(server);d.ledger.settings=settings;d.persist(server);configured=true;
+            JsonObject json=JsonParser.parseString(Files.readString(file)).getAsJsonObject();
+            Settings settings=FitnessLedger.JSON.fromJson(json,Settings.class);settings.validate();
+            if(!json.has("conditioning")){
+                json.add("conditioning",FitnessLedger.JSON.toJsonTree(settings.conditioning));
+                Path temp=Files.createTempFile(file.getParent(),"realm-fitness-",".tmp");
+                try{Files.writeString(temp,new GsonBuilder().setPrettyPrinting().create().toJson(json)+"\n");Files.move(temp,file,StandardCopyOption.ATOMIC_MOVE,StandardCopyOption.REPLACE_EXISTING);}finally{Files.deleteIfExists(temp);}
+            }
+            var d=FitnessData.get(server);d.ledger.configure(settings,System.currentTimeMillis());d.persist(server);configured=true;
             for(var p:server.getPlayerList().getPlayers())apply(p);
         }catch(java.io.IOException e){throw new IllegalStateException("fitness.invalid_settings",e);}
     }
     public static String gym(BlockPos p){return Math.floorDiv(p.getX(),32)+","+Math.floorDiv(p.getZ(),32);}
-    private static Athlete athlete(ServerPlayer p){return data(p).ledger.athlete(p.getUUID(),p.getGameProfile().getName(),System.currentTimeMillis());}
+    private static Athlete athlete(ServerPlayer p){
+        var d=data(p);var a=d.ledger.athlete(p.getUUID(),p.getGameProfile().getName(),System.currentTimeMillis());
+        if(p.getServer().getPlayerList().getPlayer(p.getUUID())==p)d.ledger.online(a);
+        if(d.ledger.settings.conditioning.enabled)d.setDirty();
+        return a;
+    }
     public static void open(ServerPlayer p,BlockPos pos,boolean board){
         if(pos!=null&&!board){interact(p,pos,false);return;}
         try{
@@ -151,7 +162,11 @@ public final class FitnessService {
                 }
             }catch(RuntimeException e){cancel(p);p.displayClientMessage(Component.translatable(error(e)),true);}
         }
-        if(server.getTickCount()%100==0)refreshBoards(server);
+        if(server.getTickCount()%100==0){
+            if(configured&&FitnessData.get(server).ledger.settings.conditioning.enabled)
+                for(var player:server.getPlayerList().getPlayers())try{apply(player);}catch(RuntimeException error){FitnessMod.LOG.error("Cannot update physical condition",error);}
+            refreshBoards(server);
+        }
     }
     private static final Set<RecordBoardEntity> BOARDS=Collections.newSetFromMap(new WeakHashMap<>());
     public static void watch(RecordBoardEntity b){BOARDS.add(b);}
@@ -168,7 +183,10 @@ public final class FitnessService {
         if(t.mount.level().getBlockState(t.pos).getBlock() instanceof GymBlock block)block.working(t.mount.level(),t.pos,false);
     }
     public static void cancel(ServerPlayer p){Training t=ACTIVE.get(p.getUUID());if(t!=null)release(p,t);FitnessNetwork.send(p,Map.of("type","cancel"));}
-    public static void logout(ServerPlayer p){cancel(p);VIEWS.remove(p.getUUID());LAST.remove(p.getUUID());}
+    public static void logout(ServerPlayer p){
+        cancel(p);VIEWS.remove(p.getUUID());LAST.remove(p.getUUID());
+        if(configured){var d=data(p);var a=athlete(p);d.ledger.offline(a,System.currentTimeMillis());if(d.ledger.settings.conditioning.enabled)d.persist(p.getServer());}
+    }
     public static double fallReduction(ServerPlayer p){var d=data(p);return d.ledger.bonus(athlete(p),Exercise.PULL);}
     public static void apply(ServerPlayer p){
         var d=data(p);var a=athlete(p);
@@ -179,10 +197,10 @@ public final class FitnessService {
         // Jump height is proportional to velocity squared.
         modify(p,Attributes.JUMP_STRENGTH,Exercise.SQUAT,Math.sqrt(1+d.ledger.bonus(a,Exercise.SQUAT))-1);
     }
-    private static void modify(ServerPlayer p,Holder<Attribute> attr,Exercise exercise,double value){var instance=p.getAttribute(attr);if(instance==null)return;var id=ResourceLocation.fromNamespaceAndPath("realmfitness",exercise.id());instance.removeModifier(id);if(value>0)instance.addTransientModifier(new AttributeModifier(id,value,AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));}
+    private static void modify(ServerPlayer p,Holder<Attribute> attr,Exercise exercise,double value){var instance=p.getAttribute(attr);if(instance==null)return;var id=ResourceLocation.fromNamespaceAndPath("realmfitness",exercise.id());var old=instance.getModifier(id);if(old==null&&value==0||old!=null&&old.amount()==value&&old.operation()==AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL)return;instance.removeModifier(id);if(value>0)instance.addTransientModifier(new AttributeModifier(id,value,AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));}
     public static void snapshot(ServerPlayer p,String message,String page){
-        var d=data(p);var a=athlete(p);View v=VIEWS.get(p.getUUID());Map<String,Object> out=new LinkedHashMap<>();out.put("type","profile");out.put("page",page);out.put("message",message);out.put("name",a.name);out.put("now",d.ledger.highWater);out.put("resetAt",d.ledger.settings.resetAt(d.ledger.highWater));
-        out.put("experience",a.experience);out.put("fatigue",a.fatigue);out.put("restUntil",a.restUntil);out.put("dailySets",a.validToday);out.put("dailyGoal",d.ledger.settings.dailySets);out.put("dailyVariety",a.trainedToday.size());out.put("varietyGoal",d.ledger.settings.dailyVariety);out.put("dailyComplete",a.dailyComplete);out.put("dailyXp",a.earnedToday);out.put("dailyXpCap",d.ledger.settings.dailyXp);out.put("bonuses",d.ledger.settings.bonuses);out.put("days",a.completedDays);out.put("routines",a.routines);
+        apply(p);var d=data(p);var a=athlete(p);View v=VIEWS.get(p.getUUID());Map<String,Object> out=new LinkedHashMap<>();out.put("type","profile");out.put("page",page);out.put("message",message);out.put("name",a.name);out.put("now",d.ledger.highWater);out.put("resetAt",d.ledger.settings.resetAt(d.ledger.highWater));
+        out.put("conditioning",d.ledger.conditionInfo(a));out.put("experience",a.experience);out.put("fatigue",a.fatigue);out.put("restUntil",a.restUntil);out.put("dailySets",a.validToday);out.put("dailyGoal",d.ledger.settings.dailySets);out.put("dailyVariety",a.trainedToday.size());out.put("varietyGoal",d.ledger.settings.dailyVariety);out.put("dailyComplete",a.dailyComplete);out.put("dailyXp",a.earnedToday);out.put("dailyXpCap",d.ledger.settings.dailyXp);out.put("bonuses",d.ledger.settings.bonuses);out.put("days",a.completedDays);out.put("routines",a.routines);
         if(a.workout!=null)out.put("workout",a.workout);
         out.put("history",a.results.reversed().stream().limit(24).toList());out.put("records",a.best.entrySet().stream().filter(e->e.getKey().equals(e.getValue().category())).map(Map.Entry::getValue).sorted(Comparator.comparing(Result::load).reversed()).limit(24).toList());
         Set<String> available=new HashSet<>();

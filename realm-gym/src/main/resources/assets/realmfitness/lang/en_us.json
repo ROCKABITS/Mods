@@ -183,5 +183,15 @@
   "block.realmfitness.leg_press": "Leg press",
   "block.realmfitness.triceps": "Cable triceps",
   "fitness.attribute.leg_press": "Leg power · shared with squats",
-  "fitness.attribute.triceps": "Strength · shared with bench press"
+  "fitness.attribute.triceps": "Strength · shared with bench press",
+  "fitness.conditioning.short": "Condition: %s%%",
+  "fitness.conditioning.bonus": "Active bonus: +%s%% / +%s%% potential",
+  "fitness.conditioning.sets": "Maintenance today: %s/%s valid sets",
+  "fitness.conditioning.maintained": "Maintenance completed today",
+  "fitness.conditioning.recovery": "Recovery: +%s points once per training day",
+  "fitness.conditioning.next_loss": "Next loss in approximately %s hours",
+  "fitness.conditioning.no_loss": "No further loss scheduled",
+  "fitness.conditioning.real_time": "Real time, including time offline",
+  "fitness.conditioning.online_time": "Only time spent connected counts",
+  "fitness.conditioning.disabled": "Physical condition is disabled on this server"
 }

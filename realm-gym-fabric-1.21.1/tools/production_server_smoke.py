@@ -54,7 +54,8 @@ def main():
         with zipfile.ZipFile(JAR) as archive:expected=json.loads(archive.read('assets/realmfitness/lang/en_us.json'))['fitness.settings_reloaded']
         assert expected in text,text[-6000:]
         assert 'Unknown or incomplete command' not in text and 'Unexpected exception' not in text,text[-6000:]
-        report={'success':True,'minecraft':'1.21.1','fabric_loader':'0.16.14','production_jar_sha256':hashlib.sha256(JAR.read_bytes()).hexdigest(),'remapped_jar_booted':True,'console_reload':True,'clean_shutdown':True}
+        assert json.loads((WORK/'config/realm-fitness.json').read_text())['conditioning']['enabled'] is False
+        report={'success':True,'minecraft':'1.21.1','fabric_loader':'0.16.14','production_jar_sha256':hashlib.sha256(JAR.read_bytes()).hexdigest(),'remapped_jar_booted':True,'console_reload':True,'clean_shutdown':True,'conditioning_default_disabled':True}
         (OUT/'production-server.json').write_text(json.dumps(report,indent=2)+'\n');print(json.dumps(report))
     finally:
         if process.poll() is None:process.kill();process.wait()

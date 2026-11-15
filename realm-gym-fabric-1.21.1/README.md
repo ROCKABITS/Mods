@@ -1,10 +1,12 @@
-# Realm Gym 0.6.0 Beta — Fabric 1.21.1
+# Realm Gym 0.7.0 Beta — Fabric 1.21.1
 
-Edição Fabric das oito máquinas, minijogos, animações articuladas, atributos permanentes, planos de treino e recordes do Realm Gym 0.6.0. Inclui **leg press e tríceps com corda**.
+Edição Fabric das oito máquinas, minijogos, animações articuladas, atributos permanentes, planos de treino e recordes do Realm Gym 0.7.0. Inclui **leg press e tríceps com corda**.
 
 **Requisitos:** Minecraft **1.21.1**, **Java 21**, **Fabric Loader 0.16.14+** e **Fabric API 0.116.18+1.21.1**. Instala o mesmo Realm Gym e o Fabric API no servidor e nos clientes. Cada loader tem o seu ficheiro de instalação.
 
-[Descarregar JAR](../mod-pronto/realm-gym-0.6.0-fabric-1.21.1.jar) · [ZIP](../mod-pronto/realm-gym-0.6.0-fabric-1.21.1.zip) · [Galeria e animações](../media/realm-gym/0.6.0-fabric-1.21.1/README.md) · [Validação](VALIDACAO.md) · [Publicar no CurseForge](CURSEFORGE.md)
+[Descarregar JAR](../mod-pronto/realm-gym-0.7.0-fabric-1.21.1.jar) · [ZIP](../mod-pronto/realm-gym-0.7.0-fabric-1.21.1.zip) · [Galeria e animações](../media/realm-gym/0.7.0-fabric-1.21.1/README.md) · [Validação](VALIDACAO.md) · [Publicar no CurseForge](CURSEFORGE.md)
+
+**Novo na 0.7.0:** [condição física opcional](../realm-gym/CONDITIONING.md), com perda gradual dos bónus por inatividade e recuperação através de manutenção. Desativada por defeito; o servidor ativa `conditioning.enabled` em `config/realm-fitness.json` e executa `/gym reload`. XP, cargas desbloqueadas e recordes permanecem guardados. Atualiza servidor e clientes em conjunto.
 
 ## Jogar
 
@@ -29,7 +31,7 @@ A edição Fabric partilha as regras, modelos, pontos de contacto e ecrãs com a
 
 Os seis atributos continuam a dar dano corpo a corpo, velocidade de movimento, velocidade de ataque, proteção contra quedas, velocidade de natação e altura de salto. A natação usa o atributo próprio sincronizado `realmfitness:swim_speed`; a queda usa a redução calculada no servidor. Não requer Realm Origins nem um mod de stats.
 
-A configuração mantém-se em `config/realm-fitness.json` e a progressão em `data/realm_fitness.dat`, com o mesmo formato da 0.6.0. Os treinos e recordes pertencem ao mundo. As montagens temporárias não são gravadas e uma série interrompida não atribui XP.
+A configuração mantém-se em `config/realm-fitness.json` e a progressão em `data/realm_fitness.dat`, com o mesmo formato da 0.7.0. Os treinos e recordes pertencem ao mundo. As montagens temporárias não são gravadas e uma série interrompida não atribui XP.
 
 ## Desenvolvimento
 
@@ -41,6 +43,6 @@ echo 'eula=true' > build/gametest/eula.txt
 ./gradlew -PfitnessVisualTests runClient
 ```
 
-O JAR para distribuir é o resultado **remapeado** de `build/libs/realm-gym-0.6.0-fabric-1.21.1.jar`. O build usa Loom 1.7.4 e mappings oficiais Mojang; os nomes de Minecraft são remapeados para intermediary na distribuição. Os testes são excluídos do JAR.
+O JAR para distribuir é o resultado **remapeado** de `build/libs/realm-gym-0.7.0-fabric-1.21.1.jar`. O build usa Loom 1.7.4 e mappings oficiais Mojang; os nomes de Minecraft são remapeados para intermediary na distribuição. Os testes são excluídos do JAR.
 
-O núcleo de domínio, geometrias, recursos, poses, apresentação e vários ecrãs são compilados diretamente de `../realm-gym`. Os adaptadores Fabric ficam neste projeto: registos, ciclo de vida, rede, montagem, efeitos físicos, renderização e controlos. A edição Forge 1.20.1 mantém a base independente 0.5.1.
+O núcleo de domínio, geometrias, recursos, poses, apresentação e vários ecrãs são compilados diretamente de `../realm-gym`. Os adaptadores Fabric ficam neste projeto: registos, ciclo de vida, rede, montagem, efeitos físicos, renderização e controlos. A edição Forge 1.20.1 conserva as seis máquinas e recebe a mesma condição física na 0.7.0.

@@ -86,10 +86,28 @@ public final class AthleteScreen extends Screen {
         for(var e:Exercise.values()){
             int yy=top+e.ordinal()*row,xp=data.getAsJsonObject("experience").get(e.name()).getAsInt(),lv=level(e);double max=data.getAsJsonObject("bonuses").get(e.name()).getAsDouble(),fatigue=data.getAsJsonObject("fatigue").get(e.name()).getAsDouble();
             g.pose().pushPose();g.pose().translate(rx,yy-3,0);g.pose().scale(.7f,.7f,1);g.renderItem(new ItemStack(FitnessMod.MACHINES.get(e).get()),0,0);g.pose().popPose();
-            label(g,text("stat."+e.id())+" · "+lv+"/20",rx+15,yy,row<24?rw-64:rw-15,INK);
-            String value=String.format(Locale.ROOT,"+%.1f%%",max*lv/20*100);label(g,value,rx+rw-font.width(value),yy+(row<24?0:10),font.width(value),GREEN);
+            label(g,text("stat."+e.id())+" · "+lv+"/20",rx+15,yy,row<24?Math.max(20,rw-(data.has("conditioning")&&data.getAsJsonObject("conditioning").get("enabled").getAsBoolean()?105:64)):rw-15,INK);
+            JsonObject condition=data.has("conditioning")?data.getAsJsonObject("conditioning"):null;
+            boolean enabled=condition!=null&&condition.get("enabled").getAsBoolean();
+            JsonObject state=enabled?condition.getAsJsonObject("attributes").getAsJsonObject(e.name()):null;
+            double percent=enabled?state.get("percent").getAsDouble():100,effective=enabled?state.get("effectiveBonus").getAsDouble():max*lv/20;
+            String value=String.format(Locale.ROOT,"+%.1f%%",effective*100);
+            if(enabled&&row<24)value+=" · "+Math.round(percent)+"%";
+            if(enabled&&row>=24)label(g,text("conditioning.short",Math.round(percent)),rx+15,yy+10,Math.max(20,rw-font.width(value)-23),percent<100?ACCENT:MUTED);
+            label(g,value,rx+rw-font.width(value),yy+(row<24?0:10),font.width(value),GREEN);
             bar(g,rx+15,yy+row-5,Math.max(20,rw-70),lv==20?1:(xp-FitnessLedger.threshold(lv))/(double)(FitnessLedger.threshold(lv+1)-FitnessLedger.threshold(lv)),ACCENT);
-            if(mx>=rx&&mx<rx+rw&&my>=yy&&my<yy+row)g.renderTooltip(font,List.of(tr("attribute."+e.id()),tr("xp",xp,lv==20?xp:FitnessLedger.threshold(lv+1)),tr("fatigue",(int)(fatigue*100))),Optional.empty(),mx,my);
+            if(mx>=rx&&mx<rx+rw&&my>=yy&&my<yy+row){
+                List<Component> tooltip=new ArrayList<>(List.of(tr("attribute."+e.id()),tr("xp",xp,lv==20?xp:FitnessLedger.threshold(lv+1)),tr("fatigue",(int)(fatigue*100))));
+                if(enabled){
+                    tooltip.add(tr("conditioning.short",Math.round(percent)));
+                    tooltip.add(tr("conditioning.bonus",String.format(Locale.ROOT,"%.1f",effective*100),String.format(Locale.ROOT,"%.1f",max*lv/20*100)));
+                    tooltip.add(state.get("maintainedToday").getAsBoolean()?tr("conditioning.maintained"):tr("conditioning.sets",state.get("setsToday").getAsInt(),condition.get("setsRequired").getAsInt()));
+                    tooltip.add(tr("conditioning.recovery",String.format(Locale.ROOT,"%.0f",condition.get("recoveryPerDay").getAsDouble())));
+                    long until=state.get("nextLossIn").getAsLong();tooltip.add(until<0?tr("conditioning.no_loss"):tr("conditioning.next_loss",Math.max(1,(until+3_599_999)/3_600_000)));
+                    tooltip.add(tr(condition.get("countOfflineTime").getAsBoolean()?"conditioning.real_time":"conditioning.online_time"));
+                }else tooltip.add(tr("conditioning.disabled"));
+                g.renderTooltip(font,tooltip,Optional.empty(),mx,my);
+            }
         }
         int fy=bottom()-38;label(g,text("daily_progress",num(data,"dailySets"),num(data,"dailyGoal"),num(data,"dailyVariety"),num(data,"varietyGoal")),left,fy,w-24,ACCENT);
         bar(g,left,fy+13,w-24,num(data,"dailySets")/(double)Math.max(1,num(data,"dailyGoal")),GREEN);

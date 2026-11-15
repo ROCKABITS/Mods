@@ -2,8 +2,8 @@
 
 Adiciona este ficheiro ao mesmo projeto **Realm Gym**, mantendo a edição NeoForge disponível.
 
-- **Nome do ficheiro:** Realm Gym 0.5.1 Beta — Forge 1.20.1
-- **Upload:** `realm-gym-0.5.1-forge-1.20.1.jar`, em [mod-pronto](../mod-pronto/realm-gym-0.5.1-forge-1.20.1.jar)
+- **Nome do ficheiro:** Realm Gym 0.7.0 Beta — Forge 1.20.1
+- **Upload:** `realm-gym-0.7.0-forge-1.20.1.jar`, em [mod-pronto](../mod-pronto/realm-gym-0.7.0-forge-1.20.1.jar)
 - **Tipo:** Beta
 - **Minecraft:** 1.20.1
 - **Mod loader:** Forge
@@ -12,9 +12,12 @@ Adiciona este ficheiro ao mesmo projeto **Realm Gym**, mantendo a edição NeoFo
 - **Dependências obrigatórias adicionais:** nenhuma
 - **Licença:** All Rights Reserved
 
-## Changelog para o ficheiro
+## Changelog
 
-First Forge 1.20.1 edition of Realm Gym, based on the 0.5.1 Beta gameplay.
+Version 0.7.0 adds optional per-attribute physical condition, disabled by default. After a configurable grace period, inactivity gradually reduces Realm Gym bonuses. Valid maintenance sets restore condition once per attribute per training day. Lifetime XP, equipment unlocks, workout plans and personal records remain saved. Includes an offline-time option, RPG condition indicators, legacy-world migration and client/server persistence checks. Enable `conditioning.enabled` in `config/realm-fitness.json` and run `/gym reload`. Update the server and clients together.
+ para o ficheiro
+
+First Forge 1.20.1 edition of Realm Gym, based on the 0.7.0 Beta gameplay.
 
 - Six animated gym machines with physical mounting and compact minigame HUDs.
 - Bench-press tapping, boxing timing/streaks, treadmill rhythm, pull-up balance, rowing strokes and squat depth control.

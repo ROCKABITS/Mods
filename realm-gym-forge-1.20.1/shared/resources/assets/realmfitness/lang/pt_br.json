@@ -164,5 +164,15 @@
   "block.realmfitness.box": "Saco de boxe",
   "block.realmfitness.pull": "Elevações",
   "block.realmfitness.row": "Remo",
-  "block.realmfitness.squat": "Agachamentos"
+  "block.realmfitness.squat": "Agachamentos",
+  "fitness.conditioning.short": "Condição: %s%%",
+  "fitness.conditioning.bonus": "Bônus atual: +%s%% / +%s%% possível",
+  "fitness.conditioning.sets": "Manutenção de hoje: %s/%s séries válidas",
+  "fitness.conditioning.maintained": "Manutenção de hoje concluída",
+  "fitness.conditioning.recovery": "Recuperação: +%s pontos por dia de treino",
+  "fitness.conditioning.next_loss": "Próxima perda em aproximadamente %s horas",
+  "fitness.conditioning.no_loss": "Nenhuma perda adicional programada",
+  "fitness.conditioning.real_time": "Tempo real, incluindo tempo offline",
+  "fitness.conditioning.online_time": "Conta apenas o tempo conectado ao servidor",
+  "fitness.conditioning.disabled": "Condição física desativada neste servidor"
 }

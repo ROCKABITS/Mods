@@ -8,7 +8,7 @@ import net.minecraftforge.network.SimpleChannel;
 
 /** Required, direction-checked Forge 52 channel. Inputs are evaluated on the server. */
 public final class FitnessNetwork {
-    private static final SimpleChannel CHANNEL=ChannelBuilder.named("realmfitness:training").networkProtocolVersion(5).simpleChannel();
+    private static final SimpleChannel CHANNEL=ChannelBuilder.named("realmfitness:training").networkProtocolVersion(6).simpleChannel();
     public record Request(String operation,String json) {}
     public record Snapshot(String json) {}
     private FitnessNetwork(){}

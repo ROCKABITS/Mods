@@ -164,5 +164,15 @@
   "block.realmfitness.box": "Punching bag",
   "block.realmfitness.pull": "Pull-up bar",
   "block.realmfitness.row": "Rowing machine",
-  "block.realmfitness.squat": "Squat rack"
+  "block.realmfitness.squat": "Squat rack",
+  "fitness.conditioning.short": "Condition: %s%%",
+  "fitness.conditioning.bonus": "Active bonus: +%s%% / +%s%% potential",
+  "fitness.conditioning.sets": "Maintenance today: %s/%s valid sets",
+  "fitness.conditioning.maintained": "Maintenance completed today",
+  "fitness.conditioning.recovery": "Recovery: +%s points once per training day",
+  "fitness.conditioning.next_loss": "Next loss in approximately %s hours",
+  "fitness.conditioning.no_loss": "No further loss scheduled",
+  "fitness.conditioning.real_time": "Real time, including time offline",
+  "fitness.conditioning.online_time": "Only time spent connected counts",
+  "fitness.conditioning.disabled": "Physical condition is disabled on this server"
 }

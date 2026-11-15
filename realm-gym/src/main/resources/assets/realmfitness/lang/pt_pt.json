@@ -183,5 +183,15 @@
   "block.realmfitness.leg_press": "Leg press",
   "block.realmfitness.triceps": "Tríceps na polia",
   "fitness.attribute.leg_press": "Potência das pernas · partilhada com agachamentos",
-  "fitness.attribute.triceps": "Força · partilhada com supino"
+  "fitness.attribute.triceps": "Força · partilhada com supino",
+  "fitness.conditioning.short": "Condição: %s%%",
+  "fitness.conditioning.bonus": "Bónus atual: +%s%% / +%s%% possível",
+  "fitness.conditioning.sets": "Manutenção de hoje: %s/%s séries válidas",
+  "fitness.conditioning.maintained": "Manutenção de hoje concluída",
+  "fitness.conditioning.recovery": "Recuperação: +%s pontos por dia de treino",
+  "fitness.conditioning.next_loss": "Próxima perda dentro de cerca de %s horas",
+  "fitness.conditioning.no_loss": "Sem perda adicional programada",
+  "fitness.conditioning.real_time": "Tempo real, incluindo tempo offline",
+  "fitness.conditioning.online_time": "Conta apenas o tempo ligado ao servidor",
+  "fitness.conditioning.disabled": "Condição física desativada neste servidor"
 }

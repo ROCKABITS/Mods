@@ -2,8 +2,8 @@
 
 Publicar como um novo ficheiro no mesmo projeto **Realm Gym**. Selecionar apenas o loader Forge para este ficheiro.
 
-- **Display name:** Realm Gym 0.6.0 Beta — Forge 1.21.1
-- **Upload:** [realm-gym-0.6.0-forge-1.21.1.jar](../mod-pronto/realm-gym-0.6.0-forge-1.21.1.jar)
+- **Display name:** Realm Gym 0.7.0 Beta — Forge 1.21.1
+- **Upload:** [realm-gym-0.7.0-forge-1.21.1.jar](../mod-pronto/realm-gym-0.7.0-forge-1.21.1.jar)
 - **Minecraft:** 1.21.1
 - **Mod loader:** Forge
 - **Release type:** Beta
@@ -14,7 +14,10 @@ Publicar como um novo ficheiro no mesmo projeto **Realm Gym**. Selecionar apenas
 
 ## Changelog
 
-First Forge 1.21.1 edition of Realm Gym 0.6.0.
+Version 0.7.0 adds optional per-attribute physical condition, disabled by default. After a configurable grace period, inactivity gradually reduces Realm Gym bonuses. Valid maintenance sets restore condition once per attribute per training day. Lifetime XP, equipment unlocks, workout plans and personal records remain saved. Includes an offline-time option, RPG condition indicators, legacy-world migration and client/server persistence checks. Enable `conditioning.enabled` in `config/realm-fitness.json` and run `/gym reload`. Update the server and clients together.
+
+
+Forge 1.21.1 edition of Realm Gym 0.7.0.
 
 - All eight functional gym machines, including plate-loaded leg press and cable rope triceps.
 - Right-click mounting, articulated character animations, moving equipment and compact exercise HUD.

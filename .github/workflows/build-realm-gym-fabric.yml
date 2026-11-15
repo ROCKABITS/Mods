@@ -2,7 +2,7 @@ name: Build Realm Gym Fabric 1.21.1
 on:
   push:
     branches: [main]
-    paths: ['realm-gym-fabric-1.21.1/**', 'realm-gym/src/main/**', 'realm-gym/src/test/**', '.github/workflows/build-realm-gym-fabric.yml', '.github/scripts/gym_fabric_release.py']
+    paths: ['realm-gym-fabric-1.21.1/**', 'realm-gym/src/main/**', 'realm-gym/src/test/**', '.github/workflows/build-realm-gym-fabric.yml', '.github/scripts/gym_fabric_release.py', '.github/scripts/gym_publish.py', '.github/scripts/test_gym_publish.py']
   workflow_dispatch:
 permissions:
   contents: write
@@ -28,6 +28,9 @@ jobs:
           cache: gradle
       - name: Verify wrapper
         run: echo 'ed2c26eba7cfb93cc2b7785d05e534f07b5b48b5e7fc941921cd098628abca58  gradle/wrapper/gradle-wrapper.jar' | sha256sum --check --strict
+      - name: Verify concurrent edition publishing
+        working-directory: .
+        run: python3 .github/scripts/test_gym_publish.py
       - name: Remapped production build and shared domain tests
         run: ./gradlew --no-daemon --console=plain build 2>&1 | tee fabric-build.log
       - name: Snapshot remapped production JAR
@@ -59,21 +62,7 @@ jobs:
       - name: Publish tested downloads
         if: github.ref == 'refs/heads/main'
         working-directory: .
-        run: |
-          version=$(sed -n 's/^mod_version=//p' realm-gym-fabric-1.21.1/gradle.properties)
-          if git cat-file -e "HEAD:mod-pronto/realm-gym-$version.build.json" 2>/dev/null; then
-            echo 'This version is already published; validation completed without replacing its downloads.'
-            exit 0
-          fi
-          git fetch --no-tags origin main
-          if [[ "$(git rev-parse FETCH_HEAD)" != "$GITHUB_SHA" ]]; then
-            echo '::error::Main changed during validation; rerun against the latest commit.'
-            exit 1
-          fi
-          git add -- "mod-pronto/realm-gym-$version.jar" "mod-pronto/realm-gym-$version.zip" "mod-pronto/realm-gym-$version.sha256" "mod-pronto/realm-gym-$version.build.json" "media/realm-gym/$version/"
-          if git diff --cached --quiet; then exit 0; fi
-          git -c user.name='github-actions[bot]' -c user.email='41898282+github-actions[bot]@users.noreply.github.com' commit -m "Publish verified Realm Gym Fabric $version Beta [skip ci]"
-          git push origin HEAD:refs/heads/main
+        run: python3 .github/scripts/gym_publish.py realm-gym-fabric-1.21.1
       - name: Validation evidence
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02

@@ -114,4 +114,40 @@ public final class FitnessGameTests {
     @GameTest(template="empty",timeoutTicks=120) public static void temporaryVehiclesAreNotSavedAndDismountUsesSafeEntrance(GameTestHelper h){
         place(h,Exercise.RUN,Direction.NORTH);var rider=passenger(h);var mount=ride(h,Exercise.RUN,Direction.NORTH,rider);h.assertTrue(!mount.save(new CompoundTag()),"Temporary gym vehicle can be serialized into a world");var target=Vec3.atBottomCenterOf(position(h).relative(Direction.NORTH,2));h.assertTrue(mount.getDismountLocationForPassenger(rider).distanceToSqr(target)<.001,"Dismount ignored the safe entrance");rider.stopRiding();mount.discard();rider.discard();h.succeed();
     }
+
+    private static void ageCondition(FitnessLedger ledger,FitnessLedger.Athlete athlete,int days){
+        athlete.conditionClock.elapsed=days*FitnessLedger.DAY;athlete.conditionClock.observedAt=ledger.highWater;
+        for(var state:athlete.condition.values()){state.maintainedAt=0;state.lossDays=0;state.percent=100;}
+    }
+    @GameTest(template="empty",timeoutTicks=120) public static void physicalConditionChangesRealModifiersWithoutStackingOrUnlockLoss(GameTestHelper h){
+        var p=player(h);FitnessService.apply(p);var d=FitnessData.get(h.getLevel().getServer());var previous=d.ledger.settings;
+        var config=FitnessLedger.JSON.fromJson(FitnessLedger.JSON.toJson(previous),FitnessLedger.Settings.class);config.conditioning.enabled=true;
+        try{
+            d.ledger.configure(config,System.currentTimeMillis());var a=d.ledger.athlete(p.getUUID(),p.getGameProfile().getName(),System.currentTimeMillis());
+            for(var e:Exercise.attributes())a.experience.put(e,FitnessLedger.threshold(20));ageCondition(d.ledger,a,11);FitnessService.apply(p);
+            var damage=net.minecraft.world.entity.ai.attributes.Attributes.ATTACK_DAMAGE;var speed=net.minecraft.world.entity.ai.attributes.Attributes.MOVEMENT_SPEED;
+            double expected=p.getAttribute(damage).getBaseValue()*1.08;
+            h.assertTrue(Math.abs(p.getAttributeValue(damage)-expected)<.000001,"Condition was not applied to actual damage");
+            h.assertTrue(Math.abs(p.getAttributeValue(speed)-p.getAttribute(speed).getBaseValue()*1.064)<.000001,"Condition was not applied to actual movement speed");
+            h.assertTrue(Math.abs(FitnessService.fallReduction(p)-.16)<.000001,"Condition was not applied to fall protection");
+            FitnessService.apply(p);h.assertTrue(Math.abs(p.getAttributeValue(damage)-expected)<.000001,"Condition modifiers stacked");
+            h.assertTrue(d.ledger.level(a,Exercise.BENCH)==20,"Condition decay removed permanent levels");
+            d.ledger.ready(a,Exercise.BENCH,Exercise.BENCH.maximumLoad(20),8,d.ledger.highWater);
+        }finally{d.ledger.configure(previous,System.currentTimeMillis());FitnessService.apply(p);}
+        h.succeed();
+    }
+    @GameTest(template="empty",timeoutTicks=120) public static void physicalConditionSurvivesNativeSavedDataAndDisablingRestoresFullBonus(GameTestHelper h){
+        var p=player(h);FitnessService.apply(p);var d=FitnessData.get(h.getLevel().getServer());var previous=d.ledger.settings;
+        var config=FitnessLedger.JSON.fromJson(FitnessLedger.JSON.toJson(previous),FitnessLedger.Settings.class);config.conditioning.enabled=true;
+        try{
+            d.ledger.configure(config,System.currentTimeMillis());var a=d.ledger.athlete(p.getUUID(),p.getGameProfile().getName(),System.currentTimeMillis());a.experience.put(Exercise.BENCH,FitnessLedger.threshold(20));
+            ageCondition(d.ledger,a,11);FitnessService.apply(p);d.ledger.online(a);var saved=d.save(new CompoundTag());var restored=FitnessData.load(saved);
+            var copy=restored.ledger.athletes.get(p.getUUID());h.assertTrue(restored.ledger.condition(copy,Exercise.BENCH)==80,"SavedData lost physical condition");
+            h.assertTrue(!copy.conditionClock.online,"SavedData incorrectly resumed an online session");
+            var disabled=FitnessLedger.JSON.fromJson(FitnessLedger.JSON.toJson(config),FitnessLedger.Settings.class);disabled.conditioning.enabled=false;d.ledger.configure(disabled,System.currentTimeMillis());FitnessService.apply(p);
+            h.assertTrue(Math.abs(p.getAttributeValue(net.minecraft.world.entity.ai.attributes.Attributes.ATTACK_DAMAGE)-p.getAttribute(net.minecraft.world.entity.ai.attributes.Attributes.ATTACK_DAMAGE).getBaseValue()*1.10)<.000001,"Disabling condition did not restore full permanent bonus");
+            h.assertTrue(a.experience.get(Exercise.BENCH)==FitnessLedger.threshold(20),"Disabling condition removed permanent experience");
+        }finally{d.ledger.configure(previous,System.currentTimeMillis());FitnessService.apply(p);}
+        h.succeed();
+    }
 }

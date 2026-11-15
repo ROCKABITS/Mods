@@ -21,6 +21,7 @@ def checkjar(p):
   assert dependencies['minecraft']['versionRange']=='[1.20.1]'
   assert json.loads(j.read('pack.mcmeta'))['pack']['pack_format']==15
   names=j.namelist()
+  assert 'pt/realmfitness/domain/Conditioning.class' in names and 'pt/realmfitness/domain/Conditioning$Config.class' in names
   assert not any('/recipe/' in n or '/loot_table/' in n or '/tags/block/' in n for n in names)
   for e in EXERCISES:
    assert json.loads(j.read(f'data/realmfitness/recipes/{e}.json'))['result']['item']==f'realmfitness:{e}'
@@ -72,11 +73,13 @@ def package():
  source=STATE/NAME;checkjar(source);assert digest(source)==state['jar_sha256']
  reports=[ET.parse(p).getroot() for p in (PROJECT/'build/test-results/test').glob('TEST-*.xml')];units=sum(int(r.get('tests',0)) for r in reports)
  assert units>=74 and not any(int(r.get(k,0)) for r in reports for k in ('failures','errors','skipped'))
+ condition_report=ET.parse(PROJECT/'build/test-results/test/TEST-pt.realmfitness.domain.ConditioningTest.xml').getroot();assert int(condition_report.get('tests',0))>=25
  for n in ('forge-build.log','forge-native.log','forge-client.log'):
   log=(PROJECT/n).read_text(errors='replace');assert 'BUILD SUCCESSFUL' in log and 'BUILD FAILED' not in log,n
  expected=sum(p.read_text().count('@GameTest(') for p in (PROJECT/'src/gametest/java').rglob('*.java'))
  counts=re.findall(r'All (\d+) required tests passed',(PROJECT/'forge-native.log').read_text(),re.I);assert counts and int(counts[-1])==expected and expected>=20
  qa=PROJECT/'qa-results/client';result=json.loads((qa/'result.json').read_text());assert result['success'] is True and result['stage']==29
+ assert result.get('optionalConditioning') is True and any('Physical condition is shown' in c for c in result['checks'])
  assert any('animated equipment model groups baked' in c for c in result['checks']) and any('Forge jump-height modifier synchronized' in c for c in result['checks'])
  assert result['actualMountedMinigames'] is True and result['hudPresentation']['interpolatedFrames']>0
  assert any('Actual SHIFT input' in c for c in result['checks']) and any('Breaking occupied equipment' in c for c in result['checks']) and any('Actual sneak-right-click' in c for c in result['checks'])
@@ -123,13 +126,13 @@ Vídeos capturados no cliente real (24 frames por exercício, amostras a 10 fps)
 ![Recordes no mundo](fitness-live-record-board.png)
 ![Portugues](fitness-profile-portuguese.png)
 
-O teste de carga usa temporariamente 100 XP no supino para desbloquear 25 kg e repõe esse valor antes das séries. O jogador inicia as séries com uma base controlada de 90 XP por atributo para tornar visivel a subida de nivel. As seis series e os seus resultados usam efetivamente os controlos do cliente e os canais de rede, sem enviar pontuacoes inventadas. O teste verifica o plano personalizado, bonus diario, persistencia e reabertura do mundo. A galeria das maquinas usa os modelos de producao no renderizador Minecraft.
+O modo de condição física é ativado apenas no cenário de teste, com força e pernas inicialmente a 80%; os restantes atributos começam a 100%. As séries reais verificam a manutenção, o bónus efetivo e a persistência. Nas edições 1.21.1, supino/tríceps e agachamentos/leg press recuperam o respetivo atributo com duas séries. Na edição de seis máquinas, a série única conserva os 80% e o progresso de manutenção. O teste de carga usa temporariamente 100 XP no supino para desbloquear 25 kg e repõe esse valor antes das séries. O jogador inicia as séries com uma base controlada de 90 XP por atributo para tornar visivel a subida de nivel. As seis series e os seus resultados usam efetivamente os controlos do cliente e os canais de rede, sem enviar pontuacoes inventadas. O teste verifica o plano personalizado, bonus diario, persistencia e reabertura do mundo. A galeria das maquinas usa os modelos de producao no renderizador Minecraft.
 ''')
  out=ROOT/'mod-pronto';out.mkdir(exist_ok=True);jar=out/NAME;shutil.copyfile(source,jar)
  archive=jar.with_suffix('.zip')
  with zipfile.ZipFile(archive,'w',zipfile.ZIP_DEFLATED) as z:
   z.write(jar,NAME);z.writestr('LEIA-ME.txt',f'Realm Gym {VERSION} Beta\nMinecraft 1.20.1 / Forge 47.4.0+ / Java 17\nInstala o mesmo JAR no servidor e nos clientes.\nBotao direito: montar; agachar + botao direito: carga; SHIFT: sair.\nPerfil: K ou /gym; maquinas: receitas ou /gym equipment (operador).\nConfiguracao: config/realm-fitness.json.\nGuia: https://github.com/ROCKABITS/Mods/tree/main/realm-gym-forge-1.20.1\n')
- meta={'name':'Realm Gym','previous_name':'Realm Fitness','mod_id':'realmfitness','version':VERSION,'status':'Beta','minecraft':'1.20.1','loader':'Forge','forge':'47.4.0','java':17,'source_commit':state['source_commit'],'tested_run':run,'jar_sha256':digest(jar),'zip_sha256':digest(archive),'unit_tests':units,'native_tests':expected,'actual_minigame_client':True,'actual_mounted_minigames':True,'hud_presentation':result['hudPresentation'],'distinct_minigame_rules':2,'relative_training_difficulty':True,'motion_previews':videos,'checks':result['checks'],'scope':'Standalone integrated-host validation with real inputs, controlled 90-XP baseline and six real results. Remote authenticated multiplayer and third-party stat-mod combinations are not covered.','screenshots':{n:digest(gallery/n) for n in images}}
+ meta={'name':'Realm Gym','previous_name':'Realm Fitness','mod_id':'realmfitness','version':VERSION,'status':'Beta','minecraft':'1.20.1','loader':'Forge','forge':'47.4.0','java':17,'source_commit':state['source_commit'],'tested_run':run,'jar_sha256':digest(jar),'zip_sha256':digest(archive),'unit_tests':units,'native_tests':expected,'actual_minigame_client':True,'actual_mounted_minigames':True,'hud_presentation':result['hudPresentation'],'distinct_minigame_rules':2,'machines':list(EXERCISES),'permanent_attributes':6,'optional_conditioning':True,'conditioning_defaults':{'enabled':False,'countOfflineTime':True,'graceDays':7,'lossPerDay':5,'minimumPercent':60,'recoveryPerDay':20,'setsRequired':2},'relative_training_difficulty':True,'motion_previews':videos,'checks':result['checks'],'scope':'Standalone integrated-host validation with real inputs, controlled 90-XP baseline and six real results. Remote authenticated multiplayer and third-party stat-mod combinations are not covered.','screenshots':{n:digest(gallery/n) for n in images}}
  (out/f'realm-gym-{VERSION}.build.json').write_text(json.dumps(meta,indent=2)+'\n');(out/f'realm-gym-{VERSION}.sha256').write_text(''.join(f'{digest(p)}  {p.name}\n' for p in (jar,archive)))
  print(json.dumps(meta,indent=2))
 if __name__=='__main__':{'snapshot':snapshot,'package':package}[sys.argv[1]]()

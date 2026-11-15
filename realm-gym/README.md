@@ -1,14 +1,16 @@
-# Realm Gym 0.6.0 Beta
+# Realm Gym 0.7.0 Beta
 
 Ginásio físico para **Minecraft 1.21.1, NeoForge 21.1.256+ e Java 21**. Máquinas 3D, oito minijogos, atributos permanentes, rotinas personalizadas, calendário e painéis de recordes. Funciona de forma independente.
 
-[Descarregar JAR](../mod-pronto/realm-gym-0.6.0.jar) · [ZIP](../mod-pronto/realm-gym-0.6.0.zip) · [Galeria](../media/realm-gym/0.6.0/README.md) · [Validação](VALIDACAO.md) · [Conceito original](DESIGN.md)
+[Descarregar JAR](../mod-pronto/realm-gym-0.7.0.jar) · [ZIP](../mod-pronto/realm-gym-0.7.0.zip) · [Galeria](../media/realm-gym/0.7.0/README.md) · [Validação](VALIDACAO.md) · [Conceito original](DESIGN.md)
 
 Instala esta versão no servidor e em todos os clientes. Esta versão exige o mesmo protocolo de montagem para manter o personagem alinhado com as máquinas. Esta edição é para 1.21.1/NeoForge.
 
-**Realm Gym é o novo nome do Realm Fitness.** Substitui o JAR antigo por `realm-gym-0.6.0.jar`; instala apenas uma edição. O identificador `realmfitness`, os blocos, `data/realm_fitness.dat` e `config/realm-fitness.json` mantêm-se para conservar os mundos, níveis, rotinas e recordes. O comando principal passa a `/gym`; `/fitness` continua como alias, incluindo `equipment` e `reload`.
+**Realm Gym é o novo nome do Realm Fitness.** Substitui o JAR antigo por `realm-gym-0.7.0.jar`; instala apenas uma edição. O identificador `realmfitness`, os blocos, `data/realm_fitness.dat` e `config/realm-fitness.json` mantêm-se para conservar os mundos, níveis, rotinas e recordes. O comando principal passa a `/gym`; `/fitness` continua como alias, incluindo `equipment` e `reload`.
 
 ![Ícone do Realm Gym](../media/realm-gym/branding/realm-gym-icon.png)
+
+**Novo na 0.7.0:** [condição física opcional](CONDITIONING.md), com perda gradual dos bónus por inatividade e recuperação através de manutenção. Desativada por defeito; o servidor ativa `conditioning.enabled` em `config/realm-fitness.json` e executa `/gym reload`. XP, cargas desbloqueadas e recordes permanecem guardados. Atualiza servidor e clientes em conjunto.
 
 ## Começar
 
@@ -56,7 +58,7 @@ O boxe mostra a sequência atual e a melhor sequência da série, com feedback P
 
 Os indicadores continuam a ser desenhados a cada frame. Toques locais recebem resposta visual imediata e são reconciliados com os inputs confirmados pelo servidor. Para ganhar XP e avançar o plano exige pelo menos 60% de repetições válidas e 50% de precisão. Resultados inferiores ficam no histórico como prática. O servidor calcula a técnica a partir dos inputs e do seu próprio relógio; o cliente não envia uma pontuação final.
 
-Os níveis não expiram por faltar ao ginásio e persistem após morte, saída e reinício. Os bónus usam modificadores próprios, reaplicados sem acumulação a cada sincronização. A altura de salto usa uma correção da velocidade de impulso; outros modificadores e a física podem afetar o resultado final.
+Os níveis não expiram por faltar ao ginásio e persistem após morte, saída e reinício. Com a condição física opcional, os bónus podem diminuir e recuperar conforme a manutenção. Os bónus usam modificadores próprios, reaplicados sem acumulação a cada sincronização. A altura de salto usa uma correção da velocidade de impulso; outros modificadores e a física podem afetar o resultado final.
 
 ## Treino diário
 
@@ -95,7 +97,7 @@ Os minijogos usam Espaço, WASD e os botões do rato nesta beta. As animações 
 
 Não há dependência de um mod de stats. Combinações específicas com outros sistemas de atributos ou renderização precisam de validação no respetivo modpack. Mensalidades, personal trainers, alterações musculares da skin, gestão de ginásios e metas semanais com prémios continuam nas ideias do conceito original.
 
-## Atualização 0.6.0
+## Atualização 0.7.0
 
 Acrescenta leg press e tríceps com corda à edição **NeoForge 1.21.1**. As gravações da 0.5.1 mantêm os seis atributos, rotinas, históricos e configurações; as novas cargas começam no mínimo de cada máquina. Atualiza servidor e clientes em conjunto: o protocolo de rede passa a 5. A edição Forge 1.20.1 continua na base 0.5.1, com seis máquinas.
 
