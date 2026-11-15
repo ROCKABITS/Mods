@@ -2,8 +2,8 @@
 
 Adiciona este ficheiro ao mesmo projeto **Realm Gym**, mantendo a edição NeoForge disponível.
 
-- **Nome do ficheiro:** Realm Gym 0.7.1 Beta — Forge 1.20.1
-- **Upload:** `realm-gym-0.7.1-forge-1.20.1.jar`, em [mod-pronto](../mod-pronto/realm-gym-0.7.1-forge-1.20.1.jar)
+- **Nome do ficheiro:** Realm Gym 0.7.0 Beta — Forge 1.20.1
+- **Upload:** `realm-gym-0.7.0-forge-1.20.1.jar`, em [mod-pronto](../mod-pronto/realm-gym-0.7.0-forge-1.20.1.jar)
 - **Tipo:** Beta
 - **Minecraft:** 1.20.1
 - **Mod loader:** Forge
@@ -12,22 +12,18 @@ Adiciona este ficheiro ao mesmo projeto **Realm Gym**, mantendo a edição NeoFo
 - **Dependências obrigatórias adicionais:** nenhuma
 - **Licença:** All Rights Reserved
 
-## Changelog
+## Changelog — 0.7.0
 
-Version 0.7.1 adds in-game physical condition controls: `/gym conditioning on`, `/gym conditioning off` and `/gym conditioning status`. Operators can enable or disable it immediately; the choice is saved automatically and survives server restarts. Status is available to all players. Console and `/fitness conditioning` commands are supported. Existing configuration values, lifetime XP, unlocked weights and records are preserved.
+- Added optional physical condition for each of the six training attributes. The system is disabled by default.
+- By default, condition remains at 100% for seven full days without maintenance, then loses five percentage points per additional complete day, down to 60%.
+- Condition scales Realm Gym's earned attribute bonuses. Lifetime XP, levels, unlocked loads, workout plans and personal records remain saved.
+- Completing two valid sets of at least eight repetitions for an attribute restores 20 condition points, once per attribute per training day, and renews its grace period. Maintenance still counts after reaching the daily XP cap.
+- Added condition, effective bonuses and maintenance details to the athlete profile, with additional information in attribute tooltips.
+- Added `/gym conditioning on`, `/gym conditioning off` and `/gym conditioning status`. Enabling or disabling requires operator permission level 2; everyone can check the status.
+- Command changes apply immediately to the whole server and are saved automatically across restarts. No file editing or `/gym reload` is needed.
+- Added console support and the `/fitness conditioning` alias. Existing configuration values are preserved when toggling the system.
+- Disabling condition restores full earned bonuses and pauses saved condition. Repeating `on` while already enabled does not reset condition or renew the grace period.
+- Added configurable grace period, loss rate, minimum condition, recovery and maintenance requirements. Offline time can be included or excluded.
+- Existing profiles receive full condition and a complete grace period when the feature is first enabled, with no inactivity charged from before activation.
 
-
-Version 0.7.1 adds optional per-attribute physical condition, disabled by default. After a configurable grace period, inactivity gradually reduces Realm Gym bonuses. Valid maintenance sets restore condition once per attribute per training day. Lifetime XP, equipment unlocks, workout plans and personal records remain saved. Includes an offline-time option, RPG condition indicators, legacy-world migration and client/server persistence checks. Enable with `/gym conditioning on` and disable with `/gym conditioning off`. Update the server and clients together.
- para o ficheiro
-
-First Forge 1.20.1 edition of Realm Gym, based on the 0.7.1 Beta gameplay.
-
-- Six animated gym machines with physical mounting and compact minigame HUDs.
-- Bench-press tapping, boxing timing/streaks, treadmill rhythm, pull-up balance, rowing strokes and squat depth control.
-- Permanent training levels, daily goals, fatigue, unlockable loads and easier light weights as you progress.
-- RPG athlete profile, custom workout plans, history, personal records and physical leaderboard boards.
-- Forge networking, Java 17 compatibility, adapted persistence and a synchronized jump-height progression attribute.
-
-Requires Minecraft 1.20.1 and Forge 47.4.0 or newer in the 47.x series. Install the same JAR on the server and every client. No other Realm mods are required.
-
-Para a descrição geral e o ícone do projeto, usa a [página principal de publicação](../realm-gym/CURSEFORGE.md), indicando que existem edições separadas **Forge 1.20.1 / Java 17** e **NeoForge 1.21.1 / Java 21**.
+Available for NeoForge, Fabric and Forge on Minecraft 1.21.1, and Forge on Minecraft 1.20.1. The 1.21.1 editions include eight machines; Forge 1.20.1 includes six. Install the same edition and version on the server and every client. Fabric also requires Fabric API.

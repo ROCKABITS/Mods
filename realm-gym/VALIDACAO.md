@@ -1,4 +1,4 @@
-# Realm Gym 0.7.1 Beta — validação
+# Realm Gym 0.7.0 Beta — validação
 
 Validação local em 14 de novembro de 2026, com Minecraft 1.21.1, NeoForge 21.1.256, Temurin Java 21 e cliente gráfico real sob Xvfb/Mesa.
 
@@ -23,7 +23,7 @@ As **38 capturas** incluem os oito modelos no renderizador Minecraft, incluindo 
 
 O [workflow](../.github/workflows/build-realm-gym.yml) repete build, testes JUnit, GameTests e cliente integrado antes de publicar. Conserva uma cópia do JAR de produção antes das execuções com código de teste e publica apenas se a main ainda estiver no commit validado.
 
-O empacotador confirma metadados, bytecode Java 21, recursos, paridade de traduções e ausência de classes de teste e bibliotecas/jogos incorporados no JAR. `mod-pronto/realm-gym-0.7.1.build.json` regista o commit, execução CI, contagens, verificações e hashes do JAR, ZIP e capturas. Os relatórios completos ficam nos artefactos da execução; o resultado do cliente acompanha a [galeria](../media/realm-gym/0.7.1/README.md).
+O empacotador confirma metadados, bytecode Java 21, recursos, paridade de traduções e ausência de classes de teste e bibliotecas/jogos incorporados no JAR. `mod-pronto/realm-gym-0.7.0.build.json` regista o commit, execução CI, contagens, verificações e hashes do JAR, ZIP e capturas. Os relatórios completos ficam nos artefactos da execução; o resultado do cliente acompanha a [galeria](../media/realm-gym/0.7.0/README.md).
 
 ## Âmbito
 
@@ -33,7 +33,7 @@ Os indicadores interpolam as atualizações recebidas e usam uma previsão visua
 
 Os testes confirmam os resultados das oito mecânicas com inputs automatizados. A dificuldade, os limites e as percentagens continuam sujeitos a afinação com jogadores. O [guia](README.md) descreve os valores, controlos, âmbito das zonas de ginásio e funcionalidades desta beta.
 
-## Condição física na 0.7.1
+## Condição física na 0.7.0
 
 A condição é opcional e desativada por defeito. A suite de domínio inclui a tolerância de sete dias, perda de cinco pontos por dia, mínimo de 60%, recuperação de 20 pontos por duas séries válidas, limite diário, contagem por atributo, treino com limite de XP atingido, relógio a recuar, pausa offline, reativação e migração de perfis antigos.
 
@@ -41,7 +41,7 @@ Dois novos GameTests verificam modificadores reais de dano, movimento e proteç�
 
 O horário de renovação do cenário é colocado a doze horas do arranque. Esta configuração evita que a execução gráfica atravesse o seu próprio reinício diário; os testes de domínio continuam a verificar as mudanças de dia. A configuração e o estado de condição são preservados na reabertura do mundo de teste.
 
-## Comandos de condição na 0.7.1
+## Comandos de condição na 0.7.0
 
 Os GameTests executam os comandos e o alias `/fitness` no dispatcher real, confirmam permissões de operador, consulta sem permissões elevadas, gravação e recarregamento do estado, preservação de outras opções, repetição idempotente de `on` e recusa de configurações inválidas sem alterar as regras ativas. O cenário de cliente verifica a alteração imediata dos atributos do jogador ligado e a conservação da condição ao alternar o modo.
 

@@ -21,9 +21,9 @@ Esta validação cobre o mod independente em servidor de testes e cliente com se
 
 O [workflow Forge](../.github/workflows/build-realm-gym-forge.yml) repete build, JUnit, GameTests e cliente integrado antes de publicar. Guarda o JAR de produção antes dos testes e confirma que o `main` ainda corresponde ao commit validado.
 
-O [empacotador](../.github/scripts/gym_forge_release.py) verifica metadados Forge/Minecraft, bytecode **Java 17**, pack format 15, receitas/loot/tags 1.20.1, modelos, colisões e traduções. Rejeita classes de teste, bibliotecas/jogos incorporados e recursos com caminhos exclusivos de 1.21. Os artefactos `mod-pronto/realm-gym-0.7.1-forge-1.20.1.*` incluem JAR, ZIP, hashes e metadados com commit/execução testados. A [galeria](../media/realm-gym/0.7.1-forge-1.20.1/README.md) conserva as capturas e o resultado do cliente da publicação CI.
+O [empacotador](../.github/scripts/gym_forge_release.py) verifica metadados Forge/Minecraft, bytecode **Java 17**, pack format 15, receitas/loot/tags 1.20.1, modelos, colisões e traduções. Rejeita classes de teste, bibliotecas/jogos incorporados e recursos com caminhos exclusivos de 1.21. Os artefactos `mod-pronto/realm-gym-0.7.0-forge-1.20.1.*` incluem JAR, ZIP, hashes e metadados com commit/execução testados. A [galeria](../media/realm-gym/0.7.0-forge-1.20.1/README.md) conserva as capturas e o resultado do cliente da publicação CI.
 
-## Condição física na 0.7.1
+## Condição física na 0.7.0
 
 A condição é opcional e desativada por defeito. A suite de domínio inclui a tolerância de sete dias, perda de cinco pontos por dia, mínimo de 60%, recuperação de 20 pontos por duas séries válidas, limite diário, contagem por atributo, treino com limite de XP atingido, relógio a recuar, pausa offline, reativação e migração de perfis antigos.
 
@@ -31,7 +31,7 @@ Dois novos GameTests verificam modificadores reais de dano, movimento e proteç�
 
 O horário de renovação do cenário é colocado a doze horas do arranque. Esta configuração evita que a execução gráfica atravesse o seu próprio reinício diário; os testes de domínio continuam a verificar as mudanças de dia. A configuração e o estado de condição são preservados na reabertura do mundo de teste.
 
-## Comandos de condição na 0.7.1
+## Comandos de condição na 0.7.0
 
 Os GameTests executam os comandos e o alias `/fitness` no dispatcher real, confirmam permissões de operador, consulta sem permissões elevadas, gravação e recarregamento do estado, preservação de outras opções, repetição idempotente de `on` e recusa de configurações inválidas sem alterar as regras ativas. O cenário de cliente verifica a alteração imediata dos atributos do jogador ligado e a conservação da condição ao alternar o modo.
 
