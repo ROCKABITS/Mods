@@ -14,7 +14,7 @@ O cenário gráfico coloca as oito máquinas, abre o perfil e o editor, grava um
 
 Confirma carregamento das partes móveis, animação, HUD interpolado, uma interação a agachar para mudar a carga, resultados e avanço único do plano, objetivo/bónus diário e modificadores permanentes. Inclui saída por SHIFT no leg press, destruição da polia ocupada, fecho do mundo com uma montagem ativa e reabertura real com os oito resultados preservados e sem bónus acumulados.
 
-A base controlada é 90 XP por atributo e cada exercício tem oito repetições. Para testar a mudança de carga, o supino recebe temporariamente 100 XP, que são repostos antes das séries. Estes parâmetros aceleram a observação da evolução e não substituem a simulação dos exercícios.
+A base controlada é 90 XP por atributo e cada exercício tem oito repetições. Para testar a mudança de carga, o supino recebe temporariamente 100 XP, que são repostos antes das séries. O reinício diário do cenário é configurado a doze horas do arranque, para as oito séries partilharem um dia mesmo se a execução atravessar a meia-noite UTC; a configuração é preservada na reabertura. Estes parâmetros aceleram a observação da evolução e não substituem a simulação dos exercícios.
 
 São produzidas **38 capturas**, oito vídeos e uma prévia GIF a partir do cliente Minecraft. Incluem os oito modelos individuais, as estruturas no mundo, os oito minijogos, menus, português, histórico e painel de recordes. O perfil também é verificado em 320 × 240 unidades GUI.
 

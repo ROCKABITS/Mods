@@ -58,7 +58,12 @@ public final class FitnessVisualQA {
         for(var e:Exercise.values()){var pos=station(e.ordinal());var block=FitnessMod.MACHINES.get(e).get();for(int i=0;i<18;i++)if(GymGeometry.contains(e,i))p.level().setBlock(GymBlock.cell(pos,Direction.NORTH,i),block.partState(Direction.NORTH,i),Block.UPDATE_CLIENTS|Block.UPDATE_KNOWN_SHAPE);check(block.intact(p.level(),pos),"Expanded visual machine is incomplete");}
         p.level().setBlockAndUpdate(BOARD,FitnessMod.BOARD.get().defaultBlockState());
         p.teleportTo(p.serverLevel(),.5,161,-3.5,0,0);p.getInventory().clearContent();
-        var d=FitnessData.get(server);d.ledger=new FitnessLedger();var a=d.ledger.athlete(p.getUUID(),p.getGameProfile().getName(),System.currentTimeMillis());
+        var d=FitnessData.get(server);d.ledger=new FitnessLedger();
+        // Keep this eight-set scenario within one real training day, even across UTC midnight.
+        // Persist the test configuration so reopening the world uses the same daily boundary.
+        var settings=new Settings();settings.resetMinute=(int)Math.floorMod(System.currentTimeMillis()/60_000L+720,1440);
+        try{Files.writeString(net.minecraftforge.fml.loading.FMLPaths.CONFIGDIR.get().resolve("realm-fitness.json"),FitnessLedger.JSON.toJson(settings));}catch(java.io.IOException error){throw new IllegalStateException("Cannot configure isolated QA day",error);}
+        FitnessService.reload(server);var a=d.ledger.athlete(p.getUUID(),p.getGameProfile().getName(),System.currentTimeMillis());
         // Controlled baseline exposes a level-up from each genuinely played series.
         for(var e:Exercise.values())a.experience.put(e.attribute(),90);
         d.persist(server);FitnessService.apply(p);FitnessService.open(p,null,false);

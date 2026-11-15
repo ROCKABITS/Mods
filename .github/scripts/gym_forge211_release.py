@@ -128,7 +128,7 @@ Vídeos capturados no cliente real (24 frames por exercício, amostras a 10 fps)
 ![Recordes no mundo](fitness-live-record-board.png)
 ![Portugues](fitness-profile-portuguese.png)
 
-O teste de carga usa temporariamente 100 XP no supino para desbloquear 25 kg e repõe esse valor antes das séries. O jogador inicia as séries com uma base controlada de 90 XP por atributo para tornar visivel a subida de nivel. As oito series e os seus resultados usam efetivamente os controlos do cliente e os canais de rede, sem enviar pontuacoes inventadas. O teste verifica o plano personalizado, bonus diario, persistencia e reabertura do mundo. A galeria das maquinas usa os modelos de producao no renderizador Minecraft.
+O cenário configura o reinício diário a doze horas do arranque e preserva esse horário na reabertura, para verificar as oito séries no mesmo dia de treino mesmo ao atravessar a meia-noite UTC. O teste de carga usa temporariamente 100 XP no supino para desbloquear 25 kg e repõe esse valor antes das séries. O jogador inicia as séries com uma base controlada de 90 XP por atributo para tornar visivel a subida de nivel. As oito series e os seus resultados usam efetivamente os controlos do cliente e os canais de rede, sem enviar pontuacoes inventadas. O teste verifica o plano personalizado, bonus diario, persistencia e reabertura do mundo. A galeria das maquinas usa os modelos de producao no renderizador Minecraft.
 ''')
  out=ROOT/'mod-pronto';out.mkdir(exist_ok=True);jar=out/NAME;shutil.copyfile(source,jar)
  archive=jar.with_suffix('.zip')
