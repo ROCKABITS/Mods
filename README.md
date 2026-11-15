@@ -6,6 +6,8 @@ The repository contains standalone mods that can also integrate with one another
 
 **Minecraft 1.20.1 / Forge / Java 17:** [Contracts & Bounties](contracts-bounties-forge-1.20.1/README.md) e [Realm Gym](realm-gym-forge-1.20.1/README.md) têm edições independentes. Downloads: [Contracts JAR](mod-pronto/contracts-bounties-0.4.1-forge-1.20.1.jar) · [Realm Gym JAR](mod-pronto/realm-gym-0.7.0-forge-1.20.1.jar). As edições da tabela seguinte continuam em 1.21.1/NeoForge.
 
+**Minecraft 1.20.1 / Fabric / Java 17:** [Realm Gym 0.7.0](realm-gym-fabric-1.20.1/README.md), com as oito máquinas, incluindo leg press e tríceps com corda. [Descarregar JAR](mod-pronto/realm-gym-0.7.0-fabric-1.20.1.jar) · [Galeria](media/realm-gym/0.7.0-fabric-1.20.1/README.md). Requer Fabric API.
+
 **Minecraft 1.21.1 / Fabric / Java 21:** [Realm Gym 0.7.0](realm-gym-fabric-1.21.1/README.md), com as oito máquinas. [Descarregar JAR](mod-pronto/realm-gym-0.7.0-fabric-1.21.1.jar) · [Galeria](media/realm-gym/0.7.0-fabric-1.21.1/README.md). Requer Fabric API.
 
 **Minecraft 1.21.1 / Forge / Java 21:** [Realm Gym 0.7.0](realm-gym-forge-1.21.1/README.md), com as oito máquinas. [Descarregar JAR](mod-pronto/realm-gym-0.7.0-forge-1.21.1.jar) · [Galeria](media/realm-gym/0.7.0-forge-1.21.1/README.md). Requer Forge 52.1.20+.

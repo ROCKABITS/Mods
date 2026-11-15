@@ -1,0 +1,85 @@
+plugins {
+    id 'fabric-loom' version '1.7.4'
+    id 'java-library'
+}
+version = mod_version
+group = mod_group_id
+base { archivesName = 'realm-gym' }
+java.toolchain.languageVersion = JavaLanguageVersion.of(17)
+repositories { mavenCentral() }
+dependencies {
+    minecraft "com.mojang:minecraft:${minecraft_version}"
+    mappings loom.officialMojangMappings()
+    modImplementation "net.fabricmc:fabric-loader:${loader_version}"
+    modImplementation "net.fabricmc.fabric-api:fabric-api:${fabric_version}"
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.11.4'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
+// Compile the complete eight-machine rules on Java 17; Minecraft adapters remain local.
+def shared = layout.buildDirectory.dir('generated/sources/shared')
+tasks.register('prepareSharedJava', Sync) {
+    from('../realm-gym/src/main/java') {
+        include 'pt/realmfitness/ConditioningCommands.java', 'pt/realmfitness/domain/**',
+            'pt/realmfitness/GymGeometry.java', 'pt/realmfitness/GymLayout.java',
+            'pt/realmfitness/client/FitnessRig.java', 'pt/realmfitness/client/FitnessTheme.java',
+            'pt/realmfitness/client/MinigameHudRenderer.java', 'pt/realmfitness/client/TrainingPresentation.java',
+            'pt/realmfitness/client/ExercisePose.java'
+        filter { line -> line.replace('Math.clamp(', 'pt.realmfitness.domain.FitnessMath.clamp(') }
+    }
+    into shared
+}
+def sharedTests = layout.buildDirectory.dir('generated/sources/shared-tests')
+tasks.register('prepareSharedTests', Sync) {
+    from('../realm-gym/src/test/java') {
+        filter { line -> line.replace('.getFirst()', '.get(0)').replace('Math.clamp(', 'pt.realmfitness.domain.FitnessMath.clamp(') }
+    }
+    into sharedTests
+}
+sourceSets.main.java.srcDir shared
+sourceSets.test.java.srcDir sharedTests
+tasks.named('compileJava') { dependsOn 'prepareSharedJava' }
+tasks.named('compileTestJava') { dependsOn 'prepareSharedTests' }
+tasks.named('processResources') {
+    from('../realm-gym/src/main/resources') {
+        exclude 'META-INF/**', 'pack.mcmeta', 'data/**/recipe/**'
+        eachFile { f -> f.path = f.path.replace('/loot_table/', '/loot_tables/').replace('/tags/item/', '/tags/items/').replace('/tags/block/', '/tags/blocks/') }
+        includeEmptyDirs = false
+    }
+    from('../realm-gym/src/main/resources') {
+        include 'data/**/recipe/**'
+        eachFile { f -> f.path = f.path.replace('/recipe/', '/recipes/') }
+        filter { line -> line.replace('"id": "realmfitness:', '"item": "realmfitness:') }
+        includeEmptyDirs = false
+    }
+    filesMatching('fabric.mod.json') {
+        expand version: project.version, loader: loader_version, api: fabric_version
+        if (project.hasProperty('fitnessGameTests')) filter { line -> line.replace('"main":', '"fabric-gametest": ["pt.realmfitness.test.FitnessGameTests"], "main":') }
+    }
+}
+tasks.named('test', Test) { useJUnitPlatform() }
+if (providers.gradleProperty('fitnessGameTests').isPresent()) {
+    sourceSets.main.java.srcDir 'src/gametest/java'
+    sourceSets.main.resources.srcDir 'src/gametest/resources'
+}
+if (providers.gradleProperty('fitnessVisualTests').isPresent()) sourceSets.main.java.srcDir 'src/visualtest/java'
+loom {
+    runs {
+        client {
+            runDir 'run'
+            if (project.hasProperty('fitnessVisualTests')) {
+                vmArg '-Dfitness.qaOutput=' + file('qa-results/client').absolutePath
+                vmArg '-Dfitness.visualTests=true'
+                programArgs '--width', '1600', '--height', '900'
+            }
+        }
+        server { programArg '--nogui' }
+        gametest {
+            server()
+            runDir 'build/gametest'
+            vmArg '-Dfabric-api.gametest'
+            vmArg '-Dfabric-api.gametest.report-file=' + file('qa-results/native.xml').absolutePath
+        }
+    }
+}
+tasks.named('jar', Jar) { exclude 'pt/realmfitness/test/**', 'pt/realmfitness/visualtest/**', 'data/realmfitness/structures/empty.nbt' }
+tasks.withType(JavaCompile).configureEach { options.encoding = 'UTF-8'; options.release = 17 }

@@ -99,7 +99,7 @@ Não há dependência de um mod de stats. Combinações específicas com outros 
 
 ## Changelog — 0.7.0
 
-Added optional physical condition, maintenance and profile indicators, with immediate, persistent operator commands. [Read the complete English changelog](CHANGELOG.md). The update is available in all four editions. Update the server and every client together.
+Added optional physical condition, maintenance and profile indicators, with immediate, persistent operator commands. [Read the complete English changelog](CHANGELOG.md). The update is available in all five editions. Update the server and every client together.
 
 ## Desenvolvimento
 

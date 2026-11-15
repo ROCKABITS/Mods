@@ -4,7 +4,7 @@ from pathlib import Path
 import hashlib,json,os,subprocess,sys,tempfile,unittest
 
 PUBLISHER=Path(__file__).with_name('gym_publish.py')
-EDITIONS={'realm-gym':'0.7.0','realm-gym-forge-1.20.1':'0.7.0-forge-1.20.1','realm-gym-fabric-1.21.1':'0.7.0-fabric-1.21.1','realm-gym-forge-1.21.1':'0.7.0-forge-1.21.1'}
+EDITIONS={'realm-gym':'0.7.0','realm-gym-forge-1.20.1':'0.7.0-forge-1.20.1','realm-gym-fabric-1.21.1':'0.7.0-fabric-1.21.1','realm-gym-fabric-1.20.1':'0.7.0-fabric-1.20.1','realm-gym-forge-1.21.1':'0.7.0-forge-1.21.1'}
 RUNNER='''import importlib.util,sys;from pathlib import Path
 spec=importlib.util.spec_from_file_location("publisher",sys.argv[1]);module=importlib.util.module_from_spec(spec);spec.loader.exec_module(module)
 module.ROOT=Path(sys.argv[2]);project=sys.argv[3];sys.argv=[sys.argv[0],project];module.main()

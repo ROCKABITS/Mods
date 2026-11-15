@@ -1,6 +1,6 @@
 # Condição física — Realm Gym 0.7.0
 
-O sistema é opcional e vem **desativado por defeito** nas quatro edições. Os níveis, o XP, as cargas desbloqueadas, os planos e os recordes continuam permanentes. Quando ativado, a condição física de cada um dos seis atributos multiplica o respetivo bónus do Realm Gym.
+O sistema é opcional e vem **desativado por defeito** nas cinco edições. Os níveis, o XP, as cargas desbloqueadas, os planos e os recordes continuam permanentes. Quando ativado, a condição física de cada um dos seis atributos multiplica o respetivo bónus do Realm Gym.
 
 ## Ativar e desativar no Minecraft
 

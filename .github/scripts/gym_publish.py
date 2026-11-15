@@ -8,6 +8,7 @@ EDITIONS={
     'realm-gym':('gym_release.py','build-realm-gym.yml'),
     'realm-gym-forge-1.20.1':('gym_forge_release.py','build-realm-gym-forge.yml'),
     'realm-gym-fabric-1.21.1':('gym_fabric_release.py','build-realm-gym-fabric.yml'),
+    'realm-gym-fabric-1.20.1':('gym_fabric201_release.py','build-realm-gym-fabric-1.20.1.yml'),
     'realm-gym-forge-1.21.1':('gym_forge211_release.py','build-realm-gym-forge-1.21.1.yml'),
 }
 def git(*args,check=True):
@@ -27,7 +28,7 @@ def main():
     paths=[prefix+suffix for suffix in ('.jar','.zip','.sha256','.build.json')]+['media/realm-gym/'+version+'/']
     assert all((ROOT/path).exists() for path in paths)
     inputs=[project,'.github/scripts/'+packager,'.github/workflows/'+workflow,'.github/scripts/gym_publish.py','.github/scripts/test_gym_publish.py']
-    if project in ('realm-gym-fabric-1.21.1','realm-gym-forge-1.21.1'):inputs+=['realm-gym/src/main','realm-gym/src/test']
+    if project in ('realm-gym-fabric-1.21.1','realm-gym-fabric-1.20.1','realm-gym-forge-1.21.1'):inputs+=['realm-gym/src/main','realm-gym/src/test']
     git('add','--',*paths)
     staged=git('diff','--cached','--name-only').stdout.splitlines()
     assert all(path in paths[:4] or path.startswith(paths[4]) for path in staged),'Unexpected staged files outside this release'
