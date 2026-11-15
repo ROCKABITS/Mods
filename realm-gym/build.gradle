@@ -38,3 +38,11 @@ if (providers.gradleProperty('fitnessVisualTests').isPresent()) {
 tasks.named('jar', Jar) { exclude 'pt/realmfitness/test/**', 'pt/realmfitness/visualtest/**', 'data/realmfitness/structure/empty.nbt' }
 tasks.withType(JavaCompile).configureEach { options.encoding = 'UTF-8'; options.release = 21 }
 tasks.withType(ProcessResources).configureEach { filteringCharset = 'UTF-8' }
+// Derive the distributed metadata version from the same property as the JAR name.
+tasks.named('processResources', ProcessResources) {
+    def metadataVersion = project.version.toString()
+    inputs.property('metadataVersion', metadataVersion)
+    filesMatching('META-INF/neoforge.mods.toml') {
+        filter { line -> line.startsWith('version=') ? 'version="' + metadataVersion + '"' : line }
+    }
+}
