@@ -14,6 +14,7 @@ Adiciona este ficheiro ao mesmo projeto **Realm Gym**, mantendo a edição NeoFo
 
 ## Changelog — 0.7.0
 
+- Added a Fabric edition for Minecraft 1.20.1 with all eight machines, Java 17 support and dedicated networking adapters.
 - Added optional physical condition for each of the six training attributes. The system is disabled by default.
 - By default, condition remains at 100% for seven full days without maintenance, then loses five percentage points per additional complete day, down to 60%.
 - Condition scales Realm Gym's earned attribute bonuses. Lifetime XP, levels, unlocked loads, workout plans and personal records remain saved.
@@ -26,4 +27,4 @@ Adiciona este ficheiro ao mesmo projeto **Realm Gym**, mantendo a edição NeoFo
 - Added configurable grace period, loss rate, minimum condition, recovery and maintenance requirements. Offline time can be included or excluded.
 - Existing profiles receive full condition and a complete grace period when the feature is first enabled, with no inactivity charged from before activation.
 
-Available for NeoForge, Fabric and Forge on Minecraft 1.21.1, and Forge on Minecraft 1.20.1. The 1.21.1 editions include eight machines; Forge 1.20.1 includes six. Install the same edition and version on the server and every client. Fabric also requires Fabric API.
+Available for NeoForge, Fabric and Forge on Minecraft 1.21.1, and Fabric and Forge on Minecraft 1.20.1. Fabric 1.20.1 and all 1.21.1 editions include eight machines; Forge 1.20.1 includes six. Install the same edition and version on the server and every client. Fabric also requires Fabric API.
