@@ -1,0 +1,120 @@
+{
+  "date": "2026-11-12",
+  "base_commit": "f9dbae3a6183937c90af5741bd1ca8f1e0e78118",
+  "command": "./gradlew --no-daemon --console=plain test",
+  "total_tests": 803,
+  "projects": [
+    {
+      "module": "contracts-bounties",
+      "exit": 0,
+      "tests": 82,
+      "failures": 0,
+      "errors": 0
+    },
+    {
+      "module": "crown-ledger",
+      "exit": 0,
+      "tests": 102,
+      "failures": 0,
+      "errors": 0
+    },
+    {
+      "module": "laws-justice",
+      "exit": 0,
+      "tests": 130,
+      "failures": 0,
+      "errors": 0
+    },
+    {
+      "module": "realm-casino",
+      "exit": 0,
+      "tests": 82,
+      "failures": 0,
+      "errors": 0
+    },
+    {
+      "module": "realm-council",
+      "exit": 0,
+      "tests": 49,
+      "failures": 0,
+      "errors": 0
+    },
+    {
+      "module": "realm-economy",
+      "exit": 0,
+      "tests": 45,
+      "failures": 0,
+      "errors": 0
+    },
+    {
+      "module": "realm-identity",
+      "exit": 0,
+      "tests": 35,
+      "failures": 0,
+      "errors": 0
+    },
+    {
+      "module": "realm-markets",
+      "exit": 0,
+      "tests": 45,
+      "failures": 0,
+      "errors": 0
+    },
+    {
+      "module": "realm-marriage",
+      "exit": 0,
+      "tests": 45,
+      "failures": 0,
+      "errors": 0
+    },
+    {
+      "module": "realm-notifications",
+      "exit": 0,
+      "tests": 22,
+      "failures": 0,
+      "errors": 0
+    },
+    {
+      "module": "realm-origins",
+      "exit": 0,
+      "tests": 70,
+      "failures": 0,
+      "errors": 0
+    },
+    {
+      "module": "realm-progression",
+      "exit": 0,
+      "tests": 25,
+      "failures": 0,
+      "errors": 0
+    },
+    {
+      "module": "realm-rewards",
+      "exit": 0,
+      "tests": 12,
+      "failures": 0,
+      "errors": 0
+    },
+    {
+      "module": "realm-titles",
+      "exit": 0,
+      "tests": 48,
+      "failures": 0,
+      "errors": 0
+    },
+    {
+      "module": "realm-villager-economy",
+      "exit": 0,
+      "tests": 9,
+      "failures": 0,
+      "errors": 0
+    },
+    {
+      "module": "season-eight",
+      "exit": 0,
+      "tests": 2,
+      "failures": 0,
+      "errors": 0
+    }
+  ]
+}

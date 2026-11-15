@@ -46,6 +46,7 @@ sources += sorted((project / 'src/test/java/pt/realmnotifications/domain').glob(
 layout = project / 'src/main/java/pt/realmnotifications/client/CardLayout.java'
 if layout.is_file():
     sources.append(layout)
+    sources.append(project / 'src/main/java/pt/realmnotifications/client/SettingsLayout.java')
     sources += sorted((project / 'src/test/java/pt/realmnotifications/client').glob('*.java'))
 subprocess.run([executable('javac'), '--release', '21', '-encoding', 'UTF-8', '-cp', str(jar),
                 '-d', str(classes), *map(str, sources)], check=True)

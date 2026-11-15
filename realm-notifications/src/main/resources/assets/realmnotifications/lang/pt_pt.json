@@ -42,5 +42,8 @@
   "gui.realmnotifications.preview_body": "Isto é apenas um exemplo visual. O teu saldo continua igual.",
   "notification.realmnotifications.burst.title": "%s avisos agrupados",
   "notification.realmnotifications.burst.body": "Vários avisos chegaram juntos. Consulta os detalhes com %s.",
-  "notification.realmnotifications.burst.no_history": "Vários avisos chegaram ao mesmo tempo."
+  "notification.realmnotifications.burst.no_history": "Vários avisos chegaram ao mesmo tempo.",
+  "gui.realmnotifications.page": "Página %s/%s",
+  "gui.realmnotifications.previous_page": "Página anterior de preferências",
+  "gui.realmnotifications.next_page": "Página seguinte de preferências"
 }
