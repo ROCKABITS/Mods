@@ -188,7 +188,7 @@
   "fitness.conditioning.bonus": "Bônus atual: +%s%% / +%s%% possível",
   "fitness.conditioning.sets": "Manutenção de hoje: %s/%s séries válidas",
   "fitness.conditioning.maintained": "Manutenção de hoje concluída",
-  "fitness.conditioning.recovery": "Recuperação: +%s pontos por dia de treino",
+  "fitness.conditioning.recovery": "Recuperação: +%s pontos por dia neste modo",
   "fitness.conditioning.next_loss": "Próxima perda em aproximadamente %s horas",
   "fitness.conditioning.no_loss": "Nenhuma perda adicional programada",
   "fitness.conditioning.real_time": "Tempo real, incluindo tempo offline",
@@ -198,5 +198,12 @@
   "fitness.conditioning.status_off": "A condição física está desativada neste servidor.",
   "fitness.conditioning.turned_on": "Condição física ativada. Alteração salva e aplicada imediatamente.",
   "fitness.conditioning.turned_off": "Condição física desativada. Bônus completos restaurados; alteração salva.",
-  "fitness.conditioning.command_failed": "Não foi possível consultar ou salvar a opção. Verifique o registro do servidor."
+  "fitness.conditioning.command_failed": "Não foi possível consultar ou salvar a opção. Verifique o registro do servidor.",
+  "fitness.conditioning.clock": "Relógio: %s",
+  "fitness.conditioning.mode.real": "tempo real",
+  "fitness.conditioning.mode.minecraft": "tempo Minecraft",
+  "fitness.conditioning.next_loss_minecraft": "Próxima perda em aproximadamente %s dias do Minecraft",
+  "fitness.conditioning.minecraft_time": "Conta enquanto o mundo está funcionando, incluindo tempo offline",
+  "fitness.conditioning.schedule": "Relógio: %s; dias de tolerância: %s.",
+  "fitness.conditioning.days_set": "Dias de tolerância: %s; relógio: %s. Salvo e aplicado imediatamente."
 }

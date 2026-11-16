@@ -1,16 +1,16 @@
-# Realm Gym 0.7.0 Beta
+# Realm Gym 0.7.1 Beta
 
 Ginásio físico para **Minecraft 1.21.1, NeoForge 21.1.256+ e Java 21**. Máquinas 3D, oito minijogos, atributos permanentes, rotinas personalizadas, calendário e painéis de recordes. Funciona de forma independente.
 
-[Descarregar JAR](../mod-pronto/realm-gym-0.7.0.jar) · [ZIP](../mod-pronto/realm-gym-0.7.0.zip) · [Galeria](../media/realm-gym/0.7.0/README.md) · [Validação](VALIDACAO.md) · [Conceito original](DESIGN.md)
+[Descarregar JAR](../mod-pronto/realm-gym-0.7.1.jar) · [ZIP](../mod-pronto/realm-gym-0.7.1.zip) · [Galeria](../media/realm-gym/0.7.1/README.md) · [Validação](VALIDACAO.md) · [Conceito original](DESIGN.md)
 
 Instala esta versão no servidor e em todos os clientes. Esta versão exige o mesmo protocolo de montagem para manter o personagem alinhado com as máquinas. Esta edição é para 1.21.1/NeoForge.
 
-**Realm Gym é o novo nome do Realm Fitness.** Substitui o JAR antigo por `realm-gym-0.7.0.jar`; instala apenas uma edição. O identificador `realmfitness`, os blocos, `data/realm_fitness.dat` e `config/realm-fitness.json` mantêm-se para conservar os mundos, níveis, rotinas e recordes. O comando principal passa a `/gym`; `/fitness` continua como alias, incluindo `equipment` e `reload`.
+**Realm Gym é o novo nome do Realm Fitness.** Substitui o JAR antigo por `realm-gym-0.7.1.jar`; instala apenas uma edição. O identificador `realmfitness`, os blocos, `data/realm_fitness.dat` e `config/realm-fitness.json` mantêm-se para conservar os mundos, níveis, rotinas e recordes. O comando principal passa a `/gym`; `/fitness` continua como alias, incluindo `equipment` e `reload`.
 
 ![Ícone do Realm Gym](../media/realm-gym/branding/realm-gym-icon.png)
 
-**New in 0.7.0:** [optional physical condition](CONDITIONING.md) and in-game controls. Use `/gym conditioning on` or `/gym conditioning off` as an operator; everyone can use `/gym conditioning status`. Changes are immediate and saved across restarts. The system is disabled by default and preserves permanent progression. [Full English changelog](CHANGELOG.md).
+**New in 0.7.1:** choose real-time or Minecraft-day physical condition with `/gym conditioning days real 7` or `/gym conditioning days minecraft 7`. Commands save and apply immediately. [Clock configuration guide](CONDITIONING.md).
 
 ## Começar
 
@@ -97,9 +97,9 @@ Os minijogos usam Espaço, WASD e os botões do rato nesta beta. As animações 
 
 Não há dependência de um mod de stats. Combinações específicas com outros sistemas de atributos ou renderização precisam de validação no respetivo modpack. Mensalidades, personal trainers, alterações musculares da skin, gestão de ginásios e metas semanais com prémios continuam nas ideias do conceito original.
 
-## Changelog — 0.7.0
+## Changelog — 0.7.1
 
-Added optional physical condition, maintenance and profile indicators, with immediate, persistent operator commands. [Read the complete English changelog](CHANGELOG.md). The update is available in all five editions. Update the server and every client together.
+Added real-time and Minecraft-day condition clocks with configurable grace periods, immediate persistent commands, matching maintenance windows and updated profile tooltips. [Complete English changelog](CHANGELOG.md). Update all clients and the server together.
 
 ## Desenvolvimento
 

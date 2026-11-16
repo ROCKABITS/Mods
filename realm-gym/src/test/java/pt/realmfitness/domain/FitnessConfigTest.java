@@ -55,4 +55,34 @@ class FitnessConfigTest {
         FitnessConfig.setConditioning(file(),true);String before=Files.readString(file());FitnessConfig.setConditioning(file(),true);assertEquals(before,Files.readString(file()));
         try(var files=Files.list(file().getParent())){assertEquals(1,files.count());}
     }
+    @Test void dayCommandsPersistBothModesAndDoNotEnableTheFeature() throws IOException {
+        var settings=FitnessConfig.setConditioningDays(file(),Conditioning.TimeMode.MINECRAFT,3);
+        assertFalse(settings.conditioning.enabled);assertEquals(3,settings.conditioning.graceDays);
+        assertEquals(Conditioning.TimeMode.MINECRAFT,FitnessConfig.load(file()).conditioning.timeMode);
+        assertEquals("minecraft",document().getAsJsonObject("conditioning").get("timeMode").getAsString());
+        FitnessConfig.setConditioningDays(file(),Conditioning.TimeMode.REAL,12);
+        assertEquals(Conditioning.TimeMode.REAL,FitnessConfig.load(file()).conditioning.timeMode);assertEquals(12,FitnessConfig.load(file()).conditioning.graceDays);
+        assertFalse(FitnessConfig.load(file()).conditioning.enabled);
+    }
+    @Test void dayCommandsPreserveUnrelatedSettingsAndExtensions() throws IOException {
+        var json=FitnessLedger.JSON.toJsonTree(new FitnessLedger.Settings()).getAsJsonObject();json.addProperty("dailyXp",133);
+        json.addProperty("unknown","keep");json.getAsJsonObject("conditioning").addProperty("extension",73);write(json);
+        FitnessConfig.setConditioningDays(file(),Conditioning.TimeMode.MINECRAFT,4);
+        json.getAsJsonObject("conditioning").addProperty("timeMode","minecraft");json.getAsJsonObject("conditioning").addProperty("graceDays",4);
+        assertEquals(json,document());
+    }
+    @Test void invalidDayArgumentsAreRejectedWithoutOverwritingTheConfiguration() throws IOException {
+        FitnessConfig.load(file());String before=Files.readString(file());
+        assertThrows(IllegalArgumentException.class,()->FitnessConfig.setConditioningDays(file(),Conditioning.TimeMode.REAL,-1));
+        assertThrows(IllegalArgumentException.class,()->FitnessConfig.setConditioningDays(file(),Conditioning.TimeMode.MINECRAFT,366));
+        assertThrows(IllegalArgumentException.class,()->FitnessConfig.setConditioningDays(file(),null,7));assertEquals(before,Files.readString(file()));
+        var json=document();json.getAsJsonObject("conditioning").addProperty("timeMode","sunrise");write(json);before=Files.readString(file());
+        assertThrows(IllegalArgumentException.class,()->FitnessConfig.setConditioningDays(file(),Conditioning.TimeMode.REAL,7));assertEquals(before,Files.readString(file()));
+    }
+    @Test void oldConditioningBlocksKeepRealTimeUntilAnOperatorChangesTheMode() throws IOException {
+        var json=FitnessLedger.JSON.toJsonTree(new FitnessLedger.Settings()).getAsJsonObject();json.getAsJsonObject("conditioning").remove("timeMode");write(json);
+        assertEquals(Conditioning.TimeMode.REAL,FitnessConfig.load(file()).conditioning.timeMode);
+        FitnessConfig.setConditioningDays(file(),Conditioning.TimeMode.MINECRAFT,0);
+        var settings=FitnessConfig.load(file());assertEquals(Conditioning.TimeMode.MINECRAFT,settings.conditioning.timeMode);assertEquals(0,settings.conditioning.graceDays);
+    }
 }

@@ -1,10 +1,10 @@
-# Realm Gym 0.7.0 Beta — validação
+# Realm Gym 0.7.1 Beta — validação
 
 Validação local em 14 de novembro de 2026, com Minecraft 1.21.1, NeoForge 21.1.256, Temurin Java 21 e cliente gráfico real sob Xvfb/Mesa.
 
 ## Testes de lógica e servidor
 
-- **128 testes JUnit:** os oito minijogos distintos podem ser concluídos com os controlos documentados, incluindo cargas máximas desbloqueadas com fadiga; ausência de inputs, spam de teclas, sequências antigas e séries incompletas não produzem uma conclusão válida. Inclui alcance das mãos nos oito exercícios, comprimento dos membros e continuidade das articulações, contacto das mãos com barras/pega durante todo o movimento, pés apoiados no supino/agachamento e altura do banco. Inclui pressão que desce sem toques, Espaço segurado que não levanta, necessidade de mais toques com mais peso, cargas baixas facilitadas pela evolução, exigência crescente com fadiga/repetições, marcador de boxe que continua a mover-se até ao golpe, primeiro resultado bloqueado contra spam, sequências perfeitas e quebra por falha, transição rápida após o ataque, alternância dos pés, subida e descida completas nas elevações, recuperação obrigatória no remo, pausa no fundo do agachamento, previsão de toques removida após confirmação e taps rápidos entre ticks, limites de experiência, bónus diário único, relógio recuado, fadiga/recuperação, planos ativos imutáveis, cargas bloqueadas, limites de rotinas, separação de jogadores, persistência JSON, dados inválidos e classificações comparáveis por categoria/zona/dimensão.
+- **148 testes JUnit:** os oito minijogos distintos podem ser concluídos com os controlos documentados, incluindo cargas máximas desbloqueadas com fadiga; ausência de inputs, spam de teclas, sequências antigas e séries incompletas não produzem uma conclusão válida. Inclui alcance das mãos nos oito exercícios, comprimento dos membros e continuidade das articulações, contacto das mãos com barras/pega durante todo o movimento, pés apoiados no supino/agachamento e altura do banco. Inclui pressão que desce sem toques, Espaço segurado que não levanta, necessidade de mais toques com mais peso, cargas baixas facilitadas pela evolução, exigência crescente com fadiga/repetições, marcador de boxe que continua a mover-se até ao golpe, primeiro resultado bloqueado contra spam, sequências perfeitas e quebra por falha, transição rápida após o ataque, alternância dos pés, subida e descida completas nas elevações, recuperação obrigatória no remo, pausa no fundo do agachamento, previsão de toques removida após confirmação e taps rápidos entre ticks, limites de experiência, bónus diário único, relógio recuado, fadiga/recuperação, planos ativos imutáveis, cargas bloqueadas, limites de rotinas, separação de jogadores, persistência JSON, dados inválidos e classificações comparáveis por categoria/zona/dimensão.
 - **23 GameTests nativos:** equipamentos e receitas, colocação das oito máquinas e de todas as células nas quatro direções, resolução das âncoras, destruição por qualquer célula com um único drop, rejeição de obstáculos distantes, perda de suporte, compatibilidade com máquinas antigas de duas partes, colisões locais e aberturas, destruição em criativo, NBT dos atletas, rejeição de NBT inválido, modificadores sem acumulação e configuração persistente do painel, passageiros reais em entidades de montagem nas quatro direções, desmontagem ao destruir equipamento, estados visuais em uso e exclusão das montagens temporárias da gravação do mundo. Inclui execução dos comandos `/gym equipment` e `/fitness equipment`, permissões e alias. Os testes de passageiros nativos usam entidades ArmorStand; a montagem por jogadores é exercitada no cliente real.
 
 A expansão acrescenta verificações de XP e fadiga partilhados sem bónus duplicados, variedade diária por atributo, leitura das gravações com seis máquinas, limites e passos de carga, recordes independentes, rejeição de pressão constante/uma perna e da puxada sem contração, contacto dos pés com a plataforma móvel e comprimento constante da corda durante a abertura.
@@ -23,7 +23,7 @@ As **38 capturas** incluem os oito modelos no renderizador Minecraft, incluindo 
 
 O [workflow](../.github/workflows/build-realm-gym.yml) repete build, testes JUnit, GameTests e cliente integrado antes de publicar. Conserva uma cópia do JAR de produção antes das execuções com código de teste e publica apenas se a main ainda estiver no commit validado.
 
-O empacotador confirma metadados, bytecode Java 21, recursos, paridade de traduções e ausência de classes de teste e bibliotecas/jogos incorporados no JAR. `mod-pronto/realm-gym-0.7.0.build.json` regista o commit, execução CI, contagens, verificações e hashes do JAR, ZIP e capturas. Os relatórios completos ficam nos artefactos da execução; o resultado do cliente acompanha a [galeria](../media/realm-gym/0.7.0/README.md).
+O empacotador confirma metadados, bytecode Java 21, recursos, paridade de traduções e ausência de classes de teste e bibliotecas/jogos incorporados no JAR. `mod-pronto/realm-gym-0.7.1.build.json` regista o commit, execução CI, contagens, verificações e hashes do JAR, ZIP e capturas. Os relatórios completos ficam nos artefactos da execução; o resultado do cliente acompanha a [galeria](../media/realm-gym/0.7.1/README.md).
 
 ## Âmbito
 
@@ -33,7 +33,7 @@ Os indicadores interpolam as atualizações recebidas e usam uma previsão visua
 
 Os testes confirmam os resultados das oito mecânicas com inputs automatizados. A dificuldade, os limites e as percentagens continuam sujeitos a afinação com jogadores. O [guia](README.md) descreve os valores, controlos, âmbito das zonas de ginásio e funcionalidades desta beta.
 
-## Condição física na 0.7.0
+## Condição física na 0.7.1
 
 A condição é opcional e desativada por defeito. A suite de domínio inclui a tolerância de sete dias, perda de cinco pontos por dia, mínimo de 60%, recuperação de 20 pontos por duas séries válidas, limite diário, contagem por atributo, treino com limite de XP atingido, relógio a recuar, pausa offline, reativação e migração de perfis antigos.
 
@@ -41,8 +41,12 @@ Dois novos GameTests verificam modificadores reais de dano, movimento e proteç�
 
 O horário de renovação do cenário é colocado a doze horas do arranque. Esta configuração evita que a execução gráfica atravesse o seu próprio reinício diário; os testes de domínio continuam a verificar as mudanças de dia. A configuração e o estado de condição são preservados na reabertura do mundo de teste.
 
-## Comandos de condição na 0.7.0
+## Comandos de condição na 0.7.1
 
 Os GameTests executam os comandos e o alias `/fitness` no dispatcher real, confirmam permissões de operador, consulta sem permissões elevadas, gravação e recarregamento do estado, preservação de outras opções, repetição idempotente de `on` e recusa de configurações inválidas sem alterar as regras ativas. O cenário de cliente verifica a alteração imediata dos atributos do jogador ligado e a conservação da condição ao alternar o modo.
 
 Os testes de ficheiros cobrem criação, configuração antiga, campos desconhecidos, tamanho, JSON inválido, falhas de escrita e substituição atómica. Nos testes de distribuição Forge/Fabric 1.21.1, a consola ativa o modo, o servidor encerra e reinicia; a consulta confirma que a opção foi mantida, antes de voltar a desativá-la.
+
+## Real-time and Minecraft-day clocks
+
+The clock tests cover exact 24,000-tick boundaries, real-time independence, offline settings, paused worlds, rollback, grace-period changes, selected-day recovery and legacy profiles. Native tests run real operator commands, check saved mode/day values, reject visitors and invalid counts, apply Minecraft-day condition to actual damage, and confirm daylight changes do not charge inactivity. The real client runs in Minecraft-day mode, verifies the profile payload and reloads the world with its selected period intact. The production-server smoke scenarios boot three times to verify both Minecraft and real-time settings after restarting.

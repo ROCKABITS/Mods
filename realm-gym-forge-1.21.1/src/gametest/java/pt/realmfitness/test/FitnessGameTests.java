@@ -216,4 +216,58 @@ public final class FitnessGameTests {
         finally{restoreCommandConfig(server,original);}
         h.succeed();
     }
+    @GameTest(template="realmfitness:empty",timeoutTicks=120) public static void dayModeCommandsPersistAndEnforcePermissions(GameTestHelper h){
+        var server=h.getLevel().getServer();var data=FitnessData.get(server);var previous=data.ledger;byte[] before=null;
+        try{
+            if(java.nio.file.Files.exists(commandConfig()))before=java.nio.file.Files.readAllBytes(commandConfig());
+            data.ledger=new FitnessLedger();var document=FitnessLedger.JSON.toJsonTree(new FitnessLedger.Settings()).getAsJsonObject();document.addProperty("clock_extension","keep");
+            java.nio.file.Files.writeString(commandConfig(),document.toString());FitnessService.reload(server);
+            var dispatcher=server.getCommands().getDispatcher();var source=server.createCommandSourceStack().withPermission(2).withSuppressedOutput();
+            h.assertTrue(dispatcher.execute("gym conditioning days minecraft 3",source)==1,"Minecraft-day command failed");
+            FitnessService.reload(server);var settings=FitnessService.conditioningSettings(server);
+            h.assertTrue(settings.timeMode==Conditioning.TimeMode.MINECRAFT&&settings.graceDays==3&&!settings.enabled,"Day command did not persist, or enabled the option unexpectedly");
+            var saved=com.google.gson.JsonParser.parseString(java.nio.file.Files.readString(commandConfig())).getAsJsonObject();
+            h.assertTrue(saved.get("clock_extension").getAsString().equals("keep"),"Day command lost an unrelated setting");
+            h.assertTrue(dispatcher.execute("gym conditioning status",source.withPermission(0))==1,"Visitor cannot view the current clock");
+            for(String command:List.of("gym conditioning days real 7","gym conditioning days minecraft 7")){
+                boolean refused=false;try{dispatcher.execute(command,source.withPermission(0));}catch(com.mojang.brigadier.exceptions.CommandSyntaxException expected){refused=true;}
+                h.assertTrue(refused,"Visitor changed the conditioning clock");
+            }
+            for(String command:List.of("gym conditioning days real -1","gym conditioning days minecraft 366")){
+                boolean refused=false;try{dispatcher.execute(command,source);}catch(com.mojang.brigadier.exceptions.CommandSyntaxException expected){refused=true;}
+                h.assertTrue(refused,"Invalid grace period was accepted");
+            }
+            h.assertTrue(dispatcher.execute("fitness conditioning days real 5",source)==1,"Legacy day-command alias failed");
+            var restored=FitnessConfig.load(commandConfig());h.assertTrue(restored.conditioning.timeMode==Conditioning.TimeMode.REAL&&restored.conditioning.graceDays==5&&!restored.conditioning.enabled,"Real-day mode was not saved correctly");
+        }catch(Exception error){throw new AssertionError(error);}
+        finally{restoreClockFixture(server,data,previous,before);}h.succeed();
+    }
+    @GameTest(template="realmfitness:empty",timeoutTicks=120) public static void worldTickClockChangesActualBonusesAndIgnoresDaylightChanges(GameTestHelper h){
+        var server=h.getLevel().getServer();var data=FitnessData.get(server);var previous=data.ledger;byte[] before=null;long daylight=server.overworld().getDayTime();
+        try{
+            if(java.nio.file.Files.exists(commandConfig()))before=java.nio.file.Files.readAllBytes(commandConfig());
+            data.ledger=new FitnessLedger();java.nio.file.Files.writeString(commandConfig(),FitnessLedger.JSON.toJson(new FitnessLedger.Settings()));FitnessService.reload(server);
+            var dispatcher=server.getCommands().getDispatcher();var source=server.createCommandSourceStack().withPermission(2).withSuppressedOutput();
+            dispatcher.execute("gym conditioning days minecraft 1",source);dispatcher.execute("gym conditioning on",source);
+            var p=player(h);FitnessService.apply(p);var athlete=data.ledger.athletes.get(p.getUUID());athlete.experience.put(Exercise.BENCH,FitnessLedger.threshold(20));FitnessService.apply(p);
+            long tick=server.overworld().getGameTime();h.assertTrue(athlete.conditionClock.minecraftObservedAt==tick,"Service did not observe the overworld game-time clock");
+            server.overworld().setDayTime(daylight+240000);FitnessService.apply(p);
+            h.assertTrue(data.ledger.condition(athlete,Exercise.BENCH)==100,"Changing daylight time charged inactivity");
+            data.ledger.observeMinecraft(tick+2*Conditioning.MINECRAFT_DAY_TICKS);FitnessService.apply(p);
+            h.assertTrue(data.ledger.condition(athlete,Exercise.BENCH)==95,"Configured Minecraft grace did not produce gradual decay");
+            var damage=net.minecraft.world.entity.ai.attributes.Attributes.ATTACK_DAMAGE;double base=p.getAttribute(damage).getBaseValue();
+            h.assertTrue(Math.abs(p.getAttributeValue(damage)-base*1.095)<.000001,"Minecraft-day condition did not affect the real damage modifier");
+            dispatcher.execute("gym conditioning days minecraft 1",source);data.ledger.observeMinecraft(tick+3*Conditioning.MINECRAFT_DAY_TICKS);FitnessService.apply(p);
+            h.assertTrue(data.ledger.condition(athlete,Exercise.BENCH)==90,"Repeated command reset the grace period");
+            var copy=FitnessLedger.fromJson(FitnessLedger.JSON.toJson(data.ledger));h.assertTrue(copy.settings.conditioning.timeMode==Conditioning.TimeMode.MINECRAFT&&copy.condition(copy.athletes.get(p.getUUID()),Exercise.BENCH)==90,"Saved data lost the clock or condition");
+            dispatcher.execute("gym conditioning days real 4",source);FitnessService.apply(p);
+            h.assertTrue(data.ledger.condition(athlete,Exercise.BENCH)==90&&data.ledger.level(athlete,Exercise.BENCH)==20,"Clock switch lost condition or permanent progress");
+        }catch(Exception error){throw new AssertionError(error);}
+        finally{server.overworld().setDayTime(daylight);restoreClockFixture(server,data,previous,before);}h.succeed();
+    }
+    private static void restoreClockFixture(net.minecraft.server.MinecraftServer server,FitnessData data,FitnessLedger previous,byte[] bytes){
+        data.ledger=previous;
+        try{if(bytes==null)java.nio.file.Files.deleteIfExists(commandConfig());else java.nio.file.Files.write(commandConfig(),bytes);FitnessService.reload(server);}
+        catch(java.io.IOException error){throw new AssertionError(error);}
+    }
 }

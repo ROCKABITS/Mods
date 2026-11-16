@@ -10,6 +10,7 @@ public final class FitnessLedger {
     public static final long DAY=86_400_000L;
     public static final int MAX_PLAYERS=10000, MAX_RESULTS=100000;
     public long highWater;
+    public long minecraftHighWater=-1;
     public Map<UUID,Athlete> athletes=new LinkedHashMap<>();
     public Settings settings=new Settings();
     public static final class Settings {
@@ -80,13 +81,15 @@ public final class FitnessLedger {
     }
     public record Award(Result result,boolean dailyBonus,int gained,boolean workoutCompleted){}
     public long observe(long now){if(now<0)throw new IllegalArgumentException("fitness.invalid_clock");return highWater=Math.max(now,highWater);}
+    public long observeMinecraft(long ticks){if(ticks<0)throw new IllegalArgumentException("fitness.invalid_clock");return minecraftHighWater=Math.max(ticks,minecraftHighWater);}
+    private long maintenanceDay(){return settings.conditioning.timeMode==Conditioning.TimeMode.MINECRAFT?Math.max(0,minecraftHighWater)/Conditioning.MINECRAFT_DAY_TICKS:settings.day(highWater);}
     public Athlete athlete(UUID id,String name,long now){
         if(id==null||name==null||name.isBlank()||name.length()>64)throw new IllegalArgumentException("fitness.invalid_player");
         if(!athletes.containsKey(id)&&athletes.size()>=MAX_PLAYERS)throw new IllegalStateException("fitness.capacity");
         Athlete a=athletes.computeIfAbsent(id,k->new Athlete());a.name=name;refresh(a,observe(now));return a;
     }
     private void refresh(Athlete a,long now){
-        a.conditionClock.advance(now,settings.conditioning);
+        a.conditionClock.advance(now,minecraftHighWater,settings.conditioning);
         if(settings.conditioning.enabled)for(var e:Exercise.attributes())
             a.condition.computeIfAbsent(e,k->new Conditioning.State(a.conditionClock.elapsed)).refresh(a.conditionClock.elapsed,settings.conditioning);
         double recovered=Math.max(0,now-a.recoveredAt)/(settings.recoveryMinutes*60_000.0);
@@ -114,18 +117,20 @@ public final class FitnessLedger {
         for(var a:athletes.values()){
             if(next.conditioning.enabled&&(!previous.enabled||!next.conditioning.sameSchedule(previous)))
                 for(var state:a.condition.values()){state.maintainedAt=a.conditionClock.elapsed;state.lossDays=0;}
+            if(next.conditioning.timeMode!=previous.timeMode)
+                for(var state:a.condition.values()){state.sets=0;state.setsDay=Long.MIN_VALUE;state.recoveredDay=Long.MIN_VALUE;}
             refresh(a,now);
         }
     }
     public Map<String,Object> conditionInfo(Athlete a){
-        Map<String,Object> attributes=new LinkedHashMap<>();var config=settings.conditioning;long day=settings.day(highWater);
+        Map<String,Object> attributes=new LinkedHashMap<>();var config=settings.conditioning;long day=maintenanceDay();
         for(var e:Exercise.attributes()){
             var state=a.condition.get(e);
             attributes.put(e.name(),Map.of("percent",condition(a,e),"baseBonus",baseBonus(a,e),"effectiveBonus",bonus(a,e),
                 "setsToday",state!=null&&state.setsDay==day?state.sets:0,"maintainedToday",state!=null&&state.recoveredDay==day,
                 "nextLossIn",config.enabled&&state!=null?state.nextLossIn(a.conditionClock.elapsed,config):-1));
         }
-        return Map.of("enabled",config.enabled,"countOfflineTime",config.countOfflineTime,"graceDays",config.graceDays,
+        return Map.of("enabled",config.enabled,"countOfflineTime",config.countOfflineTime,"graceDays",config.graceDays,"timeMode",config.timeMode.id(),
             "lossPerDay",config.lossPerDay,"minimumPercent",config.minimumPercent,"recoveryPerDay",config.recoveryPerDay,
             "setsRequired",config.setsRequired,"attributes",attributes);
     }
@@ -168,7 +173,7 @@ public final class FitnessLedger {
         if(qualified){
             if(game.repetitions>=8){
                 a.validToday++;a.trainedToday.add(game.exercise.attribute());
-                if(settings.conditioning.enabled)a.condition.get(game.exercise.attribute()).train(a.conditionClock.elapsed,a.dailyDay,settings.conditioning);
+                if(settings.conditioning.enabled)a.condition.get(game.exercise.attribute()).train(a.conditionClock.elapsed,maintenanceDay(),settings.conditioning);
             }
             if(a.workout!=null&&a.workout.next()!=null){a.restUntil=now+a.workout.next().restSeconds*1000L;a.workout.completed++;complete=a.workout.next()==null;}
             else a.restUntil=now+15_000L;
@@ -205,17 +210,19 @@ public final class FitnessLedger {
         FitnessLedger l=JSON.fromJson(json,FitnessLedger.class);if(l==null)throw new IllegalArgumentException("fitness.corrupt_data");l.validate();return l;
     }
     public void validate(){
-        settings.validate();if(highWater<0||athletes==null||athletes.size()>MAX_PLAYERS)throw new IllegalArgumentException("fitness.corrupt_data");
+        settings.validate();if(highWater<0||minecraftHighWater< -1||athletes==null||athletes.size()>MAX_PLAYERS)throw new IllegalArgumentException("fitness.corrupt_data");
         Set<UUID> ids=new HashSet<>();int total=0;
         for(var entry:athletes.entrySet()){
             Athlete a=Objects.requireNonNull(entry.getValue());Objects.requireNonNull(entry.getKey());
             if(a.conditionClock==null||a.condition==null||a.condition.size()>6)throw new IllegalArgumentException("fitness.corrupt_data");
             a.conditionClock.validate();
-            if(a.conditionClock.elapsed>highWater||a.conditionClock.observedAt>highWater)throw new IllegalArgumentException("fitness.corrupt_data");
+            long capacity=Conditioning.add(highWater,Conditioning.minecraftUnits(Math.max(0,minecraftHighWater)));
+            if(a.conditionClock.elapsed>capacity||a.conditionClock.observedAt>highWater||a.conditionClock.minecraftObservedAt>minecraftHighWater)throw new IllegalArgumentException("fitness.corrupt_data");
             for(var condition:a.condition.entrySet()){
                 if(condition.getKey()==null||condition.getKey().attribute()!=condition.getKey()||condition.getValue()==null)throw new IllegalArgumentException("fitness.corrupt_data");
                 var state=condition.getValue();state.validate(a.conditionClock.elapsed);
-                if(state.setsDay>highWater/DAY||state.recoveredDay>highWater/DAY)throw new IllegalArgumentException("fitness.corrupt_data");
+                long maximumDay=Math.max(highWater/DAY,Math.max(0,minecraftHighWater)/Conditioning.MINECRAFT_DAY_TICKS);
+                if(state.setsDay>maximumDay||state.recoveredDay>maximumDay)throw new IllegalArgumentException("fitness.corrupt_data");
             }
             if(a.name==null||a.name.length()>64||a.experience==null||a.experience.size()!=6||a.fatigue==null||a.fatigue.size()!=6||a.results==null||a.results.size()>4096||a.routines==null||a.routines.size()>12||a.best==null||a.best.size()>4096||a.completedDays==null||a.completedDays.size()>367||a.trainedToday==null||a.trainedToday.size()>6||a.earnedToday<0||a.earnedToday>10000||a.validToday<0||a.validToday>100000||a.recoveredAt<0||a.restUntil<0)
                 throw new IllegalArgumentException("fitness.corrupt_data");

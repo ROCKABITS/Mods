@@ -103,8 +103,13 @@ public final class AthleteScreen extends Screen {
                     tooltip.add(tr("conditioning.bonus",String.format(Locale.ROOT,"%.1f",effective*100),String.format(Locale.ROOT,"%.1f",max*lv/20*100)));
                     tooltip.add(state.get("maintainedToday").getAsBoolean()?tr("conditioning.maintained"):tr("conditioning.sets",state.get("setsToday").getAsInt(),condition.get("setsRequired").getAsInt()));
                     tooltip.add(tr("conditioning.recovery",String.format(Locale.ROOT,"%.0f",condition.get("recoveryPerDay").getAsDouble())));
-                    long until=state.get("nextLossIn").getAsLong();tooltip.add(until<0?tr("conditioning.no_loss"):tr("conditioning.next_loss",Math.max(1,(until+3_599_999)/3_600_000)));
-                    tooltip.add(tr(condition.get("countOfflineTime").getAsBoolean()?"conditioning.real_time":"conditioning.online_time"));
+                    boolean minecraftTime=condition.has("timeMode")&&condition.get("timeMode").getAsString().equals("minecraft");
+                    tooltip.add(tr("conditioning.clock",tr("conditioning.mode."+(minecraftTime?"minecraft":"real"))));
+                    long until=state.get("nextLossIn").getAsLong();
+                    tooltip.add(until<0?tr("conditioning.no_loss"):minecraftTime
+                        ?tr("conditioning.next_loss_minecraft",String.format(Locale.ROOT,"%.2f",Math.ceil(until/(double)FitnessLedger.DAY*100)/100))
+                        :tr("conditioning.next_loss",Math.max(1,until/3_600_000+(until%3_600_000==0?0:1))));
+                    tooltip.add(tr(!condition.get("countOfflineTime").getAsBoolean()?"conditioning.online_time":minecraftTime?"conditioning.minecraft_time":"conditioning.real_time"));
                 }else tooltip.add(tr("conditioning.disabled"));
                 g.renderTooltip(font,tooltip,Optional.empty(),mx,my);
             }

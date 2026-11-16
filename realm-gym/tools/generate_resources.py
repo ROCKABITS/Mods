@@ -114,6 +114,8 @@ assert en.keys()==pt.keys()
 for lang,strings in [('en_us',en),('pt_pt',pt),('pt_br',pt)]:
     data={'fitness.'+k:v for k,v in strings.items()};data.update({'itemGroup.realmfitness':'Realm Gym','item.realmfitness.athlete_card':'Cartão de atleta' if lang.startswith('pt') else 'Athlete card','block.realmfitness.record_board':'Painel de recordes' if lang.startswith('pt') else 'Record board','key.realmfitness.profile':'Perfil de Atleta' if lang.startswith('pt') else 'Athlete profile','key.categories.realmfitness':'Realm Gym'})
     for n in machines:data['block.realmfitness.'+n]=strings['exercise.'+n]
+    existing=ASSETS/f'lang/{lang}.json'
+    if existing.exists(): data={**json.loads(existing.read_text()),**data}
     write(ASSETS/f'lang/{lang}.json',data)
 generate_expansion(ROOT)
 print('Generated eight original machines, record board, athlete card, recipes and three language files.')

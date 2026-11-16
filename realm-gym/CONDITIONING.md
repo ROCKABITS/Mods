@@ -1,10 +1,10 @@
-# Condição física — Realm Gym 0.7.0
+# Condição física — Realm Gym 0.7.1
 
 O sistema é opcional e vem **desativado por defeito** nas cinco edições. Os níveis, o XP, as cargas desbloqueadas, os planos e os recordes continuam permanentes. Quando ativado, a condição física de cada um dos seis atributos multiplica o respetivo bónus do Realm Gym.
 
 ## Ativar e desativar no Minecraft
 
-Atualiza o servidor e os clientes para a mesma edição 0.7.0. Um operador pode usar:
+Atualiza o servidor e os clientes para a mesma edição 0.7.1. Um operador pode usar:
 
 ```text
 /gym conditioning on
@@ -16,6 +16,25 @@ Atualiza o servidor e os clientes para a mesma edição 0.7.0. Um operador pode 
 
 Ativar e desativar exige nível de permissão 2 (operador). Qualquer jogador pode consultar o estado com `/gym conditioning status` ou apenas `/gym conditioning`. Os comandos também funcionam na consola e através do alias `/fitness conditioning`. Repetir `on` quando já está ativo não repõe a condição nem renova o período de tolerância.
 
+## Escolher dias reais ou dias Minecraft
+
+```text
+/gym conditioning days real 7
+/gym conditioning days minecraft 7
+/gym conditioning status
+```
+
+Cada comando `days` escolhe o relógio e os dias de tolerância (0–365) para todo o servidor. Exige operador de nível 2, guarda e aplica imediatamente, e funciona na consola e pelo alias `/fitness`. Não ativa a funcionalidade por si só: usa `/gym conditioning on` quando a quiseres ativar.
+
+- **Real:** um dia tem 24 horas. Mantém o comportamento das versões anteriores.
+- **Minecraft:** um dia tem 24.000 ticks de simulação do mundo, aproximadamente 20 minutos a 20 TPS. O contador é comum às dimensões e só avança enquanto o mundo funciona. Dormir ou usar `/time set` altera a luz/ciclo visual e não salta tempo de condição.
+
+Com `countOfflineTime: true`, o modo real inclui tempo com o mundo fechado; o modo Minecraft conta os ticks do mundo enquanto o jogador está ausente, mas não inventa ticks quando o servidor está desligado. Com `false`, só conta o tempo ligado ao mundo.
+
+A manutenção e o limite de recuperação diária seguem o relógio escolhido. Os objetivos de XP diário, histórico e calendário de treinos continuam com o horário real já configurado. A contagem Minecraft não depende da regra `doDaylightCycle`.
+
+Mudar o relógio ou a tolerância conserva a condição atual e dá um novo período de tolerância. Mudar de relógio também abre uma janela de manutenção compatível com o novo dia. Repetir os mesmos valores não renova a tolerância nem a recuperação.
+
 ## Configuração avançada
 
 Para afinar as regras, o bloco em `config/realm-fitness.json` mantém-se disponível. As outras opções e campos adicionais são preservados quando se usam os comandos:
@@ -23,6 +42,7 @@ Para afinar as regras, o bloco em `config/realm-fitness.json` mantém-se dispon�
 ```json
 "conditioning": {
   "enabled": false,
+  "timeMode": "real",
   "countOfflineTime": true,
   "graceDays": 7,
   "setsRequired": 2,
@@ -38,11 +58,13 @@ Os valores de perda e recuperação são **pontos percentuais**. O mínimo é um
 
 ## Perda gradual
 
+Os dias seguintes usam o relógio selecionado por `timeMode` (`real` por defeito, ou `minecraft`).
+
 Depois de sete dias completos sem manutenção, cada dia adicional completo retira cinco pontos percentuais à condição do respetivo atributo. A condição permanece a 100% até ao fim do sétimo dia, passa a 95% ao completar oito dias, a 80% aos onze dias e atinge o mínimo de 60% aos quinze dias.
 
 Cada atributo tem o seu próprio contador. Supino e tríceps mantêm a força; agachamentos e leg press mantêm as pernas. As outras máquinas mantêm o seu atributo habitual. A edição Forge 1.20.1 tem as seis máquinas originais.
 
-Com `countOfflineTime: true`, conta o tempo real, incluindo saídas, reinícios e períodos em que o mundo está fechado. A perda é calculada quando o perfil volta a ser utilizado. Com `false`, conta apenas o tempo em que o jogador está ligado a esse mundo; o tempo acumulado permanece guardado entre sessões. Não existe uma tarefa a correr continuamente para jogadores offline.
+A perda é calculada quando o perfil volta a ser utilizado. O relógio selecionado e o tempo acumulado ficam guardados entre sessões. Não existe uma tarefa a correr continuamente para cada jogador offline.
 
 ## Manutenção e memória muscular
 
@@ -65,6 +87,6 @@ Desativar a funcionalidade volta a aplicar os bónus completos dos níveis perma
 
 ## Limites de configuração
 
-`graceDays`: 0–365; `setsRequired`: 1–24; perda, recuperação e mínimo: 0–100, com valores finitos. Configurações inválidas são recusadas por `/gym reload` antes de substituir as regras ativas.
+`timeMode`: `real` ou `minecraft`; `graceDays`: 0–365; `setsRequired`: 1–24; perda, recuperação e mínimo: 0–100, com valores finitos. Configurações inválidas são recusadas por `/gym reload` antes de substituir as regras ativas.
 
 As edições 1.21.1 partilham o núcleo e a apresentação. A edição Java 17 conserva as seis máquinas e usa a mesma lógica de condição, compilada para Java 17. Os testes cobrem os limiares de tempo, o mínimo, a recuperação diária, grupos partilhados, o limite de XP, o relógio a recuar, a migração de perfis, a pausa offline e a persistência. Os cenários Minecraft verificam os modificadores reais, o perfil e a reabertura do mundo.

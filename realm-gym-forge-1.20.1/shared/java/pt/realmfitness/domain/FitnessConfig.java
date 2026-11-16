@@ -44,4 +44,11 @@ public final class FitnessConfig {
         else json.getAsJsonObject("conditioning").addProperty("enabled",enabled);
         write(file,json);return settings;
     }
+    public static FitnessLedger.Settings setConditioningDays(Path file,Conditioning.TimeMode mode,int days) throws IOException {
+        var json=read(file);var settings=settings(json);
+        settings.conditioning.timeMode=mode;settings.conditioning.graceDays=days;settings.validate();
+        if(!json.has("conditioning"))json.add("conditioning",FitnessLedger.JSON.toJsonTree(settings.conditioning));
+        else{var condition=json.getAsJsonObject("conditioning");condition.addProperty("timeMode",mode.id());condition.addProperty("graceDays",days);}
+        write(file,json);return settings;
+    }
 }

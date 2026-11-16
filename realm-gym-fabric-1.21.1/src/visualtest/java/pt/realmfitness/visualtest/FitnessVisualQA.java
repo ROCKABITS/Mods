@@ -74,6 +74,11 @@ public final class FitnessVisualQA {
         command(server,"gym conditioning on");command(server,"gym conditioning status");
         check(FitnessService.conditioningEnabled(server)&&d.ledger.condition(a,Exercise.BENCH)==80,"Enable command lost saved physical condition");
         check(Math.abs(p.getAttributeValue(Attributes.ATTACK_DAMAGE)-p.getAttribute(Attributes.ATTACK_DAMAGE).getBaseValue()*(1+d.ledger.bonus(a,Exercise.BENCH)))<.000001,"Enable command did not update the connected player's real bonus");
+        command(server,"gym conditioning days real 2");
+        check(FitnessService.conditioningSettings(server).timeMode==Conditioning.TimeMode.REAL&&FitnessService.conditioningSettings(server).graceDays==2,"Real-day command was not applied");
+        command(server,"gym conditioning days minecraft 7");command(server,"gym conditioning status");
+        check(FitnessService.conditioningSettings(server).timeMode==Conditioning.TimeMode.MINECRAFT&&FitnessService.conditioningSettings(server).graceDays==7&&d.ledger.condition(a,Exercise.BENCH)==80,"Minecraft-day command lost the selected period or saved condition");
+        CHECKS.add("Real and Minecraft day commands select the grace period without losing condition; Minecraft mode is shown in the actual profile and survives world reopen");
         a.experience.put(Exercise.BENCH,90);CHECKS.add("Conditioning on/off/status commands immediately update the connected player and preserve saved condition");
         d.persist(server);FitnessService.apply(p);FitnessService.open(p,null,false);
         folder=server.getWorldPath(LevelResource.ROOT).toAbsolutePath().normalize().getFileName().toString();
@@ -118,14 +123,14 @@ public final class FitnessVisualQA {
     private static void release(TrainingHud screen){for(int code:new int[]{GLFW.GLFW_KEY_SPACE,GLFW.GLFW_KEY_A,GLFW.GLFW_KEY_D,GLFW.GLFW_KEY_W,GLFW.GLFW_KEY_S})key(code,false);mouse(0,false);mouse(1,false);held=0;}
     private static void checkCondition(ServerPlayer p){
         var d=FitnessData.get(p.getServer());var a=d.ledger.athletes.get(playerId);FitnessService.apply(p);
-        check(d.ledger.settings.conditioning.enabled,"Physical condition option was lost on world reopen");
+        check(d.ledger.settings.conditioning.enabled,"Physical condition option was lost on world reopen");check(d.ledger.settings.conditioning.timeMode==Conditioning.TimeMode.MINECRAFT&&d.ledger.settings.conditioning.graceDays==7,"World reopen lost the Minecraft-day setting");
         check(d.ledger.condition(a,Exercise.BENCH)==100&&d.ledger.condition(a,Exercise.SQUAT)==100,"Actual sets did not preserve the expected condition or recover it once");
         check(Math.abs(p.getAttributeValue(Attributes.ATTACK_DAMAGE)-p.getAttribute(Attributes.ATTACK_DAMAGE).getBaseValue()*(1+d.ledger.bonus(a,Exercise.BENCH)))<.000001,"Effective condition bonus differs from actual damage attribute");
     }
     private static void command(net.minecraft.server.MinecraftServer server,String command){
         try{check(server.getCommands().getDispatcher().execute(command,server.createCommandSourceStack().withSuppressedOutput())==1,"Operator command failed: "+command);}catch(com.mojang.brigadier.exceptions.CommandSyntaxException error){throw new IllegalStateException(error);}
     }
-    private static void complete(boolean success,String message){done=true;try{Files.createDirectories(OUT);Map<String,Object> result=new LinkedHashMap<>();result.put("success",success);result.put("stage",stage);result.put("message",message);result.put("checks",CHECKS);result.put("screenshots",CAPTURES);result.put("actualMinecraftClient",true);result.put("actualIntegratedServer",true);result.put("controlledBaselineXp",90);result.put("syntheticSetResults",false);result.put("actualMountedMinigames",true);result.put("optionalConditioning",true);result.put("conditioningCommands",true);result.put("motionFrames",FRAMES);result.put("hudPresentation",Map.of("frames",TrainingHud.renderedFrames,"interpolatedFrames",TrainingHud.interpolatedFrames,"snapshots",TrainingHud.snapshots));Files.writeString(OUT.resolve("result.json"),new GsonBuilder().setPrettyPrinting().create().toJson(result));}catch(Exception e){e.printStackTrace();}System.out.println(success?"FITNESS_CLIENT_PASSED":"FITNESS_CLIENT_FAILED "+message);mc().stop();}
+    private static void complete(boolean success,String message){done=true;try{Files.createDirectories(OUT);Map<String,Object> result=new LinkedHashMap<>();result.put("success",success);result.put("stage",stage);result.put("message",message);result.put("checks",CHECKS);result.put("screenshots",CAPTURES);result.put("actualMinecraftClient",true);result.put("actualIntegratedServer",true);result.put("controlledBaselineXp",90);result.put("syntheticSetResults",false);result.put("actualMountedMinigames",true);result.put("optionalConditioning",true);result.put("conditioningCommands",true);result.put("conditioningDayModes",true);result.put("motionFrames",FRAMES);result.put("hudPresentation",Map.of("frames",TrainingHud.renderedFrames,"interpolatedFrames",TrainingHud.interpolatedFrames,"snapshots",TrainingHud.snapshots));Files.writeString(OUT.resolve("result.json"),new GsonBuilder().setPrettyPrinting().create().toJson(result));}catch(Exception e){e.printStackTrace();}System.out.println(success?"FITNESS_CLIENT_PASSED":"FITNESS_CLIENT_FAILED "+message);mc().stop();}
     public static void tick(net.minecraft.client.Minecraft event){
         if(done)return;long now=System.currentTimeMillis();
         try{
@@ -145,7 +150,7 @@ public final class FitnessVisualQA {
                 case 1->{if(mc().screen instanceof CreateWorldScreen world){world.getUiState().setName("Realm Gym client QA");world.getUiState().setGameMode(WorldCreationUiState.SelectedGameMode.CREATIVE);world.getUiState().setAllowCommands(true);check(click("selectWorld.create"),"Create world button missing");stage++;}}
                 case 2->{if(mc().player!=null&&mc().getSingleplayerServer()!=null){playerId=mc().player.getUUID();server(FitnessVisualQA::prepare);stage++;}}
                 case 3->{if(!ready||!(mc().screen instanceof AthleteScreen))return;profile=((AthleteScreen)mc().screen).data();
-                    var condition=profile.getAsJsonObject("conditioning");check(condition.get("enabled").getAsBoolean()&&condition.getAsJsonObject("attributes").getAsJsonObject("BENCH").get("percent").getAsDouble()==80,"Physical condition did not reach the actual RPG screen");
+                    var condition=profile.getAsJsonObject("conditioning");check(condition.get("timeMode").getAsString().equals("minecraft")&&condition.get("graceDays").getAsInt()==7,"Selected day mode did not reach the RPG screen");check(condition.get("enabled").getAsBoolean()&&condition.getAsJsonObject("attributes").getAsJsonObject("BENCH").get("percent").getAsDouble()==80,"Physical condition did not reach the actual RPG screen");
                     for(var name:List.of("leg_press_sled","triceps_stack","triceps_front_cable","triceps_stack_cable","triceps_clip","triceps_rope_left","triceps_rope_right")){
                         var id=net.minecraft.resources.ResourceLocation.fromNamespaceAndPath("realmfitness","block/"+name);var model=((net.fabricmc.fabric.api.client.model.loading.v1.FabricBakedModelManager)mc().getModelManager()).getModel(id);check(model!=mc().getModelManager().getMissingModel()&&!model.getParticleIcon().contents().name().getPath().contains("missing"),"Moving model failed to bake: "+name);
                     }

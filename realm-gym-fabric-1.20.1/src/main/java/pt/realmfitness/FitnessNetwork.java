@@ -9,8 +9,8 @@ import pt.realmfitness.domain.FitnessLedger;
 /** Bounded legacy Fabric play channels; authoritative scoring stays on the server. */
 public final class FitnessNetwork {
     private FitnessNetwork() {}
-    public static final ResourceLocation REQUEST=new ResourceLocation("realmfitness","request_v6");
-    public static final ResourceLocation SNAPSHOT=new ResourceLocation("realmfitness","snapshot_v6");
+    public static final ResourceLocation REQUEST=new ResourceLocation("realmfitness","request_v7");
+    public static final ResourceLocation SNAPSHOT=new ResourceLocation("realmfitness","snapshot_v7");
     public static void register(){
         ServerPlayNetworking.registerGlobalReceiver(REQUEST,(server,player,handler,buffer,sender)->{
             try{

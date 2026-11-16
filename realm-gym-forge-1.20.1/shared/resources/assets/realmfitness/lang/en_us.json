@@ -169,7 +169,7 @@
   "fitness.conditioning.bonus": "Active bonus: +%s%% / +%s%% potential",
   "fitness.conditioning.sets": "Maintenance today: %s/%s valid sets",
   "fitness.conditioning.maintained": "Maintenance completed today",
-  "fitness.conditioning.recovery": "Recovery: +%s points once per training day",
+  "fitness.conditioning.recovery": "Recovery: +%s points once per day in this mode",
   "fitness.conditioning.next_loss": "Next loss in approximately %s hours",
   "fitness.conditioning.no_loss": "No further loss scheduled",
   "fitness.conditioning.real_time": "Real time, including time offline",
@@ -179,5 +179,12 @@
   "fitness.conditioning.status_off": "Physical condition is disabled on this server.",
   "fitness.conditioning.turned_on": "Physical condition enabled. The setting is saved and applies immediately.",
   "fitness.conditioning.turned_off": "Physical condition disabled. Full level bonuses restored; setting saved.",
-  "fitness.conditioning.command_failed": "Could not read or save the setting. Check the server log."
+  "fitness.conditioning.command_failed": "Could not read or save the setting. Check the server log.",
+  "fitness.conditioning.clock": "Time mode: %s",
+  "fitness.conditioning.mode.real": "real time",
+  "fitness.conditioning.mode.minecraft": "Minecraft time",
+  "fitness.conditioning.next_loss_minecraft": "Next loss in approximately %s Minecraft days",
+  "fitness.conditioning.minecraft_time": "Counts while the world is running, including time offline",
+  "fitness.conditioning.schedule": "Time mode: %s; grace period (days): %s.",
+  "fitness.conditioning.days_set": "Grace period (days): %s; time mode: %s. Saved and applied immediately."
 }

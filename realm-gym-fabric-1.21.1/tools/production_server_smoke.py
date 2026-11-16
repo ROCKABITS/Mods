@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Boot the distributed intermediary JAR on a real, isolated Fabric server."""
 from pathlib import Path
-import hashlib,json,os,queue,shutil,subprocess,threading,time,urllib.parse,urllib.request,zipfile
+import hashlib,json,os,re,queue,shutil,subprocess,threading,time,urllib.parse,urllib.request,zipfile
 
 PROJECT=Path(__file__).resolve().parents[1]
 VERSION=dict(line.split('=',1) for line in (PROJECT/'gradle.properties').read_text().splitlines() if '=' in line)['mod_version']
@@ -35,9 +35,10 @@ def main():
     env['JAVA_TOOL_OPTIONS']=' '.join(options)
     java=str(Path(env['JAVA_HOME'])/'bin/java') if env.get('JAVA_HOME') else shutil.which('java')
     with zipfile.ZipFile(JAR) as archive:strings=json.loads(archive.read('assets/realmfitness/lang/en_us.json'))
-    def contains(line,key):return key in line or strings[key] in line
+    def contains(line,key):return key in line or re.search(re.escape(strings[key]).replace('%s','.+?'),line) is not None
+    (WORK/'config/realm-fitness.json').unlink(missing_ok=True)
     history=[]
-    for boot in range(2):
+    for boot in range(3):
         process=subprocess.Popen([java,'-Xmx1G','-jar','fabric-server-launch.jar','nogui'],cwd=WORK,env=env,stdin=subprocess.PIPE,stdout=subprocess.PIPE,stderr=subprocess.STDOUT,text=True,bufsize=1)
         lines=queue.Queue()
         def reader():
@@ -55,26 +56,29 @@ def main():
                 expected='fitness.settings_reloaded' if boot==0 else 'fitness.conditioning.status_on'
                 if phase==1 and contains(line,expected):
                     config=json.loads((WORK/'config/realm-fitness.json').read_text())
-                    assert config['conditioning']['enabled'] is (boot==1),'Persisted mode differs from expected startup state'
-                    commands='gym conditioning on\ngym conditioning status\ngym conditioning off\ngym conditioning status\ngym conditioning on\ngym reload\nsave-all\nstop\n' if boot==0 else 'fitness conditioning off\ngym conditioning status\ngym reload\nsave-all\nstop\n'
+                    assert (config['conditioning']['enabled'],config['conditioning'].get('timeMode','real'),config['conditioning']['graceDays'])==((False,'real',7),(True,'minecraft',3),(True,'real',5))[boot],'Clock or grace period differs from expected restart state'
+                    commands=['gym conditioning days real 2\ngym conditioning days minecraft 3\ngym conditioning on\ngym conditioning status\ngym conditioning off\ngym conditioning status\ngym conditioning on\ngym reload\nsave-all\nstop\n', 'fitness conditioning days real 5\ngym conditioning status\ngym reload\nsave-all\nstop\n', 'fitness conditioning off\ngym conditioning status\ngym reload\nsave-all\nstop\n'][boot]
                     phase=2;process.stdin.write(commands);process.stdin.flush()
             code=process.wait(timeout=10);thread.join(timeout=2)
             while not lines.empty():output.append(lines.get_nowait())
             output=''.join(output);history.append(f'=== Production boot {boot+1} ===\n'+output)
             assert code==0 and phase==2 and 'Saving worlds' in output,output[-6000:]
             assert 'realmfitness '+VERSION in output,output[-6000:]
-            required=['fitness.settings_reloaded','fitness.conditioning.status_on','fitness.conditioning.status_off','fitness.conditioning.turned_off']
-            if boot==0:required.append('fitness.conditioning.turned_on')
+            required=['fitness.settings_reloaded','fitness.conditioning.schedule']
+            if boot==0:required+=['fitness.conditioning.status_on','fitness.conditioning.status_off','fitness.conditioning.turned_on','fitness.conditioning.turned_off','fitness.conditioning.days_set']
+            elif boot==1:required+=['fitness.conditioning.status_on','fitness.conditioning.days_set']
+            else:required+=['fitness.conditioning.status_on','fitness.conditioning.status_off','fitness.conditioning.turned_off']
             assert all(contains(output,key) for key in required),output[-6000:]
             assert 'Unknown or incomplete command' not in output and 'Unexpected exception' not in output,output[-6000:]
-            assert json.loads((WORK/'config/realm-fitness.json').read_text())['conditioning']['enabled'] is (boot==0)
+            saved=json.loads((WORK/'config/realm-fitness.json').read_text())['conditioning']
+            assert (saved['enabled'],saved['timeMode'],saved['graceDays'])==((True,'minecraft',3),(True,'real',5),(False,'real',5))[boot]
         finally:
             if process.poll() is None:process.kill();process.wait()
             thread.join(timeout=2)
             if isinstance(output,list):history.append(''.join(output))
             (OUT/'production-server.log').write_text('\n'.join(history))
     assert hashlib.sha256((WORK/'mods'/JAR.name).read_bytes()).digest()==hashlib.sha256(JAR.read_bytes()).digest()
-    report={'success':True,'minecraft':'1.21.1','fabric_loader':'0.16.14','remapped_jar_booted':True,'production_jar_sha256':hashlib.sha256(JAR.read_bytes()).hexdigest(),'console_reload':True,'clean_shutdown':True,'conditioning_default_disabled':True,'conditioning_commands':True,'conditioning_restart_persisted':True}
+    report={'success':True,'minecraft':'1.21.1','fabric_loader':'0.16.14','remapped_jar_booted':True,'production_jar_sha256':hashlib.sha256(JAR.read_bytes()).hexdigest(),'console_reload':True,'clean_shutdown':True,'conditioning_default_disabled':True,'conditioning_commands':True,'conditioning_restart_persisted':True,'conditioning_day_modes':True,'conditioning_days_restart_persisted':True}
     (OUT/'production-server.json').write_text(json.dumps(report,indent=2)+'\n');print(json.dumps(report))
 
 if __name__=='__main__':main()

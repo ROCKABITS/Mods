@@ -34,11 +34,11 @@ public final class FitnessService {
     private FitnessService(){}
     public static void stop(MinecraftServer server){for(var p:server.getPlayerList().getPlayers())logout(p);}
     public static void clear(){ACTIVE.clear();VIEWS.clear();LAST.clear();configured=false;}
-    private static FitnessData data(ServerPlayer p){var d=FitnessData.get(p.getServer());d.available();if(!configured){reload(p.getServer());configured=true;}return d;}
+    private static FitnessData data(ServerPlayer p){var d=FitnessData.get(p.getServer());d.available();d.ledger.observeMinecraft(p.getServer().overworld().getGameTime());if(!configured){reload(p.getServer());configured=true;}return d;}
     private static Path configFile(){return FMLPaths.CONFIGDIR.get().resolve("realm-fitness.json");}
     private static void requireServerThread(MinecraftServer server){if(!server.isSameThread())throw new IllegalStateException("Fitness requires server thread");}
     private static void configure(MinecraftServer server,Settings settings){
-        var d=FitnessData.get(server);d.available();d.ledger.configure(settings,System.currentTimeMillis());d.persist(server);configured=true;
+        var d=FitnessData.get(server);d.available();d.ledger.observeMinecraft(server.overworld().getGameTime());d.ledger.configure(settings,System.currentTimeMillis());d.persist(server);configured=true;
         for(var player:server.getPlayerList().getPlayers())apply(player);
     }
     public static void reload(MinecraftServer server){
@@ -49,6 +49,15 @@ public final class FitnessService {
     public static boolean conditioningEnabled(MinecraftServer server){
         requireServerThread(server);if(!configured)reload(server);
         var d=FitnessData.get(server);d.available();return d.ledger.settings.conditioning.enabled;
+    }
+    public static Conditioning.Config conditioningSettings(MinecraftServer server){
+        requireServerThread(server);if(!configured)reload(server);
+        var d=FitnessData.get(server);d.available();return d.ledger.settings.conditioning;
+    }
+    public static void setConditioningDays(MinecraftServer server,Conditioning.TimeMode mode,int days){
+        requireServerThread(server);FitnessData.get(server).available();
+        try{configure(server,FitnessConfig.setConditioningDays(configFile(),mode,days));}
+        catch(java.io.IOException error){throw new IllegalStateException("fitness.invalid_settings",error);}
     }
     public static void setConditioning(MinecraftServer server,boolean enabled){
         requireServerThread(server);FitnessData.get(server).available();
@@ -152,6 +161,7 @@ public final class FitnessService {
         Map<String,Object> state=new LinkedHashMap<>();state.put("tick",g.tick);state.put("sequence",g.sequence());state.put("feedbackId",g.feedbackId);state.put("effort",g.effort);state.put("balance",g.balance);state.put("leftPressure",g.leftPressure);state.put("rightPressure",g.rightPressure);state.put("grip",g.grip);state.put("valid",g.valid);state.put("accuracy",g.accuracy());state.put("target",g.target());state.put("tolerance",g.tolerance());state.put("stage",g.stage());state.put("locked",g.locked);state.put("landed",g.landed);state.put("marker",g.marker());state.put("streak",g.streak);state.put("bestStreak",g.bestStreak);state.put("feedback",g.feedback);state.put("feedbackTicks",g.feedbackTicks);state.put("nextFoot",g.nextFoot);state.put("holdTicks",g.holdTicks);state.put("holdRequired",g.squatHoldRequired());payload.put("state",state);FitnessNetwork.send(p,payload);
     }
     public static void tick(MinecraftServer server){
+        if(configured)FitnessData.get(server).ledger.observeMinecraft(server.overworld().getGameTime());
         for(UUID id:List.copyOf(ACTIVE.keySet())){
             var p=server.getPlayerList().getPlayer(id);Training t=ACTIVE.get(id);if(p==null){t.mount.discard();if(t.mount.level().getBlockState(t.pos).getBlock() instanceof GymBlock b)b.working(t.mount.level(),t.pos,false);ACTIVE.remove(id);continue;}
             try{

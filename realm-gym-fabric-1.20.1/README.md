@@ -1,8 +1,8 @@
-# Realm Gym 0.7.0 Beta — Fabric 1.20.1
+# Realm Gym 0.7.1 Beta — Fabric 1.20.1
 
 Eight animated workout machines, mounted minigames, permanent training levels, workout plans, an RPG athlete profile and physical leaderboard boards for **Minecraft 1.20.1, Fabric Loader 0.16.14+ and Java 17**.
 
-[Download JAR](../mod-pronto/realm-gym-0.7.0-fabric-1.20.1.jar) · [ZIP](../mod-pronto/realm-gym-0.7.0-fabric-1.20.1.zip) · [Gameplay gallery](../media/realm-gym/0.7.0-fabric-1.20.1/README.md) · [Validation](VALIDACAO.md) · [CurseForge upload](CURSEFORGE.md) · [English changelog](../realm-gym/CHANGELOG.md)
+[Download JAR](../mod-pronto/realm-gym-0.7.1-fabric-1.20.1.jar) · [ZIP](../mod-pronto/realm-gym-0.7.1-fabric-1.20.1.zip) · [Gameplay gallery](../media/realm-gym/0.7.1-fabric-1.20.1/README.md) · [Validation](VALIDACAO.md) · [CurseForge upload](CURSEFORGE.md) · [English changelog](../realm-gym/CHANGELOG.md)
 
 ## Installation
 
@@ -22,6 +22,8 @@ The equipment includes bench press, treadmill, punching bag, pull-up bar, rowing
 All eight server-scored minigames share the current domain rules. Leg press and squats share leg progression and fatigue; cable triceps and bench press share strength. Loads, preferred weights and records remain machine-specific. Six attributes have 20 permanent levels each. Lighter loads become easier as the corresponding attribute improves.
 
 ## Optional physical condition
+
+**New in 0.7.1:** choose real-time or Minecraft-day physical condition with `/gym conditioning days real 7` or `/gym conditioning days minecraft 7`. Commands save and apply immediately. [Clock configuration guide](../realm-gym/CONDITIONING.md).
 
 The system is disabled by default. Operators can run `/gym conditioning on` or `/gym conditioning off`; everyone can run `/gym conditioning status`. Changes apply immediately and persist across restarts. The console and `/fitness conditioning` alias work too.
 
