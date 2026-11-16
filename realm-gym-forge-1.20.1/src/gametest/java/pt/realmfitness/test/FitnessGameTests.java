@@ -199,7 +199,7 @@ public final class FitnessGameTests {
         finally{restoreCommandConfig(server,original);}
         h.succeed();
     }
-    @GameTest(template="realmfitness:empty",timeoutTicks=120) public static void dayModeCommandsPersistAndEnforcePermissions(GameTestHelper h){
+    @GameTest(template="empty",timeoutTicks=120) public static void dayModeCommandsPersistAndEnforcePermissions(GameTestHelper h){
         var server=h.getLevel().getServer();var data=FitnessData.get(server);var previous=data.ledger;byte[] before=null;
         try{
             if(java.nio.file.Files.exists(commandConfig()))before=java.nio.file.Files.readAllBytes(commandConfig());
@@ -225,7 +225,7 @@ public final class FitnessGameTests {
         }catch(Exception error){throw new AssertionError(error);}
         finally{restoreClockFixture(server,data,previous,before);}h.succeed();
     }
-    @GameTest(template="realmfitness:empty",timeoutTicks=120) public static void worldTickClockChangesActualBonusesAndIgnoresDaylightChanges(GameTestHelper h){
+    @GameTest(template="empty",timeoutTicks=120) public static void worldTickClockChangesActualBonusesAndIgnoresDaylightChanges(GameTestHelper h){
         var server=h.getLevel().getServer();var data=FitnessData.get(server);var previous=data.ledger;byte[] before=null;long daylight=server.overworld().getDayTime();
         try{
             if(java.nio.file.Files.exists(commandConfig()))before=java.nio.file.Files.readAllBytes(commandConfig());
