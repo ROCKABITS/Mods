@@ -271,12 +271,18 @@ public final class FitnessGameTests {
         catch(java.io.IOException error){throw new AssertionError(error);}
     }
     @GameTest(template="realmfitness:empty",timeoutTicks=120)
-    public static void occupiedBenchAcceptsOneSpotterAndKeepsTheLifterRiding(GameTestHelper h){
+    public static void occupiedBenchAcceptsOneSpotterAndKeepsTheLifterRiding(GameTestHelper h) throws ReflectiveOperationException{
         var anchor=position(h);
         place(h,Exercise.BENCH,Direction.NORTH);
         var lifter=player(h);
         var spotter=player(h);
         var replacement=player(h);
+        // The Forge adapter checks the server's UUID index before starting a workout.
+        var playerIndexField=net.minecraft.server.players.PlayerList.class.getDeclaredField("playersByUUID");
+        playerIndexField.setAccessible(true);
+        @SuppressWarnings("unchecked")
+        var playerIndex=(Map<UUID,ServerPlayer>)playerIndexField.get(h.getLevel().getServer().getPlayerList());
+        for(var participant:List.of(lifter,spotter,replacement))playerIndex.put(participant.getUUID(),participant);
         try{
             replacement.setGameMode(GameType.SURVIVAL);
             replacement.setPos(Vec3.atBottomCenterOf(anchor.south(3)));
@@ -298,7 +304,13 @@ public final class FitnessGameTests {
             FitnessService.cancel(lifter);
             h.assertTrue(!lifter.isPassenger()&&!replacement.isPassenger()&&mount.isRemoved(),"Ending the set left a rider behind");
         }finally{
-            FitnessService.cancel(replacement);FitnessService.cancel(spotter);FitnessService.cancel(lifter);
+            try{
+                FitnessService.cancel(replacement);
+                FitnessService.cancel(spotter);
+                FitnessService.cancel(lifter);
+            }finally{
+                for(var participant:List.of(lifter,spotter,replacement))playerIndex.remove(participant.getUUID());
+            }
         }
         h.succeed();
     }
