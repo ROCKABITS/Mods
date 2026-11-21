@@ -17,6 +17,8 @@ public final class Minigame {
     private int held,edges,sequence=-1,lastInputTick=-1,changes,lastTap=-100,lastStep=-100,lockedAt=-100,riseStarted=-1,repActions,recoveryTicks;
     private double repQuality,peak,repScore,powerScore,descentQuality;
     private boolean charging,topReached,failed;
+    private boolean spotterPresent, helpRequested, catchPressed, spotterSpaceDown, assistedRep;
+    private int spotterSequence=-1, assistedRepetitions;
 
     public Minigame(UUID id,Exercise exercise,int load,int repetitions,long seed,double fatigue){this(id,exercise,load,repetitions,seed,fatigue,0);}
     public Minigame(UUID id,Exercise exercise,int load,int repetitions,long seed,double fatigue,int trainingLevel){
@@ -31,6 +33,25 @@ public final class Minigame {
     }
     public int keys(){return held;}
     public void clearEdges(){edges=0;}
+    public void setSpotterPresent(boolean present){
+        spotterPresent=present;
+        helpRequested=catchPressed=spotterSpaceDown=false;
+        spotterSequence=-1;
+    }
+    public int assistedRepetitions(){return assistedRepetitions;}
+    public boolean helpRequested(){return helpRequested;}
+    public boolean canRequestHelp(){
+        return exercise==Exercise.BENCH&&spotterPresent&&!landed&&!helpRequested
+            &&phase()>=32&&phase()<56&&effort>=.10&&effort<=.85&&tick-lastTap>=6;
+    }
+    public void spotterInput(int number,int keys){
+        if(exercise!=Exercise.BENCH||!spotterPresent||done()||number<=spotterSequence||number>spotterSequence+128
+            ||keys<0||(keys&~MASK)!=0)return;
+        spotterSequence=number;
+        boolean pressed=(keys&SPACE)!=0;
+        if(pressed&&!spotterSpaceDown&&helpRequested)catchPressed=true;
+        spotterSpaceDown=pressed;
+    }
     public int repTicks(){return switch(exercise){case BENCH->64;case BOX->80;default->48;};}
     public int completed(){return tick/repTicks();}
     public int phase(){return tick%repTicks();}
@@ -84,7 +105,7 @@ public final class Minigame {
             };
             score=Math.clamp(score,0,1);if(score>=.5)valid++;quality+=score;
             if(exercise==Exercise.BOX&&!locked){streak=0;say("miss");}
-            else if(exercise!=Exercise.BOX)say(score>=.9?"perfect":score>=.5?"good":"miss");
+            else if(exercise!=Exercise.BOX)say(assistedRep?"assisted":score>=.9?"perfect":score>=.5?"good":"miss");
             resetRep();
         }
         return effort;
@@ -93,7 +114,16 @@ public final class Minigame {
     private void bench(int rising){
         if(landed)return;effort=Math.max(0,effort-benchDrain());
         if((rising&SPACE)!=0&&tick-lastTap>=2){lastTap=tick;attempted++;repActions++;effort=Math.min(1,effort+benchTapGain());}
-        if(effort>=.999){landed=true;hits++;repScore=1-.15*phase()/repTicks();say("good");}
+        if(effort>=.999){
+            landed=true;hits++;repScore=1-.15*phase()/repTicks();helpRequested=catchPressed=false;say("good");
+            return;
+        }
+        if((rising&W)!=0&&canRequestHelp())helpRequested=true;
+        if(catchPressed&&helpRequested){
+            repScore=Math.max(peak,effort)*.35;
+            assistedRep=landed=true;assistedRepetitions++;effort=1;
+            helpRequested=catchPressed=false;say("assisted");
+        }
     }
     private void box(int rising){
         effort=Math.max(0,effort-.08);if(locked)return;int punch=rising&(LEFT|RIGHT);if(punch==0)return;
@@ -143,6 +173,7 @@ public final class Minigame {
     private void resetRep(){
         riseStarted=-1;repQuality=peak=repScore=powerScore=descentQuality=0;repActions=recoveryTicks=holdTicks=phaseForScore=step=0;charging=topReached=failed=landed=locked=false;
         if(exercise!=Exercise.RUN)effort=exercise==Exercise.BENCH?.05:0;
+        assistedRep=helpRequested=catchPressed=false;
     }
     public boolean done(){return tick>=repetitions*repTicks();}
     public int accuracy(){return (int)Math.round(100*quality/Math.max(1,completed()));}

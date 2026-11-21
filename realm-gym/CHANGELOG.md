@@ -1,5 +1,13 @@
 # Realm Gym changelog
 
+## 0.7.2 — Bench press spotter
+
+- A second player can right-click an occupied bench to stand behind it and act as a spotter. Leave enough room behind the bench for the second player.
+- If the bar stalls, the lifter can press **W** when prompted to call for help. The spotter presses **Space** before the repetition ends to catch the bar.
+- Assisted repetitions are shown in the set summary and training history. They give no credit as valid repetitions. Sets with assistance are excluded from leaderboard and personal record rankings.
+- The spotter can press **Shift** to leave while the lifter continues. The spotter dismounts when the set ends or the bench is removed.
+- Update Realm Gym on the server and every client to play together.
+
 ## 0.7.1 — Real-time and Minecraft-day conditioning
 
 - Added configurable real-time or Minecraft-day clocks for physical condition. Existing worlds keep real-time mode by default.

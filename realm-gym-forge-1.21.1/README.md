@@ -1,10 +1,12 @@
-# Realm Gym 0.7.1 Beta — Forge 1.21.1
+# Realm Gym 0.7.2 Beta — Forge 1.21.1
 
-Edição Forge das oito máquinas, minijogos, animações articuladas, atributos permanentes, planos de treino e recordes do Realm Gym 0.7.1. Inclui **leg press e tríceps com corda**.
+Edição Forge das oito máquinas, minijogos, animações articuladas, atributos permanentes, planos de treino e recordes do Realm Gym 0.7.2. Inclui **leg press e tríceps com corda**.
 
 **Requisitos:** Minecraft **1.21.1**, **Java 21**, **Forge 52.1.20+**. Instala o mesmo Realm Gym no servidor e nos clientes. Cada loader tem o seu ficheiro de instalação.
 
-[Descarregar JAR](../mod-pronto/realm-gym-0.7.1-forge-1.21.1.jar) · [ZIP](../mod-pronto/realm-gym-0.7.1-forge-1.21.1.zip) · [Galeria e animações](../media/realm-gym/0.7.1-forge-1.21.1/README.md) · [Validação](VALIDACAO.md) · [Publicar no CurseForge](CURSEFORGE.md)
+[Descarregar JAR](../mod-pronto/realm-gym-0.7.2-forge-1.21.1.jar) · [ZIP](../mod-pronto/realm-gym-0.7.2-forge-1.21.1.zip) · [Galeria e animações](../media/realm-gym/0.7.2-forge-1.21.1/README.md) · [Validação](VALIDACAO.md) · [Publicar no CurseForge](CURSEFORGE.md)
+
+**Supino a dois.** Clica com o botão direito num banco ocupado para ser spotter. O atleta pede ajuda com **W** quando vê o aviso, e o spotter segura a barra com **Espaço**. **Shift** sai do posto. [Changelog 0.7.2](../realm-gym/CHANGELOG.md#072--bench-press-spotter).
 
 **New in 0.7.1:** choose real-time or Minecraft-day physical condition with `/gym conditioning days real 7` or `/gym conditioning days minecraft 7`. Commands save and apply immediately. [Clock configuration guide](../realm-gym/CONDITIONING.md).
 
@@ -43,7 +45,7 @@ echo 'eula=true' > run/eula.txt
 ./gradlew -PfitnessVisualTests runClient
 ```
 
-O JAR para distribuir é `build/libs/realm-gym-0.7.1-forge-1.21.1.jar`. Usa ForgeGradle 7.0.3, Gradle 9.3.1 e os mappings oficiais Mojang, também usados pelo runtime Forge 52 atual. O JAR final é testado numa instalação oficial de servidor, além dos testes de desenvolvimento. As fixtures são excluídas da distribuição.
+O JAR para distribuir é `build/libs/realm-gym-0.7.2-forge-1.21.1.jar`. Usa ForgeGradle 7.0.3, Gradle 9.3.1 e os mappings oficiais Mojang, também usados pelo runtime Forge 52 atual. O JAR final é testado numa instalação oficial de servidor, além dos testes de desenvolvimento. As fixtures são excluídas da distribuição.
 
 Para desenvolver, instala JDKs **8, 21 e 25**, detetáveis pelo Gradle ou pelas variáveis `JAVA_HOME_8_X64`, `JAVA_HOME_21_X64` e `JAVA_HOME_25_X64`. O Mavenizer e o launcher usam ferramentas separadas; a compilação e o jogo usam Java 21. **Os jogadores só precisam de Java 21.**
 

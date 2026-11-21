@@ -186,5 +186,15 @@
   "fitness.conditioning.next_loss_minecraft": "Próxima perda em aproximadamente %s dias Minecraft",
   "fitness.conditioning.minecraft_time": "Conta enquanto o mundo está a funcionar, incluindo tempo offline",
   "fitness.conditioning.schedule": "Relógio: %s; dias de tolerância: %s.",
-  "fitness.conditioning.days_set": "Dias de tolerância: %s; relógio: %s. Guardado e aplicado imediatamente."
+  "fitness.conditioning.days_set": "Dias de tolerância: %s; relógio: %s. Guardado e aplicado imediatamente.",
+  "fitness.spotter.catch": "Espaço · Segura a barra!",
+  "fitness.spotter.wait": "Spotter · Aguarda o pedido de ajuda",
+  "fitness.spotter.leave": "Shift · Sair",
+  "fitness.spotter.ready": "Spotter pronto",
+  "fitness.spotter.call": "W · Pedir ajuda",
+  "fitness.spotter.requested": "Ajuda pedida",
+  "fitness.spotter.count": "%s com ajuda",
+  "fitness.spotter.summary": "Apoio concluído · %s com ajuda",
+  "fitness.game.feedback.assisted": "Com ajuda",
+  "fitness.spotter.no_room": "Deixa espaço livre para o spotter atrás do supino."
 }

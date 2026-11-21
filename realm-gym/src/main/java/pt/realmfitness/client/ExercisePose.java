@@ -75,6 +75,19 @@ public final class ExercisePose {
         }
         return p;
     }
+    public static ExercisePose spotter(double effort,double catchAge){
+        var pose=new ExercisePose();
+        double reach=catchAge>=0&&catchAge<14?Math.sin(catchAge*Math.PI/14):0;
+        pose.hips-=.16*reach;
+        pose.forward=.29*reach;
+        pose.lean=.08+.48*reach;
+        pose.head=-pose.lean*.65;
+        double barHeight=GymLayout.number(Exercise.BENCH,"pad_top")+2*UNIT+.182+.48*effort;
+        double barDistance=GymLayout.BENCH_SPOTTER_Z-GymLayout.number(Exercise.BENCH,"bar_work_z");
+        pose.hands(1.03+(barHeight-1.03)*reach,.15+(barDistance-.15)*reach,.24+.12*reach,new V(.6,.8,.3));
+        pose.feet(0,0,.18);
+        return pose;
+    }
     private V rotate(V v){
         double cx=Math.cos(lean),sx=Math.sin(lean),cy=Math.cos(twist),sy=Math.sin(twist),cz=Math.cos(sway),sz=Math.sin(sway);
         double y=v.y*cx-v.z*sx,z=v.y*sx+v.z*cx,x=v.x*cy+z*sy;z=-v.x*sy+z*cy;

@@ -4,13 +4,13 @@
 
 The repository contains standalone mods that can also integrate with one another when the relevant companion mods are installed. Each mod keeps its own responsibilities, documentation, release notes and validation records.
 
-**Minecraft 1.20.1 / Forge / Java 17:** [Contracts & Bounties](contracts-bounties-forge-1.20.1/README.md) e [Realm Gym](realm-gym-forge-1.20.1/README.md) têm edições independentes. Downloads: [Contracts JAR](mod-pronto/contracts-bounties-0.4.1-forge-1.20.1.jar) · [Realm Gym JAR](mod-pronto/realm-gym-0.7.1-forge-1.20.1.jar). As edições da tabela seguinte continuam em 1.21.1/NeoForge.
+**Minecraft 1.20.1 / Forge / Java 17:** [Contracts & Bounties](contracts-bounties-forge-1.20.1/README.md) e [Realm Gym](realm-gym-forge-1.20.1/README.md) têm edições independentes. Downloads: [Contracts JAR](mod-pronto/contracts-bounties-0.4.1-forge-1.20.1.jar) · [Realm Gym JAR](mod-pronto/realm-gym-0.7.2-forge-1.20.1.jar). As edições da tabela seguinte continuam em 1.21.1/NeoForge.
 
-**Minecraft 1.20.1 / Fabric / Java 17:** [Realm Gym 0.7.1](realm-gym-fabric-1.20.1/README.md), com as oito máquinas, incluindo leg press e tríceps com corda. [Descarregar JAR](mod-pronto/realm-gym-0.7.1-fabric-1.20.1.jar) · [Galeria](media/realm-gym/0.7.1-fabric-1.20.1/README.md). Requer Fabric API.
+**Minecraft 1.20.1 / Fabric / Java 17:** [Realm Gym 0.7.2](realm-gym-fabric-1.20.1/README.md), com as oito máquinas, incluindo leg press e tríceps com corda. [Descarregar JAR](mod-pronto/realm-gym-0.7.2-fabric-1.20.1.jar) · [Galeria](media/realm-gym/0.7.2-fabric-1.20.1/README.md). Requer Fabric API.
 
-**Minecraft 1.21.1 / Fabric / Java 21:** [Realm Gym 0.7.1](realm-gym-fabric-1.21.1/README.md), com as oito máquinas. [Descarregar JAR](mod-pronto/realm-gym-0.7.1-fabric-1.21.1.jar) · [Galeria](media/realm-gym/0.7.1-fabric-1.21.1/README.md). Requer Fabric API.
+**Minecraft 1.21.1 / Fabric / Java 21:** [Realm Gym 0.7.2](realm-gym-fabric-1.21.1/README.md), com as oito máquinas. [Descarregar JAR](mod-pronto/realm-gym-0.7.2-fabric-1.21.1.jar) · [Galeria](media/realm-gym/0.7.2-fabric-1.21.1/README.md). Requer Fabric API.
 
-**Minecraft 1.21.1 / Forge / Java 21:** [Realm Gym 0.7.1](realm-gym-forge-1.21.1/README.md), com as oito máquinas. [Descarregar JAR](mod-pronto/realm-gym-0.7.1-forge-1.21.1.jar) · [Galeria](media/realm-gym/0.7.1-forge-1.21.1/README.md). Requer Forge 52.1.20+.
+**Minecraft 1.21.1 / Forge / Java 21:** [Realm Gym 0.7.2](realm-gym-forge-1.21.1/README.md), com as oito máquinas. [Descarregar JAR](mod-pronto/realm-gym-0.7.2-forge-1.21.1.jar) · [Galeria](media/realm-gym/0.7.2-forge-1.21.1/README.md). Requer Forge 52.1.20+.
 
 > **Multiplayer rule:** unless a mod's guide says otherwise, install the same mod version on the server and every client. **Season 8 is client-side only.** Always check each mod's guide for its required dependencies and compatibility notes.
 
@@ -33,7 +33,7 @@ The repository contains standalone mods that can also integrate with one another
 
 | Mod | Download | Funcionalidades |
 | --- | --- | --- |
-| **Realm Gym 0.7.1 Beta** | [JAR](https://github.com/ROCKABITS/Mods/raw/refs/heads/main/mod-pronto/realm-gym-0.7.1.jar) · [ZIP](https://github.com/ROCKABITS/Mods/raw/refs/heads/main/mod-pronto/realm-gym-0.7.1.zip) | Oito máquinas, incluindo leg press e tríceps com corda, minijogos, atributos permanentes, condição física opcional, treino diário, perfil RPG, rotinas personalizadas e painéis de recordes. |
+| **Realm Gym 0.7.2 Beta** | [JAR](https://github.com/ROCKABITS/Mods/raw/refs/heads/main/mod-pronto/realm-gym-0.7.2.jar) · [ZIP](https://github.com/ROCKABITS/Mods/raw/refs/heads/main/mod-pronto/realm-gym-0.7.2.zip) | Oito máquinas, incluindo leg press e tríceps com corda, minijogos, atributos permanentes, condição física opcional, treino diário, perfil RPG, rotinas personalizadas e painéis de recordes. |
 | **Realm Progression 0.1.0 Beta** | [JAR](https://github.com/ROCKABITS/Mods/raw/refs/heads/main/mod-pronto/realm-progression-0.1.0.jar) · [ZIP](https://github.com/ROCKABITS/Mods/raw/refs/heads/main/mod-pronto/realm-progression-0.1.0.zip) | Mesa de Investigação, metas administrativas por mod e desbloqueios permanentes de crafts pelo saldo público. Create: 8.000 € por defeito, preservados no tesouro. Requer Realm Treasury 0.4.0. |
 | **Season 8 0.1.0** | [JAR](https://github.com/ROCKABITS/Mods/raw/refs/heads/main/mod-pronto/season-eight-0.1.0.jar) · [ZIP](https://github.com/ROCKABITS/Mods/raw/refs/heads/main/mod-pronto/season-eight-0.1.0.zip) | Menu principal, carregamento de recursos, brasão, título e ícone da janela. Apenas nos clientes, sem dependências adicionais. |
 | **Realm Marriage 0.1.0 Beta** | [JAR](https://github.com/ROCKABITS/Mods/raw/refs/heads/main/mod-pronto/realm-marriage-0.1.0.jar) · [ZIP](https://github.com/ROCKABITS/Mods/raw/refs/heads/main/mod-pronto/realm-marriage-0.1.0.zip) | Altar medieval, celebrante escolhido pelo casal, objeções com G, votos, testemunhas, três regimes financeiros e divórcio. |
@@ -58,7 +58,7 @@ O ZIP é uma alternativa ao download direto do JAR. Extrai-o antes de instalar. 
 
 ## Documentação e validação
 
-- [Guia do Realm Gym](realm-gym/README.md): treino diário, controlos, rotinas, atributos e recordes. [Conceito original](realm-gym/DESIGN.md) · [Galeria](media/realm-gym/0.7.1/README.md).
+- [Guia do Realm Gym](realm-gym/README.md): treino diário, controlos, rotinas, atributos e recordes. [Conceito original](realm-gym/DESIGN.md) · [Galeria](media/realm-gym/0.7.2/README.md).
 
 - [Guia do Realm Progression](realm-progression/README.md): seleção de mods, metas, permissões, crafts suportados e limites de cobertura. [Galeria](media/realm-progression/README.md).
 - [Guia do Realm Marriage](realm-marriage/README.md): casamentos, objeções, contas, certidões e divórcio; [API explícita de pagamentos](realm-marriage/API.md).

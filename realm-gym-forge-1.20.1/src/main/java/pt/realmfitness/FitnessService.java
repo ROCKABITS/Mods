@@ -19,6 +19,7 @@ import pt.realmfitness.domain.FitnessLedger.*;
 public final class FitnessService {
     private static final Map<UUID,View> VIEWS=new HashMap<>();
     private static final Map<UUID,Training> ACTIVE=new HashMap<>();
+    private static final Map<UUID,Training> SPOTTING=new HashMap<>();
     private static final Map<UUID,Integer> LAST=new HashMap<>();
     private static boolean configured;
     public static final class View {
@@ -30,10 +31,20 @@ public final class FitnessService {
         public int load=20,reps=8;
         public String period="all",scope="server";
     }
-    public record Training(Minigame game,BlockPos pos,ResourceLocation dimension,double x,double y,double z,int startsAt,GymMount mount){}
+    private static final class Training {
+        final Minigame game;
+        final BlockPos pos;
+        final ResourceLocation dimension;
+        final int startsAt;
+        final GymMount mount;
+        ServerPlayer spotter;
+        Training(Minigame game,BlockPos pos,ResourceLocation dimension,int startsAt,GymMount mount){
+            this.game=game;this.pos=pos;this.dimension=dimension;this.startsAt=startsAt;this.mount=mount;
+        }
+    }
     private FitnessService(){}
     public static void stop(MinecraftServer server){for(var p:server.getPlayerList().getPlayers())logout(p);}
-    public static void clear(){ACTIVE.clear();VIEWS.clear();LAST.clear();configured=false;}
+    public static void clear(){ACTIVE.clear();SPOTTING.clear();VIEWS.clear();LAST.clear();configured=false;}
     private static FitnessData data(ServerPlayer p){var d=FitnessData.get(p.getServer());d.available();d.ledger.observeMinecraft(p.getServer().overworld().getGameTime());if(!configured){reload(p.getServer());configured=true;}return d;}
     private static Path configFile(){return FMLPaths.CONFIGDIR.get().resolve("realm-fitness.json");}
     private static void requireServerThread(MinecraftServer server){if(!server.isSameThread())throw new IllegalStateException("Fitness requires server thread");}
@@ -71,7 +82,11 @@ public final class FitnessService {
         if(d.ledger.settings.conditioning.enabled)d.setDirty();
         return a;
     }
+    private static boolean isTraining(ServerPlayer p){
+        return ACTIVE.containsKey(p.getUUID())||SPOTTING.containsKey(p.getUUID());
+    }
     public static void open(ServerPlayer p,BlockPos pos,boolean board){
+        if(SPOTTING.containsKey(p.getUUID()))return;
         if(pos!=null&&!board){interact(p,pos,false);return;}
         try{
             View v=new View();v.pos=pos==null?null:pos.immutable();v.dimension=p.level().dimension().location();v.board=board;v.expires=p.getServer().getTickCount()+6000;
@@ -86,11 +101,15 @@ public final class FitnessService {
     }
     public static void interact(ServerPlayer p,BlockPos pos,boolean adjusting){
         try{
-            if(ACTIVE.containsKey(p.getUUID()))throw new IllegalArgumentException("fitness.already_training");
+            if(isTraining(p))throw new IllegalArgumentException("fitness.already_training");
             if(!p.isAlive()||p.isSpectator()||p.isPassenger())throw new IllegalArgumentException("fitness.survival_required");
             if(!p.level().hasChunkAt(pos)||p.distanceToSqr(net.minecraft.world.phys.Vec3.atCenterOf(pos))>64)throw new IllegalArgumentException("fitness.too_far");
             var state=p.level().getBlockState(pos);if(!(state.getBlock() instanceof GymBlock block)||!block.intact(p.level(),pos))throw new IllegalArgumentException("fitness.station_missing");
-            for(var t:ACTIVE.values())if(t.dimension.equals(p.level().dimension().location())&&t.pos.equals(pos))throw new IllegalArgumentException("fitness.machine_busy");
+            for(var t:ACTIVE.values()){
+                if(!t.dimension.equals(p.level().dimension().location())||!t.pos.equals(pos))continue;
+                if(!adjusting&&t.game.exercise==Exercise.BENCH){joinSpotter(p,t);return;}
+                throw new IllegalArgumentException("fitness.machine_busy");
+            }
             var d=data(p);var a=athlete(p);Exercise exercise=block.exercise;
             if(adjusting){int load=d.ledger.cycleLoad(a,exercise);d.persist(p.getServer());p.displayClientMessage(Component.translatable("fitness.load_changed",Component.translatable("fitness.exercise."+exercise.id()),exercise.weighted?load+" kg":Component.translatable("fitness.resistance",load)),true);return;}
             if(!state.getValue(GymBlock.EXPANDED))throw new IllegalArgumentException("fitness.replace_legacy");
@@ -98,6 +117,29 @@ public final class FitnessService {
             var step=a.workout==null?null:a.workout.next();v.load=d.ledger.selectedLoad(a,exercise);v.reps=step==null?8:step.repetitions();
             VIEWS.put(p.getUUID(),v);start(p,v,v.load,v.reps);
         }catch(RuntimeException e){p.displayClientMessage(Component.translatable(error(e)),true);}
+    }
+    private static void joinSpotter(ServerPlayer player,Training training){
+        if(player.gameMode.getGameModeForPlayer()!=GameType.SURVIVAL)
+            throw new IllegalArgumentException("fitness.survival_required");
+        if(training.spotter!=null||training.mount.isRemoved()||!(training.mount.getFirstPassenger() instanceof ServerPlayer))
+            throw new IllegalArgumentException("fitness.machine_busy");
+        if(!training.mount.canPositionSpotter(player))throw new IllegalArgumentException("fitness.spotter.no_room");
+        if(!player.startRiding(training.mount,true))throw new IllegalArgumentException("fitness.training_interrupted");
+        training.spotter=player;
+        SPOTTING.put(player.getUUID(),training);
+        training.game.setSpotterPresent(true);
+        training.mount.positionRider(player);
+        sendGame(player,training,true);
+    }
+    private static void leaveSpotter(Training training,Object summary){
+        ServerPlayer spotter=training.spotter;
+        if(spotter==null)return;
+        training.spotter=null;
+        SPOTTING.remove(spotter.getUUID());
+        training.game.setSpotterPresent(false);
+        if(spotter.getVehicle()==training.mount)spotter.stopRiding();
+        if(spotter.getServer().getPlayerList().getPlayer(spotter.getUUID())==spotter)
+            FitnessNetwork.send(spotter,summary);
     }
     private static void suggestions(Athlete a){
         a.routines.add(new Routine(UUID.randomUUID(),"fitness.plan_balanced",0,List.of(new Step(Exercise.BENCH,2,8,20,30),new Step(Exercise.RUN,2,8,1,30),new Step(Exercise.BOX,2,8,1,30))));
@@ -117,12 +159,23 @@ public final class FitnessService {
         try{
             if(json.length()>16384)throw new IllegalArgumentException("fitness.invalid_request");
             JsonObject j=JsonParser.parseString(json).getAsJsonObject();
-            if(operation.equals("input")){Training t=ACTIVE.get(p.getUUID());if(t!=null&&t.game.id.toString().equals(string(j,"id",36)))t.game.input(number(j,"sequence",0,10000),number(j,"keys",0,127));return;}
+            if(operation.equals("input")){
+                Training training=ACTIVE.get(p.getUUID());
+                if(training==null)training=SPOTTING.get(p.getUUID());
+                if(training!=null&&training.game.id.toString().equals(string(j,"id",36))){
+                    int sequence=number(j,"sequence",0,10000),keys=number(j,"keys",0,127);
+                    if(training.spotter==p){
+                        if(p.getVehicle()==training.mount)training.game.spotterInput(sequence,keys);
+                    }else training.game.input(sequence,keys);
+                }
+                return;
+            }
             if(operation.equals("cancel")){cancel(p);return;}
+            if(SPOTTING.containsKey(p.getUUID()))return;
             int now=p.getServer().getTickCount();Integer old=LAST.put(p.getUUID(),now);if(old!=null&&now-old<2)return;
             if(operation.equals("open")){open(p,null,false);return;}
             View v=view(p,operation.equals("start")||operation.equals("filter")||operation.equals("pin"));
-            if(ACTIVE.containsKey(p.getUUID()))throw new IllegalArgumentException("fitness.already_training");
+            if(isTraining(p))throw new IllegalArgumentException("fitness.already_training");
             var d=data(p);var a=athlete(p);String page="";
             switch(operation){
                 case "refresh" -> {}
@@ -152,28 +205,46 @@ public final class FitnessService {
         GymMount mount=FitnessMod.MOUNT.get().create(p.level());if(mount==null)throw new IllegalStateException("fitness.station_missing");
         var state=p.level().getBlockState(v.pos);mount.configure(v.pos,state.getValue(GymBlock.FACING),v.exercise,!state.getValue(GymBlock.EXPANDED),p.position());
         if(!p.serverLevel().addFreshEntity(mount)){mount.discard();throw new IllegalArgumentException("fitness.machine_busy");}
-        Training training=new Training(g,v.pos.immutable(),v.dimension,p.getX(),p.getY(),p.getZ(),p.getServer().getTickCount()+40,mount);
+        Training training=new Training(g,v.pos.immutable(),v.dimension,p.getServer().getTickCount()+40,mount);
         if(!p.startRiding(mount,true)){mount.discard();throw new IllegalArgumentException("fitness.training_interrupted");}
-        ACTIVE.put(p.getUUID(),training);mount.positionRider(p);block.working(p.level(),v.pos,true);sendGame(p,g,true);
+        ACTIVE.put(p.getUUID(),training);mount.positionRider(p);block.working(p.level(),v.pos,true);sendGame(p,training,true);
     }
-    private static void sendGame(ServerPlayer p,Minigame g,boolean opening){
-        var t=ACTIVE.get(p.getUUID());Map<String,Object> payload=new LinkedHashMap<>();payload.put("type","game");payload.put("open",opening);payload.put("id",g.id.toString());payload.put("exercise",g.exercise.name());payload.put("load",g.load);payload.put("repetitions",g.repetitions);payload.put("seed",g.seed);payload.put("fatigue",g.fatigue);payload.put("trainingLevel",g.trainingLevel);payload.put("yaw",t==null?p.getYRot():t.mount.actorYaw());payload.put("countdown",t==null?0:Math.max(0,t.startsAt-p.getServer().getTickCount()));
-        Map<String,Object> state=new LinkedHashMap<>();state.put("tick",g.tick);state.put("sequence",g.sequence());state.put("feedbackId",g.feedbackId);state.put("effort",g.effort);state.put("balance",g.balance);state.put("grip",g.grip);state.put("valid",g.valid);state.put("accuracy",g.accuracy());state.put("target",g.target());state.put("tolerance",g.tolerance());state.put("stage",g.stage());state.put("locked",g.locked);state.put("landed",g.landed);state.put("marker",g.marker());state.put("streak",g.streak);state.put("bestStreak",g.bestStreak);state.put("feedback",g.feedback);state.put("feedbackTicks",g.feedbackTicks);state.put("nextFoot",g.nextFoot);state.put("holdTicks",g.holdTicks);state.put("holdRequired",g.squatHoldRequired());payload.put("state",state);FitnessNetwork.send(p,payload);
+    private static void sendGame(ServerPlayer p,Training t,boolean opening){
+        Minigame g=t.game;
+        Map<String,Object> payload=new LinkedHashMap<>();payload.put("type","game");payload.put("open",opening);payload.put("id",g.id.toString());payload.put("exercise",g.exercise.name());payload.put("load",g.load);payload.put("repetitions",g.repetitions);payload.put("seed",g.seed);payload.put("fatigue",g.fatigue);payload.put("trainingLevel",g.trainingLevel);payload.put("yaw",t.mount.actorYaw());payload.put("countdown",Math.max(0,t.startsAt-p.getServer().getTickCount()));
+        payload.put("spotting",t.spotter==p);
+        Map<String,Object> state=new LinkedHashMap<>();state.put("tick",g.tick);state.put("sequence",g.sequence());state.put("feedbackId",g.feedbackId);state.put("effort",g.effort);state.put("balance",g.balance);state.put("grip",g.grip);state.put("valid",g.valid);state.put("accuracy",g.accuracy());state.put("target",g.target());state.put("tolerance",g.tolerance());state.put("stage",g.stage());state.put("locked",g.locked);state.put("landed",g.landed);state.put("marker",g.marker());state.put("streak",g.streak);state.put("bestStreak",g.bestStreak);state.put("feedback",g.feedback);state.put("feedbackTicks",g.feedbackTicks);state.put("nextFoot",g.nextFoot);state.put("holdTicks",g.holdTicks);state.put("holdRequired",g.squatHoldRequired());state.put("spotterPresent",t.spotter!=null);state.put("helpRequested",g.helpRequested());
+        state.put("canRequestHelp",g.canRequestHelp());state.put("assisted",g.assistedRepetitions());
+        payload.put("state",state);FitnessNetwork.send(p,payload);
+    }
+    private static void updateParticipants(ServerPlayer lifter,Training training){
+        sendGame(lifter,training,false);
+        if(training.spotter!=null)sendGame(training.spotter,training,false);
     }
     public static void tick(MinecraftServer server){
         if(configured)FitnessData.get(server).ledger.observeMinecraft(server.overworld().getGameTime());
         for(UUID id:List.copyOf(ACTIVE.keySet())){
-            var p=server.getPlayerList().getPlayer(id);Training t=ACTIVE.get(id);if(p==null){t.mount.discard();if(t.mount.level().getBlockState(t.pos).getBlock() instanceof GymBlock b)b.working(t.mount.level(),t.pos,false);ACTIVE.remove(id);continue;}
+            var p=server.getPlayerList().getPlayer(id);Training t=ACTIVE.get(id);if(p==null){leaveSpotter(t,Map.of("type","cancel"));t.mount.discard();if(t.mount.level().getBlockState(t.pos).getBlock() instanceof GymBlock b)b.working(t.mount.level(),t.pos,false);ACTIVE.remove(id);continue;}
             try{
                 view(p,true);
                 if(!p.isAlive()||p.gameMode.getGameModeForPlayer()!=GameType.SURVIVAL||p.getVehicle()!=t.mount||t.mount.isRemoved()||!t.dimension.equals(p.level().dimension().location()))throw new IllegalArgumentException("fitness.training_interrupted");
-                if(server.getTickCount()<t.startsAt){t.game.clearEdges();if(server.getTickCount()%4==0)sendGame(p,t.game,false);continue;}
+                ServerPlayer spotter=t.spotter;
+                if(spotter!=null&&(!spotter.isAlive()||spotter.getVehicle()!=t.mount||spotter.level()!=p.level()
+                    ||spotter.gameMode.getGameModeForPlayer()!=GameType.SURVIVAL
+                    ||server.getPlayerList().getPlayer(spotter.getUUID())!=spotter||!t.mount.canPositionSpotter(spotter)))
+                    leaveSpotter(t,Map.of("type","cancel"));
+                if(server.getTickCount()<t.startsAt){
+                    t.game.clearEdges();if(server.getTickCount()%4==0)updateParticipants(p,t);continue;
+                }
+                int assists=t.game.assistedRepetitions();
                 t.game.advance();t.mount.progress(t.game.tick,t.game.effort,t.game.keys());
+                if(t.game.assistedRepetitions()>assists)t.mount.catchBar();
                 if(t.game.done()){
-                    release(p,t);var d=data(p);Award award=d.ledger.finish(id,p.getGameProfile().getName(),t.game,System.currentTimeMillis(),t.dimension.toString(),t.pos.asLong(),gym(t.pos));d.persist(server);apply(p);FitnessNetwork.send(p,Map.of("type","done","valid",award.result().valid(),"repetitions",award.result().repetitions(),"accuracy",award.result().accuracy(),"xp",award.gained(),"daily",award.dailyBonus(),"bestStreak",t.game.bestStreak));
+                    if(t.spotter!=null)leaveSpotter(t,Map.of("type","done","spotting",true,"assisted",t.game.assistedRepetitions()));
+                    release(p,t);var d=data(p);Award award=d.ledger.finish(id,p.getGameProfile().getName(),t.game,System.currentTimeMillis(),t.dimension.toString(),t.pos.asLong(),gym(t.pos));d.persist(server);apply(p);FitnessNetwork.send(p,Map.of("type","done","valid",award.result().valid(),"repetitions",award.result().repetitions(),"accuracy",award.result().accuracy(),"xp",award.gained(),"daily",award.dailyBonus(),"bestStreak",t.game.bestStreak,"assisted",t.game.assistedRepetitions()));
                     refreshBoards(server);
                 }else{
-                    if(t.game.tick%2==0)sendGame(p,t.game,false);
+                    if(t.game.tick%2==0)updateParticipants(p,t);
 
                 }
             }catch(RuntimeException e){cancel(p);p.displayClientMessage(Component.translatable(error(e)),true);}
@@ -193,12 +264,19 @@ public final class FitnessService {
         if(!b.display.equals(display)){b.display=display;b.sync();}else b.setChanged();
     }
     private static void release(ServerPlayer p,Training t){
+        leaveSpotter(t,Map.of("type","cancel"));
         ACTIVE.remove(p.getUUID());var exit=t.mount.safeExit(p);
         if(p.getVehicle()==t.mount)p.stopRiding();t.mount.discard();
         if(t.dimension.equals(p.level().dimension().location())){p.teleportTo(p.serverLevel(),exit.x,exit.y,exit.z,p.getYRot(),p.getXRot());p.fallDistance=0;}
         if(t.mount.level().getBlockState(t.pos).getBlock() instanceof GymBlock block)block.working(t.mount.level(),t.pos,false);
     }
-    public static void cancel(ServerPlayer p){Training t=ACTIVE.get(p.getUUID());if(t!=null)release(p,t);FitnessNetwork.send(p,Map.of("type","cancel"));}
+    public static void cancel(ServerPlayer p){
+        Training spot=SPOTTING.get(p.getUUID());
+        if(spot!=null){leaveSpotter(spot,Map.of("type","cancel"));return;}
+        Training training=ACTIVE.get(p.getUUID());
+        if(training!=null)release(p,training);
+        FitnessNetwork.send(p,Map.of("type","cancel"));
+    }
     public static void logout(ServerPlayer p){
         cancel(p);VIEWS.remove(p.getUUID());LAST.remove(p.getUUID());
         if(configured){var d=data(p);var a=athlete(p);d.ledger.offline(a,System.currentTimeMillis());if(d.ledger.settings.conditioning.enabled)d.persist(p.getServer());}

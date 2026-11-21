@@ -150,7 +150,7 @@ public final class AthleteScreen extends Screen {
         if(entries.isEmpty())label(g,text("no_history"),x+15,by+15,w-30,MUTED);
         for(int i=0;i<visible&&i+scroll<entries.size();i++){
             var r=entries.get(i+scroll).getAsJsonObject();var e=Exercise.valueOf(str(r,"exercise"));int yy=by+i*row;frame(g,x+12,yy,w-24,row-3,0xFF251E30);
-            String first=exercise(e)+" · "+load(e,num(r,"load"))+" · "+num(r,"valid")+"/"+num(r,"repetitions");label(g,first,x+19,yy+4,w-38,INK);
+            String first=exercise(e)+" · "+load(e,num(r,"load"))+" · "+num(r,"valid")+"/"+num(r,"repetitions");if(num(r,"assisted")>0)first+=" · "+text("spotter.count",num(r,"assisted"));label(g,first,x+19,yy+4,w-38,INK);
             String date=Instant.ofEpochMilli(time(r,"at")).atOffset(ZoneOffset.UTC).toLocalDate().toString();label(g,date+" · "+num(r,"accuracy")+"% · +"+num(r,"experience")+" XP",x+19,yy+15,w-38,MUTED);
         }
     }

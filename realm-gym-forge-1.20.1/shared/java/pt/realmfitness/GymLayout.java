@@ -7,6 +7,7 @@ import pt.realmfitness.domain.Exercise;
 
 /** Shared authored contact points, in metres. Source geometry uses model pixels. */
 public final class GymLayout {
+    public static final double BENCH_SPOTTER_Z=2.5;
     private static final JsonObject ALL=load();
     private GymLayout(){}
     public record Point(double x,double y,double z){}

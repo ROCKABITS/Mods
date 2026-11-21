@@ -75,7 +75,7 @@ public final class FitnessLedger {
         public int total(){return plan.steps.stream().mapToInt(Step::sets).sum();}
         public Step next(){int n=completed;for(var s:plan.steps){if(n<s.sets)return s;n-=s.sets;}return null;}
     }
-    public record Result(UUID id,UUID player,String name,Exercise exercise,int load,int repetitions,int valid,int accuracy,long at,String dimension,long station,String gym,UUID workout,int experience) {
+    public record Result(UUID id,UUID player,String name,Exercise exercise,int load,int repetitions,int valid,int accuracy,long at,String dimension,long station,String gym,UUID workout,int experience,int assisted) {
         public int points(){return valid*accuracy;}
         public String category(){return exercise+":"+load+":"+repetitions;}
     }
@@ -184,9 +184,9 @@ public final class FitnessLedger {
                 for(var e:new TreeSet<>(a.trainedToday))gain+=credit(a,e,each);
             }
         }
-        Result r=new Result(game.id,player,name,game.exercise,game.load,game.repetitions,game.valid,game.accuracy(),now,dimension,station,gym,workout,gain);
+        Result r=new Result(game.id,player,name,game.exercise,game.load,game.repetitions,game.valid,game.accuracy(),now,dimension,station,gym,workout,gain,game.assistedRepetitions());
         a.results.add(r);
-        if(qualified)for(String key:List.of(r.category(),r.category()+":"+dimension+":"+gym)){
+        if(qualified&&r.assisted==0)for(String key:List.of(r.category(),r.category()+":"+dimension+":"+gym)){
             Result old=a.best.get(key);if(old==null||better(r,old))a.best.put(key,r);
         }
         return new Award(r,bonus,gain,complete);
@@ -201,7 +201,7 @@ public final class FitnessLedger {
         Map<UUID,Result> byPlayer=new HashMap<>();
         for(var a:athletes.values()){
             Collection<Result> source=period.equals("all")?a.best.values():a.results;
-            for(var r:source)if(r.exercise==e&&r.load==load&&r.repetitions==reps&&r.at>=cutoff&&r.accuracy>=50&&r.valid>=Math.ceil(reps*.6)&&(gym.isEmpty()||r.gym.equals(gym)&&r.dimension.equals(dimension)))
+            for(var r:source)if(r.assisted==0&&r.exercise==e&&r.load==load&&r.repetitions==reps&&r.at>=cutoff&&r.accuracy>=50&&r.valid>=Math.ceil(reps*.6)&&(gym.isEmpty()||r.gym.equals(gym)&&r.dimension.equals(dimension)))
                 byPlayer.merge(r.player,r,(x,y)->better(y,x)?y:x);
         }
         return byPlayer.values().stream().sorted(Comparator.comparingInt(Result::points).reversed().thenComparing(Result::at).thenComparing(r->r.player.toString())).limit(10).toList();
@@ -239,7 +239,7 @@ public final class FitnessLedger {
         if(total>MAX_RESULTS)throw new IllegalArgumentException("fitness.capacity");
     }
     private static void validateResult(UUID player,Result r){
-        if(r==null||r.id==null||!player.equals(r.player)||r.name==null||r.name.length()>64||r.exercise==null||r.repetitions<4||r.repetitions>20||r.valid<0||r.valid>r.repetitions||r.accuracy<0||r.accuracy>100||r.at<0||r.dimension==null||r.dimension.length()>256||r.gym==null||r.gym.length()>128||r.experience<0||r.experience>10000)
+        if(r==null||r.id==null||!player.equals(r.player)||r.name==null||r.name.length()>64||r.exercise==null||r.repetitions<4||r.repetitions>20||r.valid<0||r.valid>r.repetitions||r.accuracy<0||r.accuracy>100||r.at<0||r.dimension==null||r.dimension.length()>256||r.gym==null||r.gym.length()>128||r.experience<0||r.experience>10000||r.assisted<0||r.assisted>r.repetitions-r.valid||r.assisted!=0&&r.exercise!=Exercise.BENCH)
             throw new IllegalArgumentException("fitness.corrupt_data");
         r.exercise.checkLoad(r.load,20);
     }

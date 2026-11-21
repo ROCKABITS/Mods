@@ -186,5 +186,15 @@
   "fitness.conditioning.next_loss_minecraft": "Next loss in approximately %s Minecraft days",
   "fitness.conditioning.minecraft_time": "Counts while the world is running, including time offline",
   "fitness.conditioning.schedule": "Time mode: %s; grace period (days): %s.",
-  "fitness.conditioning.days_set": "Grace period (days): %s; time mode: %s. Saved and applied immediately."
+  "fitness.conditioning.days_set": "Grace period (days): %s; time mode: %s. Saved and applied immediately.",
+  "fitness.spotter.catch": "Space · Catch the bar!",
+  "fitness.spotter.wait": "Spotting · Wait for the lifter to call",
+  "fitness.spotter.leave": "Shift · Leave",
+  "fitness.spotter.ready": "Spotter ready",
+  "fitness.spotter.call": "W · Call for help",
+  "fitness.spotter.requested": "Help requested",
+  "fitness.spotter.count": "%s assisted",
+  "fitness.spotter.summary": "Spotting complete · %s assisted",
+  "fitness.game.feedback.assisted": "Assist",
+  "fitness.spotter.no_room": "Clear a standing space behind the bench for a spotter."
 }

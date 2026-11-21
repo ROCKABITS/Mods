@@ -1,12 +1,14 @@
-# Realm Gym 0.7.1 Beta
+# Realm Gym 0.7.2 Beta
 
 Ginásio físico para **Minecraft 1.21.1, NeoForge 21.1.256+ e Java 21**. Máquinas 3D, oito minijogos, atributos permanentes, rotinas personalizadas, calendário e painéis de recordes. Funciona de forma independente.
 
-[Descarregar JAR](../mod-pronto/realm-gym-0.7.1.jar) · [ZIP](../mod-pronto/realm-gym-0.7.1.zip) · [Galeria](../media/realm-gym/0.7.1/README.md) · [Validação](VALIDACAO.md) · [Conceito original](DESIGN.md)
+[Descarregar JAR](../mod-pronto/realm-gym-0.7.2.jar) · [ZIP](../mod-pronto/realm-gym-0.7.2.zip) · [Galeria](../media/realm-gym/0.7.2/README.md) · [Validação](VALIDACAO.md) · [Conceito original](DESIGN.md)
+
+**Supino a dois.** Clica com o botão direito num banco ocupado para ser spotter. O atleta pede ajuda com **W** quando vê o aviso, e o spotter segura a barra com **Espaço**. **Shift** sai do posto. [Changelog 0.7.2](CHANGELOG.md#072--bench-press-spotter).
 
 Instala esta versão no servidor e em todos os clientes. Esta versão exige o mesmo protocolo de montagem para manter o personagem alinhado com as máquinas. Esta edição é para 1.21.1/NeoForge.
 
-**Realm Gym é o novo nome do Realm Fitness.** Substitui o JAR antigo por `realm-gym-0.7.1.jar`; instala apenas uma edição. O identificador `realmfitness`, os blocos, `data/realm_fitness.dat` e `config/realm-fitness.json` mantêm-se para conservar os mundos, níveis, rotinas e recordes. O comando principal passa a `/gym`; `/fitness` continua como alias, incluindo `equipment` e `reload`.
+**Realm Gym é o novo nome do Realm Fitness.** Substitui o JAR antigo por `realm-gym-0.7.2.jar`; instala apenas uma edição. O identificador `realmfitness`, os blocos, `data/realm_fitness.dat` e `config/realm-fitness.json` mantêm-se para conservar os mundos, níveis, rotinas e recordes. O comando principal passa a `/gym`; `/fitness` continua como alias, incluindo `equipment` e `reload`.
 
 ![Ícone do Realm Gym](../media/realm-gym/branding/realm-gym-icon.png)
 

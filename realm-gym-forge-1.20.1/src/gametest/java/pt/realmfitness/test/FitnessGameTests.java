@@ -253,4 +253,39 @@ public final class FitnessGameTests {
         try{if(bytes==null)java.nio.file.Files.deleteIfExists(commandConfig());else java.nio.file.Files.write(commandConfig(),bytes);FitnessService.reload(server);}
         catch(java.io.IOException error){throw new AssertionError(error);}
     }
+    @GameTest(template="empty",timeoutTicks=120)
+    public static void occupiedBenchAcceptsOneSpotterAndKeepsTheLifterRiding(GameTestHelper h){
+        var anchor=position(h);
+        place(h,Exercise.BENCH,Direction.NORTH);
+        var level=h.getLevel();
+        var lifter=h.makeMockServerPlayerInLevel();
+        var spotter=h.makeMockServerPlayerInLevel();
+        var replacement=h.makeMockServerPlayerInLevel();
+        try{
+            replacement.setGameMode(GameType.SURVIVAL);
+            replacement.setPos(Vec3.atBottomCenterOf(anchor.south(3)));
+            lifter.setGameMode(GameType.SURVIVAL);spotter.setGameMode(GameType.SURVIVAL);
+            lifter.setPos(Vec3.atBottomCenterOf(anchor.north(2)));
+            spotter.setPos(Vec3.atBottomCenterOf(anchor.south(3)));
+            FitnessService.interact(lifter,anchor,false);
+            h.assertTrue(lifter.getVehicle() instanceof GymMount,"Lifter failed to mount the bench");
+            var mount=(GymMount)lifter.getVehicle();
+            FitnessService.interact(spotter,anchor,false);
+            h.assertTrue(spotter.getVehicle()==mount&&mount.getFirstPassenger()==lifter,"Second player did not join as spotter");
+            h.assertTrue(spotter.distanceToSqr(mount.local(1,0,2.5))<.01,"Spotter did not stand behind the bench");
+            FitnessService.interact(replacement,anchor,false);
+            h.assertTrue(!replacement.isPassenger(),"A third rider joined an occupied bench");
+            FitnessService.cancel(spotter);
+            h.assertTrue(!spotter.isPassenger()&&lifter.getVehicle()==mount,"Leaving as spotter cancelled the lifter");
+            FitnessService.interact(replacement,anchor,false);
+            h.assertTrue(replacement.getVehicle()==mount,"The freed spotter place did not reopen");
+            FitnessService.cancel(lifter);
+            h.assertTrue(!lifter.isPassenger()&&!replacement.isPassenger()&&mount.isRemoved(),"Ending the set left a rider behind");
+        }finally{
+            FitnessService.cancel(replacement);FitnessService.cancel(spotter);FitnessService.cancel(lifter);
+            level.getServer().getPlayerList().remove(replacement);
+            level.getServer().getPlayerList().remove(spotter);level.getServer().getPlayerList().remove(lifter);
+        }
+        h.succeed();
+    }
 }

@@ -12,13 +12,14 @@ import pt.realmfitness.domain.Exercise;
 public final class GymMount extends Entity {
     private static final EntityDataAccessor<BlockPos> ANCHOR=SynchedEntityData.defineId(GymMount.class,EntityDataSerializers.BLOCK_POS);
     private static final EntityDataAccessor<Integer> FACING=SynchedEntityData.defineId(GymMount.class,EntityDataSerializers.INT),EXERCISE=SynchedEntityData.defineId(GymMount.class,EntityDataSerializers.INT),TICK=SynchedEntityData.defineId(GymMount.class,EntityDataSerializers.INT),KEYS=SynchedEntityData.defineId(GymMount.class,EntityDataSerializers.INT),ACTION=SynchedEntityData.defineId(GymMount.class,EntityDataSerializers.INT),ACTION_TICK=SynchedEntityData.defineId(GymMount.class,EntityDataSerializers.INT);
+    private static final EntityDataAccessor<Integer> SPOT_AT=SynchedEntityData.defineId(GymMount.class,EntityDataSerializers.INT);
     private static final EntityDataAccessor<Boolean> COMPACT=SynchedEntityData.defineId(GymMount.class,EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Float> EFFORT=SynchedEntityData.defineId(GymMount.class,EntityDataSerializers.FLOAT);
     private Vec3 entrance;
     private long received=System.nanoTime(),effortReceived=System.nanoTime();
     private double visualCorrection,visualServer,fromEffort=.5,toEffort=.5;
     public GymMount(EntityType<? extends GymMount> type,Level level){super(type,level);noPhysics=true;setNoGravity(true);}
-    @Override protected void defineSynchedData(){entityData.define(ANCHOR,BlockPos.ZERO);entityData.define(FACING,Direction.NORTH.get3DDataValue());entityData.define(EXERCISE,0);entityData.define(TICK,0);entityData.define(KEYS,0);entityData.define(ACTION,0);entityData.define(ACTION_TICK,-100);entityData.define(COMPACT,false);entityData.define(EFFORT,.5f);}
+    @Override protected void defineSynchedData(){entityData.define(ANCHOR,BlockPos.ZERO);entityData.define(FACING,Direction.NORTH.get3DDataValue());entityData.define(EXERCISE,0);entityData.define(TICK,0);entityData.define(KEYS,0);entityData.define(ACTION,0);entityData.define(ACTION_TICK,-100);entityData.define(SPOT_AT,-100);entityData.define(COMPACT,false);entityData.define(EFFORT,.5f);}
     public void configure(BlockPos anchor,Direction facing,Exercise exercise,boolean compact,Vec3 entrance){entityData.set(ANCHOR,anchor.immutable());entityData.set(FACING,facing.get3DDataValue());entityData.set(EXERCISE,exercise.ordinal());entityData.set(COMPACT,compact);this.entrance=entrance;setPos(actorPosition());}
     public BlockPos anchor(){return entityData.get(ANCHOR);}
     public Direction facing(){return Direction.from3DDataValue(entityData.get(FACING));}
@@ -29,18 +30,34 @@ public final class GymMount extends Entity {
     public int action(){return entityData.get(ACTION);}
     public float actionAge(){return visualTick()-entityData.get(ACTION_TICK);}
     public float visualTick(){if(entityData.get(TICK)==0)return 0;double elapsed=pt.realmfitness.domain.FitnessMath.clamp((System.nanoTime()-received)/1_000_000_000.0,0,.15);return (float)(visualServer+elapsed*20+visualCorrection*Math.exp(-elapsed/.12));}
+    public void catchBar(){entityData.set(SPOT_AT,entityData.get(TICK));}
+    public float spotterCatchAge(){return visualTick()-entityData.get(SPOT_AT);}
     public float actorYaw(){return (exercise()==Exercise.BENCH?facing():facing().getOpposite()).toYRot();}
     public void progress(int tick,double effort,int keys){int edges=keys&~keys();if(edges!=0){entityData.set(ACTION,edges);entityData.set(ACTION_TICK,tick);}entityData.set(TICK,tick);entityData.set(EFFORT,(float)effort);entityData.set(KEYS,keys);}
     @Override public void onSyncedDataUpdated(EntityDataAccessor<?> key){super.onSyncedDataUpdated(key);if(key==TICK){double previous=visualServer==0?0:visualTick();double next=entityData.get(TICK);boolean newRound=Math.abs(next-visualServer)>4;visualServer=next;visualCorrection=newRound?0:previous-visualServer;received=System.nanoTime();}else if(key==EFFORT){fromEffort=effort();toEffort=entityData.get(EFFORT);effortReceived=System.nanoTime();}}
     public Vec3 local(double x,double y,double z){double scale=compact()?.48:1;Vec3 a=Vec3.atLowerCornerOf(anchor());Direction right=facing().getClockWise(),back=facing().getOpposite();return a.add(.5+.5*right.getStepX()+.5*back.getStepX(),0,.5+.5*right.getStepZ()+.5*back.getStepZ()).add((x-1)*right.getStepX()*scale,y*scale,(x-1)*right.getStepZ()*scale).add((z-1)*back.getStepX()*scale,0,(z-1)*back.getStepZ()*scale);}
     private Vec3 actorPosition(){var p=GymLayout.point(exercise(),"actor");return local(p.x(),p.y(),p.z());}
-    @Override protected void positionRider(Entity rider,Entity.MoveFunction move){Vec3 p=actorPosition();move.accept(rider,p.x,p.y,p.z);rider.setYBodyRot(actorYaw());rider.fallDistance=0;}
-    @Override protected boolean canAddPassenger(Entity passenger){return getPassengers().isEmpty();}
+    private Vec3 spotterPosition(){return local(1,0,GymLayout.BENCH_SPOTTER_Z);}
+    public boolean canPositionSpotter(LivingEntity player){return safe(player,spotterPosition());}
+    @Override protected void positionRider(Entity rider,Entity.MoveFunction move){
+        boolean spotting=rider!=getFirstPassenger();
+        Vec3 position=spotting?spotterPosition():actorPosition();
+        move.accept(rider,position.x,position.y,position.z);
+        rider.setYBodyRot(spotting?facing().toYRot():actorYaw());
+        rider.fallDistance=0;
+    }
+    @Override protected boolean canAddPassenger(Entity passenger){
+        return getPassengers().isEmpty()||exercise()==Exercise.BENCH&&!compact()&&getPassengers().size()==1
+            &&passenger instanceof net.minecraft.server.level.ServerPlayer;
+    }
     @Override public boolean shouldRiderSit(){return false;}
     @Override public boolean isPickable(){return false;}
     @Override public boolean isPushable(){return false;}
     @Override public void tick(){super.tick();setDeltaMovement(Vec3.ZERO);if(!level().isClientSide&&tickCount>5&&(getPassengers().isEmpty()||!(level().getBlockState(anchor()).getBlock() instanceof GymBlock block)||!block.intact(level(),anchor())))discard();}
-    @Override public Vec3 getDismountLocationForPassenger(LivingEntity rider){return safeExit(rider);}
+    @Override public Vec3 getDismountLocationForPassenger(LivingEntity rider){
+        if(exercise()==Exercise.BENCH&&safe(rider,spotterPosition())&&rider.distanceToSqr(spotterPosition())<.09)return spotterPosition();
+        return safeExit(rider);
+    }
     public Vec3 safeExit(LivingEntity rider){
         if(entrance!=null&&safe(rider,entrance))return entrance;
         for(int distance=1;distance<=4;distance++)for(Direction d:Direction.Plane.HORIZONTAL){Vec3 p=Vec3.atBottomCenterOf(anchor().relative(d,distance));if(safe(rider,p))return p;}
