@@ -274,10 +274,9 @@ public final class FitnessGameTests {
     public static void occupiedBenchAcceptsOneSpotterAndKeepsTheLifterRiding(GameTestHelper h){
         var anchor=position(h);
         place(h,Exercise.BENCH,Direction.NORTH);
-        var level=h.getLevel();
-        var lifter=h.makeMockServerPlayerInLevel();
-        var spotter=h.makeMockServerPlayerInLevel();
-        var replacement=h.makeMockServerPlayerInLevel();
+        var lifter=player(h);
+        var spotter=player(h);
+        var replacement=player(h);
         try{
             replacement.setGameMode(GameType.SURVIVAL);
             replacement.setPos(Vec3.atBottomCenterOf(anchor.south(3)));
@@ -300,8 +299,6 @@ public final class FitnessGameTests {
             h.assertTrue(!lifter.isPassenger()&&!replacement.isPassenger()&&mount.isRemoved(),"Ending the set left a rider behind");
         }finally{
             FitnessService.cancel(replacement);FitnessService.cancel(spotter);FitnessService.cancel(lifter);
-            level.getServer().getPlayerList().remove(replacement);
-            level.getServer().getPlayerList().remove(spotter);level.getServer().getPlayerList().remove(lifter);
         }
         h.succeed();
     }

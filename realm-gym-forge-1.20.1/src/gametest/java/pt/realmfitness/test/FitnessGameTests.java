@@ -257,10 +257,9 @@ public final class FitnessGameTests {
     public static void occupiedBenchAcceptsOneSpotterAndKeepsTheLifterRiding(GameTestHelper h){
         var anchor=position(h);
         place(h,Exercise.BENCH,Direction.NORTH);
-        var level=h.getLevel();
-        var lifter=h.makeMockServerPlayerInLevel();
-        var spotter=h.makeMockServerPlayerInLevel();
-        var replacement=h.makeMockServerPlayerInLevel();
+        var lifter=benchPlayer(h);
+        var spotter=benchPlayer(h);
+        var replacement=benchPlayer(h);
         try{
             replacement.setGameMode(GameType.SURVIVAL);
             replacement.setPos(Vec3.atBottomCenterOf(anchor.south(3)));
@@ -283,9 +282,17 @@ public final class FitnessGameTests {
             h.assertTrue(!lifter.isPassenger()&&!replacement.isPassenger()&&mount.isRemoved(),"Ending the set left a rider behind");
         }finally{
             FitnessService.cancel(replacement);FitnessService.cancel(spotter);FitnessService.cancel(lifter);
-            level.getServer().getPlayerList().remove(replacement);
-            level.getServer().getPlayerList().remove(spotter);level.getServer().getPlayerList().remove(lifter);
         }
         h.succeed();
+    }
+    private static net.minecraft.server.level.ServerPlayer benchPlayer(GameTestHelper h){
+        var server=h.getLevel().getServer();
+        var profile=new GameProfile(UUID.randomUUID(),"BenchTester");
+        var player=new net.minecraft.server.level.ServerPlayer(server,h.getLevel(),profile);
+        var connection=new net.minecraft.network.Connection(net.minecraft.network.protocol.PacketFlow.SERVERBOUND);
+        player.connection=new net.minecraft.server.network.ServerGamePacketListenerImpl(server,connection,player){
+            @Override public void send(net.minecraft.network.protocol.Packet<?> packet){}
+        };
+        return player;
     }
 }
