@@ -1,5 +1,10 @@
 # Realm Gym changelog
 
+## Unreleased
+
+- Bench press gains less pressure per Space tap and loses it faster between taps. Heavier loads, accumulated fatigue and later repetitions demand a steadier rhythm. Training still makes lighter loads easier.
+- Tightened the timing windows for boxing, rowing, leg press and rope pushdowns. Running too far above the target pace drains more grip, pull-ups use more grip, and squats need a slightly longer pause.
+
 ## 0.7.2 — Bench press spotter
 
 - A second player can right-click an occupied bench to stand behind it and act as a spotter. Leave enough room behind the bench for the second player.

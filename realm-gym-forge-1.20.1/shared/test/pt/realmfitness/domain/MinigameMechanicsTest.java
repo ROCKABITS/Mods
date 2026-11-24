@@ -11,11 +11,42 @@ class MinigameMechanicsTest {
     private void play(Minigame g){int sequence=0;while(!g.done()){g.input(sequence++,FitnessRulesTest.controller(g));g.advance();}}
     @Test void holdingSpaceDoesNotMashBenchPress(){var g=game(Exercise.BENCH,20,0,0);for(int n=0;!g.done();n++){g.input(n,Minigame.SPACE);g.advance();}assertEquals(0,g.valid);}
     @Test void benchPressureFallsWhenThePlayerStopsTapping(){var g=game(Exercise.BENCH,20,0,0);g.input(0,Minigame.SPACE);g.advance();double pushed=g.effort;g.input(1,0);for(int i=0;i<8;i++)g.advance();assertTrue(g.effort<pushed);}
-    @Test void benchAcceptsShortPressAndReleaseBetweenServerTicks(){var g=game(Exercise.BENCH,20,0,0);g.input(0,Minigame.SPACE);g.input(1,0);g.advance();assertTrue(g.effort>.2);}
+    @Test void benchAcceptsShortPressAndReleaseBetweenServerTicks(){
+        var g=game(Exercise.BENCH,20,0,0);
+        double expected=g.effort-g.benchDrain()+g.benchTapGain();
+        g.input(0,Minigame.SPACE);
+        g.input(1,0);
+        g.advance();
+        assertEquals(1,g.attempted);
+        assertEquals(expected,g.effort,1e-9);
+    }
     private int tapsForFirstRep(Minigame g){int sequence=0,taps=0;while(g.tick<g.repTicks()&&g.hits==0){int key=g.tick%3==0?Minigame.SPACE:0;if(key!=0)taps++;g.input(sequence++,key);g.advance();}assertEquals(1,g.hits);return taps;}
     @Test void heavierBenchWeightsNeedMoreActualTaps(){assertTrue(tapsForFirstRep(game(Exercise.BENCH,120,0,20))>tapsForFirstRep(game(Exercise.BENCH,20,0,0)));}
     @Test void TrainingMakesTheSameLowWeightEasier(){assertTrue(tapsForFirstRep(game(Exercise.BENCH,20,0,20))<tapsForFirstRep(game(Exercise.BENCH,20,0,0)));}
     @Test void accumulatedFatigueAndLaterRepsIncreasePressureLoss(){var rested=game(Exercise.BENCH,40,0,8);var tired=game(Exercise.BENCH,40,.8,8);assertTrue(tired.benchDrain()>rested.benchDrain());double initial=tired.benchDrain();tired.tick=7*tired.repTicks();assertTrue(tired.benchDrain()>initial);}
+    @Test void steadyBenchTapsStillWorkAtEntryLoadAndRequireMoreEffortByTheLastRep(){
+        var bench=game(Exercise.BENCH,20,0,0);
+        int[] taps=playBenchAtCadence(bench,4);
+        assertTrue(taps[0]>=7&&taps[0]<=9,"Entry load must work at five taps per second");
+        assertTrue(taps[7]>taps[0],"Later reps should need more taps at the same cadence");
+        assertEquals(8,bench.valid);
+    }
+    @Test void heaviestFatiguedBenchSetRemainsCompletableEvenWithTwentyRepetitions(){
+        var bench=new Minigame(UUID.randomUUID(),Exercise.BENCH,120,20,991,1,20);
+        int[] taps=playBenchAtCadence(bench,3);
+        assertTrue(taps[19]>taps[0]);
+        assertEquals(20,bench.valid);
+    }
+    private int[] playBenchAtCadence(Minigame bench,int interval){
+        int[] taps=new int[bench.repetitions];
+        for(int sequence=0;!bench.done();sequence++){
+            int repetition=bench.completed(),attempted=bench.attempted;
+            bench.input(sequence,!bench.landed&&bench.phase()%interval==0?Minigame.SPACE:0);
+            bench.advance();
+            taps[repetition]+=bench.attempted-attempted;
+        }
+        return taps;
+    }
     @Test void lowResistanceTimingGetsMoreForgivingWithTraining(){var novice=game(Exercise.BOX,1,0,0);var trained=game(Exercise.BOX,1,0,20);assertTrue(trained.tolerance()>novice.tolerance());assertTrue(game(Exercise.BOX,1,0,1).tolerance()>novice.tolerance());assertTrue(trained.boxPeriod(0)>novice.boxPeriod(0));}
     @Test void boxingMarkerKeepsBouncingUntilThePlayerChoosesToPunch(){var g=game(Exercise.BOX,1,0,0);double low=1,high=0;for(int i=0;i<g.repTicks();i++){low=Math.min(low,g.marker());high=Math.max(high,g.marker());g.advance();}assertTrue(low<.05&&high>.95);assertEquals(0,g.attempted);}
     @Test void boxingFirstMissCannotBeReplacedBySpammingLaterHits(){var g=game(Exercise.BOX,1,0,0);while(Math.abs(g.marker()-.5)<.3)g.advance();int sequence=0;g.input(sequence++,Minigame.LEFT);g.advance();assertTrue(g.locked);while(g.tick<g.repTicks()){g.input(sequence++,Minigame.LEFT);g.input(sequence++,0);g.advance();}assertEquals(0,g.valid);assertEquals(0,g.bestStreak);}

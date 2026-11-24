@@ -10,11 +10,11 @@ class BenchSpotterTest {
     @Test void onlyAFreshSpotterPressAfterTheLifterCallsCanRescueARep(){
         var set=new Minigame(UUID.randomUUID(),Exercise.BENCH,20,4,1,0);
         set.setSpotterPresent(true);
-        stall(set);
+        int sequence=stall(set,0);
         set.spotterInput(0,Minigame.SPACE);
         set.advance();
         assertEquals(0,set.assistedRepetitions());
-        set.input(1,Minigame.W);
+        set.input(sequence,Minigame.W);
         set.advance();
         assertTrue(set.helpRequested());
         set.spotterInput(1,Minigame.SPACE);
@@ -36,15 +36,13 @@ class BenchSpotterTest {
     @Test void requestExpiresAndLeavingClearsAnyQueuedCatch(){
         var set=new Minigame(UUID.randomUUID(),Exercise.BENCH,20,4,2,0);
         set.setSpotterPresent(true);
-        stall(set);
-        set.input(1,Minigame.W);
+        int sequence=stall(set,0);
+        set.input(sequence++,Minigame.W);
         set.advance();
         while(set.completed()==0)set.advance();
         assertFalse(set.helpRequested());
-        set.input(2,0);set.advance();
-        set.input(3,Minigame.SPACE);
-        while(!set.canRequestHelp())set.advance();
-        set.input(4,Minigame.W);set.advance();
+        sequence=stall(set,sequence);
+        set.input(sequence,Minigame.W);set.advance();
         set.spotterInput(0,Minigame.SPACE);
         set.setSpotterPresent(false);set.advance();
         assertFalse(set.helpRequested());
@@ -54,11 +52,11 @@ class BenchSpotterTest {
     @Test void assistedSetKeepsItsHistoryAndCreditForSoloRepsButDoesNotRank(){
         var set=new Minigame(UUID.randomUUID(),Exercise.BENCH,20,8,3,0);
         set.setSpotterPresent(true);
-        stall(set);
-        set.input(1,Minigame.W);set.advance();
+        int sequence=stall(set,0);
+        set.input(sequence++,Minigame.W);set.advance();
         set.spotterInput(0,Minigame.SPACE);set.advance();
         while(set.completed()==0)set.advance();
-        for(int seq=2;!set.done();seq++){
+        for(int seq=sequence;!set.done();seq++){
             set.input(seq,set.phase()%2==0?Minigame.SPACE:0);set.advance();
         }
         assertEquals(7,set.valid);
@@ -74,9 +72,13 @@ class BenchSpotterTest {
             assertTrue(restored.leaders(Exercise.BENCH,20,8,period,"minecraft:overworld","",now).isEmpty());
     }
 
-    private static void stall(Minigame set){
-        set.input(0,Minigame.SPACE);
-        for(int i=0;i<32;i++)set.advance();
+    private static int stall(Minigame set,int sequence){
+        while(set.phase()<32){
+            boolean tap=set.phase()==20||set.phase()==24;
+            set.input(sequence++,tap?Minigame.SPACE:0);
+            set.advance();
+        }
         assertTrue(set.canRequestHelp());
+        return sequence;
     }
 }

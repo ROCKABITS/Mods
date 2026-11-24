@@ -57,14 +57,22 @@ public final class Minigame {
     public int completed(){return tick/repTicks();}
     public int phase(){return tick%repTicks();}
     public double ease(){double capacity=exercise.weighted?exercise.maximumLoad(trainingLevel):1+trainingLevel/4.0;return Math.clamp(1-load/capacity,0,.85);}
-    public double benchTapGain(){return (.22-(load-20)*.0006-fatigue*.015)*(1+.40*ease());}
+    public double benchTapGain(){
+        double gain=.165-(load-20)*.00048-fatigue*.014;
+        return gain*(1+.40*ease());
+    }
     public double benchDrain(){return benchDrainAt(tick);}
-    public double benchDrainAt(double time){return (.0045+(load-20)*.00002+fatigue*.003+(int)(time/repTicks())*.00055)*(1-.35*ease());}
+    public double benchDrainAt(double time){
+        // Bound the per-repetition penalty so even a fatigued athlete can finish a long set.
+        int completedRepetitions=Math.min(10,(int)(time/repTicks()));
+        double drain=.0068+(load-20)*.000023+fatigue*.0038+completedRepetitions*.00065;
+        return drain*(1-.35*ease());
+    }
     public double runDrag(){return (.0075+(load-1)*.001+fatigue*.002)*(1-.25*ease());}
     public double pullRiseRate(){return Math.max(.042,.060-(load-1)*.0025-fatigue*.005)+.008*ease();}
-    public double pullGripCost(){return (.012+(load-1)*.0015+fatigue*.004)*(1-.3*ease());}
+    public double pullGripCost(){return (.0135+(load-1)*.0015+fatigue*.004)*(1-.3*ease());}
     public double squatRiseRate(){return Math.max(.06,.085-(load-20)*.00015-fatigue*.008)+.01*ease();}
-    public int squatHoldRequired(){return 5+(int)(fatigue*2)+Math.min(2,completed()/4);}
+    public int squatHoldRequired(){return 6+(int)(fatigue*2)+Math.min(2,completed()/4);}
     public double rowChargeSpeed(){return .055-(load-1)*.002-fatigue*.006;}
     public double legTarget(){return .57+.035*Math.sin(tick*.12);}
     public double legPressureRate(){return .036+(load-40)*.00003+fatigue*.004;}
@@ -72,7 +80,16 @@ public final class Minigame {
     public double target(){return switch(exercise){case BENCH->1;case BOX,PULL->.5;case RUN->runTarget(tick);case ROW->.72;case SQUAT->.75;case LEG_PRESS->legTarget();case TRICEPS->.86;};}
     public int terrain(double time){return (int)Math.floorMod(mix(seed+(long)(time/96)),3);}
     public double runTarget(double time){return switch(terrain(time)){case 0->.44;case 1->.57;default->.67;};}
-    public double tolerance(){return switch(exercise){case BOX->Math.max(.09,.16-(load-1)*.008-fatigue*.018)+.035*ease();case RUN->Math.max(.13,.20-(load-1)*.007-fatigue*.015)+.04*ease();case ROW->Math.max(.085,.15-(load-1)*.008-fatigue*.02)+.04*ease();case SQUAT->Math.max(.065,.12-(load-20)*.00035-fatigue*.02)+.035*ease();case LEG_PRESS->.14-fatigue*.025-(load-40)*.00015+.04*ease();case TRICEPS->.105-fatigue*.02-(load-5)*.0005+.03*ease();case PULL->.24;default->.1;};}
+    public double tolerance(){return switch(exercise){
+        case BOX->Math.max(.08,.15-(load-1)*.008-fatigue*.018)+.035*ease();
+        case RUN->Math.max(.13,.20-(load-1)*.007-fatigue*.015)+.04*ease();
+        case ROW->Math.max(.08,.14-(load-1)*.008-fatigue*.02)+.04*ease();
+        case SQUAT->Math.max(.065,.12-(load-20)*.00035-fatigue*.02)+.035*ease();
+        case LEG_PRESS->.13-fatigue*.025-(load-40)*.00015+.04*ease();
+        case TRICEPS->.098-fatigue*.02-(load-5)*.0005+.03*ease();
+        case PULL->.24;
+        default->.1;
+    };}
     public int boxPeriod(double time){int rep=(int)(time/repTicks());return 4*Math.max(5,10+(int)(ease()*3)-(load-1)/2-(int)(fatigue*2)-Math.min(2,rep/3));}
     public double boxMarkerAt(double time){int rep=(int)(Math.max(0,time)/repTicks()),period=boxPeriod(time);int offset=Math.floorMod(mix(seed+rep*71L),period);double position=((time%repTicks()+offset)%period)/period;return 1-Math.abs(2*position-1);}
     public double marker(){return locked?hitMarker:boxMarkerAt(tick);}
@@ -143,7 +160,7 @@ public final class Minigame {
         double drag=runDrag();effort=Math.max(0,effort-drag);grip=Math.min(1,grip+.0025);
         int feet=rising&(A|D);
         if(feet!=0){attempted++;if(feet==nextFoot&&tick-lastStep>=4){lastStep=tick;nextFoot=nextFoot==A?D:A;effort=Math.min(1,effort+.11-fatigue*.015);grip=Math.max(0,grip-.021);repActions++;hits++;}else{grip=Math.max(0,grip-.085);say("wrong_step");}}
-        if(effort>target()+tolerance())grip=Math.max(0,grip-.009);
+        if(effort>target()+tolerance())grip=Math.max(0,grip-.011);
         double form=Math.clamp(1-Math.abs(effort-target())/tolerance(),0,1);repQuality+=form*(.55+.45*grip);
     }
     private void pull(){
