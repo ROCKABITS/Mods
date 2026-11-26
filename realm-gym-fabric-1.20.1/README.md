@@ -1,8 +1,8 @@
-# Realm Gym 0.7.2 Beta — Fabric 1.20.1
+# Realm Gym 0.7.3 Beta — Fabric 1.20.1
 
 Eight animated workout machines, mounted minigames, permanent training levels, workout plans, an RPG athlete profile and physical leaderboard boards for **Minecraft 1.20.1, Fabric Loader 0.16.14+ and Java 17**.
 
-[Download JAR](../mod-pronto/realm-gym-0.7.2-fabric-1.20.1.jar) · [ZIP](../mod-pronto/realm-gym-0.7.2-fabric-1.20.1.zip) · [Gameplay gallery](../media/realm-gym/0.7.2-fabric-1.20.1/README.md) · [Validation](VALIDACAO.md) · [CurseForge upload](CURSEFORGE.md) · [English changelog](../realm-gym/CHANGELOG.md)
+[Download JAR](../mod-pronto/realm-gym-0.7.3-fabric-1.20.1.jar) · [ZIP](../mod-pronto/realm-gym-0.7.3-fabric-1.20.1.zip) · [Gameplay gallery](../media/realm-gym/0.7.3-fabric-1.20.1/README.md) · [Validation](VALIDACAO.md) · [CurseForge upload](CURSEFORGE.md) · [English changelog](../realm-gym/CHANGELOG.md)
 
 **Supino a dois.** Clica com o botão direito num banco ocupado para ser spotter. O atleta pede ajuda com **W** quando vê o aviso, e o spotter segura a barra com **Espaço**. **Shift** sai do posto. [Changelog 0.7.2](../realm-gym/CHANGELOG.md#072--bench-press-spotter).
 

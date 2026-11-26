@@ -1,8 +1,8 @@
 # Realm Gym — Forge 1.20.1
 
-Port independente do **Realm Gym 0.7.2 Beta** para **Minecraft 1.20.1, Forge 47.4.0+ e Java 17**. Inclui as seis máquinas, montagem física, animações, minijogos com HUD discreto, progressão permanente, perfil RPG, planos de treino, histórico e painéis de recordes.
+Port independente do **Realm Gym 0.7.3 Beta** para **Minecraft 1.20.1, Forge 47.4.0+ e Java 17**. Inclui as seis máquinas, montagem física, animações, minijogos com HUD discreto, progressão permanente, perfil RPG, planos de treino, histórico e painéis de recordes.
 
-[Descarregar JAR](../mod-pronto/realm-gym-0.7.2-forge-1.20.1.jar) · [ZIP](../mod-pronto/realm-gym-0.7.2-forge-1.20.1.zip) · [Validação](VALIDACAO.md) · [Galeria](../media/realm-gym/0.7.2-forge-1.20.1/README.md) · [CurseForge](CURSEFORGE.md)
+[Descarregar JAR](../mod-pronto/realm-gym-0.7.3-forge-1.20.1.jar) · [ZIP](../mod-pronto/realm-gym-0.7.3-forge-1.20.1.zip) · [Validação](VALIDACAO.md) · [Galeria](../media/realm-gym/0.7.3-forge-1.20.1/README.md) · [CurseForge](CURSEFORGE.md)
 
 **Supino a dois.** Clica com o botão direito num banco ocupado para ser spotter. O atleta pede ajuda com **W** quando vê o aviso, e o spotter segura a barra com **Espaço**. **Shift** sai do posto. [Changelog 0.7.2](../realm-gym/CHANGELOG.md#072--bench-press-spotter).
 
@@ -10,7 +10,7 @@ Port independente do **Realm Gym 0.7.2 Beta** para **Minecraft 1.20.1, Forge 47.
 
 ## Instalação
 
-Instala `realm-gym-0.7.2-forge-1.20.1.jar` na pasta `mods` do servidor e de todos os clientes, com **Forge 47.4.0 ou superior da série 47**. Não exige outros mods Realm nem bibliotecas de animação. Usa apenas um JAR do Realm Gym/Realm Fitness por instalação.
+Instala `realm-gym-0.7.3-forge-1.20.1.jar` na pasta `mods` do servidor e de todos os clientes, com **Forge 47.4.0 ou superior da série 47**. Não exige outros mods Realm nem bibliotecas de animação. Usa apenas um JAR do Realm Gym/Realm Fitness por instalação.
 
 A edição [1.21.1/NeoForge](../realm-gym/README.md) continua disponível separadamente. Este port não converte mundos de Minecraft 1.21.1 para 1.20.1.
 

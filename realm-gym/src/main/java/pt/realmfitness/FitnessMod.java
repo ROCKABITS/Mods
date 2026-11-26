@@ -33,7 +33,10 @@ public final class FitnessMod {
     public static final DeferredBlock<RecordBoardBlock> BOARD=BLOCKS.register("record_board",()->new RecordBoardBlock(properties()));
     public static final DeferredHolder<BlockEntityType<?>,BlockEntityType<RecordBoardEntity>> BOARD_ENTITY=ENTITIES.register("record_board",()->BlockEntityType.Builder.of(RecordBoardEntity::new,BOARD.get()).build(null));
     public static final DeferredItem<Item> CARD=ITEMS.registerSimpleItem("athlete_card",new Item.Properties().stacksTo(1));
-    static{ITEMS.registerSimpleBlockItem(BOARD);TABS.register("fitness",()->CreativeModeTab.builder().title(Component.translatable("itemGroup.realmfitness")).icon(()->new ItemStack(MACHINES.get(Exercise.BENCH).get())).displayItems((p,out)->{for(var b:MACHINES.values())out.accept(b.get());out.accept(BOARD.get());out.accept(CARD.get());}).build());}
+    public static final DeferredItem<Item> WHEY=ITEMS.register("whey_powder",()->new Item(new Item.Properties()));
+    public static final DeferredItem<Item> PROTEIN_SHAKE=ITEMS.register("protein_shake",()->new ProteinItem(true));
+    public static final DeferredItem<Item> PROTEIN_BAR=ITEMS.register("protein_bar",()->new ProteinItem(false));
+    static{ITEMS.registerSimpleBlockItem(BOARD);TABS.register("fitness",()->CreativeModeTab.builder().title(Component.translatable("itemGroup.realmfitness")).icon(()->new ItemStack(MACHINES.get(Exercise.BENCH).get())).displayItems((p,out)->{for(var b:MACHINES.values())out.accept(b.get());out.accept(BOARD.get());out.accept(CARD.get());out.accept(WHEY.get());out.accept(PROTEIN_SHAKE.get());out.accept(PROTEIN_BAR.get());}).build());}
     private static BlockBehaviour.Properties properties(){return BlockBehaviour.Properties.of().strength(3).sound(SoundType.METAL).noOcclusion().pushReaction(PushReaction.BLOCK);}
     public FitnessMod(IEventBus bus){BLOCKS.register(bus);ITEMS.register(bus);ENTITIES.register(bus);ENTITY_TYPES.register(bus);TABS.register(bus);bus.addListener(FitnessNetwork::register);NeoForge.EVENT_BUS.addListener(FitnessMod::commands);}
     private static void commands(RegisterCommandsEvent event){

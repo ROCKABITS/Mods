@@ -1,0 +1,14 @@
+{
+  "providers": [
+    {
+      "type": "ttf",
+      "file": "realmfitness:barlow-condensed-bold.ttf",
+      "shift": [
+        0,
+        0
+      ],
+      "size": 42,
+      "oversample": 2
+    }
+  ]
+}

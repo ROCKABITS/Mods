@@ -9,7 +9,7 @@ import net.minecraftforge.network.simple.SimpleChannel;
 
 /** Direction-checked Forge channel; only the server evaluates inputs and rewards. */
 public final class FitnessNetwork {
-    private static final String VERSION="forge-1.20.1-7";
+    private static final String VERSION="forge-1.20.1-8";
     private static final SimpleChannel CHANNEL=NetworkRegistry.newSimpleChannel(new ResourceLocation("realmfitness","training"),()->VERSION,VERSION::equals,VERSION::equals);
     public record Request(String operation,String json) {}
     public record Snapshot(String json) {}

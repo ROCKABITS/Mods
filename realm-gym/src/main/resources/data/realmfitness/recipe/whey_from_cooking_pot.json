@@ -1,0 +1,24 @@
+{
+  "type": "farmersdelight:cooking",
+  "cookingtime": 120,
+  "experience": 0.2,
+  "ingredients": [
+    {
+      "item": "farmersdelight:milk_bottle"
+    },
+    {
+      "item": "minecraft:paper"
+    }
+  ],
+  "recipe_book_tab": "misc",
+  "result": {
+    "id": "realmfitness:whey_powder",
+    "count": 3
+  },
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "farmersdelight"
+    }
+  ]
+}

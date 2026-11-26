@@ -6,16 +6,18 @@ import net.minecraft.client.*;
 import net.minecraft.client.gui.screens.Screen;
 import org.lwjgl.glfw.GLFW;
 import pt.realmfitness.FitnessNetwork;
+import pt.realmfitness.RecoveryView;
 
 public final class FitnessClient implements net.fabricmc.api.ClientModInitializer {
     public static final KeyMapping KEY=new KeyMapping("key.realmfitness.profile",GLFW.GLFW_KEY_K,"key.categories.realmfitness");
     public static void receive(String json){
         JsonObject d=JsonParser.parseString(json).getAsJsonObject();var mc=Minecraft.getInstance();
         switch(str(d,"type")){
-            case "profile" -> {if(mc.screen instanceof AthleteScreen s)s.accept(d);else mc.setScreen(new AthleteScreen(d));}
+            case "profile" -> {RecoveryView.update(d);if(mc.screen instanceof AthleteScreen s)s.accept(d);else if(mc.screen instanceof RoutineEditorScreen editor)editor.accept(d);else mc.setScreen(new AthleteScreen(d));}
             case "game" -> {if(TrainingHud.active()!=null)TrainingHud.active().accept(d);else if(d.get("open").getAsBoolean())TrainingHud.start(d);}
             case "cancel" -> {TrainingHud.clear();}
-            case "done" -> TrainingHud.finish(d);
+            case "done" -> {RecoveryView.update(d);TrainingHud.finish(d);}
+            case "recovery" -> RecoveryView.update(d);
             default -> {}
         }
     }
@@ -26,7 +28,7 @@ public final class FitnessClient implements net.fabricmc.api.ClientModInitialize
     @Override public void onInitializeClient(){
         net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper.registerKeyBinding(KEY);
         net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking.registerGlobalReceiver(FitnessNetwork.SNAPSHOT,(client,handler,buffer,sender)->{String json=buffer.readUtf(196608);client.execute(()->receive(json));});
-        net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents.DISCONNECT.register((handler,client)->TrainingHud.clear());
+        net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents.DISCONNECT.register((handler,client)->{TrainingHud.clear();RecoveryView.clear();});
         net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents.END_CLIENT_TICK.register(client->{while(KEY.consumeClick())if(client.player!=null&&TrainingHud.active()==null)FitnessNetwork.request("open",Map.of());});
         net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback.EVENT.register((graphics,delta)->TrainingHud.draw(graphics));
         net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry.register(pt.realmfitness.FitnessMod.MOUNT.get(),GymMountRenderer::new);

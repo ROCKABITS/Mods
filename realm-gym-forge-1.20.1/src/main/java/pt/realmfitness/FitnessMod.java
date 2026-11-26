@@ -33,7 +33,10 @@ public final class FitnessMod {
     public static final RegistryObject<RecordBoardBlock> BOARD=BLOCKS.register("record_board",()->new RecordBoardBlock(properties()));
     public static final RegistryObject<BlockEntityType<RecordBoardEntity>> BOARD_ENTITY=ENTITIES.register("record_board",()->BlockEntityType.Builder.of(RecordBoardEntity::new,BOARD.get()).build(null));
     public static final RegistryObject<Item> CARD=ITEMS.register("athlete_card",()->new Item(new Item.Properties().stacksTo(1)));
-    static{ITEMS.register("record_board",()->new BlockItem(BOARD.get(),new Item.Properties()));TABS.register("fitness",()->CreativeModeTab.builder().title(Component.translatable("itemGroup.realmfitness")).icon(()->new ItemStack(MACHINES.get(Exercise.BENCH).get())).displayItems((p,out)->{for(var b:MACHINES.values())out.accept(b.get());out.accept(BOARD.get());out.accept(CARD.get());}).build());}
+    public static final RegistryObject<Item> WHEY=ITEMS.register("whey_powder",()->new Item(new Item.Properties()));
+    public static final RegistryObject<Item> PROTEIN_SHAKE=ITEMS.register("protein_shake",()->new ProteinItem(true));
+    public static final RegistryObject<Item> PROTEIN_BAR=ITEMS.register("protein_bar",()->new ProteinItem(false));
+    static{ITEMS.register("record_board",()->new BlockItem(BOARD.get(),new Item.Properties()));TABS.register("fitness",()->CreativeModeTab.builder().title(Component.translatable("itemGroup.realmfitness")).icon(()->new ItemStack(MACHINES.get(Exercise.BENCH).get())).displayItems((p,out)->{for(var b:MACHINES.values())out.accept(b.get());out.accept(BOARD.get());out.accept(CARD.get());out.accept(WHEY.get());out.accept(PROTEIN_SHAKE.get());out.accept(PROTEIN_BAR.get());}).build());}
     public static final DeferredRegister<net.minecraft.world.entity.ai.attributes.Attribute> ATTRIBUTES=DeferredRegister.create(Registries.ATTRIBUTE,ID);
     public static final RegistryObject<net.minecraft.world.entity.ai.attributes.Attribute> JUMP_STRENGTH=ATTRIBUTES.register("jump_multiplier",()->new net.minecraft.world.entity.ai.attributes.RangedAttribute("fitness.attribute.squat",1,1,2).setSyncable(true));
     private static void attributes(net.minecraftforge.event.entity.EntityAttributeModificationEvent event){event.add(EntityType.PLAYER,JUMP_STRENGTH.get());}

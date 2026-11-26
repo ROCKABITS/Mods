@@ -9,12 +9,12 @@ import net.minecraft.server.level.ServerPlayer;
 public final class FitnessNetwork {
     private FitnessNetwork(){}
     public record Request(String operation,String json) implements CustomPacketPayload {
-        public static final Type<Request> TYPE=new Type<>(ResourceLocation.parse("realmfitness:request_v8"));
+        public static final Type<Request> TYPE=new Type<>(ResourceLocation.parse("realmfitness:request_v9"));
         public static final StreamCodec<RegistryFriendlyByteBuf,Request> CODEC=StreamCodec.of((b,p)->{b.writeUtf(p.operation,24);b.writeUtf(p.json,16384);},b->new Request(b.readUtf(24),b.readUtf(16384)));
         @Override public Type<Request> type(){return TYPE;}
     }
     public record Snapshot(String json) implements CustomPacketPayload {
-        public static final Type<Snapshot> TYPE=new Type<>(ResourceLocation.parse("realmfitness:snapshot_v8"));
+        public static final Type<Snapshot> TYPE=new Type<>(ResourceLocation.parse("realmfitness:snapshot_v9"));
         public static final StreamCodec<RegistryFriendlyByteBuf,Snapshot> CODEC=StreamCodec.of((b,p)->b.writeUtf(p.json,196608),b->new Snapshot(b.readUtf(196608)));
         @Override public Type<Snapshot> type(){return TYPE;}
     }

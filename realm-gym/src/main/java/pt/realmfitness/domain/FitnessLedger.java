@@ -18,9 +18,19 @@ public final class FitnessLedger {
         public double fatiguePerSet=.12, recoveryMinutes=30;
         public Map<Exercise,Double> bonuses=new EnumMap<>(Exercise.class);
         public Conditioning.Config conditioning=new Conditioning.Config();
-        public Settings(){for(var e:Exercise.attributes())bonuses.put(e,e.maximumBonus);}
+        public Map<Exercise,Double> xpMultipliers=new EnumMap<>(Exercise.class);
+        public Recovery.Config supplements=new Recovery.Config();
+        public Settings(){
+            for(var e:Exercise.attributes())bonuses.put(e,e.maximumBonus);
+            for(var e:Exercise.values())xpMultipliers.put(e,1.0);
+        }
         public void validate(){
-            if(conditioning==null)throw new IllegalArgumentException("fitness.invalid_settings");
+            if(conditioning==null||supplements==null||xpMultipliers==null)throw new IllegalArgumentException("fitness.invalid_settings");
+            supplements.validate();
+            xpMultipliers.forEach((exercise,value)->{
+                if(exercise==null||value==null||!Double.isFinite(value)||value<0||value>5)
+                    throw new IllegalArgumentException("fitness.invalid_settings");
+            });
             conditioning.validate();
             if(resetMinute<0||resetMinute>=1440||dailyXp<0||dailyXp>10000||dailySets<1||dailySets>24||dailyVariety<1||dailyVariety>6||bonusXp<0||bonusXp>1000
                     ||!Double.isFinite(fatiguePerSet)||fatiguePerSet<0||fatiguePerSet>1||!Double.isFinite(recoveryMinutes)||recoveryMinutes<1||recoveryMinutes>1440||bonuses==null||bonuses.size()!=6)
@@ -39,6 +49,8 @@ public final class FitnessLedger {
         public Map<Exercise,Double> fatigue=new EnumMap<>(Exercise.class);
         public long recoveredAt, restUntil, dailyDay=Long.MIN_VALUE;
         public int earnedToday, validToday;
+        public Exercise latestTrainedAttribute;
+        public long supplementDay=Long.MIN_VALUE;
         public Set<Exercise> trainedToday=new HashSet<>();
         public boolean dailyComplete;
         public Set<Long> completedDays=new TreeSet<>();
@@ -95,7 +107,7 @@ public final class FitnessLedger {
         double recovered=Math.max(0,now-a.recoveredAt)/(settings.recoveryMinutes*60_000.0);
         a.fatigue.replaceAll((e,f)->Math.max(0,f-recovered));a.recoveredAt=now;
         long day=settings.day(now);
-        if(a.dailyDay<day){a.dailyDay=day;a.earnedToday=0;a.validToday=0;a.trainedToday.clear();a.dailyComplete=false;}
+        if(a.dailyDay<day){a.dailyDay=day;a.earnedToday=0;a.validToday=0;a.trainedToday.clear();a.dailyComplete=false;a.latestTrainedAttribute=null;}
         a.completedDays.removeIf(d->d<day-365);
         a.results.removeIf(r->r.at<now-70*DAY);
     }
@@ -166,11 +178,12 @@ public final class FitnessLedger {
         if(a.results.stream().anyMatch(r->r.id.equals(game.id)))throw new IllegalArgumentException("fitness.already_saved");
         ready(a,game.exercise,game.load,game.repetitions,now);
         boolean qualified=game.valid>=Math.ceil(game.repetitions*.6)&&game.accuracy()>=50;
-        int gain=qualified?(int)Math.round((10+game.accuracy()/5.0)*Math.min(2,game.valid/8.0)*(1-game.fatigue*.65)):0;
+        int gain=qualified?(int)Math.round((10+game.accuracy()/5.0)*Math.min(2,game.valid/8.0)*(1-game.fatigue*.65)*settings.xpMultipliers.getOrDefault(game.exercise,1.0)):0;
         gain=credit(a,game.exercise,gain);
         boolean complete=false,bonus=false;
         UUID workout=a.workout==null?null:a.workout.id;
         if(qualified){
+            a.latestTrainedAttribute=game.exercise.attribute();
             if(game.repetitions>=8){
                 a.validToday++;a.trainedToday.add(game.exercise.attribute());
                 if(settings.conditioning.enabled)a.condition.get(game.exercise.attribute()).train(a.conditionClock.elapsed,maintenanceDay(),settings.conditioning);
@@ -226,6 +239,8 @@ public final class FitnessLedger {
             }
             if(a.name==null||a.name.length()>64||a.experience==null||a.experience.size()!=6||a.fatigue==null||a.fatigue.size()!=6||a.results==null||a.results.size()>4096||a.routines==null||a.routines.size()>12||a.best==null||a.best.size()>4096||a.completedDays==null||a.completedDays.size()>367||a.trainedToday==null||a.trainedToday.size()>6||a.earnedToday<0||a.earnedToday>10000||a.validToday<0||a.validToday>100000||a.recoveredAt<0||a.restUntil<0)
                 throw new IllegalArgumentException("fitness.corrupt_data");
+            if(a.latestTrainedAttribute!=null&&a.latestTrainedAttribute.attribute()!=a.latestTrainedAttribute
+                ||a.supplementDay>highWater/DAY)throw new IllegalArgumentException("fitness.corrupt_data");
             for(var e:Exercise.attributes())if(a.experience.get(e)==null||a.experience.get(e)<0||a.experience.get(e)>threshold(20)||a.fatigue.get(e)==null||!Double.isFinite(a.fatigue.get(e))||a.fatigue.get(e)<0||a.fatigue.get(e)>1)throw new IllegalArgumentException("fitness.corrupt_data");
             if(a.preferredLoads==null||a.preferredLoads.size()>Exercise.values().length)throw new IllegalArgumentException("fitness.corrupt_data");
             for(var load:a.preferredLoads.entrySet())load.getKey().checkLoad(load.getValue(),level(a,load.getKey()));

@@ -1,0 +1,12 @@
+{
+  "realmfitness:protein_shake": {
+    "carbohydrates": 5,
+    "protein": 12,
+    "fat": 2
+  },
+  "realmfitness:protein_bar": {
+    "carbohydrates": 8,
+    "protein": 9,
+    "fat": 4
+  }
+}

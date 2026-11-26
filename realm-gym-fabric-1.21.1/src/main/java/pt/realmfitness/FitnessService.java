@@ -239,7 +239,8 @@ public final class FitnessService {
                 if(t.game.assistedRepetitions()>assists)t.mount.catchBar();
                 if(t.game.done()){
                     if(t.spotter!=null)leaveSpotter(t,Map.of("type","done","spotting",true,"assisted",t.game.assistedRepetitions()));
-                    release(p,t);var d=data(p);Award award=d.ledger.finish(id,p.getGameProfile().getName(),t.game,System.currentTimeMillis(),t.dimension.toString(),t.pos.asLong(),gym(t.pos));d.persist(server);apply(p);FitnessNetwork.send(p,Map.of("type","done","valid",award.result().valid(),"repetitions",award.result().repetitions(),"accuracy",award.result().accuracy(),"xp",award.gained(),"daily",award.dailyBonus(),"bestStreak",t.game.bestStreak,"assisted",t.game.assistedRepetitions()));
+                    release(p,t);var d=data(p);Award award=d.ledger.finish(id,p.getGameProfile().getName(),t.game,System.currentTimeMillis(),t.dimension.toString(),t.pos.asLong(),gym(t.pos));d.persist(server);apply(p);FitnessNetwork.send(p,Map.of("type","done","valid",award.result().valid(),"repetitions",award.result().repetitions(),"accuracy",award.result().accuracy(),"xp",award.gained(),"daily",award.dailyBonus(),"bestStreak",t.game.bestStreak,"assisted",t.game.assistedRepetitions(),"now",d.ledger.highWater,
+                        "recovery",Recovery.snapshot(d.ledger.athletes.get(id),d.ledger.settings,d.ledger.highWater)));
                     refreshBoards(server);
                 }else{
                     if(t.game.tick%2==0)updateParticipants(p,t);
@@ -290,9 +291,35 @@ public final class FitnessService {
         modify(p,Attributes.JUMP_STRENGTH,Exercise.SQUAT,Math.sqrt(1+d.ledger.bonus(a,Exercise.SQUAT))-1);
     }
     private static void modify(ServerPlayer p,Holder<Attribute> attr,Exercise exercise,double value){var instance=p.getAttribute(attr);if(instance==null)return;var id=ResourceLocation.fromNamespaceAndPath("realmfitness",exercise.id());var old=instance.getModifier(id);if(old==null&&value==0||old!=null&&old.amount()==value&&old.operation()==AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL)return;instance.removeModifier(id);if(value>0)instance.addTransientModifier(new AttributeModifier(id,value,AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));}
+    public static void syncRecovery(ServerPlayer player){
+        var data=data(player);
+        var athlete=athlete(player);
+        var ledger=data.ledger;
+        FitnessNetwork.send(player,Map.of("type","recovery","now",ledger.highWater,
+            "recovery",Recovery.snapshot(athlete,ledger.settings,ledger.highWater)));
+    }
+
+    public static void consumeSupplement(ServerPlayer player){
+        if(isTraining(player)||player.gameMode.getGameModeForPlayer()!=GameType.SURVIVAL)return;
+        try{
+            var data=data(player);
+            var athlete=athlete(player);
+            var ledger=data.ledger;
+            var config=ledger.settings.supplements;
+            double protein=config.dynamicNutrition&&Recovery.snapshot(athlete,ledger.settings,ledger.highWater).status()==Recovery.Status.READY
+                ?GymNutrition.protein(player):0;
+            if(Recovery.consume(athlete,ledger.settings,ledger.highWater,protein)!=null)
+                data.persist(player.getServer());
+            FitnessNetwork.send(player,Map.of("type","recovery","now",ledger.highWater,
+                "recovery",Recovery.snapshot(athlete,ledger.settings,ledger.highWater)));
+        }catch(RuntimeException error){
+            FitnessMod.LOG.warn("Could not apply Realm Gym supplement recovery",error);
+        }
+    }
+
     public static void snapshot(ServerPlayer p,String message,String page){
         apply(p);var d=data(p);var a=athlete(p);View v=VIEWS.get(p.getUUID());Map<String,Object> out=new LinkedHashMap<>();out.put("type","profile");out.put("page",page);out.put("message",message);out.put("name",a.name);out.put("now",d.ledger.highWater);out.put("resetAt",d.ledger.settings.resetAt(d.ledger.highWater));
-        out.put("conditioning",d.ledger.conditionInfo(a));out.put("experience",a.experience);out.put("fatigue",a.fatigue);out.put("restUntil",a.restUntil);out.put("dailySets",a.validToday);out.put("dailyGoal",d.ledger.settings.dailySets);out.put("dailyVariety",a.trainedToday.size());out.put("varietyGoal",d.ledger.settings.dailyVariety);out.put("dailyComplete",a.dailyComplete);out.put("dailyXp",a.earnedToday);out.put("dailyXpCap",d.ledger.settings.dailyXp);out.put("bonuses",d.ledger.settings.bonuses);out.put("days",a.completedDays);out.put("routines",a.routines);
+        out.put("recovery",Recovery.snapshot(a,d.ledger.settings,d.ledger.highWater));out.put("conditioning",d.ledger.conditionInfo(a));out.put("experience",a.experience);out.put("fatigue",a.fatigue);out.put("restUntil",a.restUntil);out.put("dailySets",a.validToday);out.put("dailyGoal",d.ledger.settings.dailySets);out.put("dailyVariety",a.trainedToday.size());out.put("varietyGoal",d.ledger.settings.dailyVariety);out.put("dailyComplete",a.dailyComplete);out.put("dailyXp",a.earnedToday);out.put("dailyXpCap",d.ledger.settings.dailyXp);out.put("bonuses",d.ledger.settings.bonuses);out.put("days",a.completedDays);out.put("routines",a.routines);
         if(a.workout!=null)out.put("workout",a.workout);
         out.put("history",a.results.reversed().stream().limit(24).toList());out.put("records",a.best.entrySet().stream().filter(e->e.getKey().equals(e.getValue().category())).map(Map.Entry::getValue).sorted(Comparator.comparing(Result::load).reversed()).limit(24).toList());
         Set<String> available=new HashSet<>();

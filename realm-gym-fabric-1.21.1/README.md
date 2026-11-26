@@ -1,10 +1,10 @@
-# Realm Gym 0.7.2 Beta — Fabric 1.21.1
+# Realm Gym 0.7.3 Beta — Fabric 1.21.1
 
-Edição Fabric das oito máquinas, minijogos, animações articuladas, atributos permanentes, planos de treino e recordes do Realm Gym 0.7.2. Inclui **leg press e tríceps com corda**.
+Edição Fabric das oito máquinas, minijogos, animações articuladas, atributos permanentes, planos de treino e recordes do Realm Gym 0.7.3. Inclui **leg press e tríceps com corda**.
 
 **Requisitos:** Minecraft **1.21.1**, **Java 21**, **Fabric Loader 0.16.14+** e **Fabric API 0.116.18+1.21.1**. Instala o mesmo Realm Gym e o Fabric API no servidor e nos clientes. Cada loader tem o seu ficheiro de instalação.
 
-[Descarregar JAR](../mod-pronto/realm-gym-0.7.2-fabric-1.21.1.jar) · [ZIP](../mod-pronto/realm-gym-0.7.2-fabric-1.21.1.zip) · [Galeria e animações](../media/realm-gym/0.7.2-fabric-1.21.1/README.md) · [Validação](VALIDACAO.md) · [Publicar no CurseForge](CURSEFORGE.md)
+[Descarregar JAR](../mod-pronto/realm-gym-0.7.3-fabric-1.21.1.jar) · [ZIP](../mod-pronto/realm-gym-0.7.3-fabric-1.21.1.zip) · [Galeria e animações](../media/realm-gym/0.7.3-fabric-1.21.1/README.md) · [Validação](VALIDACAO.md) · [Publicar no CurseForge](CURSEFORGE.md)
 
 **Supino a dois.** Clica com o botão direito num banco ocupado para ser spotter. O atleta pede ajuda com **W** quando vê o aviso, e o spotter segura a barra com **Espaço**. **Shift** sai do posto. [Changelog 0.7.2](../realm-gym/CHANGELOG.md#072--bench-press-spotter).
 
@@ -45,6 +45,6 @@ echo 'eula=true' > build/gametest/eula.txt
 ./gradlew -PfitnessVisualTests runClient
 ```
 
-O JAR para distribuir é o resultado **remapeado** de `build/libs/realm-gym-0.7.2-fabric-1.21.1.jar`. O build usa Loom 1.7.4 e mappings oficiais Mojang; os nomes de Minecraft são remapeados para intermediary na distribuição. Os testes são excluídos do JAR.
+O JAR para distribuir é o resultado **remapeado** de `build/libs/realm-gym-0.7.3-fabric-1.21.1.jar`. O build usa Loom 1.7.4 e mappings oficiais Mojang; os nomes de Minecraft são remapeados para intermediary na distribuição. Os testes são excluídos do JAR.
 
 O núcleo de domínio, geometrias, recursos, poses, apresentação e vários ecrãs são compilados diretamente de `../realm-gym`. Os adaptadores Fabric ficam neste projeto: registos, ciclo de vida, rede, montagem, efeitos físicos, renderização e controlos. A edição Forge 1.20.1 conserva as seis máquinas e recebe a mesma condição física na 0.7.1.

@@ -1,9 +1,15 @@
 # Realm Gym changelog
 
-## Unreleased
+## 0.7.3 — Steel console and workout recovery
 
+- Redesigned the athlete profile and training plans with a steel palette, a load plate for the next set, compact layouts, and a direct machine picker.
+- Added whey powder, a protein shake, and a protein bar with original pixel-art models. The two foods share one recovery per training day after a qualifying set.
+- Added vanilla crafting and optional Farmer's Delight milk-bottle and cooking-pot recipes.
+- Added optional Dynamic Nutrition food values and a configurable in-game protein recovery bonus. The recovery bonus is off by default.
+- Added per-exercise XP multipliers. Existing daily limits, qualification requirements, and records continue to apply.
 - Bench press gains less pressure per Space tap and loses it faster between taps. Heavier loads, accumulated fatigue and later repetitions demand a steadier rhythm. Training still makes lighter loads easier.
 - Tightened the timing windows for boxing, rowing, leg press and rope pushdowns. Running too far above the target pace drains more grip, pull-ups use more grip, and squats need a slightly longer pause.
+- Install matching versions on the server and every client.
 
 ## 0.7.2 — Bench press spotter
 

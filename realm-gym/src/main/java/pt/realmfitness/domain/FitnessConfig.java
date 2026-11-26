@@ -32,9 +32,17 @@ public final class FitnessConfig {
     }
     public static FitnessLedger.Settings load(Path file) throws IOException {
         boolean existed=Files.exists(file);var json=read(file);var settings=settings(json);
-        if(!existed||!json.has("conditioning")){
-            json.add("conditioning",FitnessLedger.JSON.toJsonTree(settings.conditioning));write(file,json);
+        boolean changed=!existed;
+        if(!json.has("conditioning")){
+            json.add("conditioning",FitnessLedger.JSON.toJsonTree(settings.conditioning));changed=true;
         }
+        if(!json.has("supplements")){
+            json.add("supplements",FitnessLedger.JSON.toJsonTree(settings.supplements));changed=true;
+        }
+        if(!json.has("xpMultipliers")){
+            json.add("xpMultipliers",FitnessLedger.JSON.toJsonTree(settings.xpMultipliers));changed=true;
+        }
+        if(changed)write(file,json);
         return settings;
     }
     public static FitnessLedger.Settings setConditioning(Path file,boolean enabled) throws IOException {

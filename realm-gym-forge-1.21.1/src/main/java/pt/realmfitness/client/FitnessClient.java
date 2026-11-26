@@ -10,6 +10,7 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.client.event.*;
 import org.lwjgl.glfw.GLFW;
 import pt.realmfitness.FitnessNetwork;
+import pt.realmfitness.RecoveryView;
 
 @Mod.EventBusSubscriber(modid="realmfitness",value=Dist.CLIENT)
 public final class FitnessClient {
@@ -18,10 +19,11 @@ public final class FitnessClient {
     public static void receive(String json){
         JsonObject d=JsonParser.parseString(json).getAsJsonObject();var mc=Minecraft.getInstance();
         switch(str(d,"type")){
-            case "profile" -> {if(mc.screen instanceof AthleteScreen s)s.accept(d);else mc.setScreen(new AthleteScreen(d));}
+            case "profile" -> {RecoveryView.update(d);if(mc.screen instanceof AthleteScreen s)s.accept(d);else if(mc.screen instanceof RoutineEditorScreen editor)editor.accept(d);else mc.setScreen(new AthleteScreen(d));}
             case "game" -> {if(TrainingHud.active()!=null)TrainingHud.active().accept(d);else if(d.get("open").getAsBoolean())TrainingHud.start(d);}
             case "cancel" -> {TrainingHud.clear();}
-            case "done" -> TrainingHud.finish(d);
+            case "done" -> {RecoveryView.update(d);TrainingHud.finish(d);}
+            case "recovery" -> RecoveryView.update(d);
             default -> {}
         }
     }
@@ -30,7 +32,7 @@ public final class FitnessClient {
     public static long time(JsonObject d,String key){return d.has(key)?d.get(key).getAsLong():0;}
     public static JsonArray array(JsonObject d,String key){return d.has(key)?d.getAsJsonArray(key):new JsonArray();}
     @SubscribeEvent public static void tick(net.minecraftforge.event.TickEvent.ClientTickEvent event){if(event.phase!=net.minecraftforge.event.TickEvent.Phase.END)return;var mc=Minecraft.getInstance();while(KEY.consumeClick())if(mc.player!=null&&TrainingHud.active()==null)FitnessNetwork.request("open",Map.of());}
-    @SubscribeEvent public static void logout(ClientPlayerNetworkEvent.LoggingOut event){TrainingHud.clear();}
+    @SubscribeEvent public static void logout(ClientPlayerNetworkEvent.LoggingOut event){TrainingHud.clear();RecoveryView.clear();}
     @Mod.EventBusSubscriber(modid="realmfitness",value=Dist.CLIENT,bus=Mod.EventBusSubscriber.Bus.MOD)
     public static final class Registration {
         @SubscribeEvent public static void models(net.minecraftforge.client.event.ModelEvent.RegisterAdditional e){

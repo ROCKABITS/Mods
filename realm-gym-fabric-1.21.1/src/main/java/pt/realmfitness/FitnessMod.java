@@ -42,10 +42,13 @@ public final class FitnessMod implements ModInitializer {
     public static final Ref<RecordBoardBlock> BOARD=new Ref<>(Registry.register(BuiltInRegistries.BLOCK,id("record_board"),new RecordBoardBlock(properties())));
     public static final Ref<BlockEntityType<RecordBoardEntity>> BOARD_ENTITY=new Ref<>(Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE,id("record_board"),net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder.create(RecordBoardEntity::new,BOARD.get()).build()));
     public static final Ref<Item> CARD=new Ref<>(Registry.register(BuiltInRegistries.ITEM,id("athlete_card"),new Item(new Item.Properties().stacksTo(1))));
+    public static final Ref<Item> WHEY=new Ref<>(Registry.register(BuiltInRegistries.ITEM,id("whey_powder"),new Item(new Item.Properties())));
+    public static final Ref<Item> PROTEIN_SHAKE=new Ref<>(Registry.register(BuiltInRegistries.ITEM,id("protein_shake"),new ProteinItem(true)));
+    public static final Ref<Item> PROTEIN_BAR=new Ref<>(Registry.register(BuiltInRegistries.ITEM,id("protein_bar"),new ProteinItem(false)));
     private static BlockBehaviour.Properties properties(){return BlockBehaviour.Properties.of().strength(3).sound(SoundType.METAL).noOcclusion().pushReaction(PushReaction.BLOCK);}
     @Override public void onInitialize(){
         Registry.register(BuiltInRegistries.ITEM,id("record_board"),new BlockItem(BOARD.get(),new Item.Properties()));
-        Registry.register(BuiltInRegistries.CREATIVE_MODE_TAB,id("fitness"),FabricItemGroup.builder().title(Component.translatable("itemGroup.realmfitness")).icon(()->new ItemStack(MACHINES.get(Exercise.BENCH).get())).displayItems((params,out)->{MACHINES.values().forEach(b->out.accept(b.get()));out.accept(BOARD.get());out.accept(CARD.get());}).build());
+        Registry.register(BuiltInRegistries.CREATIVE_MODE_TAB,id("fitness"),FabricItemGroup.builder().title(Component.translatable("itemGroup.realmfitness")).icon(()->new ItemStack(MACHINES.get(Exercise.BENCH).get())).displayItems((params,out)->{MACHINES.values().forEach(b->out.accept(b.get()));out.accept(BOARD.get());out.accept(CARD.get());out.accept(WHEY.get());out.accept(PROTEIN_SHAKE.get());out.accept(PROTEIN_BAR.get());}).build());
         FabricDefaultAttributeRegistry.register(EntityType.PLAYER,Player.createAttributes().add(SWIM_SPEED));
         FitnessNetwork.register();
         CommandRegistrationCallback.EVENT.register((dispatcher,access,environment)->{
@@ -56,7 +59,7 @@ public final class FitnessMod implements ModInitializer {
             dispatcher.register(Commands.literal("fitness").executes(gym.getCommand()).redirect(gym));
         });
         ServerTickEvents.END_SERVER_TICK.register(FitnessService::tick);
-        ServerPlayConnectionEvents.JOIN.register((handler,sender,server)->FitnessService.apply(handler.player));
+        ServerPlayConnectionEvents.JOIN.register((handler,sender,server)->{FitnessService.apply(handler.player);FitnessService.syncRecovery(handler.player);});
         ServerPlayConnectionEvents.DISCONNECT.register((handler,server)->FitnessService.logout(handler.player));
         ServerPlayerEvents.AFTER_RESPAWN.register((oldPlayer,newPlayer,alive)->FitnessService.apply(newPlayer));
         ServerEntityWorldChangeEvents.AFTER_PLAYER_CHANGE_WORLD.register((player,origin,destination)->{FitnessService.logout(player);FitnessService.apply(player);});

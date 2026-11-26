@@ -162,8 +162,15 @@ public final class FitnessVisualQA {
                 case 5->{screenshot("fitness-athlete-profile.png");check(click("tab.catalog"),"Catalog tab missing");stage++;next=now+800;}
                 case 6->{screenshot("fitness-machine-catalog.png");check(click("tab.routines"),"Routine tab missing");stage++;next=now+700;}
                 case 7->{screenshot("fitness-routines.png");check(click("new_plan"),"Visual plan editor missing");stage++;next=now+500;}
-                case 8->{check(mc().screen instanceof RoutineEditorScreen,"Editor failed to open");((EditBox)field(mc().screen,"nameField")).setValue("QA daily eight");screenshot("fitness-plan-editor.png");check(click("save"),"Save routine widget missing");stage++;next=now+800;}
-                case 9->{if(!(mc().screen instanceof AthleteScreen screen))return;check(screen.data().getAsJsonArray("routines").asList().stream().anyMatch(e->FitnessClient.str(e.getAsJsonObject(),"name").equals("QA daily eight")),"Routine was not saved over the real channel");
+                case 8->{check(mc().screen instanceof RoutineEditorScreen,"Editor failed to open");((EditBox)field(mc().screen,"nameField")).setValue("QA daily eight");screenshot("fitness-plan-editor.png");
+                    var machineSelector=mc().screen.children().stream().filter(AbstractButton.class::isInstance).map(AbstractButton.class::cast)
+                        .filter(button->button.getMessage().getString().endsWith("▾")).findFirst().orElseThrow();
+                    machineSelector.onPress();
+                    var row=mc().screen.children().stream().filter(AbstractButton.class::isInstance).map(AbstractButton.class::cast)
+                        .filter(button->button.getMessage().getString().strip().equals(FitnessTheme.exercise(Exercise.ROW))).findFirst().orElseThrow();
+                    row.onPress();
+                    check(click("save"),"Save routine widget missing");stage++;next=now+800;}
+                case 9->{if(!(mc().screen instanceof AthleteScreen screen))return;check(screen.data().getAsJsonArray("routines").asList().stream().anyMatch(e->FitnessClient.str(e.getAsJsonObject(),"name").equals("QA daily eight")&&e.getAsJsonObject().getAsJsonArray("steps").get(0).getAsJsonObject().get("exercise").getAsString().equals("ROW")),"Routine or chosen machine was not saved over the real channel");
                     // Use an explicit eight-exercise plan; completed records still come exclusively from real game inputs.
                     planId=UUID.randomUUID();List<Step> steps=Arrays.stream(Exercise.values()).map(e->new Step(e,1,8,e.minimumLoad(),5)).toList();FitnessNetwork.request("routine",new Routine(planId,"QA daily eight",5,steps));stage++;next=now+600;}
                 case 10->{FitnessNetwork.request("begin",Map.of("id",planId.toString()));stage++;next=now+600;}

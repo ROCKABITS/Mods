@@ -1,14 +1,14 @@
-# Realm Gym 0.7.2 Beta
+# Realm Gym 0.7.3 Beta
 
 Ginásio físico para **Minecraft 1.21.1, NeoForge 21.1.256+ e Java 21**. Máquinas 3D, oito minijogos, atributos permanentes, rotinas personalizadas, calendário e painéis de recordes. Funciona de forma independente.
 
-[Descarregar JAR](../mod-pronto/realm-gym-0.7.2.jar) · [ZIP](../mod-pronto/realm-gym-0.7.2.zip) · [Galeria](../media/realm-gym/0.7.2/README.md) · [Validação](VALIDACAO.md) · [Conceito original](DESIGN.md)
+[Descarregar JAR](../mod-pronto/realm-gym-0.7.3.jar) · [ZIP](../mod-pronto/realm-gym-0.7.3.zip) · [Galeria](../media/realm-gym/0.7.3/README.md) · [Validação](VALIDACAO.md) · [Conceito original](DESIGN.md)
 
 **Supino a dois.** Clica com o botão direito num banco ocupado para ser spotter. O atleta pede ajuda com **W** quando vê o aviso, e o spotter segura a barra com **Espaço**. **Shift** sai do posto. [Changelog 0.7.2](CHANGELOG.md#072--bench-press-spotter).
 
 Instala esta versão no servidor e em todos os clientes. Esta versão exige o mesmo protocolo de montagem para manter o personagem alinhado com as máquinas. Esta edição é para 1.21.1/NeoForge.
 
-**Realm Gym é o novo nome do Realm Fitness.** Substitui o JAR antigo por `realm-gym-0.7.2.jar`; instala apenas uma edição. O identificador `realmfitness`, os blocos, `data/realm_fitness.dat` e `config/realm-fitness.json` mantêm-se para conservar os mundos, níveis, rotinas e recordes. O comando principal passa a `/gym`; `/fitness` continua como alias, incluindo `equipment` e `reload`.
+**Realm Gym é o novo nome do Realm Fitness.** Substitui o JAR antigo por `realm-gym-0.7.3.jar`; instala apenas uma edição. O identificador `realmfitness`, os blocos, `data/realm_fitness.dat` e `config/realm-fitness.json` mantêm-se para conservar os mundos, níveis, rotinas e recordes. O comando principal passa a `/gym`; `/fitness` continua como alias, incluindo `equipment` e `reload`.
 
 ![Ícone do Realm Gym](../media/realm-gym/branding/realm-gym-icon.png)
 
@@ -88,6 +88,15 @@ O painel mostra os cinco primeiros da categoria, com nome, pontuação e cabeça
 Os resultados detalhados conservam-se durante 70 dias, sujeitos aos limites de armazenamento; os melhores globais e por zona guardam-se separadamente para a classificação de sempre. As cabeças usam a skin disponível no cliente para jogadores online e a skin padrão por UUID quando essa informação não está disponível.
 
 ## Configuração e âmbito
+
+### Suplementos e XP
+
+- **Whey em pó** usa leite e papel. Com Farmer’s Delight, a garrafa de leite também pode ser usada na bancada, e a panela dá uma dose adicional.
+- **Batido** usa whey, leite, cacau e uma garrafa de vidro. **Barra** usa whey, mel e sementes de abóbora.
+- Depois de uma série válida, o primeiro destes dois alimentos recupera até **10 pontos de fadiga** do último atributo treinado. Os dois partilham o mesmo limite diário e o mesmo horário de renovação do XP.
+- `xpMultipliers` aceita valores entre 0 e 5 por exercício, por exemplo `"BENCH": 1.5`. O multiplicador aplica-se ao XP da série. O limite diário e o bónus do objetivo diário têm regras próprias.
+- Em `supplements`, `enabled` controla o efeito e `fatigueReduction` controla a redução base como fração de 0 a 1. A opção `dynamicNutrition` vem desligada. Se ativares a opção e tiveres o Dynamic Nutrition instalado, o nível de proteína do jogador pode acrescentar até `proteinBonusMaximum` à redução. Os alimentos também incluem valores para esse mod.
+- Guarda as alterações em `config/realm-fitness.json` e usa `/gym reload` como operador.
 
 O servidor gera `config/realm-fitness.json`. Permite alterar hora de renovação, XP diário, requisitos do objetivo, bónus diário, fadiga/recuperação e percentagens máximas. Usa `/gym reload` como operador para validar e aplicar alterações. Percentagem 0 desativa o respetivo efeito, preservando a progressão.
 

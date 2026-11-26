@@ -47,6 +47,7 @@ tasks.named('processResources') {
     }
     from('../realm-gym/src/main/resources') {
         include 'data/**/recipe/**'
+        exclude 'data/realmfitness/recipe/whey_from_cooking_pot.json'
         eachFile { f -> f.path = f.path.replace('/recipe/', '/recipes/') }
         filter { line -> line.replace('"id": "realmfitness:', '"item": "realmfitness:') }
         includeEmptyDirs = false
