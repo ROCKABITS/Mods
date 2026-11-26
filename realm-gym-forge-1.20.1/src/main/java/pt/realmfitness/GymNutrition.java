@@ -15,8 +15,14 @@ final class GymNutrition {
                 Class<?> storage=Class.forName(ROOT+"platform.services.INutritionStorage");
                 Class<?> playerData=Class.forName(ROOT+"player.PlayerNutrition");
                 Class<?> nutrient=Class.forName(ROOT+"nutrition.Nutrient");
+                Object protein;
+                try{
+                    protein=Class.forName(ROOT+"nutrition.Nutrients").getField("PROTEIN").get(null);
+                }catch(ClassNotFoundException|NoSuchFieldException olderVersion){
+                    protein=nutrient.getField("PROTEIN").get(null);
+                }
                 return new Access(service.getField("STORAGE").get(null),storage.getMethod("get",Player.class),
-                    playerData.getMethod("get",nutrient),nutrient.getField("PROTEIN").get(null));
+                    playerData.getMethod("get",nutrient),protein);
             }catch(ClassNotFoundException missing){
                 return null;
             }catch(ReflectiveOperationException|LinkageError incompatible){
