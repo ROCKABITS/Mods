@@ -11,6 +11,7 @@ public enum Exercise {
     public Exercise attribute(){return this;}
     public static Exercise[] attributes(){return values();}
     public int minimumLoad() { return weighted ? 20 : 1; }
+    public int loadStep() { return weighted ? 5 : 1; }
     public int maximumLoad(int level) { return weighted ? 20 + Math.clamp(level, 0, 20) * 5 : 1 + Math.clamp(level, 0, 20) / 4; }
     public void checkLoad(int load, int level) {
         if (load < minimumLoad() || load > maximumLoad(level) || weighted && load % 5 != 0)
