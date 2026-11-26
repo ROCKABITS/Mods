@@ -96,7 +96,7 @@ public final class FitnessService {
                     v.exercise=Exercise.valueOf(b.exercise);v.load=b.load;v.reps=b.repetitions;v.period=b.period;v.scope=b.scope;
                 }else if(state.getBlock() instanceof GymBlock b&&b.intact(p.level(),pos))v.exercise=b.exercise;else throw new IllegalArgumentException("fitness.station_missing");
             }
-            VIEWS.put(p.getUUID(),v);var a=athlete(p);if(a.routines.isEmpty())suggestions(a);data(p).persist(p.getServer());snapshot(p,"",board?"leaders":pos==null?"profile":"machine");
+            VIEWS.put(p.getUUID(),v);var a=athlete(p);if(a.routines.isEmpty())suggestions(a);data(p).persist(p.getServer());snapshot(p,"",board?"leaders":pos==null?"profile":"machine",true);
         }catch(RuntimeException e){p.displayClientMessage(Component.translatable(error(e)),true);}
     }
     public static void interact(ServerPlayer p,BlockPos pos,boolean adjusting){
@@ -320,7 +320,11 @@ public final class FitnessService {
     }
 
     public static void snapshot(ServerPlayer p,String message,String page){
-        apply(p);var d=data(p);var a=athlete(p);View v=VIEWS.get(p.getUUID());Map<String,Object> out=new LinkedHashMap<>();out.put("type","profile");out.put("page",page);out.put("message",message);out.put("name",a.name);out.put("now",d.ledger.highWater);out.put("resetAt",d.ledger.settings.resetAt(d.ledger.highWater));
+        snapshot(p,message,page,false);
+    }
+
+    private static void snapshot(ServerPlayer p,String message,String page,boolean open){
+        apply(p);var d=data(p);var a=athlete(p);View v=VIEWS.get(p.getUUID());Map<String,Object> out=new LinkedHashMap<>();out.put("type","profile");out.put("open",open);out.put("page",page);out.put("message",message);out.put("name",a.name);out.put("now",d.ledger.highWater);out.put("resetAt",d.ledger.settings.resetAt(d.ledger.highWater));
         out.put("recovery",Recovery.snapshot(a,d.ledger.settings,d.ledger.highWater));out.put("conditioning",d.ledger.conditionInfo(a));out.put("experience",a.experience);out.put("fatigue",a.fatigue);out.put("restUntil",a.restUntil);out.put("dailySets",a.validToday);out.put("dailyGoal",d.ledger.settings.dailySets);out.put("dailyVariety",a.trainedToday.size());out.put("varietyGoal",d.ledger.settings.dailyVariety);out.put("dailyComplete",a.dailyComplete);out.put("dailyXp",a.earnedToday);out.put("dailyXpCap",d.ledger.settings.dailyXp);out.put("bonuses",d.ledger.settings.bonuses);out.put("days",a.completedDays);out.put("routines",a.routines);
         if(a.workout!=null)out.put("workout",a.workout);
         out.put("history",java.util.stream.IntStream.range(0,Math.min(24,a.results.size())).mapToObj(i->a.results.get(a.results.size()-1-i)).toList());out.put("records",a.best.entrySet().stream().filter(e->e.getKey().equals(e.getValue().category())).map(Map.Entry::getValue).sorted(Comparator.comparing(Result::load).reversed()).limit(24).toList());

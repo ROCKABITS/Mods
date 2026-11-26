@@ -19,8 +19,20 @@ public final class FitnessClient {
     public static void receive(String json){
         JsonObject d=JsonParser.parseString(json).getAsJsonObject();var mc=Minecraft.getInstance();
         switch(str(d,"type")){
-            case "profile" -> {RecoveryView.update(d);if(mc.screen instanceof AthleteScreen s)s.accept(d);else if(mc.screen instanceof RoutineEditorScreen editor)editor.accept(d);else mc.setScreen(new AthleteScreen(d));}
-            case "game" -> {if(TrainingHud.active()!=null)TrainingHud.active().accept(d);else if(d.get("open").getAsBoolean())TrainingHud.start(d);}
+            case "profile" -> {
+                RecoveryView.update(d);
+                if(TrainingHud.active()!=null)return;
+                if(mc.screen instanceof AthleteScreen screen)screen.accept(d);
+                else if(mc.screen instanceof RoutineEditorScreen editor)editor.accept(d);
+                else if(d.get("open").getAsBoolean())mc.setScreen(new AthleteScreen(d));
+            }
+            case "game" -> {
+                if(TrainingHud.active()!=null)TrainingHud.active().accept(d);
+                else if(d.get("open").getAsBoolean()){
+                    if(mc.screen instanceof AthleteScreen||mc.screen instanceof RoutineEditorScreen)mc.setScreen(null);
+                    TrainingHud.start(d);
+                }
+            }
             case "cancel" -> {TrainingHud.clear();}
             case "done" -> {RecoveryView.update(d);TrainingHud.finish(d);}
             case "recovery" -> RecoveryView.update(d);
