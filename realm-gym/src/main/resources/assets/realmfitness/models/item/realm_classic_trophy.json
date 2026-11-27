@@ -1,0 +1,17 @@
+{
+  "parent": "realmfitness:block/realm_classic_trophy",
+  "display": {
+    "gui": {
+      "rotation": [
+        12,
+        162,
+        0
+      ],
+      "scale": [
+        0.98,
+        0.98,
+        0.98
+      ]
+    }
+  }
+}

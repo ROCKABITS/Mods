@@ -11,7 +11,7 @@ tasks.register('prepareSharedJava', Sync) {
     from('../realm-gym/src/main/java') {
         include 'pt/realmfitness/GymNutrition.java', 'pt/realmfitness/RecoveryView.java', 'pt/realmfitness/ProteinItem.java',
             'pt/realmfitness/ConditioningCommands.java', 'pt/realmfitness/domain/**', 'pt/realmfitness/GymGeometry.java', 'pt/realmfitness/GymLayout.java',
-            'pt/realmfitness/GymBlock.java', 'pt/realmfitness/RecordBoardBlock.java', 'pt/realmfitness/RecordBoardEntity.java',
+            'pt/realmfitness/GymBlock.java', 'pt/realmfitness/TrophyBlock.java', 'pt/realmfitness/RecordBoardBlock.java', 'pt/realmfitness/RecordBoardEntity.java',
             'pt/realmfitness/client/AthleteScreen.java', 'pt/realmfitness/client/RoutineEditorScreen.java',
             'pt/realmfitness/client/GymMenu.java', 'pt/realmfitness/client/FitnessRig.java', 'pt/realmfitness/client/FitnessTheme.java',
             'pt/realmfitness/client/MinigameHudRenderer.java', 'pt/realmfitness/client/TrainingPresentation.java',

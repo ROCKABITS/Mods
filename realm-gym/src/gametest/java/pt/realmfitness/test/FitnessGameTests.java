@@ -30,6 +30,30 @@ public final class FitnessGameTests {
         boolean placed=p.getMainHandItem().useOn(new UseOnContext(p,InteractionHand.MAIN_HAND,new BlockHitResult(Vec3.atCenterOf(pos.below()).add(0,.5,0),Direction.UP,pos.below(),false))).consumesAction();
         h.assertTrue(placed,"Actual BlockItem placement failed");
     }
+    @GameTest(template="empty", timeoutTicks=120)
+    public static void trophyPlacesFacingPlayerAndDropsItsBlockItem(GameTestHelper h) {
+        var level = h.getLevel();
+        var pos = position(h);
+        space(h, pos);
+        var player = player(h);
+        var trophy = FitnessMod.TROPHY.get();
+        for (var facing : Direction.Plane.HORIZONTAL) {
+            var side = pos.relative(facing, 2);
+            player.setPos(side.getX() + .5, pos.getY(), side.getZ() + .5);
+            player.setYRot(facing.getOpposite().toYRot());
+            player.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(trophy));
+            var floor = new BlockHitResult(Vec3.atCenterOf(pos.below()).add(0, .5, 0), Direction.UP, pos.below(), false);
+            var result = player.getMainHandItem().useOn(new UseOnContext(player, InteractionHand.MAIN_HAND, floor));
+            var state = level.getBlockState(pos);
+            h.assertTrue(result.consumesAction() && state.is(trophy), "Trophy failed floor placement");
+            h.assertTrue(state.getValue(TrophyBlock.FACING) == facing, "Nameplate faces away from player");
+            var drops = Block.getDrops(state, level, pos, null);
+            h.assertTrue(drops.size() == 1 && drops.getFirst().is(trophy.asItem())
+                && drops.getFirst().getCount() == 1, "Trophy must drop one matching item");
+            level.removeBlock(pos, false);
+        }
+        h.succeed();
+    }
     @GameTest(template="empty",timeoutTicks=120) public static void renamedCommandsKeepLegacyAliasAndOperatorPermissions(GameTestHelper h){
         var dispatcher=h.getLevel().getServer().getCommands().getDispatcher();var gym=dispatcher.getRoot().getChild("gym");var legacy=dispatcher.getRoot().getChild("fitness");
         h.assertTrue(gym!=null&&legacy!=null&&legacy.getRedirect()==gym&&legacy.getCommand()==gym.getCommand(),"Gym command or legacy alias missing");

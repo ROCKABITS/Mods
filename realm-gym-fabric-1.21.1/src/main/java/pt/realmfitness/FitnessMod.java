@@ -39,6 +39,7 @@ public final class FitnessMod implements ModInitializer {
     public static final Ref<EntityType<GymMount>> MOUNT=new Ref<>(Registry.register(BuiltInRegistries.ENTITY_TYPE,id("gym_mount"),EntityType.Builder.<GymMount>of(GymMount::new,MobCategory.MISC).sized(.05f,.05f).clientTrackingRange(8).updateInterval(1).noSave().noSummon().build("realmfitness:gym_mount")));
     public static final Map<Exercise,Ref<GymBlock>> MACHINES=new EnumMap<>(Exercise.class);
     static{for(var e:Exercise.values()){var b=Registry.register(BuiltInRegistries.BLOCK,id(e.id()),new GymBlock(e,properties()));MACHINES.put(e,new Ref<>(b));Registry.register(BuiltInRegistries.ITEM,id(e.id()),new BlockItem(b,new Item.Properties()));}}
+    public static final Ref<TrophyBlock> TROPHY=new Ref<>(Registry.register(BuiltInRegistries.BLOCK,id("realm_classic_trophy"),new TrophyBlock(properties())));
     public static final Ref<RecordBoardBlock> BOARD=new Ref<>(Registry.register(BuiltInRegistries.BLOCK,id("record_board"),new RecordBoardBlock(properties())));
     public static final Ref<BlockEntityType<RecordBoardEntity>> BOARD_ENTITY=new Ref<>(Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE,id("record_board"),net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder.create(RecordBoardEntity::new,BOARD.get()).build()));
     public static final Ref<Item> CARD=new Ref<>(Registry.register(BuiltInRegistries.ITEM,id("athlete_card"),new Item(new Item.Properties().stacksTo(1))));
@@ -48,7 +49,8 @@ public final class FitnessMod implements ModInitializer {
     private static BlockBehaviour.Properties properties(){return BlockBehaviour.Properties.of().strength(3).sound(SoundType.METAL).noOcclusion().pushReaction(PushReaction.BLOCK);}
     @Override public void onInitialize(){
         Registry.register(BuiltInRegistries.ITEM,id("record_board"),new BlockItem(BOARD.get(),new Item.Properties()));
-        Registry.register(BuiltInRegistries.CREATIVE_MODE_TAB,id("fitness"),FabricItemGroup.builder().title(Component.translatable("itemGroup.realmfitness")).icon(()->new ItemStack(MACHINES.get(Exercise.BENCH).get())).displayItems((params,out)->{MACHINES.values().forEach(b->out.accept(b.get()));out.accept(BOARD.get());out.accept(CARD.get());out.accept(WHEY.get());out.accept(PROTEIN_SHAKE.get());out.accept(PROTEIN_BAR.get());}).build());
+        Registry.register(BuiltInRegistries.ITEM,id("realm_classic_trophy"),new BlockItem(TROPHY.get(),new Item.Properties()));
+        Registry.register(BuiltInRegistries.CREATIVE_MODE_TAB,id("fitness"),FabricItemGroup.builder().title(Component.translatable("itemGroup.realmfitness")).icon(()->new ItemStack(MACHINES.get(Exercise.BENCH).get())).displayItems((params,out)->{MACHINES.values().forEach(b->out.accept(b.get()));out.accept(BOARD.get());out.accept(TROPHY.get());out.accept(CARD.get());out.accept(WHEY.get());out.accept(PROTEIN_SHAKE.get());out.accept(PROTEIN_BAR.get());}).build());
         FabricDefaultAttributeRegistry.register(EntityType.PLAYER,Player.createAttributes().add(SWIM_SPEED));
         FitnessNetwork.register();
         CommandRegistrationCallback.EVENT.register((dispatcher,access,environment)->{

@@ -1,0 +1,20 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "realmfitness:block/realm_classic_trophy",
+      "y": 0
+    },
+    "facing=east": {
+      "model": "realmfitness:block/realm_classic_trophy",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "realmfitness:block/realm_classic_trophy",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "realmfitness:block/realm_classic_trophy",
+      "y": 270
+    }
+  }
+}
